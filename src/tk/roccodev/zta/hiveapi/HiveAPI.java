@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,7 +17,8 @@ import eu.the5zig.mod.The5zigAPI;
 public class HiveAPI {
 	
 	public static long karma = 0;
-
+	
+	
 	private static URL parsePlayerURL(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/TIMV";
 		try {
@@ -28,6 +31,8 @@ public class HiveAPI {
 	}
 	
 	
+	
+	
 	public static void updateKarma() throws ParseException, Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
 		JSONParser parser = new JSONParser();
@@ -37,8 +42,78 @@ public class HiveAPI {
 		
 		karma =  (long) o.get("total_points");
 		
+		
 	}
 	
+	public static long getKarmaPerGame(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURL(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("most_points");
+	}
+	
+	public static int getAchievements(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURL(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		HashMap<String, Object> map = new HashMap<String, Object>();
+			Iterator<?> keys = o.keySet().iterator();
+
+	        while( keys.hasNext() ){
+	            String key = (String)keys.next();
+	            Object value = o.get(key);
+	            map.put(key, value);
+
+	        }
+	       
+	       JSONObject o2 = (JSONObject) map.get("achievements");
+	       
+	       return o2.keySet().size() - 1;
+	}
+	
+	public static long getRolepoints(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURL(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("role_points");
+	}
+	public static long getKarma(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURL(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("total_points");
+	}
 	
 	
 	

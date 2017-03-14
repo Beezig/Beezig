@@ -3,10 +3,13 @@ package tk.roccodev.zta;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.TIMVMap;
 
 public class TIMV extends GameMode{
 
 	public static int karmaCounter;
+	public static TIMVMap activeMap;
+	public static String lastRecords = "";
 	
 	public static void plus20(){
 		karmaCounter +=20;
@@ -35,6 +38,7 @@ public class TIMV extends GameMode{
 	
 	public static void reset(TIMV gm){
 		resetCounter();
+		TIMV.activeMap = null;
 		gm.setState(GameState.FINISHED);
 	}
 	

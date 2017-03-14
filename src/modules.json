@@ -9,6 +9,9 @@
         },
         {
           "type": "karmacounter"
+        },
+        {
+          "type": "timvmap"
         }
       ]
     }
