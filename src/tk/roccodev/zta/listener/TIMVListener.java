@@ -4,12 +4,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
+import tk.roccodev.zta.hiveapi.TIMVRank;
 
 public class TIMVListener extends AbstractGameListener<TIMV>{
 
@@ -29,11 +31,21 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 	@Override
 	public void onGameModeJoin(TIMV gameMode){
 		gameMode.setState(GameState.STARTING);
+		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+		if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
+			
+			int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
+			HiveAPI.karma = (long) karma;
+			
+			
+		}else{
 		try {
 			HiveAPI.updateKarma();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
 		}
 		
 		
@@ -42,10 +54,19 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 
 	@Override
 	public boolean onServerChat(TIMV gameMode, String message) {
-		
+		// Uncomment this to see the real messages with chatcolor. vv
+		The5zigAPI.getLogger().info("(" + message + ")");
 		if(message.equals("§8▍ §3TIMV§8 ▏ §6Welcome to Trouble in Mineville!")){
 			gameMode.setState(GameState.STARTING);
 			The5zigAPI.getLogger().info("DEBUG = Joined TIMV");
+			Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+			if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
+				
+				int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
+				HiveAPI.karma = (long) karma;
+				
+				
+			}else{
 			try {
 				HiveAPI.updateKarma();
 			} catch (Exception e) {
@@ -53,7 +74,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				e.printStackTrace();
 			}
 			
-			
+			}
 			
 		}
 		else if(message.contains("§cLost §e20§c karma") && gameMode != null){
@@ -92,6 +113,18 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		    TIMV.activeMap = map1;
 			
 		}
+		else if(message.startsWith(ChatColor.AQUA + "Karma:")){
+			String[] contents = message.split(":");
+			String karma1 = ChatColor.stripColor(contents[1].trim());
+			long karma = Long.valueOf(karma1);
+			TIMVRank rank = TIMVRank.getFromDisplay(HiveAPI.getRank(TIMV.lastRecords));
+			String title = rank.getTotalDisplay();
+			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Karma: " + ChatColor.YELLOW + karma + " (" + title +  ChatColor.YELLOW + ")");
+			
+			return true;
+			
+			
+		}
 		else if(message.startsWith(ChatColor.AQUA + "Role points:")){
 			//Better /records
 			try{
@@ -99,6 +132,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			long rp = HiveAPI.getRolepoints(TIMV.lastRecords);
 			long karma = HiveAPI.getKarma(TIMV.lastRecords);
 			int ach = HiveAPI.getAchievements(TIMV.lastRecords);
+			
 			
 			double krr = (double)Math.round(((double)karma / (double)rp) * 100d) / 100d;
 			
@@ -110,6 +144,13 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			catch(Exception e){
 				e.printStackTrace();
 			}
+		}
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The body of §2")){
+			TIMV.traitorsDiscovered++;
+		}
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §7You are a")){
+			gameMode.setState(GameState.GAME);
+			TIMV.calculateTraitors(The5zigAPI.getAPI().getServerPlayers().size());
 		}
 		
 		

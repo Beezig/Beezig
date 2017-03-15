@@ -10,6 +10,8 @@ public class TIMV extends GameMode{
 	public static int karmaCounter;
 	public static TIMVMap activeMap;
 	public static String lastRecords = "";
+	public static int traitorsBefore = 0;
+	public static int traitorsDiscovered = 0;
 	
 	public static void plus20(){
 		karmaCounter +=20;
@@ -36,9 +38,17 @@ public class TIMV extends GameMode{
 		karmaCounter = 0;
 	}
 	
+	public static void calculateTraitors(int playersOnline){
+		if(playersOnline == 24) TIMV.traitorsBefore = 6;
+		if(playersOnline == 23) TIMV.traitorsBefore = 5;
+		TIMV.traitorsBefore = 5;
+	}
+	
 	public static void reset(TIMV gm){
 		resetCounter();
 		TIMV.activeMap = null;
+		TIMV.traitorsBefore = 0;
+		TIMV.traitorsDiscovered = 0;
 		gm.setState(GameState.FINISHED);
 	}
 	

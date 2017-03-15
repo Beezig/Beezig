@@ -15,12 +15,41 @@ public class MapItem extends GameModeItem<TIMV>{
 		TIMVMap map = TIMV.activeMap;
 		if(map == null) return "Unknown map";
 		String name = map.getDisplayName();
-		int a = map.getAccessibleEnderchests();
-		int t = map.getTotalEnderchests();
+		StringBuilder tr = new StringBuilder();
+		tr.append(name);
+		if((boolean)getProperties().getSetting("showenderchests").get()){
+			int a = map.getAccessibleEnderchests();
+			int t = map.getTotalEnderchests();
+			tr.append(" (");
+			if((boolean)getProperties().getSetting("showaccessible").get()){
+				tr.append(a);
+			}
+			if((boolean)getProperties().getSetting("showendertotal").get()){
+				if((boolean)getProperties().getSetting("showaccessible").get()){
+					tr.append(" / ").append(t);
+				}
+				else{
+					tr.append(t);
+				}
+			}
+			tr.append(")");
+			
+			
+			
+		}
 		
-		return name + " (" + a + "/" + t + ")"; 
+		
+		return tr.toString().trim(); 
 	}
 	
+	@Override
+	public void registerSettings() {
+		// TODO Auto-generated method stub
+		getProperties().addSetting("showaccessible", true);
+		getProperties().addSetting("showendertotal", true);
+		getProperties().addSetting("showenderchests", true);
+	}
+
 	@Override
 	public String getName() {
 		return "Map";

@@ -59,6 +59,20 @@ public class HiveAPI {
 		
 		return (long) o.get("most_points");
 	}
+	public static String getRank(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURL(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return (String) o.get("title");
+	}
 	
 	public static int getAchievements(String ign){
 		String playername = ign;

@@ -1,0 +1,19 @@
+{
+  "modules": [
+    {
+      "id": "TroubleInMineville",
+      "name": "Trouble in Mineville",
+      "items": [
+        {
+          "type": "karma"
+        },
+        {
+          "type": "karmacounter"
+        },
+        {
+          "type": "timvmap"
+        }
+      ]
+    }
+  ]
+}

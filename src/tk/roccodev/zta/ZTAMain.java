@@ -27,9 +27,9 @@ public class ZTAMain {
 	
 	@EventHandler(priority = EventHandler.Priority.HIGH)
 	public void onChatSend(ChatSendEvent evt){
-		if(evt.getMessage().startsWith("/records")){
-			String[] args = evt.getMessage().split("/records");
-			if(args.length == 0){
+		if(evt.getMessage().startsWith("/records") || evt.getMessage().startsWith("/stats")){
+			String[] args = evt.getMessage().split(" ");
+			if(args.length == 1){
 				TIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 			}
 			else{
