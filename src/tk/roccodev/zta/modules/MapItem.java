@@ -46,7 +46,7 @@ public class MapItem extends GameModeItem<TIMV>{
 	public void registerSettings() {
 		// TODO Auto-generated method stub
 		getProperties().addSetting("showaccessible", true);
-		getProperties().addSetting("showendertotal", true);
+		getProperties().addSetting("showendertotal", false);
 		getProperties().addSetting("showenderchests", true);
 	}
 

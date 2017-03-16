@@ -32,6 +32,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 	public void onGameModeJoin(TIMV gameMode){
 		gameMode.setState(GameState.STARTING);
 		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+		if(sb != null) The5zigAPI.getLogger().info(sb.getTitle());
 		if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
 			
 			int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
@@ -60,6 +61,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			gameMode.setState(GameState.STARTING);
 			The5zigAPI.getLogger().info("DEBUG = Joined TIMV");
 			Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+			
 			if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
 				
 				int karma = sb.getLines().get(ChatColor.AQUA + "Karma");

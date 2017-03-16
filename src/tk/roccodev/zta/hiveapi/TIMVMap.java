@@ -4,6 +4,7 @@ public enum TIMVMap {
 
 	ARMADILLO("Armadillo",3, 3),
 	ASIAN_SKY("Asian Sky", 3,3),
+	ARCWIND_TEMPLE("Arcwind Temple", 3, 3),
 	AZURE_ISLAND("Azure Island", 4, 5),
 	CABIN_IN_THE_WOODS("Cabin in the Woods",2,2),
 	CALYPSO_HARBOR("Calypso Harbor",2,2),
