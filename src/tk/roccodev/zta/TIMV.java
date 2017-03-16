@@ -39,9 +39,7 @@ public class TIMV extends GameMode{
 	}
 	
 	public static void calculateTraitors(int playersOnline){
-		if(playersOnline == 24) TIMV.traitorsBefore = 6;
-		if(playersOnline == 23) TIMV.traitorsBefore = 5;
-		TIMV.traitorsBefore = 5;
+		TIMV.traitorsBefore = (int) Math.floor(playersOnline / 4.0); 
 	}
 	
 	public static void reset(TIMV gm){

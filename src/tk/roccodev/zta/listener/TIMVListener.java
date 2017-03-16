@@ -55,7 +55,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 	@Override
 	public boolean onServerChat(TIMV gameMode, String message) {
 		// Uncomment this to see the real messages with chatcolor. vv
-		The5zigAPI.getLogger().info("(" + message + ")");
+		// The5zigAPI.getLogger().info("(" + message + ")");
 		if(message.equals("§8▍ §3TIMV§8 ▏ §6Welcome to Trouble in Mineville!")){
 			gameMode.setState(GameState.STARTING);
 			The5zigAPI.getLogger().info("DEBUG = Joined TIMV");
@@ -145,7 +145,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				e.printStackTrace();
 			}
 		}
-		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The body of §2")){
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The body of §4")){
 			TIMV.traitorsDiscovered++;
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §7You are a")){

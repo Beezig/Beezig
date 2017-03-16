@@ -6,6 +6,7 @@ import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.modules.Category;
 import eu.the5zig.mod.plugin.Plugin;
+import tk.roccodev.zta.modules.BodiesItem;
 import tk.roccodev.zta.modules.KarmaCounterItem;
 import tk.roccodev.zta.modules.KarmaItem;
 import tk.roccodev.zta.modules.MapItem;
@@ -20,6 +21,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "karma", KarmaItem.class, Category.SERVER_GENERAL);
 		The5zigAPI.getAPI().registerModuleItem(this, "karmacounter", KarmaCounterItem.class, Category.SERVER_GENERAL);
 		The5zigAPI.getAPI().registerModuleItem(this, "timvmap", MapItem.class, Category.SERVER_GENERAL);
+		The5zigAPI.getAPI().registerModuleItem(this, "bodies", BodiesItem.class, Category.SERVER_GENERAL);
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 		
 		

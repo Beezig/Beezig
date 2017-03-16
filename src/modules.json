@@ -12,6 +12,9 @@
         },
         {
           "type": "timvmap"
+        },
+        {
+          "type": "bodies"
         }
       ]
     }
