@@ -30,8 +30,9 @@ public class BodiesItem extends GameModeItem<TIMV> {
 	@Override
 	public boolean shouldRender(boolean dummy){
 		try{
+			if(!(getGameMode() instanceof TIMV)) return false;
 		return dummy || (getGameMode().getState() == GameState.GAME && TIMV.traitorsDiscovered != 0);
-		}catch(NullPointerException e){
+		}catch(Exception e){
 			return false;
 		}
 	}

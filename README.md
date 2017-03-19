@@ -1,3 +1,6 @@
+
+![Title](https://i.imgur.com/Z5SuiC9.png)
+
 # 5zig-TIMV-Plugin
 A 5zig plugin to add HiveMC (only TIMV for now) functionality.
 

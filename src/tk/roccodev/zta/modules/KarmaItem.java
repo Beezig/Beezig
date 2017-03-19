@@ -35,8 +35,9 @@ public class KarmaItem extends GameModeItem<TIMV> {
 	@Override
 	public boolean shouldRender(boolean dummy){
 		try{
+			if(!(getGameMode() instanceof TIMV)) return false;
 		return dummy || TIMV.shouldRender(getGameMode().getState());
-		}catch(NullPointerException e){
+		}catch(Exception e){
 			return false;
 		}
 	}
