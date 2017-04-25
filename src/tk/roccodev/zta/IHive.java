@@ -18,7 +18,7 @@ public class IHive extends ServerInstance {
 
 	@Override
 	public boolean handleServer(String host, int port) {
-		return host.toUpperCase().contains("HIVEMC.");
+		return host.toUpperCase().contains("HIVEMC.") || host.toUpperCase().endsWith("HIVE.SEXY");
 	}
 
 	@Override
