@@ -1,7 +1,12 @@
 package tk.roccodev.zta.listener;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.json.simple.parser.ParseException;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
@@ -69,9 +74,30 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				
 				
 			}else{
+			
+				Runnable rnn = new Runnable(){
+					
+					@Override
+					public void run(){
+						try {
+							HiveAPI.updateKarma();
+							
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				};
+				
+			ExecutorService exec = Executors.newCachedThreadPool();
+			exec.submit(rnn);
+			exec.shutdown();
 			try {
-				HiveAPI.updateKarma();
-			} catch (Exception e) {
+				exec.awaitTermination(10, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -129,6 +155,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		}
 		else if(message.startsWith(ChatColor.AQUA + "Role points:")){
 			//Better /records
+			Runnable rnn = new Runnable(){
+				@Override
+				public void run(){
 			try{
 			long mp = HiveAPI.getKarmaPerGame(TIMV.lastRecords);
 			long rp = HiveAPI.getRolepoints(TIMV.lastRecords);
@@ -142,10 +171,25 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Most Points: " + ChatColor.YELLOW + mp);
 			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Karma/Rolepoints: " + ChatColor.YELLOW + krr);
 			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Achievements: " + ChatColor.YELLOW + ach);
+			
 			}
 			catch(Exception e){
 				e.printStackTrace();
 			}
+				}
+			};
+			
+			ExecutorService exec = Executors.newCachedThreadPool();
+			exec.submit(rnn);
+			exec.shutdown();
+			try {
+				exec.awaitTermination(10, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The body of §4")){
 			TIMV.traitorsDiscovered++;
@@ -154,6 +198,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			gameMode.setState(GameState.GAME);
 			TIMV.calculateTraitors(The5zigAPI.getAPI().getServerPlayers().size());
 		}
+		
 		
 		
 		
