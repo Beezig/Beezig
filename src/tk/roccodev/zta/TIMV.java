@@ -4,6 +4,7 @@ import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
+import tk.roccodev.zta.notes.NotesManager;
 
 public class TIMV extends GameMode{
 
@@ -47,7 +48,9 @@ public class TIMV extends GameMode{
 		TIMV.activeMap = null;
 		TIMV.traitorsBefore = 0;
 		TIMV.traitorsDiscovered = 0;
+		NotesManager.notes.clear();
 		gm.setState(GameState.FINISHED);
+		ZTAMain.isTIMV = false;
 	}
 	
 	@Override

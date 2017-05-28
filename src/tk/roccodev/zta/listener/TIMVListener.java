@@ -14,6 +14,7 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.TIMV;
+import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
 import tk.roccodev.zta.hiveapi.TIMVRank;
@@ -33,9 +34,12 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		
 	}
 	
+	
+	
 	@Override
 	public void onGameModeJoin(TIMV gameMode){
 		gameMode.setState(GameState.STARTING);
+		ZTAMain.isTIMV = true;
 		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 		if(sb != null) The5zigAPI.getLogger().info(sb.getTitle());
 		if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
@@ -64,6 +68,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		// The5zigAPI.getLogger().info("(" + message + ")");
 		if(message.equals("§8▍ §3TIMV§8 ▏ §6Welcome to Trouble in Mineville!")){
 			gameMode.setState(GameState.STARTING);
+			ZTAMain.isTIMV = true;
 			The5zigAPI.getLogger().info("DEBUG = Joined TIMV");
 			Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 			
