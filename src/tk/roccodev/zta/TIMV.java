@@ -1,5 +1,22 @@
 package tk.roccodev.zta;
 
+
+
+
+
+
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+
+import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -13,6 +30,39 @@ public class TIMV extends GameMode{
 	public static String lastRecords = "";
 	public static int traitorsBefore = 0;
 	public static int traitorsDiscovered = 0;
+	public static Logger gameLogger = Logger.getLogger("TIMVGameLogger");
+	
+	
+	public static void startLogger(){
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		sdf.applyPattern("ddMMyyHHmmssSS");
+		String date = sdf.format(new Date());
+		FileHandler fh = null;
+		try {
+			fh = new FileHandler(ZTAMain.mcFile + "5zigtimv/" + date);
+		} catch (SecurityException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		DateFormatter mf = new TIMV.DateFormatter();
+		
+        fh.setFormatter(mf); 
+        
+		gameLogger.addHandler(fh);
+		gameLogger.setUseParentHandlers(false);
+		gameLogger.info("Initialized game with " + The5zigAPI.getAPI().getServerPlayers().size() + " players.");
+	
+	}
+	
+	public static void stopLogger(){
+		gameLogger = null;
+	}
+	
+	public static void logCheckNull(String toLog){
+		if(gameLogger != null){
+			gameLogger.info(toLog);
+		}
+	}
 	
 	public static void plus20(){
 		karmaCounter +=20;
@@ -51,6 +101,7 @@ public class TIMV extends GameMode{
 		NotesManager.notes.clear();
 		gm.setState(GameState.FINISHED);
 		ZTAMain.isTIMV = false;
+		TIMV.stopLogger();
 	}
 	
 	@Override
@@ -65,5 +116,35 @@ public class TIMV extends GameMode{
 		if(state == GameState.STARTING) return true;
 		return false;
 	}
+	
+	
+	static class DateFormatter extends Formatter {
+	    //
+	    // Create a DateFormat to format the logger timestamp.
+	    //
+	    private DateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+
+	    public String format(LogRecord record) {
+	        StringBuilder builder = new StringBuilder(1000);
+	        builder.append(df.format(new Date(record.getMillis()))).append(" - ");
+	        
+	        
+	        builder.append("[").append(record.getLevel()).append("] - ");
+	        builder.append(formatMessage(record));
+	        builder.append("\n");
+	        return builder.toString();
+	    }
+
+	    public String getHead(Handler h) {
+	        return super.getHead(h);
+	    }
+
+	    public String getTail(Handler h) {
+	        return super.getTail(h);
+	    }
+	
+	}
+
+	
 	
 }

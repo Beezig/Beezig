@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 import java.util.zip.GZIPOutputStream;
 
@@ -126,6 +128,7 @@ public class MetricsLite {
             // Register our service
            
                 // We are the first!
+     			
                 submitData();
             
         
@@ -221,6 +224,10 @@ public class MetricsLite {
             }
         }).start();
     }
+    
+   
+
+
 
     /**
      * Sends the data to the bStats server.

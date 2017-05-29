@@ -1,5 +1,7 @@
 package tk.roccodev.zta;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ public class ZTAMain {
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
 	public static boolean isTIMV = false;
 	public static IKeybinding notesKb;
+	public static File mcFile;
 	
 	public static int getCustomVersioning(){
 		String v = ZTAMain.class.getAnnotation(Plugin.class).version();
@@ -75,6 +78,22 @@ public class ZTAMain {
 		The5zigAPI.getLogger().info("Loading bStats");
 		MetricsLite metrics = new MetricsLite(this);
 		The5zigAPI.getLogger().info("Loaded bStats");
+		String OS = System.getProperty("os.name").toLowerCase();
+		try{
+		if (OS.indexOf("mac") >= 0) {
+		    mcFile = new File(System.getProperty("user.home") + "/Library/Application Support/minecraft/");
+		} else if (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0) {
+			mcFile = new File(System.getProperty("user.home") + "/.minecraft/");
+		} else if (OS.indexOf("win") >= 0) {
+		    mcFile = new File(System.getenv("APPDATA") + "/.minecraft/");
+		} else {
+		   mcFile = new File(System.getProperty("user.home") + "/Minecraft5zig/");
+		}
+		}catch(Exception e){
+			 mcFile = new File(System.getProperty("user.home") + "/Minecraft5zig/");
+		}
+		if(!mcFile.exists()) mcFile.mkdir();
+		
 	}
 	
 	

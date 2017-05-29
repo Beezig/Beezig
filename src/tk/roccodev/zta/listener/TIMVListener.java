@@ -112,19 +112,24 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		}
 		else if(message.contains("§cLost §e20§c karma") && gameMode != null){
 			TIMV.minus20();
+			TIMV.logCheckNull("Lost 20 karma.");
 		}
 		else if(message.contains("§cLost §e40§c karma") && gameMode != null){
 			TIMV.minus40();
+			TIMV.logCheckNull("Lost 40 karma.");
 		}
 		else if(message.contains("§aAwarded §e20§a karma") && gameMode != null){
 			TIMV.plus20();
+			TIMV.logCheckNull("Awarded 20 karma.");
 			
 		}
 		else if(message.contains("§aAwarded §e10§a karma") && gameMode != null){
 			TIMV.plus10();
+			TIMV.logCheckNull("Awarded 10 karma.");
 		}
 		else if(message.contains("§aAwarded §e25§a karma") && gameMode != null){
 			TIMV.plus25();
+			TIMV.logCheckNull("Awarded 25 karma.");
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §cGame Over§7") && gameMode != null){
 			TIMV.reset(gameMode);
@@ -198,10 +203,25 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The body of §4")){
 			TIMV.traitorsDiscovered++;
+			TIMV.logCheckNull("Traitor body discovered.");
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §7You are a")){
 			gameMode.setState(GameState.GAME);
 			TIMV.calculateTraitors(The5zigAPI.getAPI().getServerPlayers().size());
+			TIMV.startLogger();
+			String msg1 = message.split(Pattern.quote("§8▍ §3TIMV§8 ▏ §7You are a"))[0];
+			String finalmsgRole = msg1.split(" ")[0];
+			String role = "";
+			if(finalmsgRole.endsWith("INNOCENT")){
+				role = "Innocent";
+			}
+			else if(finalmsgRole.endsWith("TRAITOR")){
+				role = "Traitor";
+			}
+			else if(finalmsgRole.endsWith("DETECTIVE")){
+				role = "Detective";
+			}
+			TIMV.logCheckNull("Assigned role: " + role);
 		}
 		
 		
