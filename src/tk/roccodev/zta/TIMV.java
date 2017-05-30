@@ -1,20 +1,17 @@
 package tk.roccodev.zta;
 
-
-
-
-
-
-
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.FileHandler;
+import java.util.List;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
-import java.util.logging.Logger;
+
+import com.csvreader.CsvWriter;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
@@ -30,39 +27,72 @@ public class TIMV extends GameMode{
 	public static String lastRecords = "";
 	public static int traitorsBefore = 0;
 	public static int traitorsDiscovered = 0;
-	public static Logger gameLogger = Logger.getLogger("TIMVGameLogger");
 	
 	
-	public static void startLogger(){
-		SimpleDateFormat sdf = new SimpleDateFormat();
-		sdf.applyPattern("ddMMyyHHmmssSS");
-		String date = sdf.format(new Date());
-		FileHandler fh = null;
+	//CSV Stuff
+	
+	public static List<String[]> csvEntries;
+	public static String role;
+	public static int tPoints;
+	public static int dPoints;
+	public static int iPoints;
+	
+	
+	
+	
+	public static void writeCsv(){
+		The5zigAPI.getLogger().info("writing");
+		// Prevent from writing a line twice
+		if(role == null) return;
+		if(role.isEmpty()) return;
+		The5zigAPI.getLogger().info("writing2");
+		String[] entries = {role, karmaCounter + "", activeMap.getDisplayName() };
+		CsvWriter writer = null;
+		
+		boolean alreadyExists = new File(ZTAMain.mcFile.getAbsolutePath() + "/games.csv").exists();
+		if(!alreadyExists){
+			try {
+				new File(ZTAMain.mcFile.getAbsolutePath() + "/games.csv").createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		try {
-			fh = new FileHandler(ZTAMain.mcFile + "5zigtimv/" + date);
-		} catch (SecurityException | IOException e) {
+			writer = new CsvWriter(new FileWriter(ZTAMain.mcFile.getAbsolutePath() + "/games.csv", true), ',');
+		
+		if (!alreadyExists){
+			//Create the header
+			writer.write("role");
+			writer.write("karma");
+			writer.write("map");
+			writer.write("points");
+			writer.write("i-points");
+			writer.write("d-points");
+			writer.write("t-points");
+			writer.endRecord();
+		}
+		
+		writer.write(role);
+		writer.write(karmaCounter + "");
+		writer.write(activeMap.getDisplayName());
+		writer.write(iPoints + dPoints + tPoints + "");
+		writer.write(iPoints + "");
+		writer.write(dPoints + "");
+		writer.write(tPoints + "");
+		writer.endRecord();
+			writer.close();
+		
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		DateFormatter mf = new TIMV.DateFormatter();
+		role = null;
+		resetCounter();
+		TIMV.activeMap = null;
 		
-        fh.setFormatter(mf); 
-        
-		gameLogger.addHandler(fh);
-		gameLogger.setUseParentHandlers(false);
-		gameLogger.info("Initialized game with " + The5zigAPI.getAPI().getServerPlayers().size() + " players.");
-	
 	}
 	
-	public static void stopLogger(){
-		gameLogger = null;
-	}
-	
-	public static void logCheckNull(String toLog){
-		if(gameLogger != null){
-			gameLogger.info(toLog);
-		}
-	}
 	
 	public static void plus20(){
 		karmaCounter +=20;
@@ -87,6 +117,37 @@ public class TIMV extends GameMode{
 	
 	public static void resetCounter(){
 		karmaCounter = 0;
+		iPoints = 0;
+		tPoints = 0;
+		dPoints = 0;
+	}
+	
+	public static void applyPoints(int points){
+		switch(role){
+		case "Traitor":
+			applyPoints(points, "t");
+			break;
+		case "Innocent":
+			applyPoints(points, "i");
+			break;
+		case "Detective":
+			applyPoints(points, "d");
+			break;
+		}
+	}
+	
+	public static void applyPoints(int points, String role){
+		switch(role){
+		case "t": 
+			tPoints += points;
+			break;
+		case "i":
+			iPoints += points;
+			break;
+		case "d":
+			dPoints += points;
+			break;
+		}
 	}
 	
 	public static void calculateTraitors(int playersOnline){
@@ -94,14 +155,15 @@ public class TIMV extends GameMode{
 	}
 	
 	public static void reset(TIMV gm){
-		resetCounter();
-		TIMV.activeMap = null;
+		
+		TIMV.writeCsv();
 		TIMV.traitorsBefore = 0;
 		TIMV.traitorsDiscovered = 0;
 		NotesManager.notes.clear();
 		gm.setState(GameState.FINISHED);
 		ZTAMain.isTIMV = false;
-		TIMV.stopLogger();
+		
+		
 	}
 	
 	@Override
