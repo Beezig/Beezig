@@ -120,20 +120,45 @@ public class ZTAMain {
 				The5zigAPI.getAPI().messagePlayer("§e - §r" + s);
 			}
 		}
+		
 		else if(evt.getMessage().startsWith("/addnote") && The5zigAPI.getAPI().getActiveServer() instanceof IHive && isTIMV){
-			evt.setCancelled(true);
+			evt.setCancelled(true);			
 			String args = evt.getMessage().substring(8).trim();
-			NotesManager.notes.add(args);
-			The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eSuccesfully added note.");
+			if( args.length() == 0 ){
+				The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eNote may not be empty.");
+			}
+			else {
+				int letter8 = evt.getMessage().codePointAt(8);	
+				// 32 is a space.
+				if( letter8 != 32){
+					The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eCommand is '/addnote [note]'.");
+				}
+				else {
+					NotesManager.notes.add(args);
+					The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eSuccesfully added note.");
+			}
+		}
 			
 		}
 		else if(evt.getMessage().startsWith("/note") && The5zigAPI.getAPI().getActiveServer() instanceof IHive && isTIMV){
 			evt.setCancelled(true);
 			String args = evt.getMessage().substring(5).trim();
-			NotesManager.notes.add(args);
-			The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eSuccesfully added note.");
-			
+			if( args.length() == 0 ){
+				The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eNote may not be empty.");
+			}
+			else {
+				int letter5 = evt.getMessage().codePointAt(5);
+					// 32 is a space.
+				if( letter5 != 32){
+					The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eCommand is '/note [note]'.");
+				}
+			else {
+					NotesManager.notes.add(args);
+					The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eSuccesfully added note.");
+			}
+			}
 		}
+		
 	}
 	
 	@EventHandler
