@@ -112,24 +112,40 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		}
 		else if(message.contains("§cLost §e20§c karma") && gameMode != null){
 			TIMV.minus20();
-			TIMV.logCheckNull("Lost 20 karma.");
+			if(TIMV.role.equals("Detective")){
+				TIMV.applyPoints(-1, "i");
+			}
+			else{
+				TIMV.applyPoints(-1);
+			}
+	
 		}
 		else if(message.contains("§cLost §e40§c karma") && gameMode != null){
 			TIMV.minus40();
-			TIMV.logCheckNull("Lost 40 karma.");
+			if(TIMV.role.equals("Traitor")){
+				TIMV.applyPoints(-2, "t");
+			}else{
+			TIMV.applyPoints(-2, "d");
+			}
 		}
 		else if(message.contains("§aAwarded §e20§a karma") && gameMode != null){
 			TIMV.plus20();
-			TIMV.logCheckNull("Awarded 20 karma.");
+			if(TIMV.role.equals("Traitor")){
+			TIMV.applyPoints(2);
+			}else{
+				TIMV.applyPoints(1);
+			}
+			
 			
 		}
 		else if(message.contains("§aAwarded §e10§a karma") && gameMode != null){
 			TIMV.plus10();
-			TIMV.logCheckNull("Awarded 10 karma.");
+			TIMV.applyPoints(1);
 		}
 		else if(message.contains("§aAwarded §e25§a karma") && gameMode != null){
 			TIMV.plus25();
-			TIMV.logCheckNull("Awarded 25 karma.");
+			TIMV.applyPoints(2); //+1 Det point
+			
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §cGame Over§7") && gameMode != null){
 			TIMV.reset(gameMode);
@@ -203,25 +219,24 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The body of §4")){
 			TIMV.traitorsDiscovered++;
-			TIMV.logCheckNull("Traitor body discovered.");
+			
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §7You are a")){
 			gameMode.setState(GameState.GAME);
 			TIMV.calculateTraitors(The5zigAPI.getAPI().getServerPlayers().size());
-			TIMV.startLogger();
-			String msg1 = message.split(Pattern.quote("§8▍ §3TIMV§8 ▏ §7You are a"))[0];
-			String finalmsgRole = msg1.split(" ")[0];
+			The5zigAPI.getLogger().info("(" + message + ")");
+			
 			String role = "";
-			if(finalmsgRole.endsWith("INNOCENT")){
+			if(message.contains("§aINNOCENT§7")){
 				role = "Innocent";
 			}
-			else if(finalmsgRole.endsWith("TRAITOR")){
+			else if(message.contains("§cTRAITOR§7")){
 				role = "Traitor";
 			}
-			else if(finalmsgRole.endsWith("DETECTIVE")){
+			else if(message.contains("§9DETECTIVE§7")){
 				role = "Detective";
 			}
-			TIMV.logCheckNull("Assigned role: " + role);
+			TIMV.role = role;
 		}
 		
 		

@@ -81,18 +81,21 @@ public class ZTAMain {
 		String OS = System.getProperty("os.name").toLowerCase();
 		try{
 		if (OS.indexOf("mac") >= 0) {
-		    mcFile = new File(System.getProperty("user.home") + "/Library/Application Support/minecraft/");
+		    mcFile = new File(System.getProperty("user.home") + "/Library/Application Support/minecraft/5zigtimv");
 		} else if (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0) {
-			mcFile = new File(System.getProperty("user.home") + "/.minecraft/");
+			mcFile = new File(System.getProperty("user.home") + "/.minecraft/5zigtimv");
 		} else if (OS.indexOf("win") >= 0) {
-		    mcFile = new File(System.getenv("APPDATA") + "/.minecraft/");
+		    mcFile = new File(System.getenv("APPDATA") + "/.minecraft/5zigtimv");
 		} else {
-		   mcFile = new File(System.getProperty("user.home") + "/Minecraft5zig/");
+		   mcFile = new File(System.getProperty("user.home") + "/Minecraft5zig/5zigtimv");
 		}
 		}catch(Exception e){
-			 mcFile = new File(System.getProperty("user.home") + "/Minecraft5zig/");
+			 mcFile = new File(System.getProperty("user.home") + "/Minecraft5zig/5zigtimv");
 		}
 		if(!mcFile.exists()) mcFile.mkdir();
+		The5zigAPI.getLogger().info("MC Folder is at: " + mcFile.getAbsolutePath());
+		
+		File csvFile = new File(mcFile + "/5zigtimv/games.csv");
 		
 	}
 	
