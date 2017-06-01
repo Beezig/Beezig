@@ -180,7 +180,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 		}
 		else if(message.startsWith(ChatColor.AQUA + "Role points:")){
+			
 			//Better /records
+			
 			Runnable rnn = new Runnable(){
 				@Override
 				public void run(){
@@ -195,9 +197,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 			
 			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Most Points: " + ChatColor.YELLOW + mp);
-			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Karma/Rolepoints: " + ChatColor.YELLOW + krr);
-			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Achievements: " + ChatColor.YELLOW + ach);
-			
+			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "K/R: " + ChatColor.YELLOW + krr);
+			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Achievements: " + ChatColor.YELLOW + ach + "/41");
+			// TODO may want to pull the maxachievements(/41) from the API.
 			}
 			catch(Exception e){
 				e.printStackTrace();
