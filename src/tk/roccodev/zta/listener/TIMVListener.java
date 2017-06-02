@@ -136,9 +136,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				TIMV.applyPoints(1);
 			}
 		}	
-		else if(message.contains("§e[HiveMC] §aYou earned §550 tokens!§a You now have") && gameMode != null){
-			TIMV.applyPoints(20);
-		}
+		
 
 		else if(message.contains("§aAwarded §e10§a karma") && gameMode != null){
 			TIMV.plus10();
