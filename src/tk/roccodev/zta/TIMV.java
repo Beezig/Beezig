@@ -27,6 +27,8 @@ public class TIMV extends GameMode{
 	public static String lastRecords = "";
 	public static int traitorsBefore = 0;
 	public static int traitorsDiscovered = 0;
+	public static int detectivesBefore = 0;
+	public static int detectivesDiscovered = 0;
 	
 	
 	//CSV Stuff
@@ -154,11 +156,17 @@ public class TIMV extends GameMode{
 		TIMV.traitorsBefore = (int) Math.floor(playersOnline / 4.0); 
 	}
 	
+	public static void calculateDetectives(int playersOnline){
+		TIMV.detectivesBefore = (int) Math.floor(playersOnline / 8);
+	}
+	
 	public static void reset(TIMV gm){
 		
 		TIMV.writeCsv();
 		TIMV.traitorsBefore = 0;
 		TIMV.traitorsDiscovered = 0;
+		TIMV.detectivesBefore = 0;
+		TIMV.detectivesDiscovered = 0;
 		NotesManager.notes.clear();
 		gm.setState(GameState.FINISHED);
 		ZTAMain.isTIMV = false;

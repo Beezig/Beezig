@@ -135,9 +135,13 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			}else{
 				TIMV.applyPoints(1);
 			}
-			
-			
+		}	
+		else if(message.contains("[HiveMC]") && message.contains("You earned") && message.contains("50") && gameMode != null){
+			// Somehow I couldn't find the correct color tag positions ^ so I had to do this
+			TIMV.applyPoints(20);
+			The5zigAPI.getAPI().messagePlayer(ChatColor.GRAY + "Applied 20 Points for role:" + TIMV.role);
 		}
+
 		else if(message.contains("§aAwarded §e10§a karma") && gameMode != null){
 			TIMV.plus10();
 			TIMV.applyPoints(1);
@@ -221,11 +225,14 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The body of §4")){
 			TIMV.traitorsDiscovered++;
-			
+		}
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The body of §1")){
+			TIMV.detectivesDiscovered++;
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §7You are a")){
 			gameMode.setState(GameState.GAME);
 			TIMV.calculateTraitors(The5zigAPI.getAPI().getServerPlayers().size());
+			TIMV.calculateDetectives(The5zigAPI.getAPI().getServerPlayers().size());
 			The5zigAPI.getLogger().info("(" + message + ")");
 			
 			String role = "";

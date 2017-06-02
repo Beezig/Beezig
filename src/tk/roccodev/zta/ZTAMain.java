@@ -19,10 +19,7 @@ import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.modules.Category;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.mod.util.IKeybinding;
-import tk.roccodev.zta.modules.BodiesItem;
-import tk.roccodev.zta.modules.KarmaCounterItem;
-import tk.roccodev.zta.modules.KarmaItem;
-import tk.roccodev.zta.modules.MapItem;
+import tk.roccodev.zta.modules.*;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.updater.Updater;
 
@@ -65,12 +62,12 @@ public class ZTAMain {
 			e.printStackTrace();
 		}
 		
-		
 		The5zigAPI.getLogger().info("Loading TIMVPlugin");
 		The5zigAPI.getAPI().registerModuleItem(this, "karma", KarmaItem.class, Category.SERVER_GENERAL);
 		The5zigAPI.getAPI().registerModuleItem(this, "karmacounter", KarmaCounterItem.class, Category.SERVER_GENERAL);
 		The5zigAPI.getAPI().registerModuleItem(this, "timvmap", MapItem.class, Category.SERVER_GENERAL);
 		The5zigAPI.getAPI().registerModuleItem(this, "bodies", BodiesItem.class, Category.SERVER_GENERAL);
+		The5zigAPI.getAPI().registerModuleItem(this, "dbodies", DBodiesItem.class,Category.SERVER_GENERAL);
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 		 ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 
