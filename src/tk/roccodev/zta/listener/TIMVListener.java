@@ -135,9 +135,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			}else{
 				TIMV.applyPoints(1);
 			}
-			
-			
-		}
+		}	
+		
+
 		else if(message.contains("§aAwarded §e10§a karma") && gameMode != null){
 			TIMV.plus10();
 			TIMV.applyPoints(1);
@@ -158,6 +158,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			String afterMsg = message.split("§8▍ §3TIMV§8 ▏ §6Voting has ended! The map")[1];
 			The5zigAPI.getLogger().info(afterMsg);
 		// §bSky Lands§6
+		// 
 			String map = "";
 		    
 		    Pattern pattern = Pattern.compile(Pattern.quote("§b") + "(.*?)" + Pattern.quote("§6"));
@@ -170,6 +171,25 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		    
 		    TIMV.activeMap = map1;
 			
+		}
+		//Map Fallback (Joined after voting ended.)
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6Map :") && gameMode != null && TIMV.activeMap == null){
+			String afterMsg = message.split("§8▍ §3TIMV§8 ▏ §6Map : §b")[1];
+			// §8▍ §3TIMV§8 ▏ §6Map : §bCastle
+			The5zigAPI.getLogger().info("FALLBACK: " + afterMsg);
+			String map = "";
+			
+			// TODO I don't understand this regex pattern thing; please remove the unnecessary parts or make this nice v
+			Pattern pattern = Pattern.compile(afterMsg);
+			Matcher matcher = pattern.matcher(afterMsg);
+			while (matcher.find()) {
+			   map = matcher.group(0);
+			}
+			The5zigAPI.getLogger().info("FALLBACK: " + map);
+			TIMVMap map1 = TIMVMap.getFromDisplay(map);
+			    
+			TIMV.activeMap = map1;
+	
 		}
 		else if(message.startsWith(ChatColor.AQUA + "Karma:")){
 			String[] contents = message.split(":");
@@ -225,7 +245,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The body of §4")){
 			TIMV.traitorsDiscovered++;
-			
+		}
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The body of §1")){
+			TIMV.detectivesDiscovered++;
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6You are now in the spectator lobby")){
 			TIMV.dead = true;
@@ -234,6 +256,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §7You are a")){
 			gameMode.setState(GameState.GAME);
 			TIMV.calculateTraitors(The5zigAPI.getAPI().getServerPlayers().size());
+			TIMV.calculateDetectives(The5zigAPI.getAPI().getServerPlayers().size());
 			The5zigAPI.getLogger().info("(" + message + ")");
 			
 			String role = "";

@@ -15,7 +15,10 @@
         },
         {
           "type": "bodies"
-        }
+        },
+		{ 
+		  "type": "dbodies"
+		}
       ]
     }
   ]
