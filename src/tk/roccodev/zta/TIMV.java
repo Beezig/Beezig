@@ -41,12 +41,17 @@ public class TIMV extends GameMode{
 	
 	
 	
-	
-	public static void writeCsv(){
+	/*
+	 * Writes the data into the CSV logger.
+	 * 
+	 * @return whether the writer has written the file.
+	 * 
+	 */
+	public static boolean writeCsv(){
 		The5zigAPI.getLogger().info("writing");
 		// Prevent from writing a line twice
-		if(role == null) return;
-		if(role.isEmpty()) return;
+		if(role == null) return false;
+		if(role.isEmpty()) return false;
 		The5zigAPI.getLogger().info("writing2");
 		String[] entries = {role, karmaCounter + "", activeMap.getDisplayName() };
 		CsvWriter writer = null;
@@ -92,7 +97,7 @@ public class TIMV extends GameMode{
 		role = null;
 		resetCounter();
 		TIMV.activeMap = null;
-		
+		return true;
 	}
 	
 	
@@ -162,7 +167,11 @@ public class TIMV extends GameMode{
 	
 	public static void reset(TIMV gm){
 		
-		TIMV.writeCsv();
+		if(!TIMV.writeCsv()){
+			TIMV.activeMap = null;
+			role = null;
+			resetCounter();
+		}
 		TIMV.traitorsBefore = 0;
 		TIMV.traitorsDiscovered = 0;
 		TIMV.detectivesBefore = 0;
