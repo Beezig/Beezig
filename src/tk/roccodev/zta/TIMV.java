@@ -36,6 +36,7 @@ public class TIMV extends GameMode{
 	public static int tPoints;
 	public static int dPoints;
 	public static int iPoints;
+	public static boolean dead;
 	
 	
 	
@@ -120,6 +121,7 @@ public class TIMV extends GameMode{
 		iPoints = 0;
 		tPoints = 0;
 		dPoints = 0;
+		dead = false;
 	}
 	
 	public static void applyPoints(int points){

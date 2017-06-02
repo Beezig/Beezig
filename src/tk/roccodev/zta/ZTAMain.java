@@ -26,7 +26,7 @@ import tk.roccodev.zta.modules.MapItem;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.updater.Updater;
 
-@Plugin(name="TIMVPlugin", version="3.1.0")
+@Plugin(name="TIMVPlugin", version="3.2.0")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();

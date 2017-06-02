@@ -148,7 +148,11 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §cGame Over§7") && gameMode != null){
+			if(!TIMV.dead){
+				TIMV.applyPoints(20);
+			}
 			TIMV.reset(gameMode);
+			
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6Voting has ended! The map") && gameMode != null){
 			String afterMsg = message.split("§8▍ §3TIMV§8 ▏ §6Voting has ended! The map")[1];
@@ -221,6 +225,10 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The body of §4")){
 			TIMV.traitorsDiscovered++;
+			
+		}
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6You are now in the spectator lobby")){
+			TIMV.dead = true;
 			
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §7You are a")){
