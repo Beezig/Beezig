@@ -1,7 +1,6 @@
 package tk.roccodev.zta;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,14 @@ import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.modules.Category;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.mod.util.IKeybinding;
-import tk.roccodev.zta.modules.*;
+import tk.roccodev.zta.command.AddNoteCommand;
+import tk.roccodev.zta.command.NotesCommand;
+import tk.roccodev.zta.command.SayCommand;
+import tk.roccodev.zta.modules.BodiesItem;
+import tk.roccodev.zta.modules.DBodiesItem;
+import tk.roccodev.zta.modules.KarmaCounterItem;
+import tk.roccodev.zta.modules.KarmaItem;
+import tk.roccodev.zta.modules.MapItem;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.updater.Updater;
 
@@ -69,6 +75,9 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "bodies", BodiesItem.class, Category.SERVER_GENERAL);
 		The5zigAPI.getAPI().registerModuleItem(this, "dbodies", DBodiesItem.class,Category.SERVER_GENERAL);
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
+		CommandManager.registerCommand(new NotesCommand());
+		CommandManager.registerCommand(new AddNoteCommand());
+		CommandManager.registerCommand(new SayCommand());
 		 ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 
 		The5zigAPI.getLogger().info("Loaded TIMVPlugin");
@@ -100,6 +109,15 @@ public class ZTAMain {
 	
 	@EventHandler(priority = EventHandler.Priority.HIGH)
 	public void onChatSend(ChatSendEvent evt){
+		if(evt.getMessage().startsWith("/") && !evt.getMessage().startsWith("/ ")){
+			
+			if(CommandManager.dispatchCommand(evt.getMessage())){
+				evt.setCancelled(true);
+				return;
+			}
+			
+			
+		}
 		if(evt.getMessage().startsWith("/records") || evt.getMessage().startsWith("/stats")){
 			String[] args = evt.getMessage().split(" ");
 			if(args.length == 1){
@@ -110,51 +128,9 @@ public class ZTAMain {
 			}
 		}
 		
-		else if(evt.getMessage().trim().equalsIgnoreCase("/notes") && The5zigAPI.getAPI().getActiveServer() instanceof IHive && isTIMV){
-			evt.setCancelled(true);
-			The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eNotes:");
-			for(String s : NotesManager.notes){
-				The5zigAPI.getAPI().messagePlayer("§e - §r" + s);
-			}
-		}
 		
-		else if(evt.getMessage().startsWith("/addnote") && The5zigAPI.getAPI().getActiveServer() instanceof IHive && isTIMV){
-			evt.setCancelled(true);			
-			String args = evt.getMessage().substring(8).trim();
-			if( args.length() == 0 ){
-				The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eNote may not be empty.");
-			}
-			else {
-				int letter8 = evt.getMessage().codePointAt(8);	
-				// 32 is a space.
-				if( letter8 != 32){
-					The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eCommand is '/addnote [note]'.");
-				}
-				else {
-					NotesManager.notes.add(args);
-					The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eSuccesfully added note.");
-			}
-		}
-			
-		}
-		else if(evt.getMessage().startsWith("/note") && The5zigAPI.getAPI().getActiveServer() instanceof IHive && isTIMV){
-			evt.setCancelled(true);
-			String args = evt.getMessage().substring(5).trim();
-			if( args.length() == 0 ){
-				The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eNote may not be empty.");
-			}
-			else {
-				int letter5 = evt.getMessage().codePointAt(5);
-					// 32 is a space.
-				if( letter5 != 32){
-					The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eCommand is '/note [note]'.");
-				}
-			else {
-					NotesManager.notes.add(args);
-					The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eSuccesfully added note.");
-			}
-			}
-		}
+
+
 		
 	}
 	
