@@ -1,0 +1,70 @@
+package tk.roccodev.zta.command;
+
+import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.zta.Log;
+import tk.roccodev.zta.settings.Setting;
+
+public class SettingsCommand implements Command{
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return "settings";
+	}
+
+	@Override
+	public String[] getAliases() {
+		String aliases[] = {"/settings"};
+		return aliases;
+	}
+
+	@Override
+	public void execute(String[] args) {
+		
+		if(args.length == 0){ //List settings
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Settings:");
+			for(Setting sett : Setting.values()){
+				String todisplay = sett.getValue() ? "§aTrue" : "§cFalse";
+				The5zigAPI.getAPI().messagePlayer("§e - " + sett.name() + " (" + todisplay + "§e) (§a" + sett.getBriefDescription() + "§e)");
+			}
+		}
+		else if(args.length == 1){
+		String setting = args[0];
+		Setting sett = null;
+		try{
+			sett = Setting.valueOf(setting);
+		}
+		catch(IllegalArgumentException e){
+			The5zigAPI.getAPI().messagePlayer(Log.error + "Invalid setting.");
+		}
+		String todisplay = sett.getValue() ? "§aTrue" : "§cFalse";
+		The5zigAPI.getAPI().messagePlayer(Log.info + sett.name() + ": " + todisplay +"§e (§a" + sett.getBriefDescription() + "§e)");
+		
+		}
+		else if(args.length == 2){
+			String setting = args[0];
+			String value = args[1];
+			boolean b = Boolean.valueOf(value);
+			Setting sett = null;
+			try{
+				sett = Setting.valueOf(setting.toUpperCase());
+			}
+			catch(IllegalArgumentException e){
+				The5zigAPI.getAPI().messagePlayer(Log.error + "Invalid setting.");
+				return;
+			}
+			sett.setValue(b);
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully updated setting.");
+		}
+		else{
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage:");
+			The5zigAPI.getAPI().messagePlayer("§e - /settings §a to list the settings");
+			The5zigAPI.getAPI().messagePlayer("§e - /settings [setting] §a to get the value of a setting");
+			The5zigAPI.getAPI().messagePlayer("§e - /settings [setting] [true/false] §a to set the value of a setting.");
+		}
+		
+	}
+
+	
+
+}

@@ -21,12 +21,14 @@ import eu.the5zig.mod.util.IKeybinding;
 import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.NotesCommand;
 import tk.roccodev.zta.command.SayCommand;
+import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.modules.BodiesItem;
 import tk.roccodev.zta.modules.DBodiesItem;
 import tk.roccodev.zta.modules.KarmaCounterItem;
 import tk.roccodev.zta.modules.KarmaItem;
 import tk.roccodev.zta.modules.MapItem;
 import tk.roccodev.zta.notes.NotesManager;
+import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
 
 @Plugin(name="TIMVPlugin", version="3.2.0")
@@ -75,9 +77,11 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "bodies", BodiesItem.class, Category.SERVER_GENERAL);
 		The5zigAPI.getAPI().registerModuleItem(this, "dbodies", DBodiesItem.class,Category.SERVER_GENERAL);
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
+		
 		CommandManager.registerCommand(new NotesCommand());
 		CommandManager.registerCommand(new AddNoteCommand());
 		CommandManager.registerCommand(new SayCommand());
+		CommandManager.registerCommand(new SettingsCommand());
 		 ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 
 		The5zigAPI.getLogger().info("Loaded TIMVPlugin");
@@ -102,7 +106,22 @@ public class ZTAMain {
 		The5zigAPI.getLogger().info("MC Folder is at: " + mcFile.getAbsolutePath());
 		
 		File csvFile = new File(mcFile + "/5zigtimv/games.csv");
-		
+		File settingsFile = new File(ZTAMain.mcFile.getAbsolutePath() + "/settings.properties");
+		if(!settingsFile.exists()){
+			try {
+				settingsFile.createNewFile();
+				SettingsFetcher.saveSettings();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		try {
+			SettingsFetcher.loadSettings();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	

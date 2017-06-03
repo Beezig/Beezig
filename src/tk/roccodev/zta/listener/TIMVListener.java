@@ -18,6 +18,7 @@ import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
 import tk.roccodev.zta.hiveapi.TIMVRank;
+import tk.roccodev.zta.settings.Setting;
 
 public class TIMVListener extends AbstractGameListener<TIMV>{
 
@@ -211,18 +212,29 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				@Override
 				public void run(){
 			try{
-			long mp = HiveAPI.getKarmaPerGame(TIMV.lastRecords);
-			long rp = HiveAPI.getRolepoints(TIMV.lastRecords);
-			long karma = HiveAPI.getKarma(TIMV.lastRecords);
-			int ach = HiveAPI.getAchievements(TIMV.lastRecords);
 			
 			
-			double krr = (double)Math.round(((double)karma / (double)rp) * 100d) / 100d;
+			
+		
 			
 			
-			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Most Points: " + ChatColor.YELLOW + mp);
-			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "K/R: " + ChatColor.YELLOW + krr);
-			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Achievements: " + ChatColor.YELLOW + ach + "/41");
+			
+			if(Setting.SHOW_MOSTPOINTS.getValue()){
+				long mp = HiveAPI.getKarmaPerGame(TIMV.lastRecords);
+				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Most Points: " + ChatColor.YELLOW + mp);
+			}
+			
+			if(Setting.SHOW_KRR.getValue()){
+				long karma = HiveAPI.getKarma(TIMV.lastRecords);
+				long rp = HiveAPI.getRolepoints(TIMV.lastRecords);
+				double krr = (double)Math.round(((double)karma / (double)rp) * 100d) / 100d;
+				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "K/R: " + ChatColor.YELLOW + krr);
+			}
+			if(Setting.SHOW_ACHIEVEMENTS.getValue()){
+				int ach = HiveAPI.getAchievements(TIMV.lastRecords);
+				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Achievements: " + ChatColor.YELLOW + ach + "/41");
+			}
+			
 			// TODO may want to pull the maxachievements(/41) from the API.
 			}
 			catch(Exception e){

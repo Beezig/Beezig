@@ -19,11 +19,15 @@ public class SayCommand implements Command{
 	@Override
 	public void execute(String[] args) {
 		
-		if(args.length == 1){
+		if(args.length != 0){
+			StringBuilder sb = new StringBuilder();
+			for(String s : args){
+				sb.append(s).append(" ");
+			}
 			if(args[0].startsWith("/")){
-				The5zigAPI.getAPI().sendPlayerMessage(args[0]);
+				The5zigAPI.getAPI().sendPlayerMessage(sb.toString());
 			}else{
-			The5zigAPI.getAPI().sendPlayerMessage("/" + args[0]);
+			The5zigAPI.getAPI().sendPlayerMessage("/" + sb.toString());
 			}
 		}
 		else{
