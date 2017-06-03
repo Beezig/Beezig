@@ -71,11 +71,11 @@ public class ZTAMain {
 		}
 		
 		The5zigAPI.getLogger().info("Loading TIMVPlugin");
-		The5zigAPI.getAPI().registerModuleItem(this, "karma", KarmaItem.class, Category.SERVER_GENERAL);
-		The5zigAPI.getAPI().registerModuleItem(this, "karmacounter", KarmaCounterItem.class, Category.SERVER_GENERAL);
-		The5zigAPI.getAPI().registerModuleItem(this, "timvmap", MapItem.class, Category.SERVER_GENERAL);
-		The5zigAPI.getAPI().registerModuleItem(this, "bodies", BodiesItem.class, Category.SERVER_GENERAL);
-		The5zigAPI.getAPI().registerModuleItem(this, "dbodies", DBodiesItem.class,Category.SERVER_GENERAL);
+		The5zigAPI.getAPI().registerModuleItem(this, "karma", KarmaItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "karmacounter", KarmaCounterItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "timvmap", MapItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bodies", BodiesItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "dbodies", DBodiesItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 		
 		CommandManager.registerCommand(new NotesCommand());
