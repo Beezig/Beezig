@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.command.Command;
 
 public class CommandManager {
@@ -34,16 +35,17 @@ public class CommandManager {
 			}
 		}
 		if(cmdFound == null) return false;
-		StringBuilder sb = new StringBuilder();
+		
 		List<String> dataList = new ArrayList<String>(Arrays.asList(data));
 		dataList.remove(0); //Remove alias
 		
-		for(String s : dataList){
-			sb.append(s).append(" ");
-		}
 		
-		String args = sb.toString().trim();
-		cmdFound.execute(args.split(" "));
+		try{
+		cmdFound.execute(dataList.toArray(new String[dataList.size()]));
+		}catch(Exception e){
+			e.printStackTrace();
+			The5zigAPI.getAPI().messagePlayerInSecondChat("§a[TIMV Plugin]§c An error occurred while attempting to perform this command.");
+		}
 		return true;
 	}
 	
