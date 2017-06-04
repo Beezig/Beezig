@@ -13,10 +13,36 @@ public class KarmaCounterItem extends GameModeItem<TIMV>{
 	protected Object getValue(boolean dummy) {
 		
 		
+	StringBuilder sb = new StringBuilder();
+	sb.append(TIMV.karmaCounter + " Karma");
+	if((boolean)getProperties().getSetting("showrolepoints").get()){
 		
-		return TIMV.karmaCounter;
+		if(TIMV.dPoints != 0){
+			sb.append(" / " + TIMV.dPoints + " Detective Points");
+		}
+		if(TIMV.iPoints != 0){
+			sb.append(" / " + TIMV.iPoints + " Innocent Points");
+		}
+		if(TIMV.tPoints != 0){
+			sb.append(" / " + TIMV.tPoints + " Traitor Points");
+		}
+		
+		
 		
 	}
+	return sb.toString().trim();
+	
+		
+	}
+	
+	@Override
+	public void registerSettings() {
+		// TODO Auto-generated method stub
+		getProperties().addSetting("showrolepoints", true);
+		
+		
+	}
+
 	
 	@Override
 	public String getName() {

@@ -29,6 +29,16 @@ public class HiveAPI {
 			return null;
 		}
 	}
+	private static URL parsePlayerURLGeneric(String name){
+		String urls = "http://api.hivemc.com/v1/player/@player@/";
+		try {
+			return new URL(urls.replaceAll("@player@", name));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	
 	
@@ -59,6 +69,22 @@ public class HiveAPI {
 		
 		return (long) o.get("most_points");
 	}
+	
+	public static String getNetworkRank(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return "Either nicked player, player not found or connection error.";
+			}
+		
+		return (String) o.get("rankName");
+	}
+	
 	public static String getRank(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();

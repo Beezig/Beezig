@@ -15,11 +15,11 @@ import eu.the5zig.mod.event.KeyPressEvent;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.event.ServerQuitEvent;
 import eu.the5zig.mod.gui.IOverlay;
-import eu.the5zig.mod.modules.Category;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.mod.util.IKeybinding;
 import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.NotesCommand;
+import tk.roccodev.zta.command.RealRankCommand;
 import tk.roccodev.zta.command.SayCommand;
 import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.modules.BodiesItem;
@@ -82,6 +82,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new AddNoteCommand());
 		CommandManager.registerCommand(new SayCommand());
 		CommandManager.registerCommand(new SettingsCommand());
+		CommandManager.registerCommand(new RealRankCommand());
 		 ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 
 		The5zigAPI.getLogger().info("Loaded TIMVPlugin");
