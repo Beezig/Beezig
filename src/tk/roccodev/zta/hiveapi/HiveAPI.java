@@ -13,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
 
 public class HiveAPI {
@@ -34,6 +35,16 @@ public class HiveAPI {
 		String urls = "http://api.hivemc.com/v1/player/@player@/";
 		try {
 			return new URL(urls.replaceAll("@player@", name));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static URL parsePlayerURLUUID(String uuid){
+		String urls = "http://api.hivemc.com/v1/player/@player@/";
+		try {
+			return new URL(urls.replaceAll("@player@", uuid));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,7 +91,24 @@ public class HiveAPI {
 				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				return "Either nicked player, player not found or connection error.";
+				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
+				boolean connError = false;
+				try{
+					//RoccoDev's UUID
+					parser.parse(readUrl(parsePlayerURLUUID("bba224a20bff4913b04227ca3b60973f")));
+				}
+				catch(Exception ex){
+					connError = true;
+				}
+				if(playerOnline && !connError){
+					return "Nicked player (100%)";
+				}
+				else if(connError){
+					return "Connection error (100%)";
+				}
+				else if(!playerOnline && !connError){
+					return "Player not found or nicked player (50-50%)";
+				}
 			}
 		
 		return (String) o.get("rankName");
@@ -94,7 +122,27 @@ public class HiveAPI {
 				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				return "Either nicked player, player not found or connection error.";
+				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
+				boolean connError = false;
+				try{
+					//RoccoDev's UUID
+					parser.parse(readUrl(parsePlayerURLUUID("bba224a20bff4913b04227ca3b60973f")));
+				}
+				catch(Exception ex){
+					connError = true;
+				}
+				if(playerOnline && !connError){
+					return "Nicked player (100%)";
+				}
+				else if(connError){
+					return "Connection error (100%)";
+				}
+				else if(!playerOnline && !connError){
+					return "Player not found or nicked player (50-50%)";
+				}
+				
+				
+				
 			}
 		
 		return (String) o.get("username");
@@ -114,6 +162,15 @@ public class HiveAPI {
 		
 		return (String) o.get("title");
 	}
+	
+	public static NetworkPlayerInfo byName(String ign){
+		for(NetworkPlayerInfo p : The5zigAPI.getAPI().getServerPlayers()) {
+			
+		if(p.getGameProfile().getName().equals(ign)) return p;
+		}
+	return null; 
+	}
+	
 	
 	public static int getAchievements(String ign){
 		String playername = ign;
@@ -190,7 +247,7 @@ public class HiveAPI {
 			break;
 		case "Hive Founder and Owner": rankColor = ChatColor.YELLOW;
 			break;
-		default: rankColor = ChatColor.DARK_RED; //AFAIK custom names are Senior Moderators
+		default: rankColor = ChatColor.WHITE; //Fallback
 			break;
 		}
 		return rankColor;

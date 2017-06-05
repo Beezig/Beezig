@@ -39,7 +39,7 @@ public class TIMV extends GameMode{
 	public static int dPoints;
 	public static int iPoints;
 	public static boolean dead;
-	
+	public static long lastRecordKarma;
 	
 	
 	/*
