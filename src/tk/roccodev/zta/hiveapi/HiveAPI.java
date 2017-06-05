@@ -13,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
 
 public class HiveAPI {
 	
@@ -84,6 +85,20 @@ public class HiveAPI {
 		
 		return (String) o.get("rankName");
 	}
+	public static String getName(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return "Either nicked player, player not found or connection error.";
+			}
+		
+		return (String) o.get("username");
+	}
 	
 	public static String getRank(String ign){
 		String playername = ign;
@@ -154,9 +169,33 @@ public class HiveAPI {
 		
 		return (long) o.get("total_points");
 	}
-	
-	
-	
+	public static ChatColor getRankColor(String rankName){
+		ChatColor rankColor = null;
+		switch(rankName){
+		case "Regular Hive Member": rankColor = ChatColor.BLUE;
+			break;
+		case "Gold Hive Member": rankColor = ChatColor.GOLD;
+			break;
+		case "Diamond Hive Member": rankColor = ChatColor.AQUA;
+			break;
+		case "Lifetime Emerald Hive Member": rankColor = ChatColor.GREEN;
+			break;
+		case "VIP Player": rankColor = ChatColor.DARK_PURPLE;
+			break;
+		case "Hive Moderator": rankColor = ChatColor.RED;
+			break;
+		case "Senior Hive Moderator": rankColor = ChatColor.DARK_RED;
+			break;
+		case "Hive Developer": rankColor = ChatColor.GRAY;
+			break;
+		case "Hive Founder and Owner": rankColor = ChatColor.YELLOW;
+			break;
+		default: rankColor = ChatColor.WHITE;
+			break;
+		}
+		return rankColor;
+	}
+		
 	private static String readUrl(URL url) throws Exception {
 	    BufferedReader reader = null;
 	    try {

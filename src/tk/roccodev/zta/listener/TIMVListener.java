@@ -192,7 +192,28 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.activeMap = map1;
 	
 		}
-		else if(message.startsWith(ChatColor.AQUA + "Karma:")){
+		else if(message.startsWith(ChatColor.AQUA + "Username:") && (Setting.SHOW_NETWORK_RANK_COLOR.getValue() || Setting.SHOW_NETWORK_RANK_TITLE.getValue())){
+			// correctName is for the correct capitalization, just an enhancement
+			String correctName = HiveAPI.getName(TIMV.lastRecords);
+		 	String rank = HiveAPI.getNetworkRank(TIMV.lastRecords);
+		 	ChatColor rankColor = HiveAPI.getRankColor(rank);
+	 	
+		 	Setting.SHOW_NETWORK_RANK_COLOR.getValue();
+		 	Setting.SHOW_NETWORK_RANK_TITLE.getValue();
+		 	// Not sure if this the best way to do this v
+		 	if(Setting.SHOW_NETWORK_RANK_COLOR.getValue() && Setting.SHOW_NETWORK_RANK_TITLE.getValue()){
+		 		The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Username: " + rankColor + correctName + ChatColor.YELLOW + " (" + rankColor + rank + ChatColor.YELLOW + ")");
+		 	}
+		 	else if(Setting.SHOW_NETWORK_RANK_COLOR.getValue() && !Setting.SHOW_NETWORK_RANK_TITLE.getValue()){
+		 		The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Username: " + rankColor + correctName);
+			}
+		 	else if(!Setting.SHOW_NETWORK_RANK_COLOR.getValue() && Setting.SHOW_NETWORK_RANK_TITLE.getValue()){
+		 		The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Username: " + ChatColor.YELLOW + correctName + " (" + rank + ")");
+			}
+			return true;
+		}
+
+		else if(message.startsWith(ChatColor.AQUA + "Karma:") && Setting.SHOW_RANK.getValue()){
 			String[] contents = message.split(":");
 			String karma1 = ChatColor.stripColor(contents[1].trim());
 			long karma = Long.valueOf(karma1);
@@ -201,7 +222,17 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Karma: " + ChatColor.YELLOW + karma + " (" + title +  ChatColor.YELLOW + ")");
 			
 			return true;
-			
+		}
+		
+		else if(message.startsWith(ChatColor.AQUA + "Traitor Points:") && Setting.SHOW_TRAITORRATIO.getValue()){
+			String[] contents = message.split(":");
+			int tp = Integer.parseInt(ChatColor.stripColor(contents[1].trim()));
+			long rp = HiveAPI.getRolepoints(TIMV.lastRecords);
+			double tratio = (double)Math.round(((double)tp / (double)rp) * 1000d);
+			The5zigAPI.getLogger().info(tratio);
+			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Traitor Points: " + ChatColor.YELLOW + tp + " (" + tratio + " %" +  ChatColor.YELLOW + ")");
+			//TODO NOT FINISHED
+			return true;
 			
 		}
 		else if(message.startsWith(ChatColor.AQUA + "Role points:")){
@@ -212,11 +243,6 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				@Override
 				public void run(){
 			try{
-			
-			
-			
-		
-			
 			
 			
 			if(Setting.SHOW_MOSTPOINTS.getValue()){
@@ -235,7 +261,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Achievements: " + ChatColor.YELLOW + ach + "/41");
 			}
 			
-			// TODO may want to pull the maxachievements(/41) from the API.
+
 			}
 			catch(Exception e){
 				e.printStackTrace();
