@@ -190,7 +190,7 @@ public class HiveAPI {
 			break;
 		case "Hive Founder and Owner": rankColor = ChatColor.YELLOW;
 			break;
-		default: rankColor = ChatColor.WHITE;
+		default: rankColor = ChatColor.DARK_RED; //AFAIK custom names are Senior Moderators
 			break;
 		}
 		return rankColor;
