@@ -225,15 +225,19 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		}
 		
 		else if(message.startsWith(ChatColor.AQUA + "Traitor Points:") && Setting.SHOW_TRAITORRATIO.getValue()){
-			String[] contents = message.split(":");
-			int tp = Integer.parseInt(ChatColor.stripColor(contents[1].trim()));
-			long rp = HiveAPI.getRolepoints(TIMV.lastRecords);
-			double tratio = (double)Math.round(((double)tp / (double)rp) * 1000d);
-			The5zigAPI.getLogger().info(tratio);
-			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Traitor Points: " + ChatColor.YELLOW + tp + " (" + tratio + " %" +  ChatColor.YELLOW + ")");
-			//TODO NOT FINISHED
+			if(HiveAPI.getKarma(TIMV.lastRecords) >= 1000){
+				String[] contents = message.split(":");
+				int tp = Integer.parseInt(ChatColor.stripColor(contents[1].trim()));
+				long rp = HiveAPI.getRolepoints(TIMV.lastRecords);
+				double tratio = Math.round(((double)tp / (double)rp) * 1000d) / 10d;
+				ChatColor ratioColor = ChatColor.YELLOW;
+				if(tratio >= 38.0){
+					ratioColor= ChatColor.RED;
+				}
+				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Traitor Points: " + ChatColor.YELLOW + tp + " (" + ratioColor + tratio + "%" +  ChatColor.YELLOW + ")");
 			return true;
-			
+			}
+		return false;	
 		}
 		else if(message.startsWith(ChatColor.AQUA + "Role points:")){
 			
@@ -252,9 +256,11 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 			if(Setting.SHOW_KRR.getValue()){
 				long karma = HiveAPI.getKarma(TIMV.lastRecords);
+				if(karma >= 1000){
 				long rp = HiveAPI.getRolepoints(TIMV.lastRecords);
 				double krr = (double)Math.round(((double)karma / (double)rp) * 100d) / 100d;
 				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "K/R: " + ChatColor.YELLOW + krr);
+				}
 			}
 			if(Setting.SHOW_ACHIEVEMENTS.getValue()){
 				int ach = HiveAPI.getAchievements(TIMV.lastRecords);
