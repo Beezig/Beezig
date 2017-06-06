@@ -4,10 +4,10 @@ import java.io.IOException;
 
 public enum Setting {
 
-	SHOW_KRR(true, "Advanced Records - Show Karma/rolepoints"),
-	SHOW_ACHIEVEMENTS(true, "Advanced Records - Show achievements"),
-	SHOW_RANK(true, "Advanced Records - Show Karma-based rank"),
-	SHOW_MOSTPOINTS(true, "Advances Records - Show Karma record");
+	TIMV_SHOW_KRR(true, "Advanced Records - Show Karma/rolepoints"),
+	TIMV_SHOW_ACHIEVEMENTS(true, "Advanced Records - Show achievements"),
+	TIMV_SHOW_RANK(true, "Advanced Records - Show Karma-based rank"),
+	TIMV_SHOW_MOSTPOINTS(true, "Advances Records - Show Karma record");
 	
 	private boolean value;
 	private String briefDesc;
