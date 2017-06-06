@@ -219,18 +219,18 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 			
 			
-			if(Setting.SHOW_MOSTPOINTS.getValue()){
+			if(Setting.TIMV_SHOW_MOSTPOINTS.getValue()){
 				long mp = HiveAPI.getKarmaPerGame(TIMV.lastRecords);
 				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Most Points: " + ChatColor.YELLOW + mp);
 			}
 			
-			if(Setting.SHOW_KRR.getValue()){
+			if(Setting.TIMV_SHOW_KRR.getValue()){
 				long karma = HiveAPI.getKarma(TIMV.lastRecords);
 				long rp = HiveAPI.getRolepoints(TIMV.lastRecords);
 				double krr = (double)Math.round(((double)karma / (double)rp) * 100d) / 100d;
 				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "K/R: " + ChatColor.YELLOW + krr);
 			}
-			if(Setting.SHOW_ACHIEVEMENTS.getValue()){
+			if(Setting.TIMV_SHOW_ACHIEVEMENTS.getValue()){
 				int ach = HiveAPI.getAchievements(TIMV.lastRecords);
 				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Achievements: " + ChatColor.YELLOW + ach + "/41");
 			}
