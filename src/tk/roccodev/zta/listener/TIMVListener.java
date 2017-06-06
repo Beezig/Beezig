@@ -223,13 +223,13 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 			return true;
 		}
-		else if(message.startsWith(ChatColor.AQUA + "Karma:") && !Setting.SHOW_RANK.getValue()){
+		else if(message.startsWith(ChatColor.AQUA + "Karma:") && !Setting.TIMV_SHOW_RANK.getValue()){
 			String[] contents = message.split(":");
 			long karma = Long.valueOf(ChatColor.stripColor(contents[1].trim()));
 			TIMV.lastRecordKarma = karma;
 		}
 
-		else if(message.startsWith(ChatColor.AQUA + "Karma:") && Setting.SHOW_RANK.getValue()){
+		else if(message.startsWith(ChatColor.AQUA + "Karma:") && Setting.TIMV_SHOW_RANK.getValue()){
 			String[] contents = message.split(":");
 			String karma1 = ChatColor.stripColor(contents[1].trim());
 			long karma = Long.valueOf(karma1);
@@ -241,7 +241,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			return true;
 		}
 		
-		else if(message.startsWith(ChatColor.AQUA + "Traitor Points:") && Setting.SHOW_TRAITORRATIO.getValue()){
+		else if(message.startsWith(ChatColor.AQUA + "Traitor Points:") && Setting.TIMV_SHOW_TRAITORRATIO.getValue()){
 			Thread t = new Thread(new Runnable(){
 				@Override
 				public void run(){
@@ -285,12 +285,12 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			try{
 			
 			
-			if(Setting.SHOW_MOSTPOINTS.getValue()){
+			if(Setting.TIMV_SHOW_MOSTPOINTS.getValue()){
 				long mp = HiveAPI.getKarmaPerGame(TIMV.lastRecords);
 				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Most Points: " + ChatColor.YELLOW + mp);
 			}
 			
-			if(Setting.SHOW_KRR.getValue()){
+			if(Setting.TIMV_SHOW_KRR.getValue()){
 				long karma = HiveAPI.getKarma(TIMV.lastRecords);
 				if(karma >= 1000){
 				long rp = HiveAPI.getRolepoints(TIMV.lastRecords);
@@ -298,7 +298,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "K/R: " + ChatColor.YELLOW + krr);
 				}
 			}
-			if(Setting.SHOW_ACHIEVEMENTS.getValue()){
+			if(Setting.TIMV_SHOW_ACHIEVEMENTS.getValue()){
 				int ach = HiveAPI.getAchievements(TIMV.lastRecords);
 				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Achievements: " + ChatColor.YELLOW + ach + "/41");
 			}

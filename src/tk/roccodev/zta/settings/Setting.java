@@ -4,13 +4,13 @@ import java.io.IOException;
 
 public enum Setting {
 
-	SHOW_KRR(true, "Advanced Records - Show Karma/rolepoints"),
-	SHOW_ACHIEVEMENTS(true, "Advanced Records - Show achievements"),
-	SHOW_RANK(true, "Advanced Records - Show Karma-based rank"),
-	SHOW_MOSTPOINTS(true, "Advanced Records - Show Karma record"),
+	TIMV_SHOW_KRR(true, "TIMV Advanced Records - Show Karma/rolepoints"),
+	TIMV_SHOW_ACHIEVEMENTS(true, "TIMV Advanced Records - Show achievements"),
+	TIMV_SHOW_RANK(true, "TIMV Advanced Records - Show Karma-based rank"),
+	TIMV_SHOW_MOSTPOINTS(true, "TIMV Advanced Records - Show Karma record"),
 	SHOW_NETWORK_RANK_TITLE(false, "Advanced Records - Show the network-rank title behind username"),
 	SHOW_NETWORK_RANK_COLOR(true, "Advanced Records - Color the username/network-rank respective to their network-rank"),
-	SHOW_TRAITORRATIO(false, "Advanced Records - Show the Traitor Points / Rolepoints ratio (Advanced players)");
+	TIMV_SHOW_TRAITORRATIO(false, "TIMV Advanced Records - Show the Traitor Points / Rolepoints ratio (Advanced players)");
 	
 	private boolean value;
 	private String briefDesc;
