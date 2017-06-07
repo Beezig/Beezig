@@ -9,4 +9,4 @@ before_install:
  - wget $DOWNLOAD_LINK/'log4j-api.jar'
  - wget $DOWNLOAD_LINK/'log4j-core.jar'
  - wget $DOWNLOAD_LINK/'authlib.jar'
-
+ - cd ..
