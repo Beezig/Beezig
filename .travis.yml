@@ -1,0 +1,12 @@
+language: java
+install: ant deps
+before_install:
+ - mkdir libs
+ - cd libs
+ - wget $DOWNLOAD_LINK'5zig.jar'
+ - wget $DOWNLOAD_LINK'netty.jar'
+ - wget $DOWNLOAD_LINK'lwjgl.jar'
+ - wget $DOWNLOAD_LINK'log4j-api.jar'
+ - wget $DOWNLOAD_LINK'log4j-core.jar'
+ - wget $DOWNLOAD_LINK'authlib.jar'
+
