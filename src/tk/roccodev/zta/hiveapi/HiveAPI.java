@@ -18,11 +18,21 @@ import eu.the5zig.util.minecraft.ChatColor;
 
 public class HiveAPI {
 	
-	public static long karma = 0;
+	public static long TIMVkarma = 0;
+	public static long DRpoints = 0;
 	
-	
-	private static URL parsePlayerURL(String name){
+	private static URL TIMVparsePlayerURL(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/TIMV";
+		try {
+			return new URL(urls.replaceAll("@player@", name));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static URL DRparsePlayerURL(String name){
+		String urls = "http://api.hivemc.com/v1/player/@player@/DR";
 		try {
 			return new URL(urls.replaceAll("@player@", name));
 		} catch (MalformedURLException e) {
@@ -55,25 +65,25 @@ public class HiveAPI {
 	
 	
 	
-	public static void updateKarma() throws ParseException, Exception{
+	public static void TIMVupdateKarma() throws ParseException, Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
-			o = (JSONObject) parser.parse(readUrl(parsePlayerURL(playername)));
+			o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
 		
-		karma =  (long) o.get("total_points");
+		TIMVkarma =  (long) o.get("total_points");
 		
 		
 	}
 	
-	public static long getKarmaPerGame(String ign){
+	public static long TIMVgetKarmaPerGame(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURL(playername)));
+				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -148,13 +158,13 @@ public class HiveAPI {
 		return (String) o.get("username");
 	}
 	
-	public static String getRank(String ign){
+	public static String TIMVgetRank(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURL(playername)));
+				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -172,13 +182,13 @@ public class HiveAPI {
 	}
 	
 	
-	public static int getAchievements(String ign){
+	public static int TIMVgetAchievements(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURL(playername)));
+				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -198,13 +208,13 @@ public class HiveAPI {
 	       return o2.keySet().size() - 1;
 	}
 	
-	public static long getRolepoints(String ign){
+	public static long TIMVgetRolepoints(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURL(playername)));
+				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -212,13 +222,13 @@ public class HiveAPI {
 		
 		return (long) o.get("role_points");
 	}
-	public static long getKarma(String ign){
+	public static long TIMVgetKarma(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURL(playername)));
+				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -226,6 +236,102 @@ public class HiveAPI {
 		
 		return (long) o.get("total_points");
 	}
+	
+	//DeathRun start
+	public static String DRgetRank(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return (String) o.get("title");
+	}
+	public static long DRgetGames(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		return (long) o.get("games_played");
+	}
+	public static long DRgetRunnerWins(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		return (long) o.get("runnerwins");
+	}
+	public static long DRgetRunnerGamesPlayed(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		return (long) o.get("runnergamesplayed");
+	}
+	public static long DRgetDeaths(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		return (long) o.get("deaths");
+	}
+	public static int DRgetAchievements(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		HashMap<String, Object> map = new HashMap<String, Object>();
+			Iterator<?> keys = o.keySet().iterator();
+
+	        while( keys.hasNext() ){
+	            String key = (String)keys.next();
+	            Object value = o.get(key);
+	            map.put(key, value);
+
+	        }
+	       
+	       JSONObject o2 = (JSONObject) map.get("achievements");
+	       
+	       return o2.keySet().size() - 1;
+	}
+	
+	//DeathRun end
+	
 	public static ChatColor getRankColor(String rankName){
 		ChatColor rankColor = null;
 		switch(rankName){

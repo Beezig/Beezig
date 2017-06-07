@@ -1,4 +1,4 @@
-package tk.roccodev.zta;
+package tk.roccodev.zta.games;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,6 +16,7 @@ import com.csvreader.CsvWriter;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
+import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
 import tk.roccodev.zta.notes.NotesManager;
@@ -104,23 +105,23 @@ public class TIMV extends GameMode{
 	
 	public static void plus20(){
 		karmaCounter +=20;
-		HiveAPI.karma +=20;
+		HiveAPI.TIMVkarma +=20;
 	}
 	public static void plus25(){
 		karmaCounter +=25;
-		HiveAPI.karma +=25;
+		HiveAPI.TIMVkarma +=25;
 	}
 	public static void plus10(){
 		karmaCounter +=10;
-		HiveAPI.karma += 10;
+		HiveAPI.TIMVkarma += 10;
 		}
 	public static void minus20(){
 		karmaCounter -=20;
-		HiveAPI.karma -=20;
+		HiveAPI.TIMVkarma -=20;
 		}
 	public static void minus40(){
 		karmaCounter -=40;
-		HiveAPI.karma -=40;
+		HiveAPI.TIMVkarma -=40;
 		}
 	
 	public static void resetCounter(){
