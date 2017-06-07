@@ -24,6 +24,8 @@ import tk.roccodev.zta.command.SayCommand;
 import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
+import tk.roccodev.zta.modules.dr.DeathsItem;
+import tk.roccodev.zta.modules.dr.KillsItem;
 import tk.roccodev.zta.modules.dr.PointsItem;
 import tk.roccodev.zta.modules.dr.RoleItem;
 import tk.roccodev.zta.modules.timv.BodiesItem;
@@ -76,15 +78,20 @@ public class ZTAMain {
 		}
 		
 		The5zigAPI.getLogger().info("Loading TIMVPlugin");
-		The5zigAPI.getAPI().registerModuleItem(this, "karma", KarmaItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "karmacounter", KarmaCounterItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "timvmap", MapItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "bodies", BodiesItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "dbodies", DBodiesItem.class, "serverhivemc");
+		
+		The5zigAPI.getAPI().registerModuleItem(this, "karma", tk.roccodev.zta.modules.timv.KarmaItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "karmacounter", tk.roccodev.zta.modules.timv.KarmaCounterItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "timvmap", tk.roccodev.zta.modules.timv.MapItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bodies", tk.roccodev.zta.modules.timv.BodiesItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "dbodies", tk.roccodev.zta.modules.timv.DBodiesItem.class, "serverhivemc");
+		
 		The5zigAPI.getAPI().registerModuleItem(this, "drmap", tk.roccodev.zta.modules.dr.MapItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "drrole", RoleItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "drpoints", PointsItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
+		The5zigAPI.getAPI().registerModuleItem(this, "drrole", tk.roccodev.zta.modules.dr.RoleItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drpoints", tk.roccodev.zta.modules.dr.PointsItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drkills", tk.roccodev.zta.modules.dr.KillsItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drdeaths", tk.roccodev.zta.modules.dr.DeathsItem.class , "serverhivemc");
+		
+		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		
 		CommandManager.registerCommand(new NotesCommand());
 		CommandManager.registerCommand(new AddNoteCommand());

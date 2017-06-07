@@ -12,13 +12,16 @@ public class DR extends GameMode{
 	public static boolean dead = false;
 	public static String role = null;
 	public static long lastRecordPoints;
+	public static int checkpoints;
+	public static int deaths;
+	public static int kills;
 	
 	public static void reset(DR gm){
 		
 		gm.setState(GameState.FINISHED);
 		activeMap = null;
 		role = null;
-		ZTAMain.isDR = false;		
+		ZTAMain.isDR = false;
 	}
 	
 	@Override
