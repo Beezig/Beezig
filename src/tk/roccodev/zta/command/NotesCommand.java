@@ -2,6 +2,7 @@ package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.IHive;
+import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.notes.NotesManager;
 
@@ -22,7 +23,7 @@ public class NotesCommand implements Command{
 	@Override
 	public void execute(String[] args) {
 		if(The5zigAPI.getAPI().getActiveServer() instanceof IHive && ZTAMain.isTIMV){
-			The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eNotes:");
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Notes:");
 			for(String s : NotesManager.notes){
 				The5zigAPI.getAPI().messagePlayer("§e - §r" + s);
 			}

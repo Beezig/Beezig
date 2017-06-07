@@ -37,7 +37,7 @@ import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
 
-@Plugin(name="TIMVPlugin", version="3.2.0")
+@Plugin(name="Beezig", version="4.0.0")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -58,8 +58,8 @@ public class ZTAMain {
 		IOverlay news = The5zigAPI.getAPI().createOverlay();
 		try {
 			if(Updater.isVersionBlacklisted(getCustomVersioning())){
-				The5zigAPI.getLogger().fatal("TIMV: This version is disabled!");
-				news.displayMessage("TIMV: Version is disabled remotely! Update to the latest version.");
+				The5zigAPI.getLogger().fatal("Beezig: This version is disabled!");
+				news.displayMessage("Beezig: Version is disabled remotely! Update to the latest version.");
 				
 				return;
 			}
@@ -69,15 +69,15 @@ public class ZTAMain {
 		}
 		try {
 			if(Updater.checkForUpdates()){
-				The5zigAPI.getLogger().fatal("TIMV: A new version of the module is available!");
-				news.displayMessage("TIMV: A new version of the module is available!");
+				The5zigAPI.getLogger().fatal("Beezig: A new version of the plugin is available!");
+				news.displayMessage("Beezig: A new version of the plugin is available!");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		The5zigAPI.getLogger().info("Loading TIMVPlugin");
+		The5zigAPI.getLogger().info("Loading Beezig");
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "karma", tk.roccodev.zta.modules.timv.KarmaItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "karmacounter", tk.roccodev.zta.modules.timv.KarmaCounterItem.class, "serverhivemc");
@@ -98,12 +98,15 @@ public class ZTAMain {
 		CommandManager.registerCommand(new SayCommand());
 		CommandManager.registerCommand(new SettingsCommand());
 		CommandManager.registerCommand(new RealRankCommand());
-		 ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
+		
+		ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 
-		The5zigAPI.getLogger().info("Loaded TIMVPlugin");
+		The5zigAPI.getLogger().info("Loaded Beezig");
+		
 		The5zigAPI.getLogger().info("Loading bStats");
 		MetricsLite metrics = new MetricsLite(this);
 		The5zigAPI.getLogger().info("Loaded bStats");
+		
 		String OS = System.getProperty("os.name").toLowerCase();
 		try{
 		if (OS.indexOf("mac") >= 0) {

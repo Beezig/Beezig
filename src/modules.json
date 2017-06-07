@@ -33,8 +33,13 @@
         },
         {
           "type": "drpoints"
-        }
-        
+        },
+		{
+          "type": "drkills"
+        },
+		{
+          "type": "drdeaths"
+        }		
         ]
      }
   ]

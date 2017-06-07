@@ -16,7 +16,7 @@ public class DeathsItem extends GameModeItem<DR>{
 	
 	@Override
 	public String getName() {
-		return "§rDeaths";
+		return "Deaths";
 	}
 	@Override
 	public boolean shouldRender(boolean dummy){		

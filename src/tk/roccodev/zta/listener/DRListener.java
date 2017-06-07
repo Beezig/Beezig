@@ -61,8 +61,6 @@ public class DRListener extends AbstractGameListener<DR>{
 		if(message.startsWith("§8▍ §cDeathRun§8 ▏ §3Voting has ended! §bThe map") && gameMode != null){
 			String afterMsg = message.split("§8▍ §cDeathRun§8 ▏ §3Voting has ended! §bThe map")[1];
 			The5zigAPI.getLogger().info(afterMsg);
-		// §bSky Lands§6
-		// 
 			String map = "";
 		    
 		    Pattern pattern = Pattern.compile(Pattern.quote("§f") + "(.*?)" + Pattern.quote("§b"));
@@ -70,7 +68,6 @@ public class DRListener extends AbstractGameListener<DR>{
 		    while (matcher.find()) {
 		        map = matcher.group(1);
 		    }
-		    The5zigAPI.getLogger().info(map);
 		    DRMap map1 = DRMap.getFromDisplay(map);	    
 		    DR.activeMap = map1;			
 		}
@@ -85,7 +82,7 @@ public class DRListener extends AbstractGameListener<DR>{
 			}
 		}
 		else if(message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f") && ZTAMain.isDR && DR.role == "Runner") {
-			// I don't care about double token weekends Rocco :^)
+			// I don't care about double tokens weekends Rocco :^)
 			if(!(DR.checkpoints == DR.activeMap.getCheckpoints())){
 					DR.checkpoints++;
 				}
@@ -131,7 +128,7 @@ public class DRListener extends AbstractGameListener<DR>{
 			return true;
 		}
 		
-		else if(message.contains(ChatColor.stripColor(" Points:")) && !Setting.DR_SHOW_RANK.getValue()){
+		else if(message.contains(ChatColor.DARK_AQUA + " Points:") && !Setting.DR_SHOW_RANK.getValue()){
 			String[] contents = message.split(":");
 			long points = Long.valueOf(ChatColor.stripColor(contents[1].trim()));
 			DR.lastRecordPoints = points;

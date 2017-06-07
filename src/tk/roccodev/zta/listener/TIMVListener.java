@@ -243,6 +243,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		}
 		
 		else if(message.startsWith(ChatColor.AQUA + "Traitor Points:") && Setting.TIMV_SHOW_TRAITORRATIO.getValue()){
+			The5zigAPI.getLogger().info("Running Better Records...");
 			Thread t = new Thread(new Runnable(){
 				@Override
 				public void run(){

@@ -2,6 +2,7 @@ package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.IHive;
+import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.notes.NotesManager;
 
@@ -25,7 +26,7 @@ public class AddNoteCommand implements Command{
 		if(!ZTAMain.isTIMV) return;
 		if(!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return;
 		if( args.length == 0 ){
-			The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eNote may not be empty.");
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Note may not be empty.");
 			return;
 		}
 		StringBuilder note = new StringBuilder();
@@ -33,7 +34,7 @@ public class AddNoteCommand implements Command{
 			note.append(s).append(" ");
 		}
 		NotesManager.notes.add(note.toString().trim());
-		The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eSuccesfully added note.");
+		The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully added note.");
 	}
 
 	

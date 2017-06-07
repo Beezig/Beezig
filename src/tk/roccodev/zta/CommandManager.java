@@ -44,7 +44,7 @@ public class CommandManager {
 		cmdFound.execute(dataList.toArray(new String[dataList.size()]));
 		}catch(Exception e){
 			e.printStackTrace();
-			The5zigAPI.getAPI().messagePlayerInSecondChat("§a[TIMV Plugin]§c An error occurred while attempting to perform this command.");
+			The5zigAPI.getAPI().messagePlayer(Log.error + "An error occurred while attempting to perform this command.");
 		}
 		return true;
 	}
