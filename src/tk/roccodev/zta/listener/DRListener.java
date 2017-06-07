@@ -13,6 +13,7 @@ import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.DRRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -171,6 +172,9 @@ public class DRListener extends AbstractGameListener<DR>{
 				if(Setting.DR_SHOW_ACHIEVEMENTS.getValue()){
 					int ach = HiveAPI.DRgetAchievements(DR.lastRecords);
 					The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Achievements: " + ChatColor.AQUA + ach + "/35");
+				}
+				if(Setting.SHOW_RECORDS_LASTGAME.getValue()){
+					The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Last Game: " + ChatColor.AQUA + HiveAPI.lastGame(DR.lastRecords, "DR"));
 				}
 			}
 			catch(Exception e){

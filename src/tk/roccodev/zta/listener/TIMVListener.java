@@ -304,6 +304,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				int ach = HiveAPI.TIMVgetAchievements(TIMV.lastRecords);
 				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Achievements: " + ChatColor.YELLOW + ach + "/41");
 			}
+			if(Setting.SHOW_RECORDS_LASTGAME.getValue()){
+				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Last Game: " + ChatColor.YELLOW + HiveAPI.lastGame(TIMV.lastRecords, "TIMV"));
+			}
 			
 
 			}
