@@ -1,3 +1,4 @@
+
 package tk.roccodev.zta.settings;
 
 import java.io.IOException;
@@ -49,3 +50,4 @@ public enum Setting {
 	
 	
 }
+
