@@ -1,7 +1,7 @@
-package tk.roccodev.zta.modules;
+package tk.roccodev.zta.modules.timv;
 
 import eu.the5zig.mod.modules.GameModeItem;
-import tk.roccodev.zta.TIMV;
+import tk.roccodev.zta.games.TIMV;
 
 public class KarmaCounterItem extends GameModeItem<TIMV>{
 

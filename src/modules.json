@@ -20,6 +20,22 @@
 		  "type": "dbodies"
 		}
       ]
-    }
+    },
+    {
+    "id": "DeathRun",
+      "name": "DeathRun",
+      "items": [
+        {
+          "type": "drmap"
+        },
+        {
+          "type": "drrole"
+        },
+        {
+          "type": "drpoints"
+        }
+        
+        ]
+     }
   ]
 }

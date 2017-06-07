@@ -22,11 +22,15 @@ import tk.roccodev.zta.command.NotesCommand;
 import tk.roccodev.zta.command.RealRankCommand;
 import tk.roccodev.zta.command.SayCommand;
 import tk.roccodev.zta.command.SettingsCommand;
-import tk.roccodev.zta.modules.BodiesItem;
-import tk.roccodev.zta.modules.DBodiesItem;
-import tk.roccodev.zta.modules.KarmaCounterItem;
-import tk.roccodev.zta.modules.KarmaItem;
-import tk.roccodev.zta.modules.MapItem;
+import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.games.TIMV;
+import tk.roccodev.zta.modules.dr.PointsItem;
+import tk.roccodev.zta.modules.dr.RoleItem;
+import tk.roccodev.zta.modules.timv.BodiesItem;
+import tk.roccodev.zta.modules.timv.DBodiesItem;
+import tk.roccodev.zta.modules.timv.KarmaCounterItem;
+import tk.roccodev.zta.modules.timv.KarmaItem;
+import tk.roccodev.zta.modules.timv.MapItem;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
@@ -36,6 +40,7 @@ public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
 	public static boolean isTIMV = false;
+	public static boolean isDR = false;
 	public static IKeybinding notesKb;
 	public static File mcFile;
 	
@@ -76,6 +81,9 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "timvmap", MapItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bodies", BodiesItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "dbodies", DBodiesItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drmap", tk.roccodev.zta.modules.dr.MapItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drrole", RoleItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drpoints", PointsItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 		
 		CommandManager.registerCommand(new NotesCommand());
@@ -141,10 +149,19 @@ public class ZTAMain {
 		if(evt.getMessage().startsWith("/records") || evt.getMessage().startsWith("/stats")){
 			String[] args = evt.getMessage().split(" ");
 			if(args.length == 1){
-				TIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				if(isTIMV){
+					TIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				} else if(isDR){
+					DR.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				}
 			}
 			else{
-				TIMV.lastRecords = args[1].trim();
+				if(isTIMV){
+					TIMV.lastRecords = args[1].trim();
+				}
+				else if(isDR){
+					DR.lastRecords = args[1].trim();	
+				}
 			}
 		}
 		

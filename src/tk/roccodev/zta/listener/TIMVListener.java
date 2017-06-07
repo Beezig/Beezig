@@ -1,3 +1,4 @@
+
 package tk.roccodev.zta.listener;
 
 import java.util.concurrent.ExecutorService;
@@ -13,8 +14,8 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.TIMV;
 import tk.roccodev.zta.ZTAMain;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
 import tk.roccodev.zta.hiveapi.TIMVRank;
@@ -46,12 +47,12 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
 			
 			int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
-			HiveAPI.karma = (long) karma;
+			HiveAPI.TIMVkarma = (long) karma;
 			
 			
 		}else{
 		try {
-			HiveAPI.updateKarma();
+			HiveAPI.TIMVupdateKarma();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,7 +77,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
 				
 				int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
-				HiveAPI.karma = (long) karma;
+				HiveAPI.TIMVkarma = (long) karma;
 				
 				
 			}else{
@@ -86,7 +87,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 					@Override
 					public void run(){
 						try {
-							HiveAPI.updateKarma();
+							HiveAPI.TIMVupdateKarma();
 							
 						} catch (ParseException e) {
 							// TODO Auto-generated catch block
@@ -192,16 +193,87 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.activeMap = map1;
 	
 		}
-		else if(message.startsWith(ChatColor.AQUA + "Karma:")){
+		else if(message.startsWith(ChatColor.AQUA + "Username:") && (Setting.SHOW_NETWORK_RANK_COLOR.getValue() || Setting.SHOW_NETWORK_RANK_TITLE.getValue())){
+			Thread t = new Thread(new Runnable(){
+				@Override
+				public void run(){
+					String correctName = HiveAPI.getName(TIMV.lastRecords);
+				 	String rank = HiveAPI.getNetworkRank(TIMV.lastRecords);
+				 	ChatColor rankColor = HiveAPI.getRankColor(rank);
+			 	
+				 	
+				 	// Not sure if this the best way to do this v
+				 	if(Setting.SHOW_NETWORK_RANK_COLOR.getValue() && Setting.SHOW_NETWORK_RANK_TITLE.getValue()){
+				 		The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Username: " + rankColor + correctName + ChatColor.YELLOW + " (" + rankColor + rank + ChatColor.YELLOW + ")");
+				 	}
+				 	else if(Setting.SHOW_NETWORK_RANK_COLOR.getValue() && !Setting.SHOW_NETWORK_RANK_TITLE.getValue()){
+				 		The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Username: " + rankColor + correctName);
+					}
+				 	else if(!Setting.SHOW_NETWORK_RANK_COLOR.getValue() && Setting.SHOW_NETWORK_RANK_TITLE.getValue()){
+				 		The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Username: " + ChatColor.YELLOW + correctName + " (" + rank + ")");
+					}
+				}
+			});
+			t.start();
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return true;
+		}
+		else if(message.startsWith(ChatColor.AQUA + "Karma:") && !Setting.TIMV_SHOW_RANK.getValue()){
+			String[] contents = message.split(":");
+			long karma = Long.valueOf(ChatColor.stripColor(contents[1].trim()));
+			TIMV.lastRecordKarma = karma;
+		}
+
+		else if(message.startsWith(ChatColor.AQUA + "Karma:") && Setting.TIMV_SHOW_RANK.getValue()){
 			String[] contents = message.split(":");
 			String karma1 = ChatColor.stripColor(contents[1].trim());
 			long karma = Long.valueOf(karma1);
-			TIMVRank rank = TIMVRank.getFromDisplay(HiveAPI.getRank(TIMV.lastRecords));
+			TIMV.lastRecordKarma = karma;
+			TIMVRank rank = TIMVRank.getFromDisplay(HiveAPI.TIMVgetRank(TIMV.lastRecords));
 			String title = rank.getTotalDisplay();
 			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Karma: " + ChatColor.YELLOW + karma + " (" + title +  ChatColor.YELLOW + ")");
 			
 			return true;
-			
+		}
+		
+		else if(message.startsWith(ChatColor.AQUA + "Traitor Points:") && Setting.TIMV_SHOW_TRAITORRATIO.getValue()){
+			Thread t = new Thread(new Runnable(){
+				@Override
+				public void run(){
+					if(TIMV.lastRecordKarma >= 1000){
+						String[] contents = message.split(":");
+						int tp = Integer.parseInt(ChatColor.stripColor(contents[1].trim()));
+						long rp = HiveAPI.TIMVgetRolepoints(TIMV.lastRecords);
+						double tratio = Math.round(((double)tp / (double)rp) * 1000d) / 10d;
+						ChatColor ratioColor = ChatColor.YELLOW;
+						if(tratio >= 38.0){
+							ratioColor= ChatColor.RED;
+						}
+						The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Traitor Points: " + ChatColor.YELLOW + tp + " (" + ratioColor + tratio + "%" +  ChatColor.YELLOW + ")");
+					return;
+					}
+					else{
+						String[] contents = message.split(":");
+						int tp = Integer.parseInt(ChatColor.stripColor(contents[1].trim()));
+						The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Traitor Points: " + ChatColor.YELLOW + tp);
+					}
+				return;	
+				}
+			});
+			t.start();
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return true;
 			
 		}
 		else if(message.startsWith(ChatColor.AQUA + "Role points:")){
@@ -214,28 +286,25 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			try{
 			
 			
-			
-		
-			
-			
-			
-			if(Setting.SHOW_MOSTPOINTS.getValue()){
-				long mp = HiveAPI.getKarmaPerGame(TIMV.lastRecords);
+			if(Setting.TIMV_SHOW_MOSTPOINTS.getValue()){
+				long mp = HiveAPI.TIMVgetKarmaPerGame(TIMV.lastRecords);
 				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Most Points: " + ChatColor.YELLOW + mp);
 			}
 			
-			if(Setting.SHOW_KRR.getValue()){
-				long karma = HiveAPI.getKarma(TIMV.lastRecords);
-				long rp = HiveAPI.getRolepoints(TIMV.lastRecords);
+			if(Setting.TIMV_SHOW_KRR.getValue()){
+				long karma = HiveAPI.TIMVgetKarma(TIMV.lastRecords);
+				if(karma >= 1000){
+				long rp = HiveAPI.TIMVgetRolepoints(TIMV.lastRecords);
 				double krr = (double)Math.round(((double)karma / (double)rp) * 100d) / 100d;
 				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "K/R: " + ChatColor.YELLOW + krr);
+				}
 			}
-			if(Setting.SHOW_ACHIEVEMENTS.getValue()){
-				int ach = HiveAPI.getAchievements(TIMV.lastRecords);
+			if(Setting.TIMV_SHOW_ACHIEVEMENTS.getValue()){
+				int ach = HiveAPI.TIMVgetAchievements(TIMV.lastRecords);
 				The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Achievements: " + ChatColor.YELLOW + ach + "/41");
 			}
 			
-			// TODO may want to pull the maxachievements(/41) from the API.
+
 			}
 			catch(Exception e){
 				e.printStackTrace();
@@ -308,3 +377,4 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 	
 
 }
+

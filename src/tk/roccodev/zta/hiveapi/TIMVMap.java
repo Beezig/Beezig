@@ -32,6 +32,7 @@ public enum TIMVMap {
 	SKY_SHIP("Sky Ship",2 ,2),
 	SPECTRAL("Spectral", 3,3),
 	SPRING_FALLS("Spring Falls", 1, 1),
+	STATION("Station", 3, 3),
 	THE_CANAL("The Canal", 2, 2),
 	THE_SHIRE("The Shire", 3, 3),
 	WOODBURY("Welcome to Woodbury", 2, 2),

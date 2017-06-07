@@ -1,6 +1,7 @@
 package tk.roccodev.zta;
 
 import eu.the5zig.mod.server.ServerInstance;
+import tk.roccodev.zta.listener.DRListener;
 import tk.roccodev.zta.listener.HiveListener;
 import tk.roccodev.zta.listener.TIMVListener;
 
@@ -26,7 +27,7 @@ public class IHive extends ServerInstance {
 		// TODO Auto-generated method stub
 		getGameListener().registerListener(new TIMVListener());
 		getGameListener().registerListener(new HiveListener());
-		
+		getGameListener().registerListener(new DRListener());
 	}
 
 

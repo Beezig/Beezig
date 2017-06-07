@@ -31,6 +31,12 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			The5zigAPI.getLogger().info("Connected to TIMV! -Hive");
 		}
 		
+		else if(key.equals("dr.welcome")){
+			getGameListener().switchLobby("DR");
+			
+			The5zigAPI.getLogger().info("Connected to DR! -Hive");
+		}
+		
 	}
 
 	
