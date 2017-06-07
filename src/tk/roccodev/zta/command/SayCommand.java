@@ -18,7 +18,7 @@ public class SayCommand implements Command{
 	}
 
 	@Override
-	public void execute(String[] args) {
+	public boolean execute(String[] args) {
 		
 		if(args.length != 0){
 			StringBuilder sb = new StringBuilder();
@@ -30,11 +30,12 @@ public class SayCommand implements Command{
 			}else{
 			The5zigAPI.getAPI().sendPlayerMessage("/" + sb.toString());
 			}
+			
 		}
 		else{
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /say [command]");
 		}
-		
+		return true;
 	}
 
 

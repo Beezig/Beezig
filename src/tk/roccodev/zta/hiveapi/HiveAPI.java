@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -123,6 +124,30 @@ public class HiveAPI {
 		
 		return (String) o.get("rankName");
 	}
+	
+	/*
+	 * Fetches the last logout from the API
+	 * 
+	 * @return last logout
+	 * 
+	 */
+	public static Date getLastLogout(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		long time = (long) o.get("lastLogout");
+		return new Date(time * 1000);
+	}
+	
+	
 	public static String getName(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();

@@ -2,6 +2,9 @@ package tk.roccodev.zta;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,18 +24,10 @@ import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.NotesCommand;
 import tk.roccodev.zta.command.RealRankCommand;
 import tk.roccodev.zta.command.SayCommand;
+import tk.roccodev.zta.command.SeenCommand;
 import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
-import tk.roccodev.zta.modules.dr.DeathsItem;
-import tk.roccodev.zta.modules.dr.KillsItem;
-import tk.roccodev.zta.modules.dr.PointsItem;
-import tk.roccodev.zta.modules.dr.RoleItem;
-import tk.roccodev.zta.modules.timv.BodiesItem;
-import tk.roccodev.zta.modules.timv.DBodiesItem;
-import tk.roccodev.zta.modules.timv.KarmaCounterItem;
-import tk.roccodev.zta.modules.timv.KarmaItem;
-import tk.roccodev.zta.modules.timv.MapItem;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
@@ -98,6 +93,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new SayCommand());
 		CommandManager.registerCommand(new SettingsCommand());
 		CommandManager.registerCommand(new RealRankCommand());
+		CommandManager.registerCommand(new SeenCommand());
 		
 		ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 
@@ -123,8 +119,8 @@ public class ZTAMain {
 		}
 		if(!mcFile.exists()) mcFile.mkdir();
 		The5zigAPI.getLogger().info("MC Folder is at: " + mcFile.getAbsolutePath());
-		
-		File csvFile = new File(mcFile + "/5zigtimv/games.csv");
+		checkForFileExist(new File(mcFile + "/timv/"), true);
+		checkOldCsvPath();
 		File settingsFile = new File(ZTAMain.mcFile.getAbsolutePath() + "/settings.properties");
 		if(!settingsFile.exists()){
 			try {
@@ -143,6 +139,49 @@ public class ZTAMain {
 		}
 	}
 	
+	private void checkForFileExist(File f, boolean directory) {
+		if(!f.exists())
+			try {
+				if(directory) {
+					f.mkdir();
+					
+				}
+				else{
+					f.createNewFile();
+				}
+				
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	private void checkOldCsvPath(){
+		File oldPath = new File(mcFile + "/games.csv");
+		File newPath = new File(mcFile + "/timv/games.csv");
+		if(oldPath.exists() && newPath.exists()){
+			return;
+		}
+		else if(oldPath.exists() && !newPath.exists()){
+			The5zigAPI.getLogger().info("games.csv in 5zigtimv/ directory found! Migrating...");
+			checkForFileExist(new File(mcFile + "/timv/"), true);
+			try {
+				newPath.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				Files.move(FileSystems.getDefault().getPath(oldPath.getAbsolutePath()), FileSystems.getDefault().getPath(mcFile.getAbsolutePath() + "/timv/"), StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			The5zigAPI.getLogger().info("Migration complete!");
+		}
+		
+	}
 	
 	
 	@EventHandler(priority = EventHandler.Priority.HIGH)

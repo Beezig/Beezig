@@ -21,12 +21,16 @@ public class NotesCommand implements Command{
 	}
 
 	@Override
-	public void execute(String[] args) {
+	public boolean execute(String[] args) {
 		if(The5zigAPI.getAPI().getActiveServer() instanceof IHive && ZTAMain.isTIMV){
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Notes:");
 			for(String s : NotesManager.notes){
 				The5zigAPI.getAPI().messagePlayer("§e - §r" + s);
 			}
+			return true;
+		}
+		else{
+			return false;
 		}
 		
 		

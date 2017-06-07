@@ -1,6 +1,7 @@
 package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.settings.Setting;
 
@@ -19,8 +20,8 @@ public class SettingsCommand implements Command{
 	}
 
 	@Override
-	public void execute(String[] args) {
-		
+	public boolean execute(String[] args) {
+		if(!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
 		if(args.length == 0){ //List settings
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Settings:");
 			for(Setting sett : Setting.values()){
@@ -51,7 +52,7 @@ public class SettingsCommand implements Command{
 			}
 			catch(IllegalArgumentException e){
 				The5zigAPI.getAPI().messagePlayer(Log.error + "Invalid setting.");
-				return;
+				return true;
 			}
 			sett.setValue(b);
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully updated setting.");
@@ -62,7 +63,7 @@ public class SettingsCommand implements Command{
 			The5zigAPI.getAPI().messagePlayer("§e - /settings [setting] §a to get the value of a setting");
 			The5zigAPI.getAPI().messagePlayer("§e - /settings [setting] [true/false] §a to set the value of a setting.");
 		}
-		
+		return true;
 	}
 
 	
