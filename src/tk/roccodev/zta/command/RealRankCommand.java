@@ -21,11 +21,11 @@ public class RealRankCommand implements Command{
 	}
 
 	@Override
-	public void execute(String[] args) {
-		if(!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return;
+	public boolean execute(String[] args) {
+		if(!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
 		if(!(args.length == 1)){
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /realrank [player]");
-			return;
+			return true;
 		}
 		The5zigAPI.getAPI().messagePlayer(Log.info + "Connecting to API...");
 		new Thread(new Runnable(){
@@ -37,7 +37,7 @@ public class RealRankCommand implements Command{
 				The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.YELLOW + ign + "'s Rank: " + rankColor + networkRank);				
 			}
 		}).start();
-		
+		return true;
 	}
 
 	

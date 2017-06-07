@@ -1,0 +1,48 @@
+<project name="Beezig" basedir="." default="jar">
+    
+    <property name="lib.dir"     value="libs"/>
+    <property name="src.dir"     value="src"/>
+
+    <property name="build.dir"   value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir"     value="${build.dir}/jar"/>
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+    
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+    </target>
+ <target name="jar">
+        <mkdir dir="build/jar"/>
+        <jar destfile="build/jar/TIMVPlugin.jar" basedir="build/classes">
+  	 <fileset dir="${src.dir}" casesensitive="yes">
+  		<include name="plugin.json"/>
+  		<include name="modules.json"/>
+  		<include name="core/messages/*"/>
+  		<include name="lang/*"/>
+  	
+</fileset>
+
+          
+        </jar>
+    </target>
+    <target name="run" depends="jar">
+        <java fork="true">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${jar.dir}/${ant.project.name}.jar"/>
+            </classpath>
+        </java>
+    </target>
+	
+	<target name="test">
+		
+		</target>
+
+    
+
+</project>

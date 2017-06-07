@@ -2,6 +2,9 @@ package tk.roccodev.zta;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,21 +24,15 @@ import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.NotesCommand;
 import tk.roccodev.zta.command.RealRankCommand;
 import tk.roccodev.zta.command.SayCommand;
+import tk.roccodev.zta.command.SeenCommand;
 import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
-import tk.roccodev.zta.modules.dr.PointsItem;
-import tk.roccodev.zta.modules.dr.RoleItem;
-import tk.roccodev.zta.modules.timv.BodiesItem;
-import tk.roccodev.zta.modules.timv.DBodiesItem;
-import tk.roccodev.zta.modules.timv.KarmaCounterItem;
-import tk.roccodev.zta.modules.timv.KarmaItem;
-import tk.roccodev.zta.modules.timv.MapItem;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
 
-@Plugin(name="TIMVPlugin", version="3.2.0")
+@Plugin(name="Beezig", version="4.0.0")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -56,8 +53,8 @@ public class ZTAMain {
 		IOverlay news = The5zigAPI.getAPI().createOverlay();
 		try {
 			if(Updater.isVersionBlacklisted(getCustomVersioning())){
-				The5zigAPI.getLogger().fatal("TIMV: This version is disabled!");
-				news.displayMessage("TIMV: Version is disabled remotely! Update to the latest version.");
+				The5zigAPI.getLogger().fatal("Beezig: This version is disabled!");
+				news.displayMessage("Beezig: Version is disabled remotely! Update to the latest version.");
 				
 				return;
 			}
@@ -67,36 +64,45 @@ public class ZTAMain {
 		}
 		try {
 			if(Updater.checkForUpdates()){
-				The5zigAPI.getLogger().fatal("TIMV: A new version of the module is available!");
-				news.displayMessage("TIMV: A new version of the module is available!");
+				The5zigAPI.getLogger().fatal("Beezig: A new version of the plugin is available!");
+				news.displayMessage("Beezig: A new version of the plugin is available!");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		The5zigAPI.getLogger().info("Loading TIMVPlugin");
-		The5zigAPI.getAPI().registerModuleItem(this, "karma", KarmaItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "karmacounter", KarmaCounterItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "timvmap", MapItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "bodies", BodiesItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "dbodies", DBodiesItem.class, "serverhivemc");
+		The5zigAPI.getLogger().info("Loading Beezig");
+		
+		The5zigAPI.getAPI().registerModuleItem(this, "karma", tk.roccodev.zta.modules.timv.KarmaItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "karmacounter", tk.roccodev.zta.modules.timv.KarmaCounterItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "timvmap", tk.roccodev.zta.modules.timv.MapItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bodies", tk.roccodev.zta.modules.timv.BodiesItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "dbodies", tk.roccodev.zta.modules.timv.DBodiesItem.class, "serverhivemc");
+		
 		The5zigAPI.getAPI().registerModuleItem(this, "drmap", tk.roccodev.zta.modules.dr.MapItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "drrole", RoleItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "drpoints", PointsItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
+		The5zigAPI.getAPI().registerModuleItem(this, "drrole", tk.roccodev.zta.modules.dr.RoleItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drpoints", tk.roccodev.zta.modules.dr.PointsItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drkills", tk.roccodev.zta.modules.dr.KillsItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drdeaths", tk.roccodev.zta.modules.dr.DeathsItem.class , "serverhivemc");
+		
+		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		
 		CommandManager.registerCommand(new NotesCommand());
 		CommandManager.registerCommand(new AddNoteCommand());
 		CommandManager.registerCommand(new SayCommand());
 		CommandManager.registerCommand(new SettingsCommand());
 		CommandManager.registerCommand(new RealRankCommand());
-		 ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
+		CommandManager.registerCommand(new SeenCommand());
+		
+		ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 
-		The5zigAPI.getLogger().info("Loaded TIMVPlugin");
+		The5zigAPI.getLogger().info("Loaded Beezig");
+		
 		The5zigAPI.getLogger().info("Loading bStats");
 		MetricsLite metrics = new MetricsLite(this);
 		The5zigAPI.getLogger().info("Loaded bStats");
+		
 		String OS = System.getProperty("os.name").toLowerCase();
 		try{
 		if (OS.indexOf("mac") >= 0) {
@@ -113,8 +119,8 @@ public class ZTAMain {
 		}
 		if(!mcFile.exists()) mcFile.mkdir();
 		The5zigAPI.getLogger().info("MC Folder is at: " + mcFile.getAbsolutePath());
-		
-		File csvFile = new File(mcFile + "/5zigtimv/games.csv");
+		checkForFileExist(new File(mcFile + "/timv/"), true);
+		checkOldCsvPath();
 		File settingsFile = new File(ZTAMain.mcFile.getAbsolutePath() + "/settings.properties");
 		if(!settingsFile.exists()){
 			try {
@@ -133,6 +139,49 @@ public class ZTAMain {
 		}
 	}
 	
+	private void checkForFileExist(File f, boolean directory) {
+		if(!f.exists())
+			try {
+				if(directory) {
+					f.mkdir();
+					
+				}
+				else{
+					f.createNewFile();
+				}
+				
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	private void checkOldCsvPath(){
+		File oldPath = new File(mcFile + "/games.csv");
+		File newPath = new File(mcFile + "/timv/games.csv");
+		if(oldPath.exists() && newPath.exists()){
+			return;
+		}
+		else if(oldPath.exists() && !newPath.exists()){
+			The5zigAPI.getLogger().info("games.csv in 5zigtimv/ directory found! Migrating...");
+			checkForFileExist(new File(mcFile + "/timv/"), true);
+			try {
+				newPath.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				Files.move(FileSystems.getDefault().getPath(oldPath.getAbsolutePath()), FileSystems.getDefault().getPath(mcFile.getAbsolutePath() + "/timv/"), StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			The5zigAPI.getLogger().info("Migration complete!");
+		}
+		
+	}
 	
 	
 	@EventHandler(priority = EventHandler.Priority.HIGH)

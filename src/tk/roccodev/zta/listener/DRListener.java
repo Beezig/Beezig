@@ -57,17 +57,10 @@ public class DRListener extends AbstractGameListener<DR>{
 	public boolean onServerChat(DR gameMode, String message) {
 		// Uncomment this to see the real messages with chatcolor. vv
 		// The5zigAPI.getLogger().info("COLOR = (" + message + ")");
-		if(message.equals("§8▍ §cDeathRun§8 ▏ §6Welcome to Deathrun!")){
-			gameMode.setState(GameState.STARTING);
-			ZTAMain.isDR = true;
-			The5zigAPI.getLogger().info("DEBUG = Joined DR");
-		}
-	
-		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §3Voting has ended! §bThe map") && gameMode != null){
+		
+		if(message.startsWith("§8▍ §cDeathRun§8 ▏ §3Voting has ended! §bThe map") && gameMode != null){
 			String afterMsg = message.split("§8▍ §cDeathRun§8 ▏ §3Voting has ended! §bThe map")[1];
 			The5zigAPI.getLogger().info(afterMsg);
-		// §bSky Lands§6
-		// 
 			String map = "";
 		    
 		    Pattern pattern = Pattern.compile(Pattern.quote("§f") + "(.*?)" + Pattern.quote("§b"));
@@ -75,7 +68,6 @@ public class DRListener extends AbstractGameListener<DR>{
 		    while (matcher.find()) {
 		        map = matcher.group(1);
 		    }
-		    The5zigAPI.getLogger().info(map);
 		    DRMap map1 = DRMap.getFromDisplay(map);	    
 		    DR.activeMap = map1;			
 		}
@@ -89,6 +81,18 @@ public class DRListener extends AbstractGameListener<DR>{
 					break;
 			}
 		}
+		else if(message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f") && ZTAMain.isDR && DR.role == "Runner") {
+			// I don't care about double tokens weekends Rocco :^)
+			if(!(DR.checkpoints == DR.activeMap.getCheckpoints())){
+					DR.checkpoints++;
+				}
+			}
+		else if(message.equals("§8▍ §cDeathRun§8 ▏ §cYou have been returned to your last checkpoint!") && ZTAMain.isDR && DR.role == "Runner") {
+				DR.deaths++;	
+			}
+		else if(message.contains("§6 (") && message.contains("§6)") && message.contains(The5zigAPI.getAPI().getGameProfile().getName()) && ZTAMain.isDR && DR.role == "Death") {
+				DR.kills++;	
+			}
 		
 		else if(!message.contains("§6§6") && message.contains(" Stats §6§m") && (Setting.SHOW_NETWORK_RANK_COLOR.getValue() || Setting.SHOW_NETWORK_RANK_TITLE.getValue())){
 			Thread t = new Thread(new Runnable(){
@@ -124,7 +128,7 @@ public class DRListener extends AbstractGameListener<DR>{
 			return true;
 		}
 		
-		else if(message.contains(ChatColor.stripColor(" Points:")) && !Setting.DR_SHOW_RANK.getValue()){
+		else if(message.contains(ChatColor.DARK_AQUA + " Points:") && !Setting.DR_SHOW_RANK.getValue()){
 			String[] contents = message.split(":");
 			long points = Long.valueOf(ChatColor.stripColor(contents[1].trim()));
 			DR.lastRecordPoints = points;

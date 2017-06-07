@@ -58,17 +58,17 @@ public class TIMV extends GameMode{
 		String[] entries = {role, karmaCounter + "", activeMap.getDisplayName() };
 		CsvWriter writer = null;
 		
-		boolean alreadyExists = new File(ZTAMain.mcFile.getAbsolutePath() + "/games.csv").exists();
+		boolean alreadyExists = new File(ZTAMain.mcFile.getAbsolutePath() + "/timv/games.csv").exists();
 		if(!alreadyExists){
 			try {
-				new File(ZTAMain.mcFile.getAbsolutePath() + "/games.csv").createNewFile();
+				new File(ZTAMain.mcFile.getAbsolutePath() + "/timv/games.csv").createNewFile();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		try {
-			writer = new CsvWriter(new FileWriter(ZTAMain.mcFile.getAbsolutePath() + "/games.csv", true), ',');
+			writer = new CsvWriter(new FileWriter(ZTAMain.mcFile.getAbsolutePath() + "/timv/games.csv", true), ',');
 		
 		if (!alreadyExists){
 			//Create the header

@@ -14,7 +14,7 @@ public class Updater {
 
 	
 	private static String FETCH_URL = "https://roccodev.me/blog/versioning/5zig-timv/";
-	
+		
 
 	public static boolean checkForUpdates() throws Exception{
 		URL url = new URL(FETCH_URL + "latest.txt");
