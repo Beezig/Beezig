@@ -1,7 +1,7 @@
 language: java
 jdk:
   - oraclejdk8
-install: ant compile
+install: ant compile jar
 before_install:
  - mkdir libs
  - cd libs
@@ -12,9 +12,7 @@ before_install:
  - wget $DOWNLOAD_LINK/'log4j-core.jar'
  - wget $DOWNLOAD_LINK/'authlib.jar'
  - cd ..
-after_install:
- - ant jar
-deploy:
+deploy: 
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN 
