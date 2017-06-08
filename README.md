@@ -33,6 +33,15 @@ By RoccoDev and ItsNiklass.
 * Better /records: 
 	With Points/Game, Winrate as Runner, Deaths per Game and achievements.
 
+## Download
+
+* You can download normal stable releases in the Releases tab.
+
+If you want beta features, you can choose one of these downloads:
+
+* Master branch (unreleased changes, stable): [Click here](https://github.com/RoccoDev/Beezig-Deploy/raw/master/master/jar/TIMVPlugin.jar)
+* Experimental branch (unreleased changes, bleeding edge): [Click here](https://github.com/RoccoDev/Beezig-Deploy/raw/experimental/experimental/jar/TIMVPlugin.jar)
+
 ## APIs
 This plugin uses the 5zig Client API and Hive's API.
 
