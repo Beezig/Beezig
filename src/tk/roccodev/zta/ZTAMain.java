@@ -22,14 +22,8 @@ import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.mod.util.IKeybinding;
 import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.command.AddNoteCommand;
-import tk.roccodev.zta.command.NotesCommand;
-import tk.roccodev.zta.command.RealRankCommand;
-import tk.roccodev.zta.command.SayCommand;
-import tk.roccodev.zta.command.SeenCommand;
-import tk.roccodev.zta.command.SettingsCommand;
-import tk.roccodev.zta.games.DR;
-import tk.roccodev.zta.games.TIMV;
+import tk.roccodev.zta.command.*;
+import tk.roccodev.zta.games.*;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.notes.NotesManager;
@@ -99,6 +93,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new SettingsCommand());
 		CommandManager.registerCommand(new RealRankCommand());
 		CommandManager.registerCommand(new SeenCommand());
+		CommandManager.registerCommand(new PBCommand());
 		
 		ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 
