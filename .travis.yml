@@ -26,6 +26,7 @@ deploy:
     target_branch: $TRAVIS_BRANCH
     on: 
      all_branches: true
+     tags: false
   - provider: releases
     api_key: $GITHUB_TOKEN
     file: todeploy/$TRAVIS_BRANCH/jar/*.jar
