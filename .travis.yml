@@ -22,8 +22,8 @@ deploy:
     skip_cleanup: true
     local_dir: todeploy/
     github_token: $GITHUB_TOKEN 
-    repo: RoccoDev/5zig-TIMV-Plugin
-    target_branch: gh-pages
+    repo: RoccoDev/Beezig-Deploy
+    target_branch: master
     on: 
      branch: master
      branch: experimental
