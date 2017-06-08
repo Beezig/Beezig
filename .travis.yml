@@ -13,13 +13,14 @@ before_install:
  - wget $DOWNLOAD_LINK/'authlib.jar'
  - cd ..
 before_deploy:
- - mkdir $TRAVIS_BRANCH
- - mkdir $TRAVIS_BRANCH/jar/
+ - mkdir todeploy
+ - mkdir todeploy/$TRAVIS_BRANCH
+ - mkdir todeploy/$TRAVIS_BRANCH/jar/
  - mv build/jar/* $TRAVIS_BRANCH/jar/
 deploy:
   - provider: pages
     skip_cleanup: true
-    local_dir: $TRAVIS_BRANCH/jar/
+    local_dir: todeploy/$TRAVIS_BRANCH/jar/
     github_token: $GITHUB_TOKEN 
     repo: RoccoDev/5zig-TIMV-Plugin
     target_branch: gh-pages
@@ -28,7 +29,7 @@ deploy:
      branch: experimental
   - provider: releases
     api_key: $GITHUB_TOKEN
-    file: $TRAVIS_BRANCH/jar/*.jar
+    file: todeploy/$TRAVIS_BRANCH/jar/*.jar
     file_glob: true
     skip_cleanup: true
     on: 
