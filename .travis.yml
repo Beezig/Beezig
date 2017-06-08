@@ -12,12 +12,22 @@ before_install:
  - wget $DOWNLOAD_LINK/'log4j-core.jar'
  - wget $DOWNLOAD_LINK/'authlib.jar'
  - cd ..
-deploy: 
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN 
-  repo: RoccoDev/deploy
-  target_branch: beezig
-  on:
-   branch: master
-   branch: experimental
+deploy:
+  - provider: pages
+    skip_cleanup: true
+    file: build/*.jar
+    file_glob: true
+    github_token: $GITHUB_TOKEN 
+    repo: RoccoDev/5zig-TIMV-Plugin
+    target_branch: gh-pages
+    on: 
+     branch: master
+     branch: experimental
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file: build/*.jar
+    file_glob: true
+    skip_cleanup: true
+    on: 
+     tags: true
+
