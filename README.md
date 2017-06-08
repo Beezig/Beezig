@@ -4,10 +4,12 @@
 # Beezig v4.0 - A Hive 5zig Plugin
 
 [![Join the chat at https://gitter.im/5zig-TIMV-Plugin/Lobby](https://badges.gitter.im/5zig-TIMV-Plugin/Lobby.svg)](https://gitter.im/5zig-TIMV-Plugin/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![Master Branch](https://travis-ci.org/RoccoDev/5zig-TIMV-Plugin.svg?branch=master)
+
 A 5zig plugin to add HiveMC functionality. Currently supporting TIMV & DR.
 By RoccoDev and ItsNiklass.
 
-## Features
+# Features
 
 * Modules that show basic game information on-the-fly
 * Advanced /records for more data out of the command!
