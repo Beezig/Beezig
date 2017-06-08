@@ -13,6 +13,7 @@ before_install:
  - wget $DOWNLOAD_LINK/'authlib.jar'
  - cd ..
 before_deploy:
+ - mkdir $TRAVIS_BRANCH/jar
  - mv build/jar/* $TRAVIS_BRANCH/jar/
 deploy:
   - provider: pages
