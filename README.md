@@ -1,5 +1,5 @@
 
-![Title](https://i.imgur.com/Z5SuiC9.png)
+![Title](http://i.imgur.com/3rXuQls.png)
 
 # Beezig v4.0 - A Hive 5zig Plugin
 
@@ -35,3 +35,5 @@ By RoccoDev and ItsNiklass.
 
 ## APIs
 This plugin uses the 5zig Client API and Hive's API.
+
+## [Image Album](imgur.com/a/LIxhh)
