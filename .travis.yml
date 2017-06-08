@@ -19,8 +19,7 @@ before_deploy:
 deploy:
   - provider: pages
     skip_cleanup: true
-    file: $TRAVIS_BRANCH/jar/*.jar
-    file_glob: true
+    local_dir: $TRAVIS_BRANCH/jar/
     github_token: $GITHUB_TOKEN 
     repo: RoccoDev/5zig-TIMV-Plugin
     target_branch: gh-pages
