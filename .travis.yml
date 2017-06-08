@@ -25,8 +25,7 @@ deploy:
     repo: RoccoDev/Beezig-Deploy
     target_branch: master
     on: 
-     branch: master
-     branch: experimental
+     all_branches: true
   - provider: releases
     api_key: $GITHUB_TOKEN
     file: todeploy/$TRAVIS_BRANCH/jar/*.jar
