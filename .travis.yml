@@ -12,3 +12,9 @@ before_install:
  - wget $DOWNLOAD_LINK/'log4j-core.jar'
  - wget $DOWNLOAD_LINK/'authlib.jar'
  - cd ..
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN 
+  repo: https://github.com/RoccoDev/deploy.git
+  target_branch: beezig
