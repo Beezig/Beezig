@@ -17,9 +17,11 @@ import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.KeyPressEvent;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.event.ServerQuitEvent;
+import eu.the5zig.mod.event.TitleEvent;
 import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.mod.util.IKeybinding;
+import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.NotesCommand;
 import tk.roccodev.zta.command.RealRankCommand;
@@ -28,6 +30,8 @@ import tk.roccodev.zta.command.SeenCommand;
 import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
+import tk.roccodev.zta.hiveapi.DRMap;
+import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
@@ -85,6 +89,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "drpoints", tk.roccodev.zta.modules.dr.PointsItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drkills", tk.roccodev.zta.modules.dr.KillsItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drdeaths", tk.roccodev.zta.modules.dr.DeathsItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drpb", tk.roccodev.zta.modules.dr.PBItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		
@@ -236,6 +241,19 @@ public void onKeypress(KeyPressEvent evt){
 		}
 	}
 }
+	@EventHandler(priority = EventHandler.Priority.LOW)
+	public void onTitle(TitleEvent evt){
+		//Map fallback
+		if(ZTAMain.isDR && DR.activeMap == null){
+			String map = ChatColor.stripColor(evt.getTitle());
+			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
+		    DRMap map1 = DRMap.getFromDisplay(map);
+		    DR.activeMap = map1;
+		    if(DR.currentMapPB == null){
+				DR.currentMapPB = HiveAPI.DRgetPB(The5zigAPI.getAPI().getGameProfile().getName(), DR.activeMap);
+			}
+		}
+	}
 }
 	
 	

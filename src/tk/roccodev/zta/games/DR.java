@@ -8,6 +8,7 @@ import tk.roccodev.zta.hiveapi.DRMap;
 public class DR extends GameMode{
 
 	public static DRMap activeMap;
+	public static String currentMapPB;
 	public static String lastRecords = "";
 	public static boolean dead = false;
 	public static String role = null;
@@ -20,7 +21,11 @@ public class DR extends GameMode{
 		
 		gm.setState(GameState.FINISHED);
 		activeMap = null;
+		currentMapPB = null;
 		role = null;
+		checkpoints = 0;
+		deaths = 0;
+		kills = 0;
 		ZTAMain.isDR = false;
 	}
 	

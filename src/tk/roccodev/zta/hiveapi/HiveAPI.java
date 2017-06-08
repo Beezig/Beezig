@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.games.DR;
 
 public class HiveAPI {
 	
@@ -73,9 +74,7 @@ public class HiveAPI {
 		}
 	}
 	
-	
-	
-	
+	//TIMV
 	public static void TIMVupdateKarma() throws ParseException, Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
 		JSONParser parser = new JSONParser();
@@ -87,7 +86,6 @@ public class HiveAPI {
 		
 		
 	}
-	
 	public static long TIMVgetKarmaPerGame(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
@@ -102,97 +100,6 @@ public class HiveAPI {
 		
 		return (long) o.get("most_points");
 	}
-	
-	public static String getNetworkRank(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
-				boolean connError = false;
-				try{
-					//RoccoDev's UUID
-					parser.parse(readUrl(parsePlayerURLUUID("bba224a20bff4913b04227ca3b60973f")));
-				}
-				catch(Exception ex){
-					connError = true;
-				}
-				if(playerOnline && !connError){
-					return "Nicked player (100%)";
-				}
-				else if(connError){
-					return "Connection error (100%)";
-				}
-				else if(!playerOnline && !connError){
-					return "Player not found or nicked player (50-50%)";
-				}
-			}
-		
-		return (String) o.get("rankName");
-	}
-	
-	/*
-	 * Fetches the last logout from the API
-	 * 
-	 * @return last logout
-	 * 
-	 */
-	public static Date getLastLogout(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		long time = (long) o.get("lastLogout");
-		return new Date(time * 1000);
-	}
-	
-	
-	public static String getName(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
-				boolean connError = false;
-				try{
-					//RoccoDev's UUID
-					parser.parse(readUrl(parsePlayerURLUUID("bba224a20bff4913b04227ca3b60973f")));
-				}
-				catch(Exception ex){
-					connError = true;
-				}
-				if(playerOnline && !connError){
-					return "Nicked player (100%)";
-				}
-				else if(connError){
-					return "Connection error (100%)";
-				}
-				else if(!playerOnline && !connError){
-					return "Player not found or nicked player (50-50%)";
-				}
-				
-				
-				
-			}
-		
-		return (String) o.get("username");
-	}
-	
 	public static String TIMVgetRank(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
@@ -207,31 +114,6 @@ public class HiveAPI {
 		
 		return (String) o.get("title");
 	}
-	
-	public static NetworkPlayerInfo byName(String ign){
-		for(NetworkPlayerInfo p : The5zigAPI.getAPI().getServerPlayers()) {
-			
-		if(p.getGameProfile().getName().equals(ign)) return p;
-		}
-	return null; 
-	}
-	
-	public static Date lastGame(String ign, String game){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, game)));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			long time = (long) o.get("lastlogin");
-			return new Date(time * 1000);
-	}
-	
-	
 	public static int TIMVgetAchievements(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
@@ -257,7 +139,6 @@ public class HiveAPI {
 	       
 	       return o2.keySet().size() - 1;
 	}
-	
 	public static long TIMVgetRolepoints(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
@@ -287,7 +168,7 @@ public class HiveAPI {
 		return (long) o.get("total_points");
 	}
 	
-	//DeathRun start
+	//DR
 	public static String DRgetRank(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
@@ -354,6 +235,37 @@ public class HiveAPI {
 			}	
 		return (long) o.get("deaths");
 	}
+	public static String DRgetPB(String ign, DRMap map){
+		// totally the best way to do this 10/10
+		String playername = ign;
+		String map1 = map.toString();
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		JSONObject o1 = null;
+			try {
+				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+		try {
+			o1 = (JSONObject) parser.parse(o.get("maprecords").toString());
+			The5zigAPI.getLogger().info("VALUEOF " + o1.get(map1).toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
+		int time = Integer.valueOf(o1.get(map1).toString());
+		if(time > 59){
+			int seconds = time % 60;
+			int minutes = Math.floorDiv(time, 60);
+				if(seconds < 10){
+					return (minutes + ":0" + seconds);
+				}
+			return (minutes + ":" + seconds);
+		}
+		return (time + "s");
+	}
 	public static int DRgetAchievements(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
@@ -379,8 +291,114 @@ public class HiveAPI {
 	       
 	       return o2.keySet().size() - 1;
 	}
-	
-	//DeathRun end
+
+	public static Date getLastLogout(String ign){
+		/*
+		 * Fetches the last logout from the API
+		 * 
+		 * @return last logout
+		 * 
+		 */
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		long time = (long) o.get("lastLogout");
+		return new Date(time * 1000);
+	}
+	public static String getNetworkRank(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
+				boolean connError = false;
+				try{
+					//RoccoDev's UUID
+					parser.parse(readUrl(parsePlayerURLUUID("bba224a20bff4913b04227ca3b60973f")));
+				}
+				catch(Exception ex){
+					connError = true;
+				}
+				if(playerOnline && !connError){
+					return "Nicked player (100%)";
+				}
+				else if(connError){
+					return "Connection error (100%)";
+				}
+				else if(!playerOnline && !connError){
+					return "Player not found or nicked player (50-50%)";
+				}
+			}
+		
+		return (String) o.get("rankName");
+	}
+	public static String getName(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
+				boolean connError = false;
+				try{
+					//RoccoDev's UUID
+					parser.parse(readUrl(parsePlayerURLUUID("bba224a20bff4913b04227ca3b60973f")));
+				}
+				catch(Exception ex){
+					connError = true;
+				}
+				if(playerOnline && !connError){
+					return "Nicked player (100%)";
+				}
+				else if(connError){
+					return "Connection error (100%)";
+				}
+				else if(!playerOnline && !connError){
+					return "Player not found or nicked player (50-50%)";
+				}
+				
+				
+				
+			}
+		
+		return (String) o.get("username");
+	}
+	public static NetworkPlayerInfo byName(String ign){
+		for(NetworkPlayerInfo p : The5zigAPI.getAPI().getServerPlayers()) {
+			
+		if(p.getGameProfile().getName().equals(ign)) return p;
+		}
+	return null; 
+	}
+	public static Date lastGame(String ign, String game){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, game)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			long time = (long) o.get("lastlogin");
+			return new Date(time * 1000);
+	}
 	
 	public static ChatColor getRankColor(String rankName){
 		ChatColor rankColor = null;
@@ -429,7 +447,4 @@ public class HiveAPI {
 	    }
 	}
 
-	
-	
-	
 }

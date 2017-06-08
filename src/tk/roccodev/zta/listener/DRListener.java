@@ -79,6 +79,9 @@ public class DRListener extends AbstractGameListener<DR>{
 				case "DEATH!": DR.role = "Death";
 					break;
 				case "RUNNER!": DR.role = "Runner";
+						if(DR.activeMap != null){
+							DR.currentMapPB = HiveAPI.DRgetPB(The5zigAPI.getAPI().getGameProfile().getName(), DR.activeMap);
+						}
 					break;
 			}
 		}
@@ -203,6 +206,7 @@ public class DRListener extends AbstractGameListener<DR>{
 
 	@Override
 	public void onServerConnect(DR gameMode) {
+		The5zigAPI.getLogger().info("Resetting! (DR)");
 		DR.reset(gameMode);
 	}
 
