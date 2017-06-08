@@ -23,7 +23,7 @@ deploy:
     local_dir: todeploy/
     github_token: $GITHUB_TOKEN 
     repo: RoccoDev/Beezig-Deploy
-    target_branch: master
+    target_branch: $TRAVIS_BRANCH
     on: 
      all_branches: true
   - provider: releases
