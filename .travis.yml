@@ -1,7 +1,7 @@
 language: java
 jdk:
   - oraclejdk8
-install: ant compile
+install: ant compile jar
 before_install:
  - mkdir libs
  - cd libs
@@ -12,3 +12,26 @@ before_install:
  - wget $DOWNLOAD_LINK/'log4j-core.jar'
  - wget $DOWNLOAD_LINK/'authlib.jar'
  - cd ..
+before_deploy:
+ - mkdir todeploy
+ - mkdir todeploy/$TRAVIS_BRANCH
+ - mkdir todeploy/$TRAVIS_BRANCH/jar/
+ - mv build/jar/* todeploy/$TRAVIS_BRANCH/jar/
+deploy:
+  - provider: pages
+    skip_cleanup: true
+    local_dir: todeploy/
+    github_token: $GITHUB_TOKEN 
+    repo: RoccoDev/Beezig-Deploy
+    target_branch: master
+    on: 
+     branch: master
+     branch: experimental
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file: todeploy/$TRAVIS_BRANCH/jar/*.jar
+    file_glob: true
+    skip_cleanup: true
+    on: 
+     tags: true
+

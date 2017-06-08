@@ -42,6 +42,16 @@ public class HiveAPI {
 			return null;
 		}
 	}
+	private static URL GameParsePlayerURL(String name, String game){
+		String urls = "http://api.hivemc.com/v1/player/@player@/" + game;
+		try {
+			return new URL(urls.replaceAll("@player@", name));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 	private static URL parsePlayerURLGeneric(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/";
 		try {
@@ -204,6 +214,21 @@ public class HiveAPI {
 		if(p.getGameProfile().getName().equals(ign)) return p;
 		}
 	return null; 
+	}
+	
+	public static Date lastGame(String ign, String game){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, game)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			long time = (long) o.get("lastlogin");
+			return new Date(time * 1000);
 	}
 	
 	
