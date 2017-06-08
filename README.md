@@ -36,4 +36,4 @@ By RoccoDev and ItsNiklass.
 ## APIs
 This plugin uses the 5zig Client API and Hive's API.
 
-## [Image Album](imgur.com/a/LIxhh)
+## [Image Album](https://imgur.com/a/LIxhh)
