@@ -305,6 +305,14 @@ public class HiveAPI {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		if (DR.currentMapWRHolder == null){
+			try {
+				DR.currentMapWRHolder = (String) (((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("name".toString())).toString();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		Double time = null;
 		try {
 			//Returns the world record time in seconds
