@@ -1,19 +1,22 @@
 
 package tk.roccodev.zta.listener;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.json.simple.parser.ParseException;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -193,6 +196,133 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.activeMap = map1;
 	
 		}
+		else if(message.equals("§7==============§aTIMV Stats§7==============")){
+			//Advanced Records
+			if(message.endsWith("AR§e§l")){
+				The5zigAPI.getAPI().messagePlayer(message.replaceAll("AR§e§l", ""));
+				return true;
+			}
+				TIMV.messagesToSend.add(message);
+			
+			return true;
+		}
+		else if(message.equals("§bThis data is §elive data.") && !message.endsWith(" ")){
+			
+				TIMV.footerToSend.add(message);
+			
+			return true;
+		}
+		else if(message.startsWith(ChatColor.AQUA + "") && !message.endsWith(" ")){
+			
+			
+				TIMV.messagesToSend.add(message);
+			
+			
+			return true;
+			
+			
+		}
+		else if(message.equals("§7=====================================") && !message.endsWith(" ")){ //Bar
+			if(TIMV.footerToSend.contains("§bThis data is §elive data.")){
+				//Advanced Records - send
+				
+				The5zigAPI.getAPI().messagePlayer(Log.info + "Connecting to API...");
+				new Thread(new Runnable(){
+					@Override
+					public void run(){
+						TIMV.isRecordsRunning = true;
+						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
+						TIMVRank rank = null;
+						Long rolepoints = Setting.TIMV_SHOW_KRR.getValue() ? HiveAPI.TIMVgetRolepoints(TIMV.lastRecords) : null;
+						Long mostPoints = Setting.TIMV_SHOW_MOSTPOINTS.getValue() ? HiveAPI.TIMVgetKarmaPerGame(TIMV.lastRecords) : null;
+						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(TIMV.lastRecords) : null;
+						ChatColor rankColor = Setting.SHOW_NETWORK_RANK_COLOR.getValue() ? HiveAPI.getRankColor(rankTitle) : null;
+						long karma = 0;
+						long traitorPoints = 0;
+						Integer achievements = Setting.TIMV_SHOW_ACHIEVEMENTS.getValue() ? HiveAPI.TIMVgetAchievements(TIMV.lastRecords) : null;
+						String rankTitleTIMV = Setting.TIMV_SHOW_RANK.getValue() ? HiveAPI.TIMVgetRank(TIMV.lastRecords) : null;
+						if(rankTitleTIMV != null) rank = TIMVRank.getFromDisplay(rankTitleTIMV);
+						List<String> messages = new ArrayList<String>();
+						messages.addAll(TIMV.messagesToSend);
+							Iterator<String> it = messages.iterator();
+							for(String s : messages){
+								
+								
+								
+								if(s.startsWith("§bKarma: §e")){
+									StringBuilder sb = new StringBuilder();
+									sb.append("§bKarma: §e");
+									karma = Long.parseLong(s.replaceAll("§bKarma: §e", ""));
+									sb.append(karma);
+									if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§e)");
+									The5zigAPI.getAPI().messagePlayer(sb.toString().trim() + " ");
+									continue;
+								}
+								else if(s.startsWith("§bUsername: §e")){
+									StringBuilder sb = new StringBuilder();
+									String username = ChatColor.stripColor(s.replaceAll("§bUsername: §e", ""));
+									sb.append("§bUsername: ");
+									if(rankColor != null) sb.append(rankColor + username);
+									if(rankTitle != null){
+										if(rankColor == null) rankColor = ChatColor.WHITE;
+										sb.append("§e (" + rankColor + rankTitle + "§e)");
+									}
+									The5zigAPI.getAPI().messagePlayer(sb.toString().trim() + " ");
+									continue;
+								}
+								The5zigAPI.getAPI().messagePlayer(s + " ");
+								
+							}
+							
+						
+
+
+						Double krr = Setting.TIMV_SHOW_KRR.getValue() ? ((double) karma / (double) rolepoints) : null;
+							
+							
+						if(mostPoints != null){
+							The5zigAPI.getAPI().messagePlayer("§bMost Points: §e" + mostPoints + " ");
+						}
+						if(achievements != null){
+							The5zigAPI.getAPI().messagePlayer("§bAchievements: §e" + achievements + "/41 ");
+						}
+						if(krr != null){
+							The5zigAPI.getAPI().messagePlayer("§bKarma/Rolepoints: §e" + krr + " ");
+						}
+						if(mostPoints != null){
+							The5zigAPI.getAPI().messagePlayer("§bMost Points: §e" + mostPoints + " ");
+						}
+						
+							
+							for(String s : TIMV.footerToSend){
+								
+								The5zigAPI.getAPI().messagePlayer(s + " ");
+							}
+						
+						
+						
+						TIMV.messagesToSend.clear();
+						TIMV.footerToSend.clear();
+						TIMV.isRecordsRunning = false;
+						The5zigAPI.getAPI().messagePlayer("§7===================================== ");
+						The5zigAPI.getAPI().messagePlayer(Log.info + "Done!");
+						
+						
+					}
+				}).start();
+				return true;
+				
+				
+			}
+			else{
+				
+					TIMV.footerToSend.add(message);
+				
+				return true;
+			}
+			
+			
+		}/*
 		else if(message.startsWith(ChatColor.AQUA + "Username:") && (Setting.SHOW_NETWORK_RANK_COLOR.getValue() || Setting.SHOW_NETWORK_RANK_TITLE.getValue())){
 			Thread t = new Thread(new Runnable(){
 				@Override
@@ -334,6 +464,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 			
 		}
+		*/
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The body of §4")){
 			TIMV.traitorsDiscovered++;
 		}

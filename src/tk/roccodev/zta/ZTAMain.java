@@ -209,6 +209,11 @@ public class ZTAMain {
 			String[] args = evt.getMessage().split(" ");
 			if(args.length == 1){
 				if(isTIMV){
+					if(TIMV.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
 					TIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				} else if(isDR){
 					DR.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
@@ -216,6 +221,11 @@ public class ZTAMain {
 			}
 			else{
 				if(isTIMV){
+					if(TIMV.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
 					TIMV.lastRecords = args[1].trim();
 				}
 				else if(isDR){
