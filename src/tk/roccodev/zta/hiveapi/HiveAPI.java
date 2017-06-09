@@ -85,7 +85,7 @@ public class HiveAPI {
 		}
 	}
 	private static URL parseSpeedruncomUserID(String userid){
-		String urls = "https://www.speedrun.com/api/v1/users/@id@";
+		String urls = "http://www.speedrun.com/api/v1/users/@id@";
 		try {
 			return new URL(urls.replaceAll("@id@", userid));
 		} catch (MalformedURLException e) {

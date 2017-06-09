@@ -79,12 +79,22 @@ public class DRListener extends AbstractGameListener<DR>{
 				case "DEATH!": DR.role = "Death";
 					break;
 				case "RUNNER!": DR.role = "Runner";
+				new Thread(new Runnable(){
+				
+					@Override
+					public void run(){
 						if(DR.activeMap != null){
 							The5zigAPI.getLogger().info("Loading PB...");
 							DR.currentMapPB = HiveAPI.DRgetPB(The5zigAPI.getAPI().getGameProfile().getName(), DR.activeMap);
+							if(DR.currentMapPB == null) DR.currentMapPB = "No Personal Best";
 							The5zigAPI.getLogger().info("Loading WR...");
 							DR.currentMapWR = HiveAPI.DRgetWR(DR.activeMap);
+							if(DR.currentMapWR == null) DR.currentMapWR = "No Record";
 						}
+					}
+				}).start();
+				
+						
 					break;
 			}
 		}

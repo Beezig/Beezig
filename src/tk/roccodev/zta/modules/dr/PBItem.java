@@ -14,7 +14,9 @@ public class PBItem extends GameModeItem<DR>{
 		if(DR.activeMap != null){
 			return DR.currentMapPB;
 		}
-		return null;
+		else{
+			return "No Personal Best";
+		}
 	}
 	
 	@Override

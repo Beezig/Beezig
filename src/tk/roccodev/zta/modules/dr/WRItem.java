@@ -13,8 +13,10 @@ public class WRItem extends GameModeItem<DR>{
 	protected Object getValue(boolean dummy) {
 		if(DR.activeMap != null){
 			return DR.currentMapWR;
+		}else{
+			return "No Record";
 		}
-		return null;
+		
 	}
 	
 	@Override
