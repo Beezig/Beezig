@@ -28,7 +28,7 @@ public class WRCommand implements Command{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + DR.activeMap.getDisplayName() + "§e is §6" + HiveAPI.DRgetWR(DR.activeMap));
+					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + DR.activeMap.getDisplayName() + "§e is §6" + HiveAPI.DRgetWR(DR.activeMap) + "§e by §6" + DR.currentMapWRHolder);
 				}
 			}).start();
 	
@@ -38,7 +38,7 @@ public class WRCommand implements Command{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + map.getDisplayName() + "§e is §6" + HiveAPI.DRgetWR(map));
+					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + map.getDisplayName() + "§e is §6" + HiveAPI.DRgetWR(map) + "§e by §6" + DR.currentMapWRHolder);
 				}
 			}).start();
 	

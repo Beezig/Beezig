@@ -17,6 +17,7 @@ import org.json.simple.parser.ParseException;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.games.DR;
 
 public class HiveAPI {
 	
@@ -77,6 +78,16 @@ public class HiveAPI {
 		String urls = "http://www.speedrun.com/api/v1/leaderboards/369ep8dl/level/@id@/824xzvmd?top=1";
 		try {
 			return new URL(urls.replaceAll("@id@", mapid));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static URL parseSpeedruncomUserID(String userid){
+		String urls = "https://www.speedrun.com/api/v1/users/@id@";
+		try {
+			return new URL(urls.replaceAll("@id@", userid));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -277,52 +288,31 @@ public class HiveAPI {
 		return "0:" + time;
 	}
 	public static String DRgetWR(DRMap map){
-		// still the best way to do this 10/10
 		String mapid = map.getSpeedrunID();
 		JSONParser parser = new JSONParser();
-		JSONObject o0 = null;
-		JSONObject o1 = null;
-		JSONArray o2 = null;
-		JSONObject o3 = null;
-		JSONObject o4 = null;
-		JSONObject o5 = null;
+		JSONObject run0 = null;
+			// run0 = Information about the WR run entry on speedrun.com
 			try {
-				o0 = (JSONObject) parser.parse(readUrl(parseSpeedruncom(mapid)));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-			try {
-				o1 = (JSONObject) parser.parse(o0.get("data").toString());
+				run0 = (JSONObject) parser.parse(((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parseSpeedruncom(mapid)))).get("data").toString())).get("runs").toString())).get(0).toString())).get("run").toString());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			try {
-				o2 = (JSONArray) parser.parse(o1.get("runs").toString());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-			try {	
-				o3 = (JSONObject) parser.parse(o2.get(0).toString());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-			try {
-				o4 = (JSONObject) parser.parse(o3.get("run").toString());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-			try {
-				o5 = (JSONObject) parser.parse(o4.get("times").toString());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-		Double time = (Double) o5.get("primary_t");
+		try {
+			//Returns the world record holder username... lmao
+			DR.currentMapWRHolder = (String) ((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parseSpeedruncomUserID((String) ((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("id".toString()))))).toJSONString())).get("data").toString())).get("names").toString())).get("international").toString();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Double time = null;
+		try {
+			//Returns the world record time in seconds
+			time = (Double) ((JSONObject) parser.parse(run0.get("times").toString())).get("primary_t");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if(time > 59){
 			int seconds = (int) (Math.floor(time) % 60);
 			double millis = Math.floor(((time - seconds) - 60)*1000)/1000;
@@ -333,7 +323,7 @@ public class HiveAPI {
 			return (minutes + ":" + (seconds+millis));
 		}
 		return "0:" + time;
-	}	
+	}
 	public static int DRgetAchievements(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();

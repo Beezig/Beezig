@@ -10,6 +10,7 @@ public class DR extends GameMode{
 	public static DRMap activeMap;
 	public static String currentMapPB;
 	public static String currentMapWR;
+	public static String currentMapWRHolder;
 	public static String lastRecords = "";
 	public static boolean dead = false;
 	public static String role = null;
@@ -24,6 +25,7 @@ public class DR extends GameMode{
 		activeMap = null;
 		currentMapPB = null;
 		currentMapWR = null;
+		currentMapWRHolder = null;
 		role = null;
 		checkpoints = 0;
 		deaths = 0;

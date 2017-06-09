@@ -73,7 +73,7 @@ public class DRListener extends AbstractGameListener<DR>{
 		    DR.activeMap = map1;			
 		}
 		
-		else if(message.contains(ChatColor.stripColor("You are a ")) && gameMode != null){
+		else if(message.contains("§c§lYou are a ") && gameMode != null){
 			String afterMsg = message.split(ChatColor.stripColor("You are a "))[1];	
 			switch(afterMsg){
 				case "DEATH!": DR.role = "Death";
