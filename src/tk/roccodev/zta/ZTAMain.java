@@ -23,6 +23,7 @@ import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.mod.util.IKeybinding;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.command.AddNoteCommand;
+import tk.roccodev.zta.command.ColorDebugCommand;
 import tk.roccodev.zta.command.NotesCommand;
 import tk.roccodev.zta.command.PBCommand;
 import tk.roccodev.zta.command.RealRankCommand;
@@ -46,6 +47,7 @@ public class ZTAMain {
 	public static boolean isDR = false;
 	public static IKeybinding notesKb;
 	public static File mcFile;
+	public static boolean isColorDebug = false;
 	
 	public static int getCustomVersioning(){
 		String v = ZTAMain.class.getAnnotation(Plugin.class).version();
@@ -104,6 +106,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new SeenCommand());
 		CommandManager.registerCommand(new PBCommand());
 		CommandManager.registerCommand(new WRCommand());
+		CommandManager.registerCommand(new ColorDebugCommand());
 		
 		ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 

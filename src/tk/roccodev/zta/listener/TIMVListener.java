@@ -68,6 +68,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 	public boolean onServerChat(TIMV gameMode, String message) {
 		// Uncomment this to see the real messages with chatcolor. vv
 		// The5zigAPI.getLogger().info("(" + message + ")");
+		if(ZTAMain.isColorDebug){
+			The5zigAPI.getLogger().info("ColorDebug: " + "(" + message + ")");
+		}
 		if(message.equals("§8▍ §3TIMV§8 ▏ §6Welcome to Trouble in Mineville!")){
 			gameMode.setState(GameState.STARTING);
 			ZTAMain.isTIMV = true;

@@ -57,7 +57,9 @@ public class DRListener extends AbstractGameListener<DR>{
 	public boolean onServerChat(DR gameMode, String message) {
 		// Uncomment this to see the real messages with chatcolor. vv
 		// The5zigAPI.getLogger().info("COLOR = (" + message + ")");
-		
+		if(ZTAMain.isColorDebug){
+			The5zigAPI.getLogger().info("ColorDebug: " + "(" + message + ")");
+		}
 		if(message.startsWith("§8▍ §cDeathRun§8 ▏ §3Voting has ended! §bThe map") && gameMode != null){
 			String afterMsg = message.split("§8▍ §cDeathRun§8 ▏ §3Voting has ended! §bThe map")[1];
 			The5zigAPI.getLogger().info(afterMsg);
