@@ -13,7 +13,6 @@ import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.DR;
-import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.DRRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -73,7 +72,7 @@ public class DRListener extends AbstractGameListener<DR>{
 		    DR.activeMap = map1;			
 		}
 		
-		else if(message.contains("§c§lYou are a ") && gameMode != null){
+		else if(message.contains("§lYou are a ") && gameMode != null){
 			String afterMsg = message.split(ChatColor.stripColor("You are a "))[1];	
 			switch(afterMsg){
 				case "DEATH!": DR.role = "Death";

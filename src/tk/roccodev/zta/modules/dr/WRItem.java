@@ -12,6 +12,9 @@ public class WRItem extends GameModeItem<DR>{
 	@Override
 	protected Object getValue(boolean dummy) {
 		if(DR.activeMap != null){
+			if((boolean)getProperties().getSetting("showusername").get()){
+				return DR.currentMapWR + " (" +DR.currentMapWRHolder + ")";
+			}
 			return DR.currentMapWR;
 		}else{
 			return "No Record";
@@ -26,6 +29,7 @@ public class WRItem extends GameModeItem<DR>{
 	
 	@Override
 	public void registerSettings(){
+		getProperties().addSetting("showusername", true);
 	}
 	
 	@Override
