@@ -106,7 +106,13 @@ public class DRListener extends AbstractGameListener<DR>{
 				@Override
 				public void run(){
 					String correctName = HiveAPI.getName(DR.lastRecords);
+					if(correctName.contains("nicked player")){
+						correctName = "Nicked/Not found";
+					}
 				 	String rank = HiveAPI.getNetworkRank(DR.lastRecords);
+				 	if(rank.contains("nicked player")){
+						rank = "Nicked/Not found";
+					}
 				 	ChatColor rankColor = HiveAPI.getRankColor(rank);
 			 	
 				 	//"          §6§m                  §f ItsNiklass's Stats §6§m                  "

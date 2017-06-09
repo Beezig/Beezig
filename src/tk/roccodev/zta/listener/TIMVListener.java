@@ -198,7 +198,13 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				@Override
 				public void run(){
 					String correctName = HiveAPI.getName(TIMV.lastRecords);
+					if(correctName.contains("nicked player")){
+						correctName = "Nicked/Not found";
+					}
 				 	String rank = HiveAPI.getNetworkRank(TIMV.lastRecords);
+				 	if(rank.contains("nicked player")){
+						rank = "Nicked/Not found";
+					}
 				 	ChatColor rankColor = HiveAPI.getRankColor(rank);
 			 	
 				 	
