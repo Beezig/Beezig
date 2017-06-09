@@ -22,8 +22,16 @@ import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.mod.util.IKeybinding;
 import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.command.*;
-import tk.roccodev.zta.games.*;
+import tk.roccodev.zta.command.AddNoteCommand;
+import tk.roccodev.zta.command.NotesCommand;
+import tk.roccodev.zta.command.PBCommand;
+import tk.roccodev.zta.command.RealRankCommand;
+import tk.roccodev.zta.command.SayCommand;
+import tk.roccodev.zta.command.SeenCommand;
+import tk.roccodev.zta.command.SettingsCommand;
+import tk.roccodev.zta.command.WRCommand;
+import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.notes.NotesManager;
@@ -84,6 +92,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "drkills", tk.roccodev.zta.modules.dr.KillsItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drdeaths", tk.roccodev.zta.modules.dr.DeathsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drpb", tk.roccodev.zta.modules.dr.PBItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drwr", tk.roccodev.zta.modules.dr.WRItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		
@@ -94,6 +103,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new RealRankCommand());
 		CommandManager.registerCommand(new SeenCommand());
 		CommandManager.registerCommand(new PBCommand());
+		CommandManager.registerCommand(new WRCommand());
 		
 		ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 
@@ -230,7 +240,7 @@ public class ZTAMain {
 @EventHandler
 public void onKeypress(KeyPressEvent evt){
 	if(evt.getKeyCode() == notesKb.getKeyCode() && notesKb.isPressed() && The5zigAPI.getAPI().getActiveServer() instanceof IHive && isTIMV){
-		The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eNotes:");
+		The5zigAPI.getAPI().messagePlayer(Log.info + "Notes:");
 		for(String s : NotesManager.notes){
 			The5zigAPI.getAPI().messagePlayer("§e - §r" + s);
 		}
@@ -244,9 +254,14 @@ public void onKeypress(KeyPressEvent evt){
 			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
 		    DRMap map1 = DRMap.getFromDisplay(map);
 		    DR.activeMap = map1;
-		    if(DR.currentMapPB == null){
-				DR.currentMapPB = HiveAPI.DRgetPB(The5zigAPI.getAPI().getGameProfile().getName(), DR.activeMap);
+		    if(DR.currentMapPB == null ){
+		    	The5zigAPI.getLogger().info("Loading PB...");
+				DR.currentMapPB = HiveAPI.DRgetPB(The5zigAPI.getAPI().getGameProfile().getName(), DR.activeMap);			
 			}
+		    if(DR.currentMapWR == null ){
+		    The5zigAPI.getLogger().info("Loading WR...");
+			DR.currentMapWR = HiveAPI.DRgetWR(DR.activeMap);
+		    }
 		}
 	}
 }

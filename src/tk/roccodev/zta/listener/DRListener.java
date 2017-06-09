@@ -80,7 +80,10 @@ public class DRListener extends AbstractGameListener<DR>{
 					break;
 				case "RUNNER!": DR.role = "Runner";
 						if(DR.activeMap != null){
+							The5zigAPI.getLogger().info("Loading PB...");
 							DR.currentMapPB = HiveAPI.DRgetPB(The5zigAPI.getAPI().getGameProfile().getName(), DR.activeMap);
+							The5zigAPI.getLogger().info("Loading WR...");
+							DR.currentMapWR = HiveAPI.DRgetWR(DR.activeMap);
 						}
 					break;
 			}

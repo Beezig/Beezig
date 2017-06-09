@@ -31,7 +31,7 @@ public class PBCommand implements Command{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + ign + "§e's Personal Best on map §6" + DR.activeMap.getDisplayName() + "§e is §6" + HiveAPI.DRgetPB(ign, DR.activeMap));
+					The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e's Personal Best on map §6" + DR.activeMap.getDisplayName() + "§e is §6" + HiveAPI.DRgetPB(ign, DR.activeMap));
 				}
 			}).start();
 	
@@ -44,7 +44,7 @@ public class PBCommand implements Command{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + ign + "§e's Personal Best on map §6" + map.getDisplayName() + "§e is §6" + HiveAPI.DRgetPB(ign, map));
+					The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e's Personal Best on map §6" + map.getDisplayName() + "§e is §6" + HiveAPI.DRgetPB(ign, map));
 				}
 			}).start();
 	

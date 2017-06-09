@@ -39,7 +39,13 @@
         },
 		{
           "type": "drdeaths"
-        }		
+        },
+		{
+          "type": "drpb"
+        },
+		{
+          "type": "drwr"
+        }	
         ]
      }
   ]

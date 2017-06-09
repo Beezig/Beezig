@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -16,7 +17,6 @@ import org.json.simple.parser.ParseException;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.games.DR;
 
 public class HiveAPI {
 	
@@ -67,6 +67,16 @@ public class HiveAPI {
 		String urls = "http://api.hivemc.com/v1/player/@player@/";
 		try {
 			return new URL(urls.replaceAll("@player@", uuid));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static URL parseSpeedruncom(String mapid){
+		String urls = "http://www.speedrun.com/api/v1/leaderboards/369ep8dl/level/@id@/824xzvmd?top=1";
+		try {
+			return new URL(urls.replaceAll("@id@", mapid));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -264,8 +274,66 @@ public class HiveAPI {
 				}
 			return (minutes + ":" + seconds);
 		}
-		return (time + "s");
+		return "0:" + time;
 	}
+	public static String DRgetWR(DRMap map){
+		// still the best way to do this 10/10
+		String mapid = map.getSpeedrunID();
+		JSONParser parser = new JSONParser();
+		JSONObject o0 = null;
+		JSONObject o1 = null;
+		JSONArray o2 = null;
+		JSONObject o3 = null;
+		JSONObject o4 = null;
+		JSONObject o5 = null;
+			try {
+				o0 = (JSONObject) parser.parse(readUrl(parseSpeedruncom(mapid)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+			try {
+				o1 = (JSONObject) parser.parse(o0.get("data").toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				o2 = (JSONArray) parser.parse(o1.get("runs").toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+			try {	
+				o3 = (JSONObject) parser.parse(o2.get(0).toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+			try {
+				o4 = (JSONObject) parser.parse(o3.get("run").toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+			try {
+				o5 = (JSONObject) parser.parse(o4.get("times").toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+		Double time = (Double) o5.get("primary_t");
+		if(time > 59){
+			int seconds = (int) (Math.floor(time) % 60);
+			double millis = Math.floor(((time - seconds) - 60)*1000)/1000;
+			int minutes = Math.floorDiv((int)(time - millis), 60);
+				if(seconds < 10){
+					return (minutes + ":0" + (seconds+millis));
+				}
+			return (minutes + ":" + (seconds+millis));
+		}
+		return "0:" + time;
+	}	
 	public static int DRgetAchievements(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
