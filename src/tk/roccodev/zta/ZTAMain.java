@@ -257,14 +257,24 @@ public void onKeypress(KeyPressEvent evt){
 			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
 		    DRMap map1 = DRMap.getFromDisplay(map);
 		    DR.activeMap = map1;
-		    if(DR.currentMapPB == null ){
-		    	The5zigAPI.getLogger().info("Loading PB...");
-				DR.currentMapPB = HiveAPI.DRgetPB(The5zigAPI.getAPI().getGameProfile().getName(), DR.activeMap);			
-			}
-		    if(DR.currentMapWR == null ){
-		    The5zigAPI.getLogger().info("Loading WR...");
-			DR.currentMapWR = HiveAPI.DRgetWR(DR.activeMap);
-		    }
+		    
+		    new Thread(new Runnable(){
+		    	@Override
+			    public void run(){
+			    if(DR.currentMapPB == null ){
+			    	The5zigAPI.getLogger().info("Loading PB...");
+			    	DR.currentMapPB = HiveAPI.DRgetPB(The5zigAPI.getAPI().getGameProfile().getName(), DR.activeMap);			
+			    }
+			    if(DR.currentMapWR == null ){
+			    	The5zigAPI.getLogger().info("Loading WR...");
+			    	DR.currentMapWR = HiveAPI.DRgetWR(DR.activeMap);
+			    }
+			    if(DR.currentMapWRHolder == null ){
+			    	The5zigAPI.getLogger().info("Loading WRHolder...");
+			    	DR.currentMapWRHolder = HiveAPI.DRgetWRHolder(DR.activeMap);
+			    }
+		    	}
+		    }).start();
 		}
 	}
 }

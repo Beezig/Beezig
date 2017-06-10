@@ -91,7 +91,9 @@ public class DRListener extends AbstractGameListener<DR>{
 							if(DR.currentMapPB == null) DR.currentMapPB = "No Personal Best";
 							The5zigAPI.getLogger().info("Loading WR...");
 							DR.currentMapWR = HiveAPI.DRgetWR(DR.activeMap);
+							DR.currentMapWRHolder = HiveAPI.DRgetWRHolder(DR.activeMap);
 							if(DR.currentMapWR == null) DR.currentMapWR = "No Record";
+							if(DR.currentMapWRHolder == null) DR.currentMapWRHolder = "Unknown";
 						}
 					}
 				}).start();
