@@ -247,18 +247,23 @@ public class DRListener extends AbstractGameListener<DR>{
 
 					if(diff == 0){
 					//Lets make this more important lmao
-						The5zigAPI.getAPI().messagePlayer("");
-						The5zigAPI.getAPI().messagePlayer("");
-						The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.BOLD + "§cCongratulations! You §4tied §cthe §4World Record§c!");
-						The5zigAPI.getAPI().messagePlayer("");
-						The5zigAPI.getAPI().messagePlayer("");
+					//All this has a reason, I may overdid it but I learned smth about tags
+						The5zigAPI.getAPI().messagePlayer("    §c§m                                                                                    ");
+						The5zigAPI.getAPI().messagePlayer("§c  ");
+						The5zigAPI.getAPI().messagePlayer(Log.info + "   §c§lCongratulations! You §4§ltied §c§lthe §4§lWorld Record§c§l!");
+						The5zigAPI.getAPI().messagePlayer("§c  ");
+						The5zigAPI.getAPI().messagePlayer("    §c§m                                                                                    ");
+						The5zigAPI.getAPI().messagePlayer(message);
 					}
 					else if(diff < 0){
-						The5zigAPI.getAPI().messagePlayer("");
-						The5zigAPI.getAPI().messagePlayer("");
-						The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.BOLD + "§cCongratulations! §4You beat the World Record!!!");
-						The5zigAPI.getAPI().messagePlayer("");
-						The5zigAPI.getAPI().messagePlayer("");
+						The5zigAPI.getAPI().messagePlayer("    §c§m                                                                                    ");
+						The5zigAPI.getAPI().messagePlayer("§c  ");
+						The5zigAPI.getAPI().messagePlayer("§c  ");
+						The5zigAPI.getAPI().messagePlayer(Log.info + "   §c§lCongratulations! §4§lYou beat the World Record!!!");
+						The5zigAPI.getAPI().messagePlayer("§c  ");
+						The5zigAPI.getAPI().messagePlayer("§c  ");
+						The5zigAPI.getAPI().messagePlayer("    §c§m                                                                                    ");
+						The5zigAPI.getAPI().messagePlayer(message);
 					}
 					
 					
