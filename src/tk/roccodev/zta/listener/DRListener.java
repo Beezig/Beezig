@@ -11,6 +11,7 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.hiveapi.DRMap;
@@ -236,7 +237,29 @@ public class DRListener extends AbstractGameListener<DR>{
 					double wr = HiveAPI.DRgetWR_raw(DR.activeMap);
 					double diff = finalTime - wr;
 					
-					The5zigAPI.getAPI().messagePlayer(message + " §eThe World Record is §a" + diff + "§e seconds away! ");
+					String pb = DR.currentMapPB;
+					String[] pbData = pb.split(":");
+					double finalPb = Double.parseDouble(pbData[0]) * 60D + Double.parseDouble(pbData[1]);
+					
+					double pbDiff = finalTime - finalPb;
+
+
+					if(diff == 0){
+						The5zigAPI.getAPI().messagePlayer(Log.info + "Congratulations! You reached the World Record!");
+						
+					}
+					else if(diff < 0){
+						The5zigAPI.getAPI().messagePlayer(Log.info + "Congratulations! You are the new World Record holder!");
+					}
+					else{
+						The5zigAPI.getAPI().messagePlayer(message + " §eThe World Record is §a" + diff + "§e seconds away! Your personal best is §a" + pbDiff + " §eseconds away!");
+					}
+					
+					
+					
+					
+					
+					
 						
 					}
 					

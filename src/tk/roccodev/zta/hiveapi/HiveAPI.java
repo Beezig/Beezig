@@ -271,7 +271,7 @@ public class HiveAPI {
 			}			
 		try {
 			o1 = (JSONObject) parser.parse(o.get("maprecords").toString());
-			The5zigAPI.getLogger().info("VALUEOF " + o1.get(map1).toString());
+			
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
