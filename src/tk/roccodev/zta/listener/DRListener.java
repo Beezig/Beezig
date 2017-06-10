@@ -221,6 +221,29 @@ public class DRListener extends AbstractGameListener<DR>{
 			else if(message.contains(ChatColor.stripColor("You are a "))){
 				gameMode.setState(GameState.GAME);
 		 }
+			else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in §e") && !message.endsWith(" ")){
+				String time = message.replaceAll("§8▍ §cDeathRun§8 ▏ §bYou finished your run in §e", "").replaceAll("§b!", "");
+				String[] data = time.split(":");
+				int minutes = Integer.parseInt(data[0]);
+				//data[1	] is seconds.milliseconds
+				double secondsMillis = Double.parseDouble(data[1]);
+				double finalTime = 60 * minutes + secondsMillis; //e.g, You finished in 01:51.321 = 01*60 + 51.321 = 111.321
+				
+				new Thread(new Runnable(){
+					@Override
+					public void run(){
+						
+					double wr = HiveAPI.DRgetWR_raw(DR.activeMap);
+					double diff = finalTime - wr;
+					
+					The5zigAPI.getAPI().messagePlayer(message + " §eThe World Record is §a" + diff + "§e seconds away! ");
+						
+					}
+					
+				}).start();
+				
+			return true;
+			}
 		return false;
 	}
 

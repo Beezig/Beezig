@@ -332,6 +332,31 @@ public class HiveAPI {
 		}
 		return "0:" + time;
 	}
+	
+	public static double DRgetWR_raw(DRMap map){
+		String mapid = map.getSpeedrunID();
+		JSONParser parser = new JSONParser();
+		JSONObject run0 = null;
+			// run0 = Information about the WR run entry on speedrun.com
+			try {
+				run0 = (JSONObject) parser.parse(((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parseSpeedruncom(mapid)))).get("data").toString())).get("runs").toString())).get(0).toString())).get("run").toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		Double time = null;
+		try {
+			//Returns the world record time in seconds
+			time = (Double) ((JSONObject) parser.parse(run0.get("times").toString())).get("primary_t");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return time;
+	
+	}
+	
 	public static int DRgetAchievements(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
