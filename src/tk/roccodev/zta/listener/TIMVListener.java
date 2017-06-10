@@ -244,7 +244,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						long karma = 0;
 						long traitorPoints = 0;
 						Integer achievements = Setting.TIMV_SHOW_ACHIEVEMENTS.getValue() ? HiveAPI.TIMVgetAchievements(TIMV.lastRecords) : null;
-						String rankTitleTIMV = Setting.TIMV_SHOW_RANK.getValue() ? HiveAPI.TIMVgetRank(TIMV.lastRecords) : null;
+						String rankTitleTIMV = Setting.TIMV_SHOW_RANK.getValue() ? HiveAPI.TIMVgetRank(TIMV.lastRecords) : "";
 						if(rankTitleTIMV != null) rank = TIMVRank.getFromDisplay(rankTitleTIMV);
 						List<String> messages = new ArrayList<String>();
 						messages.addAll(TIMV.messagesToSend);
@@ -267,7 +267,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 									String username = ChatColor.stripColor(s.replaceAll("§bUsername: §e", ""));
 									sb.append("§bUsername: ");
 									if(rankColor != null) sb.append(rankColor + username);
-									if(rankTitle != null){
+									if(!rankTitle.isEmpty()){
 										if(rankColor == null) rankColor = ChatColor.WHITE;
 										sb.append("§e (" + rankColor + rankTitle + "§e)");
 									}
