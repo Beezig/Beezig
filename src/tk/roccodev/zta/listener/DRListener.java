@@ -221,9 +221,9 @@ public class DRListener extends AbstractGameListener<DR>{
 			
 			
 			}
-			else if(message.contains(ChatColor.stripColor("You are a "))){
+			else if(message.contains("§lYou are a ")){
 				gameMode.setState(GameState.GAME);
-		 }
+			}
 			else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in §e") && !message.endsWith(" ")){
 				String time = message.replaceAll("§8▍ §cDeathRun§8 ▏ §bYou finished your run in §e", "").replaceAll("§b!", "");
 				String[] data = time.split(":");
@@ -237,32 +237,37 @@ public class DRListener extends AbstractGameListener<DR>{
 					public void run(){
 						
 					double wr = HiveAPI.DRgetWR_raw(DR.activeMap);
-					double diff = finalTime - wr;
+					double diff = (Math.round((finalTime - wr) * 1000d)) / 1000d;
 					
 					String pb = DR.currentMapPB;
 					String[] pbData = pb.split(":");
-					double finalPb = Double.parseDouble(pbData[0]) * 60D + Double.parseDouble(pbData[1]);
-					
-					double pbDiff = finalTime - finalPb;
+					int finalPb = Integer.parseInt(pbData[0]) * 60 + Integer.parseInt(pbData[1]); 		
+					int pbDiff = ((int) Math.floor(finalTime)) - finalPb;
 
 
 					if(diff == 0){
-						The5zigAPI.getAPI().messagePlayer(Log.info + "Congratulations! You reached the World Record!");
-						
+					//Lets make this more important lmao
+						The5zigAPI.getAPI().messagePlayer("");
+						The5zigAPI.getAPI().messagePlayer("");
+						The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.BOLD + "§cCongratulations! You §4tied §cthe §4World Record§c!");
+						The5zigAPI.getAPI().messagePlayer("");
+						The5zigAPI.getAPI().messagePlayer("");
 					}
 					else if(diff < 0){
-						The5zigAPI.getAPI().messagePlayer(Log.info + "Congratulations! You are the new World Record holder!");
+						The5zigAPI.getAPI().messagePlayer("");
+						The5zigAPI.getAPI().messagePlayer("");
+						The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.BOLD + "§cCongratulations! §4You beat the World Record!!!");
+						The5zigAPI.getAPI().messagePlayer("");
+						The5zigAPI.getAPI().messagePlayer("");
+					}
+					
+					
+					else if(pbDiff > 0){
+						The5zigAPI.getAPI().messagePlayer(message + " §eThe World Record is §a" + diff + "§e seconds away! Your Personal Best is §a" + pbDiff + " §eseconds away!");
 					}
 					else{
-						The5zigAPI.getAPI().messagePlayer(message + " §eThe World Record is §a" + diff + "§e seconds away! Your personal best is §a" + pbDiff + " §eseconds away!");
-					}
-					
-					
-					
-					
-					
-					
-						
+						The5zigAPI.getAPI().messagePlayer(message + " §eThe World Record is §a" + diff + "§e seconds away! You tied your Personal Best!");
+					}			
 					}
 					
 				}).start();
