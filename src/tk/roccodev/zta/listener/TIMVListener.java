@@ -1,6 +1,7 @@
 
 package tk.roccodev.zta.listener;
 
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -237,6 +238,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 					public void run(){
 						TIMV.isRecordsRunning = true;
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
+						try{
 						TIMVRank rank = null;
 						Long rolepoints = Setting.TIMV_SHOW_KRR.getValue() ? HiveAPI.TIMVgetRolepoints(TIMV.lastRecords) : null;
 						Long mostPoints = Setting.TIMV_SHOW_MOSTPOINTS.getValue() ? HiveAPI.TIMVgetKarmaPerGame(TIMV.lastRecords) : null;
@@ -267,8 +269,11 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 								else if(s.startsWith("§bUsername: §e")){
 									StringBuilder sb = new StringBuilder();
 									String username = ChatColor.stripColor(s.replaceAll("§bUsername: §e", ""));
+									String correctUser = HiveAPI.getName(username);
+									if(correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
 									sb.append("§bUsername: ");
-									if(rankColor != null) sb.append(rankColor + username);
+									if(rankColor != null) sb.append(rankColor + correctUser);
+									if(rankTitle.contains("nicked player")) rankTitle = "Nicked/Not found";
 									if(!rankTitle.isEmpty()){
 										if(rankColor == null) rankColor = ChatColor.WHITE;
 										sb.append("§e (" + rankColor + rankTitle + "§e)");
@@ -329,7 +334,27 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						The5zigAPI.getAPI().messagePlayer("§7===================================== ");
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Done!");
 						
-						
+						}catch(Exception e){
+							if(e instanceof FileNotFoundException){
+								The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
+								TIMV.messagesToSend.clear();
+								TIMV.footerToSend.clear();
+								TIMV.isRecordsRunning = false;
+								return;
+							}
+							The5zigAPI.getAPI().messagePlayer(Log.error + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
+							
+							for(String s : TIMV.messagesToSend){
+								The5zigAPI.getAPI().messagePlayer(s + " ");
+							}
+							for(String s : TIMV.footerToSend){
+								The5zigAPI.getAPI().messagePlayer(s + " ");
+							}
+							TIMV.messagesToSend.clear();
+							TIMV.footerToSend.clear();
+							TIMV.isRecordsRunning = false;
+							return;
+						}
 					}
 				}).start();
 				return true;
