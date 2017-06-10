@@ -3,6 +3,7 @@ package tk.roccodev.zta.listener;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -243,6 +244,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						ChatColor rankColor = Setting.SHOW_NETWORK_RANK_COLOR.getValue() ? HiveAPI.getRankColor(rankTitle) : null;
 						long karma = 0;
 						long traitorPoints = 0;
+						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(TIMV.lastRecords, "TIMV") : null;
 						Integer achievements = Setting.TIMV_SHOW_ACHIEVEMENTS.getValue() ? HiveAPI.TIMVgetAchievements(TIMV.lastRecords) : null;
 						String rankTitleTIMV = Setting.TIMV_SHOW_RANK.getValue() ? HiveAPI.TIMVgetRank(TIMV.lastRecords) : "";
 						if(rankTitleTIMV != null) rank = TIMVRank.getFromDisplay(rankTitleTIMV);
@@ -274,10 +276,22 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 									The5zigAPI.getAPI().messagePlayer(sb.toString().trim() + " ");
 									continue;
 								}
+								else if(s.startsWith("§bTraitor Points: §e") && karma > 1000 && Setting.TIMV_SHOW_TRAITORRATIO.getValue()){
+									String[] contents = s.split(":");
+									traitorPoints = Integer.parseInt(s.replaceAll("§bTraitor Points: §e", "").trim());
+									long rp = rolepoints;
+									double tratio = Math.round(((double)traitorPoints / (double)rp) * 1000d) / 10d;
+									ChatColor ratioColor = ChatColor.YELLOW;
+									if(tratio >= 38.0){
+										ratioColor= ChatColor.RED;
+									}
+									The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Traitor Points: " + ChatColor.YELLOW + traitorPoints + " (" + ratioColor + tratio + "%" +  ChatColor.YELLOW + ") ");
+									continue;
+								}
 								The5zigAPI.getAPI().messagePlayer(s + " ");
 								
 							}
-							
+						
 						
 
 
@@ -293,8 +307,12 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						if(krr != null){
 							The5zigAPI.getAPI().messagePlayer("§bKarma/Rolepoints: §e" + krr + " ");
 						}
-						if(mostPoints != null){
-							The5zigAPI.getAPI().messagePlayer("§bMost Points: §e" + mostPoints + " ");
+						if(lastGame != null){
+							Date now = new Date();
+							long diff = now.getTime() - lastGame.getTime();
+							
+							
+							The5zigAPI.getAPI().messagePlayer("§bLast Game: §e" + lastGame + " (" + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + " days ago) ");
 						}
 						
 							
