@@ -33,6 +33,8 @@ public class TIMV extends GameMode{
 	public static int detectivesBefore = 0;
 	public static int detectivesDiscovered = 0;
 	
+	public static String gameID;
+	
 	
 	//Advanced Records
 	public static List<String> messagesToSend = new ArrayList<String>();

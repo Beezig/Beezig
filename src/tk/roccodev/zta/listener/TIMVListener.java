@@ -5,6 +5,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -156,6 +159,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			if(!TIMV.dead){
 				TIMV.applyPoints(20);
 			}
+			The5zigAPI.getAPI().messagePlayer(Log.info + "TIMV GameID: " + TIMV.gameID + " (http://hivemc.com/trouble-in-mineville/game/" + TIMV.gameID + ")");
 			TIMV.reset(gameMode);
 			
 		}
@@ -492,6 +496,11 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				role = "Detective";
 			}
 			TIMV.role = role;
+			
+			Timer timer = new Timer();
+			ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
+			timer.schedule(sft, 1500);
+			
 		}
 		
 		
@@ -510,7 +519,19 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 	
 	
 	
-	
+	private class ScoreboardFetcherTask extends TimerTask{
+
+		@Override
+		public void run() {
+			for(Map.Entry<String, Integer> e : The5zigAPI.getAPI().getSideScoreboard().getLines().entrySet()){
+				if(e.getValue().intValue() == 3){
+					TIMV.gameID = e.getKey();
+				}
+			}
+			
+		}
+		
+	}
 	
 	
 	
