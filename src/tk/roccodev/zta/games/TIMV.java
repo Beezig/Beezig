@@ -182,7 +182,7 @@ public class TIMV extends GameMode{
 		NotesManager.notes.clear();
 		gm.setState(GameState.FINISHED);
 		ZTAMain.isTIMV = false;
-		
+		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 		
 	}
 	

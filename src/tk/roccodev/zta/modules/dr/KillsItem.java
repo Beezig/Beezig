@@ -22,7 +22,7 @@ public class KillsItem extends GameModeItem<DR>{
 	public boolean shouldRender(boolean dummy){		
 		try{
 			if(!(getGameMode() instanceof DR)) return false;
-		return dummy || (DR.shouldRender(getGameMode().getState()) && DR.role == "Death");
+		return dummy || (DR.shouldRender(getGameMode().getState()) && DR.role == "Death" && DR.kills != 0);
 		}catch(Exception e){
 			return false;
 		}

@@ -1,5 +1,6 @@
 package tk.roccodev.zta.games;
 
+import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ZTAMain;
@@ -31,6 +32,7 @@ public class DR extends GameMode{
 		deaths = 0;
 		kills = 0;
 		ZTAMain.isDR = false;
+		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 	}
 	
 	@Override

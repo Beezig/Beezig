@@ -56,8 +56,6 @@ public class DRListener extends AbstractGameListener<DR>{
 	
 	@Override
 	public boolean onServerChat(DR gameMode, String message) {
-		// Uncomment this to see the real messages with chatcolor. vv
-		// The5zigAPI.getLogger().info("COLOR = (" + message + ")");
 		if(ZTAMain.isColorDebug){
 			The5zigAPI.getLogger().info("ColorDebug: " + "(" + message + ")");
 		}
