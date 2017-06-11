@@ -17,7 +17,6 @@ import org.json.simple.parser.ParseException;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.games.DR;
 
 public class HiveAPI {
 	
@@ -107,6 +106,16 @@ public class HiveAPI {
 	private static URL parseMonthlyURL(String game){
 		// Be aware that this is ItsNiklas' API key. May want to request a own in the future.
 		String url = "https://thtmx.rocks/@game@/api/90824356";
+		try {
+			return new URL(url.replaceAll("@game@", game));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static URL parseLeaderboardPlaceURL(int index, String game){
+		String url = "http://api.hivemc.com/v1/game/@game@/leaderboard/" + index + "/" + (index + 1);
 		try {
 			return new URL(url.replaceAll("@game@", game));
 		} catch (MalformedURLException e) {
@@ -542,7 +551,7 @@ public class HiveAPI {
 		JSONArray o1 = null;
 		JSONObject o2 = null;
 			try {
-				o1 = (JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(parseMonthlyURL(game)))).get("leaderboard").toString());
+				o1 = (JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(parseMonthlyURL(game.toLowerCase())))).get("leaderboard").toString());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();				
@@ -559,7 +568,31 @@ public class HiveAPI {
 		}
 		return 0;
 	}
-	public static ChatColor getRankColor(String rankName){
+	public static Long getLeaderboardsPlacePoints(int index, String game){
+		JSONParser parser = new JSONParser();
+		JSONObject o1 = null;
+		try {
+			o1 = (JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(HiveAPI.parseLeaderboardPlaceURL(index, game)))).get("leaderboard").toString())).get(0).toString());
+			System.out.println(o1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		switch (game) {
+		default : try {
+				return (Long) parser.parse(o1.get("total_points").toString());
+			} catch (Exception e) {
+				return null;
+			}
+		case "TIMV" : try {
+				return (Long) parser.parse(o1.get("karma").toString());
+			} catch (Exception e) {
+				return null;
+			}	
+		}
+	}
+
+ 	public static ChatColor getRankColor(String rankName){
 		ChatColor rankColor = null;
 		switch(rankName){
 		case "Regular Hive Member": rankColor = ChatColor.BLUE;

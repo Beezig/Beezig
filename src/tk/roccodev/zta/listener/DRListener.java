@@ -197,6 +197,12 @@ public class DRListener extends AbstractGameListener<DR>{
 					int ach = HiveAPI.DRgetAchievements(DR.lastRecords);
 					The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Achievements: " + ChatColor.AQUA + ach + "/35");
 				}
+				if(Setting.DR_SHOW_MONTHLYRANK.getValue() && (DR.lastRecordPoints > HiveAPI.getLeaderboardsPlacePoints(349, "DR"))){
+					int place = HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR");
+					if(place > 0){
+						The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Monthly Leaderboards: " + ChatColor.AQUA + "#" + place);
+					}
+				}
 				if(Setting.SHOW_RECORDS_LASTGAME.getValue()){
 					The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Last Game: " + ChatColor.AQUA + HiveAPI.lastGame(DR.lastRecords, "DR"));
 				}

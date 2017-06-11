@@ -19,7 +19,8 @@ public enum Setting {
 	DR_SHOW_POINTSPERGAME(true, "DR Advanced Records - Show the average Points per Game"),
 	DR_SHOW_RUNNERWINRATE(true, "DR Advanced Records - Show the Winrate as a Runner"),
 	DR_SHOW_DEATHSPERGAME(true, "DR Advanced Records - Show the avg. Deaths as Runner"),
-	DR_SHOW_ACHIEVEMENTS(true, "DR Advanced Records - Show players' achievements");
+	DR_SHOW_ACHIEVEMENTS(true, "DR Advanced Records - Show players' achievements"),
+	DR_SHOW_MONTHLYRANK(true, "DR Advanced Records - Show players' rank on the Monthly Leaderboards by Maxthat");
 	
 	private boolean value;
 	private String briefDesc;
