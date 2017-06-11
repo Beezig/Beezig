@@ -241,14 +241,25 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						try{
 						TIMVRank rank = null;
 						Long rolepoints = Setting.TIMV_SHOW_KRR.getValue() ? HiveAPI.TIMVgetRolepoints(TIMV.lastRecords) : null;
+						if(rolepoints == null && Setting.TIMV_SHOW_TRAITORRATIO.getValue()){
+							rolepoints = HiveAPI.TIMVgetRolepoints(TIMV.lastRecords);
+						}
 						Long mostPoints = Setting.TIMV_SHOW_MOSTPOINTS.getValue() ? HiveAPI.TIMVgetKarmaPerGame(TIMV.lastRecords) : null;
-						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(TIMV.lastRecords) : null;
-						ChatColor rankColor = Setting.SHOW_NETWORK_RANK_COLOR.getValue() ? HiveAPI.getRankColor(rankTitle) : null;
+						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(TIMV.lastRecords) : "";
+						ChatColor rankColor = null;
+						if(Setting.SHOW_NETWORK_RANK_COLOR.getValue()){
+							if(rankTitle.isEmpty()){
+								rankColor = HiveAPI.getRankColorFromIgn(TIMV.lastRecords);
+							}
+							else{
+								rankColor = HiveAPI.getRankColor(rankTitle);
+							}
+						}
 						long karma = 0;
 						long traitorPoints = 0;
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(TIMV.lastRecords, "TIMV") : null;
 						Integer achievements = Setting.TIMV_SHOW_ACHIEVEMENTS.getValue() ? HiveAPI.TIMVgetAchievements(TIMV.lastRecords) : null;
-						String rankTitleTIMV = Setting.TIMV_SHOW_RANK.getValue() ? HiveAPI.TIMVgetRank(TIMV.lastRecords) : "";
+						String rankTitleTIMV = Setting.TIMV_SHOW_RANK.getValue() ? HiveAPI.TIMVgetRank(TIMV.lastRecords) : null;
 						if(rankTitleTIMV != null) rank = TIMVRank.getFromDisplay(rankTitleTIMV);
 						List<String> messages = new ArrayList<String>();
 						messages.addAll(TIMV.messagesToSend);
@@ -272,8 +283,13 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 									String correctUser = HiveAPI.getName(username);
 									if(correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
 									sb.append("§bUsername: ");
-									if(rankColor != null) sb.append(rankColor + correctUser);
-									if(rankTitle.contains("nicked player")) rankTitle = "Nicked/Not found";
+									if(rankColor != null) {
+										sb.append(rankColor + correctUser);
+									}
+									else{
+										sb.append("§e" + correctUser);
+									}
+									if(rankTitle != null && rankTitle.contains("nicked player")) rankTitle = "Nicked/Not found";
 									if(!rankTitle.isEmpty()){
 										if(rankColor == null) rankColor = ChatColor.WHITE;
 										sb.append("§e (" + rankColor + rankTitle + "§e)");
@@ -300,8 +316,8 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						
 
 
-						Double krr = Setting.TIMV_SHOW_KRR.getValue() ? ((double) karma / (double) rolepoints) : null;
-							
+						Double krr = Setting.TIMV_SHOW_KRR.getValue() ? (double)Math.round((double) karma / (double) rolepoints * 100D) / 100D : null;
+						
 							
 						if(mostPoints != null){
 							The5zigAPI.getAPI().messagePlayer("§bMost Points: §e" + mostPoints + " ");
@@ -310,6 +326,8 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 							The5zigAPI.getAPI().messagePlayer("§bAchievements: §e" + achievements + "/41 ");
 						}
 						if(krr != null){
+							
+							
 							The5zigAPI.getAPI().messagePlayer("§bKarma/Rolepoints: §e" + krr + " ");
 						}
 						if(lastGame != null){
@@ -335,7 +353,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Done!");
 						
 						}catch(Exception e){
-							if(e instanceof FileNotFoundException){
+							if(e.getCause() instanceof FileNotFoundException){
 								The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
 								TIMV.messagesToSend.clear();
 								TIMV.footerToSend.clear();
@@ -350,6 +368,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 							for(String s : TIMV.footerToSend){
 								The5zigAPI.getAPI().messagePlayer(s + " ");
 							}
+							The5zigAPI.getAPI().messagePlayer("§7===================================== ");
 							TIMV.messagesToSend.clear();
 							TIMV.footerToSend.clear();
 							TIMV.isRecordsRunning = false;
