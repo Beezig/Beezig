@@ -43,6 +43,17 @@ public class WRCommand implements Command{
 			}).start();
 	
 		}
+		else if(args.length == 2){
+			String map1 = args[0] + " " + args[1];
+			
+			DRMap map = DRMap.getFromDisplay(map1);
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + map.getDisplayName() + "§e is §6" + HiveAPI.DRgetWR(map) + "§e by §6" + DR.currentMapWRHolder);
+				}
+			}).start();
+		}
 		else{
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /wr or /wr [map]");
 		}		

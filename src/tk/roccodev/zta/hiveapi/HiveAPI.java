@@ -618,6 +618,11 @@ public class HiveAPI {
 		}
 		return rankColor;
 	}
+	
+	public static ChatColor getRankColorFromIgn(String ign){
+		String rank = getNetworkRank(ign);
+		return getRankColor(rank);
+	}
 		
 	private static String readUrl(URL url) throws Exception {
 	    BufferedReader reader = null;

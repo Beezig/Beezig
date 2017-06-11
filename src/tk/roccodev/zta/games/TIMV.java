@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Formatter;
@@ -31,7 +33,13 @@ public class TIMV extends GameMode{
 	public static int detectivesBefore = 0;
 	public static int detectivesDiscovered = 0;
 	
+	public static String gameID;
 	
+	
+	//Advanced Records
+	public static List<String> messagesToSend = new ArrayList<String>();
+	public static List<String> footerToSend = new ArrayList<String>();
+	public static boolean isRecordsRunning = false;
 	//CSV Stuff
 	
 	public static List<String[]> csvEntries;
@@ -180,6 +188,9 @@ public class TIMV extends GameMode{
 		TIMV.detectivesBefore = 0;
 		TIMV.detectivesDiscovered = 0;
 		NotesManager.notes.clear();
+		TIMV.messagesToSend.clear();
+		TIMV.footerToSend.clear();
+		TIMV.isRecordsRunning = false;
 		gm.setState(GameState.FINISHED);
 		ZTAMain.isTIMV = false;
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");

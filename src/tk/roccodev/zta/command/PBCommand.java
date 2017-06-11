@@ -49,6 +49,17 @@ public class PBCommand implements Command{
 			}).start();
 	
 		}
+		else if(args.length == 3){
+			String map1 = args[1] + " " + args[2];
+			String ign = args[0];
+			DRMap map = DRMap.getFromDisplay(map1);
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e's Personal Best on map §6" + map.getDisplayName() + "§e is §6" + HiveAPI.DRgetPB(ign, map));
+				}
+			}).start();
+		}
 		else{
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /pb [player] or /pb [player] [map]");
 		}		
