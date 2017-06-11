@@ -74,7 +74,17 @@ public class HiveAPI {
 			return null;
 		}
 	}
-	private static URL parseSpeedruncom(String mapid){
+	private static URL parseMojangPlayerAPI(String ign){
+		String url = "https://api.mojang.com/users/profiles/minecraft/@ign@";
+		try {
+			return new URL(url.replaceAll("@ign@", ign));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+ 	private static URL parseSpeedruncom(String mapid){
 		String urls = "http://www.speedrun.com/api/v1/leaderboards/369ep8dl/level/@id@/824xzvmd?top=1";
 		try {
 			return new URL(urls.replaceAll("@id@", mapid));
@@ -88,6 +98,17 @@ public class HiveAPI {
 		String urls = "http://www.speedrun.com/api/v1/users/@id@";
 		try {
 			return new URL(urls.replaceAll("@id@", userid));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static URL parseMonthlyURL(String game){
+		// Be aware that this is ItsNiklas' API key. May want to request a own in the future.
+		String url = "https://thtmx.rocks/@game@/api/90824356";
+		try {
+			return new URL(url.replaceAll("@game@", game));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -504,7 +525,40 @@ public class HiveAPI {
 			long time = (long) o.get("lastlogin");
 			return new Date(time * 1000);
 	}
-	
+	public static String getUUID(String ign){
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		try {
+			o = (JSONObject) parser.parse(readUrl(parseMojangPlayerAPI(ign)));
+		}  catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return (String) o.get("id");
+	}
+	public static int getMonthlyLeaderboardsRank(String ign, String game){
+		String uuid = getUUID(ign);
+		JSONParser parser = new JSONParser();
+		JSONArray o1 = null;
+		JSONObject o2 = null;
+			try {
+				o1 = (JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(parseMonthlyURL(game)))).get("leaderboard").toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();				
+			}
+		for(int i = 0; i<=350; i++){
+	    	try {
+				o2 = (JSONObject) parser.parse(o1.get(i).toString());
+				} catch (Exception e) {
+				return 0;
+			}
+	    	if(o2.get("uuid").toString().equals(uuid)){
+	    		return i + 1;
+	    	}
+		}
+		return 0;
+	}
 	public static ChatColor getRankColor(String rankName){
 		ChatColor rankColor = null;
 		switch(rankName){
