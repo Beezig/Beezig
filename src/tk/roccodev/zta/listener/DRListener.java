@@ -293,61 +293,17 @@ public class DRListener extends AbstractGameListener<DR>{
 				return true;
 				
 				
+				}
+			
 			}
-			
-		}
-		/*
-			
-		else if(message.contains(ChatColor.DARK_AQUA + " Points:") && !Setting.DR_SHOW_RANK.getValue()){
-			String[] contents = message.split(":");
-			long points = Long.valueOf(ChatColor.stripColor(contents[1].trim()));
-			DR.lastRecordPoints = points;
-		}
-
-		
-		else if(message.contains(ChatColor.DARK_AQUA + " Wins:")){
-			
-			//Better /records
-			
-			Runnable rnn = new Runnable(){
-				@Override
-				public void run(){
-			try{
-			
-				The5zigAPI.getLogger().info("Running Better Records...");
-				if(Setting.DR_SHOW_POINTSPERGAME.getValue()){
-					double ppg = Math.round(((double)DR.lastRecordPoints / (double)HiveAPI.DRgetGames(DR.lastRecords)) * 10d) / 10d;
-					The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Points/Game: " + ChatColor.AQUA + ppg);
-				}
-				if(Setting.DR_SHOW_RUNNERWINRATE.getValue()){
-					int rwr = (int) (Math.floor(((double)HiveAPI.DRgetRunnerWins(DR.lastRecords) / (double)HiveAPI.DRgetRunnerGamesPlayed(DR.lastRecords)) * 1000d) / 10d);
-					The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Winrate (Runner): " + ChatColor.AQUA + rwr + "%");
-				}
-				if(Setting.DR_SHOW_DEATHSPERGAME.getValue()){
-					double dpg = (double) (Math.floor(((double)HiveAPI.DRgetDeaths(DR.lastRecords) / (double)HiveAPI.DRgetRunnerGamesPlayed(DR.lastRecords)) * 10d) / 10d);
-					The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Deaths per Game: " + ChatColor.AQUA + dpg);
-				}
-				if(Setting.DR_SHOW_ACHIEVEMENTS.getValue()){
-					int ach = HiveAPI.DRgetAchievements(DR.lastRecords);
-					The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Achievements: " + ChatColor.AQUA + ach + "/35");
-				}
-				if(Setting.DR_SHOW_MONTHLYRANK.getValue() && (DR.lastRecordPoints > HiveAPI.getLeaderboardsPlacePoints(349, "DR"))){
-					int place = HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR");
-					if(place > 0){
-						The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Monthly Leaderboards: " + ChatColor.AQUA + "#" + place);
-					}
-				}
-				if(Setting.SHOW_RECORDS_LASTGAME.getValue()){
-					The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Last Game: " + ChatColor.AQUA + HiveAPI.lastGame(DR.lastRecords, "DR"));
-				}
-			}
-			
-			}*/
+	
 			else if(message.contains("§lYou are a ")){
 				gameMode.setState(GameState.GAME);
 			}
-			else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in §e") && !message.endsWith(" ")){
-				String time = message.replaceAll("§8▍ §cDeathRun§8 ▏ §bYou finished your run in §e", "").replaceAll("§b!", "");
+			
+			else if(message.startsWith("§8▍ §cDeathRun§8 ▏") && message.contains("§3 finished §b") && message.contains(The5zigAPI.getAPI().getGameProfile().getName()) && !message.endsWith(" ")){
+				//"§8▍ §cDeathRun§8 ▏ §b §aItsNiklass§3 finished §b1st§3. §7(01:10.574)"
+				String time = (message.split("§7\\("))[1].replaceAll("\\)", "");
 				String[] data = time.split(":");
 				int minutes = Integer.parseInt(data[0]);
 				//data[1	] is seconds.milliseconds
@@ -390,11 +346,14 @@ public class DRListener extends AbstractGameListener<DR>{
 					
 					
 					else if(pbDiff > 0){
-						The5zigAPI.getAPI().messagePlayer(message + " §eThe World Record is §a" + diff + "§e seconds away! Your Personal Best is §a" + pbDiff + " §eseconds away!");
+						The5zigAPI.getAPI().messagePlayer(message + " §3The World Record is §b" + diff + "§3 seconds away! Your Personal Best is §b" + pbDiff + " §3seconds away!");
+					}
+					else if(pbDiff == 0){
+						The5zigAPI.getAPI().messagePlayer(message + " §3The World Record is §b" + diff + "§3 seconds away! You tied your Personal Best!");
 					}
 					else{
-						The5zigAPI.getAPI().messagePlayer(message + " §eThe World Record is §a" + diff + "§e seconds away! You tied your Personal Best!");
-					}			
+						The5zigAPI.getAPI().messagePlayer(message + " §3The World Record is §b" + diff + "§3 seconds away! You beat your Personal Best by §b" + -pbDiff + " §3seconds!");
+					}
 					}
 					
 				}).start();
