@@ -104,8 +104,8 @@ public class HiveAPI {
 		}
 	}
 	private static URL parseMonthlyURL(String game){
-		// Be aware that this is the standard API key. May want to request a own in the future.
-		String url = "https://thtmx.rocks/@game@/api/90824356";
+		//APIKey is only used for analytics => doesn't have to be kept secret; be aware that the endpoint URL might change in the future, there will be a notification prior to that
+		String url = "https://thtmx.rocks/@game@/api/ighGH789fdf5kfHUo";
 		try {
 			return new URL(url.replaceAll("@game@", game));
 		} catch (MalformedURLException e) {
