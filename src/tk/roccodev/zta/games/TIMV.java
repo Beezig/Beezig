@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Formatter;
@@ -40,6 +39,12 @@ public class TIMV extends GameMode{
 	public static List<String> messagesToSend = new ArrayList<String>();
 	public static List<String> footerToSend = new ArrayList<String>();
 	public static boolean isRecordsRunning = false;
+	
+	
+	//Autovoting
+	public static List<String> votesToParse = new ArrayList<String>();
+	
+	
 	//CSV Stuff
 	
 	public static List<String[]> csvEntries;
@@ -48,6 +53,7 @@ public class TIMV extends GameMode{
 	public static int dPoints;
 	public static int iPoints;
 	public static boolean dead;
+	public static boolean hasVoted = false;
 	public static long lastRecordKarma;
 	
 	
@@ -190,7 +196,9 @@ public class TIMV extends GameMode{
 		NotesManager.notes.clear();
 		TIMV.messagesToSend.clear();
 		TIMV.footerToSend.clear();
+		TIMV.votesToParse.clear();
 		TIMV.isRecordsRunning = false;
+		TIMV.hasVoted = false;
 		gm.setState(GameState.FINISHED);
 		ZTAMain.isTIMV = false;
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");

@@ -22,7 +22,9 @@ import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.mod.util.IKeybinding;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.command.AddNoteCommand;
+import tk.roccodev.zta.command.AutoVoteCommand;
 import tk.roccodev.zta.command.ColorDebugCommand;
 import tk.roccodev.zta.command.MonthlyCommand;
 import tk.roccodev.zta.command.NotesCommand;
@@ -109,6 +111,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new WRCommand());
 		CommandManager.registerCommand(new ColorDebugCommand());
 		CommandManager.registerCommand(new MonthlyCommand());
+		CommandManager.registerCommand(new AutoVoteCommand());
 		
 		ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 
@@ -152,6 +155,9 @@ public class ZTAMain {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		checkForFileExist(new File(mcFile + "/autovote.yml"), false);
+		AutovoteUtils.load();
 	}
 	
 	private void checkForFileExist(File f, boolean directory) {

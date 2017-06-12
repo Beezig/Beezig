@@ -23,6 +23,7 @@ import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
+import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -229,6 +230,78 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 			
 			return true;
+			
+			
+		}
+		
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6Vote received.")){
+			TIMV.hasVoted = true;
+		}
+		
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6§6§l6.§f§6 §4Random map§6")){
+			/*
+			 * 
+			 * Multi-threading to avoid lag on older machines
+			 * 
+			 */
+			
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					
+					List<String> votesCopy = new ArrayList<String>();
+					votesCopy.addAll(TIMV.votesToParse);
+					
+					List<String> mapNames = new ArrayList<String>();
+					
+					for(String s : votesCopy){
+						
+						String[] data = s.split("\\.");
+						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §3TIMV§8 ▏ §6§6§l", "").replaceAll("▍ TIMV ▏", "").trim();
+						String toConsider = data[1];
+						String[] data2 = ChatColor.stripColor(toConsider).split("\\(");
+						String consider = data2[0].trim();
+						
+						TIMVMap map = TIMVMap.getFromDisplay(consider);
+						if(map == null){
+							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: map not found for " + consider);
+							return;
+						}
+						
+						List<TIMVMap> parsedMaps = new ArrayList<TIMVMap>();
+						for(String s1 : AutovoteUtils.getMapsForMode("timv")){
+							TIMVMap map1 = TIMVMap.valueOf(s1);
+							
+							if(map1 == null) continue;
+							parsedMaps.add(map1);
+						}
+						
+						if(parsedMaps.contains(map)){
+							
+							The5zigAPI.getAPI().sendPlayerMessage("/vote " + index);
+							TIMV.votesToParse.clear();
+							TIMV.hasVoted = true;
+							The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for §6" + map.getDisplayName());
+							return;
+						}
+						else{
+							The5zigAPI.getAPI().sendPlayerMessage("/vote 6");
+							TIMV.votesToParse.clear();
+							TIMV.hasVoted = true;
+							The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for §4Random map");
+							return;
+						}
+						
+						
+					}
+					
+					
+				}
+			}).start();
+		}
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6§6§l") && !TIMV.hasVoted){
+			
+			TIMV.votesToParse.add(message);
 			
 			
 		}

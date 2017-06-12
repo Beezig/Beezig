@@ -23,6 +23,7 @@ public class AutovoteUtils {
 	
 	public static List<String> getMapsForMode(String mode){
 		List<String> tr = new ArrayList<String>();
+		tr.addAll((List<String>)get(mode));
 		return tr;
 	}
 	
@@ -37,7 +38,10 @@ public class AutovoteUtils {
 		}
 		
 		ymlObject = (HashMap<String, Object>) yml.load(input);
-		
+		if(ymlObject == null) {
+			ymlObject = new HashMap<String, Object>();
+			dump();
+		}
 		
 		try {
 			input.close();
