@@ -1,5 +1,8 @@
 package tk.roccodev.zta.games;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
@@ -19,6 +22,10 @@ public class DR extends GameMode{
 	public static int checkpoints;
 	public static int deaths;
 	public static int kills;
+	
+	public static List<String> messagesToSend = new ArrayList<String>();
+	public static List<String> footerToSend = new ArrayList<String>();
+	public static boolean isRecordsRunning = false;
 	
 	public static void reset(DR gm){
 		

@@ -1,5 +1,10 @@
 package tk.roccodev.zta.listener;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -14,9 +19,11 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.DRRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.TIMVRank;
 import tk.roccodev.zta.settings.Setting;
 
 public class DRListener extends AbstractGameListener<DR>{
@@ -113,64 +120,191 @@ public class DRListener extends AbstractGameListener<DR>{
 				DR.kills++;	
 			}
 		
-		else if(!message.contains("§6§6") && message.contains(" Stats §6§m") && (Setting.SHOW_NETWORK_RANK_COLOR.getValue() || Setting.SHOW_NETWORK_RANK_TITLE.getValue())){
-			Thread t = new Thread(new Runnable(){
-				@Override
-				public void run(){
-					String correctName = HiveAPI.getName(DR.lastRecords);
-					if(correctName.contains("nicked player")){
-						correctName = "Nicked/Not found";
-					}
-				 	String rank = HiveAPI.getNetworkRank(DR.lastRecords);
-				 	if(rank.contains("nicked player")){
-						rank = "Nicked/Not found";
-					}
-				 	ChatColor rankColor = HiveAPI.getRankColor(rank);
-			 	
-				 	//"          §6§m                  §f ItsNiklass's Stats §6§m                  "
-				 	// Not sure if this the best way to do this v
-				 	if(Setting.SHOW_NETWORK_RANK_COLOR.getValue() && Setting.SHOW_NETWORK_RANK_TITLE.getValue()){
-				 		The5zigAPI.getAPI().messagePlayer(ChatColor.BLACK + "" + ChatColor.GOLD + "          " + ChatColor.STRIKETHROUGH + "                  " + ChatColor.RESET + " " + rankColor + correctName + ChatColor.RESET + "'s Stats " + ChatColor.GOLD + ChatColor.STRIKETHROUGH + "                  ");
-				 		The5zigAPI.getAPI().messagePlayer(ChatColor.BLACK + "" + ChatColor.GOLD + "          " + ChatColor.STRIKETHROUGH + "       " + ChatColor.RESET + ChatColor.GOLD + " (" + rankColor + rank + ChatColor.GOLD + ") " +  ChatColor.STRIKETHROUGH + "       ");
-				 	}
-				 	else if(Setting.SHOW_NETWORK_RANK_COLOR.getValue() && !Setting.SHOW_NETWORK_RANK_TITLE.getValue()){
-				 		The5zigAPI.getAPI().messagePlayer(ChatColor.BLACK + "" + ChatColor.GOLD + "          " + ChatColor.STRIKETHROUGH + "                  " + ChatColor.RESET + " " + rankColor + correctName + ChatColor.RESET + "'s Stats " + ChatColor.GOLD + ChatColor.STRIKETHROUGH + "                  ");
-					}
-				 	else if(!Setting.SHOW_NETWORK_RANK_COLOR.getValue() && Setting.SHOW_NETWORK_RANK_TITLE.getValue()){
-				 		The5zigAPI.getAPI().messagePlayer(ChatColor.BLACK + "" + ChatColor.GOLD + "          " + ChatColor.STRIKETHROUGH + "                  " + ChatColor.RESET + " " + correctName + "'s Stats " + ChatColor.GOLD + ChatColor.STRIKETHROUGH + "                  ");
-				 		The5zigAPI.getAPI().messagePlayer(ChatColor.BLACK + "" + ChatColor.GOLD + "          " + ChatColor.STRIKETHROUGH + "       " + ChatColor.RESET + ChatColor.GOLD + " (" + ChatColor.RESET + rank + ChatColor.GOLD + ") " +  ChatColor.STRIKETHROUGH + "       ");
-				 	}
-				}
-			});
-			t.start();
-			try {
-				t.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+		
+		
+		
+		
+		else if(message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")){
+			//"          §6§m                  §f ItsNiklass's Stats §6§m                  "
+			//Advanced Records
+			DR.messagesToSend.add(message);
+			The5zigAPI.getLogger().info("found header");
 			return true;
 		}
-		
+		else if(message.startsWith("§3 ")){
+			
+				DR.messagesToSend.add(message);
+				The5zigAPI.getLogger().info("found entry");
+			
+			return true;	
+		}
+		else if(message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")){
+			//TODO Coloring
+			DR.footerToSend.add(message);
+			The5zigAPI.getLogger().info("Found Player URL");
+			
+		return true;	
+		}
+		else if((message.equals("                      §6§m                  §6§m                  ")&& !message.startsWith("§o "))){
+			The5zigAPI.getLogger().info("found footer");
+			DR.footerToSend.add(message);	
+			The5zigAPI.getLogger().info("executed /records");
+			if(DR.footerToSend.contains("                      §6§m                  §6§m                  ")){
+				//Advanced Records - send
+				The5zigAPI.getLogger().info("Sending adv rec");
+				new Thread(new Runnable(){
+					@Override
+					public void run(){
+						DR.isRecordsRunning = true;
+						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
+						try{
+						DRRank rank = null;
+						Double ppg = Setting.DR_SHOW_POINTSPERGAME.getValue() ? Math.round(((double)HiveAPI.DRgetPoints(DR.lastRecords) / (double)HiveAPI.DRgetGames(DR.lastRecords)) * 10d) / 10d : null;
+						Integer rwr = Setting.DR_SHOW_RUNNERWINRATE.getValue() ? (int) (Math.floor(((double)HiveAPI.DRgetRunnerWins(DR.lastRecords) / (double)HiveAPI.DRgetRunnerGamesPlayed(DR.lastRecords)) * 1000d) / 10d) : null;
+						Double dpg = Setting.DR_SHOW_DEATHSPERGAME.getValue() ? (double) (Math.floor(((double)HiveAPI.DRgetDeaths(DR.lastRecords) / (double)HiveAPI.DRgetRunnerGamesPlayed(DR.lastRecords)) * 10d) / 10d) : null;
+						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(DR.lastRecords) : "";
+						ChatColor rankColor = null;
+						if(Setting.SHOW_NETWORK_RANK_COLOR.getValue()){
+							if(rankTitle.isEmpty()){
+								rankColor = HiveAPI.getRankColorFromIgn(DR.lastRecords);
+								The5zigAPI.getLogger().info("Executed RankColorFromIgn > " + rankColor);
+							}
+							else{
+								rankColor = HiveAPI.getRankColor(rankTitle);
+							}
+						}
+						long points = 0;
+						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(DR.lastRecords, "DR") : null;
+						Integer achievements = Setting.DR_SHOW_ACHIEVEMENTS.getValue() ? HiveAPI.DRgetAchievements(DR.lastRecords) : null;
+						String rankTitleDR = Setting.DR_SHOW_RANK.getValue() ? HiveAPI.DRgetRank(DR.lastRecords) : null;
+						The5zigAPI.getLogger().info(HiveAPI.getLeaderboardsPlacePoints(349, "DR"));
+						int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "DR") < HiveAPI.DRgetPoints(DR.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+						if(rankTitleDR != null) rank = DRRank.getFromDisplay(rankTitleDR);
+						List<String> messages = new ArrayList<String>();
+						messages.addAll(DR.messagesToSend);
+							Iterator<String> it = messages.iterator();
+							for(String s : messages){
+								
+								
+								
+								 	if(s.trim().endsWith("'s Stats §6§m")){
+								 	//"          §6§m                  §f ItsNiklass's Stats §6§m                  "
+								 	//"§6§m                  §f ItsNiklass's Stats §6§m"
+								 	The5zigAPI.getLogger().info("Editing Header...");
+									StringBuilder sb = new StringBuilder();
+									String correctUser = HiveAPI.getName(DR.lastRecords);
+									if(correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
+									sb.append("          §6§m                  §f ");
+									The5zigAPI.getLogger().info("Added base...");
+									if(rankColor != null) {
+										sb.append(rankColor + correctUser);
+										The5zigAPI.getLogger().info("Added colored user...");
+									}
+									else{
+										sb.append(correctUser);
+										The5zigAPI.getLogger().info("Added white user...");
+									}
+									sb.append("§f's Stats §6§m                  ");
+									The5zigAPI.getLogger().info("Added end...");
+									The5zigAPI.getAPI().messagePlayer("§o " + sb.toString());
+									
+									if(rankTitle != null && rankTitle.contains("nicked player")) rankTitle = "Nicked/Not found";
+									if(!rankTitle.equals("Nicked/Not found") && !rankTitle.isEmpty()){
+											if(rankColor == null) rankColor = ChatColor.WHITE;
+											The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " (" + rankColor + rankTitle + "§6) " + "§m       ");
+										}
+									continue;
+								 	}
+									else if(s.startsWith("§3 Points: §b")){
+										StringBuilder sb = new StringBuilder();
+										sb.append("§3 Points: §b");
+										points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
+										sb.append(points);
+										if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
+										The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+										continue;
+									
+									}
+
+								The5zigAPI.getAPI().messagePlayer("§o " + s);
+								
+							}
+						
+							
+						if(ppg != null){
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + ppg);
+						}
+						if(achievements != null){
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/47");
+						}
+						if(rwr != null){
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Runner-Winrate: §b" + rwr + "%");
+						}
+						if(dpg != null){
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Deaths per Game: §b" + dpg);
+						}
+						if(monthlyRank != 0){					
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
+						}
+						if(lastGame != null){
+							Date now = new Date();
+							long diff = now.getTime() - lastGame.getTime();
+							
+							
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + lastGame + " (" + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + " days ago)");
+						}
+						
+							
+							for(String s : DR.footerToSend){								
+								The5zigAPI.getAPI().messagePlayer("§o " + s);
+							}
+						
+						
+						
+						DR.messagesToSend.clear();
+						DR.footerToSend.clear();
+						DR.isRecordsRunning = false;
+						
+						}catch(Exception e){
+							e.printStackTrace();
+							if(e.getCause() instanceof FileNotFoundException){
+								The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
+								DR.messagesToSend.clear();
+								DR.footerToSend.clear();
+								DR.isRecordsRunning = false;
+								return;
+							}
+							The5zigAPI.getAPI().messagePlayer(Log.error + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
+							
+							for(String s : DR.messagesToSend){
+								The5zigAPI.getAPI().messagePlayer("§o " + s);
+							}
+							for(String s : DR.footerToSend){
+								The5zigAPI.getAPI().messagePlayer("§o " + s);
+							}
+							The5zigAPI.getAPI().messagePlayer("§o " + "                      §6§m                  §6§m                  ");
+							DR.messagesToSend.clear();
+							DR.footerToSend.clear();
+							DR.isRecordsRunning = false;
+							return;
+						}
+					}
+				}).start();
+				return true;
+				
+				
+			}
+			
+		}
+		/*
+			
 		else if(message.contains(ChatColor.DARK_AQUA + " Points:") && !Setting.DR_SHOW_RANK.getValue()){
 			String[] contents = message.split(":");
 			long points = Long.valueOf(ChatColor.stripColor(contents[1].trim()));
 			DR.lastRecordPoints = points;
 		}
 
-		else if(message.startsWith(ChatColor.DARK_AQUA + " Points:") && Setting.DR_SHOW_RANK.getValue()){
-			String[] contents = message.split(":");
-			String points1 = ChatColor.stripColor(contents[1].trim());
-			int points = Integer.valueOf(points1);
-			DR.lastRecordPoints = points;
-			String title1 = HiveAPI.DRgetRank(DR.lastRecords);
-			DRRank rank = DRRank.getFromDisplay(title1);
-			String title = rank.getTotalDisplay();
-			The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Points: " + ChatColor.AQUA + points + " (" + title +  ChatColor.AQUA + ")");
-			
-			return true;
-		}
+		
 		else if(message.contains(ChatColor.DARK_AQUA + " Wins:")){
 			
 			//Better /records
@@ -207,24 +341,8 @@ public class DRListener extends AbstractGameListener<DR>{
 					The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Last Game: " + ChatColor.AQUA + HiveAPI.lastGame(DR.lastRecords, "DR"));
 				}
 			}
-			catch(Exception e){
-				e.printStackTrace();
-				}
-			}
-			};
 			
-			ExecutorService exec = Executors.newCachedThreadPool();
-			exec.submit(rnn);
-			exec.shutdown();
-			try {
-				exec.awaitTermination(10, TimeUnit.SECONDS);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-			}
+			}*/
 			else if(message.contains("§lYou are a ")){
 				gameMode.setState(GameState.GAME);
 			}

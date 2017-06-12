@@ -14,6 +14,7 @@ public enum Setting {
 	TIMV_SHOW_RANK(true, "TIMV Advanced Records - Show Karma-based rank"),
 	TIMV_SHOW_MOSTPOINTS(true, "TIMV Advanced Records - Show Karma record"),
 	TIMV_SHOW_TRAITORRATIO(false, "TIMV Advanced Records - Show the Traitor Points / Rolepoints ratio (Advanced players)"),
+	TIMV_SHOW_MONTHLYRANK(true, "TIMV Advanced Records - Show players' rank on the Monthly Leaderboards by Maxthat"),
 	
 	DR_SHOW_RANK(true, "DR Advanced Records - Show Point-based rank"),
 	DR_SHOW_POINTSPERGAME(true, "DR Advanced Records - Show the average Points per Game"),

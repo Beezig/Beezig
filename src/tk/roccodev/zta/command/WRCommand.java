@@ -38,7 +38,7 @@ public class WRCommand implements Command{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + map.getDisplayName() + "§e is §6" + HiveAPI.DRgetWR(map) + "§e by §6" + DR.currentMapWRHolder);
+					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + map.getDisplayName() + "§e is §6" + HiveAPI.DRgetWR(map) + "§e by §6" + HiveAPI.DRgetWRHolder(map));
 				}
 			}).start();
 	

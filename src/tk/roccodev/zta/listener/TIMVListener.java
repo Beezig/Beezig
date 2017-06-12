@@ -23,6 +23,7 @@ import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
+import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
@@ -234,8 +235,6 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		else if(message.equals("§7=====================================") && !message.endsWith(" ")){ //Bar
 			if(TIMV.footerToSend.contains("§bThis data is §elive data.")){
 				//Advanced Records - send
-				
-				The5zigAPI.getAPI().messagePlayer(Log.info + "Connecting to API...");
 				new Thread(new Runnable(){
 					@Override
 					public void run(){
@@ -263,6 +262,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(TIMV.lastRecords, "TIMV") : null;
 						Integer achievements = Setting.TIMV_SHOW_ACHIEVEMENTS.getValue() ? HiveAPI.TIMVgetAchievements(TIMV.lastRecords) : null;
 						String rankTitleTIMV = Setting.TIMV_SHOW_RANK.getValue() ? HiveAPI.TIMVgetRank(TIMV.lastRecords) : null;
+						int monthlyRank = (Setting.TIMV_SHOW_MONTHLYRANK.getValue() &&  HiveAPI.getLeaderboardsPlacePoints(349, "TIMV") < HiveAPI.TIMVgetKarma(TIMV.lastRecords))? HiveAPI.getMonthlyLeaderboardsRank(TIMV.lastRecords, "TIMV") : 0;
 						if(rankTitleTIMV != null) rank = TIMVRank.getFromDisplay(rankTitleTIMV);
 						List<String> messages = new ArrayList<String>();
 						messages.addAll(TIMV.messagesToSend);
@@ -329,9 +329,10 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 							The5zigAPI.getAPI().messagePlayer("§bAchievements: §e" + achievements + "/41 ");
 						}
 						if(krr != null){
-							
-							
 							The5zigAPI.getAPI().messagePlayer("§bKarma/Rolepoints: §e" + krr + " ");
+						}
+						if(monthlyRank != 0){					
+							The5zigAPI.getAPI().messagePlayer("§bMonthly Leaderboards: §e#" + monthlyRank + " ");
 						}
 						if(lastGame != null){
 							Date now = new Date();
@@ -353,9 +354,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						TIMV.footerToSend.clear();
 						TIMV.isRecordsRunning = false;
 						The5zigAPI.getAPI().messagePlayer("§7===================================== ");
-						The5zigAPI.getAPI().messagePlayer(Log.info + "Done!");
 						
 						}catch(Exception e){
+							e.printStackTrace();
 							if(e.getCause() instanceof FileNotFoundException){
 								The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
 								TIMV.messagesToSend.clear();
