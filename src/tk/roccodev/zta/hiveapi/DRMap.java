@@ -36,6 +36,14 @@ public enum DRMap {
 		this.speedrunid = speedrunid;
 	}
 
+	
+	public static DRMap valueFromDisplay(String display){
+		for(DRMap map : values()){
+			if(map.getDisplayName().equalsIgnoreCase(display)) return map;
+		}
+		return null;
+	}
+	
 
 	public String getDisplayName() {
 		return displayName;

@@ -43,11 +43,9 @@ public class AutoVoteCommand implements Command{
 				String gamemode = data[0]; // ex: dr
 				String mapString = data[1]; //ex: throwback
 				if(gamemode.equalsIgnoreCase("dr")){
-					DRMap apiMap = null;
-					try{
-						apiMap = DRMap.valueOf(mapString);
-					}
-					catch(IllegalArgumentException e){
+					DRMap apiMap = DRMap.valueFromDisplay(mapString);
+					
+					if(apiMap == null){
 						The5zigAPI.getAPI().messagePlayer(Log.error + "Map not found.");
 						return true;
 					}
@@ -62,7 +60,7 @@ public class AutoVoteCommand implements Command{
 				else if(gamemode.equalsIgnoreCase("timv")){
 					TIMVMap apiMap = null;
 					try{
-						apiMap = TIMVMap.valueOf(mapString);
+						apiMap = TIMVMap.valueOf(mapString.toUpperCase());
 					}
 					catch(IllegalArgumentException e){
 						The5zigAPI.getAPI().messagePlayer(Log.error + "Map not found.");
