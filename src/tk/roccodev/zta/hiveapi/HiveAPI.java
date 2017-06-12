@@ -104,7 +104,7 @@ public class HiveAPI {
 		}
 	}
 	private static URL parseMonthlyURL(String game){
-		// Be aware that this is ItsNiklas' API key. May want to request a own in the future.
+		// Be aware that this is the standard API key. May want to request a own in the future.
 		String url = "https://thtmx.rocks/@game@/api/90824356";
 		try {
 			return new URL(url.replaceAll("@game@", game));
@@ -581,6 +581,29 @@ public class HiveAPI {
 	    	}
 		}
 		return 0;
+	}
+	public static String getMonthlyLeaderboardsPlayerInfo(int index, String game){
+		String unit = "points";
+		if(game.equals("TIMV")){
+				unit = "karma";
+		}	
+		JSONParser parser = new JSONParser();
+		JSONArray o1 = null;
+		JSONObject o2 = null;
+			try {
+				o1 = (JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(parseMonthlyURL(game.toLowerCase())))).get("leaderboard").toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				o2 = (JSONObject) parser.parse(o1.get(index).toString());
+				return o2.get("name").toString() + "," + o2.get(unit).toString();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		return "";
 	}
 	public static Long getLeaderboardsPlacePoints(int index, String game){
 		JSONParser parser = new JSONParser();
