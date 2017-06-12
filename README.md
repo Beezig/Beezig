@@ -54,5 +54,6 @@ This plugin uses:
 * The 5zig Mod API
 * HiveMC's API
 * Speedrun.com's API
+* @Maxthat 's Monthly Leaderboards API
 
 ## [Image Album](https://imgur.com/a/LIxhh)
