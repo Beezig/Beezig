@@ -21,7 +21,7 @@ public class MonthlyCommand implements Command{
 
 	@Override
 	public boolean execute(String[] args) {
-		if(!(ZTAMain.isDR) || !(ZTAMain.isTIMV)) return false;
+		if(!(ZTAMain.isDR) && !(ZTAMain.isTIMV)) return false;
 		if(args.length == 1){
 			
 			int index = Integer.parseInt(args[0]) - 1;	
