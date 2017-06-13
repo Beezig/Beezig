@@ -396,7 +396,7 @@ public class HiveAPI {
 					return "No Holder";
 				}
 			}
-		return WRHolder;
+		return WRHolder != null ? WRHolder : "No Holder";
 	}
 	
 	public static double DRgetWR_raw(DRMap map){

@@ -23,6 +23,9 @@ public class AutovoteUtils {
 	
 	public static List<String> getMapsForMode(String mode){
 		List<String> tr = new ArrayList<String>();
+		if(get(mode) == null)
+			return tr;
+		
 		tr.addAll((List<String>)get(mode));
 		return tr;
 	}
