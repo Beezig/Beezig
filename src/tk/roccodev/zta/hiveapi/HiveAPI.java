@@ -311,7 +311,9 @@ public class HiveAPI {
 				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
+				return "No Personal Best";
 			}			
 		try {
 			o1 = (JSONObject) parser.parse(o.get("maprecords").toString());
@@ -319,6 +321,7 @@ public class HiveAPI {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return "No Personal Best";
 		}
 		int time = Integer.valueOf(o1.get(map1).toString());
 		if(time > 59){
@@ -339,8 +342,9 @@ public class HiveAPI {
 			try {
 				run0 = (JSONObject) parser.parse(((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parseSpeedruncom(mapid)))).get("data").toString())).get("runs").toString())).get(0).toString())).get("run").toString());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
+				return "No World Record";
 			}
 		Double time = null;
 		try {
@@ -349,6 +353,7 @@ public class HiveAPI {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "No World Record";
 		}
 		if(time > 59){
 			int seconds = (int) (Math.floor(time) % 60);
@@ -372,6 +377,7 @@ public class HiveAPI {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return "No Holder";
 			}
 			try {
 				//Returns the world record holder username... lmao
@@ -379,6 +385,7 @@ public class HiveAPI {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return "No Holder";
 			}
 			if (WRHolder == null){
 				try {
@@ -386,6 +393,7 @@ public class HiveAPI {
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					return "No Holder";
 				}
 			}
 		return WRHolder;
