@@ -162,12 +162,23 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.applyPoints(2); //+1 Det point
 			
 		}
-		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §cGame Over§7") && gameMode != null){
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6The game has ended.") && gameMode != null){
+			//Where does 'Game Over' appear?
 			if(!TIMV.dead){
 				TIMV.applyPoints(20);
 			}
-			The5zigAPI.getAPI().messagePlayer(Log.info + "TIMV GameID: " + TIMV.gameID + " (http://hivemc.com/trouble-in-mineville/game/" + TIMV.gameID + ")");
-			TIMV.reset(gameMode);
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					try {
+						TimeUnit.SECONDS.sleep(5);
+						The5zigAPI.getAPI().messagePlayer(Log.info + "§6TIMV GameID: §c" + ChatColor.stripColor(TIMV.gameID) + " §6 > §chttp://hivemc.com/trouble-in-mineville/game/" + ChatColor.stripColor(TIMV.gameID) );			
+						TIMV.reset(gameMode);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}				
+				}
+			}).start();
 			
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6Voting has ended! The map") && gameMode != null){
@@ -224,11 +235,15 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			return true;
 		}
 		else if(message.startsWith(ChatColor.AQUA + "") && !message.endsWith(" ")){
-			
-			
+				if(message.startsWith("§bAs you're an experienced player, we're") || 
+					message.startsWith("§bConstable ") || 
+					message.startsWith("§bTracer ") ||
+					message.startsWith("§bDirector ")){
+					//It was sucking in all the chat messages by people with this rank until one did /records lmao
+						return false;
+				}		
 				TIMV.messagesToSend.add(message);
-			
-			
+	
 			return true;
 			
 			
@@ -248,11 +263,16 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					
 					List<String> votesCopy = new ArrayList<String>();
 					votesCopy.addAll(TIMV.votesToParse);
-					
 					List<String> mapNames = new ArrayList<String>();
+					List<TIMVMap> parsedMaps = new ArrayList<TIMVMap>();
+					for(String s1 : AutovoteUtils.getMapsForMode("timv")){
+						TIMVMap map1 = TIMVMap.valueOf(s1);	
+						if(map1 == null) continue;
+						parsedMaps.add(map1);
+						The5zigAPI.getLogger().info("Parsed " + map1);
+					}	
 					
 					for(String s : votesCopy){
 						
@@ -261,23 +281,13 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						String toConsider = data[1];
 						String[] data2 = ChatColor.stripColor(toConsider).split("\\(");
 						String consider = data2[0].trim();
-						
 						TIMVMap map = TIMVMap.getFromDisplay(consider);
 						if(map == null){
 							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: map not found for " + consider);
 							return;
 						}
-						
-						List<TIMVMap> parsedMaps = new ArrayList<TIMVMap>();
-						for(String s1 : AutovoteUtils.getMapsForMode("timv")){
-							TIMVMap map1 = TIMVMap.valueOf(s1);
-							
-							if(map1 == null) continue;
-							parsedMaps.add(map1);
-						}
-						
+						The5zigAPI.getLogger().info("trying to match " + map);			
 						if(parsedMaps.contains(map)){
-							
 							The5zigAPI.getAPI().sendPlayerMessage("/vote " + index);
 							TIMV.votesToParse.clear();
 							TIMV.hasVoted = true;
@@ -285,25 +295,21 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 							return;
 						}
 						else{
+							The5zigAPI.getLogger().info("no matches in parsedMaps (yet)");
+						}
+						if(index.equals("5")){
 							The5zigAPI.getAPI().sendPlayerMessage("/vote 6");
 							TIMV.votesToParse.clear();
 							TIMV.hasVoted = true;
 							The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for §4Random map");
 							return;
 						}
-						
-						
-					}
-					
-					
+					}	
 				}
 			}).start();
 		}
 		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6§6§l") && !TIMV.hasVoted){
-			
-			TIMV.votesToParse.add(message);
-			
-			
+			TIMV.votesToParse.add(message);		
 		}
 		else if(message.equals("§7=====================================") && !message.endsWith(" ")){ //Bar
 			if(TIMV.footerToSend.contains("§bThis data is §elive data.")){

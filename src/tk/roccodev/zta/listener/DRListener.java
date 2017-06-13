@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,12 +16,13 @@ import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
+import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.DRRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.TIMVRank;
+import tk.roccodev.zta.hiveapi.TIMVMap;
 import tk.roccodev.zta.settings.Setting;
 
 public class DRListener extends AbstractGameListener<DR>{
@@ -120,10 +119,73 @@ public class DRListener extends AbstractGameListener<DR>{
 				DR.kills++;	
 			}
 		
-		
-		
-		
-		
+
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §a§lVote received.")){
+			DR.hasVoted = true;
+		}		
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l6. §f§cRandom map ")){
+			/*
+			 * 
+			 * Multi-threading to avoid lag on older machines
+			 * 
+			 */
+			
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					List<String> votesCopy = new ArrayList<String>();
+					votesCopy.addAll(DR.votesToParse);
+					List<String> mapNames = new ArrayList<String>();
+					List<DRMap> parsedMaps = new ArrayList<DRMap>();
+					for(String s1 : AutovoteUtils.getMapsForMode("dr")){
+						DRMap map1 = DRMap.valueOf(s1);
+						
+						if(map1 == null) continue;
+						parsedMaps.add(map1);
+						The5zigAPI.getLogger().info("Parsed " + map1);
+					}			
+					for(String s : votesCopy){
+						
+						String[] data = s.split("\\.");
+						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §cDeathRun§8 ▏ §6§e§e§l", "").replaceAll("▍ DeathRun ▏", "").trim();
+						String toConsider = data[1];
+						String[] data2 = ChatColor.stripColor(toConsider).split("\\[");
+						String consider = data2[0].trim();
+						
+						DRMap map = DRMap.getFromDisplay(consider);
+						if(map == null){
+							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: Map not found for " + consider);
+							return;
+						}
+						The5zigAPI.getLogger().info("trying to match " + map);
+						if(parsedMaps.contains(map)){
+							
+							The5zigAPI.getAPI().sendPlayerMessage("/vote " + index);
+							DR.votesToParse.clear();
+							DR.hasVoted = true;
+							The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for §6" + map.getDisplayName());
+							return;
+						}
+						else{
+							The5zigAPI.getLogger().info("no matches in parsedMaps (yet)");
+						}
+						if(index.equals("5")){
+							The5zigAPI.getAPI().sendPlayerMessage("/vote 6");
+							DR.votesToParse.clear();
+							DR.hasVoted = true;
+							The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for §cRandom map");
+							return;
+						}
+				
+					}
+			
+				}
+			}).start();
+		}
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l") && !DR.hasVoted){		
+			DR.votesToParse.add(message);		
+		}
+	
 		else if(message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")){
 			//"          §6§m                  §f ItsNiklass's Stats §6§m                  "
 			//Advanced Records

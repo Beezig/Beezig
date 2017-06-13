@@ -23,6 +23,9 @@ public class DR extends GameMode{
 	public static int deaths;
 	public static int kills;
 	
+	public static List<String> votesToParse = new ArrayList<String>();
+	public static boolean hasVoted = false;
+	
 	public static List<String> messagesToSend = new ArrayList<String>();
 	public static List<String> footerToSend = new ArrayList<String>();
 	public static boolean isRecordsRunning = false;
@@ -38,6 +41,7 @@ public class DR extends GameMode{
 		checkpoints = 0;
 		deaths = 0;
 		kills = 0;
+		DR.hasVoted = false;
 		ZTAMain.isDR = false;
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 	}

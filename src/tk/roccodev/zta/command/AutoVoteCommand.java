@@ -40,6 +40,9 @@ public class AutoVoteCommand implements Command{
 				String[] data = map.split("_");
 				String gamemode = data[0]; // ex: dr
 				String mapString = data[1]; //ex: throwback
+				if(data.length == 3){
+					mapString = (data[1] + "_" + data[2]);
+				}
 				if(gamemode.equalsIgnoreCase("dr")){
 					DRMap apiMap = DRMap.valueFromDisplay(mapString);
 					
@@ -110,6 +113,9 @@ public class AutoVoteCommand implements Command{
 				String[] data = map.split("_");
 				String gamemode = data[0]; // ex: dr
 				String mapString = data[1]; //ex: throwback
+				if(data.length == 3){
+					mapString = (data[1] + "_" + data[2]);
+				}
 				if(gamemode.equalsIgnoreCase("dr")){
 					DRMap apiMap = DRMap.valueFromDisplay(mapString);
 					
