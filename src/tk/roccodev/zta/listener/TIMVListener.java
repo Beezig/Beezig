@@ -57,16 +57,29 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
 			
 			int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
-			HiveAPI.TIMVkarma = (long) karma;
+			if(karma != 0)
+				HiveAPI.TIMVkarma = (long) karma;
 			
 			
 		}else{
-		try {
-			HiveAPI.TIMVupdateKarma();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+			
+			
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					try {
+						Thread.sleep(200); // Wait for server resources to load 
+						HiveAPI.TIMVupdateKarma();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}).start();
+			
+			
+		
 		
 		}
 		
@@ -90,6 +103,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
 				
 				int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
+				if(karma != 0)
 				HiveAPI.TIMVkarma = (long) karma;
 				
 				
@@ -100,6 +114,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 					@Override
 					public void run(){
 						try {
+							Thread.sleep(200); // Wait for server resources to load
 							HiveAPI.TIMVupdateKarma();
 							
 						} catch (ParseException e) {

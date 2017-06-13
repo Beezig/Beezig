@@ -106,8 +106,8 @@ public class DRListener extends AbstractGameListener<DR>{
 					break;
 			}
 		}
-		else if(message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f") && ZTAMain.isDR && DR.role == "Runner") {
-			// I don't care about double tokens weekends Rocco :^)
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏§aCheckpoint Reached! §7") && ZTAMain.isDR && DR.role == "Runner") {
+			// No more double tokens weekends Niklas :>)
 			if(!(DR.checkpoints == DR.activeMap.getCheckpoints())){
 					DR.checkpoints++;
 				}
