@@ -17,17 +17,28 @@ import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.KeyPressEvent;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.event.ServerQuitEvent;
+import eu.the5zig.mod.event.TitleEvent;
 import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.mod.util.IKeybinding;
+import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.autovote.AutovoteUtils;
+import tk.roccodev.zta.autovote.watisdis;
 import tk.roccodev.zta.command.AddNoteCommand;
+import tk.roccodev.zta.command.AutoVoteCommand;
+import tk.roccodev.zta.command.ColorDebugCommand;
+import tk.roccodev.zta.command.MonthlyCommand;
 import tk.roccodev.zta.command.NotesCommand;
+import tk.roccodev.zta.command.PBCommand;
 import tk.roccodev.zta.command.RealRankCommand;
 import tk.roccodev.zta.command.SayCommand;
 import tk.roccodev.zta.command.SeenCommand;
 import tk.roccodev.zta.command.SettingsCommand;
+import tk.roccodev.zta.command.WRCommand;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
+import tk.roccodev.zta.hiveapi.DRMap;
+import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
@@ -40,6 +51,7 @@ public class ZTAMain {
 	public static boolean isDR = false;
 	public static IKeybinding notesKb;
 	public static File mcFile;
+	public static boolean isColorDebug = false;
 	
 	public static int getCustomVersioning(){
 		String v = ZTAMain.class.getAnnotation(Plugin.class).version();
@@ -83,8 +95,9 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "drmap", tk.roccodev.zta.modules.dr.MapItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drrole", tk.roccodev.zta.modules.dr.RoleItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drpoints", tk.roccodev.zta.modules.dr.PointsItem.class, "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "drkills", tk.roccodev.zta.modules.dr.KillsItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drdeaths", tk.roccodev.zta.modules.dr.DeathsItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drpb", tk.roccodev.zta.modules.dr.PBItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drwr", tk.roccodev.zta.modules.dr.WRItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		
@@ -94,6 +107,11 @@ public class ZTAMain {
 		CommandManager.registerCommand(new SettingsCommand());
 		CommandManager.registerCommand(new RealRankCommand());
 		CommandManager.registerCommand(new SeenCommand());
+		CommandManager.registerCommand(new PBCommand());
+		CommandManager.registerCommand(new WRCommand());
+		CommandManager.registerCommand(new ColorDebugCommand());
+		CommandManager.registerCommand(new MonthlyCommand());
+		CommandManager.registerCommand(new AutoVoteCommand());
 		
 		ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 
@@ -137,6 +155,10 @@ public class ZTAMain {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		checkForFileExist(new File(mcFile + "/autovote.yml"), false);
+		AutovoteUtils.load();
+		watisdis.wat = HiveAPI.TIMVgetRank("RoccoDev");
 	}
 	
 	private void checkForFileExist(File f, boolean directory) {
@@ -199,6 +221,11 @@ public class ZTAMain {
 			String[] args = evt.getMessage().split(" ");
 			if(args.length == 1){
 				if(isTIMV){
+					if(TIMV.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
 					TIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				} else if(isDR){
 					DR.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
@@ -206,6 +233,11 @@ public class ZTAMain {
 			}
 			else{
 				if(isTIMV){
+					if(TIMV.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
 					TIMV.lastRecords = args[1].trim();
 				}
 				else if(isDR){
@@ -230,12 +262,40 @@ public class ZTAMain {
 @EventHandler
 public void onKeypress(KeyPressEvent evt){
 	if(evt.getKeyCode() == notesKb.getKeyCode() && notesKb.isPressed() && The5zigAPI.getAPI().getActiveServer() instanceof IHive && isTIMV){
-		The5zigAPI.getAPI().messagePlayer("§a[TIMV Plugin] §eNotes:");
+		The5zigAPI.getAPI().messagePlayer(Log.info + "Notes:");
 		for(String s : NotesManager.notes){
 			The5zigAPI.getAPI().messagePlayer("§e - §r" + s);
 		}
 	}
 }
+	@EventHandler(priority = EventHandler.Priority.LOW)
+	public void onTitle(TitleEvent evt){
+		//Map fallback
+		if(ZTAMain.isDR && DR.activeMap == null){
+			String map = ChatColor.stripColor(evt.getTitle());
+			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
+		    DRMap map1 = DRMap.getFromDisplay(map);
+		    DR.activeMap = map1;
+		    
+		    new Thread(new Runnable(){
+		    	@Override
+			    public void run(){
+			    if(DR.currentMapPB == null ){
+			    	The5zigAPI.getLogger().info("Loading PB...");
+			    	DR.currentMapPB = HiveAPI.DRgetPB(The5zigAPI.getAPI().getGameProfile().getName(), DR.activeMap);			
+			    }
+			    if(DR.currentMapWR == null ){
+			    	The5zigAPI.getLogger().info("Loading WR...");
+			    	DR.currentMapWR = HiveAPI.DRgetWR(DR.activeMap);
+			    }
+			    if(DR.currentMapWRHolder == null ){
+			    	The5zigAPI.getLogger().info("Loading WRHolder...");
+			    	DR.currentMapWRHolder = HiveAPI.DRgetWRHolder(DR.activeMap);
+			    }
+		    	}
+		    }).start();
+		}
+	}
 }
 	
 	

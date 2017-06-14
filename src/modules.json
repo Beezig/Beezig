@@ -35,11 +35,14 @@
           "type": "drpoints"
         },
 		{
-          "type": "drkills"
+          "type": "drdeaths"
         },
 		{
-          "type": "drdeaths"
-        }		
+          "type": "drpb"
+        },
+		{
+          "type": "drwr"
+        }	
         ]
      }
   ]

@@ -2,40 +2,48 @@ package tk.roccodev.zta.hiveapi;
 
 public enum DRMap {
 
-	HIGH_CITY("High City", 6),
-	ALARAN_RUINS("Alaran Ruins", 6),
-	THE_PRISON("The Prison", 5),
-	LEGACY("Legacy", 6),
-	CAVE("Cave", 6),
-	WESTERN("Western", 7),
-	JUNGLE_BASE("Jungle Base", 7),
-	SONIC("Sonic", 6),
-	ICE("Ice", 8),
-	ALIEN_FACILITY("Alien Facility", 7),
-	INTERSTELLAR("Interstellar", 9),
-	RIVIERA("Riviera", 8),
-	TOXIC_FACTORY("Toxic Factory", 6),
-	YAGRIUM("Yagrium", 7),
-	ELEMENTS("Elements", 7),
-	SCHOOL("School", 6),
-	EXPELLIARMUS("Expelliarmus", 7),
-	WAHOO("Wa-hoo", 7),
-	ZOO("Zoo", 6),
-	MINE("Mine", 0),
-	ILVERY("Ilvery", 7),
-	THROWBACK("Throwback", 7),
-	VAHLTIR("Vahltir", 5);
+	DR_1("High City", 6, "5wkk0xvw"),
+	SuperSecretProject2("Alaran Ruins", 6, "nwlg0mo9"),
+	DRD5("The Prison", 5, "29vmg6q9"),
+	DR_Legacy_Final("Legacy", 6, "Legacy"),
+	DR_Cave("Cave", 6, "rw6q21pd"),
+	DR_Western("Western", 7, "n93qkx2w"),
+	DR_JungleBase_Beta("Jungle Base", 7, "z98rpord"),
+	DR_Sonic("Sonic", 6, "rdno3m5w"),
+	DR_Ice("Ice", 8, "gdrpr0ew"),
+	DR_Alien_Facility("Alien Facility", 7, "xd0kmg09"),
+	DR_Interstellar("Interstellar", 9, "xd0kr449"),
+	DR_Renaissance("Riviera", 8, "nwlgxrg9"),
+	DR_ToxicFactory("Toxic Factory", 6, "592j4r7w"),
+	DR_Yagrium("Yagrium", 7, "5d77qqqd"),
+	DR_Elements("Elements", 7, "z98joqrw"),
+	DR_School("School", 6, "ldy1qrpd"),
+	DR_Expelliarmus("Expelliarmus", 7, "xd10qzy9"),
+	DR_Wahoo("Wa-hoo", 7, "rdq02m1w"),
+	DR_Zoo("Zoo", 6, "Zoo"),
+	DR_Ilvery("Ilvery", 7, "ldyp01rd"),
+	DR_Throwback("Throwback", 7, "ywe8p34w"),
+	DR_Vahltir("Vahltir", 5, "69z4064w");
 
 	private String displayName;
 	private int checkpoints;
+	private String speedrunid;
 	
-	DRMap(String display, int checkpoints){
+	DRMap(String display, int checkpoints, String speedrunid){
 		
 		this.displayName = display;
 		this.checkpoints = checkpoints;
-		
+		this.speedrunid = speedrunid;
 	}
 
+	
+	public static DRMap valueFromDisplay(String display){
+		for(DRMap map : values()){
+			if(map.getDisplayName().equalsIgnoreCase(display)) return map;
+		}
+		return null;
+	}
+	
 
 	public String getDisplayName() {
 		return displayName;
@@ -43,6 +51,10 @@ public enum DRMap {
 	
 	public int getCheckpoints() {
 		return checkpoints;
+	}
+	
+	public String getSpeedrunID(){
+		return speedrunid;
 	}
 
 	public static DRMap getFromDisplay(String display){
