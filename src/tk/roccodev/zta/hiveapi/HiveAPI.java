@@ -22,6 +22,9 @@ public class HiveAPI {
 	
 	public static long TIMVkarma = 0;
 	public static long DRpoints = 0;
+	public static long BEDpoints = 0;
+	
+	
 	
 	private static URL TIMVparsePlayerURL(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/TIMV";
@@ -35,6 +38,16 @@ public class HiveAPI {
 	}
 	private static URL DRparsePlayerURL(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/DR";
+		try {
+			return new URL(urls.replaceAll("@player@", name));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static URL BEDparsePlayerURL(String name){
+		String urls = "http://api.hivemc.com/v1/player/@player@/BED";
 		try {
 			return new URL(urls.replaceAll("@player@", name));
 		} catch (MalformedURLException e) {
@@ -124,6 +137,20 @@ public class HiveAPI {
 			return null;
 		}
 	}
+	
+	//BED
+	public static void BEDupdatePoints() throws ParseException, Exception{
+		String playername = The5zigAPI.getAPI().getGameProfile().getName();
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
+		
+		BEDpoints =  (long) o.get("total_points");
+		
+		
+	}
+	
 	
 	//TIMV
 	public static void TIMVupdateKarma() throws ParseException, Exception{

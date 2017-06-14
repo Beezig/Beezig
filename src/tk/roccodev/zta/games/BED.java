@@ -22,6 +22,8 @@ public class BED extends GameMode{
 	public static List<String> footerToSend = new ArrayList<String>();
 	public static boolean isRecordsRunning = false;
 	
+	// (§8▍ §3§lBed§b§lWars§8 ▏ §e§lVote for a map:)
+	
 	public static void reset(BED gm){
 		
 		gm.setState(GameState.FINISHED);

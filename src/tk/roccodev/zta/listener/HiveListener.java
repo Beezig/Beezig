@@ -36,6 +36,11 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			
 			The5zigAPI.getLogger().info("Connected to DR! -Hive");
 		}
+		else if(key.equals("bed.welcome")){
+			getGameListener().switchLobby("BED");
+			
+			The5zigAPI.getLogger().info("Connected to BED/BEDT! -Hive");
+		}
 		
 	}
 

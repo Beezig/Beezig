@@ -12,6 +12,7 @@ import org.bstats.MetricsLite;
 import org.lwjgl.input.Keyboard;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.KeyPressEvent;
@@ -98,6 +99,8 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "drdeaths", tk.roccodev.zta.modules.dr.DeathsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drpb", tk.roccodev.zta.modules.dr.PBItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drwr", tk.roccodev.zta.modules.dr.WRItem.class , "serverhivemc");
+		
+		The5zigAPI.getAPI().registerModuleItem(this, "bedpoints", tk.roccodev.zta.modules.bed.PointsItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		
@@ -295,6 +298,15 @@ public void onKeypress(KeyPressEvent evt){
 		    	}
 		    }).start();
 		}
+	}
+	
+	
+	
+	@EventHandler
+	public void onChat(ChatEvent evt){
+		
+		// The5zigAPI.getLogger().info("(" + evt.getMessage() + ")");
+		
 	}
 }
 	

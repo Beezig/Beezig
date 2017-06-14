@@ -2,7 +2,7 @@ package tk.roccodev.zta;
 
 public class ActiveGame {
 
-	private static String current;
+	private static String current = "";
 	
 	public static String current(){
 		return current;

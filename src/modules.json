@@ -44,6 +44,15 @@
           "type": "drwr"
         }	
         ]
+     },
+     {
+    "id": "BedWars",
+      "name": "BedWars",
+      "items": [
+        {
+          "type": "bedpoints"
+        }
+        ]
      }
   ]
 }
