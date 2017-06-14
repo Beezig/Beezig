@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,6 +17,7 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
@@ -23,6 +27,7 @@ import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.DRRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
+
 import tk.roccodev.zta.settings.Setting;
 
 public class DRListener extends AbstractGameListener<DR>{
@@ -41,7 +46,7 @@ public class DRListener extends AbstractGameListener<DR>{
 	@Override
 	public void onGameModeJoin(DR gameMode){
 		gameMode.setState(GameState.STARTING);
-		ZTAMain.isDR = true;
+		ActiveGame.set("DR");
 		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 		if(sb != null) The5zigAPI.getLogger().info(sb.getTitle());
 		if(sb != null && sb.getTitle().contains("Your DR Stats")){
@@ -106,16 +111,16 @@ public class DRListener extends AbstractGameListener<DR>{
 					break;
 			}
 		}
-		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §aCheckpoint Reached! §7") && ZTAMain.isDR && DR.role == "Runner") {
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §aCheckpoint Reached! §7") && ActiveGame.is("dr") && DR.role == "Runner") {
 			// No more double tokens weekends Niklas :>)
 			if(!(DR.checkpoints == DR.activeMap.getCheckpoints())){
 					DR.checkpoints++;
 				}
 			}
-		else if(message.equals("§8▍ §cDeathRun§8 ▏ §cYou have been returned to your last checkpoint!") && ZTAMain.isDR && DR.role == "Runner") {
+		else if(message.equals("§8▍ §cDeathRun§8 ▏ §cYou have been returned to your last checkpoint!") && ActiveGame.is("dr") && DR.role == "Runner") {
 				DR.deaths++;	
 			}
-		else if(message.contains("§6 (") && message.contains("§6)") && message.contains(The5zigAPI.getAPI().getGameProfile().getName()) && ZTAMain.isDR && DR.role == "Death") {
+		else if(message.contains("§6 (") && message.contains("§6)") && message.contains(The5zigAPI.getAPI().getGameProfile().getName()) && ActiveGame.is("dr") && DR.role == "Death") {
 				DR.kills++;	
 			}
 		
@@ -362,6 +367,17 @@ public class DRListener extends AbstractGameListener<DR>{
 			else if(message.contains("§lYou are a ")){
 				gameMode.setState(GameState.GAME);
 			}
+		
+		//TODO Add a "start" listener:
+		
+		/*
+		 * 
+		 * Timer timer = new Timer();
+			ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
+			timer.schedule(sft, 1500);
+		 * 
+		 * 
+		 */
 			
 			else if(message.startsWith("§8▍ §cDeathRun§8 ▏") && message.contains("§3 finished §b") && message.contains(The5zigAPI.getAPI().getGameProfile().getName()) && !message.endsWith(" ")){
 				//"§8▍ §cDeathRun§8 ▏ §b §aItsNiklass§3 finished §b1st§3. §7(01:10.574)"
@@ -430,5 +446,20 @@ public class DRListener extends AbstractGameListener<DR>{
 		The5zigAPI.getLogger().info("Resetting! (DR)");
 		DR.reset(gameMode);
 	}
+	
+	
+	private class ScoreboardFetcherTask extends TimerTask{
 
+		@Override
+		public void run() {
+			for(Map.Entry<String, Integer> e : The5zigAPI.getAPI().getSideScoreboard().getLines().entrySet()){
+				if(e.getValue().intValue() == 3){
+					TIMV.gameID = ChatColor.stripColor(e.getKey().trim());
+				}
+			}
+			
+		}
+		
+	}
 }
+

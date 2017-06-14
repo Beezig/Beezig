@@ -17,6 +17,7 @@ import com.csvreader.CsvWriter;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
+import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
@@ -200,7 +201,7 @@ public class TIMV extends GameMode{
 		TIMV.isRecordsRunning = false;
 		TIMV.hasVoted = false;
 		gm.setState(GameState.FINISHED);
-		ZTAMain.isTIMV = false;
+		ActiveGame.reset("timv");
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 		
 	}

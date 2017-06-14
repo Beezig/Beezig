@@ -21,6 +21,7 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
@@ -52,7 +53,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 	@Override
 	public void onGameModeJoin(TIMV gameMode){
 		gameMode.setState(GameState.STARTING);
-		ZTAMain.isTIMV = true;
+		ActiveGame.set("TIMV");
 		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 		if(sb != null) The5zigAPI.getLogger().info(sb.getTitle());
 		if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
@@ -97,7 +98,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		}
 		if(message.equals("§8▍ §3TIMV§8 ▏ §6Welcome to Trouble in Mineville!")){
 			gameMode.setState(GameState.STARTING);
-			ZTAMain.isTIMV = true;
+			ActiveGame.set("TIMV");
 			The5zigAPI.getLogger().info("DEBUG = Joined TIMV");
 			Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 			
@@ -664,7 +665,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 		}
 		//glorious
-		else if(ZTAMain.isTIMV && message.contains("ItsNiklass§8 » ")){
+		else if(ActiveGame.is("timv") && message.contains("ItsNiklass§8 » ")){
 			if(message.contains("▍ ")){
 				//In Lobby
 				String[] msg = message.split("▍ ");
@@ -679,10 +680,11 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			return true;
 			}
 		}
-		else if(ZTAMain.isTIMV && message.contains("RoccoDev§8 » ")){
+		else if(ActiveGame.is("timv") && message.contains("RoccoDev§8 » ")){
 			//y tho
 			if(message.contains("▍ ")){
 				//dank memez o/
+			
 				String[] msg = message.split("▍ ");
 				msg[0] = "§e1337§8 ▍ ";
 				msg[1] = msg[1].replaceAll(watisdis.wat, "Dev").replaceAll("§a", "§7");

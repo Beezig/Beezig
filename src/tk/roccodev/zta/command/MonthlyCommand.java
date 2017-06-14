@@ -1,6 +1,7 @@
 package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -21,7 +22,7 @@ public class MonthlyCommand implements Command{
 
 	@Override
 	public boolean execute(String[] args) {
-		if(!(ZTAMain.isDR) && !(ZTAMain.isTIMV)) return false;
+		if(!(ActiveGame.is("dr")) && !(ActiveGame.is("timv"))) return false;
 		if(args.length == 1){
 			
 			int index = Integer.parseInt(args[0]) - 1;	
@@ -35,7 +36,7 @@ public class MonthlyCommand implements Command{
 						mode = "TIMV";
 						unit = "karma.";
 					}
-					else if(ZTAMain.isDR){
+					else if(ActiveGame.is("dr")){
 						mode = "DR";
 						unit = "points.";
 					}

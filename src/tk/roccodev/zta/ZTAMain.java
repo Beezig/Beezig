@@ -220,19 +220,19 @@ public class ZTAMain {
 		if(evt.getMessage().startsWith("/records") || evt.getMessage().startsWith("/stats")){
 			String[] args = evt.getMessage().split(" ");
 			if(args.length == 1){
-				if(isTIMV){
+				if(ActiveGame.is("timv")){
 					if(TIMV.isRecordsRunning){
 						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
 						evt.setCancelled(true);
 						return;
 					}
 					TIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-				} else if(isDR){
+				} else if(ActiveGame.is("dr")){
 					DR.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
 			}
 			else{
-				if(isTIMV){
+				if(ActiveGame.is("timv")){
 					if(TIMV.isRecordsRunning){
 						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
 						evt.setCancelled(true);
@@ -240,7 +240,7 @@ public class ZTAMain {
 					}
 					TIMV.lastRecords = args[1].trim();
 				}
-				else if(isDR){
+				else if(ActiveGame.is("dr")){
 					DR.lastRecords = args[1].trim();	
 				}
 			}
@@ -271,7 +271,7 @@ public void onKeypress(KeyPressEvent evt){
 	@EventHandler(priority = EventHandler.Priority.LOW)
 	public void onTitle(TitleEvent evt){
 		//Map fallback
-		if(ZTAMain.isDR && DR.activeMap == null){
+		if(ActiveGame.is("dr") && DR.activeMap == null){
 			String map = ChatColor.stripColor(evt.getTitle());
 			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
 		    DRMap map1 = DRMap.getFromDisplay(map);

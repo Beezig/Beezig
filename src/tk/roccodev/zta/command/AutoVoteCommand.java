@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
@@ -29,7 +30,7 @@ public class AutoVoteCommand implements Command{
 	@Override
 	public boolean execute(String[] args) {
 		
-		if(!ZTAMain.isTIMV && !ZTAMain.isDR) return false;
+		if(!ActiveGame.is("timv") && !ActiveGame.is("dr")) return false;
 		if(!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
 		
 		//Format would be /autovote add dr_throwback
