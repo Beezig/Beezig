@@ -368,17 +368,12 @@ public class DRListener extends AbstractGameListener<DR>{
 				gameMode.setState(GameState.GAME);
 			}
 		
-		//TODO Add a "start" listener:
+			else if(message.equals("§8▍ §cDeathRun§8 ▏ §6The round has started!")){
+				Timer timer = new Timer();
+				ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
+				timer.schedule(sft, 1500);
+			}
 		
-		/*
-		 * 
-		 * Timer timer = new Timer();
-			ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
-			timer.schedule(sft, 1500);
-		 * 
-		 * 
-		 */
-			
 			else if(message.startsWith("§8▍ §cDeathRun§8 ▏") && message.contains("§3 finished §b") && message.contains(The5zigAPI.getAPI().getGameProfile().getName()) && !message.endsWith(" ")){
 				//"§8▍ §cDeathRun§8 ▏ §b §aItsNiklass§3 finished §b1st§3. §7(01:10.574)"
 				String time = (message.split("§7\\("))[1].replaceAll("\\)", "");
