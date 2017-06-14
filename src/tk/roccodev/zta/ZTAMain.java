@@ -101,6 +101,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "drwr", tk.roccodev.zta.modules.dr.WRItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "bedpoints", tk.roccodev.zta.modules.bed.PointsItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bedresources", tk.roccodev.zta.modules.bed.ResourcesItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		
