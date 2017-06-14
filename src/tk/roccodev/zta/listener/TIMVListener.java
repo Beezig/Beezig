@@ -662,9 +662,38 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			timer.schedule(sft, 1500);
 			
 		}
-		
-		
-		
+		//glorious
+		else if(ZTAMain.isTIMV && message.contains("ItsNiklass§8 » ")){
+			if(message.contains("▍ ")){
+				//In Lobby
+				String[] msg = message.split("▍ ");
+				msg[0] = "§e1337§8 ▍ ";
+				msg[1] = msg[1].replaceAll("Watson", "Dev").replaceAll("§a", "§7");
+				The5zigAPI.getAPI().messagePlayer(msg[0] + msg[1]);
+				return true;
+			}
+			else {
+			//Ingame
+			The5zigAPI.getAPI().messagePlayer(message.replaceAll("Watson", "Dev").replaceAll("§a", "§7"));
+			return true;
+			}
+		}
+		else if(ZTAMain.isTIMV && message.contains("RoccoDev§8 » ")){
+			//I don't know if a API call on every chat message is worth or just do Spy and replace on uprank
+			if(message.contains("▍ ")){
+				//In Lobby
+				String[] msg = message.split("▍ ");
+				msg[0] = "§e1337§8 ▍ ";
+				msg[1] = msg[1].replaceAll(HiveAPI.TIMVgetRank("RoccoDev"), "Dev").replaceAll("§a", "§7");
+				The5zigAPI.getAPI().messagePlayer(msg[0] + msg[1]);
+				return true;
+			}
+			else {
+			//Ingame
+			The5zigAPI.getAPI().messagePlayer(message.replaceAll(HiveAPI.TIMVgetRank("RoccoDev"), "Dev").replaceAll("§a", "§7"));
+			return true;
+			}
+		}
 		
 		
 		return false;
