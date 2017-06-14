@@ -23,6 +23,7 @@ import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.mod.util.IKeybinding;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.autovote.AutovoteUtils;
+import tk.roccodev.zta.autovote.watisdis;
 import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.AutoVoteCommand;
 import tk.roccodev.zta.command.ColorDebugCommand;
@@ -157,6 +158,7 @@ public class ZTAMain {
 		
 		checkForFileExist(new File(mcFile + "/autovote.yml"), false);
 		AutovoteUtils.load();
+		watisdis.wat = HiveAPI.TIMVgetRank("RoccoDev");
 	}
 	
 	private void checkForFileExist(File f, boolean directory) {

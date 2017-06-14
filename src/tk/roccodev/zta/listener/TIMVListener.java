@@ -24,6 +24,7 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
+import tk.roccodev.zta.autovote.watisdis;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -679,18 +680,18 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			}
 		}
 		else if(ZTAMain.isTIMV && message.contains("RoccoDev§8 » ")){
-			//I don't know if a API call on every chat message is worth or just do Spy and replace on uprank
+			//y tho
 			if(message.contains("▍ ")){
-				//In Lobby
+				//dank memez o/
 				String[] msg = message.split("▍ ");
 				msg[0] = "§e1337§8 ▍ ";
-				msg[1] = msg[1].replaceAll(HiveAPI.TIMVgetRank("RoccoDev"), "Dev").replaceAll("§a", "§7");
+				msg[1] = msg[1].replaceAll(watisdis.wat, "Dev").replaceAll("§a", "§7");
 				The5zigAPI.getAPI().messagePlayer(msg[0] + msg[1]);
 				return true;
 			}
 			else {
-			//Ingame
-			The5zigAPI.getAPI().messagePlayer(message.replaceAll(HiveAPI.TIMVgetRank("RoccoDev"), "Dev").replaceAll("§a", "§7"));
+			// gimme moar memes plz
+			The5zigAPI.getAPI().messagePlayer(message.replaceAll(watisdis.wat, "Dev").replaceAll("§a", "§7"));
 			return true;
 			}
 		}
