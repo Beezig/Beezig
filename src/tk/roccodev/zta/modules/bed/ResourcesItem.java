@@ -1,11 +1,14 @@
 package tk.roccodev.zta.modules.bed;
 
+import java.util.List;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
+import eu.the5zig.mod.render.RenderLocation;
 import eu.the5zig.mod.server.GameState;
+import eu.the5zig.util.Callable;
+import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.BED;
-import tk.roccodev.zta.games.DR;
-import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class ResourcesItem extends GameModeItem<BED>{
 
@@ -15,33 +18,128 @@ public class ResourcesItem extends GameModeItem<BED>{
 
 	@Override
 	protected Object getValue(boolean dummy) {
-		try{
-		StringBuilder sb = new StringBuilder();
-		
-		int ironIngots = The5zigAPI.getAPI().getItemCount("minecraft:iron_ingot");
-		int goldIngots = The5zigAPI.getAPI().getItemCount("minecraft:gold_ingot");
-		int diamonds = The5zigAPI.getAPI().getItemCount("minecraft:diamond");
-		int emeralds = The5zigAPI.getAPI().getItemCount("minecraft:emerald");
-		if(ironIngots != 0) sb.append(ironIngots + " Iron / ");
-		if(goldIngots != 0) sb.append(goldIngots + " Gold / ");
-		if(diamonds != 0) sb.append(diamonds + " Diamonds / ");
-		if(emeralds != 0) sb.append(emeralds + " Emeralds / ");
-		if(sb.length() > 2) sb.deleteCharAt(sb.length()-2); 
+		if((ResourcesMode)getProperties().getSetting("mode").get() == ResourcesMode.INLINE){
+			try{
+			StringBuilder sb = new StringBuilder();
+			boolean colors = (boolean)getProperties().getSetting("showcolors").get();
+			
+			int ironIngots = The5zigAPI.getAPI().getItemCount("minecraft:iron_ingot");
+			int goldIngots = The5zigAPI.getAPI().getItemCount("minecraft:gold_ingot");
+			int diamonds = The5zigAPI.getAPI().getItemCount("minecraft:diamond");
+			int emeralds = The5zigAPI.getAPI().getItemCount("minecraft:emerald");
+			if(ironIngots != 0) sb.append((colors ? " §7"+ ironIngots : ironIngots) + (colors ? " §7Iron / " : " Iron / " ));
+			if(goldIngots != 0) sb.append((colors ? " §6"+ goldIngots : goldIngots) + (colors ? " §6Gold / " : " Gold / " ));
+			if(diamonds != 0) sb.append((colors ? " §b"+ diamonds : diamonds) +  (colors ? " §bDiamonds / " : " Diamonds / " ));
+			if(emeralds != 0) sb.append((colors ? " §a"+ emeralds : emeralds) + (colors ? " §aEmeralds / " : " Emeralds / " ));
+			 if(sb.length() > 2) sb.deleteCharAt(sb.length() - 2);
 
+			
+			return sb.toString().trim();
+			}catch(Exception e){
+				e.printStackTrace();
+				return "Error";
+			}
+		} else if((ResourcesMode)getProperties().getSetting("mode").get() == ResourcesMode.INLINE_SHORTENED){
+			try{
+			StringBuilder sb = new StringBuilder();
+			
+			boolean colors = (boolean)getProperties().getSetting("showcolors").get();
+			int ironIngots = The5zigAPI.getAPI().getItemCount("minecraft:iron_ingot");
+			int goldIngots = The5zigAPI.getAPI().getItemCount("minecraft:gold_ingot");
+			int diamonds = The5zigAPI.getAPI().getItemCount("minecraft:diamond");
+			int emeralds = The5zigAPI.getAPI().getItemCount("minecraft:emerald");
+			if(ironIngots != 0) sb.append((colors ? " §7"+ ironIngots : ironIngots) + (colors ? " §7I / " : " I / " ));
+			if(goldIngots != 0) sb.append((colors ? " §6"+ goldIngots : goldIngots) + (colors ? " §6G / " : " G / " ));
+			if(diamonds != 0) sb.append((colors ? " §b"+ diamonds : diamonds) +  (colors ? " §bD / " : " D / " ));
+			if(emeralds != 0) sb.append((colors ? " §a"+ emeralds : emeralds) + (colors ? " §aE / " : " E / " ));
+			if(sb.length() > 2) sb.deleteCharAt(sb.length() - 2);
+
+			
+			return sb.toString().trim();
+			}catch(Exception e){
+				e.printStackTrace();
+				return "Error";
+			}
+		}
+		else{
 		
-		return sb.toString().trim();
-		}catch(Exception e){
-			e.printStackTrace();
-			return "Error";
+		return "";
 		}
 		
 	}
+	
+    @Override
+    public void render(int x, int y, RenderLocation renderLocation, boolean dummy) {
+    if((ResourcesMode)getProperties().getSetting("mode").get() != ResourcesMode.EXTENDED) {
+    	super.render(x, y, renderLocation, dummy);
+    	return;  
+    }
+    	int lineCount = 0;
+        The5zigAPI.getAPI().getRenderHelper().drawString(getPrefix(), x, y);
+        lineCount++;
+       
+        boolean colors = (boolean)getProperties().getSetting("showcolors").get();
+        
+        int ironIngots = The5zigAPI.getAPI().getItemCount("minecraft:iron_ingot");
+		int goldIngots = The5zigAPI.getAPI().getItemCount("minecraft:gold_ingot");
+		int diamonds = The5zigAPI.getAPI().getItemCount("minecraft:diamond");
+		int emeralds = The5zigAPI.getAPI().getItemCount("minecraft:emerald");
+		if(ironIngots != 0) {
+			if(colors){
+			 The5zigAPI.getAPI().getRenderHelper().drawString(ironIngots + " Iron", x, y + lineCount * 10, ChatColor.GRAY.getColor(), true);
+			}
+			else{
+				The5zigAPI.getAPI().getRenderHelper().drawString(ironIngots + " Iron", x, y + lineCount * 10, true);
+			}
+			 lineCount++;
+		}
+		if(goldIngots != 0) {
+			if(colors){
+			 The5zigAPI.getAPI().getRenderHelper().drawString(goldIngots + " Gold", x, y + lineCount * 10, ChatColor.GOLD.getColor(), true);
+			}
+			else{
+				 The5zigAPI.getAPI().getRenderHelper().drawString(goldIngots + " Gold", x, y + lineCount * 10, true);
+			}
+			 lineCount++;
+		}
+		if(diamonds != 0) {
+			if(colors){
+			 The5zigAPI.getAPI().getRenderHelper().drawString(diamonds + " Diamonds", x, y + lineCount * 10, ChatColor.AQUA.getColor(), true);
+			}else{
+				The5zigAPI.getAPI().getRenderHelper().drawString(diamonds + " Diamonds", x, y + lineCount * 10, true);
+			}
+			 lineCount++;
+		}
+		if(emeralds != 0) {
+			if(colors){
+				The5zigAPI.getAPI().getRenderHelper().drawString(emeralds + " Emeralds", x, y + lineCount * 10, ChatColor.GREEN.getColor(), true);
+			}
+			else{
+				The5zigAPI.getAPI().getRenderHelper().drawString(emeralds + " Emeralds", x, y + lineCount * 10, true);
+			}
+			 
+			lineCount++;
+		}
+		
+       
+    }
 	
 	@Override
 	public String getName() {
 		return "Resources";
 	}
 	
+	
+	
+	@Override
+	public void registerSettings() {
+		
+
+		getProperties().addSetting("mode", ResourcesMode.EXTENDED, ResourcesMode.class);
+		getProperties().addSetting("showcolors", true);
+		
+	}
+
 	@Override
 	public boolean shouldRender(boolean dummy){		
 		try{
