@@ -27,10 +27,10 @@ public class ResourcesItem extends GameModeItem<BED>{
 			int goldIngots = The5zigAPI.getAPI().getItemCount("minecraft:gold_ingot");
 			int diamonds = The5zigAPI.getAPI().getItemCount("minecraft:diamond");
 			int emeralds = The5zigAPI.getAPI().getItemCount("minecraft:emerald");
-			if(ironIngots != 0) sb.append((colors ? " §7"+ ironIngots : ironIngots) + (colors ? " §7Iron / " : " Iron / " ));
-			if(goldIngots != 0) sb.append((colors ? " §6"+ goldIngots : goldIngots) + (colors ? " §6Gold / " : " Gold / " ));
-			if(diamonds != 0) sb.append((colors ? " §b"+ diamonds : diamonds) +  (colors ? " §bDiamonds / " : " Diamonds / " ));
-			if(emeralds != 0) sb.append((colors ? " §a"+ emeralds : emeralds) + (colors ? " §aEmeralds / " : " Emeralds / " ));
+			if(ironIngots != 0) sb.append((colors ? "§7"+ ironIngots : ironIngots) + (colors ? " §7Iron / " : " Iron / " ));
+			if(goldIngots != 0) sb.append((colors ? "§6"+ goldIngots : goldIngots) + (colors ? " §6Gold / " : " Gold / " ));
+			if(diamonds != 0) sb.append((colors ? "§b"+ diamonds : diamonds) +  (colors ? " §bDiamonds / " : " Diamonds / " ));
+			if(emeralds != 0) sb.append((colors ? "§a"+ emeralds : emeralds) + (colors ? " §aEmeralds / " : " Emeralds / " ));
 			 if(sb.length() > 2) sb.deleteCharAt(sb.length() - 2);
 
 			
@@ -48,10 +48,10 @@ public class ResourcesItem extends GameModeItem<BED>{
 			int goldIngots = The5zigAPI.getAPI().getItemCount("minecraft:gold_ingot");
 			int diamonds = The5zigAPI.getAPI().getItemCount("minecraft:diamond");
 			int emeralds = The5zigAPI.getAPI().getItemCount("minecraft:emerald");
-			if(ironIngots != 0) sb.append((colors ? " §7"+ ironIngots : ironIngots) + (colors ? " §7I / " : " I / " ));
-			if(goldIngots != 0) sb.append((colors ? " §6"+ goldIngots : goldIngots) + (colors ? " §6G / " : " G / " ));
-			if(diamonds != 0) sb.append((colors ? " §b"+ diamonds : diamonds) +  (colors ? " §bD / " : " D / " ));
-			if(emeralds != 0) sb.append((colors ? " §a"+ emeralds : emeralds) + (colors ? " §aE / " : " E / " ));
+			if(ironIngots != 0) sb.append((colors ? "§7"+ ironIngots : ironIngots) + (colors ? " §7I / " : " I / " ));
+			if(goldIngots != 0) sb.append((colors ? "§6"+ goldIngots : goldIngots) + (colors ? " §6G / " : " G / " ));
+			if(diamonds != 0) sb.append((colors ? "§b"+ diamonds : diamonds) +  (colors ? " §bD / " : " D / " ));
+			if(emeralds != 0) sb.append((colors ? "§a"+ emeralds : emeralds) + (colors ? " §aE / " : " E / " ));
 			if(sb.length() > 2) sb.deleteCharAt(sb.length() - 2);
 
 			
