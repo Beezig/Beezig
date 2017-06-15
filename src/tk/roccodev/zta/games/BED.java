@@ -7,13 +7,11 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
-import tk.roccodev.zta.ZTAMain;
-import tk.roccodev.zta.hiveapi.DRMap;
+import tk.roccodev.zta.hiveapi.BEDMap;
 
 public class BED extends GameMode{
 	
-
-	
+	public static BEDMap activeMap;
 	
 	public static List<String> votesToParse = new ArrayList<String>();
 	public static boolean hasVoted = false;
@@ -29,7 +27,7 @@ public class BED extends GameMode{
 	public static void reset(BED gm){
 		
 		gm.setState(GameState.FINISHED);
-		
+		BED.activeMap = null;
 		BED.hasVoted = false;
 		ActiveGame.reset("bed");
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");

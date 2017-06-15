@@ -26,8 +26,6 @@ import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.DRRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.TIMVMap;
-
 import tk.roccodev.zta.settings.Setting;
 
 public class DRListener extends AbstractGameListener<DR>{
