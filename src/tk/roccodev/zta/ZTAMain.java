@@ -48,11 +48,11 @@ import tk.roccodev.zta.updater.Updater;
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
-	public static boolean isTIMV = false;
-	public static boolean isDR = false;
+	
 	public static IKeybinding notesKb;
 	public static File mcFile;
 	public static boolean isColorDebug = false;
+	public static String playerRank = "";
 	
 	public static int getCustomVersioning(){
 		String v = ZTAMain.class.getAnnotation(Plugin.class).version();
@@ -69,7 +69,7 @@ public class ZTAMain {
 				The5zigAPI.getLogger().fatal("Beezig: This version is disabled!");
 				news.displayMessage("Beezig: Version is disabled remotely! Update to the latest version.");
 				
-				return; //< brutal
+				return; //< one does not simply update beezig
 			}
 		} catch (IOException e) {
 			The5zigAPI.getLogger().info("Failed checking for blacklist");
@@ -165,6 +165,8 @@ public class ZTAMain {
 		checkForFileExist(new File(mcFile + "/autovote.yml"), false);
 		AutovoteUtils.load();
 		watisdis.wat = HiveAPI.TIMVgetRank("RoccoDev");
+		
+		playerRank = HiveAPI.getNetworkRank(The5zigAPI.getAPI().getGameProfile().getName());
 	}
 	
 	private void checkForFileExist(File f, boolean directory) {
@@ -211,9 +213,25 @@ public class ZTAMain {
 		
 	}
 	
+	private boolean isStaffChat(){
+		if(playerRank.endsWith("Hive Moderator")) return true;
+		if(playerRank.equalsIgnoreCase("Hive Developer")) return true;
+		if(playerRank.equalsIgnoreCase("Hive Founder and Owner")) return true;
+	
+		return false;
+	
+	}
+	
 	
 	@EventHandler(priority = EventHandler.Priority.HIGH)
 	public void onChatSend(ChatSendEvent evt){
+		if(evt.getMessage().startsWith("*") && isStaffChat()){
+			String noStar = evt.getMessage().replaceAll("\\*", "");
+			if(noStar.length() == 0) return;
+			The5zigAPI.getAPI().sendPlayerMessage("/s " + noStar);
+			
+			return;
+		}
 		if(evt.getMessage().startsWith("/") && !evt.getMessage().startsWith("/ ")){
 			
 			if(CommandManager.dispatchCommand(evt.getMessage())){
@@ -267,7 +285,7 @@ public class ZTAMain {
 
 @EventHandler
 public void onKeypress(KeyPressEvent evt){
-	if(evt.getKeyCode() == notesKb.getKeyCode() && notesKb.isPressed() && The5zigAPI.getAPI().getActiveServer() instanceof IHive && isTIMV){
+	if(evt.getKeyCode() == notesKb.getKeyCode() && notesKb.isPressed() && The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("TIMV")){
 		The5zigAPI.getAPI().messagePlayer(Log.info + "Notes:");
 		for(String s : NotesManager.notes){
 			The5zigAPI.getAPI().messagePlayer("§e - §r" + s);
