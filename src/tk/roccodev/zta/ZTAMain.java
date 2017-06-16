@@ -36,6 +36,7 @@ import tk.roccodev.zta.command.SayCommand;
 import tk.roccodev.zta.command.SeenCommand;
 import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.command.WRCommand;
+import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
@@ -252,8 +253,21 @@ public class ZTAMain {
 					}
 					TIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				} else if(ActiveGame.is("dr")){
+					if(DR.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
 					DR.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				} else if(ActiveGame.is("bed")){
+					if(BED.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					BED.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
+				
 			}
 			else{
 				if(ActiveGame.is("timv")){
@@ -265,14 +279,23 @@ public class ZTAMain {
 					TIMV.lastRecords = args[1].trim();
 				}
 				else if(ActiveGame.is("dr")){
+					if(DR.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
 					DR.lastRecords = args[1].trim();	
+				}
+				else if(ActiveGame.is("bed")){
+					if(BED.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					BED.lastRecords = args[1].trim();	
 				}
 			}
 		}
-		
-		
-
-
 		
 	}
 	

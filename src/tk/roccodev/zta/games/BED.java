@@ -16,6 +16,7 @@ public class BED extends GameMode{
 	
 	public static BEDMap activeMap;
 	public static String team;
+	public static String lastRecords = "";
 	
 	public static List<String> votesToParse = new ArrayList<String>();
 	public static boolean hasVoted = false;
