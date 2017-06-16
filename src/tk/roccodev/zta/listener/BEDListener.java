@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -122,7 +121,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 						BED.isRecordsRunning = true;
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
 						try{
-						//BEDRank rank = null;
+						
 						//Integer rwr = Setting.DR_SHOW_RUNNERWINRATE.getValue() ? (int) (Math.floor(((double)HiveAPI.DRgetRunnerWins(DR.lastRecords) / (double)HiveAPI.DRgetRunnerGamesPlayed(DR.lastRecords)) * 1000d) / 10d) : null;
 						//Double dpg = Setting.DR_SHOW_DEATHSPERGAME.getValue() ? (double) (Math.floor(((double)HiveAPI.DRgetDeaths(DR.lastRecords) / (double)HiveAPI.DRgetRunnerGamesPlayed(DR.lastRecords)) * 10d) / 10d) : null;
 						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(BED.lastRecords) : "";
@@ -139,12 +138,13 @@ public class BEDListener extends AbstractGameListener<BED>{
 						
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(BED.lastRecords, "BED") : null;
 						Integer achievements = Setting.BED_SHOW_ACHIEVEMENTS.getValue() ? HiveAPI.BEDgetAchievements(BED.lastRecords) : null;
+
 						
 						
 						
 						
+
 						//int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "BED") < HiveAPI.DRgetPoints(BED.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
-						//if(rankTitleBED != null) rank = BEDRank.getFromDisplay(rankTitleBED);
 						List<String> messages = new ArrayList<String>();
 						messages.addAll(BED.messagesToSend);
 							Iterator<String> it = messages.iterator();
@@ -183,6 +183,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 										sb.append("§3 Points: §b");
 										points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
 										sb.append(points);
+
 										if(Setting.BED_SHOW_RANK.getValue()){
 											BEDRank rank = BEDRank.getRank((int)points);
 											if(rank != null){
@@ -195,6 +196,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 											
 										}
 										//if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
+
 										The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
 										continue;
 									

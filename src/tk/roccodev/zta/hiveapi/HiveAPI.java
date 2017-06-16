@@ -149,20 +149,7 @@ public class HiveAPI {
 		
 		BEDpoints =  (long) o.get("total_points");
 	}
-	public static long BEDgetPoints(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetPoints");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("total_points");
-	}
+	
 	public static int BEDgetAchievements(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
@@ -188,7 +175,20 @@ public class HiveAPI {
 	       
 	       return o2.keySet().size() - 1;
 	}
-	
+	public static long BEDgetPoints(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
+			} catch (Exception e) {
+				The5zigAPI.getLogger().info("Failed BEDgetPoints");
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("total_points");
+	}
 	
 	//TIMV
 	public static void TIMVupdateKarma() throws ParseException, Exception{
