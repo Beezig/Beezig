@@ -105,20 +105,20 @@ public enum BEDRank {
 		
 	}
 	
-	public static int getLevel(BEDRank rank, int points){
-		if(points >= rank.getLvl1()){
+	public int getLevel(int points){
+		if(points >= getLvl1()){
 			return 1;
 		}
-		else if(points >= rank.getLvl2()){
+		else if(points >= getLvl2()){
 			return 2;
 		}
-		else if(points >= rank.getLvl3()){
+		else if(points >= getLvl3()){
 			return 3;
 		}
-		else if(points >= rank.getLvl4()){
+		else if(points >= getLvl4()){
 			return 4;
 		}
-		else if(points >= rank.getStart()){
+		else if(points >= getStart()){
 			return 5;
 		}
 		return -1;

@@ -20,6 +20,7 @@ import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.hiveapi.BEDMap;
+import tk.roccodev.zta.hiveapi.BEDRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.settings.Setting;
 
@@ -135,9 +136,13 @@ public class BEDListener extends AbstractGameListener<BED>{
 							}
 						}
 						long points = 0;
+						
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(BED.lastRecords, "BED") : null;
 						Integer achievements = Setting.BED_SHOW_ACHIEVEMENTS.getValue() ? HiveAPI.BEDgetAchievements(BED.lastRecords) : null;
-						//String rankTitleDR = Setting.DR_SHOW_RANK.getValue() ? HiveAPI.DRgetRank(BED.lastRecords) : null;
+						
+						
+						
+						
 						//int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "BED") < HiveAPI.DRgetPoints(BED.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 						//if(rankTitleBED != null) rank = BEDRank.getFromDisplay(rankTitleBED);
 						List<String> messages = new ArrayList<String>();
@@ -178,6 +183,17 @@ public class BEDListener extends AbstractGameListener<BED>{
 										sb.append("§3 Points: §b");
 										points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
 										sb.append(points);
+										if(Setting.BED_SHOW_RANK.getValue()){
+											BEDRank rank = BEDRank.getRank((int)points);
+											if(rank != null){
+												int level = rank.getLevel((int)points);
+												String rankString = rank.getName() + " " + BED.NUMBERS[level];
+												sb.append(" (" + rankString + "§b)");
+											}
+											
+											
+											
+										}
 										//if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 										The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
 										continue;
@@ -192,6 +208,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
 																											//^ API Achievements vs ingame - currently bad
 						}
+						
 					/*	if(ppg != null){
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + ppg);
 						}					
@@ -206,8 +223,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 						} */
 							
 						if(lastGame != null){
-							Calendar lastSeen = Calendar.getInstance();;
-							lastSeen.setTimeInMillis(HiveAPI.getLastLogout(BED.lastRecords).getTime());
+							Calendar lastSeen = Calendar.getInstance();
+							lastSeen.setTimeInMillis(HiveAPI.lastGame(BED.lastRecords, "BED").getTime());
 							
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()));
 						}
