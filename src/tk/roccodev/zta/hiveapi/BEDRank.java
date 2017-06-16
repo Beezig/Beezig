@@ -87,7 +87,7 @@ public enum BEDRank {
 	}
 	
 	
-	public static BEDRank getRank(int points){
+	public static BEDRank getRank(long points){
 		
 		ArrayList<BEDRank> ranks = new ArrayList<BEDRank>(Arrays.asList(values()));
 		Collections.reverse(ranks);
