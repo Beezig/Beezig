@@ -154,10 +154,10 @@ public class BEDListener extends AbstractGameListener<BED>{
 			        team = matcher.group(1);
 			}
 			try{
-				team = team.replaceAll(" ", "_");
-				switch(team){
+				String teamColor = team.replaceAll(" ", "_");
+				switch(teamColor){
 				//converting Hive-Team-Color-Names into actual color tag strings
-					case "Magenta" : team = "light_purple"; break;				
+					case "Magenta" : teamColor = "light_purple"; break;				
 					default : break;
 				}
 				BED.team = ChatColor.valueOf(team.toUpperCase()) + team.replaceAll("_", " ");

@@ -6,7 +6,7 @@ public enum BEDMap {
 	BED_OCEANIC("Oceanic"),
 	BED_TRIBAL("Tribal"),
 	BED_SANDSTORM("Sandstorm"),
-	BED_FACILITY("Facilty"), //Great typo Hive smh F a c i l t y
+	BED_FACILITY("Facility"), 
 	BED_ORBIT("Orbit"),
 	BED_IGLOO("Igloo"),
 	BED_FOOD("Food"),	//Teams only
