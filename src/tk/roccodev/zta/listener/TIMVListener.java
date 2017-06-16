@@ -2,8 +2,8 @@
 package tk.roccodev.zta.listener;
 
 import java.io.FileNotFoundException;
-import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +26,6 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
-import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
@@ -427,11 +426,10 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 							The5zigAPI.getAPI().messagePlayer("§bMonthly Leaderboards: §e#" + monthlyRank + " ");
 						}
 						if(lastGame != null){
-							Date now = new Date();
-							long diff = now.getTime() - lastGame.getTime();
-							
-							
-							The5zigAPI.getAPI().messagePlayer("§bLast Game: §e" + lastGame + " (" + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + " days ago) ");
+							Calendar lastSeen = Calendar.getInstance();;
+							lastSeen.setTimeInMillis(HiveAPI.getLastLogout(TIMV.lastRecords).getTime());
+						
+							The5zigAPI.getAPI().messagePlayer("§bLast Game: §e" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()) + " ");
 						}
 						
 							

@@ -2,6 +2,7 @@ package tk.roccodev.zta.listener;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -205,9 +206,10 @@ public class BEDListener extends AbstractGameListener<BED>{
 						} */
 							
 						if(lastGame != null){
-							Date now = new Date();
-							long diff = now.getTime() - lastGame.getTime();
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + lastGame + " (" + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + " days ago)");
+							Calendar lastSeen = Calendar.getInstance();;
+							lastSeen.setTimeInMillis(HiveAPI.getLastLogout(BED.lastRecords).getTime());
+							
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()));
 						}
 						
 							

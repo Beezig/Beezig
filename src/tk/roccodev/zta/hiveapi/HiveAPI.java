@@ -538,6 +538,11 @@ public class HiveAPI {
 		 * limitations under the License.
 		 */
 		
+		if (time < 1000000000000L) {
+		        // if timestamp given in seconds, convert to millis
+		        time *= 1000;
+		    }
+		
 		int SECOND_MILLIS = 1000;
 		int MINUTE_MILLIS = 60 * SECOND_MILLIS;
 		int HOUR_MILLIS = 60 * MINUTE_MILLIS;
@@ -551,26 +556,26 @@ public class HiveAPI {
 	    }
 	    
 	    final long diff = now - time;
-	    
+
 	    if (diff < MINUTE_MILLIS) {
-	        return "just now";
+	        return "Just now";
 	    } else if (diff < 2 * MINUTE_MILLIS) {
-	        return "a minute ago";
+	        return "A minute ago";
 	    } else if (diff < 50 * MINUTE_MILLIS) {
 	        return diff / MINUTE_MILLIS + " minutes ago";
 	    } else if (diff < 90 * MINUTE_MILLIS) {
-	        return "an hour ago";
+	        return "An hour ago";
 	    } else if (diff < 24 * HOUR_MILLIS) {
 	        return diff / HOUR_MILLIS + " hours ago";
-	    } else if (diff < 48 * HOUR_MILLIS) {
-	        return "yesterday";
-	    } else if (diff < 29 * DAY_MILLIS){
+	    } else if (diff < 48l * HOUR_MILLIS) {
+	        return "Yesterday";
+	    } else if (diff < 29l * DAY_MILLIS){
 	        return diff / DAY_MILLIS + " days ago";
-	    } else if (diff < 2 * MONTH_MILLIS){
+	    } else if (diff < 2l * MONTH_MILLIS){
 		    return "1 month ago";
-	    } else if (diff < 11 * MONTH_MILLIS){
+	    } else if (diff < 11l * MONTH_MILLIS){
 	        return diff / MONTH_MILLIS + " months ago";
-	    }  else if (diff < 2 * YEAR_MILLIS){
+	    }  else if (diff < 2l * YEAR_MILLIS){
 		    return "1 year ago";  
 	    } else {
 	    	return diff / YEAR_MILLIS + " years ago";
