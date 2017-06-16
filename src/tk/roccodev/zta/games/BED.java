@@ -11,6 +11,9 @@ import tk.roccodev.zta.hiveapi.BEDMap;
 
 public class BED extends GameMode{
 	
+	public static char[] NUMBERS = {Character.MIN_VALUE, '❶','❷','❸','❹','❺'};
+	
+	
 	public static BEDMap activeMap;
 	public static String team;
 	
