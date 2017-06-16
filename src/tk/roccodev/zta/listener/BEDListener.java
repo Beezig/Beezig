@@ -15,6 +15,7 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.BEDMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 
@@ -85,7 +86,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 			BED.hasVoted = true;
 		}
 		
-		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l6. ")){
+		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l6. ") && !BED.hasVoted){
 			BED.votesToParse.add(message);
 			//Adding the 6th option, the normal method doesn't work
 			new Thread(new Runnable(){

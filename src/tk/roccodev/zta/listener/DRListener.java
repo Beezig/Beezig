@@ -126,7 +126,7 @@ public class DRListener extends AbstractGameListener<DR>{
 		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §a§lVote received.")){
 			DR.hasVoted = true;
 		}		
-		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l6. §f§cRandom map ")){
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l6. §f§cRandom map ") && !DR.hasVoted){
 			/*
 			 * 
 			 * Multi-threading to avoid lag on older machines

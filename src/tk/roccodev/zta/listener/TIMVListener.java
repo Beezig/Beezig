@@ -270,7 +270,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.hasVoted = true;
 		}
 		
-		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6§6§l6.§f§6 §4Random map§6")){
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6§6§l6.§f§6 §4Random map§6") && !TIMV.hasVoted){
 			/*
 			 * 
 			 * Multi-threading to avoid lag on older machines
@@ -524,7 +524,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 		}
 		//glorious
-		else if(ActiveGame.is("timv") && message.contains("ItsNiklass§8 » ")){
+		else if(ActiveGame.is("timv") && message.contains("ItsNiklass§8 » ") && !message.contains("§b§lParty§8")){
 			if(message.contains("▍ ")){
 				//In Lobby
 				String[] msg = message.split("▍ ");
@@ -539,7 +539,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			return true;
 			}
 		}
-		else if(ActiveGame.is("timv") && message.contains("RoccoDev§8 » ")){
+		else if(ActiveGame.is("timv") && message.contains("RoccoDev§8 » ") && !message.contains("§b§lParty§8")){
 			//y tho
 			if(message.contains("▍ ")){
 				//dank memez o/

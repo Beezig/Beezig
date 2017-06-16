@@ -497,6 +497,62 @@ public class HiveAPI {
 		long time = (long) o.get("lastLogout");
 		return new Date(time * 1000);
 	}
+	public static String getTimeAgo(long time) {
+		
+		/*
+		 * Copyright 2012 Google Inc.
+		 *
+		 * Licensed under the Apache License, Version 2.0 (the "License");
+		 * you may not use this file except in compliance with the License.
+		 * You may obtain a copy of the License at
+		 *
+		 *      http://www.apache.org/licenses/LICENSE-2.0
+		 *
+		 * Unless required by applicable law or agreed to in writing, software
+		 * distributed under the License is distributed on an "AS IS" BASIS,
+		 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		 * See the License for the specific language governing permissions and
+		 * limitations under the License.
+		 */
+		
+		int SECOND_MILLIS = 1000;
+		int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+		int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+		int DAY_MILLIS = 24 * HOUR_MILLIS;
+		long MONTH_MILLIS = 30l * DAY_MILLIS;
+		long YEAR_MILLIS = 12l * MONTH_MILLIS;
+	    long now = System.currentTimeMillis();
+	    
+	    if (time > now || time <= 0) {
+	        return null;	
+	    }
+	    
+	    final long diff = now - time;
+	    
+	    if (diff < MINUTE_MILLIS) {
+	        return "just now";
+	    } else if (diff < 2 * MINUTE_MILLIS) {
+	        return "a minute ago";
+	    } else if (diff < 50 * MINUTE_MILLIS) {
+	        return diff / MINUTE_MILLIS + " minutes ago";
+	    } else if (diff < 90 * MINUTE_MILLIS) {
+	        return "an hour ago";
+	    } else if (diff < 24 * HOUR_MILLIS) {
+	        return diff / HOUR_MILLIS + " hours ago";
+	    } else if (diff < 48 * HOUR_MILLIS) {
+	        return "yesterday";
+	    } else if (diff < 29 * DAY_MILLIS){
+	        return diff / DAY_MILLIS + " days ago";
+	    } else if (diff < 2 * MONTH_MILLIS){
+		    return "1 month ago";
+	    } else if (diff < 11 * MONTH_MILLIS){
+	        return diff / MONTH_MILLIS + " months ago";
+	    }  else if (diff < 2 * YEAR_MILLIS){
+		    return "1 year ago";  
+	    } else {
+	    	return diff / YEAR_MILLIS + " years ago";
+	    }
+	}
 	public static String getNetworkRank(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
@@ -527,6 +583,20 @@ public class HiveAPI {
 			}
 		
 		return (String) o.get("rankName");
+	}
+	public static String getPlayerLocation(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+				try {
+					o = (JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)))).get("status").toString());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+		return (String) o.get("game");
 	}
 	public static String getName(String ign){
 		String playername = ign;
