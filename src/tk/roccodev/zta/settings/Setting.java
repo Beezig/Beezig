@@ -3,6 +3,8 @@ package tk.roccodev.zta.settings;
 
 import java.io.IOException;
 
+import eu.the5zig.mod.The5zigAPI;
+
 public enum Setting {
 
 	SHOW_NETWORK_RANK_TITLE(false, "Advanced Records - Show the network-rank title behind username"),
@@ -45,7 +47,7 @@ public enum Setting {
 			try {
 				SettingsFetcher.saveSettings();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed to save Settings");
 				e.printStackTrace();
 			}
 		

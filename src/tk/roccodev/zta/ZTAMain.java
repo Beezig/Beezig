@@ -69,10 +69,10 @@ public class ZTAMain {
 				The5zigAPI.getLogger().fatal("Beezig: This version is disabled!");
 				news.displayMessage("Beezig: Version is disabled remotely! Update to the latest version.");
 				
-				return;
+				return; //< brutal
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			The5zigAPI.getLogger().info("Failed checking for blacklist");
 			e.printStackTrace();
 		}
 		try {
@@ -81,7 +81,7 @@ public class ZTAMain {
 				news.displayMessage("Beezig: A new version of the plugin is available!");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			The5zigAPI.getLogger().info("Failed update check");
 			e.printStackTrace();
 		}
 		
@@ -151,14 +151,14 @@ public class ZTAMain {
 				settingsFile.createNewFile();
 				SettingsFetcher.saveSettings();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed saving new Settings");
 				e.printStackTrace();
 			}
 		}
 		try {
 			SettingsFetcher.loadSettings();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			The5zigAPI.getLogger().info("Failed to load Settings");
 			e1.printStackTrace();
 		}
 		

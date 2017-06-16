@@ -118,10 +118,6 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						try {
 							Thread.sleep(200); // Wait for server resources to load
 							HiveAPI.TIMVupdateKarma();
-							
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

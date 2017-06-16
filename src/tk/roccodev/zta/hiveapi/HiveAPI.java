@@ -17,6 +17,7 @@ import org.json.simple.parser.ParseException;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.Log;
 
 public class HiveAPI {
 	
@@ -172,8 +173,8 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				The5zigAPI.getLogger().info("Failed TIMVgetKarmaPerGame");
 			}
 		
 		return (long) o.get("most_points");
@@ -186,8 +187,8 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				The5zigAPI.getLogger().info("Failed TIMVgetRank");
 			}
 		
 		return (String) o.get("title");
@@ -200,8 +201,8 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				The5zigAPI.getLogger().info("Failed TIMVgetAchievements");
 			}
 		HashMap<String, Object> map = new HashMap<String, Object>();
 			Iterator<?> keys = o.keySet().iterator();
@@ -225,7 +226,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed TIMVgetRolepoints");
 				e.printStackTrace();
 			}
 		
@@ -239,7 +240,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed TIMVgetKarma");
 				e.printStackTrace();
 			}
 		
@@ -255,7 +256,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed DRgetPoints");
 				e.printStackTrace();
 			}
 		
@@ -269,7 +270,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed DRgetRank");
 				e.printStackTrace();
 			}
 		
@@ -283,7 +284,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed DRgetGames");
 				e.printStackTrace();
 			}	
 		return (long) o.get("games_played");
@@ -296,7 +297,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed DRgetRunnerWins");
 				e.printStackTrace();
 			}	
 		return (long) o.get("runnerwins");
@@ -309,7 +310,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed DRgetRunnerGamesPlayed");
 				e.printStackTrace();
 			}	
 		return (long) o.get("runnergamesplayed");
@@ -322,7 +323,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed DRgetDeaths");
 				e.printStackTrace();
 			}	
 		return (long) o.get("deaths");
@@ -337,8 +338,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				
+				The5zigAPI.getLogger().info("Failed DRgetPB (invalid player)");
 				e.printStackTrace();
 				return "No Personal Best";
 			}			
@@ -346,7 +346,7 @@ public class HiveAPI {
 			o1 = (JSONObject) parser.parse(o.get("maprecords").toString());
 			
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed DRgetPB (no pb)");
 				e.printStackTrace();
 				return "No Personal Best";
 		}
@@ -369,7 +369,7 @@ public class HiveAPI {
 			try {
 				run0 = (JSONObject) parser.parse(((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parseSpeedruncom(mapid)))).get("data").toString())).get("runs").toString())).get(0).toString())).get("run").toString());
 			} catch (Exception e) {
-				
+				The5zigAPI.getLogger().info("Failed DRgetWR (JSON 2)");
 				e.printStackTrace();
 				return "No World Record";
 			}
@@ -377,8 +377,8 @@ public class HiveAPI {
 		try {
 			//Returns the world record time in seconds
 			time = (Double) ((JSONObject) parser.parse(run0.get("times").toString())).get("primary_t");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
+			The5zigAPI.getLogger().info("Failed DRgetWR (JSON 2)");
 			e.printStackTrace();
 			return "No World Record";
 		}
@@ -402,7 +402,7 @@ public class HiveAPI {
 			try {
 				run0 = (JSONObject) parser.parse(((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parseSpeedruncom(mapid)))).get("data").toString())).get("runs").toString())).get(0).toString())).get("run").toString());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed DRgetWRHolder (run0)");
 				e.printStackTrace();
 				return "No Holder";
 			}
@@ -410,15 +410,15 @@ public class HiveAPI {
 				//Returns the world record holder username... lmao
 				WRHolder = (String) ((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parseSpeedruncomUserID((String) ((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("id".toString()))))).toJSONString())).get("data").toString())).get("names").toString())).get("international").toString();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed DRgetWRHolder (WRHolder)");
 				e.printStackTrace();
 				return "No Holder";
 			}
 			if (WRHolder == null){
 				try {
 					WRHolder = (String) (((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("name".toString())).toString();
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
+				} catch (Exception e) {
+					The5zigAPI.getLogger().info("Failed DRgetWRHolder (guest)");
 					e.printStackTrace();
 					return "No Holder";
 				}
@@ -434,7 +434,7 @@ public class HiveAPI {
 			try {
 				run0 = (JSONObject) parser.parse(((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parseSpeedruncom(mapid)))).get("data").toString())).get("runs").toString())).get(0).toString())).get("run").toString());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed DRgetWR (run0)");
 				e.printStackTrace();
 			}
 		
@@ -442,8 +442,8 @@ public class HiveAPI {
 		try {
 			//Returns the world record time in seconds
 			time = (Double) ((JSONObject) parser.parse(run0.get("times").toString())).get("primary_t");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
+			The5zigAPI.getLogger().info("Failed DRgetWR (time)");
 			e.printStackTrace();
 		}
 		return time;
@@ -458,7 +458,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed DRgetAchievements");
 				e.printStackTrace();
 			}
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -490,7 +490,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed getLastLogout");
 				e.printStackTrace();
 			}
 		
@@ -561,7 +561,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed getNetworkRank");
 				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
 				boolean connError = false;
 				try{
@@ -592,7 +592,7 @@ public class HiveAPI {
 				try {
 					o = (JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)))).get("status").toString());
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					The5zigAPI.getLogger().info("Failed getPlayerLocation");
 					e.printStackTrace();
 				}
 				
@@ -606,7 +606,6 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
 				boolean connError = false;
 				try{
@@ -647,7 +646,7 @@ public class HiveAPI {
 			try {
 				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, game)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed lastGame");
 				e.printStackTrace();
 			}
 			long time = (long) o.get("lastlogin");
@@ -659,7 +658,7 @@ public class HiveAPI {
 		try {
 			o = (JSONObject) parser.parse(readUrl(parseMojangPlayerAPI(ign)));
 		}  catch (Exception e) {
-			// TODO Auto-generated catch block
+			The5zigAPI.getLogger().info("Failed getUUID (Mojang)");
 			e.printStackTrace();
 		}		
 		return (String) o.get("id");
@@ -672,7 +671,7 @@ public class HiveAPI {
 			try {
 				o1 = (JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(parseMonthlyURL(game.toLowerCase())))).get("leaderboard").toString());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed getMonthlyLBRank (thtmx.rocks)");
 				e.printStackTrace();				
 			}
 		for(int i = 0; i<=350; i++){
@@ -698,14 +697,14 @@ public class HiveAPI {
 			try {
 				o1 = (JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(parseMonthlyURL(game.toLowerCase())))).get("leaderboard").toString());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed getMonthlyLBPlayerInfo (thtmx.rocks) (JSON 1)");
 				e.printStackTrace();
 			}
 			try {
 				o2 = (JSONObject) parser.parse(o1.get(index).toString());
 				return o2.get("name").toString() + "," + o2.get(unit).toString();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed getMonthlyLBPlayerInfo (thtmx.rocks) (JSON 2)");
 				e.printStackTrace();
 			}	
 		return "";
@@ -716,18 +715,22 @@ public class HiveAPI {
 		try {
 			o1 = (JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(HiveAPI.parseLeaderboardPlaceURL(index, game)))).get("leaderboard").toString())).get(0).toString());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			The5zigAPI.getLogger().info("Failed getLBPlacePoints (JSON 0)");
 			e.printStackTrace();
 		}
 		switch (game) {
 		default : try {
 				return (Long) parser.parse(o1.get("total_points").toString());
 			} catch (Exception e) {
+				The5zigAPI.getLogger().info("Failed getLBPlacePoints (JSON 1)");
+				e.printStackTrace();
 				return null;
 			}
 		case "TIMV" : try {
 				return (Long) parser.parse(o1.get("karma").toString());
 			} catch (Exception e) {
+				The5zigAPI.getLogger().info("Failed getLBPlacePoints (JSON 1)");
+				e.printStackTrace();
 				return null;
 			}	
 		}
@@ -779,10 +782,15 @@ public class HiveAPI {
 
 	        
 	        return buffer.toString();
+	    } catch(Exception e){
+	    	The5zigAPI.getAPI().messagePlayer(Log.error + "Invalid Player.");
+	    	e.printStackTrace();
+			return null;
 	    } finally {
 	        if (reader != null)
 	            reader.close();
 	    }
+
 	}
 
 }

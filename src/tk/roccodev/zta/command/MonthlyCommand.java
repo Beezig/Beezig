@@ -24,27 +24,29 @@ public class MonthlyCommand implements Command{
 	public boolean execute(String[] args) {
 		if(!(ActiveGame.is("dr")) && !(ActiveGame.is("timv"))) return false;
 		if(args.length == 1){
-			
-			int index = Integer.parseInt(args[0]) - 1;	
-				
-			new Thread(new Runnable(){
-				@Override
-				public void run(){
-					String mode = null;
-					String unit = null;
-					if(ZTAMain.isTIMV){
-						mode = "TIMV";
-						unit = "karma.";
+			try{
+				int index = Integer.parseInt(args[0]) - 1;	
+				new Thread(new Runnable(){
+					@Override
+					public void run(){
+						String mode = null;
+						String unit = null;
+						if(ActiveGame.is("timv")){
+							mode = "TIMV";
+							unit = "karma.";
+						}
+						else if(ActiveGame.is("dr")){
+							mode = "DR";
+							unit = "points.";
+						}
+						String[] data = HiveAPI.getMonthlyLeaderboardsPlayerInfo(index, mode).split(",");
+						The5zigAPI.getAPI().messagePlayer(Log.info + "On position §6#" + (index+1) + "§e is §6" + data[0] + "§e with §6" + data[1] + " " + unit);				
 					}
-					else if(ActiveGame.is("dr")){
-						mode = "DR";
-						unit = "points.";
-					}
-					String[] data = HiveAPI.getMonthlyLeaderboardsPlayerInfo(index, mode).split(",");
-					The5zigAPI.getAPI().messagePlayer(Log.info + "On position §6#" + (index+1) + "§e is §6" + data[0] + "§e with §6" + data[1] + " " + unit);				
-				}
-			}).start();
-	
+				}).start();
+			} catch (Exception e){
+				The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /monthly [position] | Use /records to find out a players' rank.");
+				return true;
+			}
 		}
 		else{
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /monthly [position] | Use /records to find out a players' rank.");
