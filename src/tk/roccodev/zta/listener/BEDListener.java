@@ -141,11 +141,34 @@ public class BEDListener extends AbstractGameListener<BED>{
 				}
 			}).start();
 		}
-		//	
+
 		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l") && !BED.hasVoted){		
 			BED.votesToParse.add(message);
 		}
 		
+		else if(message.contains("Team!")){
+			//"                        §6§lYou are on Gold Team!"
+            //§9§lYou are on Blue Team!
+			String team = null;
+			Pattern pattern = Pattern.compile(Pattern.quote("on ") + "(.*?)" + Pattern.quote(" Team!"));
+			Matcher matcher = pattern.matcher(message.trim());
+			while (matcher.find()) {
+			        team = matcher.group(1);
+			}
+			try{
+				team = team.replaceAll(" ", "_");
+				switch(team){
+				//converting Hive-Team-Color-Names into actual color tag strings
+					case "Magenta" : team = "light_purple"; break;				
+					default : break;
+				}
+				BED.team = ChatColor.valueOf(team.toUpperCase()) + team.replaceAll("_", " ");
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				The5zigAPI.getAPI().messagePlayer(Log.error + "Couldn't find your team color <" + team + ">");
+			}
+		}
 		return false;
 			
 	}

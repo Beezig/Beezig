@@ -12,6 +12,7 @@ import tk.roccodev.zta.hiveapi.BEDMap;
 public class BED extends GameMode{
 	
 	public static BEDMap activeMap;
+	public static String team;
 	
 	public static List<String> votesToParse = new ArrayList<String>();
 	public static boolean hasVoted = false;
@@ -27,6 +28,7 @@ public class BED extends GameMode{
 	public static void reset(BED gm){
 		
 		gm.setState(GameState.FINISHED);
+		BED.team = null;
 		BED.activeMap = null;
 		BED.hasVoted = false;
 		ActiveGame.reset("bed");

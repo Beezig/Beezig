@@ -44,6 +44,13 @@ public class AutoVoteCommand implements Command{
 				if(data.length == 3){
 					mapString = (data[1] + "_" + data[2]);
 				}
+				if(data.length == 4){
+					mapString = (data[1]+"_"+data[2]+"_"+data[3]);
+				}
+				if(data.length == 5){
+					mapString = (data[1]+"_"+data[2]+"_"+data[3]+"_"+data[4]);
+				}
+				// ¯\_(ツ)_/¯
 				if(gamemode.equalsIgnoreCase("dr")){
 					DRMap apiMap = DRMap.valueFromDisplay(mapString);
 					
