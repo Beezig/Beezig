@@ -39,6 +39,7 @@ import tk.roccodev.zta.command.WRCommand;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
+import tk.roccodev.zta.hiveapi.BEDRank;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.notes.NotesManager;
@@ -168,6 +169,11 @@ public class ZTAMain {
 		watisdis.wat = HiveAPI.TIMVgetRank("RoccoDev");
 		
 		playerRank = HiveAPI.getNetworkRank(The5zigAPI.getAPI().getGameProfile().getName());
+		
+	
+		
+		
+			
 	}
 	
 	private void checkForFileExist(File f, boolean directory) {
