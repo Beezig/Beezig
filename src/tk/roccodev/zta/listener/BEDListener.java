@@ -188,7 +188,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 											BEDRank rank = BEDRank.getRank((int)points);
 											if(rank != null){
 												int level = rank.getLevel((int)points);
-												String rankString = rank.getName() + " " + BED.NUMBERS[level];
+												String rankString = BED.NUMBERS[level] + " " +rank.getName();
 												sb.append(" (" + rankString + "§b)");
 											}
 											
