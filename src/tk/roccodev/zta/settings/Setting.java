@@ -26,7 +26,8 @@ public enum Setting {
 	DR_SHOW_MONTHLYRANK(true, "DR Advanced Records - Show players' rank on the Monthly Leaderboards by Maxthat"),
 
 	BED_SHOW_ACHIEVEMENTS(true, "BED Advanced Records - Show achievements"), 
-	BED_SHOW_RANK(true, "BED Advanced Records - Show point based rank");
+	BED_SHOW_RANK(true, "BED Advanced Records - Show point based rank"),
+	BED_SHOW_POINTS_TO_NEXT_RANK(true, "BED Advanced Records - Show points to next rank");
 
 	
 	private boolean value;

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.games.BED;
 
 public enum BEDRank {
 
@@ -126,7 +127,36 @@ public enum BEDRank {
 		return -1;
 	}
 	
-	
+	public String getPointsToNextRank(int points){
+		int level = getLevel(points);
+		if(level == 1){
+			ArrayList<BEDRank> ranks = new ArrayList<BEDRank>(Arrays.asList(values()));
+			int newIndex = ranks.indexOf(this) + 1;
+			BEDRank next = null;
+			try{
+				next = ranks.get(newIndex);
+				
+			}catch(Exception e){
+				return "";
+			}
+			
+			return next.getStart() - points + " to " + BED.NUMBERS[5] +  " " + next.getName();
+			
+		}
+		else if(level == 2){
+			return getLvl1() - points + " to " + BED.NUMBERS[1] +  " " + getName();
+		}
+		else if(level == 3){
+			return getLvl2() - points + " to " + BED.NUMBERS[2] +  " " + getName();
+		}
+		else if(level == 4){
+			return getLvl3() - points + " to " + BED.NUMBERS[3] +  " " + getName();
+		}
+		else if(level == 5){
+			return getLvl4() - points + " to " + BED.NUMBERS[4] +  " " + getName();
+		}
+		return null;
+	}
 	
 	
 }

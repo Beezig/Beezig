@@ -86,7 +86,18 @@ public class BEDListener extends AbstractGameListener<BED>{
 		    BED.activeMap = map1;			
 		}
 
-		
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing")){
+			
+			BED.kills++;
+			BED.pointsCounter += 10;
+			
+		}
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 5§a points for killing")){
+			
+			BED.kills++;
+			BED.pointsCounter += 5;
+			
+		}
 		
 		//Advanced Records
 		
@@ -189,7 +200,11 @@ public class BEDListener extends AbstractGameListener<BED>{
 											if(rank != null){
 												int level = rank.getLevel((int)points);
 												String rankString = BED.NUMBERS[level] + " " +rank.getName();
-												sb.append(" (" + rankString + "§b)");
+												sb.append(" (" + rankString);
+												if(Setting.BED_SHOW_POINTS_TO_NEXT_RANK.getValue()){
+													sb.append(" / " + rank.getPointsToNextRank((int)points));
+												}
+												sb.append("§b)");
 											}
 											
 											
@@ -210,6 +225,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
 																											//^ API Achievements vs ingame - currently bad
 						}
+						// "§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing"
 						
 					/*	if(ppg != null){
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + ppg);
@@ -352,10 +368,11 @@ public class BEDListener extends AbstractGameListener<BED>{
 				String teamColor = team.replaceAll(" ", "_");
 				switch(teamColor){
 				//converting Hive-Team-Color-Names into actual color tag strings
-					case "Magenta" : teamColor = "light_purple"; break;				
+					case "Magenta" : teamColor = "light_purple"; break;
+					case "Purple" : teamColor = "dark_purple"; break;
 					default : break;
 				}
-				BED.team = ChatColor.valueOf(team.toUpperCase()) + team.replaceAll("_", " ");
+				BED.team = ChatColor.valueOf(teamColor.toUpperCase()) + team.replaceAll("_", " ");
 			}
 			catch(Exception e){
 				e.printStackTrace();

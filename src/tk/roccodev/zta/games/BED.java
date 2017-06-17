@@ -18,6 +18,10 @@ public class BED extends GameMode{
 	public static String team;
 	public static String lastRecords = "";
 	
+	public static int kills;
+	public static int pointsCounter;
+	public static int bedsDestroyed;
+	
 	public static List<String> votesToParse = new ArrayList<String>();
 	public static boolean hasVoted = false;
 	
@@ -35,6 +39,9 @@ public class BED extends GameMode{
 		BED.team = null;
 		BED.activeMap = null;
 		BED.hasVoted = false;
+		BED.kills = 0;
+		BED.bedsDestroyed = 0;
+		BED.pointsCounter = 0;
 		ActiveGame.reset("bed");
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 	}

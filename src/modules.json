@@ -53,6 +53,15 @@
           "type": "bedpoints"
         },
         {
+          "type": "bedgamecounter"
+        },
+        {
+          "type": "bedteam"
+        },
+        {
+          "type": "bedkills"
+        },
+        {
           "type": "bedresources"
         }
         ]
