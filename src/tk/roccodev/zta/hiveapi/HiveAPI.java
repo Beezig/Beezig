@@ -149,7 +149,6 @@ public class HiveAPI {
 		
 		BEDpoints =  (long) o.get("total_points");
 	}
-	
 	public static int BEDgetAchievements(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();
@@ -188,6 +187,90 @@ public class HiveAPI {
 			}
 		
 		return (long) o.get("total_points");
+	}
+	public static long BEDgetVictories(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
+			} catch (Exception e) {
+				The5zigAPI.getLogger().info("Failed BEDgetVictories");
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("victories");
+	}
+	public static long BEDgetGamesPlayed(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
+			} catch (Exception e) {
+				The5zigAPI.getLogger().info("Failed BEDgetGamesPlayed");
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("games_played");
+	}
+	public static long BEDgetKills(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
+			} catch (Exception e) {
+				The5zigAPI.getLogger().info("Failed BEDgetKills");
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("kills");
+	}
+	public static long BEDgetDeaths(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
+			} catch (Exception e) {
+				The5zigAPI.getLogger().info("Failed BEDgetDeaths");
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("deaths");
+	}
+	public static long BEDgetBedsDestroyed(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
+			} catch (Exception e) {
+				The5zigAPI.getLogger().info("Failed BEDgetBedsDestroyed");
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("beds_destroyed");
+	}
+	public static long BEDgetTeamsEliminated(String ign){
+		String playername = ign;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
+			} catch (Exception e) {
+				The5zigAPI.getLogger().info("Failed BEDgetTeamsEliminated");
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("teams_eliminated");
 	}
 	
 	//TIMV

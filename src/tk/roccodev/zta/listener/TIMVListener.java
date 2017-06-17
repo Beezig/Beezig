@@ -26,7 +26,6 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
-import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
@@ -55,6 +54,8 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("TIMV");
 		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+		TIMV.rank = TIMVRank.getFromDisplay(HiveAPI.TIMVgetRank(The5zigAPI.getAPI().getGameProfile().getName())).getDisplay();
+		//Freeze? No colors because closing bracket cannot be colored correctly. The5zigAPI.getAPI().getGameProfile().getModulesColor() would be a solution ?
 		if(sb != null) The5zigAPI.getLogger().info(sb.getTitle());
 		if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
 			

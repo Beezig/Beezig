@@ -36,6 +36,7 @@ public class TIMV extends GameMode{
 	
 	public static String gameID;
 	
+	public static String rank;
 	
 	//Advanced Records
 	public static List<String> messagesToSend = new ArrayList<String>();

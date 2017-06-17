@@ -12,17 +12,25 @@ public class PointsItem extends GameModeItem<DR>{
 
 	@Override
 	protected Object getValue(boolean dummy) {
-		try{		
+		try{
+			if((boolean) getProperties().getSetting("showrank").get()){
+				return HiveAPI.DRpoints + " (" + DR.rank + ")";
+			}
 			return HiveAPI.DRpoints;
 		}catch(Exception e){
-				e.printStackTrace();
-				return "Server error";
+			e.printStackTrace();
+			return "Server error";
 		}
 	}
 	
 	@Override
 	public String getName() {
 		return "Points";
+	}
+	
+	@Override
+	public void registerSettings() {
+		getProperties().addSetting("showrank", false);
 	}
 	
 	@Override

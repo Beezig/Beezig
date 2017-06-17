@@ -21,7 +21,6 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
-import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
@@ -47,6 +46,8 @@ public class DRListener extends AbstractGameListener<DR>{
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("DR");
 		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+		DR.rank = DRRank.getFromDisplay(HiveAPI.DRgetRank(The5zigAPI.getAPI().getGameProfile().getName())).getDisplay();
+		//Freeze? No colors because closing bracket cannot be colored correctly. The5zigAPI.getAPI().getGameProfile().getModulesColor() would be a solution ?
 		if(sb != null) The5zigAPI.getLogger().info(sb.getTitle());
 		if(sb != null && sb.getTitle().contains("Your DR Stats")){
 			int points = sb.getLines().get(ChatColor.AQUA + "Points");	

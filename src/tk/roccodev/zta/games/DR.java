@@ -24,6 +24,8 @@ public class DR extends GameMode{
 	public static int deaths;
 	public static int kills;
 	
+	public static String rank;
+	
 	public static List<String> votesToParse = new ArrayList<String>();
 	public static boolean hasVoted = false;
 	

@@ -27,7 +27,14 @@ public enum Setting {
 
 	BED_SHOW_ACHIEVEMENTS(true, "BED Advanced Records - Show achievements"), 
 	BED_SHOW_RANK(true, "BED Advanced Records - Show point based rank"),
-	BED_SHOW_POINTS_TO_NEXT_RANK(true, "BED Advanced Records - Show points to next rank");
+	BED_SHOW_POINTS_TO_NEXT_RANK(true, "BED Advanced Records - Show points to next rank"),
+	BED_SHOW_ELIMINATIONS_PER_GAME(false, "BED Advanced Records - Show Eliminations per Game"),
+	BED_SHOW_BEDS_PER_GAME(true, "BED Advanced Records - Show Beds destroyed per Game"), 
+	BED_SHOW_DEATHS_PER_GAME(false, "BED Advanced Records - Show Deaths per Game"), 
+	BED_SHOW_KILLS_PER_GAME(false, "BED Advanced Records - Show Kills per Game"), 
+	BED_SHOW_POINTS_PER_GAME(true, "BED Advanced Records - Show Points gained per Game"), 
+	BED_SHOW_KD(true, "BED Advanced Records - Show Kills/Deaths"), 
+	BED_SHOW_WINRATE(true, "BED Advanced Records - Show Winrate");
 
 	
 	private boolean value;

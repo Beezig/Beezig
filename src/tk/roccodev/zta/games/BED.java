@@ -22,6 +22,8 @@ public class BED extends GameMode{
 	public static int pointsCounter;
 	public static int bedsDestroyed;
 	
+	public static String rank;
+	
 	public static List<String> votesToParse = new ArrayList<String>();
 	public static boolean hasVoted = false;
 	
