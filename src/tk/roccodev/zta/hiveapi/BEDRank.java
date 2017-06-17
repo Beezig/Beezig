@@ -9,27 +9,27 @@ import tk.roccodev.zta.games.BED;
 
 public enum BEDRank {
 
-	SLEEPY("§7Sleepy", 0, 100, 300, 600, 1000),
+	SLEEPY(ChatColor.GRAY + "Sleepy", 0, 100, 300, 600, 1000),
 	SNOOZER(ChatColor.BLUE +"Snoozer", 1500, 2100, 2800, 3600, 4500),
-	DROWSY("§eDrowsy", 5500, 6600, 7800, 9100, 10500),
-	SLOTH("Sloth", 12000, 13600, 15300, 17100, 19000),
+	DROWSY(ChatColor.YELLOW + "Drowsy", 5500, 6600, 7800, 9100, 10500),
+	SLOTH(ChatColor.GOLD + "Sloth", 12000, 13600, 15300, 17100, 19000),
 	HYPNOTIST(ChatColor.LIGHT_PURPLE + "Hypnotist", 21000, 23100, 25300, 27600, 30000),
-	SIESTA("Siesta", 32500, 35100, 37800, 40600, 43500),
-	DREAMER("Dreamer", 46500, 49600, 52800, 56100, 59500),
-	SLEEP_WALKER("Sleep Walker", 63000, 66600, 70300, 74100, 78000),
-	HIBERNATOR("Hibernator", 82000, 86100, 90300, 94600, 99000),
-	BED_HEAD("Bed Head", 103500, 108100, 112800, 117600, 122500),
-	PANDA("Panda", 127500, 132600, 137800, 143100, 148500),
-	INSOMNIAC("Insomniac", 154000, 159600, 165300, 171100, 177000),
-	WELL_RESTED("Well Rested", 183000, 189100, 195300, 201600, 208000),
-	KOALA("Koala", 214500, 221100, 227800, 234600, 241500),
-	DAY_DREAMER("Day Dreamer", 248500, 255600, 262800, 270100, 277500),
-	POWER_NAP("Power Nap", 285000, 292600, 300300, 308100, 316000),
-	BEAR("Bear", 324000, 332100, 340300, 348600, 357000),
-	BED_WARRIOR("Bed Warrior", 365500, 374100, 382800, 391600, 400500),
-	SNORLAX("Snorlax", 409500, 418600, 427800, 437100, 446500),
-	NIGHTMARE("Nightmare", 456000, 465600, 475300, 485100, 495000),
-	ZZZZZZ("Zzzzzz", -1, -1, -1, -1, -1);
+	SIESTA(ChatColor.GREEN + "Siesta", 32500, 35100, 37800, 40600, 43500),
+	DREAMER(ChatColor.AQUA + "Dreamer", 46500, 49600, 52800, 56100, 59500),
+	SLEEP_WALKER(ChatColor.RED + "Sleep Walker", 63000, 66600, 70300, 74100, 78000),
+	HIBERNATOR(ChatColor.DARK_AQUA + "Hibernator", 82000, 86100, 90300, 94600, 99000),
+	BED_HEAD(ChatColor.YELLOW +""+ ChatColor.BOLD + "Bed Head", 103500, 108100, 112800, 117600, 122500),
+	PANDA(ChatColor.GOLD +""+ ChatColor.BOLD + "Panda", 127500, 132600, 137800, 143100, 148500),
+	INSOMNIAC(ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD + "Insomniac", 154000, 159600, 165300, 171100, 177000),
+	WELL_RESTED(ChatColor.GREEN +""+ ChatColor.BOLD + "Well Rested", 183000, 189100, 195300, 201600, 208000),
+	KOALA(ChatColor.AQUA +""+ ChatColor.BOLD + "Koala", 214500, 221100, 227800, 234600, 241500),
+	DAY_DREAMER(ChatColor.RED +""+ ChatColor.BOLD + "Day Dreamer", 248500, 255600, 262800, 270100, 277500),
+	POWER_NAP(ChatColor.DARK_AQUA +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Power Nap", 285000, 292600, 300300, 308100, 316000),
+	BEAR(ChatColor.YELLOW +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Bear", 324000, 332100, 340300, 348600, 357000),
+	BED_WARRIOR(ChatColor.GOLD +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Bed Warrior", 365500, 374100, 382800, 391600, 400500),
+	SNORLAX(ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Snorlax", 409500, 418600, 427800, 437100, 446500),
+	NIGHTMARE(ChatColor.GREEN +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Nightmare", 456000, 465600, 475300, 485100, 495000),
+	ZZZZZZ(ChatColor.AQUA +""+ ChatColor.BOLD +"✸ Zzzzzz", -1, -1, -1, -1, -1);
 	
 	
 	private String name;
@@ -139,7 +139,6 @@ public enum BEDRank {
 			}catch(Exception e){
 				return "";
 			}
-			
 			return next.getStart() - points + " to " + BED.NUMBERS[5] +  " " + next.getName();
 			
 		}

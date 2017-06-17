@@ -26,6 +26,7 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
+import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
@@ -427,7 +428,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						}
 						if(lastGame != null){
 							Calendar lastSeen = Calendar.getInstance();;
-							lastSeen.setTimeInMillis(HiveAPI.getLastLogout(TIMV.lastRecords).getTime());
+							lastSeen.setTimeInMillis(HiveAPI.lastGame(TIMV.lastRecords, "TIMV").getTime());
 						
 							The5zigAPI.getAPI().messagePlayer("§bLast Game: §e" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()) + " ");
 						}
