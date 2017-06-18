@@ -108,6 +108,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "bedteam", tk.roccodev.zta.modules.bed.TeamItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedkills", tk.roccodev.zta.modules.bed.KillsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedgamecounter", tk.roccodev.zta.modules.bed.PointsCounterItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "beddestroyed", tk.roccodev.zta.modules.bed.BedsDestroyedItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		

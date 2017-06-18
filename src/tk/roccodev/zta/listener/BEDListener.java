@@ -89,12 +89,22 @@ public class BEDListener extends AbstractGameListener<BED>{
 			
 			BED.kills++;
 			BED.pointsCounter += 10;
+			HiveAPI.BEDpoints +=10;
 			
 		}
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 5§a points for killing")){
 			
 			BED.kills++;
 			BED.pointsCounter += 5;
+			HiveAPI.BEDpoints +=5;
+			
+		}
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained §f50§a points for destroying")){
+			
+			
+			BED.pointsCounter += 50;
+			BED.bedsDestroyed++;
+			HiveAPI.BEDpoints += 50;
 			
 		}
 		
