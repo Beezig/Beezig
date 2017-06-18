@@ -46,8 +46,8 @@ public class DRListener extends AbstractGameListener<DR>{
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("DR");
 		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-		DR.rank = DRRank.getFromDisplay(HiveAPI.DRgetRank(The5zigAPI.getAPI().getGameProfile().getName())).getDisplay();
-		//Freeze? No colors because closing bracket cannot be colored correctly. The5zigAPI.getAPI().getGameProfile().getModulesColor() would be a solution ?
+		DR.rank = DRRank.getFromDisplay((HiveAPI.DRgetRank(The5zigAPI.getAPI().getGameProfile().getName()))).getTotalDisplay();
+		//Should've read the docs ¯\_(ツ)_/¯
 		if(sb != null) The5zigAPI.getLogger().info(sb.getTitle());
 		if(sb != null && sb.getTitle().contains("Your DR Stats")){
 			int points = sb.getLines().get(ChatColor.AQUA + "Points");	

@@ -18,11 +18,9 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
-import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.BEDMap;
 import tk.roccodev.zta.hiveapi.BEDRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.TIMVRank;
 import tk.roccodev.zta.settings.Setting;
 
 public class BEDListener extends AbstractGameListener<BED>{
@@ -54,8 +52,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 				try {
 					Thread.sleep(200);
 					HiveAPI.BEDupdatePoints();
-					BED.rank = ChatColor.stripColor(BED.NUMBERS[BEDRank.getRank(HiveAPI.BEDpoints).getLevel((int)HiveAPI.BEDpoints)] + " " + BEDRank.getRank((int)HiveAPI.BEDpoints).getName());
-					//No colors because closing bracket cannot be colored correctly. The5zigAPI.getAPI().getGameProfile().getModulesColor() would be a solution ?
+					BED.rank = BEDRank.getRank(HiveAPI.BEDpoints).getName().replaceAll(ChatColor.stripColor(BEDRank.getRank(HiveAPI.BEDpoints).getName()), "") + BED.NUMBERS[BEDRank.getRank(HiveAPI.BEDpoints).getLevel((int)HiveAPI.BEDpoints)] + " " + BEDRank.getRank((int)HiveAPI.BEDpoints).getName();
+					//Should've read the docs ¯\_(ツ)_/¯
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
