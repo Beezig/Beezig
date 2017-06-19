@@ -145,8 +145,10 @@ public enum BEDRank {
 			}catch(Exception e){
 				return "";
 			}
+			String color = next.getName().replaceAll(ChatColor.stripColor(next.getName()), "");
 			
-			return next.getStart() - points + " to " + BED.NUMBERS[5] +  " " + next.getName();
+			
+			return next.getStart() - points + " to " + color + BED.NUMBERS[5] +  " " + next.getName();
 			
 		}
 		else if(level == 2){
