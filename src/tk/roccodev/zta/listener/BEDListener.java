@@ -215,12 +215,12 @@ public class BEDListener extends AbstractGameListener<BED>{
 										sb.append(points);
 
 										if(Setting.BED_SHOW_RANK.getValue()){
-											BEDRank rank = BEDRank.getRank((int)points);
+											BEDRank rank = BEDRank.isNo1(BED.lastRecords) ? BEDRank.ZZZZZZ :BEDRank.getRank((int)points);
 											if(rank != null){
 												int level = rank.getLevel((int)points);
 												String BEDrankColor = rank.getName().replaceAll(ChatColor.stripColor(rank.getName()), "");
 												String rankString = BED.NUMBERS[level] + " " +rank.getName();
-												sb.append(" (" + BEDrankColor + rankString);
+												sb.append(" (" + BEDrankColor + rankString.trim());
 												if(Setting.BED_SHOW_POINTS_TO_NEXT_RANK.getValue()){
 													sb.append(" / " + rank.getPointsToNextRank((int)points));
 												}

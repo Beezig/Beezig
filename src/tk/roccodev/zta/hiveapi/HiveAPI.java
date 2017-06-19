@@ -860,6 +860,26 @@ public class HiveAPI {
 			}	
 		}
 	}
+	
+	public static String getLeaderboardsPlaceHolder(int index, String game){
+		JSONParser parser = new JSONParser();
+		JSONObject o1 = null;
+		try {
+			o1 = (JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(HiveAPI.parseLeaderboardPlaceURL(index, game)))).get("leaderboard").toString())).get(0).toString());
+		} catch (Exception e) {
+			The5zigAPI.getLogger().info("Failed getLBPlacePoints (JSON 0)");
+			e.printStackTrace();
+		}
+		try {
+				return (String) o1.get("username").toString();
+			} catch (Exception e) {
+				The5zigAPI.getLogger().info("Failed getLBPlacePoints (JSON 1)");
+				e.printStackTrace();
+				return null;
+			}
+		
+		
+	}
 
  	public static ChatColor getRankColor(String rankName){
 		ChatColor rankColor = null;

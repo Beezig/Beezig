@@ -29,7 +29,7 @@ public enum BEDRank {
 	BED_WARRIOR(ChatColor.GOLD +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Bed Warrior", 365500, 374100, 382800, 391600, 400500),
 	SNORLAX(ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Snorlax", 409500, 418600, 427800, 437100, 446500),
 	NIGHTMARE(ChatColor.GREEN +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Nightmare", 456000, 465600, 475300, 485100, 495000),
-	ZZZZZZ(ChatColor.AQUA +""+ ChatColor.BOLD +"✸ Zzzzzz", -1, -1, -1, -1, -1);
+	ZZZZZZ(ChatColor.WHITE +""+ ChatColor.BOLD +"✸ Zzzzzz", -1, -1, -1, -1, -1);
 	
 	
 	private String name;
@@ -109,6 +109,9 @@ public enum BEDRank {
 	}
 	
 	public int getLevel(int points){
+		if(this == ZZZZZZ){
+			return 0;
+		}
 		if(points >= getLvl1()){
 			return 1;
 		}
@@ -128,6 +131,9 @@ public enum BEDRank {
 	}
 	
 	public String getPointsToNextRank(int points){
+		if(this == ZZZZZZ){
+			return "Highest Rank";
+		}
 		int level = getLevel(points);
 		if(level == 1){
 			ArrayList<BEDRank> ranks = new ArrayList<BEDRank>(Arrays.asList(values()));
@@ -139,6 +145,7 @@ public enum BEDRank {
 			}catch(Exception e){
 				return "";
 			}
+			
 			return next.getStart() - points + " to " + BED.NUMBERS[5] +  " " + next.getName();
 			
 		}
@@ -155,7 +162,19 @@ public enum BEDRank {
 			return getLvl4() - points + " to " + BED.NUMBERS[4] +  " " + getName();
 		}
 		return null;
+		
+		
+		
+		
+		
 	}
+	
+	
+	public static boolean isNo1(String ign){
+		String no1 = HiveAPI.getLeaderboardsPlaceHolder(0, "BED");
+		return no1.equalsIgnoreCase(ign);
+	}
+	
 	
 	
 }
