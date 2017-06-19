@@ -107,6 +107,12 @@ public class BEDListener extends AbstractGameListener<BED>{
 			HiveAPI.BEDpoints += 50;
 			
 		}
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §e✯ §6Notable Win! §eGold Medal Awarded!")){
+			
+			BED.pointsCounter += 100;
+			HiveAPI.BEDpoints += 100;
+			
+		}
 		
 		//Advanced Records
 		
