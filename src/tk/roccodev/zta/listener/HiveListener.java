@@ -5,6 +5,7 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.mod.server.IPatternResult;
+import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class HiveListener extends AbstractGameListener<GameMode>{
 
@@ -20,6 +21,17 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 		return false;
 	}
 	
+	
+	
+	
+	@Override
+	public boolean onServerChat(GameMode gameMode, String message) {
+		if(message.contains("§eGold Medal Awarded!")){
+			HiveAPI.medals++;
+		}
+		return false;
+	}
+
 	@Override
     public void onMatch(GameMode gameMode, String key, IPatternResult match) {
 		 if (gameMode != null && gameMode.getState() != GameState.FINISHED) {

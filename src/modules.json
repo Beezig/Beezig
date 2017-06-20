@@ -68,6 +68,18 @@
           "type": "bedresources"
         }
         ]
+     },
+     {
+    "id": "HiveMCGlobal",
+      "name": "HiveMC",
+      "items": [
+        {
+          "type": "globalmedals"
+        },
+        {
+          "type": "globaltokens"
+        }
+        ]
      }
   ]
 }

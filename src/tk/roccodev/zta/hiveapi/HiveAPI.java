@@ -25,6 +25,9 @@ public class HiveAPI {
 	public static long DRpoints = 0;
 	public static long BEDpoints = 0;
 	
+	public static long medals = 0;
+	public static long tokens = 0;
+	
 	
 	
 	private static URL TIMVparsePlayerURL(String name){
@@ -148,6 +151,25 @@ public class HiveAPI {
 			o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
 		
 		BEDpoints =  (long) o.get("total_points");
+	}
+	
+	public static void updateMedals() throws ParseException, Exception{
+		String playername = The5zigAPI.getAPI().getGameProfile().getName();
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+		
+		medals =  (long) o.get("medals");
+	}
+	public static void updateTokens() throws ParseException, Exception{
+		String playername = The5zigAPI.getAPI().getGameProfile().getName();
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+		
+		tokens =  (long) o.get("tokens");
 	}
 	public static int BEDgetAchievements(String ign){
 		String playername = ign;
