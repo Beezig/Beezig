@@ -1,12 +1,9 @@
 package tk.roccodev.zta.modules.bed;
 
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.render.RenderLocation;
 import eu.the5zig.mod.server.GameState;
-import eu.the5zig.util.Callable;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.BED;
 
@@ -15,7 +12,24 @@ public class ResourcesItem extends GameModeItem<BED>{
 	public ResourcesItem(){
 		super(BED.class);
 	}
-
+	
+	private String getMainFormatting(){
+		if(this.getProperties().getFormatting() != null){
+			if(this.getProperties().getFormatting().getMainColor() != null && this.getProperties().getFormatting().getMainColor() == null){
+				return The5zigAPI.getAPI().getFormatting().getMainFormatting().toString().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting().toString()).charAt(1), this.getProperties().getFormatting().getMainColor().toString().charAt(1));
+				//Replaces Char at index 1 (ColorTag) of the Main formatting with the custom one.
+			}
+			if(this.getProperties().getFormatting().getMainColor() == null && this.getProperties().getFormatting().getMainColor() != null){
+				return The5zigAPI.getAPI().getFormatting().getMainFormatting().toString().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting().toString()).charAt(3), this.getProperties().getFormatting().getMainFormatting().toString().charAt(3));
+				//Replaces Char at index 3 (FormattingTag) of the Main formatting with the custom one.
+			}
+			if(this.getProperties().getFormatting().getMainColor() != null && this.getProperties().getFormatting().getMainColor() != null){
+				return this.getProperties().getFormatting().getMainColor() +""+ this.getProperties().getFormatting().getMainColor();
+			}
+		}
+		return The5zigAPI.getAPI().getFormatting().getMainFormatting();	
+	}
+	
 	@Override
 	protected Object getValue(boolean dummy) {
 		if((ResourcesMode)getProperties().getSetting("mode").get() == ResourcesMode.INLINE){
@@ -27,10 +41,10 @@ public class ResourcesItem extends GameModeItem<BED>{
 			int goldIngots = The5zigAPI.getAPI().getItemCount("minecraft:gold_ingot");
 			int diamonds = The5zigAPI.getAPI().getItemCount("minecraft:diamond");
 			int emeralds = The5zigAPI.getAPI().getItemCount("minecraft:emerald");
-			if(ironIngots != 0) sb.append((colors ? "§7"+ ironIngots : ironIngots) + (colors ? " §7Iron / " : " Iron / " ));
-			if(goldIngots != 0) sb.append((colors ? "§6"+ goldIngots : goldIngots) + (colors ? " §6Gold / " : " Gold / " ));
-			if(diamonds != 0) sb.append((colors ? "§b"+ diamonds : diamonds) +  (colors ? " §bDiamonds / " : " Diamonds / " ));
-			if(emeralds != 0) sb.append((colors ? "§a"+ emeralds : emeralds) + (colors ? " §aEmeralds / " : " Emeralds / " ));
+			if(ironIngots != 0) sb.append((colors ? "§7"+ ironIngots : ironIngots) + (colors ? " §7Iron " + getMainFormatting() + "/ " : " Iron / " ));
+			if(goldIngots != 0) sb.append((colors ? "§6"+ goldIngots : goldIngots) + (colors ? " §6Gold " + getMainFormatting() + "/ " : " Gold / " ));
+			if(diamonds != 0) sb.append((colors ? "§b"+ diamonds : diamonds) +  (colors ? " §bDiamonds " + getMainFormatting() + "/ " : " Diamonds / " ));
+			if(emeralds != 0) sb.append((colors ? "§a"+ emeralds : emeralds) + (colors ? " §aEmeralds " + getMainFormatting() + "/ " : " Emeralds / " ));
 			 if(sb.length() > 2) sb.deleteCharAt(sb.length() - 2);
 
 			
@@ -48,10 +62,10 @@ public class ResourcesItem extends GameModeItem<BED>{
 			int goldIngots = The5zigAPI.getAPI().getItemCount("minecraft:gold_ingot");
 			int diamonds = The5zigAPI.getAPI().getItemCount("minecraft:diamond");
 			int emeralds = The5zigAPI.getAPI().getItemCount("minecraft:emerald");
-			if(ironIngots != 0) sb.append((colors ? "§7"+ ironIngots : ironIngots) + (colors ? " §7I / " : " I / " ));
-			if(goldIngots != 0) sb.append((colors ? "§6"+ goldIngots : goldIngots) + (colors ? " §6G / " : " G / " ));
-			if(diamonds != 0) sb.append((colors ? "§b"+ diamonds : diamonds) +  (colors ? " §bD / " : " D / " ));
-			if(emeralds != 0) sb.append((colors ? "§a"+ emeralds : emeralds) + (colors ? " §aE / " : " E / " ));
+			if(ironIngots != 0) sb.append((colors ? "§7"+ ironIngots : ironIngots) + (colors ? " §7I " + getMainFormatting() + "/ " : " I / " ));
+			if(goldIngots != 0) sb.append((colors ? "§6"+ goldIngots : goldIngots) + (colors ? " §6G " + getMainFormatting() + "/ " : " G / " ));
+			if(diamonds != 0) sb.append((colors ? "§b"+ diamonds : diamonds) +  (colors ? " §bD " + getMainFormatting() + "/ " : " D / " ));
+			if(emeralds != 0) sb.append((colors ? "§a"+ emeralds : emeralds) + (colors ? " §aE " + getMainFormatting() + "/ " : " E / " ));
 			if(sb.length() > 2) sb.deleteCharAt(sb.length() - 2);
 
 			

@@ -17,6 +17,7 @@ public class BED extends GameMode{
 	public static BEDMap activeMap;
 	public static String team;
 	public static String lastRecords = "";
+	public static Long lastRecordsPoints = null;
 	
 	public static int kills;
 	public static int pointsCounter;

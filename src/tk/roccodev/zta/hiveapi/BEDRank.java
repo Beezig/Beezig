@@ -173,6 +173,10 @@ public enum BEDRank {
 	
 	
 	public static boolean isNo1(String ign){
+		if(BED.lastRecordsPoints < 500000l){
+			//Saved another API operation
+			return false;
+		}
 		String no1 = HiveAPI.getLeaderboardsPlaceHolder(0, "BED");
 		return no1.equalsIgnoreCase(ign);
 	}

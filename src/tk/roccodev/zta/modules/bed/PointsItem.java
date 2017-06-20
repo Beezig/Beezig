@@ -13,10 +13,20 @@ public class PointsItem extends GameModeItem<BED>{
 	}
 	
 	private String getMainFormatting(){
-		//if(this.getProperties().getFormatting().getMainColor() != null || this.getProperties().getFormatting().getMainColor() != null){
-		//		return something;
-		//	TODO actually make this, but it very dumb; getProperties().getFormatting() has two diffrent methods for color & formatting, getFormatting() only one.
-		//}
+		if(this.getProperties().getFormatting() != null){
+			if(this.getProperties().getFormatting().getMainColor() != null && this.getProperties().getFormatting().getMainColor() == null){
+				return The5zigAPI.getAPI().getFormatting().getMainFormatting().toString().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting().toString()).charAt(1), this.getProperties().getFormatting().getMainColor().toString().charAt(1));
+				//Replaces Char at index 1 (ColorTag) of the Main formatting with the custom one.
+			}
+			if(this.getProperties().getFormatting().getMainColor() == null && this.getProperties().getFormatting().getMainColor() != null){
+				return The5zigAPI.getAPI().getFormatting().getMainFormatting().toString().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting().toString()).charAt(3), this.getProperties().getFormatting().getMainFormatting().toString().charAt(3));
+				//Replaces Char at index 3 (FormattingTag) of the Main formatting with the custom one.
+				//Somehow doesn't work with the closing brackets, no idea
+			}
+			if(this.getProperties().getFormatting().getMainColor() != null && this.getProperties().getFormatting().getMainColor() != null){
+				return this.getProperties().getFormatting().getMainColor() +""+ this.getProperties().getFormatting().getMainColor();
+			}
+		}
 		return The5zigAPI.getAPI().getFormatting().getMainFormatting();	
 	}
 	
@@ -31,7 +41,7 @@ public class PointsItem extends GameModeItem<BED>{
 			}
 			return HiveAPI.BEDpoints;
 		}catch(Exception e){
-			e.printStackTrace();
+			e.printStackTrace();;
 			return "Server error";
 		}
 	}

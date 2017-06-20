@@ -151,7 +151,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 						Double bpg = Setting.BED_SHOW_BEDS_PER_GAME.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetBedsDestroyed(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
 						Double dpg = Setting.BED_SHOW_DEATHS_PER_GAME.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetDeaths(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
 						Double kpg = Setting.BED_SHOW_KILLS_PER_GAME.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetKills(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
-						Double ppg = Setting.BED_SHOW_POINTS_PER_GAME.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetPoints(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
+						Double ppg = Setting.BED_SHOW_POINTS_PER_GAME.getValue() ? (double) Math.floor(((double)BED.lastRecordsPoints / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
 						Double kd = Setting.BED_SHOW_KD.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetKills(BED.lastRecords) / (double)HiveAPI.BEDgetDeaths(BED.lastRecords) * 100d)) / 100d  : null;
 						Integer winr = Setting.BED_SHOW_WINRATE.getValue() ? (int) (Math.floor(((double)HiveAPI.BEDgetVictories(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords)) * 1000d) / 10d) : null;
 						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(BED.lastRecords) : "";
@@ -212,8 +212,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 										StringBuilder sb = new StringBuilder();
 										sb.append("§3 Points: §b");
 										points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
+										BED.lastRecordsPoints = points;
 										sb.append(points);
-
 										if(Setting.BED_SHOW_RANK.getValue()){
 											BEDRank rank = BEDRank.isNo1(BED.lastRecords) ? BEDRank.ZZZZZZ :BEDRank.getRank((int)points);
 											if(rank != null){
