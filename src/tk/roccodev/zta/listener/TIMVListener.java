@@ -54,7 +54,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("TIMV");
 		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-		TIMV.rank = TIMVRank.getFromDisplay((HiveAPI.TIMVgetRank(The5zigAPI.getAPI().getGameProfile().getName()))).getTotalDisplay();
+		
 		//Should've read the docs ¯\_(ツ)_/¯
 		if(sb != null) The5zigAPI.getLogger().info(sb.getTitle());
 		if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
@@ -74,6 +74,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 					try {
 						Thread.sleep(200); // Wait for server resources to load 
 						HiveAPI.TIMVupdateKarma();
+						TIMV.rank = TIMVRank.getFromDisplay((HiveAPI.TIMVgetRank(The5zigAPI.getAPI().getGameProfile().getName()))).getTotalDisplay();
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -369,7 +370,11 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 									sb.append("§bKarma: §e");
 									karma = Long.parseLong(s.replaceAll("§bKarma: §e", ""));
 									sb.append(karma);
-									if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§e)");
+									if(rank != null) sb.append(" (" + rank.getTotalDisplay());
+									if(Setting.TIMV_SHOW_KARMA_TO_NEXT_RANK.getValue() && rank != null){
+										sb.append(" / " + rank.getKarmaToNextRank((int)karma));
+									}
+									sb.append("§e)");
 									The5zigAPI.getAPI().messagePlayer(sb.toString().trim() + " ");
 									continue;
 								}
