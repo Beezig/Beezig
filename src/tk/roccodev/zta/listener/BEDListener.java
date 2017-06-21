@@ -166,7 +166,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 						long points = 0;
 						
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(BED.lastRecords, "BED") : null;
-						Integer achievements = Setting.BED_SHOW_ACHIEVEMENTS.getValue() ? HiveAPI.BEDgetAchievements(BED.lastRecords) : null;
+						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? HiveAPI.BEDgetAchievements(BED.lastRecords) : null;
 
 						
 						
@@ -213,7 +213,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 										points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
 										BED.lastRecordsPoints = points;
 										sb.append(points);
-										if(Setting.BED_SHOW_RANK.getValue()){
+										if(Setting.SHOW_RECORDS_RANK.getValue()){
 											BEDRank rank = BEDRank.isNo1(BED.lastRecords) ? BEDRank.ZZZZZZ :BEDRank.getRank((int)points);
 											if(rank != null){
 												int level = rank.getLevel((int)points);
@@ -324,11 +324,11 @@ public class BEDListener extends AbstractGameListener<BED>{
 		}
 	
 		
-		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §a§lVote received.")){
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §a§lVote received.") && Setting.AUTOVOTE.getValue()){
 			BED.hasVoted = true;
 		}
 		
-		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l6. ") && !BED.hasVoted){
+		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l6. ") && !BED.hasVoted && Setting.AUTOVOTE.getValue()){
 			BED.votesToParse.add(message);
 			//Adding the 6th option, the normal method doesn't work
 			new Thread(new Runnable(){
@@ -356,7 +356,6 @@ public class BEDListener extends AbstractGameListener<BED>{
 						BEDMap map = BEDMap.getFromDisplay(consider);
 						if(map == null){
 							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: Map not found for " + consider);
-							return;
 						}
 						The5zigAPI.getLogger().info("trying to match " + map);
 						if(parsedMaps.contains(map)){
@@ -384,10 +383,17 @@ public class BEDListener extends AbstractGameListener<BED>{
 			}).start();
 		}
 
-		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l") && !BED.hasVoted){		
+		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l") && !BED.hasVoted && Setting.AUTOVOTE.getValue()){		
 			BED.votesToParse.add(message);
 		}
-		
+		else if(message.startsWith("               §aYou've reached the rank")){
+			//Update the rank module when you uprank
+			try {
+				HiveAPI.BEDupdatePoints();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		else if(message.contains("§lYou are on ")){
 			//"                        §6§lYou are on Gold Team!"
             //§9§lYou are on Blue Team!

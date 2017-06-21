@@ -125,10 +125,10 @@ public class DRListener extends AbstractGameListener<DR>{
 			}
 		
 
-		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §a§lVote received.")){
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §a§lVote received.") && Setting.AUTOVOTE.getValue()){
 			DR.hasVoted = true;
 		}		
-		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l6. §f§cRandom map ") && !DR.hasVoted){
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l6. §f§cRandom map ") && !DR.hasVoted && Setting.AUTOVOTE.getValue()){
 			/*
 			 * 
 			 * Multi-threading to avoid lag on older machines
@@ -160,7 +160,6 @@ public class DRListener extends AbstractGameListener<DR>{
 						DRMap map = DRMap.getFromDisplay(consider);
 						if(map == null){
 							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: Map not found for " + consider);
-							return;
 						}
 						The5zigAPI.getLogger().info("trying to match " + map);
 						if(parsedMaps.contains(map)){
@@ -187,7 +186,7 @@ public class DRListener extends AbstractGameListener<DR>{
 				}
 			}).start();
 		}
-		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l") && !DR.hasVoted){		
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l") && !DR.hasVoted && Setting.AUTOVOTE.getValue()){		
 			DR.votesToParse.add(message);		
 		}
 	
@@ -242,10 +241,10 @@ public class DRListener extends AbstractGameListener<DR>{
 						}
 						long points = 0;
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(DR.lastRecords, "DR") : null;
-						Integer achievements = Setting.DR_SHOW_ACHIEVEMENTS.getValue() ? HiveAPI.DRgetAchievements(DR.lastRecords) : null;
-						String rankTitleDR = Setting.DR_SHOW_RANK.getValue() ? HiveAPI.DRgetRank(DR.lastRecords) : null;
+						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? HiveAPI.DRgetAchievements(DR.lastRecords) : null;
+						String rankTitleDR = Setting.SHOW_RECORDS_RANK.getValue() ? HiveAPI.DRgetRank(DR.lastRecords) : null;
 						The5zigAPI.getLogger().info(HiveAPI.getLeaderboardsPlacePoints(349, "DR"));
-						int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "DR") < HiveAPI.DRgetPoints(DR.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+						int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "DR") < HiveAPI.DRgetPoints(DR.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 						if(rankTitleDR != null) rank = DRRank.getFromDisplay(rankTitleDR);
 						List<String> messages = new ArrayList<String>();
 						messages.addAll(DR.messagesToSend);

@@ -264,11 +264,11 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 		}
 		
-		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6Vote received.")){
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6Vote received.") && Setting.AUTOVOTE.getValue()){
 			TIMV.hasVoted = true;
 		}
 		
-		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6§6§l6.§f§6 §4Random map§6") && !TIMV.hasVoted){
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6§6§l6.§f§6 §4Random map§6") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()){
 			/*
 			 * 
 			 * Multi-threading to avoid lag on older machines
@@ -299,7 +299,6 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						TIMVMap map = TIMVMap.getFromDisplay(consider);
 						if(map == null){
 							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: map not found for " + consider);
-							return;
 						}
 						The5zigAPI.getLogger().info("trying to match " + map);			
 						if(parsedMaps.contains(map)){
@@ -323,7 +322,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				}
 			}).start();
 		}
-		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6§6§l") && !TIMV.hasVoted){
+		else if(message.startsWith("§8▍ §3TIMV§8 ▏ §6§6§l") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()){
 			TIMV.votesToParse.add(message);		
 		}
 		else if(message.equals("§7=====================================") && !message.endsWith(" ")){ //Bar
@@ -354,9 +353,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						long karma = 0;
 						long traitorPoints = 0;
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(TIMV.lastRecords, "TIMV") : null;
-						Integer achievements = Setting.TIMV_SHOW_ACHIEVEMENTS.getValue() ? HiveAPI.TIMVgetAchievements(TIMV.lastRecords) : null;
-						String rankTitleTIMV = Setting.TIMV_SHOW_RANK.getValue() ? HiveAPI.TIMVgetRank(TIMV.lastRecords) : null;
-						int monthlyRank = (Setting.TIMV_SHOW_MONTHLYRANK.getValue() &&  HiveAPI.getLeaderboardsPlacePoints(349, "TIMV") < HiveAPI.TIMVgetKarma(TIMV.lastRecords))? HiveAPI.getMonthlyLeaderboardsRank(TIMV.lastRecords, "TIMV") : 0;
+						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? HiveAPI.TIMVgetAchievements(TIMV.lastRecords) : null;
+						String rankTitleTIMV = Setting.SHOW_RECORDS_RANK.getValue() ? HiveAPI.TIMVgetRank(TIMV.lastRecords) : null;
+						int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() &&  HiveAPI.getLeaderboardsPlacePoints(349, "TIMV") < HiveAPI.TIMVgetKarma(TIMV.lastRecords))? HiveAPI.getMonthlyLeaderboardsRank(TIMV.lastRecords, "TIMV") : 0;
 						if(rankTitleTIMV != null) rank = TIMVRank.getFromDisplay(rankTitleTIMV);
 						List<String> messages = new ArrayList<String>();
 						messages.addAll(TIMV.messagesToSend);
