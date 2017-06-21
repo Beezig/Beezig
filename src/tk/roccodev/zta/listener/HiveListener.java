@@ -5,6 +5,7 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.mod.server.IPatternResult;
+import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class HiveListener extends AbstractGameListener<GameMode>{
@@ -28,6 +29,15 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 	public boolean onServerChat(GameMode gameMode, String message) {
 		if(message.contains("§eGold Medal Awarded!")){
 			HiveAPI.medals++;
+		}
+		else if(message != null && ChatColor.stripColor(message).contains("▍ Tokens ▏ You earned")){
+			
+			String[] data = ChatColor.stripColor(message).replaceAll("▍ Tokens ▏ You earned", "").split("tokens");
+			
+			int tokens = Integer.parseInt(data[0].trim());
+			
+			HiveAPI.tokens += tokens;
+			
 		}
 		return false;
 	}

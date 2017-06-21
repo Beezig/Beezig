@@ -115,8 +115,14 @@ public class DRListener extends AbstractGameListener<DR>{
 			// No more double tokens weekends Niklas :>)
 			if(!(DR.checkpoints == DR.activeMap.getCheckpoints())){
 					DR.checkpoints++;
+					
 				}
-			}
+			
+		
+			String data[] = ChatColor.stripColor(message).trim().split("\\+");
+			int tokens = Integer.parseInt(data[1].trim().replaceAll("Tokens", "").trim());
+			HiveAPI.tokens += tokens;
+	}
 		else if(message.equals("§8▍ §cDeathRun§8 ▏ §cYou have been returned to your last checkpoint!") && ActiveGame.is("dr") && DR.role == "Runner") {
 				DR.deaths++;	
 			}
