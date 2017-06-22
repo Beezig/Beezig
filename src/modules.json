@@ -87,6 +87,9 @@
       "items": [
         {
           "type": "gntmode"
+        },
+        {
+          "type": "gntteam"
         }
         ]
      }

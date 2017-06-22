@@ -4,6 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
+import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.GNT;
 import tk.roccodev.zta.games.GNTM;
 import tk.roccodev.zta.games.Giant;
@@ -53,6 +54,25 @@ public class GiantListener extends AbstractGameListener<Giant>{
 		
 	}
 
+	
+	
+	
+
+	@Override
+	public boolean onServerChat(Giant gameMode, String message) {
+		if(ZTAMain.isColorDebug){
+			The5zigAPI.getLogger().info(gameMode.getName() + " Color Debug: (" + message + ")");
+		}
+		
+		if(message.startsWith(getPrefix(ActiveGame.current()) + "§3You are now playing on the ")){
+			String team = message.replaceAll(getPrefix(ActiveGame.current()) + "§3You are now playing on the ", "").replaceAll("Team!", "");
+			Giant.team = team;
+			gameMode.setState(GameState.GAME);
+		}
+		
+		return false;
+	}
+
 
 	@Override
 	public void onServerConnect(Giant gameMode) {
@@ -61,6 +81,18 @@ public class GiantListener extends AbstractGameListener<Giant>{
 		
 	}
 	
+	
+	private String getPrefix(String mode){
+		
+		if(mode.equalsIgnoreCase("gnt")){
+			return "§8▍ §aSky§b§lGiants§8 ▏ ";
+		}
+		else if(mode.equalsIgnoreCase("gntm")){
+			return "§8▍ §aSky§b§lGiants§a§l:Mini§8 ▏ ";
+		}
+		
+		return "";
+	}
 	
 	
 	

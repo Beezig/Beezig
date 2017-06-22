@@ -11,6 +11,7 @@ public class Giant extends GameMode{
 	public static int teamsEliminated;
 	public static int gold;
 	public static Giant instance;
+	public static String team = "";
 	
 	public Giant(){
 		instance = this;
@@ -24,6 +25,7 @@ public class Giant extends GameMode{
 		
 		teamsEliminated = 0;
 		gold = 0;
+		team = "";
 		gameMode.setState(GameState.FINISHED);
 		ActiveGame.set("");
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
