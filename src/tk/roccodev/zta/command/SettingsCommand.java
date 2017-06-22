@@ -33,7 +33,7 @@ public class SettingsCommand implements Command{
 		String setting = args[0];
 		Setting sett = null;
 		try{
-			sett = Setting.valueOf(setting);
+			sett = Setting.valueOf(setting.toUpperCase());
 		}
 		catch(IllegalArgumentException e){
 			The5zigAPI.getAPI().messagePlayer(Log.error + "Invalid setting.");

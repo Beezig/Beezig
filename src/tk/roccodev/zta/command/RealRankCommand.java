@@ -32,6 +32,7 @@ public class RealRankCommand implements Command{
 			@Override
 			public void run(){
 				String ign = HiveAPI.getName(args[0]);
+				if(ign.contains("nicked player")) return;
 				String networkRank = HiveAPI.getNetworkRank(ign);
 				ChatColor rankColor = HiveAPI.getRankColor(networkRank);
 				The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.YELLOW + ign + "'s Rank: " + rankColor + networkRank);				

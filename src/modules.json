@@ -44,6 +44,57 @@
           "type": "drwr"
         }	
         ]
+     },
+     {
+    "id": "BedWars",
+      "name": "BedWars",
+      "items": [
+        {
+          "type": "bedpoints"
+        },
+        {
+          "type": "bedgamecounter"
+        },
+        {
+          "type": "bedteam"
+        },
+        {
+          "type": "bedkills"
+        },
+        {
+          "type": "beddestroyed"
+        },
+        {
+          "type": "bedresources"
+        }
+        ]
+     },
+     {
+    "id": "HiveMCGlobal",
+      "name": "HiveMC",
+      "items": [
+        {
+          "type": "globalmedals"
+        },
+        {
+          "type": "globaltokens"
+        }
+        ]
+     },
+     {
+    "id": "SkyGiants",
+      "name": "SkyGiants",
+      "items": [
+        {
+          "type": "gntmode"
+        },
+        {
+          "type": "gntteam"
+        },
+        {
+          "type": "gntmap"
+        }
+        ]
      }
   ]
 }

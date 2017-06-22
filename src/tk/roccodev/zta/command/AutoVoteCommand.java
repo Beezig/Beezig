@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
+import tk.roccodev.zta.hiveapi.BEDMap;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.TIMVMap;
 
@@ -29,7 +30,7 @@ public class AutoVoteCommand implements Command{
 	@Override
 	public boolean execute(String[] args) {
 		
-		if(!ZTAMain.isTIMV && !ZTAMain.isDR) return false;
+		if(!ActiveGame.is("timv") && !ActiveGame.is("dr") && !ActiveGame.is("bed")) return false;
 		if(!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
 		
 		//Format would be /autovote add dr_throwback
@@ -43,6 +44,13 @@ public class AutoVoteCommand implements Command{
 				if(data.length == 3){
 					mapString = (data[1] + "_" + data[2]);
 				}
+				if(data.length == 4){
+					mapString = (data[1]+"_"+data[2]+"_"+data[3]);
+				}
+				if(data.length == 5){
+					mapString = (data[1]+"_"+data[2]+"_"+data[3]+"_"+data[4]);
+				}
+				// ¯\_(ツ)_/¯
 				if(gamemode.equalsIgnoreCase("dr")){
 					DRMap apiMap = DRMap.valueFromDisplay(mapString);
 					
@@ -77,6 +85,24 @@ public class AutoVoteCommand implements Command{
 					AutovoteUtils.dump();
 					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully added map.");
 				}
+				else if(gamemode.equalsIgnoreCase("bed")){
+					mapString = "BED_" + mapString;
+					BEDMap apiMap = null;
+					try{
+						apiMap = BEDMap.valueOf(mapString.toUpperCase());
+						The5zigAPI.getLogger().info("apiMap = " + apiMap);
+					}
+					catch(IllegalArgumentException e){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Map not found.");
+						return true;
+					}	
+					List<String> bedMaps = (List<String>) AutovoteUtils.get("bed");
+					if(bedMaps == null) bedMaps = new ArrayList<String>();
+					bedMaps.add(apiMap.name());
+					AutovoteUtils.set("bed", bedMaps);
+					AutovoteUtils.dump();
+					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully added map.");
+				}
 			}
 			else if(mode.equalsIgnoreCase("listmaps")){
 				String game = args[1];
@@ -89,6 +115,12 @@ public class AutoVoteCommand implements Command{
 				else if(game.equalsIgnoreCase("timv")){
 					The5zigAPI.getAPI().messagePlayer(Log.info + "Trouble in Mineville Maps");
 					for(TIMVMap map : TIMVMap.values()){
+						The5zigAPI.getAPI().messagePlayer("§e - " + map.name() + " (" + map.getDisplayName() + ")");
+					}
+				}
+				else if(game.equalsIgnoreCase("bed")){
+					The5zigAPI.getAPI().messagePlayer(Log.info + "BedWars Maps");
+					for(BEDMap map : BEDMap.values()){
 						The5zigAPI.getAPI().messagePlayer("§e - " + map.name() + " (" + map.getDisplayName() + ")");
 					}
 				}
@@ -107,6 +139,12 @@ public class AutoVoteCommand implements Command{
 						The5zigAPI.getAPI().messagePlayer("§e - " + s);
 					}
 				}
+				else if(game.equalsIgnoreCase("bed")){
+					The5zigAPI.getAPI().messagePlayer(Log.info + "BedWars Maps");
+					for(String s : AutovoteUtils.getMapsForMode("bed")){
+						The5zigAPI.getAPI().messagePlayer("§e - " + s);
+					}
+				}
 			}
 			else if(mode.equalsIgnoreCase("remove")){
 				String map = args[1];
@@ -116,6 +154,13 @@ public class AutoVoteCommand implements Command{
 				if(data.length == 3){
 					mapString = (data[1] + "_" + data[2]);
 				}
+				if(data.length == 4){
+					mapString = (data[1]+"_"+data[2]+"_"+data[3]);
+				}
+				if(data.length == 5){
+					mapString = (data[1]+"_"+data[2]+"_"+data[3]+"_"+data[4]);
+				}
+				// ¯\_(ツ)_/¯
 				if(gamemode.equalsIgnoreCase("dr")){
 					DRMap apiMap = DRMap.valueFromDisplay(mapString);
 					
@@ -149,6 +194,25 @@ public class AutoVoteCommand implements Command{
 					if(timvMaps.contains(apiMap.name()))
 					timvMaps.remove(apiMap.name());
 					AutovoteUtils.set("timv", timvMaps);
+					AutovoteUtils.dump();
+					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully removed map.");
+				}
+				else if(gamemode.equalsIgnoreCase("bed")){
+					mapString = "BED_" + mapString;
+					BEDMap apiMap = null;
+					try{
+						apiMap = BEDMap.valueOf(mapString.toUpperCase());
+					}
+					catch(IllegalArgumentException e){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Map not found.");
+						return true;
+					}
+					
+					List<String> bedMaps = (List<String>) AutovoteUtils.get("bed");
+					if(bedMaps == null) bedMaps = new ArrayList<String>();
+					if(bedMaps.contains(apiMap.name()))
+					bedMaps.remove(apiMap.name());
+					AutovoteUtils.set("bed", bedMaps);
 					AutovoteUtils.dump();
 					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully removed map.");
 				}

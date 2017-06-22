@@ -1,6 +1,7 @@
 package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.DR;
@@ -23,7 +24,7 @@ public class PBCommand implements Command{
 
 	@Override
 	public boolean execute(String[] args) {
-		if(!(ZTAMain.isDR)) return false;
+		if(!(ActiveGame.is("dr"))) return false;
 		if(args.length == 1 && DR.activeMap != null){
 			
 			String ign = args[0];

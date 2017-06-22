@@ -2,10 +2,13 @@ package tk.roccodev.zta.listener;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +17,7 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
@@ -22,7 +26,6 @@ import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.DRRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.TIMVMap;
 import tk.roccodev.zta.settings.Setting;
 
 public class DRListener extends AbstractGameListener<DR>{
@@ -41,8 +44,10 @@ public class DRListener extends AbstractGameListener<DR>{
 	@Override
 	public void onGameModeJoin(DR gameMode){
 		gameMode.setState(GameState.STARTING);
-		ZTAMain.isDR = true;
+		ActiveGame.set("DR");
 		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+		DR.rank = DRRank.getFromDisplay((HiveAPI.DRgetRank(The5zigAPI.getAPI().getGameProfile().getName()))).getTotalDisplay();
+		//Should've read the docs ¯\_(ツ)_/¯
 		if(sb != null) The5zigAPI.getLogger().info(sb.getTitle());
 		if(sb != null && sb.getTitle().contains("Your DR Stats")){
 			int points = sb.getLines().get(ChatColor.AQUA + "Points");	
@@ -106,24 +111,30 @@ public class DRListener extends AbstractGameListener<DR>{
 					break;
 			}
 		}
-		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §aCheckpoint Reached! §7") && ZTAMain.isDR && DR.role == "Runner") {
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §aCheckpoint Reached! §7") && ActiveGame.is("dr") && DR.role == "Runner") {
 			// No more double tokens weekends Niklas :>)
 			if(!(DR.checkpoints == DR.activeMap.getCheckpoints())){
 					DR.checkpoints++;
+					
 				}
-			}
-		else if(message.equals("§8▍ §cDeathRun§8 ▏ §cYou have been returned to your last checkpoint!") && ZTAMain.isDR && DR.role == "Runner") {
+			
+		
+			String data[] = ChatColor.stripColor(message).trim().split("\\+");
+			int tokens = Integer.parseInt(data[1].trim().replaceAll("Tokens", "").trim());
+			HiveAPI.tokens += tokens;
+	}
+		else if(message.equals("§8▍ §cDeathRun§8 ▏ §cYou have been returned to your last checkpoint!") && ActiveGame.is("dr") && DR.role == "Runner") {
 				DR.deaths++;	
 			}
-		else if(message.contains("§6 (") && message.contains("§6)") && message.contains(The5zigAPI.getAPI().getGameProfile().getName()) && ZTAMain.isDR && DR.role == "Death") {
+		else if(message.contains("§6 (") && message.contains("§6)") && message.contains(The5zigAPI.getAPI().getGameProfile().getName()) && ActiveGame.is("dr") && DR.role == "Death") {
 				DR.kills++;	
 			}
 		
 
-		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §a§lVote received.")){
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §a§lVote received.") && Setting.AUTOVOTE.getValue()){
 			DR.hasVoted = true;
 		}		
-		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l6. §f§cRandom map ")){
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l6. §f§cRandom map ") && !DR.hasVoted && Setting.AUTOVOTE.getValue()){
 			/*
 			 * 
 			 * Multi-threading to avoid lag on older machines
@@ -155,7 +166,6 @@ public class DRListener extends AbstractGameListener<DR>{
 						DRMap map = DRMap.getFromDisplay(consider);
 						if(map == null){
 							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: Map not found for " + consider);
-							return;
 						}
 						The5zigAPI.getLogger().info("trying to match " + map);
 						if(parsedMaps.contains(map)){
@@ -182,7 +192,7 @@ public class DRListener extends AbstractGameListener<DR>{
 				}
 			}).start();
 		}
-		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l") && !DR.hasVoted){		
+		else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l") && !DR.hasVoted && Setting.AUTOVOTE.getValue()){		
 			DR.votesToParse.add(message);		
 		}
 	
@@ -237,10 +247,10 @@ public class DRListener extends AbstractGameListener<DR>{
 						}
 						long points = 0;
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(DR.lastRecords, "DR") : null;
-						Integer achievements = Setting.DR_SHOW_ACHIEVEMENTS.getValue() ? HiveAPI.DRgetAchievements(DR.lastRecords) : null;
-						String rankTitleDR = Setting.DR_SHOW_RANK.getValue() ? HiveAPI.DRgetRank(DR.lastRecords) : null;
+						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? HiveAPI.DRgetAchievements(DR.lastRecords) : null;
+						String rankTitleDR = Setting.SHOW_RECORDS_RANK.getValue() ? HiveAPI.DRgetRank(DR.lastRecords) : null;
 						The5zigAPI.getLogger().info(HiveAPI.getLeaderboardsPlacePoints(349, "DR"));
-						int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "DR") < HiveAPI.DRgetPoints(DR.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+						int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "DR") < HiveAPI.DRgetPoints(DR.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 						if(rankTitleDR != null) rank = DRRank.getFromDisplay(rankTitleDR);
 						List<String> messages = new ArrayList<String>();
 						messages.addAll(DR.messagesToSend);
@@ -309,11 +319,10 @@ public class DRListener extends AbstractGameListener<DR>{
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
 						}
 						if(lastGame != null){
-							Date now = new Date();
-							long diff = now.getTime() - lastGame.getTime();
+								Calendar lastSeen = Calendar.getInstance();;
+								lastSeen.setTimeInMillis(HiveAPI.lastGame(DR.lastRecords, "DR").getTime());
 							
-							
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + lastGame + " (" + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + " days ago)");
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()));
 						}
 						
 							
@@ -362,7 +371,13 @@ public class DRListener extends AbstractGameListener<DR>{
 			else if(message.contains("§lYou are a ")){
 				gameMode.setState(GameState.GAME);
 			}
-			
+		
+			else if(message.equals("§8▍ §cDeathRun§8 ▏ §6The round has started!")){
+				Timer timer = new Timer();
+				ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
+				timer.schedule(sft, 1500);
+			}
+		
 			else if(message.startsWith("§8▍ §cDeathRun§8 ▏") && message.contains("§3 finished §b") && message.contains(The5zigAPI.getAPI().getGameProfile().getName()) && !message.endsWith(" ")){
 				//"§8▍ §cDeathRun§8 ▏ §b §aItsNiklass§3 finished §b1st§3. §7(01:10.574)"
 				String time = (message.split("§7\\("))[1].replaceAll("\\)", "");
@@ -430,5 +445,20 @@ public class DRListener extends AbstractGameListener<DR>{
 		The5zigAPI.getLogger().info("Resetting! (DR)");
 		DR.reset(gameMode);
 	}
+	
+	
+	private class ScoreboardFetcherTask extends TimerTask{
 
+		@Override
+		public void run() {
+			for(Map.Entry<String, Integer> e : The5zigAPI.getAPI().getSideScoreboard().getLines().entrySet()){
+				if(e.getValue().intValue() == 3){
+					TIMV.gameID = ChatColor.stripColor(e.getKey().trim());
+				}
+			}
+			
+		}
+		
+	}
 }
+

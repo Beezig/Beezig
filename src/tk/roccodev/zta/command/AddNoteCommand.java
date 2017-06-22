@@ -1,10 +1,9 @@
 package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.server.GameMode;
+import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.notes.NotesManager;
 
 public class AddNoteCommand implements Command{
@@ -25,7 +24,7 @@ public class AddNoteCommand implements Command{
 	@Override
 	public boolean execute(String[] args) {
 		
-		if(!ZTAMain.isTIMV) return false;
+		if(!ActiveGame.is("timv")) return false;
 		if(!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
 		if( args.length == 0 ){
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Note may not be empty.");

@@ -5,6 +5,10 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.mod.server.IPatternResult;
+import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.games.GNT;
+import tk.roccodev.zta.games.GNTM;
+import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class HiveListener extends AbstractGameListener<GameMode>{
 
@@ -20,6 +24,26 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 		return false;
 	}
 	
+	
+	
+	
+	@Override
+	public boolean onServerChat(GameMode gameMode, String message) {
+		if(message.contains("§eGold Medal Awarded!")){
+			HiveAPI.medals++;
+		}
+		else if(message != null && ChatColor.stripColor(message).contains("▍ Tokens ▏ You earned")){
+			
+			String[] data = ChatColor.stripColor(message).replaceAll("▍ Tokens ▏ You earned", "").split("tokens");
+			
+			int tokens = Integer.parseInt(data[0].trim());
+			
+			HiveAPI.tokens += tokens;
+			
+		}
+		return false;
+	}
+
 	@Override
     public void onMatch(GameMode gameMode, String key, IPatternResult match) {
 		 if (gameMode != null && gameMode.getState() != GameState.FINISHED) {
@@ -36,6 +60,32 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			
 			The5zigAPI.getLogger().info("Connected to DR! -Hive");
 		}
+		else if(key.equals("bed.welcome") || (key.equals("bed.spectator") && gameMode == null)){
+			getGameListener().switchLobby("BED");
+			
+			The5zigAPI.getLogger().info("Connected to BED/BEDT! -Hive");
+		}
+		else if(key.equals("gntm.welcome")){
+			
+			
+			The5zigAPI.getLogger().info("Connected to GNTM! -Hive");
+			
+			
+			GiantListener.listener.setGameMode(GNTM.class, GNTM.instance);
+			
+			getGameListener().switchLobby("GNTM");
+		}
+		else if(key.equals("gnt.welcome")){
+			
+			
+			The5zigAPI.getLogger().info("Connected to GNT! -Hive");
+			
+			
+			GiantListener.listener.setGameMode(GNT.class, GNT.instance);
+			
+			getGameListener().switchLobby("GNT");
+		}
+		
 		
 	}
 

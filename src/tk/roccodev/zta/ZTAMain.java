@@ -12,6 +12,7 @@ import org.bstats.MetricsLite;
 import org.lwjgl.input.Keyboard;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.KeyPressEvent;
@@ -35,7 +36,11 @@ import tk.roccodev.zta.command.SayCommand;
 import tk.roccodev.zta.command.SeenCommand;
 import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.command.WRCommand;
+import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.games.GNT;
+import tk.roccodev.zta.games.GNTM;
+import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -47,11 +52,11 @@ import tk.roccodev.zta.updater.Updater;
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
-	public static boolean isTIMV = false;
-	public static boolean isDR = false;
+	
 	public static IKeybinding notesKb;
 	public static File mcFile;
 	public static boolean isColorDebug = false;
+	public static String playerRank = "";
 	
 	public static int getCustomVersioning(){
 		String v = ZTAMain.class.getAnnotation(Plugin.class).version();
@@ -68,10 +73,10 @@ public class ZTAMain {
 				The5zigAPI.getLogger().fatal("Beezig: This version is disabled!");
 				news.displayMessage("Beezig: Version is disabled remotely! Update to the latest version.");
 				
-				return;
+				return; //< one does not simply update beezig
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			The5zigAPI.getLogger().info("Failed checking for blacklist");
 			e.printStackTrace();
 		}
 		try {
@@ -80,7 +85,7 @@ public class ZTAMain {
 				news.displayMessage("Beezig: A new version of the plugin is available!");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			The5zigAPI.getLogger().info("Failed update check");
 			e.printStackTrace();
 		}
 		
@@ -98,6 +103,21 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "drdeaths", tk.roccodev.zta.modules.dr.DeathsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drpb", tk.roccodev.zta.modules.dr.PBItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drwr", tk.roccodev.zta.modules.dr.WRItem.class , "serverhivemc");
+		
+		The5zigAPI.getAPI().registerModuleItem(this, "bedpoints", tk.roccodev.zta.modules.bed.PointsItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bedresources", tk.roccodev.zta.modules.bed.ResourcesItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bedmap", tk.roccodev.zta.modules.bed.MapItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bedteam", tk.roccodev.zta.modules.bed.TeamItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bedkills", tk.roccodev.zta.modules.bed.KillsItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bedgamecounter", tk.roccodev.zta.modules.bed.PointsCounterItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "beddestroyed", tk.roccodev.zta.modules.bed.BedsDestroyedItem.class , "serverhivemc");
+		
+		The5zigAPI.getAPI().registerModuleItem(this, "globalmedals", tk.roccodev.zta.modules.global.MedalsItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "globaltokens", tk.roccodev.zta.modules.global.TokensItem.class , "serverhivemc");
+		
+		The5zigAPI.getAPI().registerModuleItem(this, "gntmode", tk.roccodev.zta.modules.gnt.ModeItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "gntteam", tk.roccodev.zta.modules.gnt.TeamItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "gntmap", tk.roccodev.zta.modules.gnt.MapItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		
@@ -145,20 +165,39 @@ public class ZTAMain {
 				settingsFile.createNewFile();
 				SettingsFetcher.saveSettings();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				The5zigAPI.getLogger().info("Failed saving new Settings");
 				e.printStackTrace();
 			}
 		}
 		try {
 			SettingsFetcher.loadSettings();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			The5zigAPI.getLogger().info("Failed to load Settings");
 			e1.printStackTrace();
 		}
 		
 		checkForFileExist(new File(mcFile + "/autovote.yml"), false);
 		AutovoteUtils.load();
 		watisdis.wat = HiveAPI.TIMVgetRank("RoccoDev");
+		
+		playerRank = HiveAPI.getNetworkRank(The5zigAPI.getAPI().getGameProfile().getName());
+		
+		try {
+			HiveAPI.updateMedals();
+			HiveAPI.updateTokens();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//Instantiate GNT Classes
+		new Giant();
+		new GNT();
+		new GNTM();
+	
+		
+		
+			
 	}
 	
 	private void checkForFileExist(File f, boolean directory) {
@@ -205,9 +244,25 @@ public class ZTAMain {
 		
 	}
 	
+	private boolean isStaffChat(){
+		if(playerRank.endsWith("Hive Moderator")) return true;
+		if(playerRank.equalsIgnoreCase("Hive Developer")) return true;
+		if(playerRank.equalsIgnoreCase("Hive Founder and Owner")) return true;
+	
+		return false;
+	
+	}
+	
 	
 	@EventHandler(priority = EventHandler.Priority.HIGH)
 	public void onChatSend(ChatSendEvent evt){
+		if(evt.getMessage().startsWith("*") && isStaffChat()){
+			String noStar = evt.getMessage().replaceAll("\\*", "");
+			if(noStar.length() == 0) return;
+			The5zigAPI.getAPI().sendPlayerMessage("/s " + noStar);
+			
+			return;
+		}
 		if(evt.getMessage().startsWith("/") && !evt.getMessage().startsWith("/ ")){
 			
 			if(CommandManager.dispatchCommand(evt.getMessage())){
@@ -220,19 +275,32 @@ public class ZTAMain {
 		if(evt.getMessage().startsWith("/records") || evt.getMessage().startsWith("/stats")){
 			String[] args = evt.getMessage().split(" ");
 			if(args.length == 1){
-				if(isTIMV){
+				if(ActiveGame.is("timv")){
 					if(TIMV.isRecordsRunning){
 						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
 						evt.setCancelled(true);
 						return;
 					}
 					TIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-				} else if(isDR){
+				} else if(ActiveGame.is("dr")){
+					if(DR.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
 					DR.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				} else if(ActiveGame.is("bed")){
+					if(BED.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					BED.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
+				
 			}
 			else{
-				if(isTIMV){
+				if(ActiveGame.is("timv")){
 					if(TIMV.isRecordsRunning){
 						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
 						evt.setCancelled(true);
@@ -240,15 +308,24 @@ public class ZTAMain {
 					}
 					TIMV.lastRecords = args[1].trim();
 				}
-				else if(isDR){
+				else if(ActiveGame.is("dr")){
+					if(DR.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
 					DR.lastRecords = args[1].trim();	
+				}
+				else if(ActiveGame.is("bed")){
+					if(BED.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					BED.lastRecords = args[1].trim();	
 				}
 			}
 		}
-		
-		
-
-
 		
 	}
 	
@@ -261,7 +338,7 @@ public class ZTAMain {
 
 @EventHandler
 public void onKeypress(KeyPressEvent evt){
-	if(evt.getKeyCode() == notesKb.getKeyCode() && notesKb.isPressed() && The5zigAPI.getAPI().getActiveServer() instanceof IHive && isTIMV){
+	if(evt.getKeyCode() == notesKb.getKeyCode() && notesKb.isPressed() && The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("TIMV")){
 		The5zigAPI.getAPI().messagePlayer(Log.info + "Notes:");
 		for(String s : NotesManager.notes){
 			The5zigAPI.getAPI().messagePlayer("§e - §r" + s);
@@ -271,7 +348,7 @@ public void onKeypress(KeyPressEvent evt){
 	@EventHandler(priority = EventHandler.Priority.LOW)
 	public void onTitle(TitleEvent evt){
 		//Map fallback
-		if(ZTAMain.isDR && DR.activeMap == null){
+		if(ActiveGame.is("dr") && DR.activeMap == null){
 			String map = ChatColor.stripColor(evt.getTitle());
 			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
 		    DRMap map1 = DRMap.getFromDisplay(map);
@@ -295,6 +372,15 @@ public void onKeypress(KeyPressEvent evt){
 		    	}
 		    }).start();
 		}
+	}
+	
+	
+	
+	@EventHandler
+	public void onChat(ChatEvent evt){
+		
+		// The5zigAPI.getLogger().info("(" + evt.getMessage() + ")");
+		
 	}
 }
 	
