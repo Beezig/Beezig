@@ -90,6 +90,9 @@
         },
         {
           "type": "gntteam"
+        },
+        {
+          "type": "gntmap"
         }
         ]
      }
