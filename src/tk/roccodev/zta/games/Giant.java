@@ -2,6 +2,7 @@ package tk.roccodev.zta.games;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
+import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
 
 public class Giant extends GameMode{
@@ -19,12 +20,15 @@ public class Giant extends GameMode{
 	public boolean isMini(){return false;};
 	
 	
-	public static void reset(){
+	public static void reset(Giant gameMode){
 		
 		teamsEliminated = 0;
 		gold = 0;
-		ActiveGame.reset(instance.isMini() ? "gntm" : "gnt");
+		gameMode.setState(GameState.FINISHED);
+		ActiveGame.set("");
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
+		
+		
 		
 		
 	}

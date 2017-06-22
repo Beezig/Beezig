@@ -80,6 +80,15 @@
           "type": "globaltokens"
         }
         ]
+     },
+     {
+    "id": "SkyGiants",
+      "name": "SkyGiants",
+      "items": [
+        {
+          "type": "gntmode"
+        }
+        ]
      }
   ]
 }
