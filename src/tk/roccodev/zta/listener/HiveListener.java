@@ -6,6 +6,8 @@ import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.games.GNT;
+import tk.roccodev.zta.games.GNTM;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class HiveListener extends AbstractGameListener<GameMode>{
@@ -63,6 +65,27 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			
 			The5zigAPI.getLogger().info("Connected to BED/BEDT! -Hive");
 		}
+		else if(key.equals("gntm.welcome")){
+			
+			
+			The5zigAPI.getLogger().info("Connected to GNTM! -Hive");
+			
+			
+			GiantListener.listener.setGameMode(GNTM.class, GNTM.instance);
+			
+			getGameListener().switchLobby("GNTM");
+		}
+		else if(key.equals("gnt.welcome")){
+			
+			
+			The5zigAPI.getLogger().info("Connected to GNT! -Hive");
+			
+			
+			GiantListener.listener.setGameMode(GNT.class, GNT.instance);
+			
+			getGameListener().switchLobby("GNT");
+		}
+		
 		
 	}
 

@@ -38,8 +38,10 @@ import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.command.WRCommand;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.games.GNT;
+import tk.roccodev.zta.games.GNTM;
+import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.games.TIMV;
-import tk.roccodev.zta.hiveapi.BEDRank;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.notes.NotesManager;
@@ -184,6 +186,10 @@ public class ZTAMain {
 			e.printStackTrace();
 		}
 		
+		//Instantiate GNT Classes
+		new Giant();
+		new GNT();
+		new GNTM();
 	
 		
 		
