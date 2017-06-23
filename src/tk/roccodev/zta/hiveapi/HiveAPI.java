@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.print.attribute.standard.MediaSize.Other;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -892,6 +894,15 @@ public class HiveAPI {
 			}
 			try {
 				o2 = (JSONObject) parser.parse(o1.get(index).toString());
+
+						
+				if(game.equals("TIMV")){
+					// Calculating K/R
+					Long rp = Long.valueOf(o2.get("innocent").toString()) + Long.valueOf(o2.get("traitor").toString()) + Long.valueOf(o2.get("detective").toString());
+					Double krr = (double)Math.round( Double.valueOf(o2.get(unit).toString()) / rp.doubleValue() * 100D) / 100D;
+					return o2.get("name").toString() + "," + o2.get(unit).toString() + "," + krr.toString();
+				}
+				
 				return o2.get("name").toString() + "," + o2.get(unit).toString();
 			} catch (Exception e) {
 				The5zigAPI.getLogger().info("Failed getMonthlyLBPlayerInfo (thtmx.rocks) (JSON 2)");

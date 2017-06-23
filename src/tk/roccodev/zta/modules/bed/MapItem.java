@@ -14,6 +14,7 @@ public class MapItem extends GameModeItem<BED>{
 	protected Object getValue(boolean dummy) {
 		BEDMap map = BED.activeMap;
 		if(map == null) return "Unknown map";
+		if((boolean) getProperties().getSetting("mode").get()) return map.getDisplayName() + " (" + BED.mode + ")";
 		return map.getDisplayName();	
 	}
 	
@@ -21,7 +22,14 @@ public class MapItem extends GameModeItem<BED>{
 	public String getName() {
 		return "Map";
 	}
-
+	
+	@Override
+	public void registerSettings(){
+		getProperties().addSetting("mode", true);
+	}
+	
+	
+	
 	@Override
 	public boolean shouldRender(boolean dummy){
 		

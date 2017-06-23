@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
@@ -45,6 +46,13 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("BED");
+		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+		if(sb != null && sb.getTitle().contains("BED ")){
+			BED.mode = "Solo";
+		}
+		if(sb != null && sb.getTitle().contains("BEDT ")){
+			BED.mode = "Teams";
+		}
 		new Thread(new Runnable(){
 			
 			@Override
