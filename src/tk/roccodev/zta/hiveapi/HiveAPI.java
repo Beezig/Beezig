@@ -153,6 +153,49 @@ public class HiveAPI {
 		BEDpoints =  (long) o.get("total_points");
 	}
 	
+	public static long getPoints(String ign, String game) {
+		String playername = The5zigAPI.getAPI().getGameProfile().getName();
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(HiveAPI.GameParsePlayerURL(ign, game)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("total_points");
+	}
+	public static long getKills(String ign, String game) {
+		
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(HiveAPI.GameParsePlayerURL(ign, game)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("kills");
+	}
+	public static long getDeaths(String ign, String game) {
+		
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(HiveAPI.GameParsePlayerURL(ign, game)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("deaths");
+	}
+	
 	public static void updateMedals() throws ParseException, Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
 		JSONParser parser = new JSONParser();

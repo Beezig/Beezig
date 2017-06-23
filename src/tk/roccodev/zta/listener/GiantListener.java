@@ -6,10 +6,9 @@ import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.ZTAMain;
-import tk.roccodev.zta.games.GNT;
-import tk.roccodev.zta.games.GNTM;
 import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.hiveapi.GiantMap;
+import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class GiantListener extends AbstractGameListener<Giant>{
 
@@ -52,6 +51,18 @@ public class GiantListener extends AbstractGameListener<Giant>{
 		if(this.lobby.equalsIgnoreCase("GNT")) ActiveGame.set("GNT");
 		if(this.lobby.equalsIgnoreCase("GNTM")) ActiveGame.set("GNTM");
 		gameMode.setState(GameState.STARTING);
+		new Thread(new Runnable(){
+			@Override
+			public void run(){
+				String ign = The5zigAPI.getAPI().getGameProfile().getName();
+				Giant.totalKills = (int) HiveAPI.getKills(ign, ActiveGame.current());
+				Giant.totalDeaths = (int) HiveAPI.getDeaths(ign, ActiveGame.current());
+				Giant.totalKdr = (double)Giant.totalKills / (double)Giant.totalDeaths;
+				
+				
+			}
+		}).start();
+		
 		The5zigAPI.getLogger().info(instance.getName());
 		
 	}
@@ -80,6 +91,12 @@ public class GiantListener extends AbstractGameListener<Giant>{
 			The5zigAPI.getLogger().info(map.getDisplay());
 			
 		}
+		else if(message.startsWith(getPrefix(ActiveGame.current()) + "§a✚ §3You gained") && message.contains("for killing")){
+			
+			Giant.gameKills++;
+			Giant.gameKdr = ((double)(Giant.totalKills + Giant.gameKills) / (double)(Giant.gameDeaths + Giant.totalDeaths == 0 ? 1 : Giant.gameDeaths + Giant.totalDeaths));
+			
+		}
 		return false;
 	}
 
@@ -92,6 +109,20 @@ public class GiantListener extends AbstractGameListener<Giant>{
 	}
 	
 	
+	
+	@Override
+	public void onTitle(Giant gameMode, String title, String subTitle) {
+		if(subTitle != null){
+			
+			if(ChatColor.stripColor(subTitle).equalsIgnoreCase("Respawning in 3 seconds")){
+				Giant.gameDeaths++;
+				Giant.gameKdr = ((double)((double)Giant.totalKills + (double)Giant.gameKills) / (double)((double)Giant.gameDeaths + (double)Giant.totalDeaths == 0 ? 1 :  (double)Giant.gameDeaths +  (double)Giant.totalDeaths));
+			}
+			
+		}
+	}
+
+
 	private String getPrefix(String mode){
 		
 		if(mode.equalsIgnoreCase("gnt")){
