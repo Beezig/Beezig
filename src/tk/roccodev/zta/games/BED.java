@@ -18,6 +18,7 @@ public class BED extends GameMode{
 	public static String team;
 	public static String lastRecords = "";
 	public static Long lastRecordsPoints = null;
+	public static String mode = null;
 	
 	public static int kills;
 	public static int pointsCounter;
@@ -40,6 +41,7 @@ public class BED extends GameMode{
 		
 		gm.setState(GameState.FINISHED);
 		BED.team = null;
+		BED.mode = null;
 		BED.activeMap = null;
 		BED.hasVoted = false;
 		BED.kills = 0;
