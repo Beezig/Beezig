@@ -253,7 +253,8 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				if(message.startsWith("§bAs you're an experienced player, we're") || 
 					message.startsWith("§bConstable ") || 
 					message.startsWith("§bTracer ") ||
-					message.startsWith("§bDirector ")){
+					message.startsWith("§bDirector ") ||
+					message.startsWith("§bWitness ")){
 					//It was sucking in all the chat messages by people with this rank until one did /records lmao
 						return false;
 				}		

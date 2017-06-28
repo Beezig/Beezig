@@ -93,6 +93,15 @@
         },
         {
           "type": "gntmap"
+        },
+        {
+          "type": "gntkills"
+        },
+        {
+          "type": "gntdeaths"
+        },
+        {
+          "type": "gntkdrchange"
         }
         ]
      }

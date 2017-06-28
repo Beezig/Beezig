@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.print.attribute.standard.MediaSize.Other;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -151,6 +153,49 @@ public class HiveAPI {
 			o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
 		
 		BEDpoints =  (long) o.get("total_points");
+	}
+	
+	public static long getPoints(String ign, String game) {
+		String playername = The5zigAPI.getAPI().getGameProfile().getName();
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(HiveAPI.GameParsePlayerURL(ign, game)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("total_points");
+	}
+	public static long getKills(String ign, String game) {
+		
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(HiveAPI.GameParsePlayerURL(ign, game)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("kills");
+	}
+	public static long getDeaths(String ign, String game) {
+		
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(HiveAPI.GameParsePlayerURL(ign, game)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return (long) o.get("deaths");
 	}
 	
 	public static void updateMedals() throws ParseException, Exception{
@@ -849,6 +894,15 @@ public class HiveAPI {
 			}
 			try {
 				o2 = (JSONObject) parser.parse(o1.get(index).toString());
+
+						
+				if(game.equals("TIMV")){
+					// Calculating K/R
+					Long rp = Long.valueOf(o2.get("innocent").toString()) + Long.valueOf(o2.get("traitor").toString()) + Long.valueOf(o2.get("detective").toString());
+					Double krr = (double)Math.round( Double.valueOf(o2.get(unit).toString()) / rp.doubleValue() * 100D) / 100D;
+					return o2.get("name").toString() + "," + o2.get(unit).toString() + "," + krr.toString();
+				}
+				
 				return o2.get("name").toString() + "," + o2.get(unit).toString();
 			} catch (Exception e) {
 				The5zigAPI.getLogger().info("Failed getMonthlyLBPlayerInfo (thtmx.rocks) (JSON 2)");

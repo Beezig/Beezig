@@ -40,7 +40,14 @@ public class MonthlyCommand implements Command{
 							unit = "points.";
 						}
 						String[] data = HiveAPI.getMonthlyLeaderboardsPlayerInfo(index, mode).split(",");
-						The5zigAPI.getAPI().messagePlayer(Log.info + "On position §6#" + (index+1) + "§e is §6" + data[0] + "§e with §6" + data[1] + " " + unit);				
+						switch(ActiveGame.current()){
+						
+						case "DR": The5zigAPI.getAPI().messagePlayer(Log.info + "On position §6#" + (index+1) + "§e is §6" + data[0] + "§e with §6" + data[1] + " §e" + unit);
+						
+						case "TIMV": The5zigAPI.getAPI().messagePlayer(Log.info + "On position §6#" + (index+1) + "§e is §6" + data[0] + "§e with §6" + data[1] + " §e" + unit + " (K/R: §6" + data[2] + "§e)");				
+						
+						
+						}
 					}
 				}).start();
 			} catch (Exception e){
