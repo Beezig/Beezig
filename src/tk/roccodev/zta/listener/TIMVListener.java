@@ -66,7 +66,8 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 					e1.printStackTrace();
 				}
 				Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-				if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
+				
+				if(sb != null && sb.getTitle().trim().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
 					
 					int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
 					if(karma != 0)
@@ -119,7 +120,8 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						e1.printStackTrace();
 					}
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-					if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
+					
+					if(sb != null && sb.getTitle().trim().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
 						
 						int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
 						if(karma != 0)
