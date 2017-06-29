@@ -53,39 +53,45 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 	public void onGameModeJoin(TIMV gameMode){
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("TIMV");
-		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+		
 		
 		//Should've read the docs ¯\_(ツ)_/¯
-		if(sb != null) The5zigAPI.getLogger().info(sb.getTitle());
-		if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
-			
-			int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
-			if(karma != 0)
-				HiveAPI.TIMVkarma = (long) karma;
-			
-			
-		}else{
-		
-			
-			
-			new Thread(new Runnable(){
-				@Override
-				public void run(){
-					try {
-						Thread.sleep(200); // Wait for server resources to load 
-						HiveAPI.TIMVupdateKarma();
-						TIMV.rank = TIMVRank.getFromDisplay((HiveAPI.TIMVgetRank(The5zigAPI.getAPI().getGameProfile().getName()))).getTotalDisplay();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+		new Thread(new Runnable(){
+			@Override
+			public void run(){
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-			}).start();
-			
-			
+				Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+				if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
+					
+					int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
+					if(karma != 0)
+					HiveAPI.TIMVkarma = (long) karma;
+					
+					
+				}else{
+				
+					
+						
+						
+							try {
+								
+								HiveAPI.TIMVupdateKarma();
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						
+				
+			}
+		}}).start();
 		
 		
-		}
+		
 		
 		
 	}
@@ -102,42 +108,43 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			gameMode.setState(GameState.STARTING);
 			ActiveGame.set("TIMV");
 			The5zigAPI.getLogger().info("DEBUG = Joined TIMV");
-			Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 			
-			if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
-				
-				int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
-				if(karma != 0)
-				HiveAPI.TIMVkarma = (long) karma;
-				
-				
-			}else{
-			
-				Runnable rnn = new Runnable(){
-					
-					@Override
-					public void run(){
-						try {
-							Thread.sleep(200); // Wait for server resources to load
-							HiveAPI.TIMVupdateKarma();
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
-				};
-				
-			ExecutorService exec = Executors.newCachedThreadPool();
-			exec.submit(rnn);
-			exec.shutdown();
-			try {
-				exec.awaitTermination(10, TimeUnit.SECONDS);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+					if(sb != null && sb.getTitle().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
+						
+						int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
+						if(karma != 0)
+						HiveAPI.TIMVkarma = (long) karma;
+						
+						
+					}else{
+					
+						
+							
+							
+								try {
+									
+									HiveAPI.TIMVupdateKarma();
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							
+					
+				}
+			}}).start();
 			
-			}
+			
+			
 			
 		}
 		else if(message.contains("§cLost §e20§c karma") && gameMode != null){
