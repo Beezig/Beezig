@@ -35,6 +35,7 @@ import tk.roccodev.zta.command.RealRankCommand;
 import tk.roccodev.zta.command.SayCommand;
 import tk.roccodev.zta.command.SeenCommand;
 import tk.roccodev.zta.command.SettingsCommand;
+import tk.roccodev.zta.command.ShrugCommand;
 import tk.roccodev.zta.command.WRCommand;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.DR;
@@ -136,6 +137,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new ColorDebugCommand());
 		CommandManager.registerCommand(new MonthlyCommand());
 		CommandManager.registerCommand(new AutoVoteCommand());
+		CommandManager.registerCommand(new ShrugCommand());
 		
 		ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 

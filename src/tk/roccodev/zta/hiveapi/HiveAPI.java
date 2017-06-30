@@ -9,8 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import javax.print.attribute.standard.MediaSize.Other;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -522,6 +520,7 @@ public class HiveAPI {
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		JSONObject o1 = null;
+		int time = 0;
 			try {
 				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
 			} catch (Exception e) {
@@ -537,8 +536,14 @@ public class HiveAPI {
 				e.printStackTrace();
 				return "No Personal Best";
 		}
-		int time = Integer.valueOf(o1.get(map1).toString());
-		if(time > 59){
+		try{
+			time = Integer.valueOf(o1.get(map1).toString());
+		} catch (Exception e) {
+			The5zigAPI.getLogger().info("Failed DRgetPB (no pb)");
+			e.printStackTrace();
+			return "No Personal Best";
+		}
+		if(time >= 60){
 			int seconds = time % 60;
 			int minutes = Math.floorDiv(time, 60);
 				if(seconds < 10){
@@ -569,7 +574,7 @@ public class HiveAPI {
 			e.printStackTrace();
 			return "No World Record";
 		}
-		if(time > 59){
+		if(time >= 60){
 			int seconds = (int) (Math.floor(time) % 60);
 			double millis = Math.floor(((time - seconds) - 60)*1000)/1000;
 			int minutes = Math.floorDiv((int)(time - millis), 60);
