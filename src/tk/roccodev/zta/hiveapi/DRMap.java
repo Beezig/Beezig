@@ -23,7 +23,9 @@ public enum DRMap {
 	DR_Zoo("Zoo", 6, "Zoo"),
 	DR_Ilvery("Ilvery", 7, "ldyp01rd"),
 	DR_Throwback("Throwback", 7, "ywe8p34w"),
-	DR_Vahltir("Vahltir", 5, "69z4064w");
+	DR_Vahltir("Vahltir", 5, "69z4064w"),
+	DR_Mine("Mine", 7, "69z4kxgw"),
+	DR_SweetTooth("SweetTooth", 7, "r9g3vrpw");
 
 	private String displayName;
 	private int checkpoints;
