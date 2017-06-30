@@ -49,7 +49,7 @@ import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
 
-@Plugin(name="Beezig", version="4.1.0")
+@Plugin(name="Beezig", version="4.1.1_experimental")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
