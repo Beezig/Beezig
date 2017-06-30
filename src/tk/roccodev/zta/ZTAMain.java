@@ -61,8 +61,14 @@ public class ZTAMain {
 	
 	public static int getCustomVersioning(){
 		String v = ZTAMain.class.getAnnotation(Plugin.class).version();
-		String toParse = v.replaceAll("\\.", "");
-		return Integer.parseInt(toParse);
+		if(!v.contains("experimental")){
+			String toParse = v.replaceAll("\\.", "");
+			return Integer.parseInt(toParse);
+		}
+		else {
+			return 100000;
+			//lol?
+		}
 	}
 	
 	@EventHandler(priority = EventHandler.Priority.LOW)
@@ -70,7 +76,7 @@ public class ZTAMain {
 
 		IOverlay news = The5zigAPI.getAPI().createOverlay();
 		try {
-			if(Updater.isVersionBlacklisted(getCustomVersioning())){
+			if(Updater.isVersionBlacklisted(getCustomVersioning()) && !ZTAMain.class.getAnnotation(Plugin.class).version().contains("experimental")){
 				The5zigAPI.getLogger().fatal("Beezig: This version is disabled!");
 				news.displayMessage("Beezig: Version is disabled remotely! Update to the latest version.");
 				
@@ -81,7 +87,7 @@ public class ZTAMain {
 			e.printStackTrace();
 		}
 		try {
-			if(Updater.checkForUpdates()){
+			if(Updater.checkForUpdates() && !ZTAMain.class.getAnnotation(Plugin.class).version().contains("experimental")){
 				The5zigAPI.getLogger().fatal("Beezig: A new version of the plugin is available!");
 				news.displayMessage("Beezig: A new version of the plugin is available!");
 			}
