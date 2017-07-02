@@ -27,6 +27,7 @@ public enum TIMVRank {
 	SCOUT("Scout", LIGHT_PURPLE + "", 755),
 	FORENSIC("Forensic", GOLD + "", 1005),
 	TRUSTABLE("Trustable", YELLOW + "", 2005),
+	DIRECTOR("Director", AQUA + "", 3505),
 	DECEIVER("Deceiver", RED + "", 5005),
 	TRACER("Tracer", AQUA + "", 7505),
 	AGENT("Agent", GOLD + "", 10005),
