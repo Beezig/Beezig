@@ -128,6 +128,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "gntkills", tk.roccodev.zta.modules.gnt.KillsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntdeaths", tk.roccodev.zta.modules.gnt.DeathsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntkdrchange", tk.roccodev.zta.modules.gnt.KDRChangeItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "gntpoints", tk.roccodev.zta.modules.gnt.PointsItem.class , "serverhivemc");
 		
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	

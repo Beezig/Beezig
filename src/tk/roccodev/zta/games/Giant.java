@@ -52,6 +52,9 @@ public class Giant extends GameMode{
 	}
 
 
+	public void cast(){}
+	
+	
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
