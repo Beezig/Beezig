@@ -395,13 +395,19 @@ public class BEDListener extends AbstractGameListener<BED>{
 		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l") && !BED.hasVoted && Setting.AUTOVOTE.getValue()){		
 			BED.votesToParse.add(message);
 		}
-		else if(message.startsWith("               §aYou've reached the rank")){
+		else if(message.startsWith("               §aYou levelled up to")){
 			//Update the rank module when you uprank
-			try {
-				HiveAPI.BEDupdatePoints();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					try {
+						
+						HiveAPI.BEDupdatePoints();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}}).start();
+				
 		}
 		else if(message.contains("§lYou are on ")){
 			//"                        §6§lYou are on Gold Team!"
