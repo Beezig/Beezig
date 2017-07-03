@@ -46,13 +46,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("BED");
-		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-		if(sb != null && sb.getTitle().contains("BED ")){
-			BED.mode = "Solo";
-		}
-		if(sb != null && sb.getTitle().contains("BEDT ")){
-			BED.mode = "Teams";
-		}
+		
 		new Thread(new Runnable(){
 			
 			@Override
@@ -61,6 +55,13 @@ public class BEDListener extends AbstractGameListener<BED>{
 					Thread.sleep(200);
 					HiveAPI.BEDupdatePoints();
 					BED.rank = BEDRank.getRank(HiveAPI.BEDpoints).getName().replaceAll(ChatColor.stripColor(BEDRank.getRank(HiveAPI.BEDpoints).getName()), "") + BED.NUMBERS[BEDRank.getRank(HiveAPI.BEDpoints).getLevel((int)HiveAPI.BEDpoints)] + " " + BEDRank.getRank((int)HiveAPI.BEDpoints).getName();
+					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+					if(sb != null && sb.getTitle().contains("BED ")){
+						BED.mode = "Solo";
+					}
+					if(sb != null && sb.getTitle().contains("BEDT ")){
+						BED.mode = "Teams";
+					}
 					//Should've read the docs ¯\_(ツ)_/¯
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
