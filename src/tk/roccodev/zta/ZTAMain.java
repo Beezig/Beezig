@@ -64,14 +64,10 @@ public class ZTAMain {
 	
 	public static int getCustomVersioning(){
 		String v = ZTAMain.class.getAnnotation(Plugin.class).version();
-		if(!v.contains("experimental")){
+		
 			String toParse = v.replaceAll("\\.", "");
 			return Integer.parseInt(toParse);
-		}
-		else {
-			return Integer.MAX_VALUE;
-			//more lol?
-		}
+		
 	}
 	
 	@EventHandler(priority = EventHandler.Priority.LOW)
