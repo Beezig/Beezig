@@ -4,17 +4,23 @@
 # Beezig v4.0 - A Hive 5zig Plugin
 
 [![Join the chat at https://gitter.im/5zig-TIMV-Plugin/Lobby](https://badges.gitter.im/5zig-TIMV-Plugin/Lobby.svg)](https://gitter.im/5zig-TIMV-Plugin/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-![Master Branch](https://travis-ci.org/RoccoDev/5zig-TIMV-Plugin.svg?branch=master)
+
 
 A 5zig plugin to add HiveMC functionality. Currently supporting TIMV & DR.
 By RoccoDev and ItsNiklass.
+
+### Build Status
+
+[![Travis Master](https://travis-ci.org/RoccoDev/5zig-TIMV-Plugin.svg?branch=master)](http://travis-ci.org/RoccoDev/5zig-TIMV-Plugin) (Master)
+
+[![Travis Exp](https://travis-ci.org/RoccoDev/5zig-TIMV-Plugin.svg?branch=experimental)](http://travis-ci.org/RoccoDev/5zig-TIMV-Plugin) (Experimental)
 
 # Features
 
 * Modules that show basic game information on-the-fly
 * Advanced /records for more data out of the command!
 	Coloring the username in their network-rank color! (Optional: Full title)
-	Colored ingame-rank in brackets behind the points!
+	Colored ingame-rank in brackets after the points!
 * /settings for toggling almost everything of the plugin on/off!
 * /rr or /realrank for checking the API if the player is nicked/toggled and returning the real rank
 
@@ -32,6 +38,7 @@ By RoccoDev and ItsNiklass.
 * Modules: Total points, current role, kills as Death, deaths as Runner and current map while displaying the passed checkpoints as runner!
 * Better /records: 
 	With Points/Game, Winrate as Runner, Deaths per Game and achievements.
+* World Record & Personal Best!
 
 ## Download
 
@@ -43,6 +50,10 @@ If you want beta features, you can choose one of these downloads:
 * Experimental branch (unreleased changes, bleeding edge): [Click here](https://github.com/RoccoDev/Beezig-Deploy/raw/experimental/experimental/jar/TIMVPlugin.jar)
 
 ## APIs
-This plugin uses the 5zig Client API and Hive's API.
+This plugin uses:
+* The 5zig Mod API
+* HiveMC's API
+* Speedrun.com's API
+* @Maxthat 's Monthly Leaderboards API
 
 ## [Image Album](https://imgur.com/a/LIxhh)
