@@ -67,8 +67,8 @@ public class ZTAMain {
 			return Integer.parseInt(toParse);
 		}
 		else {
-			return 100000;
-			//lol?
+			return Integer.MAX_VALUE;
+			//more lol?
 		}
 	}
 	
