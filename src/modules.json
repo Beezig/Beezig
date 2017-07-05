@@ -89,6 +89,9 @@
           "type": "gntmode"
         },
         {
+          "type": "gntpoints"
+        },
+        {
           "type": "gntteam"
         },
         {
@@ -102,6 +105,9 @@
         },
         {
           "type": "gntkdrchange"
+        },
+        {
+          "type": "gntgiantkills"
         }
         ]
      }

@@ -72,7 +72,7 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			
 			
 			GiantListener.listener.setGameMode(GNTM.class, GNTM.instance);
-			
+			The5zigAPI.getLogger().info(GNTM.instance.getClass());
 			getGameListener().switchLobby("GNTM");
 		}
 		else if(key.equals("gnt.welcome")){
@@ -80,6 +80,7 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			
 			The5zigAPI.getLogger().info("Connected to GNT! -Hive");
 			
+			The5zigAPI.getLogger().info(GNT.instance.getClass());
 			
 			GiantListener.listener.setGameMode(GNT.class, GNT.instance);
 			

@@ -1,5 +1,7 @@
 package tk.roccodev.zta.listener;
 
+import java.text.DecimalFormat;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
@@ -43,6 +45,7 @@ public class GiantListener extends AbstractGameListener<Giant>{
 	public void setGameMode(Class<? extends Giant> newMode, Giant instance){
 		gameMode = (Class<Giant>) newMode;
 		this.instance = instance;
+		The5zigAPI.getLogger().info(instance.getClass());
 		
 	}
 
@@ -57,14 +60,41 @@ public class GiantListener extends AbstractGameListener<Giant>{
 				String ign = The5zigAPI.getAPI().getGameProfile().getName();
 				Giant.totalKills = (int) HiveAPI.getKills(ign, ActiveGame.current());
 				Giant.totalDeaths = (int) HiveAPI.getDeaths(ign, ActiveGame.current());
-				Giant.totalKdr = (double)Giant.totalKills / (double)Giant.totalDeaths;
 				
+				
+				Giant.totalKdr = (double)Giant.totalKills / Giant.totalDeaths;
+				Giant.gameKdr = new Double(Giant.totalKdr);
+				The5zigAPI.getLogger().info(Giant.totalKdr);
 				
 			}
 		}).start();
 		
 		The5zigAPI.getLogger().info(instance.getName());
-		
+		new Thread(new Runnable(){
+			@Override
+			public void run(){
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+					
+						
+						
+							try {
+								
+								HiveAPI.GiantupdatePoints(instance.isMini());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						
+				
+			
+		}}).start();
 	}
 
 	
@@ -92,10 +122,12 @@ public class GiantListener extends AbstractGameListener<Giant>{
 			
 		}
 		else if(message.startsWith(getPrefix(ActiveGame.current()) + "§a✚ §3You gained") && message.contains("for killing")){
-			
-			Giant.gameKills++;
-			Giant.gameKdr = ((double)(Giant.totalKills + Giant.gameKills) / (double)(Giant.gameDeaths + Giant.totalDeaths == 0 ? 1 : Giant.gameDeaths + Giant.totalDeaths));
-			
+			if(message.contains("as a team")){
+				Giant.giantKills++; // Giant kill
+			} else { 
+			 Giant.gameKills++;
+			 Giant.gameKdr = ((double)(Giant.totalKills + Giant.gameKills) / (double)(Giant.gameDeaths + Giant.totalDeaths == 0 ? 1 : Giant.gameDeaths + Giant.totalDeaths));
+			}
 		}
 		return false;
 	}
@@ -103,8 +135,11 @@ public class GiantListener extends AbstractGameListener<Giant>{
 
 	@Override
 	public void onServerConnect(Giant gameMode) {
-		
+		if(instance != null){
+			Giant.reset(instance);
+		}else{
 		Giant.reset(gameMode);
+		}
 		
 	}
 	

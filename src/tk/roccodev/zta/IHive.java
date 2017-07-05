@@ -1,5 +1,6 @@
 package tk.roccodev.zta;
 
+import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.ServerInstance;
 import tk.roccodev.zta.listener.BEDListener;
 import tk.roccodev.zta.listener.DRListener;
@@ -34,5 +35,9 @@ public class IHive extends ServerInstance {
 		getGameListener().registerListener(new GiantListener());
 	}
 
+	public static void genericReset(String... optionalParams){
+		
+	}
+	
 
 }

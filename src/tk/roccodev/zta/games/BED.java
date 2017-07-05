@@ -7,6 +7,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
+import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.hiveapi.BEDMap;
 
 public class BED extends GameMode{
@@ -18,7 +19,7 @@ public class BED extends GameMode{
 	public static String team;
 	public static String lastRecords = "";
 	public static Long lastRecordsPoints = null;
-	public static String mode = null;
+	public static String mode = "";
 	
 	public static int kills;
 	public static int pointsCounter;
@@ -41,13 +42,14 @@ public class BED extends GameMode{
 		
 		gm.setState(GameState.FINISHED);
 		BED.team = null;
-		BED.mode = null;
+		BED.mode = "";
 		BED.activeMap = null;
 		BED.hasVoted = false;
 		BED.kills = 0;
 		BED.bedsDestroyed = 0;
 		BED.pointsCounter = 0;
 		ActiveGame.reset("bed");
+		IHive.genericReset();
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 	}
 	

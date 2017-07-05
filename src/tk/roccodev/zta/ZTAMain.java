@@ -28,6 +28,7 @@ import tk.roccodev.zta.autovote.watisdis;
 import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.AutoVoteCommand;
 import tk.roccodev.zta.command.ColorDebugCommand;
+import tk.roccodev.zta.command.MathCommand;
 import tk.roccodev.zta.command.MonthlyCommand;
 import tk.roccodev.zta.command.NotesCommand;
 import tk.roccodev.zta.command.PBCommand;
@@ -49,7 +50,9 @@ import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
 
-@Plugin(name="Beezig", version="4.1.1")
+
+
+@Plugin(name="Beezig", version="4.1.2")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -61,8 +64,10 @@ public class ZTAMain {
 	
 	public static int getCustomVersioning(){
 		String v = ZTAMain.class.getAnnotation(Plugin.class).version();
-		String toParse = v.replaceAll("\\.", "");
-		return Integer.parseInt(toParse);
+		
+			String toParse = v.replaceAll("\\.", "");
+			return Integer.parseInt(toParse);
+		
 	}
 	
 	@EventHandler(priority = EventHandler.Priority.LOW)
@@ -70,7 +75,7 @@ public class ZTAMain {
 
 		IOverlay news = The5zigAPI.getAPI().createOverlay();
 		try {
-			if(Updater.isVersionBlacklisted(getCustomVersioning())){
+			if(Updater.isVersionBlacklisted(getCustomVersioning()) && !ZTAMain.class.getAnnotation(Plugin.class).version().contains("experimental")){
 				The5zigAPI.getLogger().fatal("Beezig: This version is disabled!");
 				news.displayMessage("Beezig: Version is disabled remotely! Update to the latest version.");
 				
@@ -81,7 +86,7 @@ public class ZTAMain {
 			e.printStackTrace();
 		}
 		try {
-			if(Updater.checkForUpdates()){
+			if(Updater.checkForUpdates() && !ZTAMain.class.getAnnotation(Plugin.class).version().contains("experimental")){
 				The5zigAPI.getLogger().fatal("Beezig: A new version of the plugin is available!");
 				news.displayMessage("Beezig: A new version of the plugin is available!");
 			}
@@ -122,6 +127,8 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "gntkills", tk.roccodev.zta.modules.gnt.KillsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntdeaths", tk.roccodev.zta.modules.gnt.DeathsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntkdrchange", tk.roccodev.zta.modules.gnt.KDRChangeItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "gntpoints", tk.roccodev.zta.modules.gnt.PointsItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "gntgiantkills", tk.roccodev.zta.modules.gnt.GiantKillsItem.class , "serverhivemc");
 		
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
@@ -138,6 +145,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new MonthlyCommand());
 		CommandManager.registerCommand(new AutoVoteCommand());
 		CommandManager.registerCommand(new ShrugCommand());
+		CommandManager.registerCommand(new MathCommand());
 		
 		ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
 

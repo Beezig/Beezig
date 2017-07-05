@@ -24,6 +24,7 @@ public class HiveAPI {
 	public static long TIMVkarma = 0;
 	public static long DRpoints = 0;
 	public static long BEDpoints = 0;
+	public static long GiantPoints = 0;
 	
 	public static long medals = 0;
 	public static long tokens = 0;
@@ -141,6 +142,17 @@ public class HiveAPI {
 			return null;
 		}
 	}
+	//Giant
+	public static void GiantupdatePoints(boolean mini) throws ParseException, Exception{
+		String playername = The5zigAPI.getAPI().getGameProfile().getName();
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+		
+		GiantPoints =  (long) o.get("total_points");
+	}
+	
 	
 	//BED
 	public static void BEDupdatePoints() throws ParseException, Exception{

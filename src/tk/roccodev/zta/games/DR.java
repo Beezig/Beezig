@@ -7,6 +7,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
+import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.DRMap;
 
@@ -46,6 +47,7 @@ public class DR extends GameMode{
 		kills = 0;
 		DR.hasVoted = false;
 		ActiveGame.reset("dr");
+		IHive.genericReset();
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 	}
 	
