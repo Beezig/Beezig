@@ -105,6 +105,9 @@
         },
         {
           "type": "gntkdrchange"
+        },
+        {
+          "type": "gntgiantkills"
         }
         ]
      }

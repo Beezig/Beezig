@@ -122,10 +122,12 @@ public class GiantListener extends AbstractGameListener<Giant>{
 			
 		}
 		else if(message.startsWith(getPrefix(ActiveGame.current()) + "§a✚ §3You gained") && message.contains("for killing")){
-			
-			Giant.gameKills++;
-			Giant.gameKdr = ((double)(Giant.totalKills + Giant.gameKills) / (double)(Giant.gameDeaths + Giant.totalDeaths == 0 ? 1 : Giant.gameDeaths + Giant.totalDeaths));
-			
+			if(message.contains("as a team")){
+				Giant.giantKills++; // Giant kill
+			} else { 
+			 Giant.gameKills++;
+			 Giant.gameKdr = ((double)(Giant.totalKills + Giant.gameKills) / (double)(Giant.gameDeaths + Giant.totalDeaths == 0 ? 1 : Giant.gameDeaths + Giant.totalDeaths));
+			}
 		}
 		return false;
 	}
