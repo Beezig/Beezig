@@ -51,15 +51,24 @@ public class MathCommand implements Command{
 			if(splitParentheses[0].contains(".")){
 				String splitSpace[] = splitParentheses[0].split("\\.")[0].split(" ");
 				String className = splitSpace[splitSpace.length - 1];
-				if(!className.equals("Math")) {
+				if(!className.isEmpty() && !className.equals("Math")) {
 					The5zigAPI.getAPI().messagePlayer(Log.error + "You can only invoke methods from the Math class!");
 					return; // Protection
 				}
 			}
 			else{
 				//No static method, return
+				
+				Character operator = null;
+				try{
+				 operator = (" " + expression).charAt(expression.indexOf('(') - 1);
+				}catch(StringIndexOutOfBoundsException e){
+					
+				}
+				if(operator != null && !isOperator(operator)){
 				The5zigAPI.getAPI().messagePlayer(Log.error + "You can only invoke methods from the Math class!");
 				return; // Protection
+				}
 			}
 		}
 		ScriptEngineManager sem = new ScriptEngineManager(null);
@@ -76,6 +85,13 @@ public class MathCommand implements Command{
 	}
 
 	
+	private boolean isOperator(char sign){
+		if(sign == '-') return true;
+		if(sign == '+') return true;
+		if(sign == '/') return true;
+		if(sign == '*') return true;
+		return false;
+	}
 
 	
 
