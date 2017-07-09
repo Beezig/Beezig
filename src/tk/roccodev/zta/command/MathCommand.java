@@ -61,7 +61,7 @@ public class MathCommand implements Command{
 				
 				Character operator = null;
 				try{
-				 operator = (" " + expression).charAt(expression.indexOf('(') - 1);
+				 operator = expression.charAt(expression.indexOf('(') - 1);
 				}catch(StringIndexOutOfBoundsException e){
 					
 				}
