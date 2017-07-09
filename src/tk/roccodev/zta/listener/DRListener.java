@@ -393,10 +393,16 @@ public class DRListener extends AbstractGameListener<DR>{
 						
 					double wr = HiveAPI.DRgetWR_raw(DR.activeMap);
 					double diff = (Math.round((finalTime - wr) * 1000d)) / 1000d;
+					int finalPb = 0;
 					
 					String pb = DR.currentMapPB;
 					String[] pbData = pb.split(":");
-					int finalPb = Integer.parseInt(pbData[0]) * 60 + Integer.parseInt(pbData[1]); 		
+					try{
+						finalPb = Integer.parseInt(pbData[0]) * 60 + Integer.parseInt(pbData[1]);
+					} catch(Exception e){
+						finalPb = -1;
+					}
+									
 					int pbDiff = ((int) Math.floor(finalTime)) - finalPb;
 
 
@@ -420,8 +426,9 @@ public class DRListener extends AbstractGameListener<DR>{
 						The5zigAPI.getAPI().messagePlayer("    §c§m                                                                                    ");
 						The5zigAPI.getAPI().messagePlayer(message);
 					}
-					
-					
+					else if(finalPb == -1){
+						The5zigAPI.getAPI().messagePlayer(message + " §3The World Record is §b" + diff + "§3 seconds away!");
+					}				
 					else if(pbDiff > 0){
 						The5zigAPI.getAPI().messagePlayer(message + " §3The World Record is §b" + diff + "§3 seconds away! Your Personal Best is §b" + pbDiff + " §3seconds away!");
 					}

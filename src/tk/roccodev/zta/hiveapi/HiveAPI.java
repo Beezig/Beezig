@@ -34,7 +34,7 @@ public class HiveAPI {
 	private static URL TIMVparsePlayerURL(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/TIMV";
 		try {
-			return new URL(urls.replaceAll("@player@", name));
+			return new URL(urls.replaceAll("@player@", getUUID(name)));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,7 +44,7 @@ public class HiveAPI {
 	private static URL DRparsePlayerURL(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/DR";
 		try {
-			return new URL(urls.replaceAll("@player@", name));
+			return new URL(urls.replaceAll("@player@", getUUID(name)));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -54,7 +54,7 @@ public class HiveAPI {
 	private static URL BEDparsePlayerURL(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/BED";
 		try {
-			return new URL(urls.replaceAll("@player@", name));
+			return new URL(urls.replaceAll("@player@", getUUID(name)));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,7 +64,7 @@ public class HiveAPI {
 	private static URL GameParsePlayerURL(String name, String game){
 		String urls = "http://api.hivemc.com/v1/player/@player@/" + game;
 		try {
-			return new URL(urls.replaceAll("@player@", name));
+			return new URL(urls.replaceAll("@player@", getUUID(name)));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,17 +74,7 @@ public class HiveAPI {
 	private static URL parsePlayerURLGeneric(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/";
 		try {
-			return new URL(urls.replaceAll("@player@", name));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-	private static URL parsePlayerURLUUID(String uuid){
-		String urls = "http://api.hivemc.com/v1/player/@player@/";
-		try {
-			return new URL(urls.replaceAll("@player@", uuid));
+			return new URL(urls.replaceAll("@player@", getUUID(name)));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -775,7 +765,7 @@ public class HiveAPI {
 				boolean connError = false;
 				try{
 					//RoccoDev's UUID
-					parser.parse(readUrl(parsePlayerURLUUID("bba224a20bff4913b04227ca3b60973f")));
+					parser.parse(readUrl(parsePlayerURLGeneric("bba224a20bff4913b04227ca3b60973f")));
 				}
 				catch(Exception ex){
 					connError = true;
@@ -819,7 +809,7 @@ public class HiveAPI {
 				boolean connError = false;
 				try{
 					//RoccoDev's UUID
-					parser.parse(readUrl(parsePlayerURLUUID("bba224a20bff4913b04227ca3b60973f")));
+					parser.parse(readUrl(parsePlayerURLGeneric("bba224a20bff4913b04227ca3b60973f")));
 				}
 				catch(Exception ex){
 					connError = true;
@@ -862,6 +852,8 @@ public class HiveAPI {
 			return new Date(time * 1000);
 	}
 	public static String getUUID(String ign){
+		if(ign.length() == 32) return ign;
+		// ^ input is already a uuid
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		try {
