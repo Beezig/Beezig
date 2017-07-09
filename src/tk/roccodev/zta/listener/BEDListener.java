@@ -81,7 +81,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 			The5zigAPI.getLogger().info("BedWars Color Debug: (" + message + ")");
 		}
 		//§8▍ §3§lBed§b§lWars§8 ▏ §3Voting has ended! §bThe map §fEthereal§b has won!
-		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §3Voting has ended! §bThe map")){
+		if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §3Voting has ended! §bThe map")){
 			The5zigAPI.getLogger().info("Voting ended, parsing map");
 			String afterMsg = message.split("§8▍ §3§lBed§b§lWars§8 ▏ §3Voting has ended! §bThe map")[1];
 			String map = "";    
@@ -463,7 +463,23 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 	@Override
 	public void onTitle(BED gameMode, String title, String subTitle) {
-		if(subTitle != null && subTitle.equals("§r§7Protect your bed, destroy others!§r")){
+		if(ZTAMain.isColorDebug){
+			The5zigAPI.getLogger().info("BedWars TitleColor Debug: (" + 
+		
+					title != null ? title : "ERR_TITLE_NULL"
+						
+						+ " *§* " +
+						
+						
+					subTitle != null ? subTitle : "ERR_SUBTITLE_NULL"
+					
+						+ ")"
+					);
+		}
+		if(subTitle != null && subTitle.trim().equals("§r§c➊§r")){
+			BED.deaths++;
+		}
+		else if(subTitle != null && subTitle.equals("§r§7Protect your bed, destroy others!§r")){
 			gameMode.setState(GameState.GAME);
 			
 			//As Hive sends this subtitle like 13 times, don't do anything here please :)

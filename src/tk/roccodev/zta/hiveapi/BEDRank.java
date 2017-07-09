@@ -41,6 +41,8 @@ public enum BEDRank {
 	public String getName() {
 		return name;
 	}
+	
+	
 
 
 
@@ -131,8 +133,18 @@ public enum BEDRank {
 	}
 	
 	public String getPointsToNextRank(int points){
+		
+		return getPointsToNextRank(points, true);
+		
+		
+	}
+	
+	public String getPointsToNextRank(int points, boolean withColor){
 		if(this == ZZZZZZ){
 			return "Highest Rank";
+		}
+		if(this == NIGHTMARE){
+			return "Highest obtainable rank";
 		}
 		int level = getLevel(points);
 		if(level == 1){
@@ -145,28 +157,29 @@ public enum BEDRank {
 			}catch(Exception e){
 				return "";
 			}
-			String color = next.getName().replaceAll(ChatColor.stripColor(next.getName()), "");
+			String color = withColor ? next.getName().replaceAll(ChatColor.stripColor(next.getName()), "") : "";
 			
 			
 			return next.getStart() - points + " to " + color + BED.NUMBERS[5] +  " " + next.getName();
 			
 		}
 		else if(level == 2){
-			return getLvl1() - points + " to " + BED.NUMBERS[1] +  " " + getName();
+			String color = withColor ? getName().replaceAll(ChatColor.stripColor(getName()), "") : "";
+			return getLvl1() - points + " to " + color + BED.NUMBERS[1] +  " " + getName();
 		}
 		else if(level == 3){
-			return getLvl2() - points + " to " + BED.NUMBERS[2] +  " " + getName();
+			String color = withColor ? getName().replaceAll(ChatColor.stripColor(getName()), "") : "";
+			return getLvl2() - points + " to " + color + BED.NUMBERS[2] +  " " + getName();
 		}
 		else if(level == 4){
-			return getLvl3() - points + " to " + BED.NUMBERS[3] +  " " + getName();
+			String color = withColor ? getName().replaceAll(ChatColor.stripColor(getName()), "") : "";
+			return getLvl3() - points + " to " + color + BED.NUMBERS[3] +  " " + getName();
 		}
 		else if(level == 5){
-			return getLvl4() - points + " to " + BED.NUMBERS[4] +  " " + getName();
+			String color = withColor ? getName().replaceAll(ChatColor.stripColor(getName()), "") : "";
+			return getLvl4() - points + " to " + color + BED.NUMBERS[4] +  " " + getName();
 		}
 		return null;
-		
-		
-		
 		
 		
 	}
