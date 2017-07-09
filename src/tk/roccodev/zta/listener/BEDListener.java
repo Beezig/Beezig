@@ -54,7 +54,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 				try {
 					Thread.sleep(200);
 					HiveAPI.BEDupdatePoints();
-					BED.rank = BEDRank.getRank(HiveAPI.BEDpoints).getName().replaceAll(ChatColor.stripColor(BEDRank.getRank(HiveAPI.BEDpoints).getName()), "") + BED.NUMBERS[BEDRank.getRank(HiveAPI.BEDpoints).getLevel((int)HiveAPI.BEDpoints)] + " " + BEDRank.getRank((int)HiveAPI.BEDpoints).getName();
+					BED.updateRank();
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					if(sb != null && sb.getTitle().contains("BED ")){
 						BED.mode = "Solo";
@@ -120,6 +120,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 			
 			BED.pointsCounter += 100;
 			HiveAPI.BEDpoints += 100;
+			HiveAPI.medals++;
 			
 		}
 		
@@ -403,6 +404,9 @@ public class BEDListener extends AbstractGameListener<BED>{
 					try {
 						
 						HiveAPI.BEDupdatePoints();
+						Thread.sleep(200);
+						BED.updateRank();
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -432,6 +436,26 @@ public class BEDListener extends AbstractGameListener<BED>{
 				e.printStackTrace();
 				The5zigAPI.getAPI().messagePlayer(Log.error + "Couldn't find your team color <" + team + ">");
 			}
+		}
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §7You gained no points for killing")){
+			BED.kills++;
+		}
+		else if(message.trim().equals("§d§lNew Rank!")){
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					
+					try {
+						HiveAPI.BEDupdatePoints();
+						Thread.sleep(200);
+						BED.updateRank();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			}).start();
 		}
 		return false;
 			
