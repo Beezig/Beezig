@@ -911,7 +911,7 @@ public class HiveAPI {
 					Long rp = Long.valueOf(o2.get("innocent").toString()) + Long.valueOf(o2.get("traitor").toString()) + Long.valueOf(o2.get("detective").toString());
 					Double krr = (double)Math.round( Double.valueOf(o2.get(unit).toString()) / rp.doubleValue() * 100D) / 100D;
 					Double tratio = Math.round(((double)Long.valueOf(o2.get("traitor").toString()) / (double)rp) * 1000d) / 10d;
-					ChatColor ratioColor = ChatColor.YELLOW;
+					ChatColor ratioColor = ChatColor.GOLD;
 					if(tratio >= TIMV.TRATIO_LIMIT){
 						ratioColor = ChatColor.RED;
 					}
