@@ -65,6 +65,12 @@
           "type": "beddestroyed"
         },
         {
+          "type": "beddeaths"
+        },
+        {
+          "type": "bedkdrchange"
+        },
+        {
           "type": "bedresources"
         }
         ]

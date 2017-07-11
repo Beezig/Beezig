@@ -29,6 +29,12 @@ public class BED extends GameMode{
 	public static int pointsCounter;
 	public static int bedsDestroyed;
 	
+	public static int apiKills;
+	public static int apiDeaths;
+	
+	public static double apiKdr;
+	public static double gameKdr;
+	
 	public static String rank;
 	public static BEDRank rankObject;
 	
@@ -91,4 +97,9 @@ public class BED extends GameMode{
 		BED.rankObject = BEDRank.getRank(HiveAPI.BEDpoints);
 	}
 
+	public static void updateKdr(){
+		apiKdr = (double) apiKills / (apiDeaths == 0 ? 1 : apiDeaths);
+		gameKdr = (double)(kills + apiKills) / (deaths  + apiDeaths == 0 ? 1 : apiDeaths + deaths);
+	}
+	
 }

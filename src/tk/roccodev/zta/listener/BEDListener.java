@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,6 +56,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 					Thread.sleep(200);
 					HiveAPI.BEDupdatePoints();
 					BED.updateRank();
+					String ign = The5zigAPI.getAPI().getGameProfile().getName();
+					
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					if(sb != null && sb.getTitle().contains("BED ")){
 						BED.mode = "Solo";
@@ -62,6 +65,15 @@ public class BEDListener extends AbstractGameListener<BED>{
 					if(sb != null && sb.getTitle().contains("BEDT ")){
 						BED.mode = "Teams";
 					}
+					if(sb != null && sb.getTitle().contains("BED")){
+						BED.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
+						BED.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
+					}else{
+						BED.apiDeaths = (int) HiveAPI.getDeaths(ign, "BED");
+						BED.apiKills = (int) HiveAPI.getKills(ign, "BED");
+					}
+					BED.updateKdr();
+					The5zigAPI.getLogger().info(BED.apiDeaths + " / " + BED.apiKills + " / " + BED.apiKdr);
 					//Should've read the docs ¯\_(ツ)_/¯
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -99,6 +111,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 			BED.kills++;
 			BED.pointsCounter += 10;
 			HiveAPI.BEDpoints +=10;
+			BED.updateKdr();
 			
 		}
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 5§a points for killing")){
@@ -106,7 +119,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 			BED.kills++;
 			BED.pointsCounter += 5;
 			HiveAPI.BEDpoints +=5;
-			
+			BED.updateKdr();
 		}
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained §f50§a points for destroying")){
 			
@@ -439,6 +452,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 		}
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §7You gained no points for killing")){
 			BED.kills++;
+			BED.updateKdr();
 		}
 		else if(message.trim().equals("§d§lNew Rank!")){
 			new Thread(new Runnable(){
@@ -476,8 +490,9 @@ public class BEDListener extends AbstractGameListener<BED>{
 						+ ")"
 					);
 		}
-		if(subTitle != null && subTitle.trim().equals("§r§c➊§r")){
+		if(subTitle != null && ChatColor.stripColor(subTitle).trim().equals("Respawning in 2 seconds")){
 			BED.deaths++;
+			BED.updateKdr();
 		}
 		else if(subTitle != null && subTitle.equals("§r§7Protect your bed, destroy others!§r")){
 			gameMode.setState(GameState.GAME);
