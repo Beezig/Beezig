@@ -413,7 +413,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 									long rp = rolepoints;
 									double tratio = Math.round(((double)traitorPoints / (double)rp) * 1000d) / 10d;
 									ChatColor ratioColor = ChatColor.YELLOW;
-									if(tratio >= 38.0){
+									if(tratio >= TIMV.TRATIO_LIMIT){
 										ratioColor= ChatColor.RED;
 									}
 									The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Traitor Points: " + ChatColor.YELLOW + traitorPoints + " (" + ratioColor + tratio + "%" +  ChatColor.YELLOW + ") ");
@@ -534,7 +534,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 		}
 		//glorious
-		else if(ActiveGame.is("timv") && message.contains("ItsNiklass§8 » ") && !message.contains("§b§lParty§8")){
+		else if(ActiveGame.is("timv") && message.contains("ItsNiklass§8 » ") && !message.contains("§b§lParty§8")  && !message.contains("§aEU")){
 			if(message.contains("▍ ")){
 				//In Lobby
 				String[] msg = message.split("▍ ");
@@ -549,7 +549,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			return true;
 			}
 		}
-		else if(ActiveGame.is("timv") && message.contains("RoccoDev§8 » ") && !message.contains("§b§lParty§8")){
+		else if(ActiveGame.is("timv") && message.contains("RoccoDev§8 » ") && !message.contains("§b§lParty§8")  && !message.contains("§aEU")){
 			//y tho
 			if(message.contains("▍ ")){
 				//dank memez o/

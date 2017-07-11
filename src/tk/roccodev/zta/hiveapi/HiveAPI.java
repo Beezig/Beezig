@@ -18,6 +18,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.Log;
+import tk.roccodev.zta.games.TIMV;
 
 public class HiveAPI {
 	
@@ -909,7 +910,12 @@ public class HiveAPI {
 					// Calculating K/R
 					Long rp = Long.valueOf(o2.get("innocent").toString()) + Long.valueOf(o2.get("traitor").toString()) + Long.valueOf(o2.get("detective").toString());
 					Double krr = (double)Math.round( Double.valueOf(o2.get(unit).toString()) / rp.doubleValue() * 100D) / 100D;
-					return o2.get("name").toString() + "," + o2.get(unit).toString() + "," + krr.toString();
+					Double tratio = Math.round(((double)Long.valueOf(o2.get("traitor").toString()) / (double)rp) * 1000d) / 10d;
+					ChatColor ratioColor = ChatColor.YELLOW;
+					if(tratio >= TIMV.TRATIO_LIMIT){
+						ratioColor = ChatColor.RED;
+					}
+					return o2.get("name").toString() + "," + o2.get(unit).toString() + "," + krr.toString() + "," + ratioColor + tratio.toString();
 				}
 				
 				return o2.get("name").toString() + "," + o2.get(unit).toString();
