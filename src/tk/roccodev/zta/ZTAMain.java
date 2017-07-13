@@ -158,6 +158,7 @@ public class ZTAMain {
 		if(!mcFile.exists()) mcFile.mkdir();
 		The5zigAPI.getLogger().info("MC Folder is at: " + mcFile.getAbsolutePath());
 		checkForFileExist(new File(mcFile + "/timv/"), true);
+		checkForFileExist(new File(mcFile + "/timv/dailykarma/"), true);
 		checkOldCsvPath();
 		File settingsFile = new File(ZTAMain.mcFile.getAbsolutePath() + "/settings.properties");
 		if(!settingsFile.exists()){
