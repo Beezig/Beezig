@@ -904,8 +904,6 @@ public class HiveAPI {
 			}
 			try {
 				o2 = (JSONObject) parser.parse(o1.get(index).toString());
-
-						
 				if(game.equals("TIMV")){
 					// Calculating K/R
 					Long rp = Long.valueOf(o2.get("innocent").toString()) + Long.valueOf(o2.get("traitor").toString()) + Long.valueOf(o2.get("detective").toString());
@@ -917,8 +915,15 @@ public class HiveAPI {
 					}
 					return o2.get("name").toString() + "," + o2.get(unit).toString() + "," + krr.toString() + "," + ratioColor + tratio.toString();
 				}
+				if(game.equals("DR")){
+					
+					Integer winr = (int) (Math.floor((Double.valueOf(o2.get("wins").toString()) / Double.valueOf(o2.get("games").toString())) * 1000) / 10);;
+					Double ppg = Math.round(((Long)o2.get("points") / (Long)o2.get("games")) * 10d) / 10d;
+
+					return o2.get("name").toString() + "," + o2.get(unit).toString() + "," + ppg.toString() + "," + winr.toString();
+				}
+				return "Error.";
 				
-				return o2.get("name").toString() + "," + o2.get(unit).toString();
 			} catch (Exception e) {
 				The5zigAPI.getLogger().info("Failed getMonthlyLBPlayerInfo (thtmx.rocks) (JSON 2)");
 				e.printStackTrace();

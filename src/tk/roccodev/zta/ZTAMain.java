@@ -350,6 +350,7 @@ public void onKeypress(KeyPressEvent evt){
 		//Map fallback
 		if(ActiveGame.is("dr") && DR.activeMap == null){
 			String map = ChatColor.stripColor(evt.getTitle());
+			if(map.equals("HiveMC.EU")) return;
 			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
 		    DRMap map1 = DRMap.getFromDisplay(map);
 		    DR.activeMap = map1;
