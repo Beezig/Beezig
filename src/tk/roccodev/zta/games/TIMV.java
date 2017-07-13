@@ -27,7 +27,7 @@ import tk.roccodev.zta.notes.NotesManager;
 
 public class TIMV extends GameMode{
 
-	public static final double TRATIO_LIMIT = 38.0d;
+	public static final double TRATIO_LIMIT = 37.2d;
 	
 	public static int karmaCounter;
 	public static TIMVMap activeMap;
