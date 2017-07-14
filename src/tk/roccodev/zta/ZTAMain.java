@@ -12,6 +12,7 @@ import org.bstats.MetricsLite;
 import org.lwjgl.input.Keyboard;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.event.ActionBarEvent;
 import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
@@ -25,8 +26,26 @@ import eu.the5zig.mod.util.IKeybinding;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
-import tk.roccodev.zta.command.*;
-import tk.roccodev.zta.games.*;
+import tk.roccodev.zta.command.AddNoteCommand;
+import tk.roccodev.zta.command.AutoVoteCommand;
+import tk.roccodev.zta.command.ColorDebugCommand;
+import tk.roccodev.zta.command.DebugCommand;
+import tk.roccodev.zta.command.MathCommand;
+import tk.roccodev.zta.command.MonthlyCommand;
+import tk.roccodev.zta.command.NotesCommand;
+import tk.roccodev.zta.command.PBCommand;
+import tk.roccodev.zta.command.RealRankCommand;
+import tk.roccodev.zta.command.SayCommand;
+import tk.roccodev.zta.command.SeenCommand;
+import tk.roccodev.zta.command.SettingsCommand;
+import tk.roccodev.zta.command.ShrugCommand;
+import tk.roccodev.zta.command.WRCommand;
+import tk.roccodev.zta.games.BED;
+import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.games.GNT;
+import tk.roccodev.zta.games.GNTM;
+import tk.roccodev.zta.games.Giant;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.notes.NotesManager;
@@ -114,6 +133,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "gntkdrchange", tk.roccodev.zta.modules.gnt.KDRChangeItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntpoints", tk.roccodev.zta.modules.gnt.PointsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntgiantkills", tk.roccodev.zta.modules.gnt.GiantKillsItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "gntgold", tk.roccodev.zta.modules.gnt.GoldItem.class, "serverhivemc");
 		
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
@@ -383,6 +403,15 @@ public void onKeypress(KeyPressEvent evt){
 		
 		// The5zigAPI.getLogger().info("(" + evt.getMessage() + ")");
 		
+	}
+	
+	@EventHandler
+	public void onActionBar(ActionBarEvent bar){
+		//The5zigAPI.getLogger().info(bar.getMessage());
+		if((ActiveGame.is("gnt") || ActiveGame.is("gntm")) && bar.getMessage().contains("❂")){
+			//§6❂ §e12§7  ❘  §c§lDestructible Land§7  ❘  §f0§b Kills
+			Giant.gold = Integer.parseInt(ChatColor.stripColor(bar.getMessage().split("❘")[0].replaceAll("❂", "")).trim());
+		}
 	}
 }
 	

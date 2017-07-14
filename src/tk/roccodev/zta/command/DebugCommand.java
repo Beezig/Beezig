@@ -1,8 +1,5 @@
 package tk.roccodev.zta.command;
 
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.gui.ingame.Scoreboard;
-
 public class DebugCommand implements Command{
 
 	@Override
@@ -21,7 +18,9 @@ public class DebugCommand implements Command{
 	@Override
 	public boolean execute(String[] args) {
 			//some debug code here v
-			Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+			
+		
+			/*Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
@@ -31,8 +30,9 @@ public class DebugCommand implements Command{
 			
 			for(String s : sb.getLines().keySet()){
 				The5zigAPI.getAPI().messagePlayer(s);		
-			}
+			}*/
 			return true;
+		
 	}
 }
 
