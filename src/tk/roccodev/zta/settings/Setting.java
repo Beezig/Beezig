@@ -23,6 +23,7 @@ public enum Setting {
 	DR_SHOW_POINTSPERGAME(true, "DR Advanced Records - Show the average Points per Game"),
 	DR_SHOW_RUNNERWINRATE(true, "DR Advanced Records - Show the Winrate as a Runner"),
 	DR_SHOW_DEATHSPERGAME(true, "DR Advanced Records - Show the avg. Deaths as Runner"),
+	DR_SHOW_POINTS_TO_NEXT_RANK(false, "DR Advanced Records - Show points to next rank"),
 	
 	BED_SHOW_POINTS_TO_NEXT_RANK(true, "BED Advanced Records - Show points to next rank"),
 	BED_SHOW_ELIMINATIONS_PER_GAME(false, "BED Advanced Records - Show Eliminations per Game"),
@@ -31,7 +32,8 @@ public enum Setting {
 	BED_SHOW_KILLS_PER_GAME(false, "BED Advanced Records - Show Kills per Game"), 
 	BED_SHOW_POINTS_PER_GAME(true, "BED Advanced Records - Show Points gained per Game"), 
 	BED_SHOW_KD(true, "BED Advanced Records - Show Kills/Deaths"), 
-	BED_SHOW_WINRATE(true, "BED Advanced Records - Show Winrate");
+	BED_SHOW_WINRATE(true, "BED Advanced Records - Show Winrate"); 
+	
 
 	
 	private boolean value;

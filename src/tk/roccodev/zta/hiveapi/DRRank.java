@@ -1,40 +1,55 @@
 package tk.roccodev.zta.hiveapi;
 
-import static eu.the5zig.util.minecraft.ChatColor.*;
+import static eu.the5zig.util.minecraft.ChatColor.AQUA;
+import static eu.the5zig.util.minecraft.ChatColor.BLUE;
+import static eu.the5zig.util.minecraft.ChatColor.BOLD;
+import static eu.the5zig.util.minecraft.ChatColor.DARK_BLUE;
+import static eu.the5zig.util.minecraft.ChatColor.DARK_PURPLE;
+import static eu.the5zig.util.minecraft.ChatColor.GOLD;
+import static eu.the5zig.util.minecraft.ChatColor.GRAY;
+import static eu.the5zig.util.minecraft.ChatColor.GREEN;
+import static eu.the5zig.util.minecraft.ChatColor.LIGHT_PURPLE;
+import static eu.the5zig.util.minecraft.ChatColor.RED;
+import static eu.the5zig.util.minecraft.ChatColor.YELLOW;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public enum DRRank {
 
-	SNAIL("Snail", GRAY + ""),
-	TURTLE("Turtle", GOLD + ""),
-	JOGGER("Jogger", LIGHT_PURPLE + ""),
-	RUNNER("Runner", AQUA + ""),
-	RABBIT("Rabbit", YELLOW + ""),
-	KANGAROO("Kangaroo", GREEN + ""),
-	SPEEDSTER("Speedster", RED + ""),
-	BLUR("Blur", BLUE + ""),
-	CHEETAH("Cheetah", DARK_PURPLE + ""),
-	FLASH("Flash", GOLD + "" + BOLD),
-	SPEEDY_GONZALES("Speedy Gonzales", LIGHT_PURPLE + "" + BOLD),
-	BOLT("Bolt", AQUA + "" + BOLD),
-	FORREST("Forrest", YELLOW + "" + BOLD),
-	SONIC("Sonic", RED + "" + BOLD),
-	FALCON("Falcon", GREEN + "" + BOLD),
-	ROAD_RUNNER("Road Runner", RED + "" + BOLD),
-	BASILISK("Basilisk", BLUE + "" + BOLD),
-	SAILFFISH("Sailfish", DARK_PURPLE + "" + BOLD),
-	FORMULA_1("Formula 1", GOLD + "" + BOLD),
-	TORNADO("Tornado", LIGHT_PURPLE + "" + BOLD ),
-	JET("Jet", AQUA + "" + BOLD ),
-	BLACKBIRD("Blackbird", YELLOW + "" + BOLD ),
-	HYPERSPACE("Hyperspace", DARK_BLUE + "" + BOLD ),
-	SPEED_OF_LIGHT("Speed of Light", RED + "" + BOLD + "");
+	SNAIL("Snail", GRAY + "" , 0),
+	TURTLE("Turtle", GOLD + "" , 101),
+	JOGGER("Jogger", LIGHT_PURPLE + "" , 1001),
+	RUNNER("Runner", AQUA + "" , 3501),
+	RABBIT("Rabbit", YELLOW + "" , 10001),
+	KANGAROO("Kangaroo", GREEN + "" , 20001),
+	SPEEDSTER("Speedster", RED + "" , 35001),
+	BLUR("Blur", BLUE + "" , 60001),
+	CHEETAH("Cheetah", DARK_PURPLE + "" , 100001),
+	FLASH("Flash", GOLD + "" + BOLD , 200001),
+	SPEEDY_GONZALES("Speedy Gonzales", LIGHT_PURPLE + "" + BOLD , 300001),
+	BOLT("Bolt", AQUA + "" + BOLD , 400001),
+	FORREST("Forrest", YELLOW + "" + BOLD , 500001),
+	SONIC("Sonic", RED + "" + BOLD , 600001),
+	FALCON("Falcon", GREEN + "" + BOLD , 700001),
+	ROAD_RUNNER("Road Runner", RED + "" + BOLD , 800001),
+	BASILISK("Basilisk", BLUE + "" + BOLD , 950001),
+	SAILFFISH("Sailfish", DARK_PURPLE + "" + BOLD , 1200001),
+	FORMULA_1("Formula 1", GOLD + "" + BOLD , 1500001),
+	TORNADO("Tornado", LIGHT_PURPLE + "" + BOLD , 2000001),
+	JET("Jet", AQUA + "" + BOLD , 2500001),
+	BLACKBIRD("Blackbird", YELLOW + "" + BOLD , 3500001),
+	HYPERSPACE("Hyperspace", DARK_BLUE + "" + BOLD , 5000001),
+	SPEED_OF_LIGHT("Speed of Light", RED + "" + BOLD + "", -1);
 	
 	private String display;
 	private String prefix;
+	private int startPoints;
 	
-	DRRank(String display, String prefix){
+	DRRank(String display, String prefix, int startPoints){
 		this.display = display;
 		this.prefix = prefix;
+		this.startPoints = startPoints;
 	}
 
 	public static DRRank getFromDisplay(String display){
@@ -51,5 +66,22 @@ public enum DRRank {
 	
 	public String getTotalDisplay(){
 		return prefix + display;
+	}
+	
+	public int getStart(){
+		return startPoints;
+	}
+	
+	public String getPointsToNextRank(int points){
+		if(this == SPEED_OF_LIGHT) return "Leaderboard Rank";
+		if(this == HYPERSPACE) return "Highest Rank";
+		ArrayList<DRRank> ranks = new ArrayList<DRRank>(Arrays.asList(values()));
+		int newIndex = ranks.indexOf(this) + 1;
+		DRRank next = null;
+		try{
+			next = ranks.get(newIndex);			
+		} catch(Exception e){ return "";}
+			
+		return next.getStart() - points + " to " + next.prefix + next.getTotalDisplay();
 	}
 }

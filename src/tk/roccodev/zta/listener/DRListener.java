@@ -292,7 +292,9 @@ public class DRListener extends AbstractGameListener<DR>{
 										sb.append("§3 Points: §b");
 										points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
 										sb.append(points);
-										if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
+										if(rank != null) sb.append(" (" + rank.getTotalDisplay());
+										if(Setting.DR_SHOW_POINTS_TO_NEXT_RANK.getValue()) sb.append(" / " + rank.getPointsToNextRank((int)points));
+										if(rank != null) sb.append("§b)");
 										The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
 										continue;
 									
