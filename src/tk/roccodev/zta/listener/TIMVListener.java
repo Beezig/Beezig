@@ -26,6 +26,7 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
+import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
@@ -243,6 +244,30 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.activeMap = map1;
 	
 		}
+		
+		else if(message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")){
+			//"          §6§m                  §f ItsNiklass's Stats §6§m                  "
+			//Advanced Records
+			TIMV.messagesToSend.add(message);
+			The5zigAPI.getLogger().info("found header");
+			return true;
+		}
+		else if(message.startsWith("§3 ")){
+			
+				TIMV.messagesToSend.add(message);
+				The5zigAPI.getLogger().info("found entry");
+			
+			return true;	
+		}
+		else if(message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")){
+			//TODO Coloring
+			TIMV.footerToSend.add(message);
+			The5zigAPI.getLogger().info("Found Player URL");
+			
+		return true;	
+		}
+		/* 
+		 * Old AdvRec
 		else if(message.equals("§7==============§aTIMV Stats§7==============")){
 			//Advanced Records
 			if(message.endsWith("AR§e§l")){
@@ -274,7 +299,172 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 			
 		}
-		
+		*/
+		else if((message.equals("                      §6§m                  §6§m                  ")&& !message.startsWith("§o "))){
+			The5zigAPI.getLogger().info("found footer");
+			TIMV.footerToSend.add(message);	
+			The5zigAPI.getLogger().info("executed /records");
+			if(TIMV.footerToSend.contains("                      §6§m                  §6§m                  ")){
+				//Send AdvRec
+				new Thread(new Runnable(){
+					@Override
+					public void run(){
+						TIMV.isRecordsRunning = true;
+						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
+						try{
+						TIMVRank rank = null;
+						Long rolepoints = Setting.TIMV_SHOW_KRR.getValue() ? HiveAPI.TIMVgetRolepoints(TIMV.lastRecords) : null;
+						if(rolepoints == null && Setting.TIMV_SHOW_TRAITORRATIO.getValue()){
+							rolepoints = HiveAPI.TIMVgetRolepoints(TIMV.lastRecords);
+						}
+						Long mostPoints = Setting.TIMV_SHOW_MOSTPOINTS.getValue() ? HiveAPI.TIMVgetKarmaPerGame(TIMV.lastRecords) : null;
+						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(TIMV.lastRecords) : "";
+						ChatColor rankColor = null;
+						if(Setting.SHOW_NETWORK_RANK_COLOR.getValue()){
+							if(rankTitle.isEmpty()){
+								rankColor = HiveAPI.getRankColorFromIgn(TIMV.lastRecords);
+							}
+							else{
+								rankColor = HiveAPI.getRankColor(rankTitle);
+							}
+						}
+						long karma = 0;
+						long traitorPoints = 0;
+						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(TIMV.lastRecords, "TIMV") : null;
+						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? HiveAPI.TIMVgetAchievements(TIMV.lastRecords) : null;
+						String rankTitleTIMV = Setting.SHOW_RECORDS_RANK.getValue() ? HiveAPI.TIMVgetRank(TIMV.lastRecords) : null;
+						int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() &&  HiveAPI.getLeaderboardsPlacePoints(349, "TIMV") < HiveAPI.TIMVgetKarma(TIMV.lastRecords))? HiveAPI.getMonthlyLeaderboardsRank(TIMV.lastRecords, "TIMV") : 0;
+						if(rankTitleTIMV != null) rank = TIMVRank.getFromDisplay(rankTitleTIMV);
+						List<String> messages = new ArrayList<String>();
+						messages.addAll(TIMV.messagesToSend);
+							Iterator<String> it = messages.iterator();
+							for(String s : messages){
+								
+								
+								
+								if(s.startsWith("§3 Karma: §b")){
+									StringBuilder sb = new StringBuilder();
+									sb.append("§3 Karma: §b");
+									karma = Long.parseLong(s.replaceAll("§3 Karma: §b", ""));
+									sb.append(karma);
+									if(rank != null) sb.append(" (" + rank.getTotalDisplay());
+									if(Setting.TIMV_SHOW_KARMA_TO_NEXT_RANK.getValue() && rank != null){
+										sb.append(" / " + rank.getKarmaToNextRank((int)karma));
+									}
+									sb.append("§b)");
+									The5zigAPI.getAPI().messagePlayer(sb.toString().trim() + " ");
+									continue;
+								}
+								else if(s.startsWith("§3 Username: §b")){
+									StringBuilder sb = new StringBuilder();
+									String username = ChatColor.stripColor(s.replaceAll("§3 Username: §b", ""));
+									String correctUser = HiveAPI.getName(username);
+									if(correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
+									sb.append("§3 Username: ");
+									if(rankColor != null) {
+										sb.append(rankColor + correctUser);
+									}
+									else{
+										sb.append("§b" + correctUser);
+									}
+									if(rankTitle != null && rankTitle.contains("nicked player")) rankTitle = "Nicked/Not found";
+									if(!rankTitle.isEmpty()){
+										if(rankColor == null) rankColor = ChatColor.WHITE;
+										sb.append("§b (" + rankColor + rankTitle + "§b)");
+									}
+									The5zigAPI.getAPI().messagePlayer(sb.toString().trim() + " ");
+									continue;
+								}
+								else if(s.startsWith("§3 Traitor Points: §b") && karma > 1000 && Setting.TIMV_SHOW_TRAITORRATIO.getValue()){
+									String[] contents = s.split(":");
+									traitorPoints = Integer.parseInt(s.replaceAll("§3 Traitor Points: §b", "").trim());
+									long rp = rolepoints;
+									double tratio = Math.round(((double)traitorPoints / (double)rp) * 1000d) / 10d;
+									ChatColor ratioColor = ChatColor.AQUA;
+									if(tratio >= TIMV.TRATIO_LIMIT){
+										ratioColor= ChatColor.RED;
+									}
+									The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Traitor Points: " + ChatColor.AQUA + traitorPoints + " (" + ratioColor + tratio + "%" +  ChatColor.AQUA + ") ");
+									continue;
+								}
+								The5zigAPI.getAPI().messagePlayer(s + " ");
+								
+							}
+						
+						
+
+
+						Double krr = Setting.TIMV_SHOW_KRR.getValue() ? (double)Math.round((double) karma / (double) rolepoints * 100D) / 100D : null;
+						
+							
+						if(mostPoints != null){
+							The5zigAPI.getAPI().messagePlayer("§3 Most Points: §b" + mostPoints + " ");
+						}
+						if(achievements != null){
+							The5zigAPI.getAPI().messagePlayer("§3 Achievements: §b" + achievements + "/41 ");
+						}
+						if(krr != null){
+							The5zigAPI.getAPI().messagePlayer("§3 Karma/Rolepoints: §b" + krr + " ");
+						}
+						if(monthlyRank != 0){					
+							The5zigAPI.getAPI().messagePlayer("§3 Monthly Leaderboards: §b#" + monthlyRank + " ");
+						}
+						if(lastGame != null){
+							Calendar lastSeen = Calendar.getInstance();;
+							lastSeen.setTimeInMillis(HiveAPI.lastGame(TIMV.lastRecords, "TIMV").getTime());
+						
+							The5zigAPI.getAPI().messagePlayer("§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()) + " ");
+						}
+						
+							
+							for(String s : TIMV.footerToSend){
+								
+								The5zigAPI.getAPI().messagePlayer("§o " + s);
+							}
+						
+						
+						
+						TIMV.messagesToSend.clear();
+						TIMV.footerToSend.clear();
+						TIMV.isRecordsRunning = false;
+						
+						
+						}catch(Exception e){
+							e.printStackTrace();
+							if(e.getCause() instanceof FileNotFoundException){
+								The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
+								TIMV.messagesToSend.clear();
+								TIMV.footerToSend.clear();
+								TIMV.isRecordsRunning = false;
+								return;
+							}
+							The5zigAPI.getAPI().messagePlayer(Log.error + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
+							
+							for(String s : TIMV.messagesToSend){
+								The5zigAPI.getAPI().messagePlayer("§o " + s);
+							}
+							for(String s : TIMV.footerToSend){
+								The5zigAPI.getAPI().messagePlayer("§o " + s);
+							}
+							The5zigAPI.getAPI().messagePlayer("§o " + "                      §6§m                  §6§m                  ");
+							TIMV.messagesToSend.clear();
+							TIMV.footerToSend.clear();
+							TIMV.isRecordsRunning = false;
+							return;
+						}
+					
+				
+				
+				
+				
+			
+			
+			
+					}
+				}, "TIMV Advanced Records Fetcher").start(); // Labeling threads
+				return true;
+			}
+		}
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §a§lVote received. §3Your map now has") && Setting.AUTOVOTE.getValue()){
 			TIMV.hasVoted = true;
 		}
@@ -332,6 +522,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6§e§e§l") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()){
 			TIMV.votesToParse.add(message);		
 		}
+		/*
 		else if(message.equals("§7=====================================") && !message.endsWith(" ")){ //Bar
 			if(TIMV.footerToSend.contains("§bThis data is §elive data.")){
 				//Advanced Records - send
@@ -496,7 +687,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 			
 		}
-		
+		*/
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §4")){
 			TIMV.traitorsDiscovered++;
 		}
