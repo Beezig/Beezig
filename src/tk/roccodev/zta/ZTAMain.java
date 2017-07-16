@@ -2,10 +2,13 @@ package tk.roccodev.zta;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.bstats.MetricsLite;
@@ -16,6 +19,7 @@ import eu.the5zig.mod.event.ActionBarEvent;
 import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
+import eu.the5zig.mod.event.EventHandler.Priority;
 import eu.the5zig.mod.event.KeyPressEvent;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.event.ServerQuitEvent;
@@ -51,6 +55,7 @@ import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
+import tk.roccodev.zta.utils.TIMVDay;
 
 
 
@@ -104,6 +109,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "timvmap", tk.roccodev.zta.modules.timv.MapItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bodies", tk.roccodev.zta.modules.timv.BodiesItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "dbodies", tk.roccodev.zta.modules.timv.DBodiesItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "timvdailykarma", tk.roccodev.zta.modules.timv.DailyKarmaItem.class, "serverhivemc");
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "drmap", tk.roccodev.zta.modules.dr.MapItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drrole", tk.roccodev.zta.modules.dr.RoleItem.class, "serverhivemc");
@@ -216,7 +222,7 @@ public class ZTAMain {
 		new GNT();
 		new GNTM();
 	
-		
+		TIMV.setDailyKarmaFileName(TIMVDay.fromCalendar(Calendar.getInstance()) + ".txt");
 		
 			
 	}
@@ -365,9 +371,44 @@ public class ZTAMain {
 		
 	}
 	
-	@EventHandler
+	@EventHandler(priority=Priority.HIGHEST)
 	public void onDisconnect(ServerQuitEvent evt){
 		NotesManager.notes.clear();
+		if(ActiveGame.current() == null || ActiveGame.current().isEmpty()) return;
+		new Thread(new Runnable(){
+			@Override
+			public void run(){
+				try {
+					String className = ActiveGame.current().toUpperCase();
+					if(className.startsWith("GNT")) className = "Giant";
+					Class gameModeClass = Class.forName("tk.roccodev.zta.games." + className);
+					Method resetMethod = gameModeClass.getMethod("reset", gameModeClass);
+					resetMethod.invoke(null, gameModeClass.newInstance());
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		
 	}
 	
 	

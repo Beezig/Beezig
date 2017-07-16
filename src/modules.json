@@ -18,7 +18,10 @@
         },
 		{ 
 		  "type": "dbodies"
-		}
+		},
+		{ 
+          "type": "timvdailykarma"
+        }
       ]
     },
     {

@@ -62,6 +62,7 @@ public class BED extends GameMode{
 		BED.pointsCounter = 0;
 		ActiveGame.reset("bed");
 		IHive.genericReset();
+		if(The5zigAPI.getAPI().getActiveServer() != null)
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 	}
 	

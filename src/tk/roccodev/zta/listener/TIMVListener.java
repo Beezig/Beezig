@@ -2,6 +2,7 @@
 package tk.roccodev.zta.listener;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,6 +59,12 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			@Override
 			public void run(){
 				try {
+					TIMV.initDailyKarmaWriter();
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				try {
 					Thread.sleep(200);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
@@ -111,6 +118,12 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
+					try {
+						TIMV.initDailyKarmaWriter();
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
 					try {
 						Thread.sleep(200);
 					} catch (InterruptedException e1) {
@@ -774,6 +787,17 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 	
 	
 	
+	
+	
+	@Override
+	public void onServerDisconnect(TIMV gameMode) {
+		TIMV.reset(gameMode);
+	}
+
+
+
+
+
 	private class ScoreboardFetcherTask extends TimerTask{
 
 		@Override

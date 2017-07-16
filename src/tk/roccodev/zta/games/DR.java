@@ -48,6 +48,7 @@ public class DR extends GameMode{
 		DR.hasVoted = false;
 		ActiveGame.reset("dr");
 		IHive.genericReset();
+		if(The5zigAPI.getAPI().getActiveServer() != null)
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 	}
 	

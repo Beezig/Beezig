@@ -56,6 +56,7 @@ public class Giant extends GameMode{
 		gameMode.setState(GameState.FINISHED);
 		ActiveGame.set("");
 		IHive.genericReset();
+		if(The5zigAPI.getAPI().getActiveServer() != null)
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 		
 		
