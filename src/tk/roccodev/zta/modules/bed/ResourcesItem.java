@@ -32,6 +32,7 @@ public class ResourcesItem extends GameModeItem<BED>{
 	
 	@Override
 	protected Object getValue(boolean dummy) {
+		if(!The5zigAPI.getAPI().isInWorld()) return "Not in world";
 		if((ResourcesMode)getProperties().getSetting("mode").get() == ResourcesMode.INLINE){
 			try{
 			StringBuilder sb = new StringBuilder();
@@ -88,6 +89,7 @@ public class ResourcesItem extends GameModeItem<BED>{
     	super.render(x, y, renderLocation, dummy);
     	return;  
     }
+    if(!The5zigAPI.getAPI().isInWorld()) return;
     	int lineCount = 0;
         The5zigAPI.getAPI().getRenderHelper().drawString(getPrefix(), x, y);
         lineCount++;
