@@ -261,7 +261,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			The5zigAPI.getLogger().info("found header");
 			return true;
 		}
-		else if(message.startsWith("§3 ")){
+		else if(message.startsWith("§3 ") && !message.endsWith(" ")){
 			
 				TIMV.messagesToSend.add(message);
 				The5zigAPI.getLogger().info("found entry");
