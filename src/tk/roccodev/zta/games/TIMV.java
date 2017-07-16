@@ -1,8 +1,14 @@
 package tk.roccodev.zta.games;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +33,8 @@ import tk.roccodev.zta.notes.NotesManager;
 
 public class TIMV extends GameMode{
 
+	public static final double TRATIO_LIMIT = 37.2d;
+	
 	public static int karmaCounter;
 	public static TIMVMap activeMap;
 	public static String lastRecords = "";
@@ -37,12 +45,17 @@ public class TIMV extends GameMode{
 	
 	public static String gameID;
 	
+	private static PrintWriter dailyKarmaWriter;
+	private static String dailyKarmaName;
+	public static int dailyKarma;
+	
 	public static String rank;
 	
 	//Advanced Records
 	public static List<String> messagesToSend = new ArrayList<String>();
 	public static List<String> footerToSend = new ArrayList<String>();
 	public static boolean isRecordsRunning = false;
+	
 	
 	
 	//Autovoting
@@ -61,7 +74,53 @@ public class TIMV extends GameMode{
 	public static long lastRecordKarma;
 	
 	
-	/*
+	public static void setDailyKarmaFileName(String newName){
+		dailyKarmaName = newName;
+	}
+	
+	public static void initDailyKarmaWriter() throws IOException{
+		File f = new File(ZTAMain.mcFile + "/timv/dailykarma/" + dailyKarmaName);
+		if(!f.exists()){
+			f.createNewFile();
+			initKarmaWriterWithZero();
+			return;
+		}
+		FileInputStream stream = new FileInputStream(f);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		String line = reader.readLine();
+		if(line == null){
+			initKarmaWriterWithZero();
+			stream.close();
+			return;
+		}
+		else{
+			TIMV.dailyKarma = Integer.parseInt(line);
+		}
+		stream.close();
+		
+		
+		dailyKarmaWriter = new PrintWriter(ZTAMain.mcFile + "/timv/dailykarma/" + dailyKarmaName, "UTF-8");
+		
+		
+	}
+	
+	private static void initKarmaWriterWithZero() throws FileNotFoundException, UnsupportedEncodingException{
+		dailyKarmaWriter = new PrintWriter(ZTAMain.mcFile + "/timv/dailykarma/" + dailyKarmaName, "UTF-8");
+		dailyKarmaWriter.println(0);
+		
+		dailyKarmaWriter.close();
+		
+		dailyKarmaWriter = new PrintWriter(ZTAMain.mcFile + "/timv/dailykarma/" + dailyKarmaName, "UTF-8");
+		
+	}
+	
+	private static void saveDailyKarma(){
+		dailyKarmaWriter.println(dailyKarma);
+		dailyKarmaWriter.flush();
+		dailyKarmaWriter.close();
+	}
+	
+	/**
 	 * Writes the data into the CSV logger.
 	 * 
 	 * @return whether the writer has written the file.
@@ -122,22 +181,27 @@ public class TIMV extends GameMode{
 	
 	public static void plus20(){
 		karmaCounter +=20;
+		dailyKarma += 20;
 		HiveAPI.TIMVkarma +=20;
 	}
 	public static void plus25(){
 		karmaCounter +=25;
+		dailyKarma += 25;
 		HiveAPI.TIMVkarma +=25;
 	}
 	public static void plus10(){
 		karmaCounter +=10;
+		dailyKarma += 10;
 		HiveAPI.TIMVkarma += 10;
 		}
 	public static void minus20(){
 		karmaCounter -=20;
+		dailyKarma -=20;
 		HiveAPI.TIMVkarma -=20;
 		}
 	public static void minus40(){
 		karmaCounter -=40;
+		dailyKarma -= 40;
 		HiveAPI.TIMVkarma -=40;
 		}
 	
@@ -205,7 +269,10 @@ public class TIMV extends GameMode{
 		gm.setState(GameState.FINISHED);
 		ActiveGame.reset("timv");
 		IHive.genericReset();
+		if(The5zigAPI.getAPI().getActiveServer() != null)
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
+		saveDailyKarma();
+		The5zigAPI.getLogger().info(dailyKarma);
 		
 	}
 	

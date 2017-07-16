@@ -18,6 +18,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.Log;
+import tk.roccodev.zta.games.TIMV;
 
 public class HiveAPI {
 	
@@ -34,7 +35,7 @@ public class HiveAPI {
 	private static URL TIMVparsePlayerURL(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/TIMV";
 		try {
-			return new URL(urls.replaceAll("@player@", name));
+			return new URL(urls.replaceAll("@player@", getUUID(name)));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,7 +45,7 @@ public class HiveAPI {
 	private static URL DRparsePlayerURL(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/DR";
 		try {
-			return new URL(urls.replaceAll("@player@", name));
+			return new URL(urls.replaceAll("@player@", getUUID(name)));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -54,7 +55,7 @@ public class HiveAPI {
 	private static URL BEDparsePlayerURL(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/BED";
 		try {
-			return new URL(urls.replaceAll("@player@", name));
+			return new URL(urls.replaceAll("@player@", getUUID(name)));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,7 +65,7 @@ public class HiveAPI {
 	private static URL GameParsePlayerURL(String name, String game){
 		String urls = "http://api.hivemc.com/v1/player/@player@/" + game;
 		try {
-			return new URL(urls.replaceAll("@player@", name));
+			return new URL(urls.replaceAll("@player@", getUUID(name)));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,17 +75,7 @@ public class HiveAPI {
 	private static URL parsePlayerURLGeneric(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/";
 		try {
-			return new URL(urls.replaceAll("@player@", name));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-	private static URL parsePlayerURLUUID(String uuid){
-		String urls = "http://api.hivemc.com/v1/player/@player@/";
-		try {
-			return new URL(urls.replaceAll("@player@", uuid));
+			return new URL(urls.replaceAll("@player@", getUUID(name)));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -142,6 +133,7 @@ public class HiveAPI {
 			return null;
 		}
 	}
+	
 	//Giant
 	public static void GiantupdatePoints(boolean mini) throws ParseException, Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
@@ -152,7 +144,96 @@ public class HiveAPI {
 		
 		GiantPoints =  (long) o.get("total_points");
 	}
-	
+	public static String GiantgetRank(String ign, String mode){
+		String playername = ign;
+		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+			} catch (Exception e) {
+				e.printStackTrace();
+				The5zigAPI.getLogger().info("Failed GiantgetRank");
+			}
+		
+		return (String) o.get("title");
+	}
+	public static long GiantgetGamesPlayed(String ign, String mode){
+		String playername = ign;
+		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+			} catch (Exception e) {
+				e.printStackTrace();
+				The5zigAPI.getLogger().info("Failed GiantgetGamesPlayed");
+			}
+		
+		return (long) o.get("games_played");
+	}
+	public static long GiantgetPoints(String ign, String mode){
+		String playername = ign;
+		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+			} catch (Exception e) {
+				e.printStackTrace();
+				The5zigAPI.getLogger().info("Failed GiantgetPoints");
+			}
+		
+		return (long) o.get("total_points");
+	}
+	public static long GiantgetWins(String ign, String mode){
+		String playername = ign;
+		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+			} catch (Exception e) {
+				e.printStackTrace();
+				The5zigAPI.getLogger().info("Failed GiantgetWins");
+			}
+		
+		return (long) o.get("victories");
+	}
+	public static long GiantgetKills(String ign, String mode){
+		String playername = ign;
+		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+			} catch (Exception e) {
+				e.printStackTrace();
+				The5zigAPI.getLogger().info("Failed GiantgetKills");
+			}
+		
+		return (long) o.get("kills");
+	}
+	public static long GiantgetDeaths(String ign, String mode){
+		String playername = ign;
+		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			try {
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+			} catch (Exception e) {
+				e.printStackTrace();
+				The5zigAPI.getLogger().info("Failed GiantgetDeaths");
+			}
+		
+		return (long) o.get("deaths");
+	}
 	
 	//BED
 	public static void BEDupdatePoints() throws ParseException, Exception{
@@ -775,7 +856,7 @@ public class HiveAPI {
 				boolean connError = false;
 				try{
 					//RoccoDev's UUID
-					parser.parse(readUrl(parsePlayerURLUUID("bba224a20bff4913b04227ca3b60973f")));
+					parser.parse(readUrl(parsePlayerURLGeneric("bba224a20bff4913b04227ca3b60973f")));
 				}
 				catch(Exception ex){
 					connError = true;
@@ -805,6 +886,9 @@ public class HiveAPI {
 					e.printStackTrace();
 				}
 				
+		if(o.get("game").toString().equals("Hubs"))	{
+			return "Hub";
+		}			
 		return (String) o.get("game");
 	}
 	public static String getName(String ign){
@@ -819,7 +903,7 @@ public class HiveAPI {
 				boolean connError = false;
 				try{
 					//RoccoDev's UUID
-					parser.parse(readUrl(parsePlayerURLUUID("bba224a20bff4913b04227ca3b60973f")));
+					parser.parse(readUrl(parsePlayerURLGeneric("bba224a20bff4913b04227ca3b60973f")));
 				}
 				catch(Exception ex){
 					connError = true;
@@ -862,6 +946,8 @@ public class HiveAPI {
 			return new Date(time * 1000);
 	}
 	public static String getUUID(String ign){
+		if(ign.length() == 32) return ign;
+		// ^ input is already a uuid
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		try {
@@ -911,16 +997,26 @@ public class HiveAPI {
 			}
 			try {
 				o2 = (JSONObject) parser.parse(o1.get(index).toString());
-
-						
 				if(game.equals("TIMV")){
 					// Calculating K/R
 					Long rp = Long.valueOf(o2.get("innocent").toString()) + Long.valueOf(o2.get("traitor").toString()) + Long.valueOf(o2.get("detective").toString());
 					Double krr = (double)Math.round( Double.valueOf(o2.get(unit).toString()) / rp.doubleValue() * 100D) / 100D;
-					return o2.get("name").toString() + "," + o2.get(unit).toString() + "," + krr.toString();
+					Double tratio = Math.round(((double)Long.valueOf(o2.get("traitor").toString()) / (double)rp) * 1000d) / 10d;
+					ChatColor ratioColor = ChatColor.GOLD;
+					if(tratio >= TIMV.TRATIO_LIMIT){
+						ratioColor = ChatColor.RED;
+					}
+					return o2.get("name").toString() + "," + o2.get(unit).toString() + "," + krr.toString() + "," + ratioColor + tratio.toString();
 				}
+				if(game.equals("DR")){
+					
+					Integer winr = (int) (Math.floor((Double.valueOf(o2.get("wins").toString()) / Double.valueOf(o2.get("games").toString())) * 1000) / 10);;
+					Double ppg = Math.round(((Long)o2.get("points") / (Long)o2.get("games")) * 10d) / 10d;
+
+					return o2.get("name").toString() + "," + o2.get(unit).toString() + "," + ppg.toString() + "," + winr.toString();
+				}
+				return "Error.";
 				
-				return o2.get("name").toString() + "," + o2.get(unit).toString();
 			} catch (Exception e) {
 				The5zigAPI.getLogger().info("Failed getMonthlyLBPlayerInfo (thtmx.rocks) (JSON 2)");
 				e.printStackTrace();

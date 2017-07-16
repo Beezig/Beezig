@@ -16,9 +16,12 @@
         {
           "type": "bodies"
         },
-		{ 
-		  "type": "dbodies"
-		}
+	{ 
+	  "type": "dbodies"
+	},
+	{ 
+          "type": "timvdailykarma"
+        }
       ]
     },
     {
@@ -58,11 +61,20 @@
         {
           "type": "bedteam"
         },
+	{
+	  "type": "bedmap"
+	},
         {
           "type": "bedkills"
         },
         {
           "type": "beddestroyed"
+        },
+        {
+          "type": "beddeaths"
+        },
+        {
+          "type": "bedkdrchange"
         },
         {
           "type": "bedresources"
@@ -96,6 +108,9 @@
         },
         {
           "type": "gntmap"
+        },
+	{
+          "type": "gntgold"
         },
         {
           "type": "gntkills"

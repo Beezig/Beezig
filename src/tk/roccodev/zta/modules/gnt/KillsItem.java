@@ -20,7 +20,8 @@ public class KillsItem extends GameModeItem<Giant>{
 	protected Object getValue(boolean dummy) {
 		try{
 			
-			return Giant.gameKills + " (" + (Giant.gameKills + Giant.totalKills) + ")";
+			if((boolean) getProperties().getSetting("showtotal").get()) return Giant.gameKills + " (" + (Giant.gameKills + Giant.totalKills) + ")";
+			return Giant.gameKills;
 		}catch(Exception e){
 			e.printStackTrace();
 			return "Server error";
@@ -32,7 +33,10 @@ public class KillsItem extends GameModeItem<Giant>{
 		return "Kills";
 	}
 	
-	
+	@Override
+	public void registerSettings() {
+		getProperties().addSetting("showtotal", true);
+	}
 	
 	@Override
 	public boolean shouldRender(boolean dummy){		

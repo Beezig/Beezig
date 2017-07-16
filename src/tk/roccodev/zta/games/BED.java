@@ -25,10 +25,18 @@ public class BED extends GameMode{
 	public static String mode = "";
 	
 	public static int kills;
+	public static int deaths;
 	public static int pointsCounter;
 	public static int bedsDestroyed;
 	
+	public static int apiKills;
+	public static int apiDeaths;
+	
+	public static double apiKdr;
+	public static double gameKdr;
+	
 	public static String rank;
+	public static BEDRank rankObject;
 	
 	public static List<String> votesToParse = new ArrayList<String>();
 	public static boolean hasVoted = false;
@@ -49,10 +57,12 @@ public class BED extends GameMode{
 		BED.activeMap = null;
 		BED.hasVoted = false;
 		BED.kills = 0;
+		BED.deaths = 0;
 		BED.bedsDestroyed = 0;
 		BED.pointsCounter = 0;
 		ActiveGame.reset("bed");
 		IHive.genericReset();
+		if(The5zigAPI.getAPI().getActiveServer() != null)
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 	}
 	
@@ -85,7 +95,12 @@ public class BED extends GameMode{
 	
 	public static void updateRank(){
 		BED.rank = BEDRank.getRank(HiveAPI.BEDpoints).getName().replaceAll(ChatColor.stripColor(BEDRank.getRank(HiveAPI.BEDpoints).getName()), "") + BED.NUMBERS[BEDRank.getRank(HiveAPI.BEDpoints).getLevel((int)HiveAPI.BEDpoints)] + " " + BEDRank.getRank((int)HiveAPI.BEDpoints).getName();
-		
+		BED.rankObject = BEDRank.getRank(HiveAPI.BEDpoints);
 	}
 
+	public static void updateKdr(){
+		apiKdr = (double) apiKills / (apiDeaths == 0 ? 1 : apiDeaths);
+		gameKdr = (double)(kills + apiKills) / (deaths  + apiDeaths == 0 ? 1 : apiDeaths + deaths);
+	}
+	
 }

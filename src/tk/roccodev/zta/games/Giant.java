@@ -1,5 +1,8 @@
 package tk.roccodev.zta.games;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
@@ -26,6 +29,11 @@ public class Giant extends GameMode{
 	public static double gameKdr;
 	public static double totalKdr;
 	
+	public static List<String> messagesToSend = new ArrayList<String>();
+	public static List<String> footerToSend = new ArrayList<String>();
+	public static boolean isRecordsRunning = false;
+	public static String lastRecords = "";
+	
 	public Giant(){
 		instance = this;
 	}
@@ -48,6 +56,7 @@ public class Giant extends GameMode{
 		gameMode.setState(GameState.FINISHED);
 		ActiveGame.set("");
 		IHive.genericReset();
+		if(The5zigAPI.getAPI().getActiveServer() != null)
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 		
 		

@@ -33,14 +33,31 @@ public class PointsItem extends GameModeItem<BED>{
 	protected Object getValue(boolean dummy) {
 		try{
 			if((boolean) getProperties().getSetting("showrank").get()){
+				StringBuilder sb = new StringBuilder();
 				if((boolean) getProperties().getSetting("showcolor").get()){
-					return HiveAPI.BEDpoints + " (" + BED.rank + getMainFormatting() + ")";
+					sb.append(HiveAPI.BEDpoints + " (" + BED.rank + getMainFormatting());
+					
+				}else{
+				
+					sb.append(HiveAPI.BEDpoints + " (" + ChatColor.stripColor(BED.rank));
 				}
-				return HiveAPI.BEDpoints + " (" + ChatColor.stripColor(BED.rank) + ")";
-			}
+				
+				if((boolean)getProperties().getSetting("showpointstonextrank").get()){
+					if(BED.rankObject == null) return HiveAPI.BEDpoints;
+					sb.append((boolean)getProperties().getSetting("showcolor").get() ? " / " + BED.rankObject.getPointsToNextRank((int)HiveAPI.BEDpoints) : " / " + ChatColor.stripColor(BED.rankObject.getPointsToNextRank((int)HiveAPI.BEDpoints)));
+						
+				}
+				sb.append(
+						
+						(boolean)getProperties().getSetting("showcolor").get() ?
+						
+								getMainFormatting() + ")" :
+						")");
+				return sb.toString().trim();
+				}
 			return HiveAPI.BEDpoints;
 		}catch(Exception e){
-			e.printStackTrace();;
+			e.printStackTrace();
 			return "Server error";
 		}
 	}
@@ -54,6 +71,7 @@ public class PointsItem extends GameModeItem<BED>{
 	public void registerSettings() {
 		getProperties().addSetting("showrank", false);
 		getProperties().addSetting("showcolor", true);
+		getProperties().addSetting("showpointstonextrank", false);
 	}
 	
 	@Override

@@ -2,19 +2,24 @@ package tk.roccodev.zta;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.bstats.MetricsLite;
 import org.lwjgl.input.Keyboard;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.event.ActionBarEvent;
 import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
+import eu.the5zig.mod.event.EventHandler.Priority;
 import eu.the5zig.mod.event.KeyPressEvent;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.event.ServerQuitEvent;
@@ -28,6 +33,7 @@ import tk.roccodev.zta.autovote.watisdis;
 import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.AutoVoteCommand;
 import tk.roccodev.zta.command.ColorDebugCommand;
+import tk.roccodev.zta.command.DebugCommand;
 import tk.roccodev.zta.command.MathCommand;
 import tk.roccodev.zta.command.MonthlyCommand;
 import tk.roccodev.zta.command.NotesCommand;
@@ -49,10 +55,11 @@ import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
+import tk.roccodev.zta.utils.TIMVDay;
 
 
 
-@Plugin(name="Beezig", version="4.1.3")
+@Plugin(name="Beezig", version="4.2.0")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -102,6 +109,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "timvmap", tk.roccodev.zta.modules.timv.MapItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bodies", tk.roccodev.zta.modules.timv.BodiesItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "dbodies", tk.roccodev.zta.modules.timv.DBodiesItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "timvdailykarma", tk.roccodev.zta.modules.timv.DailyKarmaItem.class, "serverhivemc");
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "drmap", tk.roccodev.zta.modules.dr.MapItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drrole", tk.roccodev.zta.modules.dr.RoleItem.class, "serverhivemc");
@@ -117,6 +125,8 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "bedkills", tk.roccodev.zta.modules.bed.KillsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedgamecounter", tk.roccodev.zta.modules.bed.PointsCounterItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "beddestroyed", tk.roccodev.zta.modules.bed.BedsDestroyedItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "beddeaths", tk.roccodev.zta.modules.bed.DeathsItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bedkdrchange", tk.roccodev.zta.modules.bed.KDRChangeItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "globalmedals", tk.roccodev.zta.modules.global.MedalsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "globaltokens", tk.roccodev.zta.modules.global.TokensItem.class , "serverhivemc");
@@ -129,6 +139,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "gntkdrchange", tk.roccodev.zta.modules.gnt.KDRChangeItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntpoints", tk.roccodev.zta.modules.gnt.PointsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntgiantkills", tk.roccodev.zta.modules.gnt.GiantKillsItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "gntgold", tk.roccodev.zta.modules.gnt.GoldItem.class, "serverhivemc");
 		
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
@@ -141,6 +152,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new SeenCommand());
 		CommandManager.registerCommand(new PBCommand());
 		CommandManager.registerCommand(new WRCommand());
+		CommandManager.registerCommand(new DebugCommand());
 		CommandManager.registerCommand(new ColorDebugCommand());
 		CommandManager.registerCommand(new MonthlyCommand());
 		CommandManager.registerCommand(new AutoVoteCommand());
@@ -172,6 +184,7 @@ public class ZTAMain {
 		if(!mcFile.exists()) mcFile.mkdir();
 		The5zigAPI.getLogger().info("MC Folder is at: " + mcFile.getAbsolutePath());
 		checkForFileExist(new File(mcFile + "/timv/"), true);
+		checkForFileExist(new File(mcFile + "/timv/dailykarma/"), true);
 		checkOldCsvPath();
 		File settingsFile = new File(ZTAMain.mcFile.getAbsolutePath() + "/settings.properties");
 		if(!settingsFile.exists()){
@@ -209,7 +222,7 @@ public class ZTAMain {
 		new GNT();
 		new GNTM();
 	
-		
+		TIMV.setDailyKarmaFileName(TIMVDay.fromCalendar(Calendar.getInstance()) + ".txt");
 		
 			
 	}
@@ -310,6 +323,13 @@ public class ZTAMain {
 						return;
 					}
 					BED.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				} else if(ActiveGame.is("gnt") || ActiveGame.is("gntm")){
+					if(Giant.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					Giant.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
 				
 			}
@@ -338,14 +358,57 @@ public class ZTAMain {
 					}
 					BED.lastRecords = args[1].trim();	
 				}
+				else if(ActiveGame.is("gnt") || ActiveGame.is("gntm")){
+					if(Giant.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					Giant.lastRecords = args[1].trim();	
+				}
 			}
 		}
 		
 	}
 	
-	@EventHandler
+	@EventHandler(priority=Priority.HIGHEST)
 	public void onDisconnect(ServerQuitEvent evt){
 		NotesManager.notes.clear();
+		if(ActiveGame.current() == null || ActiveGame.current().isEmpty()) return;
+		new Thread(new Runnable(){
+			@Override
+			public void run(){
+				try {
+					String className = ActiveGame.current().toUpperCase();
+					if(className.startsWith("GNT")) className = "Giant";
+					Class gameModeClass = Class.forName("tk.roccodev.zta.games." + className);
+					Method resetMethod = gameModeClass.getMethod("reset", gameModeClass);
+					resetMethod.invoke(null, gameModeClass.newInstance());
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		
 	}
 	
 	
@@ -364,6 +427,7 @@ public void onKeypress(KeyPressEvent evt){
 		//Map fallback
 		if(ActiveGame.is("dr") && DR.activeMap == null){
 			String map = ChatColor.stripColor(evt.getTitle());
+			if(map.equals("HiveMC.EU")) return;
 			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
 		    DRMap map1 = DRMap.getFromDisplay(map);
 		    DR.activeMap = map1;
@@ -395,6 +459,15 @@ public void onKeypress(KeyPressEvent evt){
 		
 		// The5zigAPI.getLogger().info("(" + evt.getMessage() + ")");
 		
+	}
+	
+	@EventHandler
+	public void onActionBar(ActionBarEvent bar){
+		//The5zigAPI.getLogger().info(bar.getMessage());
+		if((ActiveGame.is("gnt") || ActiveGame.is("gntm")) && bar.getMessage().contains("❂")){
+			//§6❂ §e12§7  ❘  §c§lDestructible Land§7  ❘  §f0§b Kills
+			Giant.gold = Integer.parseInt(ChatColor.stripColor(bar.getMessage().split("❘")[0].replaceAll("❂", "")).trim());
+		}
 	}
 }
 	
