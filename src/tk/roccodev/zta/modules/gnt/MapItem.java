@@ -18,7 +18,7 @@ public class MapItem extends GameModeItem<Giant>{
 	@Override
 	protected Object getValue(boolean dummy) {
 		try{
-			
+			if(Giant.activeMap == null) return "No Map";
 			return Giant.activeMap.getDisplay().trim();
 		}catch(Exception e){
 			e.printStackTrace();
