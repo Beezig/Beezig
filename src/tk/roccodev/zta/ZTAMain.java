@@ -59,7 +59,7 @@ import tk.roccodev.zta.utils.TIMVDay;
 
 
 
-@Plugin(name="Beezig", version="4.2.0")
+@Plugin(name="Beezig", version="4.2.1")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
