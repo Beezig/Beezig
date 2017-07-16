@@ -796,6 +796,9 @@ public class HiveAPI {
 					e.printStackTrace();
 				}
 				
+		if(o.get("game").toString().equals("Hubs"))	{
+			return "Hub";
+		}			
 		return (String) o.get("game");
 	}
 	public static String getName(String ign){

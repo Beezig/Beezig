@@ -54,7 +54,7 @@ import tk.roccodev.zta.updater.Updater;
 
 
 
-@Plugin(name="Beezig", version="4.1.3")
+@Plugin(name="Beezig", version="4.2.0")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
