@@ -415,22 +415,22 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						
 							
 						if(mostPoints != null){
-							The5zigAPI.getAPI().messagePlayer("§3 Most Points: §b" + mostPoints + " ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Most Points: §b" + mostPoints + " ");
 						}
 						if(achievements != null){
-							The5zigAPI.getAPI().messagePlayer("§3 Achievements: §b" + achievements + "/41 ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/41 ");
 						}
 						if(krr != null){
-							The5zigAPI.getAPI().messagePlayer("§3 Karma/Rolepoints: §b" + krr + " ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Karma/Rolepoints: §b" + krr + " ");
 						}
 						if(monthlyRank != 0){					
-							The5zigAPI.getAPI().messagePlayer("§3 Monthly Leaderboards: §b#" + monthlyRank + " ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Monthly Leaderboards: §b#" + monthlyRank + " ");
 						}
 						if(lastGame != null){
 							Calendar lastSeen = Calendar.getInstance();;
 							lastSeen.setTimeInMillis(HiveAPI.lastGame(TIMV.lastRecords, "TIMV").getTime());
 						
-							The5zigAPI.getAPI().messagePlayer("§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()) + " ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()) + " ");
 						}
 						
 							
