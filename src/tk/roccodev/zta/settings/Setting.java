@@ -32,7 +32,11 @@ public enum Setting {
 	BED_SHOW_KILLS_PER_GAME(false, "BED Advanced Records - Show Kills per Game"), 
 	BED_SHOW_POINTS_PER_GAME(true, "BED Advanced Records - Show Points gained per Game"), 
 	BED_SHOW_KD(true, "BED Advanced Records - Show Kills/Deaths"), 
-	BED_SHOW_WINRATE(true, "BED Advanced Records - Show Winrate"); 
+	BED_SHOW_WINRATE(true, "BED Advanced Records - Show Winrate"), 
+	
+	Giant_SHOW_WINRATE(true, "Giant Advanced Records - Show Winrate"),
+	Giant_SHOW_KD(true, "Giant Advanced Records - Show Kills/Deaths"), 
+	Giant_SHOW_PPG(true, "Giant Advanced Records - Show the average Points per Game"); 
 	
 
 	

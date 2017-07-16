@@ -317,6 +317,13 @@ public class ZTAMain {
 						return;
 					}
 					BED.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				} else if(ActiveGame.is("gnt") || ActiveGame.is("gntm")){
+					if(Giant.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					Giant.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
 				
 			}
@@ -344,6 +351,14 @@ public class ZTAMain {
 						return;
 					}
 					BED.lastRecords = args[1].trim();	
+				}
+				else if(ActiveGame.is("gnt") || ActiveGame.is("gntm")){
+					if(Giant.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					Giant.lastRecords = args[1].trim();	
 				}
 			}
 		}

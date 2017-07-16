@@ -31,6 +31,13 @@ public enum GiantRank {
 		this.display = display;
 		this.prefix = prefix;
 	}
+	
+	public static GiantRank getFromDisplay(String display){
+		for(GiantRank rank : GiantRank.values()){
+			if(rank.getDisplay().equalsIgnoreCase(display)) return rank;
+		}
+		return null;
+	}	
 
 	public String getDisplay() {
 		return display;
