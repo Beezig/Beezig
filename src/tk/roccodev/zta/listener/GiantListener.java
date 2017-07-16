@@ -193,6 +193,7 @@ public class GiantListener extends AbstractGameListener<Giant>{
 						long points = 0;
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(Giant.lastRecords, lobby) : null;
 						String rankTitleGiant = Setting.SHOW_RECORDS_RANK.getValue() ? HiveAPI.GiantgetRank(Giant.lastRecords, lobby) : null;
+						The5zigAPI.getLogger().info(rankTitleGiant);
 						// int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "DR") < HiveAPI.DRgetPoints(Giant.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(Giant.lastRecords, "DR") : 0;
 						if(rankTitleGiant != null) rank = GiantRank.getFromDisplay(rankTitleGiant);
 						List<String> messages = new ArrayList<String>();
@@ -227,11 +228,12 @@ public class GiantListener extends AbstractGameListener<Giant>{
 										}
 									continue;
 								 	}
-									else if(s.startsWith("§3 Points: §b")){
+									else if(s.startsWith("§3 Total Points: §b")){
 										StringBuilder sb = new StringBuilder();
 										sb.append("§3 Points: §b");
-										points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
+										points = Long.parseLong(s.replaceAll("§3 Total Points: §b", ""));
 										sb.append(points);
+										The5zigAPI.getLogger().info(rank);
 										if(rank != null) sb.append(" (" + rank.getTotalDisplay());
 										// if(Setting.Giant_SHOW_POINTS_TO_NEXT_RANK.getValue()) sb.append(" / " + rank.getPointsToNextRank((int)points));
 										if(rank != null) sb.append("§b)");
