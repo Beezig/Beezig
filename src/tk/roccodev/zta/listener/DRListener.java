@@ -18,6 +18,7 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
+import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
@@ -45,6 +46,7 @@ public class DRListener extends AbstractGameListener<DR>{
 	public void onGameModeJoin(DR gameMode){
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("DR");
+		IHive.genericJoin();
 		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 		DR.rank = DRRank.getFromDisplay((HiveAPI.DRgetRank(The5zigAPI.getAPI().getGameProfile().getName()))).getTotalDisplay();
 		//Should've read the docs ¯\_(ツ)_/¯

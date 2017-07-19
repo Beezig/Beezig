@@ -862,13 +862,13 @@ public class HiveAPI {
 					connError = true;
 				}
 				if(playerOnline && !connError){
-					return "Nicked player (100%)";
+					return "Regular Hive Member";
 				}
 				else if(connError){
 					return "Connection error (100%)";
 				}
 				else if(!playerOnline && !connError){
-					return "Player not found or nicked player (50-50%)";
+					return "Regular Hive Member";
 				}
 			}
 		
@@ -909,13 +909,13 @@ public class HiveAPI {
 					connError = true;
 				}
 				if(playerOnline && !connError){
-					return "Nicked player (100%)";
+					return ign;
 				}
 				else if(connError){
 					return "Connection error (100%)";
 				}
 				else if(!playerOnline && !connError){
-					return "Player not found or nicked player (50-50%)";
+					return ign;
 				}
 				
 				

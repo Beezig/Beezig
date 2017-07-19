@@ -21,6 +21,7 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
+import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
@@ -52,7 +53,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 	public void onGameModeJoin(TIMV gameMode){
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("TIMV");
-		
+		IHive.genericJoin();
 		
 		//Should've read the docs ¯\_(ツ)_/¯
 		new Thread(new Runnable(){
@@ -114,7 +115,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			gameMode.setState(GameState.STARTING);
 			ActiveGame.set("TIMV");
 			The5zigAPI.getLogger().info("DEBUG = Joined TIMV");
-			
+			IHive.genericJoin();
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
@@ -261,7 +262,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			The5zigAPI.getLogger().info("found header");
 			return true;
 		}
-		else if(message.startsWith("§3 ")){
+		else if(message.startsWith("§3 ") && !message.endsWith(" ")){
 			
 				TIMV.messagesToSend.add(message);
 				The5zigAPI.getLogger().info("found entry");
@@ -415,22 +416,22 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						
 							
 						if(mostPoints != null){
-							The5zigAPI.getAPI().messagePlayer("§3 Most Points: §b" + mostPoints + " ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Most Points: §b" + mostPoints + " ");
 						}
 						if(achievements != null){
-							The5zigAPI.getAPI().messagePlayer("§3 Achievements: §b" + achievements + "/41 ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/41 ");
 						}
 						if(krr != null){
-							The5zigAPI.getAPI().messagePlayer("§3 Karma/Rolepoints: §b" + krr + " ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Karma/Rolepoints: §b" + krr + " ");
 						}
 						if(monthlyRank != 0){					
-							The5zigAPI.getAPI().messagePlayer("§3 Monthly Leaderboards: §b#" + monthlyRank + " ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Monthly Leaderboards: §b#" + monthlyRank + " ");
 						}
 						if(lastGame != null){
 							Calendar lastSeen = Calendar.getInstance();;
 							lastSeen.setTimeInMillis(HiveAPI.lastGame(TIMV.lastRecords, "TIMV").getTime());
 						
-							The5zigAPI.getAPI().messagePlayer("§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()) + " ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()) + " ");
 						}
 						
 							

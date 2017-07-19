@@ -15,6 +15,7 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
+import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
@@ -46,6 +47,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("BED");
+		IHive.genericJoin();
 		
 		new Thread(new Runnable(){
 			
