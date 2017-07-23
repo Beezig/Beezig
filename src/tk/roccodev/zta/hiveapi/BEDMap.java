@@ -11,7 +11,8 @@ public enum BEDMap {
 	BED_IGLOO("Igloo"),
 	BED_FOOD("Food"),	//Teams only
 	BED_ETHEREAL("Ethereal"),
-	BED_MORROWLAND("Morrowland");
+	BED_MORROWLAND("Morrowland"),
+	BED_MARIO("Mario");
 
 	private String displayName;
 	
