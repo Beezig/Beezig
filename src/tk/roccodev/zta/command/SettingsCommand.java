@@ -1,5 +1,8 @@
 package tk.roccodev.zta.command;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
@@ -45,6 +48,18 @@ public class SettingsCommand implements Command{
 		else if(args.length == 2){
 			String setting = args[0];
 			String value = args[1];
+			if(setting.equalsIgnoreCase("filter")){
+				
+				The5zigAPI.getAPI().messagePlayer(Log.info + "Filter results:");
+				for(Setting sett : Setting.values()){
+					if(sett.name().toUpperCase().contains(value.toUpperCase())){
+						String todisplay = sett.getValue() ? "§aTrue" : "§cFalse";
+						The5zigAPI.getAPI().messagePlayer("§e - " + sett.name() + " (" + todisplay + "§e) (§a" + sett.getBriefDescription() + "§e)");
+					}
+				}
+				
+				return true;
+			}
 			boolean b = Boolean.valueOf(value);
 			Setting sett = null;
 			try{

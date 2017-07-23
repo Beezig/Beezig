@@ -73,6 +73,7 @@ public class TIMV extends GameMode{
 	public static boolean hasVoted = false;
 	public static long lastRecordKarma;
 	
+	public static boolean actionBarChecked = false;
 	
 	public static void setDailyKarmaFileName(String newName){
 		dailyKarmaName = newName;
@@ -266,6 +267,7 @@ public class TIMV extends GameMode{
 		TIMV.votesToParse.clear();
 		TIMV.isRecordsRunning = false;
 		TIMV.hasVoted = false;
+		TIMV.actionBarChecked = false;
 		gm.setState(GameState.FINISHED);
 		ActiveGame.reset("timv");
 		IHive.genericReset();

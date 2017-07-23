@@ -111,57 +111,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		if(ZTAMain.isColorDebug){
 			The5zigAPI.getLogger().info("ColorDebug: " + "(" + message + ")");
 		}
-		if(message.equals("§8▍ §6TIMV§8 ▏ §6Welcome to Trouble in Mineville!")){
-			gameMode.setState(GameState.STARTING);
-			ActiveGame.set("TIMV");
-			The5zigAPI.getLogger().info("DEBUG = Joined TIMV");
-			IHive.genericJoin();
-			new Thread(new Runnable(){
-				@Override
-				public void run(){
-					try {
-						TIMV.initDailyKarmaWriter();
-					} catch (IOException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					try {
-						Thread.sleep(200);
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-					
-					if(sb != null && sb.getTitle().trim().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")){
-						
-						int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
-						if(karma != 0)
-						HiveAPI.TIMVkarma = (long) karma;
-						
-						
-					}else{
-					
-						
-							
-							
-								try {
-									
-									HiveAPI.TIMVupdateKarma();
-								} catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-							
-					
-				}
-			}}).start();
-			
-			
-			
-			
-		}
-		else if(message.contains("§cLost §e20§c karma") && gameMode != null){
+		if(message.startsWith("§8▍ §6TIMV§8 ▏ §c§l- 20 Karma") && gameMode != null){
 			TIMV.minus20();
 			if(TIMV.role.equals("Detective")){
 				TIMV.applyPoints(-1, "i");
@@ -170,8 +120,8 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				TIMV.applyPoints(-1);
 			}
 	
-		}
-		else if(message.contains("§cLost §e40§c karma") && gameMode != null){
+		} // Assumption, haven't tested yet
+		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §c§l- 40 Karma") && gameMode != null){
 			TIMV.minus40();
 			if(TIMV.role.equals("Traitor")){
 				TIMV.applyPoints(-2, "t");
@@ -179,7 +129,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.applyPoints(-2, "d");
 			}
 		}
-		else if(message.contains("§aAwarded §e20§a karma") && gameMode != null){
+		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §a§l+ 20 Karma") && gameMode != null){
 			TIMV.plus20();
 			if(TIMV.role.equals("Traitor")){
 			TIMV.applyPoints(2);
@@ -189,16 +139,16 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		}	
 		
 
-		else if(message.contains("§aAwarded §e10§a karma") && gameMode != null){
+		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §a§l+ 10 Karma") && gameMode != null){
 			TIMV.plus10();
 			TIMV.applyPoints(1);
 		}
-		else if(message.contains("§aAwarded §e25§a karma") && gameMode != null){
+		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §a§l+ 25 Karma") && gameMode != null){
 			TIMV.plus25();
 			TIMV.applyPoints(2); //+1 Det point
 			
 		}
-		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6The game has ended.") && gameMode != null){
+		else if(message.equals("               §a§m                §f§l Game Over! §a§m                ") && gameMode != null){
 			if(!TIMV.dead){
 				TIMV.applyPoints(20);
 			}
@@ -708,7 +658,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 		}
 		*/
-		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §4")){
+		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §c")){
 			TIMV.traitorsDiscovered++;
 		}
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §1")){
@@ -718,20 +668,20 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.dead = true;
 			
 		}
-		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §7You are a")){
+		else if(message.startsWith("          §a§m                §f§l §f§lYOU ARE ")){
 			gameMode.setState(GameState.GAME);
 			TIMV.calculateTraitors(The5zigAPI.getAPI().getServerPlayers().size());
 			TIMV.calculateDetectives(The5zigAPI.getAPI().getServerPlayers().size());
 			The5zigAPI.getLogger().info("(" + message + ")");
 			
 			String role = "";
-			if(message.contains("§aINNOCENT§7")){
+			if(message.contains("§a§lINNOCENT§f§l")){
 				role = "Innocent";
 			}
-			else if(message.contains("§cTRAITOR§7")){
+			else if(message.contains("§c§lTRAITOR§f§l")){
 				role = "Traitor";
 			}
-			else if(message.contains("§9DETECTIVE§7")){
+			else if(message.contains("§9§lDETECTIVE§f§l")){ // Assumption
 				role = "Detective";
 			}
 			TIMV.role = role;
@@ -799,15 +749,29 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 
 
 
+	@Override
+	public boolean onActionBar(TIMV gameMode, String message) {
+		if(!TIMV.actionBarChecked){
+			The5zigAPI.getLogger().info(message != null ? message : "lolnull");
+			if(message != null && message.contains("▏ §7")){
+				String[] data = message.split("▏ §7");
+				String gameId = data[1];
+				TIMV.gameID = gameId;
+				TIMV.actionBarChecked = true;
+			}
+		}
+		return false;
+	}
+
+
+
+
+
 	private class ScoreboardFetcherTask extends TimerTask{
 
 		@Override
 		public void run() {
-			for(Map.Entry<String, Integer> e : The5zigAPI.getAPI().getSideScoreboard().getLines().entrySet()){
-				if(e.getValue().intValue() == 3){
-					TIMV.gameID = e.getKey();
-				}
-			}
+			
 			
 		}
 		
