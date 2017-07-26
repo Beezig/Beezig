@@ -291,12 +291,16 @@ public class HiveAPI {
 	
 	public static void updateMedals() throws ParseException, Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
+		medals = getMedals(playername);
+	}
+	public static long getMedals(String ign) throws ParseException, Exception{
+		
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
-			o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+			o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(ign)));
 		
-		medals =  (long) o.get("medals");
+		return (long) o.get("medals");
 	}
 	public static void updateTokens() throws ParseException, Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
@@ -1117,7 +1121,7 @@ public class HiveAPI {
 	        
 	        return buffer.toString();
 	    } catch(Exception e){
-	    	The5zigAPI.getAPI().messagePlayer(Log.error + "Invalid Player.");
+	    	
 	    	e.printStackTrace();
 			return null;
 	    } finally {

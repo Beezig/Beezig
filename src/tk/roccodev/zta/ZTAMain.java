@@ -35,12 +35,11 @@ import tk.roccodev.zta.command.AutoVoteCommand;
 import tk.roccodev.zta.command.ColorDebugCommand;
 import tk.roccodev.zta.command.DebugCommand;
 import tk.roccodev.zta.command.MathCommand;
+import tk.roccodev.zta.command.MedalsCommand;
 import tk.roccodev.zta.command.MonthlyCommand;
 import tk.roccodev.zta.command.NotesCommand;
 import tk.roccodev.zta.command.PBCommand;
-import tk.roccodev.zta.command.RealRankCommand;
 import tk.roccodev.zta.command.SayCommand;
-import tk.roccodev.zta.command.SeenCommand;
 import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.command.ShrugCommand;
 import tk.roccodev.zta.command.WRCommand;
@@ -154,6 +153,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new RealRankCommand());
 		CommandManager.registerCommand(new SeenCommand());
 		*/
+		CommandManager.registerCommand(new MedalsCommand());
 		CommandManager.registerCommand(new PBCommand());
 		CommandManager.registerCommand(new WRCommand());
 		CommandManager.registerCommand(new DebugCommand());
