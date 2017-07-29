@@ -308,7 +308,7 @@ public class ZTAMain {
 			
 			
 		}
-		if(evt.getMessage().startsWith("/records") || evt.getMessage().startsWith("/stats")){
+		if(evt.getMessage().toUpperCase().startsWith("/RECORDS") || evt.getMessage().toUpperCase().startsWith("/STATS")){
 			String[] args = evt.getMessage().split(" ");
 			if(args.length == 1){
 				if(ActiveGame.is("timv")){
