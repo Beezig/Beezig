@@ -1,7 +1,8 @@
-package tk.roccodev.zta.hiveapi.wrapper;
+package tk.roccodev.zta.hiveapi.wrapper.modes;
 
 import eu.the5zig.mod.server.GameMode;
 import tk.roccodev.zta.games.TIMV;
+import tk.roccodev.zta.hiveapi.wrapper.APIGameMode;
 
 public class ApiTIMV extends APIGameMode {
 
@@ -22,8 +23,22 @@ public class ApiTIMV extends APIGameMode {
 		return "TIMV";
 	}
 	
+	
+	
 	//TIMV Stuff
 	
+	@Override
+	public boolean supportsMonthly() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public String getMonthlyPointsName() {
+		// TODO Auto-generated method stub
+		return "karma";
+	}
+
 	/**
 	 * Just a mirror to {@link tk.roccodev.zta.hiveapi.wrapper.APIGameMode#getPoints()}
 	 * 

@@ -4,7 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.TIMV;
-import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.APIValues;
 
 public class KarmaItem extends GameModeItem<TIMV> {
 
@@ -34,11 +34,11 @@ public class KarmaItem extends GameModeItem<TIMV> {
 		try{
 			if((boolean) getProperties().getSetting("showrank").get()){
 				if((boolean) getProperties().getSetting("showcolor").get()){
-					return HiveAPI.TIMVkarma + " (" + TIMV.rank + getMainFormatting() + ")";
+					return APIValues.TIMVkarma + " (" + TIMV.rank + getMainFormatting() + ")";
 				}
-				return HiveAPI.TIMVkarma + " (" + ChatColor.stripColor(TIMV.rank) + ")";
+				return APIValues.TIMVkarma + " (" + ChatColor.stripColor(TIMV.rank) + ")";
 			}
-			return HiveAPI.TIMVkarma;
+			return APIValues.TIMVkarma;
 		}catch(Exception e){
 			e.printStackTrace();
 			return "Server error";

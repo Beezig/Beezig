@@ -55,7 +55,9 @@ public class APIUtils {
 		}
 		
 		public static URL game(String uuid, String game){
+			
 			String url = "http://api.hivemc.com/v1/player/@player@/" + game;
+			if(game.isEmpty()) url = "http://api.hivemc.com/v1/player/@player@";
 			try {
 				return new URL(url.replaceAll("@player@", uuid));
 			} catch (MalformedURLException e) {
@@ -65,6 +67,27 @@ public class APIUtils {
 			}
 		}
 		
+		public static URL hiveLB(int index, String game){
+			String url = "http://api.hivemc.com/v1/game/@game@/leaderboard/" + index + "/" + (index + 1);
+			try {
+				return new URL(url.replaceAll("@game@", game));
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		public static URL monthlyLB(String game){
+			String url = "https://thtmx.rocks/@game@/api/ighGH789fdf5kfHUo";
+			try {
+				return new URL(url.replaceAll("@game@", game));
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		}
 		
 		public static String read(URL url){
 			BufferedReader reader = null;
