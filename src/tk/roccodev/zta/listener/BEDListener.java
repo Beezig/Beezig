@@ -1,11 +1,15 @@
 package tk.roccodev.zta.listener;
 
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -171,12 +175,24 @@ public class BEDListener extends AbstractGameListener<BED>{
 						BED.isRecordsRunning = true;
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
 						try{
-						Double epg = Setting.BED_SHOW_ELIMINATIONS_PER_GAME.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetTeamsEliminated(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
-						Double bpg = Setting.BED_SHOW_BEDS_PER_GAME.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetBedsDestroyed(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
-						Double dpg = Setting.BED_SHOW_DEATHS_PER_GAME.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetDeaths(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
-						Double kpg = Setting.BED_SHOW_KILLS_PER_GAME.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetKills(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
-						Double kd = Setting.BED_SHOW_KD.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetKills(BED.lastRecords) / (double)HiveAPI.BEDgetDeaths(BED.lastRecords) * 100d)) / 100d  : null;
-						Integer winr = Setting.BED_SHOW_WINRATE.getValue() ? (int) (Math.floor(((double)HiveAPI.BEDgetVictories(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords)) * 1000d) / 10d) : null;
+						
+						int kills = 0;
+						int deaths = 0;
+						int gamesPlayed = 0;
+						int victories = 0;
+						int bedsDestroyed = 0;
+						int eliminations = 0;
+						
+						NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+						DecimalFormat df = (DecimalFormat) nf;
+						df.setMaximumFractionDigits(2);
+						df.setMinimumFractionDigits(2);
+						
+						DecimalFormat df1f = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+						df1f.setMaximumFractionDigits(1);
+						df1f.setMinimumFractionDigits(1);
+						
+						
 						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(BED.lastRecords) : "";
 						ChatColor rankColor = null;
 						if(Setting.SHOW_NETWORK_RANK_COLOR.getValue()){
@@ -253,18 +269,37 @@ public class BEDListener extends AbstractGameListener<BED>{
 											
 											
 										}
+										
 										//if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
 										The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
 										continue;
 									
 									}
-
+									else if(s.startsWith("§3 Kills: §b")){
+										kills = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
+									}
+									else if(s.startsWith("§3 Deaths: §b")){
+										deaths = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Deaths: §b", "").trim()));
+									}
+									else if(s.startsWith("§3 Games Played: §b")){
+										gamesPlayed = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+									}
+									else if(s.startsWith("§3 Victories: §b")){
+										victories = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+									}
+									else if(s.startsWith("§3 Beds Destroyed: §b")){
+										bedsDestroyed = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Beds Destroyed: §b", "").trim()));
+									}
+									else if(s.startsWith("§3 Team Eliminated: §b")){
+										eliminations = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Team Eliminated: §b", "").trim()));
+									}
+								 	
 								The5zigAPI.getAPI().messagePlayer("§o " + s);
 								
 							}
 							
-						Double ppg = Setting.BED_SHOW_POINTS_PER_GAME.getValue() ? (double) Math.floor(((double)BED.lastRecordsPoints / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
+						
 							
 						if(achievements != null){
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
@@ -272,26 +307,33 @@ public class BEDListener extends AbstractGameListener<BED>{
 						}
 						// "§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing"
 						
-						if(epg != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Eliminations per Game: §b" + epg);
+						if(Setting.BED_SHOW_ELIMINATIONS_PER_GAME.getValue()){
+							double epg = eliminations / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Eliminations per Game: §b" + df1f.format(epg));
 						}	
-						if(bpg != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Beds per Game: §b" + bpg);
+						if(Setting.BED_SHOW_BEDS_PER_GAME.getValue()){
+							double bpg = bedsDestroyed / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Beds per Game: §b" + df1f.format(bpg));
 						}
-						if(dpg != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Deaths per Game: §b" + dpg);
+						if(Setting.BED_SHOW_DEATHS_PER_GAME.getValue()){
+							double dpg = deaths / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Deaths per Game: §b" + df1f.format(dpg));
 						}
-						if(kpg != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills per Game: §b" + kpg);
+						if(Setting.BED_SHOW_KILLS_PER_GAME.getValue()){
+							double kpg = kills / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills per Game: §b" + df1f.format(kpg));
 						}
-						if(ppg != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + ppg);
+						if(Setting.BED_SHOW_POINTS_PER_GAME.getValue()){
+							double ppg = BED.lastRecordsPoints / (double)(deaths == 0 ? 1 : deaths);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + df1f.format(ppg));
 						}
-						if(kd != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + kd);
+						if(Setting.BED_SHOW_KD.getValue()){
+							double kdr = kills / (double)(deaths == 0 ? 1 : deaths);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + df.format(kdr));
 						}
-						if(winr != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + winr + "%");
+						if(Setting.BED_SHOW_WINRATE.getValue()){
+							double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
 						}
 					/*	if(monthlyRank != 0){					
 					 *		The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);

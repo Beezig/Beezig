@@ -51,6 +51,7 @@ import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
@@ -209,7 +210,7 @@ public class ZTAMain {
 		
 		checkForFileExist(new File(mcFile + "/autovote.yml"), false);
 		AutovoteUtils.load();
-		watisdis.wat = HiveAPI.TIMVgetRank("RoccoDev");
+		watisdis.wat = new ApiTIMV("RoccoDev").getTitle();
 		
 		playerRank = HiveAPI.getNetworkRank(The5zigAPI.getAPI().getGameProfile().getName());
 		
@@ -428,6 +429,7 @@ public void onKeypress(KeyPressEvent evt){
 		The5zigAPI.getAPI().messagePlayer(Log.info + "Notes:");
 		for(String s : NotesManager.notes){
 			The5zigAPI.getAPI().messagePlayer("§e - §r" + s);
+			
 		}
 	}
 }
