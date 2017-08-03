@@ -1,12 +1,10 @@
 package tk.roccodev.zta.hiveapi.wrapper.modes;
 
 import eu.the5zig.mod.server.GameMode;
-import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.BED;
-import tk.roccodev.zta.hiveapi.wrapper.APIGameMode;
-import tk.roccodev.zta.hiveapi.wrapper.NetworkRank;
+import tk.roccodev.zta.hiveapi.wrapper.PvPMode;
 
-public class ApiBED extends APIGameMode {
+public class ApiBED extends PvPMode {
 
 	public ApiBED(String playerName) {
 		super(playerName);

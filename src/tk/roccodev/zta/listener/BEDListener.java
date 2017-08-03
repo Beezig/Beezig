@@ -2,7 +2,6 @@ package tk.roccodev.zta.listener;
 
 import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,9 +23,11 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
+import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.BEDMap;
 import tk.roccodev.zta.hiveapi.BEDRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.zta.settings.Setting;
 
 public class BEDListener extends AbstractGameListener<BED>{
@@ -59,8 +60,14 @@ public class BEDListener extends AbstractGameListener<BED>{
 			public void run(){
 				try {
 					Thread.sleep(200);
-					HiveAPI.BEDupdatePoints();
+					
+					String ign1 = The5zigAPI.getAPI().getGameProfile().getName();
+					APIValues.BEDpoints = new ApiBED(ign1).getPoints();
+					Thread.sleep(200);
 					BED.updateRank();
+						
+					
+					
 					String ign = The5zigAPI.getAPI().getGameProfile().getName();
 					
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
@@ -74,8 +81,10 @@ public class BEDListener extends AbstractGameListener<BED>{
 						BED.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
 						BED.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
 					}else{
-						BED.apiDeaths = (int) HiveAPI.getDeaths(ign, "BED");
-						BED.apiKills = (int) HiveAPI.getKills(ign, "BED");
+						String ign2 = The5zigAPI.getAPI().getGameProfile().getName();
+						ApiBED api = new ApiBED(ign2);
+						BED.apiDeaths = api.getDeaths();
+						BED.apiKills = api.getKills();
 					}
 					BED.updateKdr();
 					The5zigAPI.getLogger().info(BED.apiDeaths + " / " + BED.apiKills + " / " + BED.apiKdr);
@@ -115,7 +124,15 @@ public class BEDListener extends AbstractGameListener<BED>{
 			
 			BED.kills++;
 			BED.pointsCounter += 10;
-			HiveAPI.BEDpoints +=10;
+			APIValues.BEDpoints += 10;
+			BED.updateKdr();
+			
+		}
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 20§a points for killing")){
+			
+			BED.kills++;
+			BED.pointsCounter += 20;
+			APIValues.BEDpoints += 20;
 			BED.updateKdr();
 			
 		}
@@ -123,7 +140,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 			
 			BED.kills++;
 			BED.pointsCounter += 5;
-			HiveAPI.BEDpoints +=5;
+			APIValues.BEDpoints += 5;
 			BED.updateKdr();
 		}
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained §f50§a points for destroying")){
@@ -131,14 +148,23 @@ public class BEDListener extends AbstractGameListener<BED>{
 			
 			BED.pointsCounter += 50;
 			BED.bedsDestroyed++;
-			HiveAPI.BEDpoints += 50;
+			APIValues.BEDpoints += 50;
+			
+		}
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained §f100§a points for destroying")){
+			
+			
+			BED.pointsCounter += 100;
+			BED.bedsDestroyed++;
+			APIValues.BEDpoints += 100;
 			
 		}
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §e✯ §6Notable Win! §eGold Medal Awarded!")){
 			
 			BED.pointsCounter += 100;
-			HiveAPI.BEDpoints += 100;
+			APIValues.BEDpoints += 100;
 			HiveAPI.medals++;
+			HiveAPI.tokens += 100;
 			
 		}
 		
@@ -176,6 +202,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
 						try{
 						
+						ApiBED api = new ApiBED(BED.lastRecords);
+							
 						int kills = 0;
 						int deaths = 0;
 						int gamesPlayed = 0;
@@ -193,20 +221,17 @@ public class BEDListener extends AbstractGameListener<BED>{
 						df1f.setMinimumFractionDigits(1);
 						
 						
-						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(BED.lastRecords) : "";
+						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? api.getParentMode().getNetworkTitle() : "";
 						ChatColor rankColor = null;
 						if(Setting.SHOW_NETWORK_RANK_COLOR.getValue()){
-							if(rankTitle.isEmpty()){
-								rankColor = HiveAPI.getRankColorFromIgn(BED.lastRecords);
-							}
-							else{
-								rankColor = HiveAPI.getRankColor(rankTitle);
-							}
+							
+							rankColor = api.getParentMode().getNetworkRankColor();
+							
 						}
 						long points = 0;
 						
-						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(BED.lastRecords, "BED") : null;
-						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? HiveAPI.BEDgetAchievements(BED.lastRecords) : null;
+						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
+						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
 
 						
 						
@@ -224,7 +249,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 								 	if(s.trim().endsWith("'s Stats §6§m")){
 								 	The5zigAPI.getLogger().info("Editing Header...");
 									StringBuilder sb = new StringBuilder();
-									String correctUser = HiveAPI.getName(BED.lastRecords);
+									String correctUser = api.getParentMode().getCorrectName();
 									if(correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
 									sb.append("          §6§m                  §f ");
 									The5zigAPI.getLogger().info("Added base...");
@@ -341,7 +366,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 					 */		
 						if(lastGame != null){
 							Calendar lastSeen = Calendar.getInstance();
-							lastSeen.setTimeInMillis(HiveAPI.lastGame(BED.lastRecords, "BED").getTime());
+							lastSeen.setTimeInMillis(lastGame.getTime());
 							
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()));
 						}
@@ -458,8 +483,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 				@Override
 				public void run(){
 					try {
-						
-						HiveAPI.BEDupdatePoints();
+						String ign = The5zigAPI.getAPI().getGameProfile().getName();
+						APIValues.BEDpoints = new ApiBED(ign).getPoints();
 						Thread.sleep(200);
 						BED.updateRank();
 						
@@ -503,11 +528,12 @@ public class BEDListener extends AbstractGameListener<BED>{
 				public void run(){
 					
 					try {
-						HiveAPI.BEDupdatePoints();
+						String ign = The5zigAPI.getAPI().getGameProfile().getName();
+						APIValues.BEDpoints = new ApiBED(ign).getPoints();
 						Thread.sleep(200);
 						BED.updateRank();
+						
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
