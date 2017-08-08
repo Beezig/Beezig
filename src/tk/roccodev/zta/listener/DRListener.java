@@ -47,25 +47,27 @@ public class DRListener extends AbstractGameListener<DR>{
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("DR");
 		IHive.genericJoin();
-		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-		DR.rank = DRRank.getFromDisplay((HiveAPI.DRgetRank(The5zigAPI.getAPI().getGameProfile().getName()))).getTotalDisplay();
-		//Should've read the docs ¯\_(ツ)_/¯
-		if(sb != null) The5zigAPI.getLogger().info(sb.getTitle());
-		if(sb != null && sb.getTitle().contains("Your DR Stats")){
-			int points = sb.getLines().get(ChatColor.AQUA + "Points");	
-			HiveAPI.DRpoints = (long) points;		
-		}else{
-		try {
-			//HiveAPI.updateKarma();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		new Thread(new Runnable(){
+			@Override 
+			public void run(){
+				Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+				DR.rank = DRRank.getFromDisplay((HiveAPI.DRgetRank(The5zigAPI.getAPI().getGameProfile().getName()))).getTotalDisplay();
+				//Should've read the docs ¯\_(ツ)_/¯
+				if(sb != null) The5zigAPI.getLogger().info(sb.getTitle());
+				if(sb != null && sb.getTitle().contains("Your DR Stats")){
+					int points = sb.getLines().get(ChatColor.AQUA + "Points");	
+					HiveAPI.DRpoints = (long) points;		
+				
+				}
+			}
+		}).start();
+		
+		
 		
 		}
 		
 		
-	}
+	
 	
 	@Override
 	public boolean onServerChat(DR gameMode, String message) {

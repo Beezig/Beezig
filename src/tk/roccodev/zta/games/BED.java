@@ -95,7 +95,7 @@ public class BED extends GameMode{
 	}
 	
 	public static void updateRank(){
-		BED.rank = BEDRank.getRank(APIValues.BEDpoints).getName().replaceAll(ChatColor.stripColor(BEDRank.getRank(HiveAPI.BEDpoints).getName()), "") + BED.NUMBERS[BEDRank.getRank(HiveAPI.BEDpoints).getLevel((int)HiveAPI.BEDpoints)] + " " + BEDRank.getRank((int)HiveAPI.BEDpoints).getName();
+		BED.rank = BEDRank.getRank(APIValues.BEDpoints).getName().replaceAll(ChatColor.stripColor(BEDRank.getRank(APIValues.BEDpoints).getName()), "") + BED.NUMBERS[BEDRank.getRank(APIValues.BEDpoints).getLevel((int)APIValues.BEDpoints)] + " " + BEDRank.getRank((int)APIValues.BEDpoints).getName();
 		BED.rankObject = BEDRank.getRank(APIValues.BEDpoints);
 	}
 

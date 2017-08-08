@@ -235,16 +235,6 @@ public class HiveAPI {
 		return (long) o.get("deaths");
 	}
 	
-	//BED
-	public static void BEDupdatePoints() throws ParseException, Exception{
-		String playername = The5zigAPI.getAPI().getGameProfile().getName();
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-		
-		BEDpoints =  (long) o.get("total_points");
-	}
 	
 	public static long getPoints(String ign, String game) {
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
@@ -311,129 +301,8 @@ public class HiveAPI {
 		
 		tokens =  (long) o.get("tokens");
 	}
-	public static int BEDgetAchievements(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetAchievements");
-				e.printStackTrace();
-			}
-		HashMap<String, Object> map = new HashMap<String, Object>();
-			Iterator<?> keys = o.keySet().iterator();
-
-	        while( keys.hasNext() ){
-	            String key = (String)keys.next();
-	            Object value = o.get(key);
-	            map.put(key, value);
-
-	        }
-	       
-	       JSONObject o2 = (JSONObject) map.get("achievements");
-	       
-	       return o2.keySet().size() - 1;
-	}
-	public static long BEDgetPoints(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetPoints");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("total_points");
-	}
-	public static long BEDgetVictories(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetVictories");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("victories");
-	}
-	public static long BEDgetGamesPlayed(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetGamesPlayed");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("games_played");
-	}
-	public static long BEDgetKills(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetKills");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("kills");
-	}
-	public static long BEDgetDeaths(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetDeaths");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("deaths");
-	}
-	public static long BEDgetBedsDestroyed(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetBedsDestroyed");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("beds_destroyed");
-	}
-	public static long BEDgetTeamsEliminated(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetTeamsEliminated");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("teams_eliminated");
-	}
+	
+	
 	
 	//TIMV
 	public static void TIMVupdateKarma() throws ParseException, Exception{
