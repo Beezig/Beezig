@@ -6,8 +6,16 @@
 [![Join the chat at https://gitter.im/5zig-TIMV-Plugin/Lobby](https://badges.gitter.im/5zig-TIMV-Plugin/Lobby.svg)](https://gitter.im/5zig-TIMV-Plugin/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-A 5zig plugin to add HiveMC functionality. Currently supporting TIMV & DR.
+A 5zig plugin to add HiveMC functionality.
 By RoccoDev and ItsNiklass.
+
+#### Supports:
+
+* Trouble in Mineville
+* DeathRun
+* BedWars
+* SkyGiants
+* More coming soon!
 
 ### Build Status
 
