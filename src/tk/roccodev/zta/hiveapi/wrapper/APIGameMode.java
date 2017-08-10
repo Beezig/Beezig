@@ -62,6 +62,10 @@ public class APIGameMode {
 		return (long) object("total_points");
 	}
 	
+	public long getGamesPlayed(){
+		return (long) object("games_played");
+	}
+	
 	public String getMonthlyPointsName(){
 		return "total_points";
 	}

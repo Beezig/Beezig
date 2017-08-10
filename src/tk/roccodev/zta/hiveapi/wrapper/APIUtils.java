@@ -39,8 +39,22 @@ public class APIUtils {
 		}
 		return o;
 	}
+	
+	public static JSONObject getSpeedrunObject(String toParse, int mode){
+		return getObject(Parser.read(Parser.speedrun(toParse, mode)));
+	}
+	
+	public static String readURL(URL url){
+		return Parser.read(url);
+	}
+	
+	public static URL speedrunPublic(String id, int mode){
+		return Parser.speedrun(id, mode);
+	}
+	
 
 	static class Parser {
+		
 		
 		
 		public static URL mojang(String ign){
@@ -60,6 +74,32 @@ public class APIUtils {
 			if(game.isEmpty()) url = "http://api.hivemc.com/v1/player/@player@";
 			try {
 				return new URL(url.replaceAll("@player@", uuid));
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		/**
+		 * 
+		 * Parses url from speedrun.com
+		 * 
+		 * @param mapId for mode 0, or userId for mode 1
+		 * @param 0 for map parsing, 1 for user parsing
+		 * @return the parsed URL
+		 */
+		public static URL speedrun(String param, int mode){
+			String url = "";
+			switch(mode){
+			case 0:
+				url =  "http://www.speedrun.com/api/v1/leaderboards/369ep8dl/level/@id@/824xzvmd?top=1";
+				break;
+			case 1:
+				url = "http://www.speedrun.com/api/v1/users/@id@";
+			}
+			try {
+				return new URL(url.replaceAll("@id@", param));
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

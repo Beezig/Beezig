@@ -83,8 +83,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 					}else{
 						String ign2 = The5zigAPI.getAPI().getGameProfile().getName();
 						ApiBED api = new ApiBED(ign2);
-						BED.apiDeaths = api.getDeaths();
-						BED.apiKills = api.getKills();
+						BED.apiDeaths = Math.toIntExact(api.getDeaths());
+						BED.apiKills = Math.toIntExact(api.getKills());
 					}
 					BED.updateKdr();
 					The5zigAPI.getLogger().info(BED.apiDeaths + " / " + BED.apiKills + " / " + BED.apiKdr);

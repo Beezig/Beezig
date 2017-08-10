@@ -7,13 +7,13 @@ public class PvPMode extends APIGameMode {
 		
 	}
 	
-	public int getKills(){
-		return (int) object("kills");
+	public long getKills(){
+		return (long) object("kills");
 	}
 	
-	public int getDeaths(){
+	public long getDeaths(){
 		
-		return (int) object("deaths");
+		return (long) object("deaths");
 		
 	}
 
