@@ -34,6 +34,7 @@ public enum TIMVMap {
 	SPECTRAL("Spectral", 3,3),
 	SPRING_FALLS("Spring Falls", 1, 1),
 	STATION("Station", 3, 3),
+	STUDIO("Studio", 4, 4),
 	THE_CANAL("The Canal", 2, 2),
 	THE_SHIRE("The Shire", 3, 3),
 	WOODBURY("Welcome to Woodbury", 2, 2),

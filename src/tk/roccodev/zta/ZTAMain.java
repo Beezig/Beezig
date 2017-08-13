@@ -51,6 +51,7 @@ import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
@@ -59,7 +60,7 @@ import tk.roccodev.zta.utils.TIMVDay;
 
 
 
-@Plugin(name="Beezig", version="4.2.1")
+@Plugin(name="Beezig", version="4.2.2")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -446,17 +447,18 @@ public void onKeypress(KeyPressEvent evt){
 		    new Thread(new Runnable(){
 		    	@Override
 			    public void run(){
+		    		ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
 			    if(DR.currentMapPB == null ){
 			    	The5zigAPI.getLogger().info("Loading PB...");
-			    	DR.currentMapPB = HiveAPI.DRgetPB(The5zigAPI.getAPI().getGameProfile().getName(), DR.activeMap);			
+			    	DR.currentMapPB = api.getPersonalBest(DR.activeMap);		
 			    }
 			    if(DR.currentMapWR == null ){
 			    	The5zigAPI.getLogger().info("Loading WR...");
-			    	DR.currentMapWR = HiveAPI.DRgetWR(DR.activeMap);
+			    	DR.currentMapWR = api.getWorldRecord(DR.activeMap);
 			    }
 			    if(DR.currentMapWRHolder == null ){
 			    	The5zigAPI.getLogger().info("Loading WRHolder...");
-			    	DR.currentMapWRHolder = HiveAPI.DRgetWRHolder(DR.activeMap);
+			    	DR.currentMapWRHolder = api.getWorldRecordHolder(DR.activeMap);
 			    }
 		    	}
 		    }).start();

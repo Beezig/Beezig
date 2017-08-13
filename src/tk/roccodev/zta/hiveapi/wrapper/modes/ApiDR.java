@@ -34,17 +34,11 @@ public class ApiDR extends PvPMode {
 	
 	public String getPersonalBest(DRMap map){
 		JSONObject mapRecords = (JSONObject) object("maprecords");
-		String timeString = (String) mapRecords.get(map.toString());
-		Integer time = 0;
-		try{
-			time  = Integer.parseInt(timeString);
-		}
-		catch(Exception e){
-			return "No Personal Best";
-		}
+		Long time = (long) mapRecords.get(map.toString());
+		
 		if(time >= 60){
-			int seconds = time % 60;
-			int minutes = Math.floorDiv(time, 60);
+			int seconds = Math.toIntExact(time) % 60;
+			int minutes = Math.floorDiv(Math.toIntExact(time), 60);
 				if(seconds < 10){
 					return (minutes + ":0" + seconds);
 				}
