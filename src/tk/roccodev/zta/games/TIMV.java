@@ -27,7 +27,7 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
-import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.TIMVMap;
 import tk.roccodev.zta.notes.NotesManager;
 
@@ -183,27 +183,27 @@ public class TIMV extends GameMode{
 	public static void plus20(){
 		karmaCounter +=20;
 		dailyKarma += 20;
-		HiveAPI.TIMVkarma +=20;
+		APIValues.TIMVkarma +=20;
 	}
 	public static void plus25(){
 		karmaCounter +=25;
 		dailyKarma += 25;
-		HiveAPI.TIMVkarma +=25;
+		APIValues.TIMVkarma +=25;
 	}
 	public static void plus10(){
 		karmaCounter +=10;
 		dailyKarma += 10;
-		HiveAPI.TIMVkarma += 10;
+		APIValues.TIMVkarma += 10;
 		}
 	public static void minus20(){
 		karmaCounter -=20;
 		dailyKarma -=20;
-		HiveAPI.TIMVkarma -=20;
+		APIValues.TIMVkarma -=20;
 		}
 	public static void minus40(){
 		karmaCounter -=40;
 		dailyKarma -= 40;
-		HiveAPI.TIMVkarma -=40;
+		APIValues.TIMVkarma -=40;
 		}
 	
 	public static void resetCounter(){

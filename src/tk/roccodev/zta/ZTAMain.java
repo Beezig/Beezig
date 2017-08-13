@@ -35,12 +35,11 @@ import tk.roccodev.zta.command.AutoVoteCommand;
 import tk.roccodev.zta.command.ColorDebugCommand;
 import tk.roccodev.zta.command.DebugCommand;
 import tk.roccodev.zta.command.MathCommand;
+import tk.roccodev.zta.command.MedalsCommand;
 import tk.roccodev.zta.command.MonthlyCommand;
 import tk.roccodev.zta.command.NotesCommand;
 import tk.roccodev.zta.command.PBCommand;
-import tk.roccodev.zta.command.RealRankCommand;
 import tk.roccodev.zta.command.SayCommand;
-import tk.roccodev.zta.command.SeenCommand;
 import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.command.ShrugCommand;
 import tk.roccodev.zta.command.WRCommand;
@@ -52,6 +51,8 @@ import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
@@ -59,7 +60,7 @@ import tk.roccodev.zta.utils.TIMVDay;
 
 
 
-@Plugin(name="Beezig", version="4.2.1")
+@Plugin(name="Beezig", version="4.2.2")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -154,6 +155,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new RealRankCommand());
 		CommandManager.registerCommand(new SeenCommand());
 		*/
+		CommandManager.registerCommand(new MedalsCommand());
 		CommandManager.registerCommand(new PBCommand());
 		CommandManager.registerCommand(new WRCommand());
 		CommandManager.registerCommand(new DebugCommand());
@@ -209,7 +211,7 @@ public class ZTAMain {
 		
 		checkForFileExist(new File(mcFile + "/autovote.yml"), false);
 		AutovoteUtils.load();
-		watisdis.wat = HiveAPI.TIMVgetRank("RoccoDev");
+		watisdis.wat = new ApiTIMV("RoccoDev").getTitle();
 		
 		playerRank = HiveAPI.getNetworkRank(The5zigAPI.getAPI().getGameProfile().getName());
 		
@@ -308,7 +310,7 @@ public class ZTAMain {
 			
 			
 		}
-		if(evt.getMessage().startsWith("/records") || evt.getMessage().startsWith("/stats")){
+		if(evt.getMessage().toUpperCase().startsWith("/RECORDS") || evt.getMessage().toUpperCase().startsWith("/STATS")){
 			String[] args = evt.getMessage().split(" ");
 			if(args.length == 1){
 				if(ActiveGame.is("timv")){
@@ -428,6 +430,7 @@ public void onKeypress(KeyPressEvent evt){
 		The5zigAPI.getAPI().messagePlayer(Log.info + "Notes:");
 		for(String s : NotesManager.notes){
 			The5zigAPI.getAPI().messagePlayer("§e - §r" + s);
+			
 		}
 	}
 }
@@ -444,17 +447,18 @@ public void onKeypress(KeyPressEvent evt){
 		    new Thread(new Runnable(){
 		    	@Override
 			    public void run(){
+		    		ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
 			    if(DR.currentMapPB == null ){
 			    	The5zigAPI.getLogger().info("Loading PB...");
-			    	DR.currentMapPB = HiveAPI.DRgetPB(The5zigAPI.getAPI().getGameProfile().getName(), DR.activeMap);			
+			    	DR.currentMapPB = api.getPersonalBest(DR.activeMap);		
 			    }
 			    if(DR.currentMapWR == null ){
 			    	The5zigAPI.getLogger().info("Loading WR...");
-			    	DR.currentMapWR = HiveAPI.DRgetWR(DR.activeMap);
+			    	DR.currentMapWR = api.getWorldRecord(DR.activeMap);
 			    }
 			    if(DR.currentMapWRHolder == null ){
 			    	The5zigAPI.getLogger().info("Loading WRHolder...");
-			    	DR.currentMapWRHolder = HiveAPI.DRgetWRHolder(DR.activeMap);
+			    	DR.currentMapWRHolder = api.getWorldRecordHolder(DR.activeMap);
 			    }
 		    	}
 		    }).start();

@@ -24,11 +24,11 @@ public enum BEDRank {
 	WELL_RESTED(ChatColor.GREEN +""+ ChatColor.BOLD + "Well Rested", 183000, 189100, 195300, 201600, 208000),
 	KOALA(ChatColor.AQUA +""+ ChatColor.BOLD + "Koala", 214500, 221100, 227800, 234600, 241500),
 	DAY_DREAMER(ChatColor.RED +""+ ChatColor.BOLD + "Day Dreamer", 248500, 255600, 262800, 270100, 277500),
-	POWER_NAP(ChatColor.DARK_AQUA +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Power Nap", 285000, 292600, 300300, 308100, 316000),
-	BEAR(ChatColor.YELLOW +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Bear", 324000, 332100, 340300, 348600, 357000),
-	BED_WARRIOR(ChatColor.GOLD +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Bed Warrior", 365500, 374100, 382800, 391600, 400500),
+	POWER_NAP(ChatColor.YELLOW +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Power Nap", 285000, 292600, 300300, 308100, 316000),
+	BEAR(ChatColor.GREEN +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Bear", 324000, 332100, 340300, 348600, 357000),
+	BED_WARRIOR(ChatColor.AQUA +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Bed Warrior", 365500, 374100, 382800, 391600, 400500),
 	SNORLAX(ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Snorlax", 409500, 418600, 427800, 437100, 446500),
-	NIGHTMARE(ChatColor.GREEN +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Nightmare", 456000, 465600, 475300, 485100, 495000),
+	NIGHTMARE(ChatColor.RED +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Nightmare", 456000, 465600, 475300, 485100, 495000),
 	ZZZZZZ(ChatColor.WHITE +""+ ChatColor.BOLD +"✸ Zzzzzz", -1, -1, -1, -1, -1);
 	
 	

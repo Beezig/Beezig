@@ -235,16 +235,6 @@ public class HiveAPI {
 		return (long) o.get("deaths");
 	}
 	
-	//BED
-	public static void BEDupdatePoints() throws ParseException, Exception{
-		String playername = The5zigAPI.getAPI().getGameProfile().getName();
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-		
-		BEDpoints =  (long) o.get("total_points");
-	}
 	
 	public static long getPoints(String ign, String game) {
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
@@ -291,12 +281,16 @@ public class HiveAPI {
 	
 	public static void updateMedals() throws ParseException, Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
+		medals = getMedals(playername);
+	}
+	public static long getMedals(String ign) throws ParseException, Exception{
+		
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
-			o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+			o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(ign)));
 		
-		medals =  (long) o.get("medals");
+		return (long) o.get("medals");
 	}
 	public static void updateTokens() throws ParseException, Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
@@ -307,129 +301,8 @@ public class HiveAPI {
 		
 		tokens =  (long) o.get("tokens");
 	}
-	public static int BEDgetAchievements(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetAchievements");
-				e.printStackTrace();
-			}
-		HashMap<String, Object> map = new HashMap<String, Object>();
-			Iterator<?> keys = o.keySet().iterator();
-
-	        while( keys.hasNext() ){
-	            String key = (String)keys.next();
-	            Object value = o.get(key);
-	            map.put(key, value);
-
-	        }
-	       
-	       JSONObject o2 = (JSONObject) map.get("achievements");
-	       
-	       return o2.keySet().size() - 1;
-	}
-	public static long BEDgetPoints(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetPoints");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("total_points");
-	}
-	public static long BEDgetVictories(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetVictories");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("victories");
-	}
-	public static long BEDgetGamesPlayed(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetGamesPlayed");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("games_played");
-	}
-	public static long BEDgetKills(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetKills");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("kills");
-	}
-	public static long BEDgetDeaths(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetDeaths");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("deaths");
-	}
-	public static long BEDgetBedsDestroyed(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetBedsDestroyed");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("beds_destroyed");
-	}
-	public static long BEDgetTeamsEliminated(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(BEDparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed BEDgetTeamsEliminated");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("teams_eliminated");
-	}
+	
+	
 	
 	//TIMV
 	public static void TIMVupdateKarma() throws ParseException, Exception{
@@ -443,323 +316,10 @@ public class HiveAPI {
 		
 		
 	}
-	public static long TIMVgetKarmaPerGame(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
-			} catch (Exception e) {
-				e.printStackTrace();
-				The5zigAPI.getLogger().info("Failed TIMVgetKarmaPerGame");
-			}
-		
-		return (long) o.get("most_points");
-	}
-	public static String TIMVgetRank(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
-			} catch (Exception e) {
-				e.printStackTrace();
-				The5zigAPI.getLogger().info("Failed TIMVgetRank");
-			}
-		
-		return (String) o.get("title");
-	}
-	public static int TIMVgetAchievements(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
-			} catch (Exception e) {
-				e.printStackTrace();
-				The5zigAPI.getLogger().info("Failed TIMVgetAchievements");
-			}
-		HashMap<String, Object> map = new HashMap<String, Object>();
-			Iterator<?> keys = o.keySet().iterator();
-
-	        while( keys.hasNext() ){
-	            String key = (String)keys.next();
-	            Object value = o.get(key);
-	            map.put(key, value);
-
-	        }
-	       
-	       JSONObject o2 = (JSONObject) map.get("achievements");
-	       
-	       return o2.keySet().size() - 1;
-	}
-	public static long TIMVgetRolepoints(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed TIMVgetRolepoints");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("role_points");
-	}
-	public static long TIMVgetKarma(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed TIMVgetKarma");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("total_points");
-	}
 	
 	//DR
-	public static long DRgetPoints(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetPoints");
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("total_points");
-	}
-	public static String DRgetRank(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetRank");
-				e.printStackTrace();
-			}
-		
-		return (String) o.get("title");
-	}
-	public static long DRgetGames(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetGames");
-				e.printStackTrace();
-			}	
-		return (long) o.get("games_played");
-	}
-	public static long DRgetRunnerWins(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetRunnerWins");
-				e.printStackTrace();
-			}	
-		return (long) o.get("runnerwins");
-	}
-	public static long DRgetRunnerGamesPlayed(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetRunnerGamesPlayed");
-				e.printStackTrace();
-			}	
-		return (long) o.get("runnergamesplayed");
-	}
-	public static long DRgetDeaths(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetDeaths");
-				e.printStackTrace();
-			}	
-		return (long) o.get("deaths");
-	}
-	public static String DRgetPB(String ign, DRMap map){
-		// totally the best way to do this 10/10
-		String playername = ign;
-		String map1 = map.toString();
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		JSONObject o1 = null;
-		int time = 0;
-			try {
-				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetPB (invalid player)");
-				e.printStackTrace();
-				return "No Personal Best";
-			}			
-		try {
-			o1 = (JSONObject) parser.parse(o.get("maprecords").toString());
-			
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetPB (no pb)");
-				e.printStackTrace();
-				return "No Personal Best";
-		}
-		try{
-			time = Integer.valueOf(o1.get(map1).toString());
-		} catch (Exception e) {
-			The5zigAPI.getLogger().info("Failed DRgetPB (no pb)");
-			e.printStackTrace();
-			return "No Personal Best";
-		}
-		if(time >= 60){
-			int seconds = time % 60;
-			int minutes = Math.floorDiv(time, 60);
-				if(seconds < 10){
-					return (minutes + ":0" + seconds);
-				}
-			return (minutes + ":" + seconds);
-		}
-		return "0:" + time;
-	}
-	public static String DRgetWR(DRMap map){
-		String mapid = map.getSpeedrunID();
-		JSONParser parser = new JSONParser();
-		JSONObject run0 = null;
-			// run0 = Information about the WR run entry on speedrun.com
-			try {
-				run0 = (JSONObject) parser.parse(((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parseSpeedruncom(mapid)))).get("data").toString())).get("runs").toString())).get(0).toString())).get("run").toString());
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetWR (JSON 2)");
-				e.printStackTrace();
-				return "No World Record";
-			}
-		Double time = null;
-		try {
-			//Returns the world record time in seconds
-			time = (Double) ((JSONObject) parser.parse(run0.get("times").toString())).get("primary_t");
-		} catch (Exception e) {
-			The5zigAPI.getLogger().info("Failed DRgetWR (JSON 2)");
-			e.printStackTrace();
-			return "No World Record";
-		}
-		if(time >= 60){
-			int seconds = (int) (Math.floor(time) % 60);
-			double millis = Math.floor(((time - seconds) - 60)*1000)/1000;
-			int minutes = Math.floorDiv((int)(time - millis), 60);
-				if(seconds < 10){
-					return (minutes + ":0" + (seconds+millis));
-				}
-			return (minutes + ":" + (seconds+millis));
-		}
-		return "0:" + time;
-	}
-	public static String DRgetWRHolder(DRMap map){
-		String mapid = map.getSpeedrunID();
-		String WRHolder = null;
-		JSONParser parser = new JSONParser();
-		JSONObject run0 = null;
-			// run0 = Information about the WR run entry on speedrun.com
-			try {
-				run0 = (JSONObject) parser.parse(((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parseSpeedruncom(mapid)))).get("data").toString())).get("runs").toString())).get(0).toString())).get("run").toString());
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetWRHolder (run0)");
-				e.printStackTrace();
-				return "No Holder";
-			}
-			try {
-				//Returns the world record holder username... lmao
-				WRHolder = (String) ((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parseSpeedruncomUserID((String) ((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("id".toString()))))).toJSONString())).get("data").toString())).get("names").toString())).get("international").toString();
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetWRHolder (WRHolder)");
-				e.printStackTrace();
-				return "No Holder";
-			}
-			if (WRHolder == null){
-				try {
-					WRHolder = (String) (((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("name".toString())).toString();
-				} catch (Exception e) {
-					The5zigAPI.getLogger().info("Failed DRgetWRHolder (guest)");
-					e.printStackTrace();
-					return "No Holder";
-				}
-			}
-		return WRHolder != null ? WRHolder : "No Holder";
-	}
 	
-	public static double DRgetWR_raw(DRMap map){
-		String mapid = map.getSpeedrunID();
-		JSONParser parser = new JSONParser();
-		JSONObject run0 = null;
-			// run0 = Information about the WR run entry on speedrun.com
-			try {
-				run0 = (JSONObject) parser.parse(((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parseSpeedruncom(mapid)))).get("data").toString())).get("runs").toString())).get(0).toString())).get("run").toString());
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetWR (run0)");
-				e.printStackTrace();
-			}
-		
-		Double time = null;
-		try {
-			//Returns the world record time in seconds
-			time = (Double) ((JSONObject) parser.parse(run0.get("times").toString())).get("primary_t");
-		} catch (Exception e) {
-			The5zigAPI.getLogger().info("Failed DRgetWR (time)");
-			e.printStackTrace();
-		}
-		return time;
 	
-	}
-	
-	public static int DRgetAchievements(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(DRparsePlayerURL(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed DRgetAchievements");
-				e.printStackTrace();
-			}
-		HashMap<String, Object> map = new HashMap<String, Object>();
-			Iterator<?> keys = o.keySet().iterator();
-
-	        while( keys.hasNext() ){
-	            String key = (String)keys.next();
-	            Object value = o.get(key);
-	            map.put(key, value);
-
-	        }
-	       
-	       JSONObject o2 = (JSONObject) map.get("achievements");
-	       
-	       return o2.keySet().size() - 1;
-	}
 
 	public static Date getLastLogout(String ign){
 		/*
@@ -1117,7 +677,7 @@ public class HiveAPI {
 	        
 	        return buffer.toString();
 	    } catch(Exception e){
-	    	The5zigAPI.getAPI().messagePlayer(Log.error + "Invalid Player.");
+	    	
 	    	e.printStackTrace();
 			return null;
 	    } finally {

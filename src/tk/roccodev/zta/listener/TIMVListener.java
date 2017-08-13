@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -27,9 +26,11 @@ import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
 import tk.roccodev.zta.games.TIMV;
+import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
 import tk.roccodev.zta.hiveapi.TIMVRank;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.zta.settings.Setting;
 
 public class TIMVListener extends AbstractGameListener<TIMV>{
@@ -77,7 +78,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 					
 					int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
 					if(karma != 0)
-					HiveAPI.TIMVkarma = (long) karma;
+					APIValues.TIMVkarma = (long) karma;
 					
 					
 				}else{
@@ -86,8 +87,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						
 						
 							try {
+								String ign = The5zigAPI.getAPI().getGameProfile().getName();
+								APIValues.TIMVkarma = new ApiTIMV(ign).getKarma();
 								
-								HiveAPI.TIMVupdateKarma();
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -272,28 +274,24 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						TIMV.isRecordsRunning = true;
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
 						try{
+						ApiTIMV api = new ApiTIMV(TIMV.lastRecords);
 						TIMVRank rank = null;
-						Long rolepoints = Setting.TIMV_SHOW_KRR.getValue() ? HiveAPI.TIMVgetRolepoints(TIMV.lastRecords) : null;
+						Long rolepoints = Setting.TIMV_SHOW_KRR.getValue() ? api.getRolepoints() : null;
 						if(rolepoints == null && Setting.TIMV_SHOW_TRAITORRATIO.getValue()){
-							rolepoints = HiveAPI.TIMVgetRolepoints(TIMV.lastRecords);
+							rolepoints = api.getRolepoints();
 						}
-						Long mostPoints = Setting.TIMV_SHOW_MOSTPOINTS.getValue() ? HiveAPI.TIMVgetKarmaPerGame(TIMV.lastRecords) : null;
-						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(TIMV.lastRecords) : "";
+						Long mostPoints = Setting.TIMV_SHOW_MOSTPOINTS.getValue() ? api.getMostKarma() : null;
+						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? api.getParentMode().getNetworkTitle() : "";
 						ChatColor rankColor = null;
 						if(Setting.SHOW_NETWORK_RANK_COLOR.getValue()){
-							if(rankTitle.isEmpty()){
-								rankColor = HiveAPI.getRankColorFromIgn(TIMV.lastRecords);
-							}
-							else{
-								rankColor = HiveAPI.getRankColor(rankTitle);
-							}
+							rankColor = api.getParentMode().getNetworkRankColor();
 						}
 						long karma = 0;
 						long traitorPoints = 0;
-						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(TIMV.lastRecords, "TIMV") : null;
-						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? HiveAPI.TIMVgetAchievements(TIMV.lastRecords) : null;
-						String rankTitleTIMV = Setting.SHOW_RECORDS_RANK.getValue() ? HiveAPI.TIMVgetRank(TIMV.lastRecords) : null;
-						int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() &&  HiveAPI.getLeaderboardsPlacePoints(349, "TIMV") < HiveAPI.TIMVgetKarma(TIMV.lastRecords))? HiveAPI.getMonthlyLeaderboardsRank(TIMV.lastRecords, "TIMV") : 0;
+						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
+						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
+						String rankTitleTIMV = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
+						int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() &&  api.getLeaderboardsPlacePoints(349) < api.getKarma())? api.getMonthlyRank() : 0;
 						if(rankTitleTIMV != null) rank = TIMVRank.getFromDisplay(rankTitleTIMV);
 						List<String> messages = new ArrayList<String>();
 						messages.addAll(TIMV.messagesToSend);
@@ -305,7 +303,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 								 	//"§6§m                  §f ItsNiklass's Stats §6§m"
 								 	The5zigAPI.getLogger().info("Editing Header...");
 									StringBuilder sb = new StringBuilder();
-									String correctUser = HiveAPI.getName(TIMV.lastRecords);
+									String correctUser = api.getParentMode().getCorrectName();
 									if(correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
 									sb.append("          §6§m                  §f ");
 									The5zigAPI.getLogger().info("Added base...");
@@ -378,8 +376,8 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 							The5zigAPI.getAPI().messagePlayer("§o§3 Monthly Leaderboards: §b#" + monthlyRank + " ");
 						}
 						if(lastGame != null){
-							Calendar lastSeen = Calendar.getInstance();;
-							lastSeen.setTimeInMillis(HiveAPI.lastGame(TIMV.lastRecords, "TIMV").getTime());
+							Calendar lastSeen = Calendar.getInstance();
+							lastSeen.setTimeInMillis(lastGame.getTime());
 						
 							The5zigAPI.getAPI().messagePlayer("§o§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()) + " ");
 						}
@@ -492,172 +490,6 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6§e§e§l") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()){
 			TIMV.votesToParse.add(message);		
 		}
-		/*
-		else if(message.equals("§7=====================================") && !message.endsWith(" ")){ //Bar
-			if(TIMV.footerToSend.contains("§bThis data is §elive data.")){
-				//Advanced Records - send
-				new Thread(new Runnable(){
-					@Override
-					public void run(){
-						TIMV.isRecordsRunning = true;
-						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
-						try{
-						TIMVRank rank = null;
-						Long rolepoints = Setting.TIMV_SHOW_KRR.getValue() ? HiveAPI.TIMVgetRolepoints(TIMV.lastRecords) : null;
-						if(rolepoints == null && Setting.TIMV_SHOW_TRAITORRATIO.getValue()){
-							rolepoints = HiveAPI.TIMVgetRolepoints(TIMV.lastRecords);
-						}
-						Long mostPoints = Setting.TIMV_SHOW_MOSTPOINTS.getValue() ? HiveAPI.TIMVgetKarmaPerGame(TIMV.lastRecords) : null;
-						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(TIMV.lastRecords) : "";
-						ChatColor rankColor = null;
-						if(Setting.SHOW_NETWORK_RANK_COLOR.getValue()){
-							if(rankTitle.isEmpty()){
-								rankColor = HiveAPI.getRankColorFromIgn(TIMV.lastRecords);
-							}
-							else{
-								rankColor = HiveAPI.getRankColor(rankTitle);
-							}
-						}
-						long karma = 0;
-						long traitorPoints = 0;
-						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(TIMV.lastRecords, "TIMV") : null;
-						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? HiveAPI.TIMVgetAchievements(TIMV.lastRecords) : null;
-						String rankTitleTIMV = Setting.SHOW_RECORDS_RANK.getValue() ? HiveAPI.TIMVgetRank(TIMV.lastRecords) : null;
-						int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() &&  HiveAPI.getLeaderboardsPlacePoints(349, "TIMV") < HiveAPI.TIMVgetKarma(TIMV.lastRecords))? HiveAPI.getMonthlyLeaderboardsRank(TIMV.lastRecords, "TIMV") : 0;
-						if(rankTitleTIMV != null) rank = TIMVRank.getFromDisplay(rankTitleTIMV);
-						List<String> messages = new ArrayList<String>();
-						messages.addAll(TIMV.messagesToSend);
-							Iterator<String> it = messages.iterator();
-							for(String s : messages){
-								
-								
-								
-								if(s.startsWith("§bKarma: §e")){
-									StringBuilder sb = new StringBuilder();
-									sb.append("§bKarma: §e");
-									karma = Long.parseLong(s.replaceAll("§bKarma: §e", ""));
-									sb.append(karma);
-									if(rank != null) sb.append(" (" + rank.getTotalDisplay());
-									if(Setting.TIMV_SHOW_KARMA_TO_NEXT_RANK.getValue() && rank != null){
-										sb.append(" / " + rank.getKarmaToNextRank((int)karma));
-									}
-									sb.append("§e)");
-									The5zigAPI.getAPI().messagePlayer(sb.toString().trim() + " ");
-									continue;
-								}
-								else if(s.startsWith("§bUsername: §e")){
-									StringBuilder sb = new StringBuilder();
-									String username = ChatColor.stripColor(s.replaceAll("§bUsername: §e", ""));
-									String correctUser = HiveAPI.getName(username);
-									if(correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
-									sb.append("§bUsername: ");
-									if(rankColor != null) {
-										sb.append(rankColor + correctUser);
-									}
-									else{
-										sb.append("§e" + correctUser);
-									}
-									if(rankTitle != null && rankTitle.contains("nicked player")) rankTitle = "Nicked/Not found";
-									if(!rankTitle.isEmpty()){
-										if(rankColor == null) rankColor = ChatColor.WHITE;
-										sb.append("§e (" + rankColor + rankTitle + "§e)");
-									}
-									The5zigAPI.getAPI().messagePlayer(sb.toString().trim() + " ");
-									continue;
-								}
-								else if(s.startsWith("§bTraitor Points: §e") && karma > 1000 && Setting.TIMV_SHOW_TRAITORRATIO.getValue()){
-									String[] contents = s.split(":");
-									traitorPoints = Integer.parseInt(s.replaceAll("§bTraitor Points: §e", "").trim());
-									long rp = rolepoints;
-									double tratio = Math.round(((double)traitorPoints / (double)rp) * 1000d) / 10d;
-									ChatColor ratioColor = ChatColor.YELLOW;
-									if(tratio >= TIMV.TRATIO_LIMIT){
-										ratioColor= ChatColor.RED;
-									}
-									The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "Traitor Points: " + ChatColor.YELLOW + traitorPoints + " (" + ratioColor + tratio + "%" +  ChatColor.YELLOW + ") ");
-									continue;
-								}
-								The5zigAPI.getAPI().messagePlayer(s + " ");
-								
-							}
-						
-						
-
-
-						Double krr = Setting.TIMV_SHOW_KRR.getValue() ? (double)Math.round((double) karma / (double) rolepoints * 100D) / 100D : null;
-						
-							
-						if(mostPoints != null){
-							The5zigAPI.getAPI().messagePlayer("§bMost Points: §e" + mostPoints + " ");
-						}
-						if(achievements != null){
-							The5zigAPI.getAPI().messagePlayer("§bAchievements: §e" + achievements + "/41 ");
-						}
-						if(krr != null){
-							The5zigAPI.getAPI().messagePlayer("§bKarma/Rolepoints: §e" + krr + " ");
-						}
-						if(monthlyRank != 0){					
-							The5zigAPI.getAPI().messagePlayer("§bMonthly Leaderboards: §e#" + monthlyRank + " ");
-						}
-						if(lastGame != null){
-							Calendar lastSeen = Calendar.getInstance();;
-							lastSeen.setTimeInMillis(HiveAPI.lastGame(TIMV.lastRecords, "TIMV").getTime());
-						
-							The5zigAPI.getAPI().messagePlayer("§bLast Game: §e" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()) + " ");
-						}
-						
-							
-							for(String s : TIMV.footerToSend){
-								
-								The5zigAPI.getAPI().messagePlayer(s + " ");
-							}
-						
-						
-						
-						TIMV.messagesToSend.clear();
-						TIMV.footerToSend.clear();
-						TIMV.isRecordsRunning = false;
-						The5zigAPI.getAPI().messagePlayer("§7===================================== ");
-						
-						}catch(Exception e){
-							e.printStackTrace();
-							if(e.getCause() instanceof FileNotFoundException){
-								The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
-								TIMV.messagesToSend.clear();
-								TIMV.footerToSend.clear();
-								TIMV.isRecordsRunning = false;
-								return;
-							}
-							The5zigAPI.getAPI().messagePlayer(Log.error + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
-							
-							for(String s : TIMV.messagesToSend){
-								The5zigAPI.getAPI().messagePlayer(s + " ");
-							}
-							for(String s : TIMV.footerToSend){
-								The5zigAPI.getAPI().messagePlayer(s + " ");
-							}
-							The5zigAPI.getAPI().messagePlayer("§7===================================== ");
-							TIMV.messagesToSend.clear();
-							TIMV.footerToSend.clear();
-							TIMV.isRecordsRunning = false;
-							return;
-						}
-					}
-				}).start();
-				return true;
-				
-				
-			}
-			else{
-				
-					TIMV.footerToSend.add(message);
-				
-				return true;
-			}
-			
-			
-		}
-		*/
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §c")){
 			TIMV.traitorsDiscovered++;
 		}

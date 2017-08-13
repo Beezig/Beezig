@@ -1,11 +1,14 @@
 package tk.roccodev.zta.listener;
 
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,9 +23,11 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
+import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.BEDMap;
 import tk.roccodev.zta.hiveapi.BEDRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.zta.settings.Setting;
 
 public class BEDListener extends AbstractGameListener<BED>{
@@ -55,8 +60,14 @@ public class BEDListener extends AbstractGameListener<BED>{
 			public void run(){
 				try {
 					Thread.sleep(200);
-					HiveAPI.BEDupdatePoints();
+					
+					String ign1 = The5zigAPI.getAPI().getGameProfile().getName();
+					APIValues.BEDpoints = new ApiBED(ign1).getPoints();
+					Thread.sleep(200);
 					BED.updateRank();
+						
+					
+					
 					String ign = The5zigAPI.getAPI().getGameProfile().getName();
 					
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
@@ -70,8 +81,10 @@ public class BEDListener extends AbstractGameListener<BED>{
 						BED.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
 						BED.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
 					}else{
-						BED.apiDeaths = (int) HiveAPI.getDeaths(ign, "BED");
-						BED.apiKills = (int) HiveAPI.getKills(ign, "BED");
+						String ign2 = The5zigAPI.getAPI().getGameProfile().getName();
+						ApiBED api = new ApiBED(ign2);
+						BED.apiDeaths = Math.toIntExact(api.getDeaths());
+						BED.apiKills = Math.toIntExact(api.getKills());
 					}
 					BED.updateKdr();
 					The5zigAPI.getLogger().info(BED.apiDeaths + " / " + BED.apiKills + " / " + BED.apiKdr);
@@ -111,7 +124,15 @@ public class BEDListener extends AbstractGameListener<BED>{
 			
 			BED.kills++;
 			BED.pointsCounter += 10;
-			HiveAPI.BEDpoints +=10;
+			APIValues.BEDpoints += 10;
+			BED.updateKdr();
+			
+		}
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 20§a points for killing")){
+			
+			BED.kills++;
+			BED.pointsCounter += 20;
+			APIValues.BEDpoints += 20;
 			BED.updateKdr();
 			
 		}
@@ -119,7 +140,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 			
 			BED.kills++;
 			BED.pointsCounter += 5;
-			HiveAPI.BEDpoints +=5;
+			APIValues.BEDpoints += 5;
 			BED.updateKdr();
 		}
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained §f50§a points for destroying")){
@@ -127,14 +148,23 @@ public class BEDListener extends AbstractGameListener<BED>{
 			
 			BED.pointsCounter += 50;
 			BED.bedsDestroyed++;
-			HiveAPI.BEDpoints += 50;
+			APIValues.BEDpoints += 50;
+			
+		}
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained §f100§a points for destroying")){
+			
+			
+			BED.pointsCounter += 100;
+			BED.bedsDestroyed++;
+			APIValues.BEDpoints += 100;
 			
 		}
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §e✯ §6Notable Win! §eGold Medal Awarded!")){
 			
 			BED.pointsCounter += 100;
-			HiveAPI.BEDpoints += 100;
+			APIValues.BEDpoints += 100;
 			HiveAPI.medals++;
+			HiveAPI.tokens += 100;
 			
 		}
 		
@@ -171,26 +201,37 @@ public class BEDListener extends AbstractGameListener<BED>{
 						BED.isRecordsRunning = true;
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
 						try{
-						Double epg = Setting.BED_SHOW_ELIMINATIONS_PER_GAME.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetTeamsEliminated(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
-						Double bpg = Setting.BED_SHOW_BEDS_PER_GAME.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetBedsDestroyed(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
-						Double dpg = Setting.BED_SHOW_DEATHS_PER_GAME.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetDeaths(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
-						Double kpg = Setting.BED_SHOW_KILLS_PER_GAME.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetKills(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
-						Double kd = Setting.BED_SHOW_KD.getValue() ? (double) Math.floor(((double)HiveAPI.BEDgetKills(BED.lastRecords) / (double)HiveAPI.BEDgetDeaths(BED.lastRecords) * 100d)) / 100d  : null;
-						Integer winr = Setting.BED_SHOW_WINRATE.getValue() ? (int) (Math.floor(((double)HiveAPI.BEDgetVictories(BED.lastRecords) / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords)) * 1000d) / 10d) : null;
-						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(BED.lastRecords) : "";
+						
+						ApiBED api = new ApiBED(BED.lastRecords);
+							
+						int kills = 0;
+						int deaths = 0;
+						int gamesPlayed = 0;
+						int victories = 0;
+						int bedsDestroyed = 0;
+						int eliminations = 0;
+						
+						NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+						DecimalFormat df = (DecimalFormat) nf;
+						df.setMaximumFractionDigits(2);
+						df.setMinimumFractionDigits(2);
+						
+						DecimalFormat df1f = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+						df1f.setMaximumFractionDigits(1);
+						df1f.setMinimumFractionDigits(1);
+						
+						
+						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? api.getParentMode().getNetworkTitle() : "";
 						ChatColor rankColor = null;
 						if(Setting.SHOW_NETWORK_RANK_COLOR.getValue()){
-							if(rankTitle.isEmpty()){
-								rankColor = HiveAPI.getRankColorFromIgn(BED.lastRecords);
-							}
-							else{
-								rankColor = HiveAPI.getRankColor(rankTitle);
-							}
+							
+							rankColor = api.getParentMode().getNetworkRankColor();
+							
 						}
 						long points = 0;
 						
-						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(BED.lastRecords, "BED") : null;
-						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? HiveAPI.BEDgetAchievements(BED.lastRecords) : null;
+						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
+						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
 
 						
 						
@@ -208,7 +249,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 								 	if(s.trim().endsWith("'s Stats §6§m")){
 								 	The5zigAPI.getLogger().info("Editing Header...");
 									StringBuilder sb = new StringBuilder();
-									String correctUser = HiveAPI.getName(BED.lastRecords);
+									String correctUser = api.getParentMode().getCorrectName();
 									if(correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
 									sb.append("          §6§m                  §f ");
 									The5zigAPI.getLogger().info("Added base...");
@@ -253,18 +294,37 @@ public class BEDListener extends AbstractGameListener<BED>{
 											
 											
 										}
+										
 										//if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
 										The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
 										continue;
 									
 									}
-
+									else if(s.startsWith("§3 Kills: §b")){
+										kills = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
+									}
+									else if(s.startsWith("§3 Deaths: §b")){
+										deaths = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Deaths: §b", "").trim()));
+									}
+									else if(s.startsWith("§3 Games Played: §b")){
+										gamesPlayed = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+									}
+									else if(s.startsWith("§3 Victories: §b")){
+										victories = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+									}
+									else if(s.startsWith("§3 Beds Destroyed: §b")){
+										bedsDestroyed = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Beds Destroyed: §b", "").trim()));
+									}
+									else if(s.startsWith("§3 Team Eliminated: §b")){
+										eliminations = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Team Eliminated: §b", "").trim()));
+									}
+								 	
 								The5zigAPI.getAPI().messagePlayer("§o " + s);
 								
 							}
 							
-						Double ppg = Setting.BED_SHOW_POINTS_PER_GAME.getValue() ? (double) Math.floor(((double)BED.lastRecordsPoints / (double)HiveAPI.BEDgetGamesPlayed(BED.lastRecords) * 10d)) / 10d  : null;
+						
 							
 						if(achievements != null){
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
@@ -272,26 +332,33 @@ public class BEDListener extends AbstractGameListener<BED>{
 						}
 						// "§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing"
 						
-						if(epg != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Eliminations per Game: §b" + epg);
+						if(Setting.BED_SHOW_ELIMINATIONS_PER_GAME.getValue()){
+							double epg = eliminations / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Eliminations per Game: §b" + df1f.format(epg));
 						}	
-						if(bpg != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Beds per Game: §b" + bpg);
+						if(Setting.BED_SHOW_BEDS_PER_GAME.getValue()){
+							double bpg = bedsDestroyed / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Beds per Game: §b" + df1f.format(bpg));
 						}
-						if(dpg != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Deaths per Game: §b" + dpg);
+						if(Setting.BED_SHOW_DEATHS_PER_GAME.getValue()){
+							double dpg = deaths / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Deaths per Game: §b" + df1f.format(dpg));
 						}
-						if(kpg != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills per Game: §b" + kpg);
+						if(Setting.BED_SHOW_KILLS_PER_GAME.getValue()){
+							double kpg = kills / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills per Game: §b" + df1f.format(kpg));
 						}
-						if(ppg != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + ppg);
+						if(Setting.BED_SHOW_POINTS_PER_GAME.getValue()){
+							double ppg = BED.lastRecordsPoints / (double)(deaths == 0 ? 1 : deaths);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + df1f.format(ppg));
 						}
-						if(kd != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + kd);
+						if(Setting.BED_SHOW_KD.getValue()){
+							double kdr = kills / (double)(deaths == 0 ? 1 : deaths);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + df.format(kdr));
 						}
-						if(winr != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + winr + "%");
+						if(Setting.BED_SHOW_WINRATE.getValue()){
+							double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
 						}
 					/*	if(monthlyRank != 0){					
 					 *		The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
@@ -299,7 +366,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 					 */		
 						if(lastGame != null){
 							Calendar lastSeen = Calendar.getInstance();
-							lastSeen.setTimeInMillis(HiveAPI.lastGame(BED.lastRecords, "BED").getTime());
+							lastSeen.setTimeInMillis(lastGame.getTime());
 							
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()));
 						}
@@ -416,8 +483,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 				@Override
 				public void run(){
 					try {
-						
-						HiveAPI.BEDupdatePoints();
+						String ign = The5zigAPI.getAPI().getGameProfile().getName();
+						APIValues.BEDpoints = new ApiBED(ign).getPoints();
 						Thread.sleep(200);
 						BED.updateRank();
 						
@@ -461,11 +528,12 @@ public class BEDListener extends AbstractGameListener<BED>{
 				public void run(){
 					
 					try {
-						HiveAPI.BEDupdatePoints();
+						String ign = The5zigAPI.getAPI().getGameProfile().getName();
+						APIValues.BEDpoints = new ApiBED(ign).getPoints();
 						Thread.sleep(200);
 						BED.updateRank();
+						
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					

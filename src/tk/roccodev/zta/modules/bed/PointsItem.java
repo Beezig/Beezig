@@ -4,7 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.BED;
-import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.APIValues;
 
 public class PointsItem extends GameModeItem<BED>{
 
@@ -35,16 +35,16 @@ public class PointsItem extends GameModeItem<BED>{
 			if((boolean) getProperties().getSetting("showrank").get()){
 				StringBuilder sb = new StringBuilder();
 				if((boolean) getProperties().getSetting("showcolor").get()){
-					sb.append(HiveAPI.BEDpoints + " (" + BED.rank + getMainFormatting());
+					sb.append(APIValues.BEDpoints + " (" + BED.rank + getMainFormatting());
 					
 				}else{
 				
-					sb.append(HiveAPI.BEDpoints + " (" + ChatColor.stripColor(BED.rank));
+					sb.append(APIValues.BEDpoints + " (" + ChatColor.stripColor(BED.rank));
 				}
 				
 				if((boolean)getProperties().getSetting("showpointstonextrank").get()){
-					if(BED.rankObject == null) return HiveAPI.BEDpoints;
-					sb.append((boolean)getProperties().getSetting("showcolor").get() ? " / " + BED.rankObject.getPointsToNextRank((int)HiveAPI.BEDpoints) : " / " + ChatColor.stripColor(BED.rankObject.getPointsToNextRank((int)HiveAPI.BEDpoints)));
+					if(BED.rankObject == null) return APIValues.BEDpoints;
+					sb.append((boolean)getProperties().getSetting("showcolor").get() ? " / " + BED.rankObject.getPointsToNextRank((int)APIValues.BEDpoints) : " / " + ChatColor.stripColor(BED.rankObject.getPointsToNextRank((int)APIValues.BEDpoints)));
 						
 				}
 				sb.append(
@@ -55,7 +55,7 @@ public class PointsItem extends GameModeItem<BED>{
 						")");
 				return sb.toString().trim();
 				}
-			return HiveAPI.BEDpoints;
+			return APIValues.BEDpoints;
 		}catch(Exception e){
 			e.printStackTrace();
 			return "Server error";

@@ -9,6 +9,7 @@ import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
+import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.BEDMap;
 import tk.roccodev.zta.hiveapi.BEDRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -94,8 +95,8 @@ public class BED extends GameMode{
 	}
 	
 	public static void updateRank(){
-		BED.rank = BEDRank.getRank(HiveAPI.BEDpoints).getName().replaceAll(ChatColor.stripColor(BEDRank.getRank(HiveAPI.BEDpoints).getName()), "") + BED.NUMBERS[BEDRank.getRank(HiveAPI.BEDpoints).getLevel((int)HiveAPI.BEDpoints)] + " " + BEDRank.getRank((int)HiveAPI.BEDpoints).getName();
-		BED.rankObject = BEDRank.getRank(HiveAPI.BEDpoints);
+		BED.rank = BEDRank.getRank(APIValues.BEDpoints).getName().replaceAll(ChatColor.stripColor(BEDRank.getRank(APIValues.BEDpoints).getName()), "") + BED.NUMBERS[BEDRank.getRank(APIValues.BEDpoints).getLevel((int)APIValues.BEDpoints)] + " " + BEDRank.getRank((int)APIValues.BEDpoints).getName();
+		BED.rankObject = BEDRank.getRank(APIValues.BEDpoints);
 	}
 
 	public static void updateKdr(){

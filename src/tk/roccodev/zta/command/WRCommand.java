@@ -7,6 +7,7 @@ import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 
 public class WRCommand implements Command{
 
@@ -29,7 +30,8 @@ public class WRCommand implements Command{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + DR.activeMap.getDisplayName() + "§e is §6" + HiveAPI.DRgetWR(DR.activeMap) + "§e by §6" + DR.currentMapWRHolder);
+					ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
+					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + DR.activeMap.getDisplayName() + "§e is §6" + api.getWorldRecord(DR.activeMap) + "§e by §6" + DR.currentMapWRHolder);
 				}
 			}).start();
 	
@@ -39,7 +41,8 @@ public class WRCommand implements Command{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + map.getDisplayName() + "§e is §6" + HiveAPI.DRgetWR(map) + "§e by §6" + HiveAPI.DRgetWRHolder(map));
+					ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
+					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + map.getDisplayName() + "§e is §6" + api.getWorldRecord(map) + "§e by §6" + api.getWorldRecordHolder(map));
 				}
 			}).start();
 	
@@ -51,7 +54,8 @@ public class WRCommand implements Command{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + map.getDisplayName() + "§e is §6" + HiveAPI.DRgetWR(map) + "§e by §6" + DR.currentMapWRHolder);
+					ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
+					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + map.getDisplayName() + "§e is §6" + api.getWorldRecord(map) + "§e by §6" + api.getWorldRecordHolder(map));
 				}
 			}).start();
 		}

@@ -4,7 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.DR;
-import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.APIValues;
 
 public class PointsItem extends GameModeItem<DR>{
 
@@ -34,11 +34,11 @@ public class PointsItem extends GameModeItem<DR>{
 		try{
 			if((boolean) getProperties().getSetting("showrank").get()){
 				if((boolean) getProperties().getSetting("showcolor").get()){
-					return HiveAPI.DRpoints + " (" + DR.rank + getMainFormatting() + ")";
+					return APIValues.DRpoints + " (" + DR.rank + getMainFormatting() + ")";
 				}
-				return HiveAPI.DRpoints + " (" + ChatColor.stripColor(DR.rank) + ")";
+				return APIValues.DRpoints + " (" + ChatColor.stripColor(DR.rank) + ")";
 			}
-			return HiveAPI.DRpoints;
+			return APIValues.DRpoints;
 		}catch(Exception e){
 			e.printStackTrace();
 			return "Server error";

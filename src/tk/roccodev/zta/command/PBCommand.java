@@ -3,10 +3,10 @@ package tk.roccodev.zta.command;
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 
 public class PBCommand implements Command{
 
@@ -32,7 +32,8 @@ public class PBCommand implements Command{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e's Personal Best on map §6" + DR.activeMap.getDisplayName() + "§e is §6" + HiveAPI.DRgetPB(ign, DR.activeMap));
+					ApiDR api = new ApiDR(ign);
+					The5zigAPI.getAPI().messagePlayer(Log.info + api.getParentMode().getNetworkRankColor() + api.getParentMode().getCorrectName() + "§e's Personal Best on map §6" + DR.activeMap.getDisplayName() + "§e is §6" + api.getPersonalBest(DR.activeMap));
 				}
 			}).start();
 	
@@ -41,11 +42,13 @@ public class PBCommand implements Command{
 			
 			String ign = args[0];
 			DRMap map = DRMap.getFromDisplay(args[1]);
+			
 				
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e's Personal Best on map §6" + map.getDisplayName() + "§e is §6" + HiveAPI.DRgetPB(ign, map));
+					ApiDR api = new ApiDR(ign);
+					The5zigAPI.getAPI().messagePlayer(Log.info + api.getParentMode().getNetworkRankColor() + api.getParentMode().getCorrectName() + "§e's Personal Best on map §6" + map.getDisplayName() + "§e is §6" + api.getPersonalBest(map));
 				}
 			}).start();
 	
@@ -57,7 +60,8 @@ public class PBCommand implements Command{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e's Personal Best on map §6" + map.getDisplayName() + "§e is §6" + HiveAPI.DRgetPB(ign, map));
+					ApiDR api = new ApiDR(ign);
+					The5zigAPI.getAPI().messagePlayer(Log.info + api.getParentMode().getNetworkRankColor() + api.getParentMode().getCorrectName() + "§e's Personal Best on map §6" + map.getDisplayName() + "§e is §6" + api.getPersonalBest(map));
 				}
 			}).start();
 		}
