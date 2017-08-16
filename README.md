@@ -54,8 +54,8 @@ By RoccoDev and ItsNiklass.
 
 If you want beta features, you can choose one of these downloads:
 
-* Master branch (unreleased changes, stable): [Click here](https://github.com/RoccoDev/Beezig-Deploy/raw/master/master/jar/TIMVPlugin.jar)
-* Experimental branch (unreleased changes, bleeding edge): [Click here](https://github.com/RoccoDev/Beezig-Deploy/raw/experimental/experimental/jar/TIMVPlugin.jar)
+* Master branch (unreleased changes, stable): [Click here](https://github.com/RoccoDev/Beezig-Deploy/raw/master/master/jar/Beezig.jar)
+* Experimental branch (unreleased changes, bleeding edge): [Click here](https://github.com/RoccoDev/Beezig-Deploy/raw/experimental/experimental/jar/Beezig.jar)
 
 ## APIs
 This plugin uses:
