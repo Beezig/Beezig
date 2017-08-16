@@ -60,12 +60,12 @@ import tk.roccodev.zta.utils.TIMVDay;
 
 
 
-@Plugin(name="Beezig", version="4.2.2")
+@Plugin(name="Beezig", version="4.2.3")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
 	
-	public static IKeybinding notesKb;
+	
 	public static File mcFile;
 	public static boolean isColorDebug = false;
 	public static String playerRank = "";
@@ -165,7 +165,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new ShrugCommand());
 		CommandManager.registerCommand(new MathCommand());
 		
-		ZTAMain.notesKb = The5zigAPI.getAPI().registerKeyBinding("TIMV: Show /notes", Keyboard.KEY_X, "TIMV Plugin");
+		
 
 		The5zigAPI.getLogger().info("Loaded Beezig");
 		
@@ -424,16 +424,7 @@ public class ZTAMain {
 	
 	
 
-@EventHandler
-public void onKeypress(KeyPressEvent evt){
-	if(evt.getKeyCode() == notesKb.getKeyCode() && notesKb.isPressed() && The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("TIMV")){
-		The5zigAPI.getAPI().messagePlayer(Log.info + "Notes:");
-		for(String s : NotesManager.notes){
-			The5zigAPI.getAPI().messagePlayer("§e - §r" + s);
-			
-		}
-	}
-}
+
 	@EventHandler(priority = EventHandler.Priority.LOW)
 	public void onTitle(TitleEvent evt){
 		//Map fallback
