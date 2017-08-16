@@ -92,6 +92,17 @@ public class ApiDR extends PvPMode {
 		
 	}
 	
+	
+	
+	
+	@Override
+	public boolean supportsMonthly() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+
 	public String getWorldRecordHolder(DRMap map){
 		String mapid = map.getSpeedrunID();
 		String WRHolder = null;
