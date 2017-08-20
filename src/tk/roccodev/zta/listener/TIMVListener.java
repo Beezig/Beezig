@@ -187,7 +187,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		    TIMV.activeMap = map1;
 			
 		}
-		//Map Fallback (Joined after voting ended.)
+		/* Map Fallback (Joined after voting ended.)
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6Map :") && gameMode != null && TIMV.activeMap == null){
 			String afterMsg = message.split("§8▍ §6TIMV§8 ▏ §6Map : §b")[1];
 			// §8▍ §6TIMV§8 ▏ §6Map : §bCastle
@@ -205,7 +205,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			    
 			TIMV.activeMap = map1;
 	
-		}
+		}*/
 		
 		else if(message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")){
 			//"          §6§m                  §f ItsNiklass's Stats §6§m                  "
