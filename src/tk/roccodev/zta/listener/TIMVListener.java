@@ -490,7 +490,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6§e§e§l") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()){
 			TIMV.votesToParse.add(message);		
 		}
-		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §c")){
+		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §4")){
 			TIMV.traitorsDiscovered++;
 		}
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §1")){
