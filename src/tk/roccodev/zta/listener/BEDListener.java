@@ -74,6 +74,9 @@ public class BEDListener extends AbstractGameListener<BED>{
 					if(sb != null && sb.getTitle().contains("BED ")){
 						BED.mode = "Solo";
 					}
+					if(sb != null && sb.getTitle().contains("BEDD ")){
+						BED.mode = "Duo";
+					}
 					if(sb != null && sb.getTitle().contains("BEDT ")){
 						BED.mode = "Teams";
 					}
@@ -498,7 +501,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 			//"                        §6§lYou are on Gold Team!"
             //§9§lYou are on Blue Team!
 			String team = null;
-			Pattern pattern = Pattern.compile(Pattern.quote("on ") + "(.*?)" + Pattern.quote(" Team!"));
+			Pattern pattern = Pattern.compile(Pattern.quote("the ") + "(.*?)" + Pattern.quote(" Team!"));
 			Matcher matcher = pattern.matcher(message.trim());
 			while (matcher.find()) {
 			        team = matcher.group(1);

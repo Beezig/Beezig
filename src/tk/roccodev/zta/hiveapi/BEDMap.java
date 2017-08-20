@@ -12,7 +12,11 @@ public enum BEDMap {
 	BED_FOOD("Food"),	//Teams only
 	BED_ETHEREAL("Ethereal"),
 	BED_MORROWLAND("Morrowland"),
-	BED_MARIO("Mario");
+	BED_MARIO("Mario"),
+	BED_RUINS("Ruins"),
+	BED_PIRATES("Pirates"),
+	BED_FLORAL("Floral"),
+	BED_HELL("Hell");
 
 	private String displayName;
 	
