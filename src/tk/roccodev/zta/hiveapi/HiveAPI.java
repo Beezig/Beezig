@@ -292,14 +292,19 @@ public class HiveAPI {
 		
 		return (long) o.get("medals");
 	}
+	
 	public static void updateTokens() throws ParseException, Exception{
-		String playername = The5zigAPI.getAPI().getGameProfile().getName();
+		String playername = The5zigAPI.getAPI().getGameProfile().getName();		
+		tokens =  getTokens(playername);
+	}
+	public static long getTokens(String ign) throws ParseException, Exception{
+		
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
-			o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+			o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(ign)));
 		
-		tokens =  (long) o.get("tokens");
+		return (long) o.get("tokens");
 	}
 	
 	

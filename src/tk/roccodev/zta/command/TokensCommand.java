@@ -7,17 +7,17 @@ import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 
-public class MedalsCommand implements Command{
+public class TokensCommand implements Command{
 
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "medals";
+		return "tokens";
 	}
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/medals"};
+		String[] aliases = {"/tokens"};
 		
 		return aliases;
 	}
@@ -30,8 +30,8 @@ public class MedalsCommand implements Command{
 				@Override
 				public void run(){
 					try {
-						HiveAPI.updateMedals();
-						The5zigAPI.getAPI().messagePlayer(Log.info + "Your medals:§a " + HiveAPI.medals);
+						HiveAPI.updateTokens();
+						The5zigAPI.getAPI().messagePlayer(Log.info + "Your tokens:§a " + HiveAPI.tokens);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -45,17 +45,17 @@ public class MedalsCommand implements Command{
 				@Override
 				public void run(){
 					try {
-						long medals = HiveAPI.getMedals(args[0]);
-						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Medals:§a " + medals);
+						long tokens = HiveAPI.getTokens(args[0]);
+						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Tokens:§6 " + tokens);
 					} catch (Exception e) {
 						// RoccoDev - length:8 chars:1,3,5,7
 						List<Integer> odds = new ArrayList<Integer>();
-						odds.add(stringToNumber(args[0]).length() - 1);
+						odds.add(stringToNumber(args[0]).length()*500 - 1);
 						while(odds.get(odds.size() - 1) - 16 > 0){
 							odds.add(odds.get(odds.size() - 1) - 16);
 						}
 						int i = Integer.parseInt(stringFromIntList(odds));
-						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Medals:§a " + secretAlgorithm(i));
+						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Tokens:§6 " + secretAlgorithm(i));
 					}
 					
 				}

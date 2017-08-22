@@ -37,9 +37,12 @@ import tk.roccodev.zta.command.MessageOverlayCommand;
 import tk.roccodev.zta.command.MonthlyCommand;
 import tk.roccodev.zta.command.NotesCommand;
 import tk.roccodev.zta.command.PBCommand;
+import tk.roccodev.zta.command.RealRankCommand;
 import tk.roccodev.zta.command.SayCommand;
+import tk.roccodev.zta.command.SeenCommand;
 import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.command.ShrugCommand;
+import tk.roccodev.zta.command.TokensCommand;
 import tk.roccodev.zta.command.WRCommand;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.DR;
@@ -149,11 +152,8 @@ public class ZTAMain {
 		CommandManager.registerCommand(new AddNoteCommand());
 		CommandManager.registerCommand(new SayCommand());
 		CommandManager.registerCommand(new SettingsCommand());
-		/*
-		CommandManager.registerCommand(new RealRankCommand());
-		CommandManager.registerCommand(new SeenCommand());
-		*/
 		CommandManager.registerCommand(new MedalsCommand());
+		CommandManager.registerCommand(new TokensCommand());
 		CommandManager.registerCommand(new PBCommand());
 		CommandManager.registerCommand(new WRCommand());
 		CommandManager.registerCommand(new DebugCommand());
@@ -162,6 +162,13 @@ public class ZTAMain {
 		CommandManager.registerCommand(new AutoVoteCommand());
 		CommandManager.registerCommand(new ShrugCommand());
 		CommandManager.registerCommand(new MathCommand());
+		CommandManager.registerCommand(new MessageOverlayCommand());
+		
+		if(The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d") || 
+				The5zigAPI.getAPI().getGameProfile().getId().toString().equals("bba224a2-0bff-4913-b042-27ca3b60973f")){
+			CommandManager.registerCommand(new RealRankCommand());
+			CommandManager.registerCommand(new SeenCommand());			
+		}
 		CommandManager.registerCommand(new MessageOverlayCommand());
 		
 		
