@@ -24,7 +24,6 @@ public class MedalsCommand implements Command{
 
 	@Override
 	public boolean execute(String[] args) {
-		args[0] = HiveAPI.getName(args[0]); //correct capitalization
 		if(args.length == 0){
 			new Thread(new Runnable(){
 				@Override
@@ -45,6 +44,7 @@ public class MedalsCommand implements Command{
 				@Override
 				public void run(){
 					try {
+						args[0] = HiveAPI.getName(args[0]); //correct capitalization
 						long medals = HiveAPI.getMedals(args[0]);
 						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Medals:§a " + medals);
 					} catch (Exception e) {

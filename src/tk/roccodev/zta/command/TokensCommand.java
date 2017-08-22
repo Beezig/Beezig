@@ -24,7 +24,6 @@ public class TokensCommand implements Command{
 
 	@Override
 	public boolean execute(String[] args) {
-		args[0] = HiveAPI.getName(args[0]); //correct capitalization
 		if(args.length == 0){
 			new Thread(new Runnable(){
 				@Override
@@ -45,6 +44,7 @@ public class TokensCommand implements Command{
 				@Override
 				public void run(){
 					try {
+						args[0] = HiveAPI.getName(args[0]); //correct capitalization
 						long tokens = HiveAPI.getTokens(args[0]);
 						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Tokens:§6 " + tokens);
 					} catch (Exception e) {
