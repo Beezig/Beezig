@@ -500,7 +500,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.dead = true;
 			
 		}
-		else if(message.startsWith("          §a§m                §f§l §f§lYOU ARE ")){
+		else if(message.contains("§f§lYOU ARE ")){
 			gameMode.setState(GameState.GAME);
 			TIMV.calculateTraitors(The5zigAPI.getAPI().getServerPlayers().size());
 			TIMV.calculateDetectives(The5zigAPI.getAPI().getServerPlayers().size());
@@ -510,10 +510,10 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			if(message.contains("§a§lINNOCENT§f§l")){
 				role = "Innocent";
 			}
-			else if(message.contains("§c§lTRAITOR§f§l")){
+			else if(message.contains("§c§lA TRAITOR§f§l")){
 				role = "Traitor";
 			}
-			else if(message.contains("§9§lDETECTIVE§f§l")){ // Assumption
+			else if(message.contains("§9§lA DETECTIVE§f§l")){ // Assumption
 				role = "Detective";
 			}
 			TIMV.role = role;

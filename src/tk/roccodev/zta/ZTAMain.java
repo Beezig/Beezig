@@ -12,7 +12,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.bstats.MetricsLite;
-import org.lwjgl.input.Keyboard;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.ActionBarEvent;
@@ -20,13 +19,11 @@ import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.EventHandler.Priority;
-import eu.the5zig.mod.event.KeyPressEvent;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.event.ServerQuitEvent;
 import eu.the5zig.mod.event.TitleEvent;
 import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
-import eu.the5zig.mod.util.IKeybinding;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
@@ -36,6 +33,7 @@ import tk.roccodev.zta.command.ColorDebugCommand;
 import tk.roccodev.zta.command.DebugCommand;
 import tk.roccodev.zta.command.MathCommand;
 import tk.roccodev.zta.command.MedalsCommand;
+import tk.roccodev.zta.command.MessageOverlayCommand;
 import tk.roccodev.zta.command.MonthlyCommand;
 import tk.roccodev.zta.command.NotesCommand;
 import tk.roccodev.zta.command.PBCommand;
@@ -164,6 +162,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new AutoVoteCommand());
 		CommandManager.registerCommand(new ShrugCommand());
 		CommandManager.registerCommand(new MathCommand());
+		CommandManager.registerCommand(new MessageOverlayCommand());
 		
 		
 
@@ -294,6 +293,7 @@ public class ZTAMain {
 	
 	@EventHandler(priority = EventHandler.Priority.HIGH)
 	public void onChatSend(ChatSendEvent evt){
+	
 		if(evt.getMessage().startsWith("*") && isStaffChat()){
 			String noStar = evt.getMessage().replaceAll("\\*", "");
 			if(noStar.length() == 0) return;
@@ -301,6 +301,7 @@ public class ZTAMain {
 			
 			return;
 		}
+		
 		if(evt.getMessage().startsWith("/") && !evt.getMessage().startsWith("/ ")){
 			
 			if(CommandManager.dispatchCommand(evt.getMessage())){
@@ -309,6 +310,13 @@ public class ZTAMain {
 			}
 			
 			
+		}
+		if(!MessageOverlayCommand.toggledName.isEmpty() && !evt.getMessage().startsWith("/")){
+			evt.setCancelled(true);
+			The5zigAPI.getAPI().sendPlayerMessage("/msg " + MessageOverlayCommand.toggledName + " " + evt.getMessage());
+		}
+		if(evt.getMessage().toUpperCase().trim().equals("/P")){
+			MessageOverlayCommand.toggledName = "";
 		}
 		if(evt.getMessage().toUpperCase().startsWith("/RECORDS") || evt.getMessage().toUpperCase().startsWith("/STATS")){
 			String[] args = evt.getMessage().split(" ");
