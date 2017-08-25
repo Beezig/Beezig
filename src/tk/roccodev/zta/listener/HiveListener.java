@@ -8,6 +8,7 @@ import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.GNT;
 import tk.roccodev.zta.games.GNTM;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class HiveListener extends AbstractGameListener<GameMode>{
@@ -49,6 +50,13 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 		 if (gameMode != null && gameMode.getState() != GameState.FINISHED) {
 	            return;
 	        }
+		 
+		 if(key.equals(TIMV.joinMessage)){
+				getGameListener().switchLobby("TIMV");
+				
+				The5zigAPI.getLogger().info("Connected to TIMV! -Hive");
+			}
+		 
 		if(key.equals("timv.welcome")){
 			getGameListener().switchLobby("TIMV");
 			

@@ -23,6 +23,7 @@ import com.csvreader.CsvWriter;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
+import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
@@ -34,6 +35,8 @@ import tk.roccodev.zta.notes.NotesManager;
 public class TIMV extends GameMode{
 
 	public static final double TRATIO_LIMIT = 36.4d;
+	
+	public static String joinMessage = ChatColor.stripColor(The5zigAPI.getAPI().getGameProfile().getName() + " wants to investigate!");
 	
 	public static int karmaCounter;
 	public static TIMVMap activeMap;

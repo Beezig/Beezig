@@ -35,6 +35,7 @@ import tk.roccodev.zta.settings.Setting;
 
 public class TIMVListener extends AbstractGameListener<TIMV>{
 
+	
 	@Override
 	public Class<TIMV> getGameMode() {
 		// TODO Auto-generated method stub
@@ -112,6 +113,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		// The5zigAPI.getLogger().info("(" + message + ")");
 		if(ZTAMain.isColorDebug){
 			The5zigAPI.getLogger().info("ColorDebug: " + "(" + message + ")");
+		}
+		if(message.equals(TIMV.joinMessage)){
+			TIMV.reset(gameMode);
 		}
 		if(message.startsWith("§8▍ §6TIMV§8 ▏ §c§l- 20 Karma") && gameMode != null){
 			TIMV.minus20();
@@ -206,6 +210,20 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.activeMap = map1;
 	
 		}*/
+		else if(message.contains("is known to have poisonous water...") && gameMode != null && TIMV.activeMap == null){
+			//(         §eFrozen Cargo is known to have poisonous water...)
+			String mapmsg = ChatColor.stripColor(message.split(" is known to have poisonous water...")[0]).trim().trim();
+			String map = "";
+			Pattern pattern = Pattern.compile(mapmsg);
+			Matcher matcher = pattern.matcher(mapmsg);
+			while (matcher.find()) {
+			   map = matcher.group(0);
+			}
+			The5zigAPI.getLogger().info("FALLBACK: " + map);
+			TIMVMap map1 = TIMVMap.getFromDisplay(map);
+			    
+			TIMV.activeMap = map1;
+		}
 		
 		else if(message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")){
 			//"          §6§m                  §f ItsNiklass's Stats §6§m                  "
