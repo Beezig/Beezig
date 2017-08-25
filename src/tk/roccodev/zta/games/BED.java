@@ -2,8 +2,10 @@ package tk.roccodev.zta.games;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
@@ -29,6 +31,7 @@ public class BED extends GameMode{
 	public static int deaths;
 	public static int pointsCounter;
 	public static int bedsDestroyed;
+	public static int teamsLeft;
 	
 	public static int apiKills;
 	public static int apiDeaths;
@@ -61,6 +64,7 @@ public class BED extends GameMode{
 		BED.deaths = 0;
 		BED.bedsDestroyed = 0;
 		BED.pointsCounter = 0;
+		BED.teamsLeft = 0;
 		ActiveGame.reset("bed");
 		IHive.genericReset();
 		if(The5zigAPI.getAPI().getActiveServer() != null)
@@ -80,6 +84,16 @@ public class BED extends GameMode{
 		return false;
 	}
 	
+	public static void updateTeamsLeft(){
+		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();	
+		
+		for(Map.Entry<String, Integer> entry: sb.getLines().entrySet()) {	
+			
+			if(entry.getValue() == 13){				
+				BED.teamsLeft = ChatColor.stripColor(entry.getKey().toString()).toCharArray().length;				
+			}
+		}
+	}
 	public static String updateResources(){
 		StringBuilder sb = new StringBuilder();
 		int ironIngots = The5zigAPI.getAPI().getItemCount("iron_ingot");
