@@ -59,7 +59,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 			@Override
 			public void run(){
 				try {
-					Thread.sleep(200);
+					Thread.sleep(1000);
 					
 					String ign1 = The5zigAPI.getAPI().getGameProfile().getName();
 					APIValues.BEDpoints = new ApiBED(ign1).getPoints();
@@ -71,6 +71,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 					String ign = The5zigAPI.getAPI().getGameProfile().getName();
 					
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+					The5zigAPI.getLogger().info(sb.getTitle());
 					if(sb != null && sb.getTitle().contains("BED ")){
 						BED.mode = "Solo";
 					}
@@ -120,7 +121,18 @@ public class BEDListener extends AbstractGameListener<BED>{
 		        map = matcher.group(1);
 		    }
 		    BEDMap map1 = BEDMap.getFromDisplay(map);
-		    BED.activeMap = map1;			
+		    BED.activeMap = map1;
+		    if(BED.mode == null){
+		    	if(map1 == BEDMap.BED_RUINS ||
+		    			map1 == BEDMap.BED_FLORAL ||
+		    			map1 == BEDMap.BED_HELL||
+		    			map1 == BEDMap.BED_PIRATES){
+		    		BED.mode = "Teams";	    		
+		    	}
+		    	if(map1 == BEDMap.BED_FOOD){
+		    		BED.mode = "Duo";
+		    	}
+		    }
 		}
 
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing")){
@@ -169,6 +181,12 @@ public class BEDListener extends AbstractGameListener<BED>{
 			HiveAPI.medals++;
 			HiveAPI.tokens += 100;
 			
+		}
+		else if(message.contains("§c has been ELIMINATED!")){
+			BED.updateTeamsLeft();
+		}
+		else if(message.contains("§c bed has been DESTROYED!")){
+			BED.updateTeamsLeft();
 		}
 		
 		//Advanced Records

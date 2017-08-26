@@ -12,7 +12,6 @@ public class TeamsLeftItem extends GameModeItem<BED>{
 	@Override
 	protected Object getValue(boolean dummy) {
 		
-			BED.updateTeamsLeft();
 			return BED.teamsLeft;
 
 	}
