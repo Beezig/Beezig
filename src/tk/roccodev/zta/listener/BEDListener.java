@@ -568,7 +568,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 		}
 		else if(subTitle != null && subTitle.equals("§r§7Protect your bed, destroy others!§r")){
 			gameMode.setState(GameState.GAME);
-			
+			BED.updateTeamsLeft();
 			//As Hive sends this subtitle like 13 times, don't do anything here please :)
 		}
 		
