@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -465,8 +466,11 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				public void run(){
 					List<String> votesCopy = new ArrayList<String>();
 					votesCopy.addAll(TIMV.votesToParse);
-					List<String> mapNames = new ArrayList<String>();
 					List<TIMVMap> parsedMaps = new ArrayList<TIMVMap>();
+					
+					List<String> votesindex = new ArrayList<String>();
+					List<String> finalvoting = new ArrayList<String>();
+					
 					for(String s1 : AutovoteUtils.getMapsForMode("timv")){
 						TIMVMap map1 = TIMVMap.valueOf(s1);	
 						if(map1 == null) continue;
@@ -478,29 +482,46 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						
 						String[] data = s.split("\\.");						
 						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §6TIMV§8 ▏ §6§6§l", "").replaceAll("▍ TIMV ▏", "").trim();
-						String[] toConsider = data[1].split("\\[");
+						String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
 						String consider = ChatColor.stripColor(toConsider[0]).trim();
 						TIMVMap map = TIMVMap.getFromDisplay(consider);
+						String votes = toConsider[1].split(" ")[0].trim();
+						
 						if(map == null){
 							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: map not found for " + consider);
 						}
-						The5zigAPI.getLogger().info("trying to match " + map);			
+						The5zigAPI.getLogger().info("trying to match " + map);
 						if(parsedMaps.contains(map)){
-							The5zigAPI.getAPI().sendPlayerMessage("/v " + index);
-							// /vote doesn't work anymore #JustHiveThings
-							TIMV.votesToParse.clear();
-							TIMV.hasVoted = true;
-							The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for §6" + map.getDisplayName());
-							return;
+							votesindex.add(votes + "-" + index);
+							The5zigAPI.getLogger().info("Added " + map + " Index #" + index + " with " + votes + " votes");	
+						}else{
+							The5zigAPI.getLogger().info(map + " is not a favourite");
 						}
 						if(index.equals("5")){
-							The5zigAPI.getAPI().sendPlayerMessage("/v 6");
-							// /vote doesn't work anymore #JustHiveThings
-							TIMV.votesToParse.clear();
-							TIMV.hasVoted = true;
-							The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for §cRandom map");
+							if(votesindex.size() != 0){
+								for(String n : votesindex){
+									finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
+								}
+								int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
+								The5zigAPI.getLogger().info("Voting " + finalindex);
+								The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
+								
+								TIMV.votesToParse.clear();
+								TIMV.hasVoted = true;
+																										//we can't really get the map name at this point
+								The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
+								return;
+							}
+							else{
+								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting Random");
+								The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+								The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for §cRandom map");
+								TIMV.votesToParse.clear();
+								TIMV.hasVoted = true;
+								//he hasn't but we don't want to check again and again
 							return;
-						}
+							}
+						}						
 					}	
 				}
 			}).start();

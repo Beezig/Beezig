@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -445,6 +446,10 @@ public class BEDListener extends AbstractGameListener<BED>{
 					List<String> votesCopy = new ArrayList<String>();
 					votesCopy.addAll(BED.votesToParse);
 					List<BEDMap> parsedMaps = new ArrayList<BEDMap>();
+					
+					List<String> votesindex = new ArrayList<String>();
+					List<String> finalvoting = new ArrayList<String>();
+					
 					for(String s1 : AutovoteUtils.getMapsForMode("bed")){
 						BEDMap map1 = BEDMap.valueOf(s1);					
 						if(map1 == null) continue;
@@ -459,37 +464,74 @@ public class BEDListener extends AbstractGameListener<BED>{
 						String toConsider = data[1];
 						String[] data2 = ChatColor.stripColor(toConsider).split("\\[");
 						String consider = data2[0].trim();
-						
+						String votes = data2[1].split(" ")[0].trim();
+								
 						BEDMap map = BEDMap.getFromDisplay(consider);
 						if(map == null){
 							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: Map not found for " + consider);
 						}
 						The5zigAPI.getLogger().info("trying to match " + map);
 						if(parsedMaps.contains(map)){
-							
-							The5zigAPI.getAPI().sendPlayerMessage("/vote " + index);
+							votesindex.add(votes + "-" + index);
+							The5zigAPI.getLogger().info("Added " + map + " Index #" + index + " with " + votes + " votes");
+			
+						/*	The5zigAPI.getAPI().sendPlayerMessage("/vote " + index);
 							BED.votesToParse.clear();
 							BED.hasVoted = true;
 							The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for §6" + map.getDisplayName());
 							return;
+						*/	
 						}
 						else{
-							The5zigAPI.getLogger().info("no matches in parsedMaps (yet)");
+							The5zigAPI.getLogger().info(map + " is not a favourite");
 						}
 						if(index.equals("4") && BED.mode.equals("Teams")){
-							The5zigAPI.getLogger().info("Done, couldn't find matches - Teams");
-							BED.votesToParse.clear();
-							BED.hasVoted = true;
-							//he hasn't but we don't want to check again and again
-							return;
+							
+							if(votesindex.size() != 0){
+								for(String n : votesindex){
+									finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
+								}
+								int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
+								The5zigAPI.getLogger().info("Voting " + finalindex);
+								The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
+								
+								BED.votesToParse.clear();
+								BED.hasVoted = true;
+																										//we can't really get the map name at this point
+								The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
+								return;
+							}
+							else{				
+								The5zigAPI.getLogger().info("Done, couldn't find matches - Teams");
+								BED.votesToParse.clear();
+								BED.hasVoted = true;
+								//he hasn't but we don't want to check again and again
+								return;
+							}
 						}
 				
 						if(index.equals("6")){
-							The5zigAPI.getLogger().info("Done, couldn't find matches");
-							BED.votesToParse.clear();
-							BED.hasVoted = true;
-							//he hasn't but we don't want to check again and again
+							if(votesindex.size() != 0){
+								for(String n : votesindex){
+									finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
+								}
+								int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
+								The5zigAPI.getLogger().info("Voting " + finalindex);
+								The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
+								
+								BED.votesToParse.clear();
+								BED.hasVoted = true;
+																										//we can't really get the map name at this point
+								The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
+								return;
+							}
+							else{
+								The5zigAPI.getLogger().info("Done, couldn't find matches");
+								BED.votesToParse.clear();
+								BED.hasVoted = true;
+								//he hasn't but we don't want to check again and again
 							return;
+							}
 						}
 				
 					}
