@@ -89,7 +89,7 @@ public class BED extends GameMode{
 		
 		for(Map.Entry<String, Integer> entry: sb.getLines().entrySet()) {	
 			
-			if(entry.getValue() == 13){				
+			if(entry.getValue() == 13){
 				BED.teamsLeft = ChatColor.stripColor(entry.getKey().toString()).toCharArray().length;				
 			}
 		}

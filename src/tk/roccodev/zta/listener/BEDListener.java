@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,7 +49,6 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 	@Override
 	public void onGameModeJoin(BED gameMode) {
-		
 
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("BED");
@@ -59,17 +59,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 			@Override
 			public void run(){
 				try {
-					Thread.sleep(1000);
-					
-					String ign1 = The5zigAPI.getAPI().getGameProfile().getName();
-					APIValues.BEDpoints = new ApiBED(ign1).getPoints();
-					Thread.sleep(200);
-					BED.updateRank();
-						
-					
-					
-					String ign = The5zigAPI.getAPI().getGameProfile().getName();
-					
+										
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					The5zigAPI.getLogger().info(sb.getTitle());
 					if(sb != null && sb.getTitle().contains("BED ")){
@@ -90,6 +80,10 @@ public class BEDListener extends AbstractGameListener<BED>{
 						BED.apiDeaths = Math.toIntExact(api.getDeaths());
 						BED.apiKills = Math.toIntExact(api.getKills());
 					}
+
+					String ign1 = The5zigAPI.getAPI().getGameProfile().getName();
+					APIValues.BEDpoints = new ApiBED(ign1).getPoints();
+					BED.updateRank();
 					BED.updateKdr();
 					The5zigAPI.getLogger().info(BED.apiDeaths + " / " + BED.apiKills + " / " + BED.apiKdr);
 					//Should've read the docs ¯\_(ツ)_/¯
@@ -440,23 +434,24 @@ public class BEDListener extends AbstractGameListener<BED>{
 			BED.hasVoted = true;
 		}
 		
-		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l6. ") && !BED.hasVoted && Setting.AUTOVOTE.getValue()){
-			BED.votesToParse.add(message);
+		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l4. ") && !BED.hasVoted && Setting.AUTOVOTE.getValue()){
 			//Adding the 6th option, the normal method doesn't work
+			BED.votesToParse.add(message);
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					
+					try { TimeUnit.MILLISECONDS.sleep(200); } catch (Exception e) {}
+				
 					List<String> votesCopy = new ArrayList<String>();
 					votesCopy.addAll(BED.votesToParse);
-					List<String> mapNames = new ArrayList<String>();
 					List<BEDMap> parsedMaps = new ArrayList<BEDMap>();
 					for(String s1 : AutovoteUtils.getMapsForMode("bed")){
 						BEDMap map1 = BEDMap.valueOf(s1);					
 						if(map1 == null) continue;
 						parsedMaps.add(map1);
 						The5zigAPI.getLogger().info("Parsed " + map1);
-					}			
+					}
+					The5zigAPI.getLogger().info(votesCopy.size());
 					for(String s : votesCopy){
 						
 						String[] data = s.split("\\.");
@@ -481,6 +476,14 @@ public class BEDListener extends AbstractGameListener<BED>{
 						else{
 							The5zigAPI.getLogger().info("no matches in parsedMaps (yet)");
 						}
+						if(index.equals("4") && BED.mode.equals("Teams")){
+							The5zigAPI.getLogger().info("Done, couldn't find matches - Teams");
+							BED.votesToParse.clear();
+							BED.hasVoted = true;
+							//he hasn't but we don't want to check again and again
+							return;
+						}
+				
 						if(index.equals("6")){
 							The5zigAPI.getLogger().info("Done, couldn't find matches");
 							BED.votesToParse.clear();
@@ -586,10 +589,19 @@ public class BEDListener extends AbstractGameListener<BED>{
 		}
 		else if(subTitle != null && subTitle.equals("§r§7Protect your bed, destroy others!§r")){
 			gameMode.setState(GameState.GAME);
-			BED.updateTeamsLeft();
-			//As Hive sends this subtitle like 13 times, don't do anything here please :)
+			//As Hive sends this subtitle like 13 times, don't do anything here please :) mhm
 		}
-		
+		else if(title != null && title.equals("§r§c§lFIGHT!§r")){	
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					try {
+						TimeUnit.SECONDS.sleep(4);
+						BED.updateTeamsLeft();
+					} catch (Exception e) {}									
+				}
+				}).start();
+		}
 	}
 
 	@Override
