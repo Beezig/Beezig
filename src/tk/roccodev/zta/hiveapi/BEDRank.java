@@ -143,7 +143,7 @@ public enum BEDRank {
 		if(this == ZZZZZZ){
 			return "Highest Rank";
 		}
-		if(this == NIGHTMARE){
+		if(this == NIGHTMARE && this.getLevel(points) == 1){
 			return "Highest obtainable rank";
 		}
 		int level = getLevel(points);
