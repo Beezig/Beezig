@@ -10,6 +10,7 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.hiveapi.BEDMap;
 import tk.roccodev.zta.hiveapi.DRMap;
+import tk.roccodev.zta.hiveapi.GiantMap;
 import tk.roccodev.zta.hiveapi.TIMVMap;
 
 public class AutoVoteCommand implements Command{
@@ -30,7 +31,7 @@ public class AutoVoteCommand implements Command{
 	@Override
 	public boolean execute(String[] args) {
 		
-		if(!ActiveGame.is("timv") && !ActiveGame.is("dr") && !ActiveGame.is("bed")) return false;
+		if(!ActiveGame.is("timv") && !ActiveGame.is("dr") && !ActiveGame.is("bed") && !ActiveGame.is("gnt") && !ActiveGame.is("gntm")) return false;
 		if(!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
 		
 		//Format would be /autovote add dr_throwback
@@ -103,7 +104,27 @@ public class AutoVoteCommand implements Command{
 					AutovoteUtils.dump();
 					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully added map.");
 				}
+				else if(gamemode.equalsIgnoreCase("giant")){
+					
+					GiantMap apiMap = null;
+					try{
+						apiMap = GiantMap.valueOf(mapString.toUpperCase());
+						The5zigAPI.getLogger().info("apiMap = " + apiMap);
+					}
+					catch(IllegalArgumentException e){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Map not found.");
+						return true;
+					}	
+					List<String> gntMaps = (List<String>) AutovoteUtils.get("giant");
+					if(gntMaps == null) gntMaps = new ArrayList<String>();
+					gntMaps.add(apiMap.name());
+					AutovoteUtils.set("giant", gntMaps);
+					AutovoteUtils.dump();
+					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully added map.");
+				}
+			
 			}
+			
 			else if(mode.equalsIgnoreCase("listmaps")){
 				String game = args[1];
 				if(game.equalsIgnoreCase("dr")){
@@ -122,6 +143,12 @@ public class AutoVoteCommand implements Command{
 					The5zigAPI.getAPI().messagePlayer(Log.info + "BedWars Maps");
 					for(BEDMap map : BEDMap.values()){
 						The5zigAPI.getAPI().messagePlayer("§e - " + map.name() + " (" + map.getDisplayName() + ")");
+					}
+				}
+				else if(game.equalsIgnoreCase("giant")){
+					The5zigAPI.getAPI().messagePlayer(Log.info + "SkyGiants Maps");
+					for(GiantMap map : GiantMap.values()){
+						The5zigAPI.getAPI().messagePlayer("§e - " + map.name() + " (" + map.getDisplay() + ")");
 					}
 				}
 			}
@@ -143,6 +170,12 @@ public class AutoVoteCommand implements Command{
 					The5zigAPI.getAPI().messagePlayer(Log.info + "BedWars Maps");
 					for(String s : AutovoteUtils.getMapsForMode("bed")){
 						The5zigAPI.getAPI().messagePlayer("§e - " + s);
+					}
+				}
+				else if(game.equalsIgnoreCase("bed")){
+					The5zigAPI.getAPI().messagePlayer(Log.info + "SkyGiants Maps");
+					for(GiantMap map : GiantMap.values()){
+						The5zigAPI.getAPI().messagePlayer("§e - " + map.name() + " (" + map.getDisplay() + ")");
 					}
 				}
 			}
@@ -213,6 +246,25 @@ public class AutoVoteCommand implements Command{
 					if(bedMaps.contains(apiMap.name()))
 					bedMaps.remove(apiMap.name());
 					AutovoteUtils.set("bed", bedMaps);
+					AutovoteUtils.dump();
+					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully removed map.");
+				}
+				else if(gamemode.equalsIgnoreCase("giant")){
+					GiantMap apiMap = null;
+					try{
+						apiMap = GiantMap.valueOf(mapString.toUpperCase());
+					}
+					catch(IllegalArgumentException e){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Map not found.");
+						return true;
+					}
+					
+					
+					List<String> gntMaps = (List<String>) AutovoteUtils.get("giant");
+					if(gntMaps == null) gntMaps = new ArrayList<String>();
+					if(gntMaps.contains(apiMap.name()))
+					gntMaps.remove(apiMap.name());
+					AutovoteUtils.set("giant", gntMaps);
 					AutovoteUtils.dump();
 					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully removed map.");
 				}

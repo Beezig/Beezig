@@ -20,6 +20,8 @@ public class Giant extends GameMode{
 	public static GiantMap activeMap;
 	public static int giantKills;
 	
+	public static boolean hasVoted;
+	
 	//KDR
 	
 	public static int totalKills;
@@ -33,6 +35,7 @@ public class Giant extends GameMode{
 	public static List<String> footerToSend = new ArrayList<String>();
 	public static boolean isRecordsRunning = false;
 	public static String lastRecords = "";
+	public static List<String> votesToParse = new ArrayList<String>();
 	
 	public Giant(){
 		instance = this;
@@ -52,6 +55,8 @@ public class Giant extends GameMode{
 		gameDeaths = 0;
 		gameKdr = 0D;
 		giantKills = 0;
+		hasVoted = false;
+		votesToParse.clear();
 		
 		gameMode.setState(GameState.FINISHED);
 		ActiveGame.set("");

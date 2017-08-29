@@ -3,6 +3,7 @@ package tk.roccodev.zta.listener;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +16,7 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
+import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.hiveapi.GiantMap;
 import tk.roccodev.zta.hiveapi.GiantRank;
@@ -117,7 +119,83 @@ public class GiantListener extends AbstractGameListener<Giant>{
 			The5zigAPI.getLogger().info(gameMode.getName() + " Color Debug: (" + message + ")");
 		}
 		
-		if(message.startsWith(getPrefix(ActiveGame.current()) + "§3You are now playing on the ")){
+		if(message.startsWith(getPrefixWithBoldDivider(ActiveGame.current()) + "§a§lVote received. §3Your map now has") && Setting.AUTOVOTE.getValue()){
+			Giant.hasVoted = true;
+		}
+		
+		//§8▍ §aSky§b§b§lGiants§a§l§a§l:Mini§8§l ▏ §6§l§e§l§e§l1. §f§6Blossom §a[§f0§a Votes]
+		else if(message.startsWith(getPrefixWithBoldDivider(ActiveGame.current()) + "§6§l§e§l§e§l6. ") && !Giant.hasVoted && Setting.AUTOVOTE.getValue()) {
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					List<String> votesCopy = new ArrayList<String>();
+					votesCopy.addAll(Giant.votesToParse);
+					List<GiantMap> parsedMaps = new ArrayList<GiantMap>();
+					
+					List<String> votesindex = new ArrayList<String>();
+					List<String> finalvoting = new ArrayList<String>();
+					
+					for(String s1 : AutovoteUtils.getMapsForMode("giant")){
+						GiantMap map1 = GiantMap.valueOf(s1);	
+						if(map1 == null) continue;
+						parsedMaps.add(map1);
+						The5zigAPI.getLogger().info("Parsed " + map1);
+					}	
+					
+					for(String s : votesCopy){
+						
+						String[] data = s.split("\\.");						
+						String index = ChatColor.stripColor(data[0]).replaceAll(getPrefixWithBoldDivider(ActiveGame.current()) + "§6§l§e§l§e§l", "").replaceAll(ChatColor.stripColor(getPrefixWithBoldDivider(ActiveGame.current())), "").trim();
+						String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
+						String consider = ChatColor.stripColor(toConsider[0]).trim();
+						GiantMap map = GiantMap.get(consider, ActiveGame.current().equals("GNTM"));
+						String votes = toConsider[1].split(" ")[0].trim();
+						
+						if(map == null){
+							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: map not found for " + consider);
+						}
+						The5zigAPI.getLogger().info("trying to match " + map);
+						if(parsedMaps.contains(map)){
+							votesindex.add(votes + "-" + index);
+							The5zigAPI.getLogger().info("Added " + map + " Index #" + index + " with " + votes + " votes");	
+						}else{
+							The5zigAPI.getLogger().info(map + " is not a favourite");
+						}
+						if(index.equals("6")){
+							if(votesindex.size() != 0){
+								for(String n : votesindex){
+									finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
+								}
+								int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
+								The5zigAPI.getLogger().info("Voting " + finalindex);
+								The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
+								
+								Giant.votesToParse.clear();
+								Giant.hasVoted = true;
+																										//we can't really get the map name at this point
+								The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
+								return;
+							}
+							else{
+								The5zigAPI.getLogger().info("Done, couldn't find matches");
+	
+								Giant.votesToParse.clear();
+								Giant.hasVoted = true;
+								//he hasn't but we don't want to check again and again
+							return;
+							}
+						}						
+					}	
+				}
+			}).start();
+			
+			
+		}
+		else if(message.startsWith(getPrefixWithBoldDivider(ActiveGame.current()) + "§6§l§e§l§e§l") && !Giant.hasVoted && Setting.AUTOVOTE.getValue()){
+			Giant.votesToParse.add(message);		
+			The5zigAPI.getLogger().info("Added map");
+		}
+		else if(message.startsWith(getPrefix(ActiveGame.current()) + "§3You are now playing on the ")){
 			String team = message.replaceAll(getPrefix(ActiveGame.current()) + "§3You are now playing on the ", "").replaceAll("Team!", "");
 			Giant.team = team;
 			gameMode.setState(GameState.GAME);
@@ -338,12 +416,24 @@ public class GiantListener extends AbstractGameListener<Giant>{
 
 
 	private String getPrefix(String mode){
-		
+		// §8▍ §aSky§b§b§lGiants§8§l ▏ §6§l§e§l§e§l6. §f§6Lost §7[§f0§7 Votes]
 		if(mode.equalsIgnoreCase("gnt")){
 			return "§8▍ §aSky§b§lGiants§8 ▏ ";
 		}
 		else if(mode.equalsIgnoreCase("gntm")){
 			return "§8▍ §aSky§b§lGiants§a§l:Mini§8 ▏ ";
+		}
+		
+		return "";
+	}
+	
+	private String getPrefixWithBoldDivider(String mode){
+		// §8▍ §aSky§b§b§lGiants§8§l ▏ §6§l§e§l§e§l6. §f§6Lost §7[§f0§7 Votes]
+		if(mode.equalsIgnoreCase("gnt")){
+			return "§8▍ §aSky§b§b§lGiants§8§l ▏ ";
+		}
+		else if(mode.equalsIgnoreCase("gntm")){
+			return "§8▍ §aSky§b§b§lGiants§a§l§a§l:Mini§8§l ▏ ";
 		}
 		
 		return "";
