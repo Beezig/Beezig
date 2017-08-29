@@ -36,6 +36,15 @@ public class BED extends GameMode{
 	public static int apiKills;
 	public static int apiDeaths;
 	
+	
+	//Generators (0: None, 1: Level 1, 2: Level 2, 3: Level 3)
+	
+	public static int ironGen;
+	public static int goldGen;
+	public static int diamondGen;
+	
+	
+	
 	public static double apiKdr;
 	public static double gameKdr;
 	
@@ -66,6 +75,9 @@ public class BED extends GameMode{
 		BED.pointsCounter = 0;
 		BED.teamsLeft = 0;
 		BED.votesToParse.clear();
+		ironGen = 0;
+		goldGen = 0;
+		diamondGen = 0;
 		ActiveGame.reset("bed");
 		IHive.genericReset();
 		if(The5zigAPI.getAPI().getActiveServer() != null)

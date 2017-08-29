@@ -533,7 +533,21 @@ public class BEDListener extends AbstractGameListener<BED>{
 				}
 			}).start();
 		}
-
+		else if(message.equals("                 §e§lGold Ingot Summoner Activated!")) {
+			BED.goldGen = 1;
+		}
+		else if(message.equals("                   §b§lDiamond Summoner Activated!")) {
+			BED.diamondGen = 1;
+		}
+		else if(message.equals("                 §e§lGold Ingot Summoner Upgraded!")) {
+			BED.goldGen++;
+		}
+		else if(message.equals("                 §f§lIron Ingot Summoner Upgraded!")) {
+			BED.ironGen++;
+		}
+		else if(message.equals("                   §b§lDiamond Summoner Upgraded!")) {
+			BED.diamondGen++;
+		}
 		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l") && !BED.hasVoted && Setting.AUTOVOTE.getValue()){		
 			BED.votesToParse.add(message);
 		}
@@ -625,6 +639,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 		}
 		else if(subTitle != null && subTitle.equals("§r§7Protect your bed, destroy others!§r")){
 			gameMode.setState(GameState.GAME);
+			BED.ironGen = 1;
 			//As Hive sends this subtitle like 13 times, don't do anything here please :) mhm
 		}
 		else if(title != null && title.equals("§r§c§lFIGHT!§r")){	
