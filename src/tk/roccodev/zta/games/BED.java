@@ -65,6 +65,7 @@ public class BED extends GameMode{
 		BED.bedsDestroyed = 0;
 		BED.pointsCounter = 0;
 		BED.teamsLeft = 0;
+		BED.votesToParse.clear();
 		ActiveGame.reset("bed");
 		IHive.genericReset();
 		if(The5zigAPI.getAPI().getActiveServer() != null)
