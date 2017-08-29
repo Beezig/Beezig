@@ -118,4 +118,19 @@ public class BED extends GameMode{
 		gameKdr = (double)(kills + apiKills) / (deaths  + apiDeaths == 0 ? 1 : apiDeaths + deaths);
 	}
 	
+	public static void updateMode(){
+		//ffs mode is so annoying
+		Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+		The5zigAPI.getLogger().info(sb.getTitle());
+		if(sb != null && sb.getTitle().contains("BED ")){
+			BED.mode = "Solo";
+		}
+		if(sb != null && sb.getTitle().contains("BEDD ")){
+			BED.mode = "Duo";
+		}
+		if(sb != null && sb.getTitle().contains("BEDT ")){
+			BED.mode = "Teams";
+		}
+	}
+	
 }
