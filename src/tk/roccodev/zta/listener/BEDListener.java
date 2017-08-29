@@ -63,15 +63,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 										
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					The5zigAPI.getLogger().info(sb.getTitle());
-					if(sb != null && sb.getTitle().contains("BED ")){
-						BED.mode = "Solo";
-					}
-					if(sb != null && sb.getTitle().contains("BEDD ")){
-						BED.mode = "Duo";
-					}
-					if(sb != null && sb.getTitle().contains("BEDT ")){
-						BED.mode = "Teams";
-					}
+					BED.updateMode();
 					if(sb != null && sb.getTitle().contains("BED")){
 						BED.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
 						BED.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
@@ -109,6 +101,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 		if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §3Voting has ended! §bThe map")){
 			The5zigAPI.getLogger().info("Voting ended, parsing map");
 			String afterMsg = message.split("§8▍ §3§lBed§b§lWars§8 ▏ §3Voting has ended! §bThe map")[1];
+			BED.updateMode();
 			String map = "";    
 		    Pattern pattern = Pattern.compile(Pattern.quote("§f") + "(.*?)" + Pattern.quote("§b"));
 		    Matcher matcher = pattern.matcher(afterMsg);
@@ -432,6 +425,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 	
 		
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §a§lVote received.") && Setting.AUTOVOTE.getValue()){
+			BED.updateMode();
 			BED.hasVoted = true;
 		}
 		
