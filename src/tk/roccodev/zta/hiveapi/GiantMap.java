@@ -32,6 +32,7 @@ public enum GiantMap {
 	SPRUCE_SPRINGSTEEN("Spruce Springsteen", true),
 	BLOSSOM("Blossom", true),
 	TOWN_HALL("Town Hall", true),
+	MUFFIN("Muffin", true),
 	AQUARIUS("Aquarius", true);
 	
 	

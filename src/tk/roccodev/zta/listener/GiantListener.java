@@ -125,6 +125,7 @@ public class GiantListener extends AbstractGameListener<Giant>{
 		
 		//§8▍ §aSky§b§b§lGiants§a§l§a§l:Mini§8§l ▏ §6§l§e§l§e§l1. §f§6Blossom §a[§f0§a Votes]
 		else if(message.startsWith(getPrefixWithBoldDivider(ActiveGame.current()) + "§6§l§e§l§e§l6. ") && !Giant.hasVoted && Setting.AUTOVOTE.getValue()) {
+				Giant.votesToParse.add(message);
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
@@ -161,6 +162,7 @@ public class GiantListener extends AbstractGameListener<Giant>{
 						}else{
 							The5zigAPI.getLogger().info(map + " is not a favourite");
 						}
+						The5zigAPI.getLogger().info("Index Counter: " + index);
 						if(index.equals("6")){
 							if(votesindex.size() != 0){
 								for(String n : votesindex){
