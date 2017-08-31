@@ -464,6 +464,12 @@ public class BEDListener extends AbstractGameListener<BED>{
 						if(map == null){
 							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: Map not found for " + consider);
 						}
+						if(map.getExclusiveModes().length == 1) {
+							BED.mode = "Duo";
+						}
+						else if(map.getExclusiveModes().length == 2) {
+							BED.mode = "Teams";
+						}
 						The5zigAPI.getLogger().info("trying to match " + map);
 						if(parsedMaps.contains(map)){
 							votesindex.add(votes + "-" + index);
