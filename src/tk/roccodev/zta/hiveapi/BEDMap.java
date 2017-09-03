@@ -16,7 +16,9 @@ public enum BEDMap {
 	BED_RUINS("Ruins", true, true),	//Teams only
 	BED_PIRATES("Pirates", true, true),	//Teams only
 	BED_FLORAL("Floral", true, true),	//Teams only
-	BED_HELL("Hell", true, true);	//Teams only
+	BED_HELL("Hell", true, true),	//Teams only
+	BED_PALACE("Palace", true, true),
+	BED_ROME("Rome", true, true);
 
 	private String displayName;
 	private boolean[] exclusiveModes;

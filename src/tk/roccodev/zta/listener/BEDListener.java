@@ -485,31 +485,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 						else{
 							The5zigAPI.getLogger().info(map + " is not a favourite");
 						}
-						if(index.equals("4") && BED.mode.equals("Teams")){
-							
-							if(votesindex.size() != 0){
-								for(String n : votesindex){
-									finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
-								}
-								int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
-								The5zigAPI.getLogger().info("Voting " + finalindex);
-								The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
-								
-								BED.votesToParse.clear();
-								BED.hasVoted = true;
-																										//we can't really get the map name at this point
-								The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
-								return;
-							}
-							else{				
-								The5zigAPI.getLogger().info("Done, couldn't find matches - Teams");
-								BED.votesToParse.clear();
-								BED.hasVoted = true;
-								//he hasn't but we don't want to check again and again
-								return;
-							}
-						}
-				
+						
 						if(index.equals("6")){
 							if(votesindex.size() != 0){
 								for(String n : votesindex){
