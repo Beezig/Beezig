@@ -2,7 +2,6 @@ package tk.roccodev.zta;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -51,6 +50,7 @@ import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.GNT;
 import tk.roccodev.zta.games.GNTM;
 import tk.roccodev.zta.games.Giant;
+import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -360,6 +360,13 @@ public class ZTAMain {
 						return;
 					}
 					Giant.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				}  else if(ActiveGame.is("hide")){
+					if(HIDE.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					HIDE.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
 				
 			}
@@ -396,6 +403,14 @@ public class ZTAMain {
 					}
 					Giant.lastRecords = args[1].trim();	
 				}
+				else if(ActiveGame.is("hide")){
+					if(HIDE.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					HIDE.lastRecords = args[1].trim();	
+				}
 			}
 		}
 		
@@ -414,28 +429,9 @@ public class ZTAMain {
 					Class gameModeClass = Class.forName("tk.roccodev.zta.games." + className);
 					Method resetMethod = gameModeClass.getMethod("reset", gameModeClass);
 					resetMethod.invoke(null, gameModeClass.newInstance());
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
+				} catch (Exception e) {
 					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				} 
 			}
 		}).start();
 		

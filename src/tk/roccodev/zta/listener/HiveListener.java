@@ -94,6 +94,10 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			
 			getGameListener().switchLobby("GNT");
 		}
+		else if(key.equals("hide.welcome")){		
+			getGameListener().switchLobby("HIDE");			
+			The5zigAPI.getLogger().info("Connected to HIDE! -Hive");
+		}
 		
 		
 	}
