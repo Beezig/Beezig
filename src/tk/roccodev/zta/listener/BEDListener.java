@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -25,14 +24,12 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
-import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.BEDMap;
 import tk.roccodev.zta.hiveapi.BEDRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
 import tk.roccodev.zta.settings.Setting;
 
 public class BEDListener extends AbstractGameListener<BED>{
@@ -210,11 +207,11 @@ public class BEDListener extends AbstractGameListener<BED>{
 				new Thread(new Runnable(){
 					@Override
 					public void run(){
-						HIDE.isRecordsRunning = true;
+						BED.isRecordsRunning = true;
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
 						try{
 						
-						ApiHIDE api = new ApiHIDE(HIDE.lastRecords);
+						ApiBED api = new ApiBED(BED.lastRecords);
 							
 						int kills = 0;
 						int deaths = 0;

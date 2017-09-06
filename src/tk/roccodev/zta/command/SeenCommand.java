@@ -7,6 +7,7 @@ import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 public class SeenCommand implements Command{
 
@@ -28,15 +29,16 @@ public class SeenCommand implements Command{
 		if(args.length == 1){
 			
 			String ign = args[0];
+			ApiHiveGlobal api = new ApiHiveGlobal(ign);
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					if(!HiveAPI.getPlayerLocation(ign).equals("the Land of Nods!")){
-						The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e is online and in §6" + HiveAPI.getPlayerLocation(ign));
+					if(!api.getPlayerLocation().equals("the Land of Nods!")){
+						The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e is online and in §6" + api.getPlayerLocation());
 					}
 					else{
 						Calendar lastSeen = Calendar.getInstance();;
-						lastSeen.setTimeInMillis(HiveAPI.getLastLogout(ign).getTime());
+						lastSeen.setTimeInMillis(api.getLastLogout()*1000);
 					
 						String minute = Integer.toString(lastSeen.get(lastSeen.MINUTE));
 						if(lastSeen.get(lastSeen.MINUTE) < 10){

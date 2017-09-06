@@ -3,11 +3,8 @@ package tk.roccodev.zta.command;
 import java.util.UUID;
 
 import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.server.GameMode;
-import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
-import tk.roccodev.zta.notes.NotesManager;
 
 public class ColorDebugCommand implements Command{
 

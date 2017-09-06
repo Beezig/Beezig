@@ -2,8 +2,6 @@ package tk.roccodev.zta.modules.bed;
 
 import eu.the5zig.mod.modules.GameModeItem;
 import tk.roccodev.zta.games.BED;
-import tk.roccodev.zta.games.DR;
-import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class DeathsItem extends GameModeItem<BED>{
 

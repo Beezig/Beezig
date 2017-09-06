@@ -102,7 +102,7 @@ public class APIUtils {
 	    }
 	}
 	
-public static String getTimePassed(long time) {
+	public static String getTimePassed(long time) {
 		
 		
 		if (time < 1000000000000L) {
@@ -261,7 +261,26 @@ public static String getTimePassed(long time) {
 		    }
 		}
 	
+		/* LEGACY
+		 			
 	
+	
+	//TIMV
+	public static void TIMVupdateKarma() throws ParseException, Exception{
+		String playername = The5zigAPI.getAPI().getGameProfile().getName();
+		JSONParser parser = new JSONParser();
+		JSONObject o = null;
+		
+			o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
+		
+		TIMVkarma =  (long) o.get("total_points");
+		
+		
+	}
+		 
+		 
+		 
+		 */
 	}
 	
 }

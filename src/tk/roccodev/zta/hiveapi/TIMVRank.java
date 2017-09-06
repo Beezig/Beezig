@@ -9,15 +9,11 @@ import static eu.the5zig.util.minecraft.ChatColor.GOLD;
 import static eu.the5zig.util.minecraft.ChatColor.GRAY;
 import static eu.the5zig.util.minecraft.ChatColor.LIGHT_PURPLE;
 import static eu.the5zig.util.minecraft.ChatColor.RED;
+import static eu.the5zig.util.minecraft.ChatColor.WHITE;
 import static eu.the5zig.util.minecraft.ChatColor.YELLOW;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.games.BED;
-
-import static eu.the5zig.util.minecraft.ChatColor.WHITE;
 
 public enum TIMVRank {
 

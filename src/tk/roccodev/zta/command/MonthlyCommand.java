@@ -3,7 +3,6 @@ package tk.roccodev.zta.command;
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class MonthlyCommand implements Command{

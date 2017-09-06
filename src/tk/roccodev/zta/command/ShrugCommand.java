@@ -1,7 +1,6 @@
 package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.zta.Log;
 
 public class ShrugCommand implements Command{
 

@@ -1,6 +1,13 @@
 package tk.roccodev.zta.hiveapi.wrapper;
 
-import static eu.the5zig.util.minecraft.ChatColor.*;
+import static eu.the5zig.util.minecraft.ChatColor.AQUA;
+import static eu.the5zig.util.minecraft.ChatColor.BLUE;
+import static eu.the5zig.util.minecraft.ChatColor.DARK_PURPLE;
+import static eu.the5zig.util.minecraft.ChatColor.DARK_RED;
+import static eu.the5zig.util.minecraft.ChatColor.GRAY;
+import static eu.the5zig.util.minecraft.ChatColor.GREEN;
+import static eu.the5zig.util.minecraft.ChatColor.RED;
+import static eu.the5zig.util.minecraft.ChatColor.YELLOW;
 
 import eu.the5zig.util.minecraft.ChatColor;
 
