@@ -40,6 +40,109 @@ public class APIUtils {
 		return o;
 	}
 	
+	public static String getTimeAgo(long time) {
+		
+		/*
+		 * Copyright 2012 Google Inc.
+		 *
+		 * Licensed under the Apache License, Version 2.0 (the "License");
+		 * you may not use this file except in compliance with the License.
+		 * You may obtain a copy of the License at
+		 *
+		 *      http://www.apache.org/licenses/LICENSE-2.0
+		 *
+		 * Unless required by applicable law or agreed to in writing, software
+		 * distributed under the License is distributed on an "AS IS" BASIS,
+		 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		 * See the License for the specific language governing permissions and
+		 * limitations under the License.
+		 */
+		
+		if (time < 1000000000000L) {
+		        // if timestamp given in seconds, convert to millis
+		        time *= 1000;
+		    }
+		
+		int SECOND_MILLIS = 1000;
+		int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+		int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+		int DAY_MILLIS = 24 * HOUR_MILLIS;
+		long MONTH_MILLIS = 30l * DAY_MILLIS;
+		long YEAR_MILLIS = 12l * MONTH_MILLIS;
+	    long now = System.currentTimeMillis();
+	    
+	    if (time > now || time <= 0) {
+	        return null;	
+	    }
+	    
+	    final long diff = now - time;
+
+	    if (diff < MINUTE_MILLIS) {
+	        return "Just now";
+	    } else if (diff < 2 * MINUTE_MILLIS) {
+	        return "A minute ago";
+	    } else if (diff < 50 * MINUTE_MILLIS) {
+	        return diff / MINUTE_MILLIS + " minutes ago";
+	    } else if (diff < 90 * MINUTE_MILLIS) {
+	        return "An hour ago";
+	    } else if (diff < 24 * HOUR_MILLIS) {
+	        return diff / HOUR_MILLIS + " hours ago";
+	    } else if (diff < 48l * HOUR_MILLIS) {
+	        return "Yesterday";
+	    } else if (diff < 29l * DAY_MILLIS){
+	        return diff / DAY_MILLIS + " days ago";
+	    } else if (diff < 2l * MONTH_MILLIS){
+		    return "1 month ago";
+	    } else if (diff < 11l * MONTH_MILLIS){
+	        return diff / MONTH_MILLIS + " months ago";
+	    }  else if (diff < 2l * YEAR_MILLIS){
+		    return "1 year ago";  
+	    } else {
+	    	return diff / YEAR_MILLIS + " years ago";
+	    }
+	}
+	
+public static String getTimePassed(long time) {
+		
+		
+		if (time < 1000000000000L) {
+		        // if timestamp given in seconds, convert to millis
+		        time *= 1000;
+		    }
+		
+		if (time < 0) {
+	        // HiveAPI error
+	        return "Error";
+	    }
+		
+		
+		int SECOND_MILLIS = 1000;
+		int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+		int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+		int DAY_MILLIS = 24 * HOUR_MILLIS;
+		long MONTH_MILLIS = 30l * DAY_MILLIS;
+
+	    if (time < MINUTE_MILLIS) {
+	        return "Less a minute";
+	    } else if (time < 2 * MINUTE_MILLIS) {
+	        return "A minute";
+	    } else if (time < 50 * MINUTE_MILLIS) {
+	        return time / MINUTE_MILLIS + " minutes";
+	    } else if (time < 90 * MINUTE_MILLIS) {
+	        return "An hour";
+	    } else if (time < 24 * HOUR_MILLIS) {
+	        return time / HOUR_MILLIS + " hours";
+	    } else if (time < 48l * HOUR_MILLIS) {
+	        return "A day";
+	    } else if (time < 29l * DAY_MILLIS){
+	        return time / DAY_MILLIS + " days";
+	    } else if (time < 2l * MONTH_MILLIS){
+		    return "1 month";
+	    } else {
+	        return time / MONTH_MILLIS + " months";
+	    }
+	}
+	
 	public static JSONObject getSpeedrunObject(String toParse, int mode){
 		return getObject(Parser.read(Parser.speedrun(toParse, mode)));
 	}

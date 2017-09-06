@@ -18,7 +18,7 @@ public enum Setting {
 	TIMV_SHOW_KRR(true, "TIMV Advanced Records - Show Karma/rolepoints"),
 	TIMV_SHOW_MOSTPOINTS(true, "TIMV Advanced Records - Show Karma record"),
 	TIMV_SHOW_KARMA_TO_NEXT_RANK(false, "TIMV Advanced Records - Show karma to next rank"),
-	TIMV_SHOW_TRAITORRATIO(false, "TIMV Advanced Records - Show the Traitor Points / Rolepoints ratio (Advanced players)"),
+	TIMV_SHOW_TRAITORRATIO(false, "TIMV Advanced Records - Show the Traitor Points / Rolepoints ratio"),
 	
 	DR_SHOW_POINTSPERGAME(true, "DR Advanced Records - Show the average Points per Game"),
 	DR_SHOW_RUNNERWINRATE(true, "DR Advanced Records - Show the Winrate as a Runner"),
@@ -36,7 +36,13 @@ public enum Setting {
 	
 	Giant_SHOW_WINRATE(true, "Giant Advanced Records - Show Winrate"),
 	Giant_SHOW_KD(true, "Giant Advanced Records - Show Kills/Deaths"), 
-	Giant_SHOW_PPG(true, "Giant Advanced Records - Show the average Points per Game"); 
+	Giant_SHOW_PPG(true, "Giant Advanced Records - Show the average Points per Game"),
+	
+	HIDE_SHOW_WINRATE(true, "HIDE Advanced Records - Show Winrate"), 
+	HIDE_SHOW_SEEKER_KPG(true, "HIDE Advanced Records - Show Kills per Game as Seeker"),
+	HIDE_SHOW_HIDER_KPG(false, "HIDE Advanced Records - Show Kills per Game as Hider"),
+	HIDE_SHOW_POINTSPG(true, "HIDE Advanced Records - Show Points per Game"),
+	HIDE_SHOW_AMOUNT_UNLOCKED(true, "HIDE Advanced Records - Show amount of unlocked blocks"); 
 	
 
 	

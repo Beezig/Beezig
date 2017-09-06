@@ -6,8 +6,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,7 +15,6 @@ import org.json.simple.parser.ParseException;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.Log;
 import tk.roccodev.zta.games.TIMV;
 
 public class HiveAPI {
@@ -34,26 +31,6 @@ public class HiveAPI {
 	
 	private static URL TIMVparsePlayerURL(String name){
 		String urls = "http://api.hivemc.com/v1/player/@player@/TIMV";
-		try {
-			return new URL(urls.replaceAll("@player@", getUUID(name)));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-	private static URL DRparsePlayerURL(String name){
-		String urls = "http://api.hivemc.com/v1/player/@player@/DR";
-		try {
-			return new URL(urls.replaceAll("@player@", getUUID(name)));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-	private static URL BEDparsePlayerURL(String name){
-		String urls = "http://api.hivemc.com/v1/player/@player@/BED";
 		try {
 			return new URL(urls.replaceAll("@player@", getUUID(name)));
 		} catch (MalformedURLException e) {
@@ -86,26 +63,6 @@ public class HiveAPI {
 		String url = "https://api.mojang.com/users/profiles/minecraft/@ign@";
 		try {
 			return new URL(url.replaceAll("@ign@", ign));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
- 	private static URL parseSpeedruncom(String mapid){
-		String urls = "http://www.speedrun.com/api/v1/leaderboards/369ep8dl/level/@id@/824xzvmd?top=1";
-		try {
-			return new URL(urls.replaceAll("@id@", mapid));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-	private static URL parseSpeedruncomUserID(String userid){
-		String urls = "http://www.speedrun.com/api/v1/users/@id@";
-		try {
-			return new URL(urls.replaceAll("@id@", userid));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -237,7 +194,7 @@ public class HiveAPI {
 	
 	
 	public static long getPoints(String ign, String game) {
-		String playername = The5zigAPI.getAPI().getGameProfile().getName();
+
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
@@ -347,67 +304,7 @@ public class HiveAPI {
 		long time = (long) o.get("lastLogout");
 		return new Date(time * 1000);
 	}
-	public static String getTimeAgo(long time) {
-		
-		/*
-		 * Copyright 2012 Google Inc.
-		 *
-		 * Licensed under the Apache License, Version 2.0 (the "License");
-		 * you may not use this file except in compliance with the License.
-		 * You may obtain a copy of the License at
-		 *
-		 *      http://www.apache.org/licenses/LICENSE-2.0
-		 *
-		 * Unless required by applicable law or agreed to in writing, software
-		 * distributed under the License is distributed on an "AS IS" BASIS,
-		 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-		 * See the License for the specific language governing permissions and
-		 * limitations under the License.
-		 */
-		
-		if (time < 1000000000000L) {
-		        // if timestamp given in seconds, convert to millis
-		        time *= 1000;
-		    }
-		
-		int SECOND_MILLIS = 1000;
-		int MINUTE_MILLIS = 60 * SECOND_MILLIS;
-		int HOUR_MILLIS = 60 * MINUTE_MILLIS;
-		int DAY_MILLIS = 24 * HOUR_MILLIS;
-		long MONTH_MILLIS = 30l * DAY_MILLIS;
-		long YEAR_MILLIS = 12l * MONTH_MILLIS;
-	    long now = System.currentTimeMillis();
-	    
-	    if (time > now || time <= 0) {
-	        return null;	
-	    }
-	    
-	    final long diff = now - time;
-
-	    if (diff < MINUTE_MILLIS) {
-	        return "Just now";
-	    } else if (diff < 2 * MINUTE_MILLIS) {
-	        return "A minute ago";
-	    } else if (diff < 50 * MINUTE_MILLIS) {
-	        return diff / MINUTE_MILLIS + " minutes ago";
-	    } else if (diff < 90 * MINUTE_MILLIS) {
-	        return "An hour ago";
-	    } else if (diff < 24 * HOUR_MILLIS) {
-	        return diff / HOUR_MILLIS + " hours ago";
-	    } else if (diff < 48l * HOUR_MILLIS) {
-	        return "Yesterday";
-	    } else if (diff < 29l * DAY_MILLIS){
-	        return diff / DAY_MILLIS + " days ago";
-	    } else if (diff < 2l * MONTH_MILLIS){
-		    return "1 month ago";
-	    } else if (diff < 11l * MONTH_MILLIS){
-	        return diff / MONTH_MILLIS + " months ago";
-	    }  else if (diff < 2l * YEAR_MILLIS){
-		    return "1 year ago";  
-	    } else {
-	    	return diff / YEAR_MILLIS + " years ago";
-	    }
-	}
+	
 	public static String getNetworkRank(String ign){
 		String playername = ign;
 		JSONParser parser = new JSONParser();

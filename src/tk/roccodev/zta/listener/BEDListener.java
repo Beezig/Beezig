@@ -25,11 +25,14 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
+import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.BEDMap;
 import tk.roccodev.zta.hiveapi.BEDRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
 import tk.roccodev.zta.settings.Setting;
 
 public class BEDListener extends AbstractGameListener<BED>{
@@ -207,11 +210,11 @@ public class BEDListener extends AbstractGameListener<BED>{
 				new Thread(new Runnable(){
 					@Override
 					public void run(){
-						BED.isRecordsRunning = true;
+						HIDE.isRecordsRunning = true;
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
 						try{
 						
-						ApiBED api = new ApiBED(BED.lastRecords);
+						ApiHIDE api = new ApiHIDE(HIDE.lastRecords);
 							
 						int kills = 0;
 						int deaths = 0;
@@ -242,17 +245,10 @@ public class BEDListener extends AbstractGameListener<BED>{
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
 						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
 
-						
-						
-						
-						
-
 						//int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "BED") < HiveAPI.DRgetPoints(BED.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 						List<String> messages = new ArrayList<String>();
 						messages.addAll(BED.messagesToSend);
-							Iterator<String> it = messages.iterator();
 							for(String s : messages){
-								
 								
 								
 								 	if(s.trim().endsWith("'s Stats §6§m")){
@@ -372,12 +368,13 @@ public class BEDListener extends AbstractGameListener<BED>{
 					/*	if(monthlyRank != 0){					
 					 *		The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
 					 *	}
-					 */		
+					 */	
+						
 						if(lastGame != null){
 							Calendar lastSeen = Calendar.getInstance();
 							lastSeen.setTimeInMillis(lastGame.getTime());
 							
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()));
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
 						}
 						
 							

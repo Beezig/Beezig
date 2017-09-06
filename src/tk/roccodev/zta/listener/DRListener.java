@@ -29,6 +29,7 @@ import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.DRRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.settings.Setting;
 
@@ -348,7 +349,7 @@ public class DRListener extends AbstractGameListener<DR>{
 								Calendar lastSeen = Calendar.getInstance();;
 								lastSeen.setTimeInMillis(lastGame.getTime());
 							
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()));
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
 						}
 						
 							

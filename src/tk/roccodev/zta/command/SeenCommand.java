@@ -6,6 +6,7 @@ import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 
 public class SeenCommand implements Command{
 
@@ -47,7 +48,7 @@ public class SeenCommand implements Command{
 						}
 					// Never again
 						The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e was last seen on §6" + lastSeen.get(lastSeen.DAY_OF_MONTH) + "." + (lastSeen.get(lastSeen.MONTH) + 1) + "." + lastSeen.get(lastSeen.YEAR) + " " + hour + ":" + minute
-							+ "§e (§6" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()) + ".§e)");
+							+ "§e (§6" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()) + ".§e)");
 					}
 				}
 			}).start();

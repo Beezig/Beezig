@@ -6,7 +6,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -23,7 +22,7 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.hiveapi.HIDEMap;
-import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
 import tk.roccodev.zta.settings.Setting;
 
@@ -156,17 +155,16 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 						
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
 						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
+						String[] unlockedBlocks = Setting.HIDE_SHOW_AMOUNT_UNLOCKED.getValue() ? api.getBlocks() : null;
+
 						
 
 						//int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "HIDE") < HiveAPI.DRgetPoints(HIDE.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 						
 						List<String> messages = new ArrayList<String>();
 						messages.addAll(HIDE.messagesToSend);
-							Iterator<String> it = messages.iterator();
 							for(String s : messages){
-								
-								
-								
+			
 								 	if(s.trim().endsWith("'s Stats §6§m")){
 								 	The5zigAPI.getLogger().info("Editing Header...");
 									StringBuilder sb = new StringBuilder();
@@ -226,7 +224,8 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 										killsHider = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills as Hider: §b", "").trim()));
 									}
 									else if(s.startsWith("§3 Time Alive: §b")){
-										timeAlive = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Time Alive: §b", "").trim()));
+										timeAlive = Long.parseLong(ChatColor.stripColor(s.replaceAll("§3 Time Alive: §b", "").trim()));
+										s = s.replaceAll(Long.toString(timeAlive), APIUtils.getTimePassed(timeAlive));
 									}
 								
 									
@@ -237,11 +236,25 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 							
 												
 						if(achievements != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
-																											
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");																										
 						}
-
-						
+						if(Setting.HIDE_SHOW_WINRATE.getValue()){
+							double wr = (double) victories / (double) gamesPlayed;
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr*100) + "%");
+						}
+						if(Setting.HIDE_SHOW_SEEKER_KPG.getValue()){
+							double skpg = (double) killsSeeker / (double) gamesPlayed;
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Seeker: Kills per Game: §b" + df.format(skpg));
+						}
+						if(Setting.HIDE_SHOW_HIDER_KPG.getValue()){
+							double hkpg = (double) killsHider / (double) gamesPlayed;
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Hider: Kills per Game: §b" + df.format(hkpg));
+						}
+						if(Setting.HIDE_SHOW_POINTSPG.getValue()){
+							double ppg = (double) points / (double) gamesPlayed;
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + df1f.format(ppg));
+						}
+			
 					/*	if(Setting.HIDE_SHOW_WINRATE.getValue()){				
 							double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
@@ -250,12 +263,14 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 					*	if(monthlyRank != 0){					
 					 *		The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
 					 *	}
-					 */		
+					 */	
+						if(unlockedBlocks != null){
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Unlocked Blocks: §b" + unlockedBlocks.length);
+						}
 						if(lastGame != null){
 							Calendar lastSeen = Calendar.getInstance();
-							lastSeen.setTimeInMillis(lastGame.getTime());
-							
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()));
+							lastSeen.setTimeInMillis(lastGame.getTime());					
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
 						}
 						
 							

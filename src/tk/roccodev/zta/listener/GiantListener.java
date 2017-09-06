@@ -21,6 +21,7 @@ import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.hiveapi.GiantMap;
 import tk.roccodev.zta.hiveapi.GiantRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.settings.Setting;
 
 public class GiantListener extends AbstractGameListener<Giant>{
@@ -339,7 +340,7 @@ public class GiantListener extends AbstractGameListener<Giant>{
 								Calendar lastSeen = Calendar.getInstance();;
 								lastSeen.setTimeInMillis(HiveAPI.lastGame(Giant.lastRecords, lobby).getTime());
 							
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()));
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
 						} 
 						
 							
