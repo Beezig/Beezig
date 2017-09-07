@@ -1,13 +1,13 @@
 package tk.roccodev.zta.command;
 
-import java.util.Calendar;
-
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
+
+import java.util.Calendar;
 
 public class SeenCommand implements Command{
 
@@ -19,8 +19,7 @@ public class SeenCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/seen"};
-		return aliases;
+		return new String[]{"/seen"};
 	}
 
 	@Override
@@ -37,7 +36,7 @@ public class SeenCommand implements Command{
 						The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e is online and in §6" + api.getPlayerLocation());
 					}
 					else{
-						Calendar lastSeen = Calendar.getInstance();;
+						Calendar lastSeen = Calendar.getInstance();
 						lastSeen.setTimeInMillis(api.getLastLogout()*1000);
 					
 						String minute = Integer.toString(lastSeen.get(lastSeen.MINUTE));

@@ -13,8 +13,7 @@ public class ReVoteCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/revote", "/rev"};
-		return aliases;
+		return new String[]{"/revote", "/rev"};
 	}
 	
 

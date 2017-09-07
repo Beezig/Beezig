@@ -1,11 +1,11 @@
 package tk.roccodev.zta.command;
 
+import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.zta.Log;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-
-import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.zta.Log;
 
 public class MathCommand implements Command{
 
@@ -17,8 +17,7 @@ public class MathCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/math"};
-		return aliases;
+		return new String[]{"/math"};
 	}
 	
 
@@ -77,7 +76,6 @@ public class MathCommand implements Command{
 		The5zigAPI.getAPI().messagePlayer(Log.info + "Result: §6" + engine.eval(expression));
 		}catch(ScriptException ex){
 			The5zigAPI.getAPI().messagePlayer(Log.error + "Error while calculating.");
-			return;
 		}
 		}
 		}).start();

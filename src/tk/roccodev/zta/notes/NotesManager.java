@@ -1,10 +1,10 @@
 package tk.roccodev.zta.notes;
 
+import eu.the5zig.mod.The5zigAPI;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import eu.the5zig.mod.The5zigAPI;
 
 public class NotesManager {
 
@@ -16,6 +16,7 @@ public class NotesManager {
 	public static void tramontoccataStelle(){
 		
 		String[] ℛ = {
+				//Non-ASCII characters in an indentifier smh
 				"Va, pensiero",
 				"Nessun dorma",
 				"Vincerò",
@@ -36,7 +37,6 @@ public class NotesManager {
 		int index = random.nextInt(end - start) + start;
 		
 		The5zigAPI.getAPI().sendPlayerMessage("/msg Toccata " + ℛ[index]);
-		return;
 	}
 	
 	

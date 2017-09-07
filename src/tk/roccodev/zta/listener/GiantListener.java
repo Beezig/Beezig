@@ -1,13 +1,5 @@
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
@@ -23,6 +15,9 @@ import tk.roccodev.zta.hiveapi.GiantRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.settings.Setting;
+
+import java.io.FileNotFoundException;
+import java.util.*;
 
 public class GiantListener extends AbstractGameListener<Giant>{
 
@@ -76,7 +71,7 @@ public class GiantListener extends AbstractGameListener<Giant>{
 				
 				
 				Giant.totalKdr = (double)Giant.totalKills / Giant.totalDeaths;
-				Giant.gameKdr = new Double(Giant.totalKdr);
+				Giant.gameKdr = Giant.totalKdr;
 				The5zigAPI.getLogger().info(Giant.totalKdr);
 				
 			}
@@ -199,8 +194,7 @@ public class GiantListener extends AbstractGameListener<Giant>{
 			The5zigAPI.getLogger().info("Added map");
 		}
 		else if(message.startsWith(getPrefix(ActiveGame.current()) + "§3You are now playing on the ")){
-			String team = message.replaceAll(getPrefix(ActiveGame.current()) + "§3You are now playing on the ", "").replaceAll("Team!", "");
-			Giant.team = team;
+			Giant.team = message.replaceAll(getPrefix(ActiveGame.current()) + "§3You are now playing on the ", "").replaceAll("Team!", "");
 			gameMode.setState(GameState.GAME);
 		}
 		else if(message.startsWith(getPrefix(ActiveGame.current()) + "§3Voting has ended! §bThe map §f")){
@@ -293,7 +287,7 @@ public class GiantListener extends AbstractGameListener<Giant>{
 									sb.append("          §6§m                  §f ");
 									The5zigAPI.getLogger().info("Added base...");
 									if(rankColor != null) {
-										sb.append(rankColor + correctUser);
+										sb.append(rankColor).append(correctUser);
 										The5zigAPI.getLogger().info("Added colored user...");
 									}
 									else{
@@ -317,7 +311,7 @@ public class GiantListener extends AbstractGameListener<Giant>{
 										points = Long.parseLong(s.replaceAll("§3 Total Points: §b", ""));
 										sb.append(points);
 										The5zigAPI.getLogger().info(rank);
-										if(rank != null) sb.append(" (" + rank.getTotalDisplay());
+										if(rank != null) sb.append(" (").append(rank.getTotalDisplay());
 										// if(Setting.Giant_SHOW_POINTS_TO_NEXT_RANK.getValue()) sb.append(" / " + rank.getPointsToNextRank((int)points));
 										if(rank != null) sb.append("§b)");
 										The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
@@ -337,8 +331,8 @@ public class GiantListener extends AbstractGameListener<Giant>{
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
 						} */
 						if(lastGame != null){
-								Calendar lastSeen = Calendar.getInstance();;
-								lastSeen.setTimeInMillis(HiveAPI.lastGame(Giant.lastRecords, lobby).getTime());
+								Calendar lastSeen = Calendar.getInstance();
+							lastSeen.setTimeInMillis(HiveAPI.lastGame(Giant.lastRecords, lobby).getTime());
 							
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
 						} 
@@ -375,7 +369,6 @@ public class GiantListener extends AbstractGameListener<Giant>{
 							Giant.messagesToSend.clear();
 							Giant.footerToSend.clear();
 							Giant.isRecordsRunning = false;
-							return;
 						}
 					}
 				}).start();

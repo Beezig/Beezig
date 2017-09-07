@@ -16,11 +16,11 @@ public class SummonersItem extends GameModeItem<BED>{
 	private String getMainFormatting(){
 		if(this.getProperties().getFormatting() != null){
 			if(this.getProperties().getFormatting().getMainColor() != null && this.getProperties().getFormatting().getMainFormatting() == null){
-				return The5zigAPI.getAPI().getFormatting().getMainFormatting().toString().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting().toString()).charAt(1), this.getProperties().getFormatting().getMainColor().toString().charAt(1));
+				return The5zigAPI.getAPI().getFormatting().getMainFormatting().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting()).charAt(1), this.getProperties().getFormatting().getMainColor().toString().charAt(1));
 				//Replaces Char at index 1 (ColorTag) of the Main formatting with the custom one.
 			}
 			if(this.getProperties().getFormatting().getMainColor() == null && this.getProperties().getFormatting().getMainFormatting() != null){
-				return The5zigAPI.getAPI().getFormatting().getMainFormatting().toString().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting().toString()).charAt(3), this.getProperties().getFormatting().getMainFormatting().toString().charAt(3));
+				return The5zigAPI.getAPI().getFormatting().getMainFormatting().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting()).charAt(3), this.getProperties().getFormatting().getMainFormatting().toString().charAt(3));
 				//Replaces Char at index 3 (FormattingTag) of the Main formatting with the custom one.
 			}
 			if(this.getProperties().getFormatting().getMainColor() != null && this.getProperties().getFormatting().getMainFormatting() != null){
@@ -39,9 +39,9 @@ public class SummonersItem extends GameModeItem<BED>{
 			boolean colors = (boolean)getProperties().getSetting("showcolors").get();
 			
 			
-			if(BED.ironGen != 0) sb.append((colors ? "§f" : "") + BED.NUMBERS[BED.ironGen] + " Iron " + getMainFormatting() + "/ ");
-			if(BED.goldGen != 0) sb.append((colors ? "§e" : "") + BED.NUMBERS[BED.goldGen] + " Gold " + getMainFormatting() + "/ ");
-			if(BED.diamondGen != 0) sb.append((colors ? "§b" : "") + BED.NUMBERS[BED.diamondGen] + " Diamond " + getMainFormatting() + "/ ");
+			if(BED.ironGen != 0) sb.append(colors ? "§f" : "").append(BED.NUMBERS[BED.ironGen]).append(" Iron ").append(getMainFormatting()).append("/ ");
+			if(BED.goldGen != 0) sb.append(colors ? "§e" : "").append(BED.NUMBERS[BED.goldGen]).append(" Gold ").append(getMainFormatting()).append("/ ");
+			if(BED.diamondGen != 0) sb.append(colors ? "§b" : "").append(BED.NUMBERS[BED.diamondGen]).append(" Diamond ").append(getMainFormatting()).append("/ ");
 			if(sb.length() > 2) sb.deleteCharAt(sb.length() - 2);
 			
 			
@@ -55,9 +55,9 @@ public class SummonersItem extends GameModeItem<BED>{
 			StringBuilder sb = new StringBuilder();
 			
 			boolean colors = (boolean)getProperties().getSetting("showcolors").get();
-			if(BED.ironGen != 0) sb.append((colors ? "§f" : "") + BED.NUMBERS[BED.ironGen] + " I " + getMainFormatting() + "/ ");
-			if(BED.goldGen != 0) sb.append((colors ? "§e" : "") + BED.NUMBERS[BED.goldGen] + " G " + getMainFormatting() + "/ ");
-			if(BED.diamondGen != 0) sb.append((colors ? "§b" : "") + BED.NUMBERS[BED.diamondGen] + " D " + getMainFormatting() + "/ ");
+			if(BED.ironGen != 0) sb.append(colors ? "§f" : "").append(BED.NUMBERS[BED.ironGen]).append(" I ").append(getMainFormatting()).append("/ ");
+			if(BED.goldGen != 0) sb.append(colors ? "§e" : "").append(BED.NUMBERS[BED.goldGen]).append(" G ").append(getMainFormatting()).append("/ ");
+			if(BED.diamondGen != 0) sb.append(colors ? "§b" : "").append(BED.NUMBERS[BED.diamondGen]).append(" D ").append(getMainFormatting()).append("/ ");
 			if(sb.length() > 2) sb.deleteCharAt(sb.length() - 2);
 			if(sb.length() > 2) sb.deleteCharAt(sb.length() - 2);
 

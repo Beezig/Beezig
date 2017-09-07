@@ -12,9 +12,8 @@ public class ShrugCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/shrug"};
-		
-		return aliases;
+
+		return new String[]{"/shrug"};
 	}
 
 	@Override

@@ -1,16 +1,15 @@
 package tk.roccodev.zta.hiveapi.wrapper;
 
+import eu.the5zig.mod.The5zigAPI;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-import eu.the5zig.mod.The5zigAPI;
 
 public class APIUtils {
 
@@ -67,8 +66,8 @@ public class APIUtils {
 		int MINUTE_MILLIS = 60 * SECOND_MILLIS;
 		int HOUR_MILLIS = 60 * MINUTE_MILLIS;
 		int DAY_MILLIS = 24 * HOUR_MILLIS;
-		long MONTH_MILLIS = 30l * DAY_MILLIS;
-		long YEAR_MILLIS = 12l * MONTH_MILLIS;
+		long MONTH_MILLIS = 30L * DAY_MILLIS;
+		long YEAR_MILLIS = 12L * MONTH_MILLIS;
 	    long now = System.currentTimeMillis();
 	    
 	    if (time > now || time <= 0) {
@@ -87,15 +86,15 @@ public class APIUtils {
 	        return "An hour ago";
 	    } else if (diff < 24 * HOUR_MILLIS) {
 	        return diff / HOUR_MILLIS + " hours ago";
-	    } else if (diff < 48l * HOUR_MILLIS) {
+	    } else if (diff < 48L * HOUR_MILLIS) {
 	        return "Yesterday";
-	    } else if (diff < 29l * DAY_MILLIS){
+	    } else if (diff < 29L * DAY_MILLIS){
 	        return diff / DAY_MILLIS + " days ago";
-	    } else if (diff < 2l * MONTH_MILLIS){
+	    } else if (diff < 2L * MONTH_MILLIS){
 		    return "1 month ago";
-	    } else if (diff < 11l * MONTH_MILLIS){
+	    } else if (diff < 11L * MONTH_MILLIS){
 	        return diff / MONTH_MILLIS + " months ago";
-	    }  else if (diff < 2l * YEAR_MILLIS){
+	    }  else if (diff < 2L * YEAR_MILLIS){
 		    return "1 year ago";  
 	    } else {
 	    	return diff / YEAR_MILLIS + " years ago";
@@ -120,7 +119,7 @@ public class APIUtils {
 		int MINUTE_MILLIS = 60 * SECOND_MILLIS;
 		int HOUR_MILLIS = 60 * MINUTE_MILLIS;
 		int DAY_MILLIS = 24 * HOUR_MILLIS;
-		long MONTH_MILLIS = 30l * DAY_MILLIS;
+		long MONTH_MILLIS = 30L * DAY_MILLIS;
 
 	    if (time < MINUTE_MILLIS) {
 	        return "Less a minute";
@@ -132,11 +131,11 @@ public class APIUtils {
 	        return "An hour";
 	    } else if (time < 24 * HOUR_MILLIS) {
 	        return time / HOUR_MILLIS + " hours";
-	    } else if (time < 48l * HOUR_MILLIS) {
+	    } else if (time < 48L * HOUR_MILLIS) {
 	        return "A day";
-	    } else if (time < 29l * DAY_MILLIS){
+	    } else if (time < 29L * DAY_MILLIS){
 	        return time / DAY_MILLIS + " days";
-	    } else if (time < 2l * MONTH_MILLIS){
+	    } else if (time < 2L * MONTH_MILLIS){
 		    return "1 month";
 	    } else {
 	        return time / MONTH_MILLIS + " months";

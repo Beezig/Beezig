@@ -1,11 +1,11 @@
 package tk.roccodev.zta.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TokensCommand implements Command{
 
@@ -17,9 +17,8 @@ public class TokensCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/tokens"};
-		
-		return aliases;
+
+		return new String[]{"/tokens"};
 	}
 
 	@Override

@@ -16,8 +16,7 @@ public class NotesCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/notes"};
-		return aliases;
+		return new String[]{"/notes"};
 	}
 
 	@Override

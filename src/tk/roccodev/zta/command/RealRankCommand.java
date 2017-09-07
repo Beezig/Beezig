@@ -16,8 +16,7 @@ public class RealRankCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String aliases[] = {"/realrank", "/rr"};
-		return aliases;
+		return new String[]{"/realrank", "/rr"};
 	}
 
 	@Override

@@ -15,8 +15,7 @@ public class SettingsCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String aliases[] = {"/settings"};
-		return aliases;
+		return new String[]{"/settings"};
 	}
 
 	@Override

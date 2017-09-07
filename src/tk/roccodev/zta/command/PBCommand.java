@@ -17,8 +17,7 @@ public class PBCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/pb"};
-		return aliases;
+		return new String[]{"/pb"};
 	}
 
 	@Override

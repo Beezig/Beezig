@@ -1,8 +1,5 @@
 package tk.roccodev.zta.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
@@ -12,6 +9,9 @@ import tk.roccodev.zta.hiveapi.BEDMap;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.GiantMap;
 import tk.roccodev.zta.hiveapi.TIMVMap;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AutoVoteCommand implements Command{
 
@@ -23,8 +23,7 @@ public class AutoVoteCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/autovote", "/avote"};
-		return aliases;
+		return new String[]{"/autovote", "/avote"};
 	}
 	
 
@@ -61,7 +60,7 @@ public class AutoVoteCommand implements Command{
 					}
 					
 					
-					List<String> drMaps = (List<String>) AutovoteUtils.get("dr");
+					@SuppressWarnings("unchecked") List<String> drMaps = (List<String>) AutovoteUtils.get("dr");
 					if(drMaps == null) drMaps = new ArrayList<String>();
 					drMaps.add(apiMap.name());
 					AutovoteUtils.set("dr", drMaps);

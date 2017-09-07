@@ -15,8 +15,7 @@ public class MonthlyCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/monthly"};
-		return aliases;
+		return new String[]{"/monthly"};
 	}
 
 	@Override

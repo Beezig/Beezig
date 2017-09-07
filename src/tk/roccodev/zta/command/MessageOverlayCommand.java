@@ -17,8 +17,7 @@ public class MessageOverlayCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/msg", "/tell"};
-		return aliases;
+		return new String[]{"/msg", "/tell"};
 	}
 	
 

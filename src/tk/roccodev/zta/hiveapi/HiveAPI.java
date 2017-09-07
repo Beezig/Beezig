@@ -1,21 +1,19 @@
 package tk.roccodev.zta.hiveapi;
 
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.util.NetworkPlayerInfo;
+import eu.the5zig.util.minecraft.ChatColor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import tk.roccodev.zta.games.TIMV;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.util.NetworkPlayerInfo;
-import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.games.TIMV;
 
 public class HiveAPI {
 	
@@ -82,7 +80,7 @@ public class HiveAPI {
 	}
 	
 	//Giant
-	public static void GiantupdatePoints(boolean mini) throws ParseException, Exception{
+	public static void GiantupdatePoints(boolean mini) throws Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
@@ -92,13 +90,12 @@ public class HiveAPI {
 		GiantPoints =  (long) o.get("total_points");
 	}
 	public static String GiantgetRank(String ign, String mode){
-		String playername = ign;
-		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		boolean mini = mode.equalsIgnoreCase("GNTM");
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
 			} catch (Exception e) {
 				e.printStackTrace();
 				The5zigAPI.getLogger().info("Failed GiantgetRank");
@@ -107,13 +104,12 @@ public class HiveAPI {
 		return (String) o.get("title");
 	}
 	public static long GiantgetGamesPlayed(String ign, String mode){
-		String playername = ign;
-		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		boolean mini = mode.equalsIgnoreCase("GNTM");
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
 			} catch (Exception e) {
 				e.printStackTrace();
 				The5zigAPI.getLogger().info("Failed GiantgetGamesPlayed");
@@ -122,13 +118,12 @@ public class HiveAPI {
 		return (long) o.get("games_played");
 	}
 	public static long GiantgetPoints(String ign, String mode){
-		String playername = ign;
-		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		boolean mini = mode.equalsIgnoreCase("GNTM");
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
 			} catch (Exception e) {
 				e.printStackTrace();
 				The5zigAPI.getLogger().info("Failed GiantgetPoints");
@@ -137,13 +132,12 @@ public class HiveAPI {
 		return (long) o.get("total_points");
 	}
 	public static long GiantgetWins(String ign, String mode){
-		String playername = ign;
-		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		boolean mini = mode.equalsIgnoreCase("GNTM");
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
 			} catch (Exception e) {
 				e.printStackTrace();
 				The5zigAPI.getLogger().info("Failed GiantgetWins");
@@ -152,13 +146,12 @@ public class HiveAPI {
 		return (long) o.get("victories");
 	}
 	public static long GiantgetKills(String ign, String mode){
-		String playername = ign;
-		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		boolean mini = mode.equalsIgnoreCase("GNTM");
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
 			} catch (Exception e) {
 				e.printStackTrace();
 				The5zigAPI.getLogger().info("Failed GiantgetKills");
@@ -167,13 +160,12 @@ public class HiveAPI {
 		return (long) o.get("kills");
 	}
 	public static long GiantgetDeaths(String ign, String mode){
-		String playername = ign;
-		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		boolean mini = mode.equalsIgnoreCase("GNTM");
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
 			} catch (Exception e) {
 				e.printStackTrace();
 				The5zigAPI.getLogger().info("Failed GiantgetDeaths");
@@ -226,11 +218,11 @@ public class HiveAPI {
 		return (long) o.get("deaths");
 	}
 	
-	public static void updateMedals() throws ParseException, Exception{
+	public static void updateMedals() throws Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
 		medals = getMedals(playername);
 	}
-	public static long getMedals(String ign) throws ParseException, Exception{
+	public static long getMedals(String ign) throws Exception{
 		
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
@@ -240,11 +232,11 @@ public class HiveAPI {
 		return (long) o.get("medals");
 	}
 	
-	public static void updateTokens() throws ParseException, Exception{
+	public static void updateTokens() throws Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();		
 		tokens =  getTokens(playername);
 	}
-	public static long getTokens(String ign) throws ParseException, Exception{
+	public static long getTokens(String ign) throws Exception{
 		
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
@@ -258,12 +250,11 @@ public class HiveAPI {
 
 	
 	public static String getNetworkRank(String ign){
-		String playername = ign;
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(ign)));
 			} catch (Exception e) {
 				The5zigAPI.getLogger().info("Failed getNetworkRank");
 				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
@@ -290,12 +281,11 @@ public class HiveAPI {
 	}
 	
 	public static String getName(String ign){
-		String playername = ign;
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(ign)));
 			} catch (Exception e) {
 				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
 				boolean connError = false;
@@ -330,12 +320,11 @@ public class HiveAPI {
 	return null; 
 	}
 	public static Date lastGame(String ign, String game){
-		String playername = ign;
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, game)));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, game)));
 			} catch (Exception e) {
 				The5zigAPI.getLogger().info("Failed lastGame");
 				e.printStackTrace();
@@ -386,7 +375,7 @@ public class HiveAPI {
 				}
 				if(game.equals("DR")){
 					
-					Integer winr = (int) (Math.floor((Double.valueOf(o2.get("wins").toString()) / Double.valueOf(o2.get("games").toString())) * 1000) / 10);;
+					Integer winr = (int) (Math.floor((Double.valueOf(o2.get("wins").toString()) / Double.valueOf(o2.get("games").toString())) * 1000) / 10);
 					Double ppg = Math.round(((Long)o2.get("points") / (Long)o2.get("games")) * 10d) / 10d;
 
 					return o2.get("name").toString() + "," + o2.get(unit).toString() + "," + ppg.toString() + "," + winr.toString();

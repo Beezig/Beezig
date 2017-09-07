@@ -12,8 +12,7 @@ public class DebugCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/debug"};
-		return aliases;
+		return new String[]{"/debug"};
 	}
 	
 

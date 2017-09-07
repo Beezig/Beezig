@@ -1,11 +1,10 @@
 package tk.roccodev.zta.hiveapi.wrapper.modes;
 
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.server.GameMode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.server.GameMode;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
@@ -118,7 +117,7 @@ public class ApiDR extends PvPMode {
 			}
 			try {
 				//Returns the world record holder username... lmao
-				WRHolder = (String) ((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(APIUtils.readURL(APIUtils.speedrunPublic((String) ((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("id".toString()), 1)))).toJSONString())).get("data").toString())).get("names").toString())).get("international").toString();
+				WRHolder = (String) ((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(APIUtils.readURL(APIUtils.speedrunPublic((String) ((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("id"), 1)))).toJSONString())).get("data").toString())).get("names").toString())).get("international").toString();
 			} catch (Exception e) {
 				The5zigAPI.getLogger().info("Failed DRgetWRHolder (WRHolder)");
 				e.printStackTrace();
@@ -126,7 +125,7 @@ public class ApiDR extends PvPMode {
 			}
 			if (WRHolder == null){
 				try {
-					WRHolder = (String) (((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("name".toString())).toString();
+					WRHolder = (String) (((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("name")).toString();
 				} catch (Exception e) {
 					The5zigAPI.getLogger().info("Failed DRgetWRHolder (guest)");
 					e.printStackTrace();

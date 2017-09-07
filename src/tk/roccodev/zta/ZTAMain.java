@@ -1,5 +1,25 @@
 package tk.roccodev.zta;
 
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.event.*;
+import eu.the5zig.mod.event.EventHandler.Priority;
+import eu.the5zig.mod.gui.IOverlay;
+import eu.the5zig.mod.plugin.Plugin;
+import eu.the5zig.util.minecraft.ChatColor;
+import org.bstats.MetricsLite;
+import tk.roccodev.zta.autovote.AutovoteUtils;
+import tk.roccodev.zta.autovote.watisdis;
+import tk.roccodev.zta.command.*;
+import tk.roccodev.zta.games.*;
+import tk.roccodev.zta.hiveapi.DRMap;
+import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
+import tk.roccodev.zta.notes.NotesManager;
+import tk.roccodev.zta.settings.SettingsFetcher;
+import tk.roccodev.zta.updater.Updater;
+import tk.roccodev.zta.utils.TIMVDay;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -9,57 +29,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import org.bstats.MetricsLite;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.event.ActionBarEvent;
-import eu.the5zig.mod.event.ChatEvent;
-import eu.the5zig.mod.event.ChatSendEvent;
-import eu.the5zig.mod.event.EventHandler;
-import eu.the5zig.mod.event.EventHandler.Priority;
-import eu.the5zig.mod.event.LoadEvent;
-import eu.the5zig.mod.event.ServerQuitEvent;
-import eu.the5zig.mod.event.TitleEvent;
-import eu.the5zig.mod.gui.IOverlay;
-import eu.the5zig.mod.plugin.Plugin;
-import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.autovote.AutovoteUtils;
-import tk.roccodev.zta.autovote.watisdis;
-import tk.roccodev.zta.command.AddNoteCommand;
-import tk.roccodev.zta.command.AutoVoteCommand;
-import tk.roccodev.zta.command.CheckPingCommand;
-import tk.roccodev.zta.command.ColorDebugCommand;
-import tk.roccodev.zta.command.DebugCommand;
-import tk.roccodev.zta.command.MathCommand;
-import tk.roccodev.zta.command.MedalsCommand;
-import tk.roccodev.zta.command.MessageOverlayCommand;
-import tk.roccodev.zta.command.MonthlyCommand;
-import tk.roccodev.zta.command.NotesCommand;
-import tk.roccodev.zta.command.PBCommand;
-import tk.roccodev.zta.command.ReVoteCommand;
-import tk.roccodev.zta.command.RealRankCommand;
-import tk.roccodev.zta.command.SayCommand;
-import tk.roccodev.zta.command.SeenCommand;
-import tk.roccodev.zta.command.SettingsCommand;
-import tk.roccodev.zta.command.ShrugCommand;
-import tk.roccodev.zta.command.TokensCommand;
-import tk.roccodev.zta.command.WRCommand;
-import tk.roccodev.zta.games.BED;
-import tk.roccodev.zta.games.DR;
-import tk.roccodev.zta.games.GNT;
-import tk.roccodev.zta.games.GNTM;
-import tk.roccodev.zta.games.Giant;
-import tk.roccodev.zta.games.HIDE;
-import tk.roccodev.zta.games.TIMV;
-import tk.roccodev.zta.hiveapi.DRMap;
-import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
-import tk.roccodev.zta.notes.NotesManager;
-import tk.roccodev.zta.settings.SettingsFetcher;
-import tk.roccodev.zta.updater.Updater;
-import tk.roccodev.zta.utils.TIMVDay;
 
 
 
@@ -185,11 +154,11 @@ public class ZTAMain {
 		
 		String OS = System.getProperty("os.name").toLowerCase();
 		try{
-		if (OS.indexOf("mac") >= 0) {
+		if (OS.contains("mac")) {
 		    mcFile = new File(System.getProperty("user.home") + "/Library/Application Support/minecraft/5zigtimv");
-		} else if (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0) {
+		} else if (OS.contains("nix") || OS.contains("nux") || OS.indexOf("aix") > 0) {
 			mcFile = new File(System.getProperty("user.home") + "/.minecraft/5zigtimv");
-		} else if (OS.indexOf("win") >= 0) {
+		} else if (OS.contains("win")) {
 		    mcFile = new File(System.getenv("APPDATA") + "/.minecraft/5zigtimv");
 		} else {
 		   mcFile = new File(System.getProperty("user.home") + "/Minecraft5zig/5zigtimv");
@@ -270,7 +239,6 @@ public class ZTAMain {
 		File oldPath = new File(mcFile + "/games.csv");
 		File newPath = new File(mcFile + "/timv/games.csv");
 		if(oldPath.exists() && newPath.exists()){
-			return;
 		}
 		else if(oldPath.exists() && !newPath.exists()){
 			The5zigAPI.getLogger().info("games.csv in 5zigtimv/ directory found! Migrating...");
@@ -295,10 +263,8 @@ public class ZTAMain {
 	private boolean isStaffChat(){
 		if(playerRank.endsWith("Hive Moderator")) return true;
 		if(playerRank.equalsIgnoreCase("Hive Developer")) return true;
-		if(playerRank.equalsIgnoreCase("Hive Founder and Owner")) return true;
-	
-		return false;
-	
+		return playerRank.equalsIgnoreCase("Hive Founder and Owner");
+
 	}
 	
 	
@@ -431,7 +397,7 @@ public class ZTAMain {
 					resetMethod.invoke(null, gameModeClass.newInstance());
 				} catch (Exception e) {
 					e.printStackTrace();
-				} 
+				}
 			}
 		}).start();
 		
@@ -447,8 +413,7 @@ public class ZTAMain {
 			String map = ChatColor.stripColor(evt.getTitle());
 			if(map.equals("HiveMC.EU")) return;
 			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
-		    DRMap map1 = DRMap.getFromDisplay(map);
-		    DR.activeMap = map1;
+			DR.activeMap = DRMap.getFromDisplay(map);
 		    
 		    new Thread(new Runnable(){
 		    	@Override

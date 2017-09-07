@@ -1,18 +1,5 @@
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -31,6 +18,14 @@ import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.zta.settings.Setting;
+
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BEDListener extends AbstractGameListener<BED>{
 
@@ -256,7 +251,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 									sb.append("          §6§m                  §f ");
 									The5zigAPI.getLogger().info("Added base...");
 									if(rankColor != null) {
-										sb.append(rankColor + correctUser);
+										sb.append(rankColor).append(correctUser);
 										The5zigAPI.getLogger().info("Added colored user...");
 									}
 									else{
@@ -286,9 +281,9 @@ public class BEDListener extends AbstractGameListener<BED>{
 												int level = rank.getLevel((int)points);
 												String BEDrankColor = rank.getName().replaceAll(ChatColor.stripColor(rank.getName()), "");
 												String rankString = BED.NUMBERS[level] + " " +rank.getName();
-												sb.append(" (" + BEDrankColor + rankString.trim());
+												sb.append(" (").append(BEDrankColor).append(rankString.trim());
 												if(Setting.BED_SHOW_POINTS_TO_NEXT_RANK.getValue()){
-													sb.append(" / " + rank.getPointsToNextRank((int)points));
+													sb.append(" / ").append(rank.getPointsToNextRank((int) points));
 												}
 												sb.append("§b)");
 											}
@@ -406,7 +401,6 @@ public class BEDListener extends AbstractGameListener<BED>{
 							BED.messagesToSend.clear();
 							BED.footerToSend.clear();
 							BED.isRecordsRunning = false;
-							return;
 						}
 					}
 				}).start();

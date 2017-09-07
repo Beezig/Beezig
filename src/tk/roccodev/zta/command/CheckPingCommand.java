@@ -12,8 +12,7 @@ public class CheckPingCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/cping", "/checkping"};
-		return aliases;
+		return new String[]{"/cping", "/checkping"};
 	}
 	
 	@Override

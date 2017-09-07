@@ -1,11 +1,11 @@
 package tk.roccodev.zta.hiveapi;
 
+import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.games.BED;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-
-import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.games.BED;
 
 public enum BEDRank {
 
@@ -186,7 +186,7 @@ public enum BEDRank {
 	
 	
 	public static boolean isNo1(String ign){
-		if(BED.lastRecordsPoints < 500000l){
+		if(BED.lastRecordsPoints < 500000L){
 			//Saved another API operation
 			return false;
 		}

@@ -17,8 +17,7 @@ public class WRCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/wr"};
-		return aliases;
+		return new String[]{"/wr"};
 	}
 
 	@Override

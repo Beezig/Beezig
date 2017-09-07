@@ -14,17 +14,17 @@ public class KarmaCounterItem extends GameModeItem<TIMV>{
 		
 		
 	StringBuilder sb = new StringBuilder();
-	sb.append(TIMV.karmaCounter + " Karma");
+	sb.append(TIMV.karmaCounter).append(" Karma");
 	if((boolean)getProperties().getSetting("showrolepoints").get()){
 		
 		if(TIMV.dPoints != 0){
-			sb.append(" / " + TIMV.dPoints + " Detective Points");
+			sb.append(" / ").append(TIMV.dPoints).append(" Detective Points");
 		}
 		if(TIMV.iPoints != 0){
-			sb.append(" / " + TIMV.iPoints + " Innocent Points");
+			sb.append(" / ").append(TIMV.iPoints).append(" Innocent Points");
 		}
 		if(TIMV.tPoints != 0){
-			sb.append(" / " + TIMV.tPoints + " Traitor Points");
+			sb.append(" / ").append(TIMV.tPoints).append(" Traitor Points");
 		}
 		
 		

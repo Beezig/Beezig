@@ -1,9 +1,5 @@
 package tk.roccodev.zta.games;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.GameMode;
@@ -14,6 +10,10 @@ import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.BEDMap;
 import tk.roccodev.zta.hiveapi.BEDRank;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class BED extends GameMode{
 	
@@ -102,7 +102,7 @@ public class BED extends GameMode{
 		for(Map.Entry<String, Integer> entry: sb.getLines().entrySet()) {	
 			
 			if(entry.getValue() == 13){
-				BED.teamsLeft = ChatColor.stripColor(entry.getKey().toString()).toCharArray().length;				
+				BED.teamsLeft = ChatColor.stripColor(entry.getKey()).toCharArray().length;
 			}
 		}
 	}
@@ -112,10 +112,10 @@ public class BED extends GameMode{
 		int goldIngots = The5zigAPI.getAPI().getItemCount("gold_ingot");
 		int diamonds = The5zigAPI.getAPI().getItemCount("diamond");
 		int emeralds = The5zigAPI.getAPI().getItemCount("emerald");
-		if(ironIngots != 0) sb.append(ironIngots + " Iron / ");
-		if(goldIngots != 0) sb.append(goldIngots + " Gold / ");
-		if(diamonds != 0) sb.append(diamonds + " Diamonds / ");
-		if(emeralds != 0) sb.append(emeralds + " Emeralds / ");
+		if(ironIngots != 0) sb.append(ironIngots).append(" Iron / ");
+		if(goldIngots != 0) sb.append(goldIngots).append(" Gold / ");
+		if(diamonds != 0) sb.append(diamonds).append(" Diamonds / ");
+		if(emeralds != 0) sb.append(emeralds).append(" Emeralds / ");
 		
 		return sb.toString().trim();
 	}
