@@ -9,6 +9,7 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
+import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.hiveapi.HIDEMap;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
@@ -70,9 +71,9 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 			The5zigAPI.getLogger().info("HIDE Color Debug: (" + message + ")");
 		}
 
-		if(message.startsWith("§8▍ §3§lHIDE§b§lWars§8 ▏ §3Voting has ended! §bThe map")){
+		if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §3Voting has ended! §bThe map §f")){
 			The5zigAPI.getLogger().info("Voting ended, parsing map");
-			String afterMsg = message.split("§8▍ §3§lHIDE§b§lWars§8 ▏ §3Voting has ended! §bThe map")[1];
+			String afterMsg = message.split("§8▍ §bHide§aAnd§eSeek§8 ▏ §3Voting has ended! §bThe map ")[1];
 			String map = "";
 		    Pattern pattern = Pattern.compile(Pattern.quote("§f") + "(.*?)" + Pattern.quote("§b"));
 		    Matcher matcher = pattern.matcher(afterMsg);
@@ -82,6 +83,84 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 			HIDE.activeMap = HIDEMap.getFromDisplay(map);
 		}
 
+		//Autovoting
+
+		else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §a§lVote received. §3Your map now has ") && Setting.AUTOVOTE.getValue()){
+			HIDE.hasVoted = true;
+		}
+		else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6§e§e§l6. §f§cRandom map") && !HIDE.hasVoted && Setting.AUTOVOTE.getValue()){
+
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+					List<String> votesCopy = new ArrayList<String>();
+					votesCopy.addAll(HIDE.votesToParse);
+					List<HIDEMap> parsedMaps = new ArrayList<HIDEMap>();
+
+					List<String> votesindex = new ArrayList<String>();
+					List<String> finalvoting = new ArrayList<String>();
+
+					for(String s1 : AutovoteUtils.getMapsForMode("hide")){
+						HIDEMap map1 = HIDEMap.valueOf(s1);
+						if(map1 == null) continue;
+						parsedMaps.add(map1);
+						The5zigAPI.getLogger().info("Parsed " + map1);
+					}
+
+					for(String s : votesCopy){
+
+						String[] data = s.split("\\.");
+						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §bHide§aAnd§eSeek§8 ▏ §6§e§e§l", "").replaceAll("▍ HideAndSeek ▏", "").trim();
+						String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
+						String consider = ChatColor.stripColor(toConsider[0]).trim();
+						HIDEMap map = HIDEMap.getFromDisplay(consider);
+						String votes = toConsider[1].split(" ")[0].trim();
+
+						if(map == null){
+							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: map not found for " + consider);
+						}
+						The5zigAPI.getLogger().info("trying to match " + map);
+						if(parsedMaps.contains(map)){
+							votesindex.add(votes + "-" + index);
+							The5zigAPI.getLogger().info("Added " + map + " Index #" + index + " with " + votes + " votes");
+						}else{
+							The5zigAPI.getLogger().info(map + " is not a favourite");
+						}
+
+						The5zigAPI.getLogger().info("\"" + index + "\"");
+
+						if(index.equals("5")){
+							if(votesindex.size() != 0){
+								for(String n : votesindex){
+									finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
+								}
+								int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
+								The5zigAPI.getLogger().info("Voting " + finalindex);
+								The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
+
+								HIDE.votesToParse.clear();
+								HIDE.hasVoted = true;
+								//we can't really get the map name at this point
+								The5zigAPI.getAPI().messagePlayer("§8▍ §bHide§aAnd§eSeek§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
+								return;
+							}
+							else{
+								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting Random");
+								The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+								The5zigAPI.getAPI().messagePlayer("§8▍ §bHide§aAnd§eSeek§8 ▏ " + "§eAutomatically voted for §cRandom map");
+								HIDE.votesToParse.clear();
+								HIDE.hasVoted = true;
+								//he hasn't but we don't want to check again and again
+								return;
+							}
+						}
+					}
+				}
+			}).start();
+		}
+		else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6§e§e§l") && !HIDE.hasVoted && Setting.AUTOVOTE.getValue()){
+			HIDE.votesToParse.add(message);
+		}
 
 		//Advanced Records
 

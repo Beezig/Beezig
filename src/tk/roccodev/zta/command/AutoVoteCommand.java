@@ -1,14 +1,10 @@
 package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.autovote.AutovoteUtils;
-import tk.roccodev.zta.hiveapi.BEDMap;
-import tk.roccodev.zta.hiveapi.DRMap;
-import tk.roccodev.zta.hiveapi.GiantMap;
-import tk.roccodev.zta.hiveapi.TIMVMap;
+import tk.roccodev.zta.hiveapi.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +25,7 @@ public class AutoVoteCommand implements Command{
 
 	@Override
 	public boolean execute(String[] args) {
-		
-		if(!ActiveGame.is("timv") && !ActiveGame.is("dr") && !ActiveGame.is("bed") && !ActiveGame.is("gnt") && !ActiveGame.is("gntm")) return false;
+
 		if(!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
 		
 		//Format would be /autovote add dr_throwback
@@ -60,7 +55,7 @@ public class AutoVoteCommand implements Command{
 					}
 					
 					
-					@SuppressWarnings("unchecked") List<String> drMaps = (List<String>) AutovoteUtils.get("dr");
+					List<String> drMaps = (List<String>) AutovoteUtils.get("dr");
 					if(drMaps == null) drMaps = new ArrayList<String>();
 					drMaps.add(apiMap.name());
 					AutovoteUtils.set("dr", drMaps);
@@ -121,6 +116,22 @@ public class AutoVoteCommand implements Command{
 					AutovoteUtils.dump();
 					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully added map.");
 				}
+				else if(gamemode.equalsIgnoreCase("hide")){
+					HIDEMap apiMap = HIDEMap.getFromDisplay(mapString);
+
+					if(apiMap == null){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Map not found.");
+						return true;
+					}
+
+
+					List<String> hideMaps = (List<String>) AutovoteUtils.get("hide");
+					if(hideMaps == null) hideMaps = new ArrayList<String>();
+					hideMaps.add(apiMap.name());
+					AutovoteUtils.set("hide", hideMaps);
+					AutovoteUtils.dump();
+					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully added map.");
+				}
 			
 			}
 			
@@ -150,6 +161,12 @@ public class AutoVoteCommand implements Command{
 						The5zigAPI.getAPI().messagePlayer("§e - " + map.name() + " (" + map.getDisplay() + ")");
 					}
 				}
+				else if(game.equalsIgnoreCase("hide")){
+					The5zigAPI.getAPI().messagePlayer(Log.info + "HideAndSeek Maps");
+					for(HIDEMap map : HIDEMap.values()){
+						The5zigAPI.getAPI().messagePlayer("§e - " + map.name() + " (" + map.getDisplayName() + ")");
+					}
+				}
 			}
 			else if(mode.equalsIgnoreCase("list")){
 				String game = args[1];
@@ -175,6 +192,12 @@ public class AutoVoteCommand implements Command{
 					The5zigAPI.getAPI().messagePlayer(Log.info + "SkyGiants Maps");
 					for(GiantMap map : GiantMap.values()){
 						The5zigAPI.getAPI().messagePlayer("§e - " + map.name() + " (" + map.getDisplay() + ")");
+					}
+				}
+				else if(game.equalsIgnoreCase("hide")){
+					The5zigAPI.getAPI().messagePlayer(Log.info + "HideAndSeek Maps");
+					for(String s : AutovoteUtils.getMapsForMode("hide")){
+						The5zigAPI.getAPI().messagePlayer("§e - " + s);
 					}
 				}
 			}
@@ -264,6 +287,23 @@ public class AutoVoteCommand implements Command{
 					if(gntMaps.contains(apiMap.name()))
 					gntMaps.remove(apiMap.name());
 					AutovoteUtils.set("giant", gntMaps);
+					AutovoteUtils.dump();
+					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully removed map.");
+				}
+				else if(gamemode.equalsIgnoreCase("hide")){
+					HIDEMap apiMap = HIDEMap.getFromDisplay(mapString);
+
+					if(apiMap == null){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Map not found.");
+						return true;
+					}
+
+
+					List<String> hideMaps = (List<String>) AutovoteUtils.get("hide");
+					if(hideMaps == null) hideMaps = new ArrayList<String>();
+					if(hideMaps.contains(apiMap.name()))
+						hideMaps.remove(apiMap.name());
+					AutovoteUtils.set("hide", hideMaps);
 					AutovoteUtils.dump();
 					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully removed map.");
 				}

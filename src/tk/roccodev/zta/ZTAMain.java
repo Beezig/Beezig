@@ -117,6 +117,8 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "gntpoints", tk.roccodev.zta.modules.gnt.PointsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntgiantkills", tk.roccodev.zta.modules.gnt.GiantKillsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntgold", tk.roccodev.zta.modules.gnt.GoldItem.class, "serverhivemc");
+
+		The5zigAPI.getAPI().registerModuleItem(this, "hidemap", tk.roccodev.zta.modules.hide.MapItem.class, "serverhivemc");
 		
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
