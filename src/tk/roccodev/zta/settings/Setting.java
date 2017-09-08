@@ -1,9 +1,9 @@
 
 package tk.roccodev.zta.settings;
 
-import java.io.IOException;
-
 import eu.the5zig.mod.The5zigAPI;
+
+import java.io.IOException;
 
 public enum Setting {
 
@@ -42,7 +42,8 @@ public enum Setting {
 	HIDE_SHOW_SEEKER_KPG(true, "HIDE Advanced Records - Show Kills per Game as Seeker"),
 	HIDE_SHOW_HIDER_KPG(false, "HIDE Advanced Records - Show Kills per Game as Hider"),
 	HIDE_SHOW_POINTSPG(true, "HIDE Advanced Records - Show Points per Game"),
-	HIDE_SHOW_AMOUNT_UNLOCKED(true, "HIDE Advanced Records - Show amount of unlocked blocks"); 
+	HIDE_SHOW_AMOUNT_UNLOCKED(true, "HIDE Advanced Records - Show amount of unlocked blocks"),
+	HIDE_SHOW_POINTS_TO_NEXT_RANK(true, "HIDE Advanced Records - Show points to next rank");
 	
 
 	

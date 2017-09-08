@@ -6,5 +6,6 @@ public class APIValues {
 	public static long DRpoints;
 	public static long BEDpoints;
 	public static long Giantpoints;
+	public static long HIDEpoints;
 
 }

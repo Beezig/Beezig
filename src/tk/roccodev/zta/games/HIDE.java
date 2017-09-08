@@ -22,6 +22,8 @@ public class HIDE extends GameMode {
 	public static boolean hasVoted = false;
 	public static List<String> votesToParse = new ArrayList<String>();
 
+	public static String rank;
+
 
 	public static void reset(HIDE gameMode){
 		

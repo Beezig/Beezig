@@ -11,7 +11,9 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.HIDE;
+import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HIDEMap;
+import tk.roccodev.zta.hiveapi.HIDERank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
 import tk.roccodev.zta.settings.Setting;
@@ -50,9 +52,13 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					The5zigAPI.getLogger().info(sb.getTitle());
-					if(sb != null && sb.getTitle().contains("HIDE")){
-
+					
+					if(sb != null && sb.getTitle().contains("Your HIDE Stats")){
+						int points = sb.getLines().get(ChatColor.AQUA + "Points");
+						APIValues.HIDEpoints = (long) points;
 					}
+
+					HIDE.rank = HIDERank.getFromDisplay(new ApiHIDE(The5zigAPI.getAPI().getGameProfile().getName()).getTitle()).getTotalDisplay();
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -197,8 +203,9 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 						try{
 
 						ApiHIDE api = new ApiHIDE(HIDE.lastRecords);
+						HIDERank rank = null;
 
-						int kills = 0;
+
 
 
 						NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -214,11 +221,12 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? api.getParentMode().getNetworkTitle() : "";
 						ChatColor rankColor = null;
 						if(Setting.SHOW_NETWORK_RANK_COLOR.getValue()){
-
 							rankColor = api.getParentMode().getNetworkRankColor();
-
 						}
+						String rankTitleHIDE = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
+						if(rankTitleHIDE != null) rank = HIDERank.getFromDisplay(rankTitleHIDE);
 
+						int kills = 0;
 						long points = 0;
 						int deaths = 0;
 						int gamesPlayed = 0;
@@ -270,9 +278,9 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 										sb.append("§3 Points: §b");
 										points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
 										sb.append(points);
-										if(Setting.SHOW_RECORDS_RANK.getValue()){
-
-										}
+										if(rank != null) sb.append(" (").append(rank.getTotalDisplay());
+										if(Setting.HIDE_SHOW_POINTS_TO_NEXT_RANK.getValue()) sb.append(" / ").append(rank.getPointsToNextRank((int) points));
+										if(rank != null) sb.append("§b)");
 
 										//if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
