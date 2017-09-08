@@ -237,7 +237,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
 						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
-						String[] unlockedBlocks = Setting.HIDE_SHOW_AMOUNT_UNLOCKED.getValue() ? api.getBlocks() : null;
+						Integer playedBlocks = Setting.HIDE_SHOW_AMOUNT_UNLOCKED.getValue() ? api.getBlockExperience().size() : null;
 
 
 
@@ -346,8 +346,8 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 					 *		The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
 					 *	}
 					 */
-						if(unlockedBlocks != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Unlocked Blocks: §b" + unlockedBlocks.length);
+						if(playedBlocks != null){
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Played Blocks: §b" + playedBlocks);
 						}
 						if(lastGame != null){
 							Calendar lastSeen = Calendar.getInstance();

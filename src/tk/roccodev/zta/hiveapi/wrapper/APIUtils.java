@@ -1,6 +1,7 @@
 package tk.roccodev.zta.hiveapi.wrapper;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -141,7 +142,55 @@ public class APIUtils {
 	        return time / MONTH_MILLIS + " months";
 	    }
 	}
-	
+
+	public static String capitalize(String sentence){
+
+		//Thanks to "Samet öztoprak" on stackoverflow :^)
+
+		String words[] = sentence.replaceAll("\\s+", " ").trim().split(" ");
+		String newSentence = "";
+		for (String word : words) {
+			for (int i = 0; i < word.length(); i++)
+				newSentence = newSentence + ((i == 0) ? word.substring(i, i + 1).toUpperCase():
+													 (i != word.length() - 1) ? word.substring(i, i + 1).toLowerCase() : word.substring(i, i + 1).toLowerCase().toLowerCase() + " ");
+		}
+
+		return newSentence.trim();
+	}
+
+	public static ChatColor getLevelColorHIDE(int level){
+		if(level < 5) return ChatColor.GRAY;
+		if(level < 10) return  ChatColor.AQUA;
+		if(level < 15) return ChatColor.GREEN;
+		if(level < 20) return ChatColor.YELLOW;
+		if(level < 25) return ChatColor.GOLD;
+		if(level < 30) return ChatColor.RED;
+		if(level == 30) return ChatColor.LIGHT_PURPLE;
+
+		return ChatColor.WHITE;
+	}
+
+	public static String getNextPecentHIDE(int exp, int level){
+		if(level == 30) return "";
+		//exp = 600
+		//level = 4
+		exp = exp-50;
+
+		int prevXP = 0;
+		int i = 1;
+		while (i < level) {
+			prevXP = 50 * i + prevXP;
+			i++;
+		}
+		int nextXP = 50 * i + prevXP;
+		int diff = nextXP - prevXP;
+		exp = exp-prevXP;
+
+		double percent = Math.floor(((double) exp / (double) diff) * 100d);
+
+		return " +" + ((int) percent) + "%";
+	}
+
 	public static JSONObject getSpeedrunObject(String toParse, int mode){
 		return getObject(Parser.read(Parser.speedrun(toParse, mode)));
 	}

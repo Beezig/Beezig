@@ -1,10 +1,11 @@
 package tk.roccodev.zta.hiveapi.wrapper.modes;
 
-import java.util.Date;
-
 import eu.the5zig.mod.server.GameMode;
+import org.json.simple.JSONObject;
 import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.hiveapi.wrapper.APIGameMode;
+
+import java.util.Date;
 
 public class ApiHIDE extends APIGameMode {
 
@@ -31,7 +32,15 @@ public class ApiHIDE extends APIGameMode {
 	
 	public String[] getBlocks(){
 		String blocks = (String) object("blocks");
-		return (String[]) blocks.split(",");		
+		return blocks.split(",");
+	}
+
+	public JSONObject getBlockExperience(){
+		return (JSONObject) object("blockExperience");
+	}
+
+	public JSONObject getRawBlockExperience(){
+		return (JSONObject) object("rawBlockExperience");
 	}
 	
 	
