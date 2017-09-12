@@ -25,6 +25,7 @@ public enum TIMVMap {
 	METROPOLIS("Metropolis", 3, 3),
 	MV_CLASSIC("MineVille: Classic", 4, 4),
 	MV_REVAMP("MineVille: Revamped", 4, 4),
+	NIGHTCLUB("Nightclub", 0, 0),
 	PIRATES("Pirates", 3,3),
 	PRECINCT("Precinct", 4,4),
 	PUERTO_TEREZA("Puerto Tereza", 2,2),

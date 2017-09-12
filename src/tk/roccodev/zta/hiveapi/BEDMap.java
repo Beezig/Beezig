@@ -9,16 +9,18 @@ public enum BEDMap {
 	BED_FACILITY("Facility"),
 	BED_ORBIT("Orbit"),
 	BED_IGLOO("Igloo"),
-	BED_FOOD("Food", true),	
+	BED_YINYANG("Yin-Yang"),
 	BED_ETHEREAL("Ethereal"),
 	BED_MORROWLAND("Morrowland"),
 	BED_MARIO("Mario"),
+	BED_FOOD("Food", true),	
+	BED_TREASURE_ISLAND("Treasure Island", true),
 	BED_RUINS("Ruins", true, true),	//Teams only
 	BED_PIRATES("Pirates", true, true),	//Teams only
 	BED_FLORAL("Floral", true, true),	//Teams only
 	BED_HELL("Hell", true, true),	//Teams only
-	BED_PALACE("Palace", true, true),
-	BED_ROME("Rome", true, true);
+	BED_PALACE("Palace", true, true), //Teams only
+	BED_ROME("Rome", true, true); //Teams only
 
 	private String displayName;
 	private boolean[] exclusiveModes;

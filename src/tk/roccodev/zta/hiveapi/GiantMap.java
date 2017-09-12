@@ -18,6 +18,7 @@ public enum GiantMap {
 	DRAGONS("Dragons", false),
 	ADVENUS("Advenus", false),
 	MOONLIGHT("Moonlight", false),
+	ANCHORED("Anchored", false),
 	
 	
 	//GNTM Maps
