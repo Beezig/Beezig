@@ -1,8 +1,28 @@
 package tk.roccodev.zta;
 
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.event.*;
+import eu.the5zig.mod.event.EventHandler.Priority;
+import eu.the5zig.mod.gui.IOverlay;
+import eu.the5zig.mod.plugin.Plugin;
+import eu.the5zig.util.minecraft.ChatColor;
+import org.bstats.MetricsLite;
+import tk.roccodev.zta.autovote.AutovoteUtils;
+import tk.roccodev.zta.autovote.watisdis;
+import tk.roccodev.zta.command.*;
+import tk.roccodev.zta.games.*;
+import tk.roccodev.zta.hiveapi.DRMap;
+import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
+import tk.roccodev.zta.notes.NotesManager;
+import tk.roccodev.zta.settings.SettingsFetcher;
+import tk.roccodev.zta.updater.Updater;
+import tk.roccodev.zta.utils.TIMVDay;
+
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -10,57 +30,10 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import org.bstats.MetricsLite;
-import org.lwjgl.input.Keyboard;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.event.ActionBarEvent;
-import eu.the5zig.mod.event.ChatEvent;
-import eu.the5zig.mod.event.ChatSendEvent;
-import eu.the5zig.mod.event.EventHandler;
-import eu.the5zig.mod.event.EventHandler.Priority;
-import eu.the5zig.mod.event.KeyPressEvent;
-import eu.the5zig.mod.event.LoadEvent;
-import eu.the5zig.mod.event.ServerQuitEvent;
-import eu.the5zig.mod.event.TitleEvent;
-import eu.the5zig.mod.gui.IOverlay;
-import eu.the5zig.mod.plugin.Plugin;
-import eu.the5zig.mod.util.IKeybinding;
-import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.autovote.AutovoteUtils;
-import tk.roccodev.zta.autovote.watisdis;
-import tk.roccodev.zta.command.AddNoteCommand;
-import tk.roccodev.zta.command.AutoVoteCommand;
-import tk.roccodev.zta.command.ColorDebugCommand;
-import tk.roccodev.zta.command.DebugCommand;
-import tk.roccodev.zta.command.MathCommand;
-import tk.roccodev.zta.command.MedalsCommand;
-import tk.roccodev.zta.command.MonthlyCommand;
-import tk.roccodev.zta.command.NotesCommand;
-import tk.roccodev.zta.command.PBCommand;
-import tk.roccodev.zta.command.SayCommand;
-import tk.roccodev.zta.command.SettingsCommand;
-import tk.roccodev.zta.command.ShrugCommand;
-import tk.roccodev.zta.command.WRCommand;
-import tk.roccodev.zta.games.BED;
-import tk.roccodev.zta.games.DR;
-import tk.roccodev.zta.games.GNT;
-import tk.roccodev.zta.games.GNTM;
-import tk.roccodev.zta.games.Giant;
-import tk.roccodev.zta.games.TIMV;
-import tk.roccodev.zta.hiveapi.DRMap;
-import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
-import tk.roccodev.zta.notes.NotesManager;
-import tk.roccodev.zta.settings.SettingsFetcher;
-import tk.roccodev.zta.updater.Updater;
-import tk.roccodev.zta.utils.TIMVDay;
+import java.util.concurrent.TimeUnit;
 
 
-
-@Plugin(name="Beezig", version="4.2.3")
+@Plugin(name="Beezig", version="4.3.0")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -72,7 +45,6 @@ public class ZTAMain {
 	
 	public static int getCustomVersioning(){
 		String v = ZTAMain.class.getAnnotation(Plugin.class).version();
-		
 			String toParse = v.replaceAll("\\.", "");
 			return Integer.parseInt(toParse);
 		
@@ -86,9 +58,18 @@ public class ZTAMain {
 		IOverlay news = The5zigAPI.getAPI().createOverlay();
 		try {
 			if(Updater.isVersionBlacklisted(getCustomVersioning()) && !ZTAMain.class.getAnnotation(Plugin.class).version().contains("experimental")){
-				The5zigAPI.getLogger().fatal("Beezig: This version is disabled!");
-				news.displayMessage("Beezig: Version is disabled remotely! Update to the latest version.");
-				
+				new Thread(new Runnable(){
+					@Override
+					public void run(){
+						try {
+							TimeUnit.SECONDS.sleep(10);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						The5zigAPI.getLogger().error("Beezig: This version is disabled!");
+						news.displayMessage("Beezig: Version is disabled!", "Please update to the latest version.");
+					}
+				}).start();
 				return; //< one does not simply update beezig
 			}
 		} catch (IOException e) {
@@ -130,6 +111,8 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "beddestroyed", tk.roccodev.zta.modules.bed.BedsDestroyedItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "beddeaths", tk.roccodev.zta.modules.bed.DeathsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedkdrchange", tk.roccodev.zta.modules.bed.KDRChangeItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bedteamsleft", tk.roccodev.zta.modules.bed.TeamsLeftItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bedsummoners", tk.roccodev.zta.modules.bed.SummonersItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "globalmedals", tk.roccodev.zta.modules.global.MedalsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "globaltokens", tk.roccodev.zta.modules.global.TokensItem.class , "serverhivemc");
@@ -143,6 +126,9 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "gntpoints", tk.roccodev.zta.modules.gnt.PointsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntgiantkills", tk.roccodev.zta.modules.gnt.GiantKillsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntgold", tk.roccodev.zta.modules.gnt.GoldItem.class, "serverhivemc");
+
+		The5zigAPI.getAPI().registerModuleItem(this, "hidemap", tk.roccodev.zta.modules.hide.MapItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "hidepoints", tk.roccodev.zta.modules.hide.PointsItem.class, "serverhivemc");
 		
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
@@ -151,11 +137,8 @@ public class ZTAMain {
 		CommandManager.registerCommand(new AddNoteCommand());
 		CommandManager.registerCommand(new SayCommand());
 		CommandManager.registerCommand(new SettingsCommand());
-		/*
-		CommandManager.registerCommand(new RealRankCommand());
-		CommandManager.registerCommand(new SeenCommand());
-		*/
 		CommandManager.registerCommand(new MedalsCommand());
+		CommandManager.registerCommand(new TokensCommand());
 		CommandManager.registerCommand(new PBCommand());
 		CommandManager.registerCommand(new WRCommand());
 		CommandManager.registerCommand(new DebugCommand());
@@ -164,8 +147,17 @@ public class ZTAMain {
 		CommandManager.registerCommand(new AutoVoteCommand());
 		CommandManager.registerCommand(new ShrugCommand());
 		CommandManager.registerCommand(new MathCommand());
+		CommandManager.registerCommand(new MessageOverlayCommand());
+		CommandManager.registerCommand(new ReVoteCommand());
+		CommandManager.registerCommand(new CheckPingCommand());
+		CommandManager.registerCommand(new BlockstatsCommand());
 		
-		
+		if(The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d") || 
+				The5zigAPI.getAPI().getGameProfile().getId().toString().equals("bba224a2-0bff-4913-b042-27ca3b60973f")){
+			CommandManager.registerCommand(new RealRankCommand());
+			CommandManager.registerCommand(new SeenCommand());			
+		}
+			
 
 		The5zigAPI.getLogger().info("Loaded Beezig");
 		
@@ -175,11 +167,11 @@ public class ZTAMain {
 		
 		String OS = System.getProperty("os.name").toLowerCase();
 		try{
-		if (OS.indexOf("mac") >= 0) {
+		if (OS.contains("mac")) {
 		    mcFile = new File(System.getProperty("user.home") + "/Library/Application Support/minecraft/5zigtimv");
-		} else if (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0) {
+		} else if (OS.contains("nix") || OS.contains("nux") || OS.indexOf("aix") > 0) {
 			mcFile = new File(System.getProperty("user.home") + "/.minecraft/5zigtimv");
-		} else if (OS.indexOf("win") >= 0) {
+		} else if (OS.contains("win")) {
 		    mcFile = new File(System.getenv("APPDATA") + "/.minecraft/5zigtimv");
 		} else {
 		   mcFile = new File(System.getProperty("user.home") + "/Minecraft5zig/5zigtimv");
@@ -212,8 +204,9 @@ public class ZTAMain {
 		checkForFileExist(new File(mcFile + "/autovote.yml"), false);
 		AutovoteUtils.load();
 		watisdis.wat = new ApiTIMV("RoccoDev").getTitle();
-		
-		playerRank = HiveAPI.getNetworkRank(The5zigAPI.getAPI().getGameProfile().getName());
+
+		ApiHiveGlobal api = new ApiHiveGlobal(The5zigAPI.getAPI().getGameProfile().getName());
+		playerRank = api.getNetworkTitle();
 		
 		try {
 			HiveAPI.updateMedals();
@@ -260,7 +253,6 @@ public class ZTAMain {
 		File oldPath = new File(mcFile + "/games.csv");
 		File newPath = new File(mcFile + "/timv/games.csv");
 		if(oldPath.exists() && newPath.exists()){
-			return;
 		}
 		else if(oldPath.exists() && !newPath.exists()){
 			The5zigAPI.getLogger().info("games.csv in 5zigtimv/ directory found! Migrating...");
@@ -285,15 +277,14 @@ public class ZTAMain {
 	private boolean isStaffChat(){
 		if(playerRank.endsWith("Hive Moderator")) return true;
 		if(playerRank.equalsIgnoreCase("Hive Developer")) return true;
-		if(playerRank.equalsIgnoreCase("Hive Founder and Owner")) return true;
-	
-		return false;
-	
+		return playerRank.equalsIgnoreCase("Hive Founder and Owner");
+
 	}
 	
 	
 	@EventHandler(priority = EventHandler.Priority.HIGH)
 	public void onChatSend(ChatSendEvent evt){
+	
 		if(evt.getMessage().startsWith("*") && isStaffChat()){
 			String noStar = evt.getMessage().replaceAll("\\*", "");
 			if(noStar.length() == 0) return;
@@ -301,6 +292,7 @@ public class ZTAMain {
 			
 			return;
 		}
+		
 		if(evt.getMessage().startsWith("/") && !evt.getMessage().startsWith("/ ")){
 			
 			if(CommandManager.dispatchCommand(evt.getMessage())){
@@ -309,6 +301,13 @@ public class ZTAMain {
 			}
 			
 			
+		}
+		if(!MessageOverlayCommand.toggledName.isEmpty() && !evt.getMessage().startsWith("/")){
+			evt.setCancelled(true);
+			The5zigAPI.getAPI().sendPlayerMessage("/msg " + MessageOverlayCommand.toggledName + " " + evt.getMessage());
+		}
+		if(evt.getMessage().toUpperCase().trim().equals("/P")){
+			MessageOverlayCommand.toggledName = "";
 		}
 		if(evt.getMessage().toUpperCase().startsWith("/RECORDS") || evt.getMessage().toUpperCase().startsWith("/STATS")){
 			String[] args = evt.getMessage().split(" ");
@@ -341,6 +340,13 @@ public class ZTAMain {
 						return;
 					}
 					Giant.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				}  else if(ActiveGame.is("hide")){
+					if(HIDE.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					HIDE.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
 				
 			}
@@ -377,6 +383,14 @@ public class ZTAMain {
 					}
 					Giant.lastRecords = args[1].trim();	
 				}
+				else if(ActiveGame.is("hide")){
+					if(HIDE.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					HIDE.lastRecords = args[1].trim();	
+				}
 			}
 		}
 		
@@ -395,26 +409,7 @@ public class ZTAMain {
 					Class gameModeClass = Class.forName("tk.roccodev.zta.games." + className);
 					Method resetMethod = gameModeClass.getMethod("reset", gameModeClass);
 					resetMethod.invoke(null, gameModeClass.newInstance());
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -432,8 +427,7 @@ public class ZTAMain {
 			String map = ChatColor.stripColor(evt.getTitle());
 			if(map.equals("HiveMC.EU")) return;
 			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
-		    DRMap map1 = DRMap.getFromDisplay(map);
-		    DR.activeMap = map1;
+			DR.activeMap = DRMap.getFromDisplay(map);
 		    
 		    new Thread(new Runnable(){
 		    	@Override

@@ -1,7 +1,5 @@
 package tk.roccodev.zta.command;
 
-import eu.the5zig.mod.server.GameMode;
-
 public interface Command {
 
 	

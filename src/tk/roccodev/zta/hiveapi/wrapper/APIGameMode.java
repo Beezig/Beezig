@@ -1,15 +1,14 @@
 package tk.roccodev.zta.hiveapi.wrapper;
 
-import java.util.Date;
-
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.server.GameMode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.server.GameMode;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
+
+import java.util.Date;
 
 public class APIGameMode {
 
@@ -44,11 +43,11 @@ public class APIGameMode {
 	}
 	
 	public Object object(String field){
-		return APIUtils.getObject(APIUtils.Parser.read(APIUtils.Parser.game(uuid.toString(), getShortcode() ))).get(field);
+		return APIUtils.getObject(APIUtils.Parser.read(APIUtils.Parser.game(uuid, getShortcode() ))).get(field);
 	}
 	
 	public JSONObject jsonObject(){
-		return APIUtils.getObject(APIUtils.Parser.read(APIUtils.Parser.game(uuid.toString(), getShortcode() )));
+		return APIUtils.getObject(APIUtils.Parser.read(APIUtils.Parser.game(uuid, getShortcode() )));
 	}
 	
 	/**

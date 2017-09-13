@@ -1,14 +1,14 @@
 package tk.roccodev.zta.games;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.hiveapi.GiantMap;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Giant extends GameMode{
 
@@ -19,6 +19,8 @@ public class Giant extends GameMode{
 	public static String team = "";
 	public static GiantMap activeMap;
 	public static int giantKills;
+	
+	public static boolean hasVoted;
 	
 	//KDR
 	
@@ -33,15 +35,16 @@ public class Giant extends GameMode{
 	public static List<String> footerToSend = new ArrayList<String>();
 	public static boolean isRecordsRunning = false;
 	public static String lastRecords = "";
+	public static List<String> votesToParse = new ArrayList<String>();
 	
 	public Giant(){
 		instance = this;
 	}
 	
 	
-	public boolean isMini(){return false;};
-	
-	
+	public boolean isMini(){return false;}
+
+
 	public static void reset(Giant gameMode){
 		
 		teamsEliminated = 0;
@@ -52,6 +55,8 @@ public class Giant extends GameMode{
 		gameDeaths = 0;
 		gameKdr = 0D;
 		giantKills = 0;
+		hasVoted = false;
+		votesToParse.clear();
 		
 		gameMode.setState(GameState.FINISHED);
 		ActiveGame.set("");

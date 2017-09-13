@@ -6,7 +6,6 @@ import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.games.Giant;
-import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class TeamItem extends GameModeItem<Giant>{
 

@@ -18,6 +18,7 @@ public enum GiantMap {
 	DRAGONS("Dragons", false),
 	ADVENUS("Advenus", false),
 	MOONLIGHT("Moonlight", false),
+	ANCHORED("Anchored", false),
 	
 	
 	//GNTM Maps
@@ -32,6 +33,7 @@ public enum GiantMap {
 	SPRUCE_SPRINGSTEEN("Spruce Springsteen", true),
 	BLOSSOM("Blossom", true),
 	TOWN_HALL("Town Hall", true),
+	MUFFIN("Muffin", true),
 	AQUARIUS("Aquarius", true);
 	
 	

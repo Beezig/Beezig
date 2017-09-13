@@ -16,8 +16,7 @@ public class AddNoteCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/note", "/addnote"};
-		return aliases;
+		return new String[]{"/note", "/addnote"};
 	}
 	
 

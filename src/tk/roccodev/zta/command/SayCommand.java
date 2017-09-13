@@ -13,9 +13,8 @@ public class SayCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/say"};
 		// "/s" is a staff command.
-		return aliases;
+		return new String[]{"/say"};
 	}
 
 	@Override

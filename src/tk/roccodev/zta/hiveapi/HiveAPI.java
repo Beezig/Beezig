@@ -1,30 +1,21 @@
 package tk.roccodev.zta.hiveapi;
 
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import tk.roccodev.zta.games.TIMV;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.util.NetworkPlayerInfo;
-import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.Log;
-import tk.roccodev.zta.games.TIMV;
 
 public class HiveAPI {
-	
-	public static long TIMVkarma = 0;
-	public static long DRpoints = 0;
-	public static long BEDpoints = 0;
+
 	public static long GiantPoints = 0;
 	
 	public static long medals = 0;
@@ -32,36 +23,6 @@ public class HiveAPI {
 	
 	
 	
-	private static URL TIMVparsePlayerURL(String name){
-		String urls = "http://api.hivemc.com/v1/player/@player@/TIMV";
-		try {
-			return new URL(urls.replaceAll("@player@", getUUID(name)));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-	private static URL DRparsePlayerURL(String name){
-		String urls = "http://api.hivemc.com/v1/player/@player@/DR";
-		try {
-			return new URL(urls.replaceAll("@player@", getUUID(name)));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-	private static URL BEDparsePlayerURL(String name){
-		String urls = "http://api.hivemc.com/v1/player/@player@/BED";
-		try {
-			return new URL(urls.replaceAll("@player@", getUUID(name)));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
 	private static URL GameParsePlayerURL(String name, String game){
 		String urls = "http://api.hivemc.com/v1/player/@player@/" + game;
 		try {
@@ -92,26 +53,6 @@ public class HiveAPI {
 			return null;
 		}
 	}
- 	private static URL parseSpeedruncom(String mapid){
-		String urls = "http://www.speedrun.com/api/v1/leaderboards/369ep8dl/level/@id@/824xzvmd?top=1";
-		try {
-			return new URL(urls.replaceAll("@id@", mapid));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-	private static URL parseSpeedruncomUserID(String userid){
-		String urls = "http://www.speedrun.com/api/v1/users/@id@";
-		try {
-			return new URL(urls.replaceAll("@id@", userid));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
 	private static URL parseMonthlyURL(String game){
 		//APIKey is only used for analytics => doesn't have to be kept secret; be aware that the endpoint URL might change in the future, there will be a notification prior to that
 		String url = "https://thtmx.rocks/@game@/api/ighGH789fdf5kfHUo";
@@ -135,7 +76,7 @@ public class HiveAPI {
 	}
 	
 	//Giant
-	public static void GiantupdatePoints(boolean mini) throws ParseException, Exception{
+	public static void GiantupdatePoints(boolean mini) throws Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
@@ -145,13 +86,12 @@ public class HiveAPI {
 		GiantPoints =  (long) o.get("total_points");
 	}
 	public static String GiantgetRank(String ign, String mode){
-		String playername = ign;
-		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		boolean mini = mode.equalsIgnoreCase("GNTM");
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
 			} catch (Exception e) {
 				e.printStackTrace();
 				The5zigAPI.getLogger().info("Failed GiantgetRank");
@@ -160,13 +100,12 @@ public class HiveAPI {
 		return (String) o.get("title");
 	}
 	public static long GiantgetGamesPlayed(String ign, String mode){
-		String playername = ign;
-		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		boolean mini = mode.equalsIgnoreCase("GNTM");
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
 			} catch (Exception e) {
 				e.printStackTrace();
 				The5zigAPI.getLogger().info("Failed GiantgetGamesPlayed");
@@ -175,13 +114,12 @@ public class HiveAPI {
 		return (long) o.get("games_played");
 	}
 	public static long GiantgetPoints(String ign, String mode){
-		String playername = ign;
-		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		boolean mini = mode.equalsIgnoreCase("GNTM");
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
 			} catch (Exception e) {
 				e.printStackTrace();
 				The5zigAPI.getLogger().info("Failed GiantgetPoints");
@@ -190,13 +128,12 @@ public class HiveAPI {
 		return (long) o.get("total_points");
 	}
 	public static long GiantgetWins(String ign, String mode){
-		String playername = ign;
-		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		boolean mini = mode.equalsIgnoreCase("GNTM");
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
 			} catch (Exception e) {
 				e.printStackTrace();
 				The5zigAPI.getLogger().info("Failed GiantgetWins");
@@ -205,13 +142,12 @@ public class HiveAPI {
 		return (long) o.get("victories");
 	}
 	public static long GiantgetKills(String ign, String mode){
-		String playername = ign;
-		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		boolean mini = mode.equalsIgnoreCase("GNTM");
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
 			} catch (Exception e) {
 				e.printStackTrace();
 				The5zigAPI.getLogger().info("Failed GiantgetKills");
@@ -220,13 +156,12 @@ public class HiveAPI {
 		return (long) o.get("kills");
 	}
 	public static long GiantgetDeaths(String ign, String mode){
-		String playername = ign;
-		boolean mini = mode.equalsIgnoreCase("GNTM") ? true : false;
+		boolean mini = mode.equalsIgnoreCase("GNTM");
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
 			} catch (Exception e) {
 				e.printStackTrace();
 				The5zigAPI.getLogger().info("Failed GiantgetDeaths");
@@ -234,22 +169,7 @@ public class HiveAPI {
 		
 		return (long) o.get("deaths");
 	}
-	
-	
-	public static long getPoints(String ign, String game) {
-		String playername = The5zigAPI.getAPI().getGameProfile().getName();
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(HiveAPI.GameParsePlayerURL(ign, game)));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("total_points");
-	}
+
 	public static long getKills(String ign, String game) {
 		
 		JSONParser parser = new JSONParser();
@@ -279,11 +199,11 @@ public class HiveAPI {
 		return (long) o.get("deaths");
 	}
 	
-	public static void updateMedals() throws ParseException, Exception{
+	public static void updateMedals() throws Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
 		medals = getMedals(playername);
 	}
-	public static long getMedals(String ign) throws ParseException, Exception{
+	public static long getMedals(String ign) throws Exception{
 		
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
@@ -292,212 +212,28 @@ public class HiveAPI {
 		
 		return (long) o.get("medals");
 	}
-	public static void updateTokens() throws ParseException, Exception{
-		String playername = The5zigAPI.getAPI().getGameProfile().getName();
+	
+	public static void updateTokens() throws Exception{
+		String playername = The5zigAPI.getAPI().getGameProfile().getName();		
+		tokens =  getTokens(playername);
+	}
+	public static long getTokens(String ign) throws Exception{
+		
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
-			o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
+			o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(ign)));
 		
-		tokens =  (long) o.get("tokens");
+		return (long) o.get("tokens");
 	}
-	
-	
-	
-	//TIMV
-	public static void TIMVupdateKarma() throws ParseException, Exception{
-		String playername = The5zigAPI.getAPI().getGameProfile().getName();
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			o = (JSONObject) parser.parse(readUrl(TIMVparsePlayerURL(playername)));
-		
-		TIMVkarma =  (long) o.get("total_points");
-		
-		
-	}
-	
-	//DR
-	
-	
 
-	public static Date getLastLogout(String ign){
-		/*
-		 * Fetches the last logout from the API
-		 * 
-		 * @return last logout
-		 * 
-		 */
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed getLastLogout");
-				e.printStackTrace();
-			}
-		
-		long time = (long) o.get("lastLogout");
-		return new Date(time * 1000);
-	}
-	public static String getTimeAgo(long time) {
-		
-		/*
-		 * Copyright 2012 Google Inc.
-		 *
-		 * Licensed under the Apache License, Version 2.0 (the "License");
-		 * you may not use this file except in compliance with the License.
-		 * You may obtain a copy of the License at
-		 *
-		 *      http://www.apache.org/licenses/LICENSE-2.0
-		 *
-		 * Unless required by applicable law or agreed to in writing, software
-		 * distributed under the License is distributed on an "AS IS" BASIS,
-		 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-		 * See the License for the specific language governing permissions and
-		 * limitations under the License.
-		 */
-		
-		if (time < 1000000000000L) {
-		        // if timestamp given in seconds, convert to millis
-		        time *= 1000;
-		    }
-		
-		int SECOND_MILLIS = 1000;
-		int MINUTE_MILLIS = 60 * SECOND_MILLIS;
-		int HOUR_MILLIS = 60 * MINUTE_MILLIS;
-		int DAY_MILLIS = 24 * HOUR_MILLIS;
-		long MONTH_MILLIS = 30l * DAY_MILLIS;
-		long YEAR_MILLIS = 12l * MONTH_MILLIS;
-	    long now = System.currentTimeMillis();
-	    
-	    if (time > now || time <= 0) {
-	        return null;	
-	    }
-	    
-	    final long diff = now - time;
 
-	    if (diff < MINUTE_MILLIS) {
-	        return "Just now";
-	    } else if (diff < 2 * MINUTE_MILLIS) {
-	        return "A minute ago";
-	    } else if (diff < 50 * MINUTE_MILLIS) {
-	        return diff / MINUTE_MILLIS + " minutes ago";
-	    } else if (diff < 90 * MINUTE_MILLIS) {
-	        return "An hour ago";
-	    } else if (diff < 24 * HOUR_MILLIS) {
-	        return diff / HOUR_MILLIS + " hours ago";
-	    } else if (diff < 48l * HOUR_MILLIS) {
-	        return "Yesterday";
-	    } else if (diff < 29l * DAY_MILLIS){
-	        return diff / DAY_MILLIS + " days ago";
-	    } else if (diff < 2l * MONTH_MILLIS){
-		    return "1 month ago";
-	    } else if (diff < 11l * MONTH_MILLIS){
-	        return diff / MONTH_MILLIS + " months ago";
-	    }  else if (diff < 2l * YEAR_MILLIS){
-		    return "1 year ago";  
-	    } else {
-	    	return diff / YEAR_MILLIS + " years ago";
-	    }
-	}
-	public static String getNetworkRank(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed getNetworkRank");
-				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
-				boolean connError = false;
-				try{
-					//RoccoDev's UUID
-					parser.parse(readUrl(parsePlayerURLGeneric("bba224a20bff4913b04227ca3b60973f")));
-				}
-				catch(Exception ex){
-					connError = true;
-				}
-				if(playerOnline && !connError){
-					return "Regular Hive Member";
-				}
-				else if(connError){
-					return "Connection error (100%)";
-				}
-				else if(!playerOnline && !connError){
-					return "Regular Hive Member";
-				}
-			}
-		
-		return (String) o.get("rankName");
-	}
-	public static String getPlayerLocation(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-				try {
-					o = (JSONObject) parser.parse(((JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)))).get("status").toString());
-				} catch (Exception e) {
-					The5zigAPI.getLogger().info("Failed getPlayerLocation");
-					e.printStackTrace();
-				}
-				
-		if(o.get("game").toString().equals("Hubs"))	{
-			return "Hub";
-		}			
-		return (String) o.get("game");
-	}
-	public static String getName(String ign){
-		String playername = ign;
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(playername)));
-			} catch (Exception e) {
-				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
-				boolean connError = false;
-				try{
-					//RoccoDev's UUID
-					parser.parse(readUrl(parsePlayerURLGeneric("bba224a20bff4913b04227ca3b60973f")));
-				}
-				catch(Exception ex){
-					connError = true;
-				}
-				if(playerOnline && !connError){
-					return ign;
-				}
-				else if(connError){
-					return "Connection error (100%)";
-				}
-				else if(!playerOnline && !connError){
-					return ign;
-				}
-				
-				
-				
-			}
-		
-		return (String) o.get("username");
-	}
-	public static NetworkPlayerInfo byName(String ign){
-		for(NetworkPlayerInfo p : The5zigAPI.getAPI().getServerPlayers()) {
-			
-		if(p.getGameProfile().getName().equals(ign)) return p;
-		}
-	return null; 
-	}
 	public static Date lastGame(String ign, String game){
-		String playername = ign;
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		
 			try {
-				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, game)));
+				o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, game)));
 			} catch (Exception e) {
 				The5zigAPI.getLogger().info("Failed lastGame");
 				e.printStackTrace();
@@ -505,6 +241,7 @@ public class HiveAPI {
 			long time = (long) o.get("lastlogin");
 			return new Date(time * 1000);
 	}
+
 	public static String getUUID(String ign){
 		if(ign.length() == 32) return ign;
 		// ^ input is already a uuid
@@ -518,29 +255,7 @@ public class HiveAPI {
 		}		
 		return (String) o.get("id");
 	}
-	public static int getMonthlyLeaderboardsRank(String ign, String game){
-		String uuid = getUUID(ign);
-		JSONParser parser = new JSONParser();
-		JSONArray o1 = null;
-		JSONObject o2 = null;
-			try {
-				o1 = (JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(parseMonthlyURL(game.toLowerCase())))).get("leaderboard").toString());
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed getMonthlyLBRank (thtmx.rocks)");
-				e.printStackTrace();				
-			}
-		for(int i = 0; i<=350; i++){
-	    	try {
-				o2 = (JSONObject) parser.parse(o1.get(i).toString());
-				} catch (Exception e) {
-				return 0;
-			}
-	    	if(o2.get("uuid").toString().equals(uuid)){
-	    		return i + 1;
-	    	}
-		}
-		return 0;
-	}
+	
 	public static String getMonthlyLeaderboardsPlayerInfo(int index, String game){
 		String unit = "points";
 		if(game.equals("TIMV")){
@@ -570,7 +285,7 @@ public class HiveAPI {
 				}
 				if(game.equals("DR")){
 					
-					Integer winr = (int) (Math.floor((Double.valueOf(o2.get("wins").toString()) / Double.valueOf(o2.get("games").toString())) * 1000) / 10);;
+					Integer winr = (int) (Math.floor((Double.valueOf(o2.get("wins").toString()) / Double.valueOf(o2.get("games").toString())) * 1000) / 10);
 					Double ppg = Math.round(((Long)o2.get("points") / (Long)o2.get("games")) * 10d) / 10d;
 
 					return o2.get("name").toString() + "," + o2.get(unit).toString() + "," + ppg.toString() + "," + winr.toString();
@@ -582,32 +297,6 @@ public class HiveAPI {
 				e.printStackTrace();
 			}	
 		return "";
-	}
-	public static Long getLeaderboardsPlacePoints(int index, String game){
-		JSONParser parser = new JSONParser();
-		JSONObject o1 = null;
-		try {
-			o1 = (JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(HiveAPI.parseLeaderboardPlaceURL(index, game)))).get("leaderboard").toString())).get(0).toString());
-		} catch (Exception e) {
-			The5zigAPI.getLogger().info("Failed getLBPlacePoints (JSON 0)");
-			e.printStackTrace();
-		}
-		switch (game) {
-		default : try {
-				return (Long) parser.parse(o1.get("total_points").toString());
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed getLBPlacePoints (JSON 1)");
-				e.printStackTrace();
-				return null;
-			}
-		case "TIMV" : try {
-				return (Long) parser.parse(o1.get("karma").toString());
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed getLBPlacePoints (JSON 1)");
-				e.printStackTrace();
-				return null;
-			}	
-		}
 	}
 	
 	public static String getLeaderboardsPlaceHolder(int index, String game){
@@ -628,38 +317,6 @@ public class HiveAPI {
 			}
 		
 		
-	}
-
- 	public static ChatColor getRankColor(String rankName){
-		ChatColor rankColor = null;
-		switch(rankName){
-		case "Regular Hive Member": rankColor = ChatColor.BLUE;
-			break;
-		case "Gold Hive Member": rankColor = ChatColor.GOLD;
-			break;
-		case "Diamond Hive Member": rankColor = ChatColor.AQUA;
-			break;
-		case "Lifetime Emerald Hive Member": rankColor = ChatColor.GREEN;
-			break;
-		case "VIP Player": rankColor = ChatColor.DARK_PURPLE;
-			break;
-		case "Hive Moderator": rankColor = ChatColor.RED;
-			break;
-		case "Senior Hive Moderator": rankColor = ChatColor.DARK_RED;
-			break;
-		case "Hive Developer": rankColor = ChatColor.GRAY;
-			break;
-		case "Hive Founder and Owner": rankColor = ChatColor.YELLOW;
-			break;
-		default: rankColor = ChatColor.WHITE; //Fallback
-			break;
-		}
-		return rankColor;
-	}
-	
-	public static ChatColor getRankColorFromIgn(String ign){
-		String rank = getNetworkRank(ign);
-		return getRankColor(rank);
 	}
 		
 	private static String readUrl(URL url) throws Exception {

@@ -1,19 +1,6 @@
 
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -27,14 +14,22 @@ import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.APIValues;
-import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.TIMVMap;
 import tk.roccodev.zta.hiveapi.TIMVRank;
+import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.zta.settings.Setting;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class TIMVListener extends AbstractGameListener<TIMV>{
 
+	
 	@Override
 	public Class<TIMV> getGameMode() {
 		// TODO Auto-generated method stub
@@ -113,6 +108,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		if(ZTAMain.isColorDebug){
 			The5zigAPI.getLogger().info("ColorDebug: " + "(" + message + ")");
 		}
+		if(message.equals(TIMV.joinMessage)){
+			TIMV.reset(gameMode);
+		}
 		if(message.startsWith("§8▍ §6TIMV§8 ▏ §c§l- 20 Karma") && gameMode != null){
 			TIMV.minus20();
 			if(TIMV.role.equals("Detective")){
@@ -182,29 +180,23 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		        map = matcher.group(1);
 		    }
 		    The5zigAPI.getLogger().info(map);
-		    TIMVMap map1 = TIMVMap.getFromDisplay(map);
-		    
-		    TIMV.activeMap = map1;
+
+			TIMV.activeMap = TIMVMap.getFromDisplay(map);
 			
 		}
-		//Map Fallback (Joined after voting ended.)
-		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6Map :") && gameMode != null && TIMV.activeMap == null){
-			String afterMsg = message.split("§8▍ §6TIMV§8 ▏ §6Map : §b")[1];
-			// §8▍ §6TIMV§8 ▏ §6Map : §bCastle
-			The5zigAPI.getLogger().info("FALLBACK: " + afterMsg);
+
+		else if(message.contains("is known to have poisonous water...") && gameMode != null && TIMV.activeMap == null){
+			//(         §eFrozen Cargo is known to have poisonous water...)
+			String mapmsg = ChatColor.stripColor(message.split(" is known to have poisonous water...")[0]).trim().trim();
 			String map = "";
-			
-			// TODO I don't understand this regex pattern thing; please remove the unnecessary parts or make this nice v
-			Pattern pattern = Pattern.compile(afterMsg);
-			Matcher matcher = pattern.matcher(afterMsg);
+			Pattern pattern = Pattern.compile(mapmsg);
+			Matcher matcher = pattern.matcher(mapmsg);
 			while (matcher.find()) {
 			   map = matcher.group(0);
 			}
 			The5zigAPI.getLogger().info("FALLBACK: " + map);
-			TIMVMap map1 = TIMVMap.getFromDisplay(map);
-			    
-			TIMV.activeMap = map1;
-	
+
+			TIMV.activeMap = TIMVMap.getFromDisplay(map);
 		}
 		
 		else if(message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")){
@@ -228,40 +220,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 		return true;	
 		}
-		/* 
-		 * Old AdvRec
-		else if(message.equals("§7==============§aTIMV Stats§7==============")){
-			//Advanced Records
-			if(message.endsWith("AR§e§l")){
-				The5zigAPI.getAPI().messagePlayer(message.replaceAll("AR§e§l", ""));
-				return true;
-			}
-				TIMV.messagesToSend.add(message);
-			
-			return true;
-		}
-		else if(message.equals("§bThis data is §elive data.") && !message.endsWith(" ")){
-			
-				TIMV.footerToSend.add(message);
-			
-			return true;
-		}
-		else if(message.startsWith(ChatColor.AQUA + "") && !message.endsWith(" ")){
-				if(message.startsWith("§bAs you're an experienced player, we're") || 
-					message.startsWith("§bConstable ") || 
-					message.startsWith("§bTracer ") ||
-					message.startsWith("§bDirector ") ||
-					message.startsWith("§bWitness ")){
-					//It was sucking in all the chat messages by people with this rank until one did /records lmao
-						return false;
-				}		
-				TIMV.messagesToSend.add(message);
-	
-			return true;
-			
-			
-		}
-		*/
+
 		else if((message.equals("                      §6§m                  §6§m                  ")&& !message.startsWith("§o "))){
 			The5zigAPI.getLogger().info("found footer");
 			TIMV.footerToSend.add(message);	
@@ -308,7 +267,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 									sb.append("          §6§m                  §f ");
 									The5zigAPI.getLogger().info("Added base...");
 									if(rankColor != null) {
-										sb.append(rankColor + correctUser);
+										sb.append(rankColor).append(correctUser);
 										The5zigAPI.getLogger().info("Added colored user...");
 									}
 									else{
@@ -332,9 +291,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 									sb.append("§3 Karma: §b");
 									karma = Long.parseLong(s.replaceAll("§3 Karma: §b", ""));
 									sb.append(karma);
-									if(rank != null) sb.append(" (" + rank.getTotalDisplay());
+									if(rank != null) sb.append(" (").append(rank.getTotalDisplay());
 									if(Setting.TIMV_SHOW_KARMA_TO_NEXT_RANK.getValue() && rank != null){
-										sb.append(" / " + rank.getKarmaToNextRank((int)karma));
+										sb.append(" / ").append(rank.getKarmaToNextRank((int) karma));
 									}
 									sb.append("§b)");
 									The5zigAPI.getAPI().messagePlayer(sb.toString().trim() + " ");
@@ -367,7 +326,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 							The5zigAPI.getAPI().messagePlayer("§o§3 Most Points: §b" + mostPoints + " ");
 						}
 						if(achievements != null){
-							The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/41 ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/59 ");
 						}
 						if(krr != null){
 							The5zigAPI.getAPI().messagePlayer("§o§3 Karma/Rolepoints: §b" + krr + " ");
@@ -379,7 +338,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 							Calendar lastSeen = Calendar.getInstance();
 							lastSeen.setTimeInMillis(lastGame.getTime());
 						
-							The5zigAPI.getAPI().messagePlayer("§o§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()) + " ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()) + " ");
 						}
 						
 							
@@ -416,7 +375,6 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 							TIMV.messagesToSend.clear();
 							TIMV.footerToSend.clear();
 							TIMV.isRecordsRunning = false;
-							return;
 						}
 					
 				
@@ -447,8 +405,11 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				public void run(){
 					List<String> votesCopy = new ArrayList<String>();
 					votesCopy.addAll(TIMV.votesToParse);
-					List<String> mapNames = new ArrayList<String>();
 					List<TIMVMap> parsedMaps = new ArrayList<TIMVMap>();
+					
+					List<String> votesindex = new ArrayList<String>();
+					List<String> finalvoting = new ArrayList<String>();
+					
 					for(String s1 : AutovoteUtils.getMapsForMode("timv")){
 						TIMVMap map1 = TIMVMap.valueOf(s1);	
 						if(map1 == null) continue;
@@ -460,29 +421,46 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						
 						String[] data = s.split("\\.");						
 						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §6TIMV§8 ▏ §6§6§l", "").replaceAll("▍ TIMV ▏", "").trim();
-						String[] toConsider = data[1].split("\\[");
+						String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
 						String consider = ChatColor.stripColor(toConsider[0]).trim();
 						TIMVMap map = TIMVMap.getFromDisplay(consider);
+						String votes = toConsider[1].split(" ")[0].trim();
+						
 						if(map == null){
 							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: map not found for " + consider);
 						}
-						The5zigAPI.getLogger().info("trying to match " + map);			
+						The5zigAPI.getLogger().info("trying to match " + map);
 						if(parsedMaps.contains(map)){
-							The5zigAPI.getAPI().sendPlayerMessage("/v " + index);
-							// /vote doesn't work anymore #JustHiveThings
-							TIMV.votesToParse.clear();
-							TIMV.hasVoted = true;
-							The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for §6" + map.getDisplayName());
-							return;
+							votesindex.add(votes + "-" + index);
+							The5zigAPI.getLogger().info("Added " + map + " Index #" + index + " with " + votes + " votes");	
+						}else{
+							The5zigAPI.getLogger().info(map + " is not a favourite");
 						}
 						if(index.equals("5")){
-							The5zigAPI.getAPI().sendPlayerMessage("/v 6");
-							// /vote doesn't work anymore #JustHiveThings
-							TIMV.votesToParse.clear();
-							TIMV.hasVoted = true;
-							The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for §cRandom map");
+							if(votesindex.size() != 0){
+								for(String n : votesindex){
+									finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
+								}
+								int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
+								The5zigAPI.getLogger().info("Voting " + finalindex);
+								The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
+								
+								TIMV.votesToParse.clear();
+								TIMV.hasVoted = true;
+																										//we can't really get the map name at this point
+								The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
+								return;
+							}
+							else{
+								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting Random");
+								The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+								The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for §cRandom map");
+								TIMV.votesToParse.clear();
+								TIMV.hasVoted = true;
+								//he hasn't but we don't want to check again and again
 							return;
-						}
+							}
+						}						
 					}	
 				}
 			}).start();
@@ -490,7 +468,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6§e§e§l") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()){
 			TIMV.votesToParse.add(message);		
 		}
-		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §c")){
+		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §4")){
 			TIMV.traitorsDiscovered++;
 		}
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §1")){
@@ -500,7 +478,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.dead = true;
 			
 		}
-		else if(message.startsWith("          §a§m                §f§l §f§lYOU ARE ")){
+		else if(message.contains("§f§lYOU ARE ")){
 			gameMode.setState(GameState.GAME);
 			TIMV.calculateTraitors(The5zigAPI.getAPI().getServerPlayers().size());
 			TIMV.calculateDetectives(The5zigAPI.getAPI().getServerPlayers().size());
@@ -510,10 +488,10 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			if(message.contains("§a§lINNOCENT§f§l")){
 				role = "Innocent";
 			}
-			else if(message.contains("§c§lTRAITOR§f§l")){
+			else if(message.contains("§c§lA TRAITOR§f§l")){
 				role = "Traitor";
 			}
-			else if(message.contains("§9§lDETECTIVE§f§l")){ // Assumption
+			else if(message.contains("§9§lA DETECTIVE§f§l")){ // Assumption
 				role = "Detective";
 			}
 			TIMV.role = role;
@@ -587,8 +565,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			The5zigAPI.getLogger().info(message != null ? message : "lolnull");
 			if(message != null && message.contains("▏ §7")){
 				String[] data = message.split("▏ §7");
-				String gameId = data[1];
-				TIMV.gameID = gameId;
+				TIMV.gameID = data[1];
 				TIMV.actionBarChecked = true;
 			}
 		}

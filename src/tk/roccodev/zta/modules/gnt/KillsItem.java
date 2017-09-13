@@ -5,7 +5,6 @@ import eu.the5zig.mod.modules.GameModeItem;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.games.Giant;
-import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class KillsItem extends GameModeItem<Giant>{
 

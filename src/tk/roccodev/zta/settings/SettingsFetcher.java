@@ -1,13 +1,12 @@
 package tk.roccodev.zta.settings;
 
+import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.zta.ZTAMain;
+
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
-import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.zta.ZTAMain;
 
 public class SettingsFetcher {
 
@@ -31,7 +30,6 @@ public class SettingsFetcher {
 					
 				}
 				catch(IllegalArgumentException e){
-					continue;
 				}
 			}
 		}

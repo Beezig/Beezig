@@ -15,11 +15,11 @@ public class PointsItem extends GameModeItem<BED>{
 	private String getMainFormatting(){
 		if(this.getProperties().getFormatting() != null){
 			if(this.getProperties().getFormatting().getMainColor() != null && this.getProperties().getFormatting().getMainFormatting() == null){
-				return The5zigAPI.getAPI().getFormatting().getMainFormatting().toString().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting().toString()).charAt(1), this.getProperties().getFormatting().getMainColor().toString().charAt(1));
+				return The5zigAPI.getAPI().getFormatting().getMainFormatting().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting()).charAt(1), this.getProperties().getFormatting().getMainColor().toString().charAt(1));
 				//Replaces Char at index 1 (ColorTag) of the Main formatting with the custom one.
 			}
 			if(this.getProperties().getFormatting().getMainColor() == null && this.getProperties().getFormatting().getMainFormatting() != null){
-				return The5zigAPI.getAPI().getFormatting().getMainFormatting().toString().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting().toString()).charAt(3), this.getProperties().getFormatting().getMainFormatting().toString().charAt(3));
+				return The5zigAPI.getAPI().getFormatting().getMainFormatting().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting()).charAt(3), this.getProperties().getFormatting().getMainFormatting().toString().charAt(3));
 				//Replaces Char at index 3 (FormattingTag) of the Main formatting with the custom one.
 			}
 			if(this.getProperties().getFormatting().getMainColor() != null && this.getProperties().getFormatting().getMainFormatting() != null){
@@ -35,11 +35,11 @@ public class PointsItem extends GameModeItem<BED>{
 			if((boolean) getProperties().getSetting("showrank").get()){
 				StringBuilder sb = new StringBuilder();
 				if((boolean) getProperties().getSetting("showcolor").get()){
-					sb.append(APIValues.BEDpoints + " (" + BED.rank + getMainFormatting());
+					sb.append(APIValues.BEDpoints).append(" (").append(BED.rank).append(getMainFormatting());
 					
 				}else{
 				
-					sb.append(APIValues.BEDpoints + " (" + ChatColor.stripColor(BED.rank));
+					sb.append(APIValues.BEDpoints).append(" (").append(ChatColor.stripColor(BED.rank));
 				}
 				
 				if((boolean)getProperties().getSetting("showpointstonextrank").get()){

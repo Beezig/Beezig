@@ -1,17 +1,5 @@
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -28,8 +16,14 @@ import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.DRRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.settings.Setting;
+
+import java.io.FileNotFoundException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DRListener extends AbstractGameListener<DR>{
 
@@ -86,8 +80,7 @@ public class DRListener extends AbstractGameListener<DR>{
 		    while (matcher.find()) {
 		        map = matcher.group(1);
 		    }
-		    DRMap map1 = DRMap.getFromDisplay(map);	    
-		    DR.activeMap = map1;			
+			DR.activeMap = DRMap.getFromDisplay(map);
 		}
 		
 		else if(message.contains("§lYou are a ") && gameMode != null){
@@ -155,8 +148,11 @@ public class DRListener extends AbstractGameListener<DR>{
 				public void run(){
 					List<String> votesCopy = new ArrayList<String>();
 					votesCopy.addAll(DR.votesToParse);
-					List<String> mapNames = new ArrayList<String>();
 					List<DRMap> parsedMaps = new ArrayList<DRMap>();
+					
+					List<String> votesindex = new ArrayList<String>();
+					List<String> finalvoting = new ArrayList<String>();
+					
 					for(String s1 : AutovoteUtils.getMapsForMode("dr")){
 						DRMap map1 = DRMap.valueOf(s1);
 						
@@ -171,6 +167,7 @@ public class DRListener extends AbstractGameListener<DR>{
 						String toConsider = data[1];
 						String[] data2 = ChatColor.stripColor(toConsider).split("\\[");
 						String consider = data2[0].trim();
+						String votes = data2[1].split(" ")[0].trim();
 						
 						DRMap map = DRMap.getFromDisplay(consider);
 						if(map == null){
@@ -178,23 +175,37 @@ public class DRListener extends AbstractGameListener<DR>{
 						}
 						The5zigAPI.getLogger().info("trying to match " + map);
 						if(parsedMaps.contains(map)){
-							
-							The5zigAPI.getAPI().sendPlayerMessage("/vote " + index);
-							DR.votesToParse.clear();
-							DR.hasVoted = true;
-							The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for §6" + map.getDisplayName());
-							return;
+							votesindex.add(votes + "-" + index);
+							The5zigAPI.getLogger().info("Added " + map + " Index #" + index + " with " + votes + " votes");	
+						}else{
+							The5zigAPI.getLogger().info(map + " is not a favourite");
 						}
-						else{
-							The5zigAPI.getLogger().info("no matches in parsedMaps (yet)");
-						}
+						
 						if(index.equals("5")){
-							The5zigAPI.getAPI().sendPlayerMessage("/vote 6");
-							DR.votesToParse.clear();
-							DR.hasVoted = true;
-							The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for §cRandom map");
+							if(votesindex.size() != 0){
+								for(String n : votesindex){
+									finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
+								}
+								int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
+								The5zigAPI.getLogger().info("Voting " + finalindex);
+								The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
+								
+								DR.votesToParse.clear();
+								DR.hasVoted = true;
+																										//we can't really get the map name at this point
+								The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
+								return;
+							}
+							else{
+								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting Random");
+								The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+								The5zigAPI.getAPI().messagePlayer(Log.info + "§eAutomatically voted for §cRandom map");
+								DR.votesToParse.clear();
+								DR.hasVoted = true;
+								//he hasn't but we don't want to check again and again
 							return;
-						}
+							}
+						}	
 				
 					}
 			
@@ -274,7 +285,7 @@ public class DRListener extends AbstractGameListener<DR>{
 									sb.append("          §6§m                  §f ");
 									The5zigAPI.getLogger().info("Added base...");
 									if(rankColor != null) {
-										sb.append(rankColor + correctUser);
+										sb.append(rankColor).append(correctUser);
 										The5zigAPI.getLogger().info("Added colored user...");
 									}
 									else{
@@ -297,8 +308,8 @@ public class DRListener extends AbstractGameListener<DR>{
 										sb.append("§3 Points: §b");
 										points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
 										sb.append(points);
-										if(rank != null) sb.append(" (" + rank.getTotalDisplay());
-										if(Setting.DR_SHOW_POINTS_TO_NEXT_RANK.getValue()) sb.append(" / " + rank.getPointsToNextRank((int)points));
+										if(rank != null) sb.append(" (").append(rank.getTotalDisplay());
+										if(Setting.DR_SHOW_POINTS_TO_NEXT_RANK.getValue()) sb.append(" / ").append(rank.getPointsToNextRank((int) points));
 										if(rank != null) sb.append("§b)");
 										The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
 										continue;
@@ -326,10 +337,10 @@ public class DRListener extends AbstractGameListener<DR>{
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
 						}
 						if(lastGame != null){
-								Calendar lastSeen = Calendar.getInstance();;
-								lastSeen.setTimeInMillis(lastGame.getTime());
+								Calendar lastSeen = Calendar.getInstance();
+							lastSeen.setTimeInMillis(lastGame.getTime());
 							
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()));
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
 						}
 						
 							
@@ -364,7 +375,6 @@ public class DRListener extends AbstractGameListener<DR>{
 							DR.messagesToSend.clear();
 							DR.footerToSend.clear();
 							DR.isRecordsRunning = false;
-							return;
 						}
 					}
 				}).start();
@@ -466,7 +476,7 @@ public class DRListener extends AbstractGameListener<DR>{
 		@Override
 		public void run() {
 			for(Map.Entry<String, Integer> e : The5zigAPI.getAPI().getSideScoreboard().getLines().entrySet()){
-				if(e.getValue().intValue() == 3){
+				if(e.getValue() == 3){
 					TIMV.gameID = ChatColor.stripColor(e.getKey().trim());
 				}
 			}

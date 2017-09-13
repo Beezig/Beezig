@@ -1,11 +1,12 @@
 package tk.roccodev.zta.command;
 
-import java.util.Calendar;
-
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
+
+import java.util.Calendar;
 
 public class SeenCommand implements Command{
 
@@ -17,8 +18,7 @@ public class SeenCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/seen"};
-		return aliases;
+		return new String[]{"/seen"};
 	}
 
 	@Override
@@ -27,15 +27,16 @@ public class SeenCommand implements Command{
 		if(args.length == 1){
 			
 			String ign = args[0];
+			ApiHiveGlobal api = new ApiHiveGlobal(ign);
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					if(!HiveAPI.getPlayerLocation(ign).equals("the Land of Nods!")){
-						The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e is online and in §6" + HiveAPI.getPlayerLocation(ign));
+					if(!api.getPlayerLocation().equals("the Land of Nods!")){
+						The5zigAPI.getAPI().messagePlayer(Log.info + api.getNetworkRankColor() + api.getCorrectName() + "§e is online and in §6" + api.getPlayerLocation());
 					}
 					else{
-						Calendar lastSeen = Calendar.getInstance();;
-						lastSeen.setTimeInMillis(HiveAPI.getLastLogout(ign).getTime());
+						Calendar lastSeen = Calendar.getInstance();
+						lastSeen.setTimeInMillis(api.getLastLogout()*1000);
 					
 						String minute = Integer.toString(lastSeen.get(lastSeen.MINUTE));
 						if(lastSeen.get(lastSeen.MINUTE) < 10){
@@ -46,8 +47,8 @@ public class SeenCommand implements Command{
 							hour = "0" + hour;
 						}
 					// Never again
-						The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e was last seen on §6" + lastSeen.get(lastSeen.DAY_OF_MONTH) + "." + (lastSeen.get(lastSeen.MONTH) + 1) + "." + lastSeen.get(lastSeen.YEAR) + " " + hour + ":" + minute
-							+ "§e (§6" + HiveAPI.getTimeAgo(lastSeen.getTimeInMillis()) + ".§e)");
+						The5zigAPI.getAPI().messagePlayer(Log.info + api.getNetworkRankColor() + api.getCorrectName() + "§e was last seen on §6" + lastSeen.get(lastSeen.DAY_OF_MONTH) + "." + (lastSeen.get(lastSeen.MONTH) + 1) + "." + lastSeen.get(lastSeen.YEAR) + " " + hour + ":" + minute
+							+ "§e (§6" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()) + ".§e)");
 					}
 				}
 			}).start();

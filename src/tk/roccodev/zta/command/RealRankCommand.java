@@ -4,7 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 public class RealRankCommand implements Command{
 
@@ -16,8 +16,7 @@ public class RealRankCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String aliases[] = {"/realrank", "/rr"};
-		return aliases;
+		return new String[]{"/realrank", "/rr"};
 	}
 
 	@Override
@@ -31,10 +30,10 @@ public class RealRankCommand implements Command{
 		new Thread(new Runnable(){
 			@Override
 			public void run(){
-				String ign = HiveAPI.getName(args[0]);
-				
-				String networkRank = HiveAPI.getNetworkRank(ign);
-				ChatColor rankColor = HiveAPI.getRankColor(networkRank);
+				ApiHiveGlobal api = new ApiHiveGlobal(args[0]);
+				String ign = api.getCorrectName();
+				String networkRank = api.getNetworkTitle();
+				ChatColor rankColor = api.getNetworkRankColor();
 				The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.YELLOW + ign + "'s Rank: " + rankColor + networkRank);				
 			}
 		}).start();

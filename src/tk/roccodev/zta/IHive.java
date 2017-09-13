@@ -9,6 +9,7 @@ import eu.the5zig.mod.server.ServerInstance;
 import tk.roccodev.zta.listener.BEDListener;
 import tk.roccodev.zta.listener.DRListener;
 import tk.roccodev.zta.listener.GiantListener;
+import tk.roccodev.zta.listener.HIDEListener;
 import tk.roccodev.zta.listener.HiveListener;
 import tk.roccodev.zta.listener.TIMVListener;
 import tk.roccodev.zta.notes.NotesManager;
@@ -38,6 +39,7 @@ public class IHive extends ServerInstance {
 		getGameListener().registerListener(new DRListener());
 		getGameListener().registerListener(new BEDListener());
 		getGameListener().registerListener(new GiantListener());
+		getGameListener().registerListener(new HIDEListener());
 	}
 
 	public static void genericReset(String... optionalParams){

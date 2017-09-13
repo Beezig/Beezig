@@ -8,6 +8,7 @@ import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.GNT;
 import tk.roccodev.zta.games.GNTM;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class HiveListener extends AbstractGameListener<GameMode>{
@@ -23,7 +24,10 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
+	@Override
+	public void onGameModeJoin(GameMode gameMode){
+	}
 	
 	
 	
@@ -49,6 +53,13 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 		 if (gameMode != null && gameMode.getState() != GameState.FINISHED) {
 	            return;
 	        }
+		 
+		 if(key.equals(TIMV.joinMessage)){
+				getGameListener().switchLobby("TIMV");
+				
+				The5zigAPI.getLogger().info("Connected to TIMV! -Hive");
+			}
+		 
 		if(key.equals("timv.welcome")){
 			getGameListener().switchLobby("TIMV");
 			
@@ -85,6 +96,10 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			GiantListener.listener.setGameMode(GNT.class, GNT.instance);
 			
 			getGameListener().switchLobby("GNT");
+		}
+		else if(key.equals("hide.welcome")){		
+			getGameListener().switchLobby("HIDE");			
+			The5zigAPI.getLogger().info("Connected to HIDE! -Hive");
 		}
 		
 		

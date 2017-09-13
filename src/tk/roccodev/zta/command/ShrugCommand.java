@@ -1,7 +1,6 @@
 package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.zta.Log;
 
 public class ShrugCommand implements Command{
 
@@ -13,9 +12,8 @@ public class ShrugCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/shrug"};
-		
-		return aliases;
+
+		return new String[]{"/shrug"};
 	}
 
 	@Override

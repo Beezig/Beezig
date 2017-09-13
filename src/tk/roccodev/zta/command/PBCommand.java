@@ -5,7 +5,6 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.hiveapi.DRMap;
-import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 
 public class PBCommand implements Command{
@@ -18,8 +17,7 @@ public class PBCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/pb"};
-		return aliases;
+		return new String[]{"/pb"};
 	}
 
 	@Override

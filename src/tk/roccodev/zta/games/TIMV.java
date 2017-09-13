@@ -1,14 +1,19 @@
 package tk.roccodev.zta.games;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import com.csvreader.CsvWriter;
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.server.GameMode;
+import eu.the5zig.mod.server.GameState;
+import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.ActiveGame;
+import tk.roccodev.zta.IHive;
+import tk.roccodev.zta.Log;
+import tk.roccodev.zta.ZTAMain;
+import tk.roccodev.zta.hiveapi.APIValues;
+import tk.roccodev.zta.hiveapi.TIMVMap;
+import tk.roccodev.zta.notes.NotesManager;
+
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,22 +23,11 @@ import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
-import com.csvreader.CsvWriter;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.server.GameMode;
-import eu.the5zig.mod.server.GameState;
-import tk.roccodev.zta.ActiveGame;
-import tk.roccodev.zta.IHive;
-import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
-import tk.roccodev.zta.hiveapi.APIValues;
-import tk.roccodev.zta.hiveapi.TIMVMap;
-import tk.roccodev.zta.notes.NotesManager;
-
 public class TIMV extends GameMode{
 
-	public static final double TRATIO_LIMIT = 37.2d;
+	public static final double TRATIO_LIMIT = 35.7d;
+	
+	public static String joinMessage = ChatColor.stripColor(The5zigAPI.getAPI().getGameProfile().getName() + " wants to investigate!");
 	
 	public static int karmaCounter;
 	public static TIMVMap activeMap;

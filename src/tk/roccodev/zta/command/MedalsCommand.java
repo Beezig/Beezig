@@ -1,11 +1,12 @@
 package tk.roccodev.zta.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MedalsCommand implements Command{
 
@@ -17,9 +18,8 @@ public class MedalsCommand implements Command{
 
 	@Override
 	public String[] getAliases() {
-		String[] aliases = {"/medals"};
-		
-		return aliases;
+
+		return new String[]{"/medals"};
 	}
 
 	@Override
@@ -44,6 +44,8 @@ public class MedalsCommand implements Command{
 				@Override
 				public void run(){
 					try {
+						ApiHiveGlobal api = new ApiHiveGlobal(args[0]);
+						args[0] = api.getCorrectName();
 						long medals = HiveAPI.getMedals(args[0]);
 						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Medals:§a " + medals);
 					} catch (Exception e) {

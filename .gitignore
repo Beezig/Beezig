@@ -11,3 +11,11 @@ README.md
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 /bin/
+
+# IntelliJ project files
+.idea/
+.idea/5zig-TIMV-Plugin.iml
+.idea/kotlinc.xml
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
