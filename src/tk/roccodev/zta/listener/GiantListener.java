@@ -14,6 +14,7 @@ import tk.roccodev.zta.hiveapi.GiantMap;
 import tk.roccodev.zta.hiveapi.GiantRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiGiant;
 import tk.roccodev.zta.settings.Setting;
 
 import java.io.FileNotFoundException;
@@ -248,6 +249,7 @@ public class GiantListener extends AbstractGameListener<Giant>{
 				new Thread(new Runnable(){
 					@Override
 					public void run(){
+						ApiGiant api = new ApiGiant(Giant.lastRecords);
 						Giant.isRecordsRunning = true;
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
 						try{
@@ -257,15 +259,10 @@ public class GiantListener extends AbstractGameListener<Giant>{
 						Double kd = Setting.Giant_SHOW_KD.getValue() ? (double) Math.floor(((double)HiveAPI.GiantgetKills(Giant.lastRecords, lobby) / (double)HiveAPI.GiantgetDeaths(Giant.lastRecords, lobby) * 100d)) / 100d : null;
 						Double ppg = Setting.Giant_SHOW_PPG.getValue() ? Math.round(((double)HiveAPI.GiantgetPoints(Giant.lastRecords, lobby) / (double)HiveAPI.GiantgetGamesPlayed(Giant.lastRecords, lobby)) * 10d) / 10d : null;
 						
-						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? HiveAPI.getNetworkRank(Giant.lastRecords) : "";
+						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? api.getParentMode().getNetworkTitle() : "";
 						ChatColor rankColor = null;
 						if(Setting.SHOW_NETWORK_RANK_COLOR.getValue()){
-							if(rankTitle.isEmpty()){
-								rankColor = HiveAPI.getRankColorFromIgn(Giant.lastRecords);
-							}
-							else{
-								rankColor = HiveAPI.getRankColor(rankTitle);
-							}
+							rankColor = api.getParentMode().getNetworkRankColor();
 						}
 						long points = 0;
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? HiveAPI.lastGame(Giant.lastRecords, lobby) : null;
@@ -282,7 +279,7 @@ public class GiantListener extends AbstractGameListener<Giant>{
 								 	if(s.trim().endsWith("'s Stats §6§m")){
 								 	The5zigAPI.getLogger().info("Editing Header...");
 									StringBuilder sb = new StringBuilder();
-									String correctUser = HiveAPI.getName(Giant.lastRecords);
+									String correctUser = api.getParentMode().getCorrectName();
 									if(correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
 									sb.append("          §6§m                  §f ");
 									The5zigAPI.getLogger().info("Added base...");

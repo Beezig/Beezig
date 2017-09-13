@@ -14,6 +14,7 @@ import tk.roccodev.zta.games.*;
 import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.SettingsFetcher;
@@ -29,10 +30,10 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
-
-@Plugin(name="Beezig", version="4.2.3")
+@Plugin(name="Beezig", version="4.3.0")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -44,7 +45,6 @@ public class ZTAMain {
 	
 	public static int getCustomVersioning(){
 		String v = ZTAMain.class.getAnnotation(Plugin.class).version();
-		
 			String toParse = v.replaceAll("\\.", "");
 			return Integer.parseInt(toParse);
 		
@@ -58,9 +58,18 @@ public class ZTAMain {
 		IOverlay news = The5zigAPI.getAPI().createOverlay();
 		try {
 			if(Updater.isVersionBlacklisted(getCustomVersioning()) && !ZTAMain.class.getAnnotation(Plugin.class).version().contains("experimental")){
-				The5zigAPI.getLogger().fatal("Beezig: This version is disabled!");
-				news.displayMessage("Beezig: Version is disabled remotely! Update to the latest version.");
-				
+				new Thread(new Runnable(){
+					@Override
+					public void run(){
+						try {
+							TimeUnit.SECONDS.sleep(10);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						The5zigAPI.getLogger().error("Beezig: This version is disabled!");
+						news.displayMessage("Beezig: Version is disabled!", "Please update to the latest version.");
+					}
+				}).start();
 				return; //< one does not simply update beezig
 			}
 		} catch (IOException e) {
@@ -195,8 +204,9 @@ public class ZTAMain {
 		checkForFileExist(new File(mcFile + "/autovote.yml"), false);
 		AutovoteUtils.load();
 		watisdis.wat = new ApiTIMV("RoccoDev").getTitle();
-		
-		playerRank = HiveAPI.getNetworkRank(The5zigAPI.getAPI().getGameProfile().getName());
+
+		ApiHiveGlobal api = new ApiHiveGlobal(The5zigAPI.getAPI().getGameProfile().getName());
+		playerRank = api.getNetworkTitle();
 		
 		try {
 			HiveAPI.updateMedals();

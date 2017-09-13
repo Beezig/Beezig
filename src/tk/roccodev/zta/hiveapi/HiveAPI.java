@@ -1,7 +1,6 @@
 package tk.roccodev.zta.hiveapi;
 
 import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,10 +15,7 @@ import java.net.URLConnection;
 import java.util.Date;
 
 public class HiveAPI {
-	
-	public static long TIMVkarma = 0;
-	public static long DRpoints = 0;
-	public static long BEDpoints = 0;
+
 	public static long GiantPoints = 0;
 	
 	public static long medals = 0;
@@ -173,22 +169,7 @@ public class HiveAPI {
 		
 		return (long) o.get("deaths");
 	}
-	
-	
-	public static long getPoints(String ign, String game) {
 
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(HiveAPI.GameParsePlayerURL(ign, game)));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		return (long) o.get("total_points");
-	}
 	public static long getKills(String ign, String game) {
 		
 		JSONParser parser = new JSONParser();
@@ -245,80 +226,8 @@ public class HiveAPI {
 		
 		return (long) o.get("tokens");
 	}
-	
-	//DR
 
-	
-	public static String getNetworkRank(String ign){
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(ign)));
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed getNetworkRank");
-				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
-				boolean connError = false;
-				try{
-					//RoccoDev's UUID
-					parser.parse(readUrl(parsePlayerURLGeneric("bba224a20bff4913b04227ca3b60973f")));
-				}
-				catch(Exception ex){
-					connError = true;
-				}
-				if(playerOnline && !connError){
-					return "Regular Hive Member";
-				}
-				else if(connError){
-					return "Connection error (100%)";
-				}
-				else if(!playerOnline && !connError){
-					return "Regular Hive Member";
-				}
-			}
-		
-		return (String) o.get("rankName");
-	}
-	
-	public static String getName(String ign){
-		JSONParser parser = new JSONParser();
-		JSONObject o = null;
-		
-			try {
-				o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(ign)));
-			} catch (Exception e) {
-				boolean playerOnline = byName(ign) != null; //If the player is online, we're sure that the player is in Hive's database
-				boolean connError = false;
-				try{
-					//RoccoDev's UUID
-					parser.parse(readUrl(parsePlayerURLGeneric("bba224a20bff4913b04227ca3b60973f")));
-				}
-				catch(Exception ex){
-					connError = true;
-				}
-				if(playerOnline && !connError){
-					return ign;
-				}
-				else if(connError){
-					return "Connection error (100%)";
-				}
-				else if(!playerOnline && !connError){
-					return ign;
-				}
-				
-				
-				
-			}
-		
-		return (String) o.get("username");
-	}
-	public static NetworkPlayerInfo byName(String ign){
-		for(NetworkPlayerInfo p : The5zigAPI.getAPI().getServerPlayers()) {
-			
-		if(p.getGameProfile().getName().equals(ign)) return p;
-		}
-	return null; 
-	}
+
 	public static Date lastGame(String ign, String game){
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
@@ -332,6 +241,7 @@ public class HiveAPI {
 			long time = (long) o.get("lastlogin");
 			return new Date(time * 1000);
 	}
+
 	public static String getUUID(String ign){
 		if(ign.length() == 32) return ign;
 		// ^ input is already a uuid
@@ -388,32 +298,6 @@ public class HiveAPI {
 			}	
 		return "";
 	}
-	public static Long getLeaderboardsPlacePoints(int index, String game){
-		JSONParser parser = new JSONParser();
-		JSONObject o1 = null;
-		try {
-			o1 = (JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(HiveAPI.parseLeaderboardPlaceURL(index, game)))).get("leaderboard").toString())).get(0).toString());
-		} catch (Exception e) {
-			The5zigAPI.getLogger().info("Failed getLBPlacePoints (JSON 0)");
-			e.printStackTrace();
-		}
-		switch (game) {
-		default : try {
-				return (Long) parser.parse(o1.get("total_points").toString());
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed getLBPlacePoints (JSON 1)");
-				e.printStackTrace();
-				return null;
-			}
-		case "TIMV" : try {
-				return (Long) parser.parse(o1.get("karma").toString());
-			} catch (Exception e) {
-				The5zigAPI.getLogger().info("Failed getLBPlacePoints (JSON 1)");
-				e.printStackTrace();
-				return null;
-			}	
-		}
-	}
 	
 	public static String getLeaderboardsPlaceHolder(int index, String game){
 		JSONParser parser = new JSONParser();
@@ -433,38 +317,6 @@ public class HiveAPI {
 			}
 		
 		
-	}
-
- 	public static ChatColor getRankColor(String rankName){
-		ChatColor rankColor = null;
-		switch(rankName){
-		case "Regular Hive Member": rankColor = ChatColor.BLUE;
-			break;
-		case "Gold Hive Member": rankColor = ChatColor.GOLD;
-			break;
-		case "Diamond Hive Member": rankColor = ChatColor.AQUA;
-			break;
-		case "Lifetime Emerald Hive Member": rankColor = ChatColor.GREEN;
-			break;
-		case "VIP Player": rankColor = ChatColor.DARK_PURPLE;
-			break;
-		case "Hive Moderator": rankColor = ChatColor.RED;
-			break;
-		case "Senior Hive Moderator": rankColor = ChatColor.DARK_RED;
-			break;
-		case "Hive Developer": rankColor = ChatColor.GRAY;
-			break;
-		case "Hive Founder and Owner": rankColor = ChatColor.YELLOW;
-			break;
-		default: rankColor = ChatColor.WHITE; //Fallback
-			break;
-		}
-		return rankColor;
-	}
-	
-	public static ChatColor getRankColorFromIgn(String ign){
-		String rank = getNetworkRank(ign);
-		return getRankColor(rank);
 	}
 		
 	private static String readUrl(URL url) throws Exception {

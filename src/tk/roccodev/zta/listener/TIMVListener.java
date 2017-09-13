@@ -184,25 +184,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.activeMap = TIMVMap.getFromDisplay(map);
 			
 		}
-		/* Map Fallback (Joined after voting ended.)
-		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6Map :") && gameMode != null && TIMV.activeMap == null){
-			String afterMsg = message.split("§8▍ §6TIMV§8 ▏ §6Map : §b")[1];
-			// §8▍ §6TIMV§8 ▏ §6Map : §bCastle
-			The5zigAPI.getLogger().info("FALLBACK: " + afterMsg);
-			String map = "";
-			
-			// TODO I don't understand this regex pattern thing; please remove the unnecessary parts or make this nice v
-			Pattern pattern = Pattern.compile(afterMsg);
-			Matcher matcher = pattern.matcher(afterMsg);
-			while (matcher.find()) {
-			   map = matcher.group(0);
-			}
-			The5zigAPI.getLogger().info("FALLBACK: " + map);
-			TIMVMap map1 = TIMVMap.getFromDisplay(map);
-			    
-			TIMV.activeMap = map1;
-	
-		}*/
+
 		else if(message.contains("is known to have poisonous water...") && gameMode != null && TIMV.activeMap == null){
 			//(         §eFrozen Cargo is known to have poisonous water...)
 			String mapmsg = ChatColor.stripColor(message.split(" is known to have poisonous water...")[0]).trim().trim();
@@ -238,40 +220,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 		return true;	
 		}
-		/* 
-		 * Old AdvRec
-		else if(message.equals("§7==============§aTIMV Stats§7==============")){
-			//Advanced Records
-			if(message.endsWith("AR§e§l")){
-				The5zigAPI.getAPI().messagePlayer(message.replaceAll("AR§e§l", ""));
-				return true;
-			}
-				TIMV.messagesToSend.add(message);
-			
-			return true;
-		}
-		else if(message.equals("§bThis data is §elive data.") && !message.endsWith(" ")){
-			
-				TIMV.footerToSend.add(message);
-			
-			return true;
-		}
-		else if(message.startsWith(ChatColor.AQUA + "") && !message.endsWith(" ")){
-				if(message.startsWith("§bAs you're an experienced player, we're") || 
-					message.startsWith("§bConstable ") || 
-					message.startsWith("§bTracer ") ||
-					message.startsWith("§bDirector ") ||
-					message.startsWith("§bWitness ")){
-					//It was sucking in all the chat messages by people with this rank until one did /records lmao
-						return false;
-				}		
-				TIMV.messagesToSend.add(message);
-	
-			return true;
-			
-			
-		}
-		*/
+
 		else if((message.equals("                      §6§m                  §6§m                  ")&& !message.startsWith("§o "))){
 			The5zigAPI.getLogger().info("found footer");
 			TIMV.footerToSend.add(message);	

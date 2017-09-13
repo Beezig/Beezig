@@ -3,7 +3,6 @@ package tk.roccodev.zta.command;
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
 
@@ -33,7 +32,7 @@ public class SeenCommand implements Command{
 				@Override
 				public void run(){
 					if(!api.getPlayerLocation().equals("the Land of Nods!")){
-						The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e is online and in §6" + api.getPlayerLocation());
+						The5zigAPI.getAPI().messagePlayer(Log.info + api.getNetworkRankColor() + api.getCorrectName() + "§e is online and in §6" + api.getPlayerLocation());
 					}
 					else{
 						Calendar lastSeen = Calendar.getInstance();
@@ -48,7 +47,7 @@ public class SeenCommand implements Command{
 							hour = "0" + hour;
 						}
 					// Never again
-						The5zigAPI.getAPI().messagePlayer(Log.info + HiveAPI.getRankColor(HiveAPI.getNetworkRank(ign)) + HiveAPI.getName(ign) + "§e was last seen on §6" + lastSeen.get(lastSeen.DAY_OF_MONTH) + "." + (lastSeen.get(lastSeen.MONTH) + 1) + "." + lastSeen.get(lastSeen.YEAR) + " " + hour + ":" + minute
+						The5zigAPI.getAPI().messagePlayer(Log.info + api.getNetworkRankColor() + api.getCorrectName() + "§e was last seen on §6" + lastSeen.get(lastSeen.DAY_OF_MONTH) + "." + (lastSeen.get(lastSeen.MONTH) + 1) + "." + lastSeen.get(lastSeen.YEAR) + " " + hour + ":" + minute
 							+ "§e (§6" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()) + ".§e)");
 					}
 				}

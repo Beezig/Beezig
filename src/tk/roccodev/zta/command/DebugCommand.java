@@ -1,7 +1,5 @@
 package tk.roccodev.zta.command;
 
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
-
 public class DebugCommand implements Command{
 	public static boolean go = false;
 	@Override
@@ -23,8 +21,7 @@ public class DebugCommand implements Command{
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					ApiHIDE api = new ApiHIDE("ItsNiklass");
-					api.getBlocks();
+
 				}
 			}).start();
 				 

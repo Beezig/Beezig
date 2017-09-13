@@ -8,6 +8,9 @@
           "type": "karma"
         },
         {
+          "type": "timvdailykarma"
+        },
+        {
           "type": "karmacounter"
         },
         {
@@ -16,11 +19,8 @@
         {
           "type": "bodies"
         },
-	{ 
-	  "type": "dbodies"
-	},
-	{ 
-          "type": "timvdailykarma"
+        {
+          "type": "dbodies"
         }
       ]
     },
@@ -29,13 +29,13 @@
       "name": "DeathRun",
       "items": [
         {
-          "type": "drmap"
+          "type": "drpoints"
         },
         {
           "type": "drrole"
         },
         {
-          "type": "drpoints"
+          "type": "drmap"
         },
 		{
           "type": "drdeaths"
@@ -48,7 +48,7 @@
         }	
         ]
      },
-     {
+    {
     "id": "BedWars",
       "name": "BedWars",
       "items": [
@@ -56,19 +56,22 @@
           "type": "bedpoints"
         },
         {
-          "type": "bedgamecounter"
+          "type": "bedmap"
         },
         {
           "type": "bedteam"
         },
-	{
-	  "type": "bedmap"
-	},
         {
-          "type": "bedkills"
+          "type": "bedteamsleft"
+        },
+        {
+          "type": "bedgamecounter"
         },
         {
           "type": "beddestroyed"
+        },
+        {
+          "type": "bedkills"
         },
         {
           "type": "beddeaths"
@@ -77,11 +80,14 @@
           "type": "bedkdrchange"
         },
         {
+          "type": "bedsummoners"
+        },
+        {
           "type": "bedresources"
         }
         ]
      },
-     {
+    {
     "id": "HiveMCGlobal",
       "name": "HiveMC",
       "items": [
@@ -93,7 +99,7 @@
         }
         ]
      },
-     {
+    {
     "id": "SkyGiants",
       "name": "SkyGiants",
       "items": [
@@ -104,13 +110,10 @@
           "type": "gntpoints"
         },
         {
-          "type": "gntteam"
-        },
-        {
           "type": "gntmap"
         },
-	{
-          "type": "gntgold"
+        {
+          "type": "gntteam"
         },
         {
           "type": "gntkills"
@@ -123,8 +126,23 @@
         },
         {
           "type": "gntgiantkills"
+        },
+        {
+          "type": "gntgold"
         }
         ]
-     }
+     },
+    {
+      "id": "HideAndSeek",
+      "name": "Hide and Seek",
+      "items": [
+        {
+          "type": "hidepoints"
+        },
+        {
+          "type": "hidemap"
+        }
+      ]
+    }
   ]
 }

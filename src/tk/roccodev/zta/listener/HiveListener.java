@@ -24,7 +24,10 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
+	@Override
+	public void onGameModeJoin(GameMode gameMode){
+	}
 	
 	
 	
