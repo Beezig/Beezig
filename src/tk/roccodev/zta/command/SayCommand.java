@@ -8,13 +8,13 @@ public class SayCommand implements Command{
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "say";
+		return "servercommand";
 	}
 
 	@Override
 	public String[] getAliases() {
 		// "/s" is a staff command.
-		return new String[]{"/say"};
+		return new String[]{"/servercommand"};
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class SayCommand implements Command{
 			
 		}
 		else{
-			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /say [command]");
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /servercommand [command]");
 		}
 		return true;
 	}
