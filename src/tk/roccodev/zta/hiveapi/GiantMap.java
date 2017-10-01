@@ -19,6 +19,8 @@ public enum GiantMap {
 	ADVENUS("Advenus", false),
 	MOONLIGHT("Moonlight", false),
 	ANCHORED("Anchored", false),
+	ANUBIS("Anubis", false),
+	FROST("Frost", false),
 	
 	
 	//GNTM Maps
@@ -34,7 +36,9 @@ public enum GiantMap {
 	BLOSSOM("Blossom", true),
 	TOWN_HALL("Town Hall", true),
 	MUFFIN("Muffin", true),
-	AQUARIUS("Aquarius", true);
+	AQUARIUS("Aquarius", true),
+	GWOLITH("Gwolith", true),
+	SUNRISE("Sunrise", true);
 	
 	
 	
