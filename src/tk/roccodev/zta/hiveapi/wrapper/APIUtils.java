@@ -190,10 +190,6 @@ public class APIUtils {
 
 		return " +" + ((int) percent) + "%";
 	}
-
-	public static JSONObject getSpeedrunObject(String toParse, int mode){
-		return getObject(Parser.read(Parser.speedrun(toParse, mode)));
-	}
 	
 	public static String readURL(URL url){
 		return Parser.read(url);
@@ -236,8 +232,8 @@ public class APIUtils {
 		 * 
 		 * Parses url from speedrun.com
 		 * 
-		 * @param mapId for mode 0, or userId for mode 1
-		 * @param 0 for map parsing, 1 for user parsing
+		 * @param param mapId for mode 0, or userId for mode 1
+		 * @param mode 0 for map parsing, 1 for user parsing
 		 * @return the parsed URL
 		 */
 		public static URL speedrun(String param, int mode){
@@ -283,8 +279,8 @@ public class APIUtils {
 		public static String read(URL url){
 			BufferedReader reader = null;
 		    try {
-		       URLConnection conn = url.openConnection();
-		       conn.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36(KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36");
+				URLConnection conn = url.openConnection();
+		       	conn.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36(KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36");
 		        reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		        StringBuffer buffer = new StringBuffer();
 		        int read;
@@ -308,7 +304,7 @@ public class APIUtils {
 					}
 		    }
 		}
-	
+
 		/* LEGACY
 		 			
 	

@@ -251,7 +251,7 @@ public class DRListener extends AbstractGameListener<DR>{
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
 						try{
 						DRRank rank = null;
-						ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
+						ApiDR api = new ApiDR(DR.lastRecords);
 						
 						Double ppg = Setting.DR_SHOW_POINTSPERGAME.getValue() ? Math.round(((double)api.getPoints() / (double)api.getGamesPlayed()) * 10d) / 10d : null;
 						Integer rwr = Setting.DR_SHOW_RUNNERWINRATE.getValue() ? (int) (Math.floor(((double)api.getVictoriesAsRunner() / (double)api.getGamesPlayedAsRunner()) * 1000d) / 10d) : null;

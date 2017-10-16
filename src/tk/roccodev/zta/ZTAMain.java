@@ -426,6 +426,7 @@ public class ZTAMain {
 		if(ActiveGame.is("dr") && DR.activeMap == null){
 			String map = ChatColor.stripColor(evt.getTitle());
 			if(map.equals("HiveMC.EU")) return;
+			if(map.equals("play.HiveMC.com")) return;
 			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
 			DR.activeMap = DRMap.getFromDisplay(map);
 		    
