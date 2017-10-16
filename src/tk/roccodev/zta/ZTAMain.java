@@ -461,6 +461,7 @@ public class ZTAMain {
 		
 		if(evt.getMessage() != null){
 			if(The5zigAPI.getAPI().getActiveServer() instanceof IHive) {
+				if(ZTAMain.isColorDebug)
 				The5zigAPI.getLogger().info("Global Color Debug: (" + evt.getMessage() + ")");
 			}
 			if(ChatColor.stripColor(evt.getMessage().trim()).equals("▍ Friends ▏ ✚ Toccata")){
