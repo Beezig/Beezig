@@ -13,6 +13,7 @@ public enum TIMVMap {
 	CLOCKWORLD_ISLAND("Clockworld Island", 3, 3),
 	CONSTRUCTION("Construction", 2, 2), // idk
 	COSMIC_FORAY("Cosmic Foray", 3,3),
+	EAGLE_ROCK("Eagle Rock", 3, 3), //idk
 	FALLEN_BRIDGES("Fallen Bridges", 3, 3),
 	FORGE("Forge", 7, 7),
 	FORSAKEN("Forsaken", 3, 3),
