@@ -460,6 +460,9 @@ public class ZTAMain {
 	public void onChat(ChatEvent evt){
 		
 		if(evt.getMessage() != null){
+			if(The5zigAPI.getAPI().getActiveServer() instanceof IHive) {
+				The5zigAPI.getLogger().info("Global Color Debug: (" + evt.getMessage() + ")");
+			}
 			if(ChatColor.stripColor(evt.getMessage().trim()).equals("▍ Friends ▏ ✚ Toccata")){
 				NotesManager.tramontoccataStelle();
 			}
