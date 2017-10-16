@@ -46,8 +46,8 @@ public class CAIListener extends AbstractGameListener<CAI> {
 						APIValues.CAIpoints = (long) points;
 					}
 
-					CAI.rank = CAIRank.getFromDisplay(new ApiCAI(The5zigAPI.getAPI().getGameProfile().getName()).getTitle()).getTotalDisplay();
-
+					CAI.rankObject = CAIRank.getFromDisplay(new ApiCAI(The5zigAPI.getAPI().getGameProfile().getName()).getTitle());
+					CAI.rank = CAI.rankObject.getTotalDisplay();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

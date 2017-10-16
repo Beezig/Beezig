@@ -78,6 +78,7 @@ public enum CAIRank {
 			next = ranks.get(newIndex);
 			
 		}catch(Exception e){
+			e.printStackTrace();
 			return "";
 		}
 		
