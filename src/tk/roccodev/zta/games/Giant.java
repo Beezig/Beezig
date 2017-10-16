@@ -5,7 +5,7 @@ import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
-import tk.roccodev.zta.hiveapi.GiantMap;
+import tk.roccodev.zta.hiveapi.stuff.gnt.GiantMap;
 
 import java.util.ArrayList;
 import java.util.List;

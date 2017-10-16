@@ -1,4 +1,4 @@
-package tk.roccodev.zta.hiveapi;
+package tk.roccodev.zta.hiveapi.stuff.bed;
 
 public enum BEDMap {
 
@@ -20,6 +20,9 @@ public enum BEDMap {
 	BED_FLORAL("Floral", true, true),	//Teams only
 	BED_HELL("Hell", true, true),	//Teams only
 	BED_PALACE("Palace", true, true), //Teams only
+	BED_SPRING("Spring", true, true), //Teams only
+	BED_WORLD_EXHIBITION("World Exhibition", true, true), //Teams only
+	BED_SLEEPY_HOLLOW("Sleepy Hollow", true, true), //Teams only
 	BED_ROME("Rome", true, true); //Teams only
 
 	private String displayName;

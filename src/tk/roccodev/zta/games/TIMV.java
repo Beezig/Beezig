@@ -10,7 +10,7 @@ import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.APIValues;
-import tk.roccodev.zta.hiveapi.TIMVMap;
+import tk.roccodev.zta.hiveapi.stuff.timv.TIMVMap;
 import tk.roccodev.zta.notes.NotesManager;
 
 import java.io.*;

@@ -1,4 +1,4 @@
-package tk.roccodev.zta.hiveapi;
+package tk.roccodev.zta.hiveapi.stuff.timv;
 
 public enum TIMVMap {
 

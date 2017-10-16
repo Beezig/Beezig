@@ -2,7 +2,7 @@ package tk.roccodev.zta.modules.timv;
 
 import eu.the5zig.mod.modules.GameModeItem;
 import tk.roccodev.zta.games.TIMV;
-import tk.roccodev.zta.hiveapi.TIMVMap;
+import tk.roccodev.zta.hiveapi.stuff.timv.TIMVMap;
 
 public class MapItem extends GameModeItem<TIMV>{
 

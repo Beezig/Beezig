@@ -5,6 +5,11 @@ import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.hiveapi.*;
+import tk.roccodev.zta.hiveapi.stuff.bed.BEDMap;
+import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
+import tk.roccodev.zta.hiveapi.stuff.gnt.GiantMap;
+import tk.roccodev.zta.hiveapi.stuff.hide.HIDEMap;
+import tk.roccodev.zta.hiveapi.stuff.timv.TIMVMap;
 
 import java.util.ArrayList;
 import java.util.List;

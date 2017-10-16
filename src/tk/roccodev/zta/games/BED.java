@@ -8,8 +8,8 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.hiveapi.APIValues;
-import tk.roccodev.zta.hiveapi.BEDMap;
-import tk.roccodev.zta.hiveapi.BEDRank;
+import tk.roccodev.zta.hiveapi.stuff.bed.BEDMap;
+import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
 
 import java.util.ArrayList;
 import java.util.List;

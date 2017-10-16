@@ -4,7 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.games.DR;
-import tk.roccodev.zta.hiveapi.DRMap;
+import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 
 public class PBCommand implements Command{
