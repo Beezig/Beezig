@@ -41,8 +41,22 @@ public class ApiCAI extends PvPMode {
 		return 0;
 	}
 	
+	public long getCaptures() {
+		return (long) object("captures");
+	}
 	
 	
+	public long getCaptured() {
+		return (long) object("captured");
+	}
+	
+	public long getCatches() {
+		return (long) object("catches");
+	}
+	
+	public long getCaught() {
+		return (long) object("caught");
+	}
 
 	
 	
