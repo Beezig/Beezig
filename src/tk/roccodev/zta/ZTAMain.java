@@ -130,6 +130,9 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "hidemap", tk.roccodev.zta.modules.hide.MapItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "hidepoints", tk.roccodev.zta.modules.hide.PointsItem.class, "serverhivemc");
 		
+		The5zigAPI.getAPI().registerModuleItem(this, "caimap", tk.roccodev.zta.modules.cai.MapItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "caipoints", tk.roccodev.zta.modules.cai.PointsItem.class, "serverhivemc");
+		
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		

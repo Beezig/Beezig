@@ -143,6 +143,18 @@
           "type": "hidemap"
         }
       ]
+    },
+    {
+      "id": "CowboysAndIndians",
+      "name": "Cowboys and Indians",
+      "items": [
+        {
+          "type": "caipoints"
+        },
+        {
+          "type": "caimap"
+        }
+      ]
     }
   ]
 }

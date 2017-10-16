@@ -68,7 +68,7 @@ public enum CAIRank {
 		return startPoints;
 	}
 	
-	public String getpointsToNextRank(int points){
+	public String getPointsToNextRank(int points){
 		if(this == SHERIFF) return "Leaderboard Rank";
 		if(this == TOMAHAWK) return "Highest Rank";
 		ArrayList<CAIRank> ranks = new ArrayList<CAIRank>(Arrays.asList(values()));

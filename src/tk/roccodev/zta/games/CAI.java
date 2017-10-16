@@ -8,6 +8,7 @@ import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
+import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.zta.hiveapi.stuff.hide.HIDEMap;
 
 public class CAI extends GameMode {
@@ -23,7 +24,7 @@ public class CAI extends GameMode {
 	public static List<String> votesToParse = new ArrayList<String>();
 
 	public static String rank;
-
+	public static CAIRank rankObject;
 
 	public static void reset(CAI gameMode){
 		
