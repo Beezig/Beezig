@@ -101,6 +101,10 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			getGameListener().switchLobby("HIDE");			
 			The5zigAPI.getLogger().info("Connected to HIDE! -Hive");
 		}
+		else if(key.equals("cai.welcome")){		
+			getGameListener().switchLobby("CAI");			
+			The5zigAPI.getLogger().info("Connected to CAI! -Hive");
+		}
 		
 		
 	}

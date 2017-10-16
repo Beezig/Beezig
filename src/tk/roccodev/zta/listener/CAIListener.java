@@ -1,12 +1,17 @@
 package tk.roccodev.zta.listener;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
+import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.CAI;
+import tk.roccodev.zta.hiveapi.APIValues;
+import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiCAI;
 
 public class CAIListener extends AbstractGameListener<CAI> {
 
@@ -26,8 +31,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
 		gameMode.setState(GameState.STARTING);
 		ActiveGame.set("CAI");
 		IHive.genericJoin();
-		/*
-
+		
 		new Thread(new Runnable(){
 
 			@Override
@@ -50,7 +54,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
 			}
 
 		}).start();
-		*/ // TODO remove this (cai)
+	
 	}
 
 
