@@ -351,6 +351,14 @@ public class ZTAMain {
 					}
 					HIDE.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
+				else if(ActiveGame.is("cai")){
+					if(CAI.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					CAI.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				}
 				
 			}
 			else{
@@ -393,6 +401,14 @@ public class ZTAMain {
 						return;
 					}
 					HIDE.lastRecords = args[1].trim();	
+				}
+				else if(ActiveGame.is("cai")){
+					if(CAI.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					CAI.lastRecords = args[1].trim();	
 				}
 			}
 		}

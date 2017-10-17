@@ -1,9 +1,15 @@
 package tk.roccodev.zta.listener;
 
 
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +27,7 @@ import tk.roccodev.zta.games.CAI;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIMap;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
+import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiCAI;
 import tk.roccodev.zta.settings.Setting;
 
@@ -166,6 +173,218 @@ public class CAIListener extends AbstractGameListener<CAI> {
 		else if(message.startsWith("§8▍ §6CaI§8 ▏ §6§e§e§l") && !CAI.hasVoted && Setting.AUTOVOTE.getValue()){
 			CAI.votesToParse.add(message);
 		}
+		//Advanced Records
+
+				else if(message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")){
+					CAI.messagesToSend.add(message);
+					The5zigAPI.getLogger().info("found header");
+					return true;
+				}
+				else if(message.startsWith("§3 ")){
+
+						CAI.messagesToSend.add(message);
+						The5zigAPI.getLogger().info("found entry");
+
+					return true;
+				}
+				else if(message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")){
+					CAI.footerToSend.add(message);
+					The5zigAPI.getLogger().info("Found Player URL");
+
+					return true;
+				}
+				else if((message.equals("                      §6§m                  §6§m                  ")&& !message.startsWith("§o "))){
+					The5zigAPI.getLogger().info("found footer");
+					CAI.footerToSend.add(message);
+					The5zigAPI.getLogger().info("executed /records");
+					if(CAI.footerToSend.contains("                      §6§m                  §6§m                  ")){
+						//Advanced Records - send
+						The5zigAPI.getLogger().info("Sending adv rec");
+						new Thread(new Runnable(){
+							@Override
+							public void run(){
+								CAI.isRecordsRunning = true;
+								The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
+								try{
+
+								ApiCAI api = new ApiCAI(CAI.lastRecords);
+								CAIRank rank = null;
+
+
+
+
+								NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+								DecimalFormat df = (DecimalFormat) nf;
+								df.setMaximumFractionDigits(2);
+								df.setMinimumFractionDigits(2);
+
+								DecimalFormat df1f = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+								df1f.setMaximumFractionDigits(1);
+								df1f.setMinimumFractionDigits(1);
+
+
+								String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? api.getParentMode().getNetworkTitle() : "";
+								ChatColor rankColor = null;
+								if(Setting.SHOW_NETWORK_RANK_COLOR.getValue()){
+									rankColor = api.getParentMode().getNetworkRankColor();
+								}
+								String rankTitleCAI = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
+								if(rankTitleCAI != null) rank = CAIRank.getFromDisplay(rankTitleCAI);
+
+								int kills = 0;
+								long points = 0;
+								int deaths = 0;
+								int gamesPlayed = 0;
+								int victories = 0;
+							
+								long timeAlive = 0;
+
+								Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
+								Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
+								;
+
+
+
+								//int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "CAI") < HiveAPI.DRgetPoints(CAI.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+
+								List<String> messages = new ArrayList<String>();
+								messages.addAll(CAI.messagesToSend);
+									for(String s : messages){
+
+										 	if(s.trim().endsWith("'s Stats §6§m")){
+										 	The5zigAPI.getLogger().info("Editing Header...");
+											StringBuilder sb = new StringBuilder();
+											String correctUser = api.getParentMode().getCorrectName();
+											if(correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
+											sb.append("          §6§m                  §f ");
+											The5zigAPI.getLogger().info("Added base...");
+											if(rankColor != null) {
+												sb.append(rankColor).append(correctUser);
+												The5zigAPI.getLogger().info("Added colored user...");
+											}
+											else{
+												sb.append(correctUser);
+												The5zigAPI.getLogger().info("Added white user...");
+											}
+											sb.append("§f's Stats §6§m                  ");
+											The5zigAPI.getLogger().info("Added end...");
+											The5zigAPI.getAPI().messagePlayer("§o " + sb.toString());
+
+											if(rankTitle != null && rankTitle.contains("nicked player")) rankTitle = "Nicked/Not found";
+											if(!rankTitle.equals("Nicked/Not found") && !rankTitle.isEmpty()){
+													if(rankColor == null) rankColor = ChatColor.WHITE;
+													The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " (" + rankColor + rankTitle + "§6) " + "§m       ");
+												}
+											continue;
+										 	}
+											else if(s.startsWith("§3 Points: §b")){
+												StringBuilder sb = new StringBuilder();
+												sb.append("§3 Points: §b");
+												points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
+												sb.append(points);
+												if(rank != null) sb.append(" (").append(rank.getTotalDisplay());
+												if(Setting.CAI_SHOW_POINTS_TO_NEXT_RANK.getValue()) sb.append(" / ").append(rank.getPointsToNextRank((int) points));
+												if(rank != null) sb.append("§b)");
+
+												//if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
+
+												The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+												continue;
+											}
+											else if(s.startsWith("§3 Victories: §b")){
+												victories = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+											}
+											else if(s.startsWith("§3 Games Played: §b")){
+												gamesPlayed = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+											}
+											else if(s.startsWith("§3 Total Kills: §b")){
+												kills = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Total Kills: §b", "").trim()));
+											}
+											else if(s.startsWith("§3 Total Deaths: §b")){
+												deaths = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Total Deaths: §b", "").trim()));
+											}
+											
+											else if(s.startsWith("§3 Time Alive: §b")){
+												timeAlive = Long.parseLong(ChatColor.stripColor(s.replaceAll("§3 Time Alive: §b", "").trim()));
+												s = s.replaceAll(Long.toString(timeAlive), APIUtils.getTimePassed(timeAlive));
+											}
+
+
+
+										The5zigAPI.getAPI().messagePlayer("§o " + s);
+
+									}
+
+
+								if(achievements != null){
+									The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
+								}
+								if(Setting.CAI_SHOW_WINRATE.getValue()){
+									double wr = (double) victories / (double) gamesPlayed;
+									The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr*100) + "%");
+								}
+								if(Setting.CAI_SHOW_POINTSPG.getValue()){
+									double ppg = (double) points / (double) gamesPlayed;
+									The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + df1f.format(ppg));
+								}
+
+							/*	if(Setting.CAI_SHOW_WINRATE.getValue()){				
+									double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
+									The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
+								}
+								
+							*	if(monthlyRank != 0){					
+							 *		The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
+							 *	}
+							 */
+								
+								if(lastGame != null){
+									Calendar lastSeen = Calendar.getInstance();
+									lastSeen.setTimeInMillis(lastGame.getTime());
+									The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+								}
+
+
+									for(String s : CAI.footerToSend){
+										The5zigAPI.getAPI().messagePlayer("§o " + s);
+									}
+
+
+
+									CAI.messagesToSend.clear();
+									CAI.footerToSend.clear();
+									CAI.isRecordsRunning = false;
+
+								}catch(Exception e){
+									e.printStackTrace();
+									if(e.getCause() instanceof FileNotFoundException){
+										The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
+										CAI.messagesToSend.clear();
+										CAI.footerToSend.clear();
+										CAI.isRecordsRunning = false;
+										return;
+									}
+									The5zigAPI.getAPI().messagePlayer(Log.error + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
+
+									for(String s : CAI.messagesToSend){
+										The5zigAPI.getAPI().messagePlayer("§o " + s);
+									}
+									for(String s : CAI.footerToSend){
+										The5zigAPI.getAPI().messagePlayer("§o " + s);
+									}
+									The5zigAPI.getAPI().messagePlayer("§o " + "                      §6§m                  §6§m                  ");
+									CAI.messagesToSend.clear();
+									CAI.footerToSend.clear();
+									CAI.isRecordsRunning = false;
+								}
+							}
+						}).start();
+						return true;
+
+
+					}
+
+				}
 
 		return false;
 		
