@@ -138,7 +138,7 @@ public class AutoVoteCommand implements Command{
 					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully added map.");
 				}
 				else if(gamemode.equalsIgnoreCase("cai")){
-					CAIMap apiMap = CAIMap.getFromDisplay(mapString);
+					CAIMap apiMap = CAIMap.getFromDisplay(mapString.replaceAll("_", " "));
 
 					if(apiMap == null){
 						The5zigAPI.getAPI().messagePlayer(Log.error + "Map not found.");
@@ -341,7 +341,7 @@ public class AutoVoteCommand implements Command{
 					The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully removed map.");
 				}
 				else if(gamemode.equalsIgnoreCase("cai")){
-					CAIMap apiMap = CAIMap.getFromDisplay(mapString);
+					CAIMap apiMap = CAIMap.getFromDisplay(mapString.replaceAll("_", " "));
 
 					if(apiMap == null){
 						The5zigAPI.getAPI().messagePlayer(Log.error + "Map not found.");
