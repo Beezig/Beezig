@@ -163,6 +163,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 			APIValues.BEDpoints += 100;
 			HiveAPI.medals++;
 			HiveAPI.tokens += 100;
+			BED.hasWon = true;
+			BED.winstreak++;
 			
 		}
 		else if(message.contains("§c has been ELIMINATED!")){
@@ -627,6 +629,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 	@Override
 	public void onServerConnect(BED gameMode) {
+		if(BED.hasWon == null || !BED.hasWon) BED.hasWon = false; 
 		BED.reset(gameMode);
 	}
 	

@@ -238,6 +238,10 @@ public class CAIListener extends AbstractGameListener<CAI> {
 								int victories = 0;
 							
 								long timeAlive = 0;
+								
+								long catches = 0, captured = 0, caught = 0, captures = 0;
+								
+								
 
 								Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
 								Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
@@ -322,6 +326,11 @@ public class CAIListener extends AbstractGameListener<CAI> {
 								if(Setting.CAI_SHOW_WINRATE.getValue()){
 									double wr = (double) victories / (double) gamesPlayed;
 									The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr*100) + "%");
+								}
+								if(Setting.CAI_SHOW_CATCHES_CAUGHT.getValue()) {
+									if(catches == 0) catches = api.getCatches();
+									if(caught == 0) caught = api.getCaught();
+									The5zigAPI.getAPI().messagePlayer("§o " + "§3 Cc/Ct: §b" + df.format((double)((double)catches / (double)caught)) + "");
 								}
 								if(Setting.CAI_SHOW_POINTSPG.getValue()){
 									double ppg = (double) points / (double) gamesPlayed;

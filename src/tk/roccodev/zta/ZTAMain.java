@@ -12,6 +12,7 @@ import tk.roccodev.zta.autovote.watisdis;
 import tk.roccodev.zta.command.*;
 import tk.roccodev.zta.games.*;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.stuff.bed.StreakUtils;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
@@ -113,6 +114,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "bedkdrchange", tk.roccodev.zta.modules.bed.KDRChangeItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedteamsleft", tk.roccodev.zta.modules.bed.TeamsLeftItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedsummoners", tk.roccodev.zta.modules.bed.SummonersItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bedwinstreak", tk.roccodev.zta.modules.bed.WinstreakItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "globalmedals", tk.roccodev.zta.modules.global.MedalsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "globaltokens", tk.roccodev.zta.modules.global.TokensItem.class , "serverhivemc");
@@ -162,6 +164,12 @@ public class ZTAMain {
 		}
 			
 
+		
+		checkForFileExist(new File(mcFile + "/bedwars/"), true);
+		checkForFileExist(new File(mcFile + "/bedwars/streak.txt"), false);
+		StreakUtils.init();
+		
+		
 		The5zigAPI.getLogger().info("Loaded Beezig");
 		
 		The5zigAPI.getLogger().info("Loading bStats");
@@ -423,6 +431,9 @@ public class ZTAMain {
 			@Override
 			public void run(){
 				try {
+					StreakUtils.saveDailyStreak();
+					
+					
 					String className = ActiveGame.current().toUpperCase();
 					if(className.startsWith("GNT")) className = "Giant";
 					Class gameModeClass = Class.forName("tk.roccodev.zta.games." + className);

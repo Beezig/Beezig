@@ -52,10 +52,13 @@ public class BED extends GameMode{
 	
 	public static List<String> votesToParse = new ArrayList<String>();
 	public static boolean hasVoted = false;
+	public static Boolean hasWon = null;
 	
 	public static List<String> messagesToSend = new ArrayList<String>();
 	public static List<String> footerToSend = new ArrayList<String>();
 	public static boolean isRecordsRunning = false;
+	
+	public static int winstreak;
 	
 	
 	
@@ -64,6 +67,11 @@ public class BED extends GameMode{
 	public static void reset(BED gm){
 		
 		gm.setState(GameState.FINISHED);
+		if(hasWon != null) {
+			if(!hasWon) {
+				winstreak = 0;
+			}
+		}
 		BED.team = null;
 		BED.mode = "";
 		BED.activeMap = null;
@@ -78,6 +86,7 @@ public class BED extends GameMode{
 		goldGen = 0;
 		diamondGen = 0;
 		ActiveGame.reset("bed");
+		hasWon = null;
 		IHive.genericReset();
 		if(The5zigAPI.getAPI().getActiveServer() != null)
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");

@@ -46,9 +46,10 @@ public enum Setting {
 	HIDE_SHOW_POINTS_TO_NEXT_RANK(true, "HIDE Advanced Records - Show points to next rank"),
 	
 	
-	CAI_SHOW_WINRATE(true, "HIDE Advanced Records - Show Winrate"), 
-	CAI_SHOW_POINTSPG(true, "HIDE Advanced Records - Show Points per Game"),
-	CAI_SHOW_POINTS_TO_NEXT_RANK(true, "HIDE Advanced Records - Show points to next rank");
+	CAI_SHOW_WINRATE(true, "CAI Advanced Records - Show Winrate"), 
+	CAI_SHOW_POINTSPG(true, "CAI Advanced Records - Show Points per Game"),
+	CAI_SHOW_POINTS_TO_NEXT_RANK(true, "CAI Advanced Records - Show points to next rank"),
+	CAI_SHOW_CATCHES_CAUGHT(true, "CAI Advenced Records - Show Catches/Caught Ratio");
 	
 
 	
