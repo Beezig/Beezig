@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-@Plugin(name="Beezig", version="4.3.0")
+@Plugin(name="Beezig", version="4.3.1")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
