@@ -6,7 +6,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import tk.roccodev.zta.games.DR;
-import tk.roccodev.zta.hiveapi.DRMap;
+import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.PvPMode;
 
@@ -47,17 +47,20 @@ public class ApiDR extends PvPMode {
 		
 	}
 	
-	private JSONObject speedrunJson(int mode, String id){
-		return APIUtils.getSpeedrunObject(id, mode);
-	}
-	
 	public Double getRawWorldRecord(DRMap map){
 		String mapid = map.getSpeedrunID();
 		JSONParser parser = new JSONParser();
 		JSONObject run0 = null;
 			// run0 = Information about the WR run entry on speedrun.com
 			try {
-				run0 = (JSONObject) parser.parse(((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(APIUtils.readURL(APIUtils.speedrunPublic(mapid, 0)))).get("data").toString())).get("runs").toString())).get(0).toString())).get("run").toString());
+				The5zigAPI.getLogger().info(APIUtils.readURL(APIUtils.speedrunPublic(mapid, 0)).toString());
+				run0 = (JSONObject) parser.parse((
+							(JSONObject) parser.parse((
+									(JSONArray) parser.parse((
+											(JSONObject) parser.parse((
+													(JSONObject) parser.parse(
+															APIUtils.readURL(
+																	APIUtils.speedrunPublic(mapid, 0)))).get("data").toString())).get("runs").toString())).get(0).toString())).get("run").toString());
 			} catch (Exception e) {
 				The5zigAPI.getLogger().info("Failed DRgetWR (run0)");
 				e.printStackTrace();

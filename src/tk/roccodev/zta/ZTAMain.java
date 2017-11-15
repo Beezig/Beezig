@@ -11,8 +11,9 @@ import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
 import tk.roccodev.zta.command.*;
 import tk.roccodev.zta.games.*;
-import tk.roccodev.zta.hiveapi.DRMap;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.stuff.bed.StreakUtils;
+import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
@@ -113,6 +114,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "bedkdrchange", tk.roccodev.zta.modules.bed.KDRChangeItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedteamsleft", tk.roccodev.zta.modules.bed.TeamsLeftItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedsummoners", tk.roccodev.zta.modules.bed.SummonersItem.class , "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bedwinstreak", tk.roccodev.zta.modules.bed.WinstreakItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "globalmedals", tk.roccodev.zta.modules.global.MedalsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "globaltokens", tk.roccodev.zta.modules.global.TokensItem.class , "serverhivemc");
@@ -129,6 +131,9 @@ public class ZTAMain {
 
 		The5zigAPI.getAPI().registerModuleItem(this, "hidemap", tk.roccodev.zta.modules.hide.MapItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "hidepoints", tk.roccodev.zta.modules.hide.PointsItem.class, "serverhivemc");
+		
+		The5zigAPI.getAPI().registerModuleItem(this, "caimap", tk.roccodev.zta.modules.cai.MapItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "caipoints", tk.roccodev.zta.modules.cai.PointsItem.class, "serverhivemc");
 		
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
@@ -159,6 +164,12 @@ public class ZTAMain {
 		}
 			
 
+		
+		checkForFileExist(new File(mcFile + "/bedwars/"), true);
+		checkForFileExist(new File(mcFile + "/bedwars/streak.txt"), false);
+		StreakUtils.init();
+		
+		
 		The5zigAPI.getLogger().info("Loaded Beezig");
 		
 		The5zigAPI.getLogger().info("Loading bStats");
@@ -348,6 +359,14 @@ public class ZTAMain {
 					}
 					HIDE.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
+				else if(ActiveGame.is("cai")){
+					if(CAI.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					CAI.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				}
 				
 			}
 			else{
@@ -391,6 +410,14 @@ public class ZTAMain {
 					}
 					HIDE.lastRecords = args[1].trim();	
 				}
+				else if(ActiveGame.is("cai")){
+					if(CAI.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					CAI.lastRecords = args[1].trim();	
+				}
 			}
 		}
 		
@@ -404,6 +431,9 @@ public class ZTAMain {
 			@Override
 			public void run(){
 				try {
+					StreakUtils.saveDailyStreak();
+					
+					
 					String className = ActiveGame.current().toUpperCase();
 					if(className.startsWith("GNT")) className = "Giant";
 					Class gameModeClass = Class.forName("tk.roccodev.zta.games." + className);
@@ -426,6 +456,7 @@ public class ZTAMain {
 		if(ActiveGame.is("dr") && DR.activeMap == null){
 			String map = ChatColor.stripColor(evt.getTitle());
 			if(map.equals("HiveMC.EU")) return;
+			if(map.equals("play.HiveMC.com")) return;
 			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
 			DR.activeMap = DRMap.getFromDisplay(map);
 		    
@@ -456,6 +487,10 @@ public class ZTAMain {
 	public void onChat(ChatEvent evt){
 		
 		if(evt.getMessage() != null){
+			if(The5zigAPI.getAPI().getActiveServer() instanceof IHive) {
+				if(ZTAMain.isColorDebug)
+				The5zigAPI.getLogger().info("Global Color Debug: (" + evt.getMessage() + ")");
+			}
 			if(ChatColor.stripColor(evt.getMessage().trim()).equals("▍ Friends ▏ ✚ Toccata")){
 				NotesManager.tramontoccataStelle();
 			}

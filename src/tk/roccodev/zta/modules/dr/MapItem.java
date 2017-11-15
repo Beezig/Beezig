@@ -2,7 +2,7 @@ package tk.roccodev.zta.modules.dr;
 
 import eu.the5zig.mod.modules.GameModeItem;
 import tk.roccodev.zta.games.DR;
-import tk.roccodev.zta.hiveapi.DRMap;
+import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 
 public class MapItem extends GameModeItem<DR>{
 

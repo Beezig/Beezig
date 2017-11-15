@@ -1,7 +1,8 @@
-package tk.roccodev.zta.hiveapi;
+package tk.roccodev.zta.hiveapi.stuff.bed;
 
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.BED;
+import tk.roccodev.zta.hiveapi.HiveAPI;
 
 import java.util.ArrayList;
 import java.util.Arrays;

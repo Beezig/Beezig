@@ -12,9 +12,9 @@ import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.hiveapi.APIValues;
-import tk.roccodev.zta.hiveapi.BEDMap;
-import tk.roccodev.zta.hiveapi.BEDRank;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.stuff.bed.BEDMap;
+import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.zta.settings.Setting;
@@ -163,6 +163,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 			APIValues.BEDpoints += 100;
 			HiveAPI.medals++;
 			HiveAPI.tokens += 100;
+			BED.hasWon = true;
+			BED.winstreak++;
 			
 		}
 		else if(message.contains("§c has been ELIMINATED!")){
@@ -627,6 +629,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 	@Override
 	public void onServerConnect(BED gameMode) {
+		if(BED.hasWon == null || !BED.hasWon) BED.hasWon = false; 
 		BED.reset(gameMode);
 	}
 	

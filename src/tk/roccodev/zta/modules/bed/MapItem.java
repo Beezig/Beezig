@@ -2,7 +2,7 @@ package tk.roccodev.zta.modules.bed;
 
 import eu.the5zig.mod.modules.GameModeItem;
 import tk.roccodev.zta.games.BED;
-import tk.roccodev.zta.hiveapi.BEDMap;
+import tk.roccodev.zta.hiveapi.stuff.bed.BEDMap;
 
 public class MapItem extends GameModeItem<BED>{
 

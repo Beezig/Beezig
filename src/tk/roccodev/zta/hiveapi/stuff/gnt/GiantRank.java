@@ -1,4 +1,4 @@
-package tk.roccodev.zta.hiveapi;
+package tk.roccodev.zta.hiveapi.stuff.gnt;
 import static eu.the5zig.util.minecraft.ChatColor.AQUA;
 import static eu.the5zig.util.minecraft.ChatColor.GOLD;
 import static eu.the5zig.util.minecraft.ChatColor.GRAY;
