@@ -1,6 +1,7 @@
 package tk.roccodev.zta.command;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import eu.the5zig.mod.The5zigAPI;
@@ -40,16 +41,15 @@ public class AutoVoteCommand implements Command{
 				String map = args[1];
 				String[] data = map.split("_");
 				String gamemode = data[0]; // ex: dr
-				String mapString = data[1]; //ex: throwback
-				if(data.length == 3){
-					mapString = (data[1] + "_" + data[2]);
+				List<String> mapStr = new ArrayList<String>(Arrays.asList(data));
+				mapStr.remove(0);
+				
+				StringBuilder sb = new StringBuilder();
+				String mapString = "";
+				for(String s : mapStr) {
+					sb.append(s + " ");
 				}
-				if(data.length == 4){
-					mapString = (data[1]+"_"+data[2]+"_"+data[3]);
-				}
-				if(data.length == 5){
-					mapString = (data[1]+"_"+data[2]+"_"+data[3]+"_"+data[4]);
-				}
+				mapString = sb.toString().trim();
 				// ¯\_(ツ)_/¯
 				if(gamemode.equalsIgnoreCase("dr")){
 					DRMap apiMap = DRMap.valueFromDisplay(mapString);

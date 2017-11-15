@@ -4,38 +4,44 @@ public enum GiantMap {
 	
 	//GNT Maps
 	
-	FORTRESS("Fortress", false),
-	LOST("Lost", false),
-	ELYSIUM("Elysium", false),
-	TROPICAL_TROUBLE("Tropical Trouble", false),
-	LUMBER("Lumber", false),
-	ORC("Orc", false),
-	MAGIKOS("Magikos", false),
-	ODYSSEY("Odyssey", false),
-	GATEWAY("Gateway", false),
-	AIRSHIP("Airship", false),
-	RADIOACTIVE("Radioactive", false),
-	DRAGONS("Dragons", false),
-	ADVENUS("Advenus", false),
-	MOONLIGHT("Moonlight", false),
-	ANCHORED("Anchored", false),
-	
-	
-	//GNTM Maps
-	
-	SANCTUM("Sanctum", true),
-	M_FORTRESS("Fortress", true),
-	OASIS("Oasis", true),
-	EVERGREEN("Evergreen", true),
-	BABYLON("Babylon", true),
-	URBAN("Urban", true),
-	RED("Red", true),
-	SPRUCE_SPRINGSTEEN("Spruce Springsteen", true),
-	BLOSSOM("Blossom", true),
-	TOWN_HALL("Town Hall", true),
-	MUFFIN("Muffin", true),
-	AQUARIUS("Aquarius", true);
-	
+		FORTRESS("Fortress", false),
+		LOST("Lost", false),
+		ELYSIUM("Elysium", false),
+		TROPICAL_TROUBLE("Tropical Trouble", false),
+		LUMBER("Lumber", false),
+		ORC("Orc", false),
+		MAGIKOS("Magikos", false),
+		ODYSSEY("Odyssey", false),
+		GATEWAY("Gateway", false),
+		AIRSHIP("Airship", false),
+		RADIOACTIVE("Radioactive", false),
+		DRAGONS("Dragons", false),
+		ADVENUS("Advenus", false),
+		MOONLIGHT("Moonlight", false),
+		ANCHORED("Anchored", false),
+		ANUBIS("Anubis", false),
+		SKY_KINGDOM("Sky Kingdom", false),
+		STRONGHOLD("Stronghold", false),
+		
+		
+		//GNTM Maps
+		
+		SANCTUM("Sanctum", true),
+		M_FORTRESS("Fortress", true),
+		OASIS("Oasis", true),
+		EVERGREEN("Evergreen", true),
+		BABYLON("Babylon", true),
+		URBAN("Urban", true),
+		RED("Red", true),
+		SPRUCE_SPRINGSTEEN("Spruce Springsteen", true),
+		BLOSSOM("Blossom", true),
+		TOWN_HALL("Town Hall", true),
+		MUFFIN("Muffin", true),
+		AQUARIUS("Aquarius", true),
+		GWOLITH("Gwolith", true),
+		ROCKET("Rocket", true),
+		WITCHSLAIR("Witch's Lair", true);
+		
 	
 	
 	private String display;

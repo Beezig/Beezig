@@ -28,7 +28,10 @@ public enum DRMap {
 	DR_SweetTooth("SweetTooth", 7, "r9g3vrpw"),
 	DR_EnchantedLagoon("Enchanted Lagoon", 7, "z98627gd"),
 	DR_Starbase("Starbase", 8, "69z34nld"),
-	DR_Windfall("Windfall", 7, "29v3263w");
+	DR_Windfall("Windfall", 7, "29v3263w"),
+	DR_SkyLands("SkyLands", 6, ""),
+	DR_ToBeeOrNotToBee("To Bee Or Not To Bee", 6, ""),
+	DR_JadeCoast("Jade Coast", 6, "");
 
 	private String displayName;
 	private int checkpoints;
