@@ -77,6 +77,8 @@ public class ZTAMain {
 		
 	}
 	
+	
+	
 	@EventHandler(priority = EventHandler.Priority.LOW)
 	public void onLoad(LoadEvent event) { 
 
@@ -223,6 +225,11 @@ public class ZTAMain {
 		new GNTM();
 	
 		TIMV.setDailyKarmaFileName(TIMVDay.fromCalendar(Calendar.getInstance()) + ".txt");
+		
+		Calendar cal = Calendar.getInstance();
+		if(cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA){
+			NotesManager.HR1cm5z = true; //Hbd
+		}
 		
 			
 	}
@@ -457,7 +464,11 @@ public void onKeypress(KeyPressEvent evt){
 	@EventHandler
 	public void onChat(ChatEvent evt){
 		
-		// The5zigAPI.getLogger().info("(" + evt.getMessage() + ")");
+		if(evt.getMessage() != null){
+			if(ChatColor.stripColor(evt.getMessage().trim()).equals("▍ Friends ▏ ✚ Toccata")){
+				NotesManager.tramontoccataStelle();
+			}
+		}
 		
 	}
 	

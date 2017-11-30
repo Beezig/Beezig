@@ -12,6 +12,7 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
+import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.Giant;
@@ -62,6 +63,7 @@ public class GiantListener extends AbstractGameListener<Giant>{
 		if(this.lobby.equalsIgnoreCase("GNT")) ActiveGame.set("GNT");
 		if(this.lobby.equalsIgnoreCase("GNTM")) ActiveGame.set("GNTM");
 		gameMode.setState(GameState.STARTING);
+		IHive.genericJoin();
 		new Thread(new Runnable(){
 			@Override
 			public void run(){
