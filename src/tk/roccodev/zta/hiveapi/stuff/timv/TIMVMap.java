@@ -19,6 +19,7 @@ public enum TIMVMap {
 	FORSAKEN("Forsaken", 3, 3),
 	FROZEN_CARGO("Frozen Cargo", 2, 2),
 	FUNFAIR("FunFair", 3, 3),
+	HOLLYWOOD_HOTEL("Hollywood Hotel", 3, 3),
 	HS_CLASSIC("Hermit Sands: Classic", 3, 3),
 	HS_REVISIT("Hermit Sands: Revisited", 3,3),
 	HS_REVAMP("Hermit Sands: Revamped", 2, 2),
