@@ -161,7 +161,7 @@ public enum BEDRank {
 			String color = withColor ? next.getName().replaceAll(ChatColor.stripColor(next.getName()), "") : "";
 			
 			
-			return next.getStart() - points + " to " + color + BED.NUMBERS[5] +  " " + next.getName();
+			return color + (next.getStart() - points) + " to " + BED.NUMBERS[5] +  " " + next.getName();
 			
 		}
 		else if(level == 2){
