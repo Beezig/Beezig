@@ -1,11 +1,7 @@
 package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.games.DR;
-import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 
 public class WRCommand implements Command{
 
@@ -22,7 +18,7 @@ public class WRCommand implements Command{
 
 	@Override
 	public boolean execute(String[] args) {
-		if(!(ActiveGame.is("dr"))) return false;
+		/*if(!(ActiveGame.is("dr"))) return false;
 		if(args.length == 0 && DR.activeMap != null){
 			new Thread(new Runnable(){
 				@Override
@@ -58,7 +54,8 @@ public class WRCommand implements Command{
 		}
 		else{
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /wr or /wr [map]");
-		}		
+		}*/
+		The5zigAPI.getAPI().messagePlayer(Log.info + "Feature unavailable until issues are resolved.");
 		return true;
 	}
 

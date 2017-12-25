@@ -1,26 +1,36 @@
 package tk.roccodev.zta.hiveapi.wrapper;
 
-import static eu.the5zig.util.minecraft.ChatColor.AQUA;
-import static eu.the5zig.util.minecraft.ChatColor.BLUE;
-import static eu.the5zig.util.minecraft.ChatColor.DARK_PURPLE;
-import static eu.the5zig.util.minecraft.ChatColor.DARK_RED;
-import static eu.the5zig.util.minecraft.ChatColor.GRAY;
-import static eu.the5zig.util.minecraft.ChatColor.GREEN;
-import static eu.the5zig.util.minecraft.ChatColor.RED;
-import static eu.the5zig.util.minecraft.ChatColor.YELLOW;
-
 import eu.the5zig.util.minecraft.ChatColor;
+
+import static eu.the5zig.util.minecraft.ChatColor.*;
 
 public enum NetworkRank {
 
-	REGULAR("Regular Hive Member", BLUE),
-	GOLD("Gold Hive Member", ChatColor.GOLD),
-	DIAMOND("Diamond Hive Member", AQUA),
-	EMERALD("Lifetime Emerald Hive Member", GREEN),
-	VIP("VIP Player", DARK_PURPLE),
-	MODERATOR("Hive Moderator", RED),
-	SENIOR_MODERATOR("Senior Hive Moderator", DARK_RED),
+	REGULAR("Regular", BLUE),
+
+	GOLD("Gold Premium", ChatColor.GOLD),
+
+	DIAMOND("Diamond Premium", AQUA),
+
+	EMERALD("Emerald Premium", GREEN),
+
+	ULTIMATE("Ultimate Premium", LIGHT_PURPLE),
+
+	VIP("VIP", DARK_PURPLE),
+	YOUTUBER("YouTuber", DARK_PURPLE),
+	STREAMER("Streamer", DARK_PURPLE),
+	CONTRIBUTOR("Contributor", DARK_PURPLE),
+	NECTAR("Team Nectar", DARK_PURPLE),
+
+	RESERVERD_STAFF("Reserved Staff", null),
+
+	MODERATOR("Moderator", RED),
+
+	SENIOR_MODERATOR("Senior Moderator", DARK_RED),
+	STAFFMANAGER("Staff Manager", DARK_RED),
+
 	DEVELOPER("Hive Developer", GRAY),
+
 	OWNER("Hive Founder and Owner", YELLOW);
 	
 	
