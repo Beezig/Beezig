@@ -165,10 +165,7 @@ public class ZTAMain {
 			
 
 		
-		checkForFileExist(new File(mcFile + "/bedwars/"), true);
-		checkForFileExist(new File(mcFile + "/bedwars/streak.txt"), false);
-		StreakUtils.init();
-		
+	
 		
 		The5zigAPI.getLogger().info("Loaded Beezig");
 		
@@ -194,6 +191,10 @@ public class ZTAMain {
 		The5zigAPI.getLogger().info("MC Folder is at: " + mcFile.getAbsolutePath());
 		checkForFileExist(new File(mcFile + "/timv/"), true);
 		checkForFileExist(new File(mcFile + "/timv/dailykarma/"), true);
+		checkForFileExist(new File(mcFile + "/bedwars/"), true);
+		checkForFileExist(new File(mcFile + "/bedwars/streak.txt"), false);
+		StreakUtils.init();
+		
 		checkOldCsvPath();
 		File settingsFile = new File(ZTAMain.mcFile.getAbsolutePath() + "/settings.properties");
 		if(!settingsFile.exists()){
