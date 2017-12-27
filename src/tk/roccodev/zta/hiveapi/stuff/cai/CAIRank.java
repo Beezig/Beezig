@@ -84,7 +84,7 @@ public enum CAIRank {
 		
 		
 		
-		return next.getStart() - points + " to " + next.prefix + next.getTotalDisplay();
+		return next.prefix + (next.getStart() - points) + " to " +  next.getTotalDisplay();
 	}
 	
 }
