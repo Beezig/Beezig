@@ -323,6 +323,7 @@ public class ZTAMain {
 		}
 		if(evt.getMessage().toUpperCase().startsWith("/RECORDS") || evt.getMessage().toUpperCase().startsWith("/STATS")){
 			String[] args = evt.getMessage().split(" ");
+			System.out.println(String.join(",", args));
 			if(args.length == 1){
 				if(ActiveGame.is("timv")){
 					if(TIMV.isRecordsRunning){
@@ -423,7 +424,7 @@ public class ZTAMain {
 		}
 		
 	}
-	
+	 
 	@EventHandler(priority=Priority.HIGHEST)
 	public void onDisconnect(ServerQuitEvent evt){
 		NotesManager.notes.clear();

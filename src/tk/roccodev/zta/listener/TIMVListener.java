@@ -233,6 +233,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						TIMV.isRecordsRunning = true;
 						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
 						try{
+						The5zigAPI.getLogger().info(TIMV.lastRecords);
 						ApiTIMV api = new ApiTIMV(TIMV.lastRecords);
 						TIMVRank rank = null;
 						Long rolepoints = Setting.TIMV_SHOW_KRR.getValue() ? api.getRolepoints() : null;
@@ -405,36 +406,31 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				public void run(){
 					List<String> votesCopy = new ArrayList<String>();
 					votesCopy.addAll(TIMV.votesToParse);
-					List<TIMVMap> parsedMaps = new ArrayList<TIMVMap>();
+					List<String> parsedMaps = new ArrayList<String>();
+					parsedMaps.addAll(AutovoteUtils.getMapsForMode("timv"));
+					
 					
 					List<String> votesindex = new ArrayList<String>();
 					List<String> finalvoting = new ArrayList<String>();
 					
-					for(String s1 : AutovoteUtils.getMapsForMode("timv")){
-						TIMVMap map1 = TIMVMap.valueOf(s1);	
-						if(map1 == null) continue;
-						parsedMaps.add(map1);
-						The5zigAPI.getLogger().info("Parsed " + map1);
-					}	
+					
 					
 					for(String s : votesCopy){
 						
 						String[] data = s.split("\\.");						
 						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §6TIMV§8 ▏ §6§6§l", "").replaceAll("▍ TIMV ▏", "").trim();
 						String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
-						String consider = ChatColor.stripColor(toConsider[0]).trim();
-						TIMVMap map = TIMVMap.getFromDisplay(consider);
+						String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
+						
 						String votes = toConsider[1].split(" ")[0].trim();
 						
-						if(map == null){
-							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: map not found for " + consider);
-						}
-						The5zigAPI.getLogger().info("trying to match " + map);
-						if(parsedMaps.contains(map)){
+						
+						The5zigAPI.getLogger().info("trying to match " + consider);
+						if(parsedMaps.contains(consider)){
 							votesindex.add(votes + "-" + index);
-							The5zigAPI.getLogger().info("Added " + map + " Index #" + index + " with " + votes + " votes");	
+							The5zigAPI.getLogger().info("Added " + consider + " Index #" + index + " with " + votes + " votes");	
 						}else{
-							The5zigAPI.getLogger().info(map + " is not a favourite");
+							The5zigAPI.getLogger().info(consider + " is not a favourite");
 						}
 						if(index.equals("5")){
 							if(votesindex.size() != 0){
