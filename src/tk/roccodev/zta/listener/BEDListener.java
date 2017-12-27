@@ -118,43 +118,24 @@ public class BEDListener extends AbstractGameListener<BED>{
 		    }
 		}
 
-		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing")){
-			
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained") && message.contains("§a points for killing")){
+
+			int i = Integer.parseInt(ChatColor.stripColor(message.split(" ")[5]));
+
 			BED.kills++;
-			BED.pointsCounter += 10;
-			APIValues.BEDpoints += 10;
+			BED.pointsCounter += i;
+			APIValues.BEDpoints += i;
 			BED.updateKdr();
 			
 		}
-		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 20§a points for killing")){
+
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained") && message.contains("points for destroying")){
+
+			int i = Integer.parseInt(ChatColor.stripColor(message.split(" ")[6]));
 			
-			BED.kills++;
-			BED.pointsCounter += 20;
-			APIValues.BEDpoints += 20;
-			BED.updateKdr();
-			
-		}
-		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 5§a points for killing")){
-			
-			BED.kills++;
-			BED.pointsCounter += 5;
-			APIValues.BEDpoints += 5;
-			BED.updateKdr();
-		}
-		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained §f50§a points for destroying")){
-			
-			
-			BED.pointsCounter += 50;
+			BED.pointsCounter += i;
 			BED.bedsDestroyed++;
-			APIValues.BEDpoints += 50;
-			
-		}
-		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained §f100§a points for destroying")){
-			
-			
-			BED.pointsCounter += 100;
-			BED.bedsDestroyed++;
-			APIValues.BEDpoints += 100;
+			APIValues.BEDpoints += i;
 			
 		}
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §e✯ §6Notable Win! §eGold Medal Awarded!")){
@@ -424,7 +405,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 			BED.votesToParse.add(message);
 			new Thread(new Runnable(){
 				@Override
-				public void run(){
+				public void run()	{
 					try { TimeUnit.MILLISECONDS.sleep(200); } catch (Exception e) {}
 				
 					List<String> votesCopy = new ArrayList<String>();
