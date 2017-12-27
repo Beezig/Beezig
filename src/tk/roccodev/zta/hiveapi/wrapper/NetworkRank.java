@@ -6,40 +6,43 @@ import static eu.the5zig.util.minecraft.ChatColor.*;
 
 public enum NetworkRank {
 
-	REGULAR("Regular", BLUE),
+	REGULAR("Regular", BLUE, 0),
 
-	GOLD("Gold Premium", ChatColor.GOLD),
+	GOLD("Gold Premium", ChatColor.GOLD, 10),
 
-	DIAMOND("Diamond Premium", AQUA),
+	DIAMOND("Diamond Premium", AQUA, 20),
 
-	EMERALD("Emerald Premium", GREEN),
+	EMERALD("Emerald Premium", GREEN, 30),
 
-	ULTIMATE("Ultimate Premium", LIGHT_PURPLE),
+	ULTIMATE("Ultimate Premium", LIGHT_PURPLE, 40),
 
-	VIP("VIP", DARK_PURPLE),
-	YOUTUBER("YouTuber", DARK_PURPLE),
-	STREAMER("Streamer", DARK_PURPLE),
-	CONTRIBUTOR("Contributor", DARK_PURPLE),
-	NECTAR("Team Nectar", DARK_PURPLE),
+	VIP("VIP", DARK_PURPLE, 50),
+	YOUTUBER("YouTuber", DARK_PURPLE, 51),
+	STREAMER("Streamer", DARK_PURPLE, 52),
+	CONTRIBUTOR("Contributor", DARK_PURPLE, 53),
 
-	RESERVERD_STAFF("Reserved Staff", null),
+	NECTAR("Team Nectar", DARK_AQUA, 54),
 
-	MODERATOR("Moderator", RED),
+	RESERVERD_STAFF("Reserved Staff", null, 60),
 
-	SENIOR_MODERATOR("Senior Moderator", DARK_RED),
-	STAFFMANAGER("Staff Manager", DARK_RED),
+	MODERATOR("Moderator", RED, 70),
 
-	DEVELOPER("Hive Developer", GRAY),
+	SENIOR_MODERATOR("Senior Moderator", DARK_RED, 80),
+	STAFFMANAGER("Staff Manager", DARK_RED, 81),
 
-	OWNER("Hive Founder and Owner", YELLOW);
+	DEVELOPER("Developer", GRAY, 90),
+
+	OWNER("Owner", YELLOW, 100);
 	
 	
 	private String display;
 	private ChatColor color;
+	private Integer level;
 	
-	NetworkRank(String display, ChatColor color){
+	NetworkRank(String display, ChatColor color, Integer level){
 		this.display = display;
 		this.color = color;
+		this.level = level;
 	}
 
 	public String getDisplay() {
@@ -49,10 +52,21 @@ public enum NetworkRank {
 	public ChatColor getColor() {
 		return color;
 	}
+
+	public Integer getLevel() {
+		return level;
+	}
 	
 	public static NetworkRank fromDisplay(String s){
 		for(NetworkRank rank : values()){
 			if(rank.getDisplay().equalsIgnoreCase(s)) return rank;
+		}
+		return null;
+	}
+
+	public static NetworkRank fromColor(ChatColor cc){
+		for(NetworkRank rank : values()){
+			if(rank.getColor() == cc) return rank;
 		}
 		return null;
 	}
