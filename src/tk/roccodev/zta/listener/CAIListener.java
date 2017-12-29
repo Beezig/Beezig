@@ -24,6 +24,7 @@ import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.CAI;
 import tk.roccodev.zta.hiveapi.APIValues;
+import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIMap;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
@@ -160,7 +161,23 @@ public class CAIListener extends AbstractGameListener<CAI> {
 			}).start();
 		} else if (message.startsWith("§8▍ §6CaI§8 ▏ §6§e§e§l") && !CAI.hasVoted && Setting.AUTOVOTE.getValue()) {
 			CAI.votesToParse.add(message);
+		} else if (message.equals("§8▍ §6CaI§8 ▏ §6You receive 10 points and 5 tokens for your teams capture.")) {
+
+			HiveAPI.tokens += 5;
+			CAI.gamePoints += 10;
+
+		} else if (message.endsWith("points for staying alive as a leader for another minute.")
+				&& message.startsWith("§8▍ §6CaI§8 ▏ §6You gained")) {
+
+			
+			String points = message.replaceAll("points for staying alive as a leader for another minute.", "").replaceAll("§8▍ §6CaI§8 ▏ §6You gained", "");
+			
+			CAI.gamePoints += Long.parseLong(points.trim());
+			
+			
+			
 		}
+
 		// Advanced Records
 
 		else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
