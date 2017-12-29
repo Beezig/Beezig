@@ -79,7 +79,7 @@ public class AutoVoteCommand implements Command {
 				}
 				mapString = sb.deleteCharAt(sb.length() - 1).toString().trim();
 
-				List<String> maps = (List<String>) AutovoteUtils.get(gamemode.toLowerCase());
+				List<String> maps = (List<String>) AutovoteUtils.getMapsForMode(gamemode.toLowerCase());
 				maps.remove(mapString.trim().toUpperCase());
 				AutovoteUtils.set(gamemode.toLowerCase(), maps);
 				AutovoteUtils.dump();

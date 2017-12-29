@@ -28,7 +28,7 @@ public class AutovoteUtils {
 		if(get(mode) == null)
 			return tr;
 		
-		tr.addAll(((List<String>)get(mode)).stream().map(s -> s.replaceAll("\\{c\\}", ":")).collect(Collectors.toList()));
+		tr.addAll(((List<String>)get(mode)).stream().map(s -> s.replaceAll("\\^c\\^", ":")).collect(Collectors.toList()));
 		return tr;
 	}
 	
@@ -60,7 +60,7 @@ public class AutovoteUtils {
 		if(value instanceof Collection) value = ((Collection<?>)value).stream().map(o -> {
 			if(!(o instanceof String)) return o;
 			
-			return ((String)o).replaceAll(":", "\\{c\\}");
+			return ((String)o).replaceAll(":", "\\^c\\^");
 			
 		}).collect(Collectors.toList());
 		
