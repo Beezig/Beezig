@@ -19,6 +19,7 @@ public enum Setting {
 	TIMV_SHOW_MOSTPOINTS(true, "TIMV Advanced Records - Show Karma record"),
 	TIMV_SHOW_KARMA_TO_NEXT_RANK(false, "TIMV Advanced Records - Show karma to next rank"),
 	TIMV_SHOW_TRAITORRATIO(false, "TIMV Advanced Records - Show the Traitor Points / Rolepoints ratio"),
+	TIMV_USE_TESTREQUESTS(true, "Replace \" test\" with nicer phrases to avoid HAS"),
 	
 	DR_SHOW_POINTSPERGAME(true, "DR Advanced Records - Show the average Points per Game"),
 	DR_SHOW_RUNNERWINRATE(true, "DR Advanced Records - Show the Winrate as a Runner"),

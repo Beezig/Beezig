@@ -18,6 +18,7 @@ import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.zta.notes.NotesManager;
+import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
 import tk.roccodev.zta.utils.TIMVDay;
@@ -31,6 +32,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
@@ -423,7 +425,11 @@ public class ZTAMain {
 				}
 			}
 		}
-		
+		if(evt.getMessage().endsWith(" test") && (evt.getMessage().split(" ").length == 2) && ActiveGame.is("TIMV") && Setting.TIMV_USE_TESTREQUESTS.getValue()){
+			evt.setCancelled(true);
+			Random random = new Random();
+			The5zigAPI.getAPI().sendPlayerMessage(evt.getMessage().replaceAll(" test", TIMV.testRequests[random.nextInt(TIMV.testRequests.length - 1)]));
+		}
 	}
 	 
 	@EventHandler(priority=Priority.HIGHEST)
