@@ -7,8 +7,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.yaml.snakeyaml.Yaml;
 
@@ -26,7 +28,7 @@ public class AutovoteUtils {
 		if(get(mode) == null)
 			return tr;
 		
-		tr.addAll((List<String>)get(mode));
+		tr.addAll(((List<String>)get(mode)).stream().map(s -> s.replaceAll("\\{c\\}", ":")).collect(Collectors.toList()));
 		return tr;
 	}
 	
@@ -55,6 +57,14 @@ public class AutovoteUtils {
 	}
 	
 	public static void set(String key, Object value){
+		if(value instanceof Collection) value = ((Collection<?>)value).stream().map(o -> {
+			if(!(o instanceof String)) return o;
+			
+			return ((String)o).replaceAll(":", "\\{c\\}");
+			
+		}).collect(Collectors.toList());
+		
+		
 		ymlObject.put(key, value);
 	}
 	
