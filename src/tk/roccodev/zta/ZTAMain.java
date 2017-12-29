@@ -1,16 +1,63 @@
 package tk.roccodev.zta;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.bstats.MetricsLite;
+
 import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.event.*;
+import eu.the5zig.mod.event.ActionBarEvent;
+import eu.the5zig.mod.event.ChatEvent;
+import eu.the5zig.mod.event.ChatSendEvent;
+import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.EventHandler.Priority;
+import eu.the5zig.mod.event.LoadEvent;
+import eu.the5zig.mod.event.ServerQuitEvent;
+import eu.the5zig.mod.event.TitleEvent;
 import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.util.minecraft.ChatColor;
-import org.bstats.MetricsLite;
+import io.netty.util.internal.ThreadLocalRandom;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
-import tk.roccodev.zta.command.*;
-import tk.roccodev.zta.games.*;
+import tk.roccodev.zta.command.AddNoteCommand;
+import tk.roccodev.zta.command.AutoVoteCommand;
+import tk.roccodev.zta.command.BlockstatsCommand;
+import tk.roccodev.zta.command.CheckPingCommand;
+import tk.roccodev.zta.command.ColorDebugCommand;
+import tk.roccodev.zta.command.CustomTestCommand;
+import tk.roccodev.zta.command.DebugCommand;
+import tk.roccodev.zta.command.MathCommand;
+import tk.roccodev.zta.command.MedalsCommand;
+import tk.roccodev.zta.command.MessageOverlayCommand;
+import tk.roccodev.zta.command.MonthlyCommand;
+import tk.roccodev.zta.command.NotesCommand;
+import tk.roccodev.zta.command.PBCommand;
+import tk.roccodev.zta.command.ReVoteCommand;
+import tk.roccodev.zta.command.RealRankCommand;
+import tk.roccodev.zta.command.SayCommand;
+import tk.roccodev.zta.command.SeenCommand;
+import tk.roccodev.zta.command.SettingsCommand;
+import tk.roccodev.zta.command.ShrugCommand;
+import tk.roccodev.zta.command.TeamsCommand;
+import tk.roccodev.zta.command.TokensCommand;
+import tk.roccodev.zta.command.WRCommand;
+import tk.roccodev.zta.games.BED;
+import tk.roccodev.zta.games.CAI;
+import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.games.GNT;
+import tk.roccodev.zta.games.GNTM;
+import tk.roccodev.zta.games.Giant;
+import tk.roccodev.zta.games.HIDE;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.stuff.bed.StreakUtils;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
@@ -22,18 +69,7 @@ import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
 import tk.roccodev.zta.utils.TIMVDay;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import tk.roccodev.zta.utils.TIMVTest;
 
 
 @Plugin(name="Beezig", version="4.3.0")
@@ -159,6 +195,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new CheckPingCommand());
 		CommandManager.registerCommand(new BlockstatsCommand());
 		CommandManager.registerCommand(new TeamsCommand());
+		CommandManager.registerCommand(new CustomTestCommand());
 		
 		//if(The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d") ||
 		//		The5zigAPI.getAPI().getGameProfile().getId().toString().equals("bba224a2-0bff-4913-b042-27ca3b60973f")){
@@ -194,9 +231,19 @@ public class ZTAMain {
 		The5zigAPI.getLogger().info("MC Folder is at: " + mcFile.getAbsolutePath());
 		checkForFileExist(new File(mcFile + "/timv/"), true);
 		checkForFileExist(new File(mcFile + "/timv/dailykarma/"), true);
+		checkForFileExist(new File(mcFile + "/timv/testMessages.txt"), false);
 		checkForFileExist(new File(mcFile + "/bedwars/"), true);
 		checkForFileExist(new File(mcFile + "/bedwars/streak.txt"), false);
 		StreakUtils.init();
+		
+		
+		try {
+			TIMVTest.init();
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
 		
 		checkOldCsvPath();
 		File settingsFile = new File(ZTAMain.mcFile.getAbsolutePath() + "/settings.properties");
@@ -242,6 +289,8 @@ public class ZTAMain {
 		if(cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA){
 			NotesManager.HR1cm5z = true; //Hbd
 		}
+		
+		
 		
 			
 	}
@@ -427,8 +476,9 @@ public class ZTAMain {
 		}
 		if(evt.getMessage().endsWith(" test") && (evt.getMessage().split(" ").length == 2) && ActiveGame.is("TIMV") && Setting.TIMV_USE_TESTREQUESTS.getValue()){
 			evt.setCancelled(true);
-			Random random = new Random();
-			The5zigAPI.getAPI().sendPlayerMessage(evt.getMessage().replaceAll(" test", TIMV.testRequests[random.nextInt(TIMV.testRequests.length - 1)]));
+			int random = ThreadLocalRandom.current().ints(0, TIMV.testRequests.size()).distinct().filter(i -> i != TIMV.lastTestMsg).findFirst().getAsInt();
+			TIMV.lastTestMsg = random;
+			The5zigAPI.getAPI().sendPlayerMessage(TIMV.testRequests.get(random).replaceAll("\\{p\\}", evt.getMessage().replaceAll(" test", "").trim()));
 		}
 	}
 	 

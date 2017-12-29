@@ -1,6 +1,26 @@
 package tk.roccodev.zta.games;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+
 import com.csvreader.CsvWriter;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
@@ -12,16 +32,6 @@ import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.timv.TIMVMap;
 import tk.roccodev.zta.notes.NotesManager;
-
-import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 public class TIMV extends GameMode{
 
@@ -56,19 +66,11 @@ public class TIMV extends GameMode{
 	public static List<String> votesToParse = new ArrayList<String>();
 	
 	//Anti HAS 'test'
-	public static String[] testRequests = {
-		" go test please",
-		" test please",
-		" pls test",
-		", would you mind testing?",
-		", could you test please?",
-		", please go into the tester",
-		", I'd appreciate it if you would test",
-		", how about testing?",
-		", would you test for me?"
-		// ...
-	 };
+	public static List<String> testRequests = new ArrayList<String>();
 
+	
+	public static int lastTestMsg = -1;
+	
 
 	//CSV Stuff
 	
@@ -276,6 +278,7 @@ public class TIMV extends GameMode{
 		TIMV.isRecordsRunning = false;
 		TIMV.hasVoted = false;
 		TIMV.actionBarChecked = false;
+		lastTestMsg = -1;
 		gm.setState(GameState.FINISHED);
 		ActiveGame.reset("timv");
 		IHive.genericReset();
