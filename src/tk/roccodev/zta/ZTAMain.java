@@ -172,6 +172,7 @@ public class ZTAMain {
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "caimap", tk.roccodev.zta.modules.cai.MapItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "caipoints", tk.roccodev.zta.modules.cai.PointsItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "caigame", tk.roccodev.zta.modules.cai.GamePointsItem.class, "serverhivemc");
 		
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
