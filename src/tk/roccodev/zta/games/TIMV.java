@@ -55,7 +55,21 @@ public class TIMV extends GameMode{
 	//Autovoting
 	public static List<String> votesToParse = new ArrayList<String>();
 	
-	
+	//Anti HAS 'test'
+	public static String[] testRequests = {
+		" go test please",
+		" test please",
+		" pls test",
+		", would you mind testing?",
+		", could you test please?",
+		", please go into the tester",
+		", I'd appreciate it if you would test",
+		", how about testing?",
+		", would you test for me?"
+		// ...
+	 };
+
+
 	//CSV Stuff
 	
 	public static List<String[]> csvEntries;
