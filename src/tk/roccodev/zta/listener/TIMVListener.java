@@ -498,7 +498,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			
 		}
 		//glorious
-		else if(ActiveGame.is("timv") && message.contains("ItsNiklass§8 » ") && !message.contains("§b§lParty§8")){
+		/*else if(ActiveGame.is("timv") && message.contains("ItsNiklass§8 » ") && !message.contains("§b§lParty§8")){
 			if(message.contains("▍ ")){
 				//In Lobby
 				String[] msg = message.split("▍ ");
@@ -512,7 +512,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			The5zigAPI.getAPI().messagePlayer(message.replaceAll("Watson", "Watson ⚝").replaceAll("§a", "§b"));
 			return true;
 			}
-		}
+		}*/
 		else if(ActiveGame.is("timv") && message.contains("RoccoDev§8 » ") && !message.contains("§b§lParty§8")){
 			//y tho
 			if(message.contains("▍ ")){
