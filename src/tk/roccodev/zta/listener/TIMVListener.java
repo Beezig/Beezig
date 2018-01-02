@@ -11,7 +11,6 @@ import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
-import tk.roccodev.zta.autovote.watisdis;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.timv.TIMVMap;
@@ -512,7 +511,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			The5zigAPI.getAPI().messagePlayer(message.replaceAll("Watson", "Watson ⚝").replaceAll("§a", "§b"));
 			return true;
 			}
-		}*/
+		}
 		else if(ActiveGame.is("timv") && message.contains("RoccoDev§8 » ") && !message.contains("§b§lParty§8")){
 			//y tho
 			if(message.contains("▍ ")){
@@ -529,7 +528,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			The5zigAPI.getAPI().messagePlayer(message.replaceAll(watisdis.wat, "Dev").replaceAll("§a", "§7"));
 			return true;
 			}
-		}
+		}*/
 		
 		
 		return false;
