@@ -11,7 +11,7 @@ public enum TIMVMap {
 	CASTLE("Castle",3,3),
 	CATHEDRAL("Cathedral", 3,3),
 	CLOCKWORLD_ISLAND("Clockworld Island", 3, 3),
-	CONSTRUCTION("Construction", 2, 2), // idk
+	CONSTRUCTION("Construction", 3, 3),
 	COSMIC_FORAY("Cosmic Foray", 4, 4),
 	EAGLE_ROCK("Eagle Rock", 4, 4), 
 	FALLEN_BRIDGES("Fallen Bridges", 3, 3),
