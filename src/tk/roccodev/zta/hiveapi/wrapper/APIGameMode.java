@@ -17,9 +17,15 @@ public class APIGameMode {
 	private ApiHiveGlobal parent;
 	private JSONObject object;
 	
-	public APIGameMode(String playerName){
-		this.playerName = playerName;
-		this.uuid = APIUtils.getUUID(playerName);
+	public APIGameMode(String playerName, String... UUID){
+
+		if(UUID.length == 0) {
+			this.playerName = playerName;
+			this.uuid = APIUtils.getUUID(playerName);
+		} else {
+			this.playerName = playerName;
+			this.uuid = UUID[0].replaceAll("-","");
+		}
 		if(!(this instanceof ApiHiveGlobal))
 		this.parent = new ApiHiveGlobal(playerName);
 		

@@ -36,6 +36,7 @@ public class PlayerStatsCommand implements Command {
 		} else game = args[0];
 
 		if(game.equalsIgnoreCase("timv")){
+			long startT = System.currentTimeMillis();
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
 			new Thread(() -> {
 				List<Long> points = new ArrayList<>();
@@ -44,8 +45,8 @@ public class PlayerStatsCommand implements Command {
 
 				for(NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
 					try {
-						ApiTIMV apiTIMV = new ApiTIMV(npi.getGameProfile().getName());
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(npi.getGameProfile().getName());
+						ApiTIMV apiTIMV = new ApiTIMV(npi.getGameProfile().getName(), npi.getGameProfile().getId().toString());
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(npi.getGameProfile().getName(), npi.getGameProfile().getId().toString());
 						points.add(apiTIMV.getKarma());
 						title.add(TIMVRank.getFromDisplay(apiTIMV.getTitle()).getTotalDisplay());
 						name.add(apiHIVE.getNetworkRankColor() + npi.getGameProfile().getName());
@@ -56,7 +57,7 @@ public class PlayerStatsCommand implements Command {
 
 				APIUtils.concurrentSort(points,	points,title,name);
 
-				The5zigAPI.getAPI().messagePlayer("\n" + Log.info + "Playerstats: (" + name.size() + ")");
+				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
 				for(int i = name.size()-1; i != 0; i--){
 					try {
 						if (points.get(i) != 0) {
@@ -66,10 +67,12 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
+				The5zigAPI.getAPI().messagePlayer(Log.info + "TIMV Playerstats: " + name.size() + "P / " + (System.currentTimeMillis() - startT) + "ms");
 				The5zigAPI.getAPI().messagePlayer("");
 			}).start();
 		}
 		if(game.equalsIgnoreCase("bed")){
+			long startT = System.currentTimeMillis();
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
 			new Thread(() -> {
 				List<Long> points = new ArrayList<>();
@@ -79,8 +82,8 @@ public class PlayerStatsCommand implements Command {
 
 				for(NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
 					try {
-						ApiBED apiBED = new ApiBED(npi.getGameProfile().getName());
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(npi.getGameProfile().getName());
+						ApiBED apiBED = new ApiBED(npi.getGameProfile().getName(), npi.getGameProfile().getId().toString());
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(npi.getGameProfile().getName(), npi.getGameProfile().getId().toString());
 						points.add(apiBED.getPoints());
 
 						BEDRank rank = BEDRank.getRank(apiBED.getPoints());
@@ -98,7 +101,7 @@ public class PlayerStatsCommand implements Command {
 
 				APIUtils.concurrentSort(points,	points,titlecolor,title,name);
 
-				The5zigAPI.getAPI().messagePlayer("\n" + Log.info + "Playerstats: (" + name.size() + ")");
+				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
 				for(int i = name.size()-1; i != 0; i--){
 					try {
 						if (points.get(i) != 0) {
@@ -108,6 +111,7 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
+				The5zigAPI.getAPI().messagePlayer(Log.info + "BED Playerstats: " + name.size() + "P / " + (System.currentTimeMillis() - startT) + "ms");
 				The5zigAPI.getAPI().messagePlayer("");
 			}).start();
 		}

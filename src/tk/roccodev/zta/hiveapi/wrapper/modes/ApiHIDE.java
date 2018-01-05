@@ -9,8 +9,8 @@ import java.util.Date;
 
 public class ApiHIDE extends APIGameMode {
 
-	public ApiHIDE(String playerName) {
-		super(playerName);
+	public ApiHIDE(String playerName, String... UUID) {
+		super(playerName, UUID);
 	}
 	
 	@Override

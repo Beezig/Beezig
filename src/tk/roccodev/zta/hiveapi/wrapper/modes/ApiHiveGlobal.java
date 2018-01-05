@@ -8,8 +8,8 @@ import tk.roccodev.zta.hiveapi.wrapper.NetworkRank;
 
 public class ApiHiveGlobal extends APIGameMode {
 
-	public ApiHiveGlobal(String playerName) {
-		super(playerName);
+	public ApiHiveGlobal(String playerName, String... UUID) {
+		super(playerName, UUID);
 		
 	}
 

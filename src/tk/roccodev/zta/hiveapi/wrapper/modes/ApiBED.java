@@ -6,8 +6,8 @@ import tk.roccodev.zta.hiveapi.wrapper.PvPMode;
 
 public class ApiBED extends PvPMode {
 
-	public ApiBED(String playerName) {
-		super(playerName);
+	public ApiBED(String playerName, String... UUID) {
+		super(playerName, UUID);
 		
 	}
 
