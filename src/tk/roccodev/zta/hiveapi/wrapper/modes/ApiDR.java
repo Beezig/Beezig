@@ -12,8 +12,8 @@ import tk.roccodev.zta.hiveapi.wrapper.PvPMode;
 
 public class ApiDR extends PvPMode {
 
-	public ApiDR(String playerName) {
-		super(playerName);
+	public ApiDR(String playerName, String... UUID) {
+		super(playerName, UUID);
 		
 	}
 

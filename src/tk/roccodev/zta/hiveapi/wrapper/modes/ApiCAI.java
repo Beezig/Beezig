@@ -6,9 +6,8 @@ import tk.roccodev.zta.hiveapi.wrapper.PvPMode;
 
 public class ApiCAI extends PvPMode {
 
-	public ApiCAI(String playerName) {
-		super(playerName);
-		
+	public ApiCAI(String playerName, String... UUID) {
+		super(playerName, UUID);
 	}
 
 	
