@@ -48,6 +48,8 @@ public class AutovoteUtils {
 			dump();
 		}
 		
+		
+		
 		try {
 			input.close();
 		} catch (IOException e) {
@@ -94,5 +96,14 @@ public class AutovoteUtils {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	public static void migrate() {
+		
+		
+		
+		
+	}
+	
 
 }

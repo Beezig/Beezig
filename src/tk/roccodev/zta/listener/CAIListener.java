@@ -161,21 +161,41 @@ public class CAIListener extends AbstractGameListener<CAI> {
 			}).start();
 		} else if (message.startsWith("§8▍ §6CaI§8 ▏ §6§e§e§l") && !CAI.hasVoted && Setting.AUTOVOTE.getValue()) {
 			CAI.votesToParse.add(message);
-		} else if (message.equals("§8▍ §6CaI§8 ▏ §6You receive 10 points and 5 tokens for your teams capture.")) {
+		} 
+		else if(message.startsWith("§8▍ §6CaI§8 ▏ §aYou are part of the")) {
+		
+			String team = message.replaceAll("§8▍ §6CaI§8 ▏ §aYou are part of the ", "").replaceAll(", good luck!", "").trim();
+			
+			switch(team) {
+			case "§bindians§a":
+				CAI.team = "§eIndians";
+				break;
+			case "§bcowboys§a":
+				CAI.team = "§cCowboys";
+				break;
+			}
+			
+			
+		}
+		else if (message.equals("§8▍ §6CaI§8 ▏ §6You receive 10 points and 5 tokens for your teams capture.")) {
 
 			HiveAPI.tokens += 5;
 			CAI.gamePoints += 10;
 
+		} else if (message.startsWith("§8▍ §6CaI§8 ▏ §6You gained 5 points for killing")) {
+			
+			
+			CAI.gamePoints += 5;
+			
+
 		} else if (message.endsWith("points for staying alive as a leader for another minute.")
 				&& message.startsWith("§8▍ §6CaI§8 ▏ §6You gained")) {
 
-			
-			String points = message.replaceAll("points for staying alive as a leader for another minute.", "").replaceAll("§8▍ §6CaI§8 ▏ §6You gained", "");
-			
+			String points = message.replaceAll("points for staying alive as a leader for another minute.", "")
+					.replaceAll("§8▍ §6CaI§8 ▏ §6You gained", "");
+
 			CAI.gamePoints += Long.parseLong(points.trim());
-			
-			
-			
+
 		}
 
 		// Advanced Records
