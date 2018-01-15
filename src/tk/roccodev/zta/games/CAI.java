@@ -23,7 +23,12 @@ public class CAI extends GameMode {
 	public static boolean hasVoted = false;
 	public static List<String> votesToParse = new ArrayList<String>();
 
+	
+	public static long gamePoints;
+	
+	
 	public static String rank;
+	public static String team;
 	public static CAIRank rankObject;
 
 	public static void reset(CAI gameMode){
@@ -36,7 +41,8 @@ public class CAI extends GameMode {
 		CAI.isRecordsRunning = false;
 		CAI.hasVoted = false;
 		CAI.activeMap = null;
-
+		gamePoints = 0;
+		team = "";
 		ActiveGame.reset("cai");
 		IHive.genericReset();
 		if(The5zigAPI.getAPI().getActiveServer() != null)

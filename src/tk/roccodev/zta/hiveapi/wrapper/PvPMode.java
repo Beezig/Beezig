@@ -2,8 +2,8 @@ package tk.roccodev.zta.hiveapi.wrapper;
 
 public class PvPMode extends APIGameMode {
 
-	public PvPMode(String playerName) {
-		super(playerName);
+	public PvPMode(String playerName, String... UUID) {
+		super(playerName, UUID);
 		
 	}
 	

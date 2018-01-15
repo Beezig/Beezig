@@ -8,8 +8,8 @@ import java.util.Date;
 
 public class ApiGiant extends APIGameMode{
 
-	public ApiGiant(String playerName) {
-		super(playerName);
+	public ApiGiant(String playerName, String... UUID) {
+		super(playerName, UUID);
 	}
 
 	@Override

@@ -153,6 +153,12 @@
         },
         {
           "type": "caimap"
+        },
+         {
+          "type": "caigame"
+        },
+        {
+          "type": "caiteam"
         }
       ]
     }

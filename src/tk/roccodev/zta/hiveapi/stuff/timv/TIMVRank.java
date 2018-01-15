@@ -85,7 +85,7 @@ public enum TIMVRank {
 		
 		
 		
-		return next.getStart() - karma + " to " + next.prefix + next.getTotalDisplay();
+		return next.prefix + (next.getStart() - karma)  + " to " + next.getTotalDisplay();
 	}
 	
 }

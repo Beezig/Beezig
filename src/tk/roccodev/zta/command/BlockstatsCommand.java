@@ -7,10 +7,9 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class BlockstatsCommand implements Command{
 
@@ -43,25 +42,22 @@ public class BlockstatsCommand implements Command{
 					ApiHIDE api = new ApiHIDE(ign);
 					JSONObject blockExp = api.getBlockExperience();
 					JSONObject rawBlockEx = api.getRawBlockExperience();
-					The5zigAPI.getAPI().messagePlayer("\n§3Blockstats of §b" + api.getParentMode().getNetworkRankColor() +  api.getParentMode().getCorrectName() + "§3:");
+					The5zigAPI.getAPI().messagePlayer("\n" + Log.info + "§3Blockstats of §b" + api.getParentMode().getNetworkRankColor() +  api.getParentMode().getCorrectName() + "§3:");
 
-					Map<String, Integer> blockMap = new HashMap<>();
-					for (Object block : blockExp.keySet()) {
-						blockMap.put(block.toString(), Integer.valueOf(blockExp.get(block).toString()));
+
+					List<Object> blocks = new ArrayList<>(Arrays.asList(blockExp.keySet().toArray()));
+					List<Long> levels = new ArrayList<>();
+					List<Long> rawExp = new ArrayList<>();
+					for(int i = 0; i < blocks.size(); i++){
+						levels.add(Long.valueOf(blockExp.get(blocks.get(i)).toString()));
+						rawExp.add(Long.valueOf(rawBlockEx.get(blocks.get(i)).toString()));
 					}
-					The5zigAPI.getLogger().info("blockMap size: " + blockMap.size());
-					Object[] a = blockMap.entrySet().toArray();
-					Arrays.sort(a, (Comparator) (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue()));
-					//Magic right there
-					The5zigAPI.getLogger().info("magic happened");
-					for (Object e : a) {
-						String block = ((Map.Entry<String, Integer>) e).getKey();
-						Integer level = Integer.valueOf((((Map.Entry<String, Integer>) e).getValue()).toString());
 
-						String blockName = APIUtils.capitalize(block.replaceAll("_", " "));
-						ChatColor levelColor = APIUtils.getLevelColorHIDE(Integer.valueOf(blockExp.get(block).toString()));
-						int rawExperience = Integer.valueOf(rawBlockEx.get(block).toString());
+					APIUtils.concurrentSort(rawExp, blocks,levels,rawExp);
 
+					for(int i = blocks.size()-1; i != 0; i--){
+
+						String blockName = APIUtils.capitalize(blocks.get(i).toString().replaceAll("_", " "));
 						if (blockName.equals("Wood")) {
 							blockName = "Oak Planks";
 						}
@@ -69,10 +65,9 @@ public class BlockstatsCommand implements Command{
 							//no idea
 							blockName = "Wood";
 						}
-
-						The5zigAPI.getAPI().messagePlayer("§3" + blockName + ": " + levelColor + "" + level + APIUtils.getNextPecentHIDE(rawExperience, level));
+						The5zigAPI.getAPI().messagePlayer("§3" + blockName + ": " + APIUtils.getLevelColorHIDE(levels.get(i).intValue()) + "" + levels.get(i) + APIUtils.getNextPecentHIDE(rawExp.get(i).intValue(), levels.get(i).intValue()));
 					}
-
+					The5zigAPI.getAPI().messagePlayer("");
 				}).start();
 			}
 		}

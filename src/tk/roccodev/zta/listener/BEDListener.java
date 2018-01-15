@@ -118,43 +118,24 @@ public class BEDListener extends AbstractGameListener<BED>{
 		    }
 		}
 
-		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing")){
-			
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained") && message.contains("§a points for killing")){
+
+			int i = Integer.parseInt(ChatColor.stripColor(message.split(" ")[5]));
+
 			BED.kills++;
-			BED.pointsCounter += 10;
-			APIValues.BEDpoints += 10;
+			BED.pointsCounter += i;
+			APIValues.BEDpoints += i;
 			BED.updateKdr();
 			
 		}
-		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 20§a points for killing")){
+
+		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained") && message.contains("points for destroying")){
+
+			int i = Integer.parseInt(ChatColor.stripColor(message.split(" ")[6]));
 			
-			BED.kills++;
-			BED.pointsCounter += 20;
-			APIValues.BEDpoints += 20;
-			BED.updateKdr();
-			
-		}
-		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 5§a points for killing")){
-			
-			BED.kills++;
-			BED.pointsCounter += 5;
-			APIValues.BEDpoints += 5;
-			BED.updateKdr();
-		}
-		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained §f50§a points for destroying")){
-			
-			
-			BED.pointsCounter += 50;
+			BED.pointsCounter += i;
 			BED.bedsDestroyed++;
-			APIValues.BEDpoints += 50;
-			
-		}
-		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained §f100§a points for destroying")){
-			
-			
-			BED.pointsCounter += 100;
-			BED.bedsDestroyed++;
-			APIValues.BEDpoints += 100;
+			APIValues.BEDpoints += i;
 			
 		}
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §e✯ §6Notable Win! §eGold Medal Awarded!")){
@@ -424,56 +405,34 @@ public class BEDListener extends AbstractGameListener<BED>{
 			BED.votesToParse.add(message);
 			new Thread(new Runnable(){
 				@Override
-				public void run(){
+				public void run()	{
 					try { TimeUnit.MILLISECONDS.sleep(200); } catch (Exception e) {}
 				
 					List<String> votesCopy = new ArrayList<String>();
 					votesCopy.addAll(BED.votesToParse);
-					List<BEDMap> parsedMaps = new ArrayList<BEDMap>();
+					List<String> parsedMaps = new ArrayList<String>();
+					parsedMaps.addAll(AutovoteUtils.getMapsForMode("bed"));
 					
 					List<String> votesindex = new ArrayList<String>();
 					List<String> finalvoting = new ArrayList<String>();
 					
-					for(String s1 : AutovoteUtils.getMapsForMode("bed")){
-						BEDMap map1 = BEDMap.valueOf(s1);					
-						if(map1 == null) continue;
-						parsedMaps.add(map1);
-						The5zigAPI.getLogger().info("Parsed " + map1);
-					}
 					The5zigAPI.getLogger().info(votesCopy.size());
 					for(String s : votesCopy){
 						
 						String[] data = s.split("\\.");
 						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l", "").replaceAll("▍ BedWars ▏", "").trim();
-						String toConsider = data[1];
-						String[] data2 = ChatColor.stripColor(toConsider).split("\\[");
-						String consider = data2[0].trim();
-						String votes = data2[1].split(" ")[0].trim();
-								
-						BEDMap map = BEDMap.getFromDisplay(consider);
-						if(map == null){
-							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: Map not found for " + consider);
-						}
-						if(map.getExclusiveModes().length == 1) {
-							BED.mode = "Duo";
-						}
-						else if(map.getExclusiveModes().length == 2) {
-							BED.mode = "Teams";
-						}
-						The5zigAPI.getLogger().info("trying to match " + map);
-						if(parsedMaps.contains(map)){
+						String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
+						String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
+						
+						String votes = toConsider[1].split(" ")[0].trim();
+						
+						
+						The5zigAPI.getLogger().info("trying to match " + consider);
+						if(parsedMaps.contains(consider)){
 							votesindex.add(votes + "-" + index);
-							The5zigAPI.getLogger().info("Added " + map + " Index #" + index + " with " + votes + " votes");
-			
-						/*	The5zigAPI.getAPI().sendPlayerMessage("/vote " + index);
-							BED.votesToParse.clear();
-							BED.hasVoted = true;
-							The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for §6" + map.getDisplayName());
-							return;
-						*/	
-						}
-						else{
-							The5zigAPI.getLogger().info(map + " is not a favourite");
+							The5zigAPI.getLogger().info("Added " + consider + " Index #" + index + " with " + votes + " votes");	
+						}else{
+							The5zigAPI.getLogger().info(consider + " is not a favourite");
 						}
 						
 						if(index.equals("6")){

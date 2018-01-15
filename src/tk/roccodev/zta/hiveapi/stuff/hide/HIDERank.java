@@ -70,7 +70,7 @@ public enum HIDERank {
 			next = ranks.get(newIndex);
 		} catch(Exception e){ return "";}
 
-		return next.getStart() - points + " to " + next.prefix + next.getTotalDisplay();
+		return next.prefix + "" + (next.getStart() - points) + " to " + next.getTotalDisplay();
 	}
 	
 }

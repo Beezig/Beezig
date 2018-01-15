@@ -6,6 +6,7 @@ import eu.the5zig.mod.event.EventHandler.Priority;
 import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.util.minecraft.ChatColor;
+import io.netty.util.internal.ThreadLocalRandom;
 import org.bstats.MetricsLite;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
@@ -18,9 +19,11 @@ import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.zta.notes.NotesManager;
+import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
 import tk.roccodev.zta.utils.TIMVDay;
+import tk.roccodev.zta.utils.TIMVTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +37,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-@Plugin(name="Beezig", version="4.3.1")
+@Plugin(name="Beezig", version="4.4.0")
 public class ZTAMain {
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -134,7 +137,8 @@ public class ZTAMain {
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "caimap", tk.roccodev.zta.modules.cai.MapItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "caipoints", tk.roccodev.zta.modules.cai.PointsItem.class, "serverhivemc");
-		
+		The5zigAPI.getAPI().registerModuleItem(this, "caigame", tk.roccodev.zta.modules.cai.GamePointsItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "caiteam", tk.roccodev.zta.modules.cai.TeamItem.class, "serverhivemc");
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		
@@ -156,19 +160,19 @@ public class ZTAMain {
 		CommandManager.registerCommand(new ReVoteCommand());
 		CommandManager.registerCommand(new CheckPingCommand());
 		CommandManager.registerCommand(new BlockstatsCommand());
+		CommandManager.registerCommand(new PlayerStatsCommand());
+		CommandManager.registerCommand(new CustomTestCommand());
+		CommandManager.registerCommand(new SetDisplayNameCommand());
 		
-		if(The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d") || 
-				The5zigAPI.getAPI().getGameProfile().getId().toString().equals("bba224a2-0bff-4913-b042-27ca3b60973f")){
+		//if(The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d") ||
+		//		The5zigAPI.getAPI().getGameProfile().getId().toString().equals("bba224a2-0bff-4913-b042-27ca3b60973f")){
 			CommandManager.registerCommand(new RealRankCommand());
 			CommandManager.registerCommand(new SeenCommand());			
-		}
+		//}
 			
 
 		
-		checkForFileExist(new File(mcFile + "/bedwars/"), true);
-		checkForFileExist(new File(mcFile + "/bedwars/streak.txt"), false);
-		StreakUtils.init();
-		
+	
 		
 		The5zigAPI.getLogger().info("Loaded Beezig");
 		
@@ -194,6 +198,20 @@ public class ZTAMain {
 		The5zigAPI.getLogger().info("MC Folder is at: " + mcFile.getAbsolutePath());
 		checkForFileExist(new File(mcFile + "/timv/"), true);
 		checkForFileExist(new File(mcFile + "/timv/dailykarma/"), true);
+		checkForFileExist(new File(mcFile + "/timv/testMessages.txt"), false);
+		checkForFileExist(new File(mcFile + "/bedwars/"), true);
+		checkForFileExist(new File(mcFile + "/bedwars/streak.txt"), false);
+		StreakUtils.init();
+		
+		
+		try {
+			TIMVTest.init();
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		
 		checkOldCsvPath();
 		File settingsFile = new File(ZTAMain.mcFile.getAbsolutePath() + "/settings.properties");
 		if(!settingsFile.exists()){
@@ -238,6 +256,8 @@ public class ZTAMain {
 		if(cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA){
 			NotesManager.HR1cm5z = true; //Hbd
 		}
+		
+		
 		
 			
 	}
@@ -322,6 +342,7 @@ public class ZTAMain {
 		}
 		if(evt.getMessage().toUpperCase().startsWith("/RECORDS") || evt.getMessage().toUpperCase().startsWith("/STATS")){
 			String[] args = evt.getMessage().split(" ");
+			System.out.println(String.join(",", args));
 			if(args.length == 1){
 				if(ActiveGame.is("timv")){
 					if(TIMV.isRecordsRunning){
@@ -420,9 +441,14 @@ public class ZTAMain {
 				}
 			}
 		}
-		
+		if(evt.getMessage().endsWith(" test") && (evt.getMessage().split(" ").length == 2) && ActiveGame.is("TIMV") && Setting.TIMV_USE_TESTREQUESTS.getValue()){
+			evt.setCancelled(true);
+			int random = ThreadLocalRandom.current().ints(0, TIMV.testRequests.size()).distinct().filter(i -> i != TIMV.lastTestMsg).findFirst().getAsInt();
+			TIMV.lastTestMsg = random;
+			The5zigAPI.getAPI().sendPlayerMessage(TIMV.testRequests.get(random).replaceAll("\\{p\\}", evt.getMessage().replaceAll(" test", "").trim()));
+		}
 	}
-	
+	 
 	@EventHandler(priority=Priority.HIGHEST)
 	public void onDisconnect(ServerQuitEvent evt){
 		NotesManager.notes.clear();

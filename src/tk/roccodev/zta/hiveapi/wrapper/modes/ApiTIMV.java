@@ -6,9 +6,8 @@ import tk.roccodev.zta.hiveapi.wrapper.APIGameMode;
 
 public class ApiTIMV extends APIGameMode {
 
-	public ApiTIMV(String playerName) {
-		super(playerName);
-		
+	public ApiTIMV(String playerName, String... UUID) {
+		super(playerName, UUID);
 	}
 
 	@Override

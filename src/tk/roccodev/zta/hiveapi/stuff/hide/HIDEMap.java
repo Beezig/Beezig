@@ -22,6 +22,8 @@ public enum HIDEMap {
 	HEARTHSTONE_VILLAGE("Hearthstone Village"),
 	INDUSTRIA("Industria"),
 	TOWN_SQUARE_REVAMP("Town Square: Revamped"),
+	NEXUSCITY("Nexus City"),
+	KINGSTON("Kingston"),
 
 	//not in API v
 	OASIS("Oasis"),

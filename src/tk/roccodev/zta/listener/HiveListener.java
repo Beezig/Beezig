@@ -45,6 +45,11 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			HiveAPI.tokens += tokens;
 			
 		}
+		else if(message != null && message.contains("§b EXTRA tokens this round!")){
+			//§8▍ §3§lBed§b§lWars§8 ▏ §bThanks to the §dultimate§b member §dGryffin§b you gained §a25§b EXTRA tokens this round!
+			//idk if thats how it works
+			HiveAPI.tokens += Integer.parseInt(ChatColor.stripColor(message.split("EXTRA")[0].split("you gained ")[1].trim()));
+		}
 		return false;
 	}
 

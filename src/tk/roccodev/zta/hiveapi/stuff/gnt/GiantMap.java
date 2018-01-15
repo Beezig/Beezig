@@ -22,6 +22,7 @@ public enum GiantMap {
 		ANUBIS("Anubis", false),
 		SKY_KINGDOM("Sky Kingdom", false),
 		STRONGHOLD("Stronghold", false),
+		SNOWFIGHT("Snow Fight", false),
 		
 		
 		//GNTM Maps

@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.*;
 
 public class APIUtils {
 
@@ -39,7 +40,56 @@ public class APIUtils {
 		}
 		return o;
 	}
-	
+
+	public static <T extends Comparable<T>> void concurrentSort(final List<T> key, List<?>... lists){
+
+		//
+		//
+		//	Source: https://ideone.com/cXdw6T
+		//
+		//
+
+		// Do validation
+		if(key == null || lists == null)
+			throw new NullPointerException("key cannot be null.");
+
+		for(List<?> list : lists)
+			if(list.size() != key.size())
+				throw new IllegalArgumentException("all lists must be the same size");
+
+		// Lists are size 0 or 1, nothing to sort
+		if(key.size() < 2)
+			return;
+
+		// Create a List of indices
+		List<Integer> indices = new ArrayList<>();
+		for(int i = 0; i < key.size(); i++)
+			indices.add(i);
+
+		// Sort the indices list based on the key
+		indices.sort(Comparator.comparing(key::get));
+
+		Map<Integer, Integer> swapMap = new HashMap<>(indices.size());
+		List<Integer> swapFrom = new ArrayList<>(indices.size()),
+				swapTo   = new ArrayList<>(indices.size());
+
+		// create a mapping that allows sorting of the List by N swaps.
+		for(int i = 0; i < key.size(); i++){
+			int k = indices.get(i);
+			while(i != k && swapMap.containsKey(k))
+				k = swapMap.get(k);
+
+			swapFrom.add(i);
+			swapTo.add(k);
+			swapMap.put(i, k);
+		}
+
+		// use the swap order to sort each list by swapping elements
+		for(List<?> list : lists)
+			for(int i = 0; i < list.size(); i++)
+				Collections.swap(list, swapFrom.get(i), swapTo.get(i));
+	}
+
 	public static String getTimeAgo(long time) {
 		
 		/*

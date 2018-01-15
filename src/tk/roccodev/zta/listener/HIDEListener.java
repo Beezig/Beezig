@@ -101,40 +101,30 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 				public void run(){
 					List<String> votesCopy = new ArrayList<String>();
 					votesCopy.addAll(HIDE.votesToParse);
-					List<HIDEMap> parsedMaps = new ArrayList<HIDEMap>();
+					List<String> parsedMaps = new ArrayList<String>();
+					parsedMaps.addAll(AutovoteUtils.getMapsForMode("hide"));
 
 					List<String> votesindex = new ArrayList<String>();
 					List<String> finalvoting = new ArrayList<String>();
 
-					for(String s1 : AutovoteUtils.getMapsForMode("hide")){
-						HIDEMap map1 = HIDEMap.valueOf(s1);
-						if(map1 == null) continue;
-						parsedMaps.add(map1);
-						The5zigAPI.getLogger().info("Parsed " + map1);
-					}
-
+					
 					for(String s : votesCopy){
 
 						String[] data = s.split("\\.");
 						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §bHide§aAnd§eSeek§8 ▏ §6§e§e§l", "").replaceAll("▍ HideAndSeek ▏", "").trim();
 						String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
-						String consider = ChatColor.stripColor(toConsider[0]).trim();
-						HIDEMap map = HIDEMap.getFromDisplay(consider);
+						String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
+						
 						String votes = toConsider[1].split(" ")[0].trim();
-
-						if(map == null){
-							The5zigAPI.getAPI().messagePlayer(Log.error + "Error while autovoting: map not found for " + consider);
-						}
-						The5zigAPI.getLogger().info("trying to match " + map);
-						if(parsedMaps.contains(map)){
+						
+						
+						The5zigAPI.getLogger().info("trying to match " + consider);
+						if(parsedMaps.contains(consider)){
 							votesindex.add(votes + "-" + index);
-							The5zigAPI.getLogger().info("Added " + map + " Index #" + index + " with " + votes + " votes");
+							The5zigAPI.getLogger().info("Added " + consider + " Index #" + index + " with " + votes + " votes");	
 						}else{
-							The5zigAPI.getLogger().info(map + " is not a favourite");
+							The5zigAPI.getLogger().info(consider + " is not a favourite");
 						}
-
-						The5zigAPI.getLogger().info("\"" + index + "\"");
-
 						if(index.equals("5")){
 							if(votesindex.size() != 0){
 								for(String n : votesindex){
