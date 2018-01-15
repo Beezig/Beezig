@@ -33,7 +33,8 @@ public enum DRMap {
 	DR_ToBeeOrNotToBee("To Bee Or Not To Bee", 7, "y9mj1xz9"),
 	DR_JadeCoast("Jade Coast", 7, "z986gnrd"),
 	DR_Snowfall("Snowfall", 7, "4956g4jd"),
-	DR_CrystalNight("Crystal Night", 6, "29v3nelw");
+	DR_CrystalNight("Crystal Night", 6, "29v3nelw"),
+	DR_Safari("Safari Valley", 7, "");
 
 	private String displayName;
 	private int checkpoints;

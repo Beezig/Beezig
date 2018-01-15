@@ -25,6 +25,7 @@ public enum TIMVMap {
 	HS_REVAMP("Hermit Sands: Revamped", 2, 2),
 	KAZAMUZO_TEMPLE("Kazamuzo Temple", 4, 4),
 	METROPOLIS("Metropolis", 3, 3),
+	MINECITY("MineCity", 4, 4),
 	MV_CLASSIC("MineVille: Classic", 4, 4),
 	MV_REVAMP("MineVille: Revamped", 4, 4),
 	NIGHTCLUB("Nightclub", 4, 4),

@@ -333,7 +333,7 @@ public class DRListener extends AbstractGameListener<DR> {
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + ppg);
 							}
 							if (achievements != null) {
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/47");
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/65");
 							}
 							if (rwr != null) {
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Runner-Winrate: §b" + rwr + "%");

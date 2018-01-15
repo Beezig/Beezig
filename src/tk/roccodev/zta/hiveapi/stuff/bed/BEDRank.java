@@ -19,17 +19,26 @@ public enum BEDRank {
 	DREAMER(ChatColor.AQUA + "Dreamer", 46500, 49600, 52800, 56100, 59500),
 	SLEEP_WALKER(ChatColor.RED + "Sleep Walker", 63000, 66600, 70300, 74100, 78000),
 	HIBERNATOR(ChatColor.DARK_AQUA + "Hibernator", 82000, 86100, 90300, 94600, 99000),
+	
 	BED_HEAD(ChatColor.YELLOW +""+ ChatColor.BOLD + "Bed Head", 103500, 108100, 112800, 117600, 122500),
 	PANDA(ChatColor.GOLD +""+ ChatColor.BOLD + "Panda", 127500, 132600, 137800, 143100, 148500),
 	INSOMNIAC(ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD + "Insomniac", 154000, 159600, 165300, 171100, 177000),
 	WELL_RESTED(ChatColor.GREEN +""+ ChatColor.BOLD + "Well Rested", 183000, 189100, 195300, 201600, 208000),
 	KOALA(ChatColor.AQUA +""+ ChatColor.BOLD + "Koala", 214500, 221100, 227800, 234600, 241500),
 	DAY_DREAMER(ChatColor.RED +""+ ChatColor.BOLD + "Day Dreamer", 248500, 255600, 262800, 270100, 277500),
+	
 	POWER_NAP(ChatColor.YELLOW +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Power Nap", 285000, 292600, 300300, 308100, 316000),
 	BEAR(ChatColor.GREEN +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Bear", 324000, 332100, 340300, 348600, 357000),
 	BED_WARRIOR(ChatColor.AQUA +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Bed Warrior", 365500, 374100, 382800, 391600, 400500),
 	SNORLAX(ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Snorlax", 409500, 418600, 427800, 437100, 446500),
-	NIGHTMARE(ChatColor.RED +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Nightmare", 456000, 465600, 475300, 485100, 495000),
+	SANDMAN(ChatColor.RED +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Sandman", 456000, 465600, 475300, 485100, 495000),
+	
+	LULLABY(ChatColor.RED +""+ ChatColor.BOLD +""+ ChatColor.UNDERLINE + "Lullaby", 505000, 515100, 525300, 535600, 546000),
+	BED_BUG(ChatColor.GREEN +""+ ChatColor.BOLD +""+ ChatColor.UNDERLINE + "Bed Bug", 556500, 567100, 577800, 588800, 600300),
+	SLEEPING_LION(ChatColor.AQUA +""+ ChatColor.BOLD +""+ ChatColor.UNDERLINE + "Sleeping Lion", 612500, 625600, 639800, 655300, 672300),
+	TRANQUILISED(ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD +""+ ChatColor.UNDERLINE + "Tranquilised", 691000, 711600, 734300, 759300, 786800),
+	NIGHTMARE(ChatColor.RED +""+ ChatColor.BOLD +""+ ChatColor.UNDERLINE + "Nightmare", 817000, 850100, 886300, 925800, 968800),
+	
 	ZZZZZZ(ChatColor.WHITE +""+ ChatColor.BOLD +"✸ Zzzzzz", -1, -1, -1, -1, -1);
 	
 	
