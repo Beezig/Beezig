@@ -71,6 +71,8 @@ import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
 import tk.roccodev.zta.utils.TIMVDay;
 import tk.roccodev.zta.utils.TIMVTest;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
+import tk.roccodev.zta.utils.rpc.NativeUtils;
 
 
 @Plugin(name="Beezig", version="4.4.0")
@@ -280,6 +282,32 @@ public class ZTAMain {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		if (Setting.DISCORD_RPC.getValue()) {
+			try {
+				String OS1 = System.getProperty("os.name").toLowerCase();
+				if (OS1.contains("mac")) {
+					NativeUtils.loadLibraryFromJar("/libraries/darwin/libdiscord-rpc.dylib");
+				} else if (OS1.contains("nix") || OS1.contains("nux") || OS1.indexOf("aix") > 0) {
+					NativeUtils.loadLibraryFromJar("/libraries/linux-x86-64/libdiscord-rpc.so");
+				} else if (OS1.contains("win")) {
+					if (System.getProperty("os.arch").equals("x86")) {
+						NativeUtils.loadLibraryFromJar("/libraries/win32-x86/discord-rpc.dll");
+					} else {
+						NativeUtils.loadLibraryFromJar("/libraries/win32-x86-64/discord-rpc.dll");
+					}
+
+				} else {
+					NativeUtils.loadLibraryFromJar("/libraries/linux-x86-64/libdiscord-rpc.so");
+				}
+
+				DiscordUtils.init();
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		//Instantiate GNT Classes
@@ -492,6 +520,7 @@ public class ZTAMain {
 	@EventHandler(priority=Priority.HIGHEST)
 	public void onDisconnect(ServerQuitEvent evt){
 		NotesManager.notes.clear();
+		DiscordUtils.updatePresence(null);
 		if(ActiveGame.current() == null || ActiveGame.current().isEmpty()) return;
 		new Thread(new Runnable(){
 			@Override

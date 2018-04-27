@@ -14,6 +14,7 @@ import tk.roccodev.zta.listener.HIDEListener;
 import tk.roccodev.zta.listener.HiveListener;
 import tk.roccodev.zta.listener.TIMVListener;
 import tk.roccodev.zta.notes.NotesManager;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 public class IHive extends ServerInstance {
 
@@ -29,7 +30,12 @@ public class IHive extends ServerInstance {
 
 	@Override
 	public boolean handleServer(String host, int port) {
-		return host.toUpperCase().contains("HIVEMC.") || host.toUpperCase().endsWith("HIVE.SEXY");
+		if(host.toUpperCase().contains("HIVEMC.") || host.toUpperCase().endsWith("HIVE.SEXY")) {
+			System.out.println("Joined Hive.");
+			DiscordUtils.updatePresence("Relaxing in the Hub");
+		return true;	
+		}
+		return false;
 	}
 
 	@Override
@@ -45,7 +51,7 @@ public class IHive extends ServerInstance {
 	}
 
 	public static void genericReset(String... optionalParams){
-		
+		DiscordUtils.updatePresence("Relaxing in the Hub");
 	}
 	
 	public static void genericJoin(String... optionalParams){

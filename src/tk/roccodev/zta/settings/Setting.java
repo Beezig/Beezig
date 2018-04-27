@@ -13,6 +13,7 @@ public enum Setting {
 	SHOW_RECORDS_MONTHLYRANK(true, "Advanced Records - Show players' rank on the Monthly Leaderboards by Maxthat"),
 	SHOW_RECORDS_ACHIEVEMENTS(true, "Advanced Records - Show achievements"),
 	SHOW_RECORDS_RANK(true, "BED Advanced Records - Show point based rank"),
+	DISCORD_RPC(true, "Use Discord Rich Presence"),
 	AUTOVOTE(true, "Turn the autovote feature on or off"),
 	
 	TIMV_SHOW_KRR(true, "TIMV Advanced Records - Show Karma/rolepoints"),
