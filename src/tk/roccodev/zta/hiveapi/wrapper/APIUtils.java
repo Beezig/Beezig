@@ -290,10 +290,10 @@ public class APIUtils {
 			String url = "";
 			switch(mode){
 			case 0:
-				url =  "http://www.speedrun.com/api/v1/leaderboards/369ep8dl/level/@id@/824xzvmd?top=1";
+				url =  "https://www.speedrun.com/api/v1/leaderboards/369ep8dl/level/@id@/824xzvmd?top=1";
 				break;
 			case 1:
-				url = "http://www.speedrun.com/api/v1/users/@id@";
+				url = "https://www.speedrun.com/api/v1/users/@id@";
 			}
 			try {
 				return new URL(url.replaceAll("@id@", param));
@@ -331,7 +331,9 @@ public class APIUtils {
 		    try {
 				URLConnection conn = url.openConnection();
 		       	conn.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36(KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36");
-		        reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		        conn.setRequestProperty("Accept", "application/json");
+		        
+		       	reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		        StringBuffer buffer = new StringBuffer();
 		        int read;
 		        char[] chars = new char[1024];
