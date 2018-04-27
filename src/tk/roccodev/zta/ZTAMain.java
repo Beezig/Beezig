@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.bstats.MetricsLite;
 
+import club.minnced.discord.rpc.DiscordRPC;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.ActionBarEvent;
 import eu.the5zig.mod.event.ChatEvent;
@@ -302,8 +303,7 @@ public class ZTAMain {
 					NativeUtils.loadLibraryFromJar("/libraries/linux-x86-64/libdiscord-rpc.so");
 				}
 
-				DiscordUtils.init();
-				
+			
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -520,7 +520,11 @@ public class ZTAMain {
 	@EventHandler(priority=Priority.HIGHEST)
 	public void onDisconnect(ServerQuitEvent evt){
 		NotesManager.notes.clear();
-		DiscordUtils.updatePresence(null);
+		System.out.println("Disconnecting...");
+		if(DiscordUtils.callbacksThread != null)
+			DiscordUtils.callbacksThread.interrupt();
+			DiscordRPC.INSTANCE.Discord_Shutdown();
+
 		if(ActiveGame.current() == null || ActiveGame.current().isEmpty()) return;
 		new Thread(new Runnable(){
 			@Override

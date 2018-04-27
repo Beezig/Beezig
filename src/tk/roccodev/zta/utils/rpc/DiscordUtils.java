@@ -9,6 +9,9 @@ import club.minnced.discord.rpc.DiscordUser;
 
 public class DiscordUtils {
 
+	public static Thread callbacksThread;
+	public static boolean init;
+	
 	public static void init() {
 		DiscordRPC lib = DiscordRPC.INSTANCE;
 		String applicationId = "439523115383652372";
@@ -20,13 +23,15 @@ public class DiscordUtils {
 
 			@Override
 			public void accept(DiscordUser user) {
+				
 				System.out.println("Connected to Discord!");
 				
 			}
 		};
 		lib.Discord_Initialize(applicationId, handlers, true, "");
 
-        new Thread(new Runnable() {
+
+		callbacksThread = new Thread(new Runnable() {
         	@Override
         	public void run() {
         		 while (!Thread.currentThread().isInterrupted()) {
@@ -36,7 +41,8 @@ public class DiscordUtils {
                      } catch (InterruptedException ignored) {}
         		 }
         	}
-        }, "RPC Callbacks").start(); 
+        }, "RPC Callbacks");
+        callbacksThread.start();
 	}
 	
 	/**
