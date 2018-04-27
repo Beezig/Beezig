@@ -21,7 +21,9 @@ public enum CAIMap {
 	CAI_Antarctica("Antarctica"),
 	CAI_Subterranean("Subterranean"),
 	CAI_OakheartManor("Oakheart Manor"),
-	CAI_Roar("Roar");
+	CAI_Roar("Roar"),
+	CAI_FairiesDream("Fairies Dream"),
+	CAI_ChristmasSquare("Christmas Square");
 
 	private String displayName;
 

@@ -39,8 +39,8 @@ public class RealRankCommand implements Command{
 				//§r§eJollyajaX§r
 				//§r§aItsNiklass§r
 				//§r§diElena§r
-				if(NetworkRank.fromDisplay(networkRank).getLevel() >= 50){
-					//comply
+				if(NetworkRank.fromDisplay(networkRank).getLevel() >= 50 && NetworkRank.fromDisplay(networkRank).getLevel() < 80){
+					//Only checks for VIPs & Moderators
 					//TODO check if tampered displayName - e.g. TIMV
 					rankColor = null;
 					for(NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
@@ -50,6 +50,9 @@ public class RealRankCommand implements Command{
 						}
 					}
 					if(rankColor == null) /*???*/  The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.YELLOW + ign + "'s Rank: " + NetworkRank.REGULAR.getColor() + NetworkRank.REGULAR.getDisplay());
+
+					//Never works outside the Hub - the reason being Hive's game plugins & .getDisplayName()
+
 				} else /*default*/ The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.YELLOW + ign + "'s Rank: " + rankColor + networkRank);
 			}
 		}).start();

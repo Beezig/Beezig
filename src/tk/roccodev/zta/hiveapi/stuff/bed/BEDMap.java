@@ -17,6 +17,7 @@ public enum BEDMap {
 	BED_TREASURE_ISLAND("Treasure Island", true),
 	BED_CITYSCAPE("Cityscape", true),
 	BED_HAUNTED("Haunted", true),
+	BED_PRESENT_FACTORY("Present Factory", true),
 	BED_STEAMPUNK("Steampunk"),
 	BED_RUINS("Ruins", true, true),	//Teams only
 	BED_PIRATES("Pirates", true, true),	//Teams only
