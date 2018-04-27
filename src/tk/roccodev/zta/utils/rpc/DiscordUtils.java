@@ -36,7 +36,7 @@ public class DiscordUtils {
                      } catch (InterruptedException ignored) {}
         		 }
         	}
-        }, "RPC Callbacks").start();
+        }, "RPC Callbacks").start(); 
 	}
 	
 	/**
