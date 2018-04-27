@@ -479,10 +479,13 @@ public class ZTAMain {
 			}
 		}
 		if(evt.getMessage().endsWith(" test") && (evt.getMessage().split(" ").length == 2) && ActiveGame.is("TIMV") && Setting.TIMV_USE_TESTREQUESTS.getValue()){
-			evt.setCancelled(true);
+			
 			int random = ThreadLocalRandom.current().ints(0, TIMV.testRequests.size()).distinct().filter(i -> i != TIMV.lastTestMsg).findFirst().getAsInt();
 			TIMV.lastTestMsg = random;
-			The5zigAPI.getAPI().sendPlayerMessage(TIMV.testRequests.get(random).replaceAll("\\{p\\}", evt.getMessage().replaceAll(" test", "").trim()));
+			String player = evt.getMessage().replaceAll(" test", "").trim();
+			if(player.equalsIgnoreCase("i'll") || player.equalsIgnoreCase("ill")) return;
+			evt.setCancelled(true);
+			The5zigAPI.getAPI().sendPlayerMessage(TIMV.testRequests.get(random).replaceAll("\\{p\\}", player));
 		}
 	}
 	 

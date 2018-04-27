@@ -167,6 +167,7 @@ public class TIMV extends GameMode{
 			writer.write("i-points");
 			writer.write("d-points");
 			writer.write("t-points");
+			writer.write("gameId");
 			writer.endRecord();
 		}
 		
@@ -177,6 +178,7 @@ public class TIMV extends GameMode{
 		writer.write(iPoints + "");
 		writer.write(dPoints + "");
 		writer.write(tPoints + "");
+		writer.write(gameID);
 		writer.endRecord();
 			writer.close();
 		
