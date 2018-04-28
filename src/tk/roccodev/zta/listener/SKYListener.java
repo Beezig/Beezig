@@ -93,9 +93,9 @@ public class SKYListener extends AbstractGameListener<SKY> {
 			while (matcher.find()) {
 				map = matcher.group(1);
 			}
-			
+
 			SKY.map = map;
-			
+
 		}
 
 		// Autovoting
@@ -120,7 +120,8 @@ public class SKYListener extends AbstractGameListener<SKY> {
 					for (String s : votesCopy) {
 
 						String[] data = s.split("\\.");
-						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l", "")
+						String index = ChatColor.stripColor(data[0])
+								.replaceAll("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l", "")
 								.replaceAll("▍ SkyWars ▏", "").trim();
 						String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
 						String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
@@ -152,7 +153,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 								return;
 							} else {
 								The5zigAPI.getLogger().info("Done, couldn't find matches");
-								
+
 								SKY.votesToParse.clear();
 								SKY.hasVoted = true;
 								// he hasn't but we don't want to check again and again
@@ -162,10 +163,11 @@ public class SKYListener extends AbstractGameListener<SKY> {
 					}
 				}
 			}).start();
-		} else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l") && !SKY.hasVoted && Setting.AUTOVOTE.getValue()) {
+		} else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l") && !SKY.hasVoted
+				&& Setting.AUTOVOTE.getValue()) {
 			SKY.votesToParse.add(message);
-		} 
-		
+		}
+
 		// Advanced Records
 
 		else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
@@ -228,8 +230,6 @@ public class SKYListener extends AbstractGameListener<SKY> {
 							int victories = 0;
 
 							long timeAlive = 0;
-
-							long catches = 0, captured = 0, caught = 0, captures = 0;
 
 							Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
 							Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements()
@@ -295,18 +295,12 @@ public class SKYListener extends AbstractGameListener<SKY> {
 								} else if (s.startsWith("§3 Games Played: §b")) {
 									gamesPlayed = Integer.parseInt(
 											ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
-								} else if (s.startsWith("§3 Total Kills: §b")) {
-									kills = Integer.parseInt(
-											ChatColor.stripColor(s.replaceAll("§3 Total Kills: §b", "").trim()));
-								} else if (s.startsWith("§3 Total Deaths: §b")) {
-									deaths = Integer.parseInt(
-											ChatColor.stripColor(s.replaceAll("§3 Total Deaths: §b", "").trim()));
-								}
-
-								else if (s.startsWith("§3 Time Alive: §b")) {
-									timeAlive = Long.parseLong(
-											ChatColor.stripColor(s.replaceAll("§3 Time Alive: §b", "").trim()));
-									s = s.replaceAll(Long.toString(timeAlive), APIUtils.getTimePassed(timeAlive));
+								} else if (s.startsWith("§3 Kills: §b")) {
+									kills = Integer
+											.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
+								} else if (s.startsWith("§3 Deaths: §b")) {
+									deaths = Integer
+											.parseInt(ChatColor.stripColor(s.replaceAll("§3 Deaths: §b", "").trim()));
 								}
 
 								The5zigAPI.getAPI().messagePlayer("§o " + s);
@@ -316,17 +310,13 @@ public class SKYListener extends AbstractGameListener<SKY> {
 							if (achievements != null) {
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
 							}
-							
 
-							/*
-							 * if(Setting.SKY_SHOW_WINRATE.getValue()){ double wr = Math.floor(((double)
-							 * victories / (double) gamesPlayed) * 1000d) / 10d;
-							 * The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr)
-							 * + "%"); }
-							 * 
-							 * if(monthlyRank != 0){ The5zigAPI.getAPI().messagePlayer("§o " +
-							 * "§3 Monthly Leaderboards: §b#" + monthlyRank); }
-							 */
+							if (Setting.SKY_SHOW_WINRATE.getValue()) {
+								double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
+							}
+
+						
 
 							if (lastGame != null) {
 								Calendar lastSeen = Calendar.getInstance();
