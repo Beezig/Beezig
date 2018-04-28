@@ -167,9 +167,17 @@ public class SKYListener extends AbstractGameListener<SKY> {
 				&& Setting.AUTOVOTE.getValue()) {
 			SKY.votesToParse.add(message);
 		}
+		else if(message.contains("§e, noble fighter for the ")) {
+			String team = message.split("§7")[1].split("§e")[0];
+			SKY.team = team;
+		}
 
 		// Advanced Records
 
+		else if(message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f15§7 tokens!")) {
+			SKY.kills++;
+		}
+		
 		else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
 			SKY.messagesToSend.add(message);
 			The5zigAPI.getLogger().info("found header");

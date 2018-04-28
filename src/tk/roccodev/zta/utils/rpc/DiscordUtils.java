@@ -84,7 +84,7 @@ public class DiscordUtils {
 	 * Updates the RPC presence.
 	 * 
 	 * @param Presence details
-	 * @param 0: State (Lobby, game etc.); 1: Max party size (e.g. Teams of 4); 2: Party name (e.g., Aqua Team)
+	 * @param 0: State (Lobby, game etc.); 1: Image; 2: Max party size (e.g. Teams of 4); 3: Party name (e.g., Aqua Team)
 	 */
 	public static void updatePresence(String newPresence, String... opts) {
 		if(!Setting.DISCORD_RPC.getValue()) return;
@@ -94,9 +94,11 @@ public class DiscordUtils {
 				DiscordRichPresence presence = new DiscordRichPresence();
 		        presence.startTimestamp = System.currentTimeMillis() / 1000; // epoch second
 		        presence.details = newPresence;
+		        presence.largeImageKey = "background";
 		        if(opts.length >= 1) presence.state = opts[0];
-		        if(opts.length >= 2) presence.partyMax = Integer.parseInt(opts[1]);
-		        if(opts.length >= 3) presence.partyId = opts[2];
+		        if(opts.length >= 2) presence.smallImageKey = opts[1];
+		        if(opts.length >= 3) presence.partyMax = Integer.parseInt(opts[2]);
+		        if(opts.length >= 4) presence.partyId = opts[3];
 		        DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
 			}
 		}).start();

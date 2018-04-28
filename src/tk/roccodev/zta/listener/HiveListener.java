@@ -66,33 +66,33 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 				getGameListener().switchLobby("TIMV");
 				
 				The5zigAPI.getLogger().info("Connected to TIMV! -Hive");
-				DiscordUtils.updatePresence("Investigating in Trouble in Mineville");
+				DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "In Lobby", "game_timv");
 			}
 		 
 		if(key.equals("timv.welcome")){
 			getGameListener().switchLobby("TIMV");
 			
 			The5zigAPI.getLogger().info("Connected to TIMV! -Hive");
-			DiscordUtils.updatePresence("Investigating in Trouble in Mineville");
+			DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "In Lobby", "game_timv");
 		}
 		
 		else if(key.equals("dr.welcome")){
 			getGameListener().switchLobby("DR");
 			
 			The5zigAPI.getLogger().info("Connected to DR! -Hive");
-			DiscordUtils.updatePresence("Running in DeathRun");
+			DiscordUtils.updatePresence("Running in DeathRun", "In Lobby", "game_dr");
 		}
 		else if(key.equals("bed.welcome") || (key.equals("bed.spectator") && gameMode == null)){
 			getGameListener().switchLobby("BED");
 			
 			The5zigAPI.getLogger().info("Connected to BED/BEDT! -Hive");
-			DiscordUtils.updatePresence("Housekeeping in BedWars");
+			DiscordUtils.updatePresence("Housekeeping in BedWars", "In Lobby", "game_bedwars");
 		}
 		else if(key.equals("gntm.welcome")){
 			
 			
 			The5zigAPI.getLogger().info("Connected to GNTM! -Hive");
-			DiscordUtils.updatePresence("Slaying Giants in SkyGiants:Mini");
+			DiscordUtils.updatePresence("Slaying Giants in SkyGiants:Mini", "In Lobby", "game_giant");
 			
 			
 			GiantListener.listener.setGameMode(GNTM.class, GNTM.instance);
@@ -103,7 +103,7 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			
 			
 			The5zigAPI.getLogger().info("Connected to GNT! -Hive");
-			DiscordUtils.updatePresence("Slaying Giants in SkyGiants");
+			DiscordUtils.updatePresence("Slaying Giants in SkyGiants", "In Lobby", "game_giant");
 			The5zigAPI.getLogger().info(GNT.instance.getClass());
 			
 			GiantListener.listener.setGameMode(GNT.class, GNT.instance);
@@ -113,17 +113,17 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 		else if(key.equals("hide.welcome")){		
 			getGameListener().switchLobby("HIDE");			
 			The5zigAPI.getLogger().info("Connected to HIDE! -Hive");
-			DiscordUtils.updatePresence("Seeking in Hide&Seek");
+			DiscordUtils.updatePresence("Seeking in Hide&Seek", "In Lobby", "game_hide");
 		}
 		else if(key.equals("cai.welcome")){		
 			getGameListener().switchLobby("CAI");			
 			The5zigAPI.getLogger().info("Connected to CAI! -Hive");
-			DiscordUtils.updatePresence("Battling in Cowboys and Indians");
+			DiscordUtils.updatePresence("Battling in Cowboys and Indians", "In Lobby", "game_cai");
 		}
 		else if(key.equals("sky.welcome")) {
 			getGameListener().switchLobby("SKY");
 			The5zigAPI.getLogger().info("Connected to SKY! - Hive");
-			DiscordUtils.updatePresence("Crossing the skies in SkyWars");
+			DiscordUtils.updatePresence("Crossing the skies in SkyWars", "In Lobby", "game_skywars");
 			
 		}
 		

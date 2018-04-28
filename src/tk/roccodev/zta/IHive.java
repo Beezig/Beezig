@@ -34,7 +34,7 @@ public class IHive extends ServerInstance {
 		if(host.toUpperCase().contains("HIVEMC.") || host.toUpperCase().endsWith("HIVE.SEXY")) {
 			System.out.println("Joined Hive.");
 			DiscordUtils.init();
-			DiscordUtils.updatePresence("Relaxing in the Hub");
+			DiscordUtils.updatePresence("Relaxing in the Hub", "In Lobby", "lobby");
 		return true;	
 		}
 		return false;
@@ -54,7 +54,7 @@ public class IHive extends ServerInstance {
 	}
 
 	public static void genericReset(String... optionalParams){
-		DiscordUtils.updatePresence("Relaxing in the Hub");
+		DiscordUtils.updatePresence("Relaxing in the Hub", "In Lobby", "lobby");
 	}
 	
 	public static void genericJoin(String... optionalParams){

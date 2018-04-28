@@ -26,6 +26,7 @@ public class SKY extends GameMode {
 	
 	public static long gamePoints;
 	
+	public static int kills;
 	
 	public static String rank;
 	public static String team;
@@ -44,6 +45,7 @@ public class SKY extends GameMode {
 		SKY.hasVoted = false;
 		gamePoints = 0;
 		team = "";
+		kills = 0;
 		ActiveGame.reset("sky");
 		IHive.genericReset();
 		if(The5zigAPI.getAPI().getActiveServer() != null)
