@@ -26,7 +26,7 @@
   		<include name="lang/*"/>
   	
 </fileset>
-        <zipfileset dir="/src/libraries" prefix="/libraries/"/>
+        <zipfileset dir="src/libraries" prefix="/libraries/"/>
         	
 
           
