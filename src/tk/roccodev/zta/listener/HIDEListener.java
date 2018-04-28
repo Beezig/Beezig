@@ -86,7 +86,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 		    while (matcher.find()) {
 		        map = matcher.group(1);
 		    }
-			HIDE.activeMap = HIDEMap.getFromDisplay(map);
+			HIDE.activeMap = map;
 		}
 
 		//Autovoting

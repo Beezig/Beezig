@@ -12,7 +12,7 @@ import java.util.List;
 
 public class HIDE extends GameMode {
 	
-	public static HIDEMap activeMap;
+	public static String activeMap;
 	
 	public static List<String> messagesToSend = new ArrayList<String>();
 	public static List<String> footerToSend = new ArrayList<String>();

@@ -16,8 +16,7 @@ public class MapItem extends GameModeItem<HIDE>{
 		@Override
 		protected Object getValue(boolean dummy) {
 			try{
-				if(HIDE.activeMap == null) return "No Map";
-				return HIDE.activeMap.getDisplayName().trim();
+				return HIDE.activeMap;
 			}catch(Exception e){
 				e.printStackTrace();
 				return "No Map";
