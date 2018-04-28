@@ -190,7 +190,7 @@ public class DRListener extends AbstractGameListener<DR> {
 								The5zigAPI.getAPI()
 										.messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
 								return;
-							} else {
+							} else if(Setting.AUTOVOTE_RANDOM.getValue()){
 								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting Random");
 								The5zigAPI.getAPI().sendPlayerMessage("/v 6");
 								The5zigAPI.getAPI().messagePlayer(Log.info + "§eAutomatically voted for §cRandom map");

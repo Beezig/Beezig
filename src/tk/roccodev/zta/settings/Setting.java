@@ -15,6 +15,7 @@ public enum Setting {
 	SHOW_RECORDS_RANK(true, "BED Advanced Records - Show point based rank"),
 	DISCORD_RPC(true, "Use Discord Rich Presence"),
 	AUTOVOTE(true, "Turn the autovote feature on or off"),
+	AUTOVOTE_RANDOM(true, "Autovote for random map if no favorites are found"),
 	
 	TIMV_SHOW_KRR(true, "TIMV Advanced Records - Show Karma/rolepoints"),
 	TIMV_SHOW_MOSTPOINTS(true, "TIMV Advanced Records - Show Karma record"),

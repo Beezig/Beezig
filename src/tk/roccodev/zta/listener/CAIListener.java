@@ -23,6 +23,7 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.CAI;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIMap;
@@ -83,9 +84,9 @@ public class CAIListener extends AbstractGameListener<CAI> {
 			The5zigAPI.getLogger().info("CAI Color Debug: (" + message + ")");
 		}
 
-		if (message.startsWith("§8▍ §6CaI§8 ▏ §3Voting has ended! §bThe map §f")) {
+		if (message.startsWith("§8▍ §bCAI§8 ▏ §3Voting has ended! §bThe map §f")) {
 			The5zigAPI.getLogger().info("Voting ended, parsing map");
-			String afterMsg = message.split("§8▍ §6CaI§8 ▏ §3Voting has ended! §bThe map ")[1];
+			String afterMsg = message.split("§8▍ §bCAI§8 ▏ §3Voting has ended! §bThe map ")[1];
 			String map = "";
 			Pattern pattern = Pattern.compile(Pattern.quote("§f") + "(.*?)" + Pattern.quote("§b"));
 			Matcher matcher = pattern.matcher(afterMsg);
@@ -97,12 +98,12 @@ public class CAIListener extends AbstractGameListener<CAI> {
 
 		// Autovoting
 
-		else if (message.startsWith("§8▍ §6CaI§8 ▏ §a§lVote received. §3Your map now has ")
+		else if (message.startsWith("§8▍ §bCAI§8 ▏ §a§lVote received. §3Your map now has")
 				&& Setting.AUTOVOTE.getValue()) {
 			CAI.hasVoted = true;
-		} else if (message.startsWith("§8▍ §6CaI§8 ▏ §6§e§e§l6. §f§6") && !CAI.hasVoted
+		} else if (message.startsWith("§8▍ §bCAI§8 ▏ §6§e§e§l6. §f§cRandom map") && !CAI.hasVoted
 				&& Setting.AUTOVOTE.getValue()) {
-			CAI.votesToParse.add(message);
+			
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -117,8 +118,8 @@ public class CAIListener extends AbstractGameListener<CAI> {
 					for (String s : votesCopy) {
 
 						String[] data = s.split("\\.");
-						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §6CaI§8 ▏ §6§e§e§l", "")
-								.replaceAll("▍ CaI ▏", "").trim();
+						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §bCAI§8 ▏ §6§e§e§l", "")
+								.replaceAll("▍ CAI ▏", "").trim();
 						String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
 						String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
 
@@ -147,9 +148,11 @@ public class CAIListener extends AbstractGameListener<CAI> {
 								The5zigAPI.getAPI().messagePlayer(
 										"§8▍ §6CaI§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
 								return;
-							} else {
-								The5zigAPI.getLogger().info("Done, couldn't find matches");
-
+							} else if(Setting.AUTOVOTE_RANDOM.getValue()) {
+								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting random");
+								The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+								The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for §cRandom map");
+							
 								CAI.votesToParse.clear();
 								CAI.hasVoted = true;
 								// he hasn't but we don't want to check again and again
@@ -159,7 +162,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
 					}
 				}
 			}).start();
-		} else if (message.startsWith("§8▍ §6CaI§8 ▏ §6§e§e§l") && !CAI.hasVoted && Setting.AUTOVOTE.getValue()) {
+		} else if (message.startsWith("§8▍ §bCAI§8 ▏ §6§e§e§l") && !CAI.hasVoted && Setting.AUTOVOTE.getValue()) {
 			CAI.votesToParse.add(message);
 		} 
 		else if(message.startsWith("§8▍ §6CaI§8 ▏ §aYou are part of the")) {

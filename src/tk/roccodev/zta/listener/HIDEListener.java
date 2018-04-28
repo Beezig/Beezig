@@ -140,7 +140,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 								The5zigAPI.getAPI().messagePlayer("§8▍ §bHide§aAnd§eSeek§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
 								return;
 							}
-							else{
+							else if(Setting.AUTOVOTE_RANDOM.getValue()){
 								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting Random");
 								The5zigAPI.getAPI().sendPlayerMessage("/v 6");
 								The5zigAPI.getAPI().messagePlayer("§8▍ §bHide§aAnd§eSeek§8 ▏ " + "§eAutomatically voted for §cRandom map");
