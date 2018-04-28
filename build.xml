@@ -23,7 +23,10 @@
   		<include name="plugin.json"/>
   		<include name="modules.json"/>
   		<include name="core/messages/*"/>
-		<include name="libraries/*"/>
+		<include name="libraries/darwin/*"/>
+  	 	<include name="libraries/linux-x86-64/*"/>
+  	 	<include name="libraries/win32-x86/*"/>
+  	 	<include name="libraries/win32-x86-64/*"/>
   		<include name="lang/*"/>
   	
 </fileset>
