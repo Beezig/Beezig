@@ -521,9 +521,11 @@ public class ZTAMain {
 	public void onDisconnect(ServerQuitEvent evt){
 		NotesManager.notes.clear();
 		System.out.println("Disconnecting...");
+		DiscordRPC.INSTANCE.Discord_ClearPresence();
 		if(DiscordUtils.callbacksThread != null)
 			DiscordUtils.callbacksThread.interrupt();
-			DiscordRPC.INSTANCE.Discord_Shutdown();
+		DiscordRPC.INSTANCE.Discord_Shutdown();
+		
 
 		if(ActiveGame.current() == null || ActiveGame.current().isEmpty()) return;
 		new Thread(new Runnable(){

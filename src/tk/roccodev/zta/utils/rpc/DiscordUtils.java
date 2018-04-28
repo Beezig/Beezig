@@ -17,14 +17,23 @@ public class DiscordUtils {
 		String applicationId = "439523115383652372";
 
 		DiscordEventHandlers handlers = new DiscordEventHandlers();
+		handlers.disconnected = new DiscordEventHandlers.OnStatus() {
+			
+			@Override
+			public void accept(int errorCode, String message) {
+				System.out.println("RPC: " + message);
+				
+			}
+		};
 		handlers.ready = new OnReady() {
 
+			
 		
 
 			@Override
 			public void accept(DiscordUser user) {
 				
-				System.out.println("Connected to Discord!");
+				System.out.println("Connected to Discord as " + user.username + "#" + user.discriminator + "!");
 				
 			}
 		};
@@ -38,7 +47,9 @@ public class DiscordUtils {
                      lib.Discord_RunCallbacks();
                      try {
                          Thread.sleep(2000);
-                     } catch (InterruptedException ignored) {}
+                     } catch (InterruptedException ignored) {
+                    
+                     }
         		 }
         	}
         }, "RPC Callbacks");
