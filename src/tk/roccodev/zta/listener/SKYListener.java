@@ -181,6 +181,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
 		else if(message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f15§7 tokens!")) {
 			SKY.kills++;
+			SKY.totalKills++;
 		}
 		
 		else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
