@@ -12,6 +12,7 @@ import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
 import club.minnced.discord.rpc.DiscordUser;
 import tk.roccodev.zta.Log;
+import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.settings.Setting;
 
 public class DiscordUtils {
@@ -47,6 +48,7 @@ public class DiscordUtils {
 						try {
 							URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/check/" + user.userId);
 							HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+							conn.addRequestProperty("User-Agent", "Beezig v" + ZTAMain.BEEZIG_VERSION + " on " + System.getProperty("os.name"));
 							if(conn.getResponseCode() == 404) {
 								The5zigAPI.getAPI().messagePlayer(Log.info + "You are using Discord, but you're not in our server! Make sure to join.\nInvite: §ehttp://discord.gg/se7zJsU");
 							}

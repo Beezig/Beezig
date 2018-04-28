@@ -2,6 +2,8 @@ package tk.roccodev.zta.hiveapi.wrapper;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.ZTAMain;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -330,7 +332,7 @@ public class APIUtils {
 			BufferedReader reader = null;
 		    try {
 				URLConnection conn = url.openConnection();
-		       	conn.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36(KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36");
+		       	conn.addRequestProperty("User-Agent", "Beezig v" + ZTAMain.BEEZIG_VERSION + " (5zig v" + The5zigAPI.getAPI().getMinecraftVersion() + " on " + The5zigAPI.getAPI().getMinecraftVersion() + ")");
 		        conn.setRequestProperty("Accept", "application/json");
 		        
 		       	reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));

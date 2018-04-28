@@ -78,9 +78,10 @@ import tk.roccodev.zta.utils.rpc.DiscordUtils;
 import tk.roccodev.zta.utils.rpc.NativeUtils;
 
 
-@Plugin(name="Beezig", version="4.5.0")
+@Plugin(name="Beezig", version=ZTAMain.BEEZIG_VERSION)
 public class ZTAMain {
 	
+	public static final String BEEZIG_VERSION = "4.5.0";
 	
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
 	
