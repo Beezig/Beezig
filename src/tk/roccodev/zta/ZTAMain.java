@@ -296,18 +296,18 @@ public class ZTAMain {
 			try {
 				String OS1 = System.getProperty("os.name").toLowerCase();
 				if (OS1.contains("mac")) {
-					NativeUtils.loadLibraryFromJar("/darwin/libdiscord-rpc.dylib");
+					NativeUtils.loadLibraryFromJar("/libraries/darwin/libdiscord-rpc.dylib");
 				} else if (OS1.contains("nix") || OS1.contains("nux") || OS1.indexOf("aix") > 0) {
-					NativeUtils.loadLibraryFromJar("/linux-x86-64/libdiscord-rpc.so");
+					NativeUtils.loadLibraryFromJar("/libraries/linux-x86-64/libdiscord-rpc.so");
 				} else if (OS1.contains("win")) {
 					if (System.getProperty("os.arch").equals("x86")) {
-						NativeUtils.loadLibraryFromJar("/win32-x86/discord-rpc.dll");
+						NativeUtils.loadLibraryFromJar("/libraries/win32-x86/discord-rpc.dll");
 					} else {
-						NativeUtils.loadLibraryFromJar("/win32-x86-64/discord-rpc.dll");
+						NativeUtils.loadLibraryFromJar("/libraries/win32-x86-64/discord-rpc.dll");
 					}
 
 				} else {
-					NativeUtils.loadLibraryFromJar("/linux-x86-64/libdiscord-rpc.so");
+					NativeUtils.loadLibraryFromJar("/libraries/linux-x86-64/libdiscord-rpc.so");
 				}
 
 			

@@ -26,10 +26,10 @@
   		<include name="lang/*"/>
   	
 </fileset>
-        	 <fileset dir="${src.dir}/libraries" casesensitive="yes">
+        	 <zipfileset dir="${src.dir}/libraries" prefix="libraries" casesensitive="yes">
         	 	<include name="**/*"/>
         	 	
-        	 	</fileset>
+        	 	</zipfileset>
 
           
         </jar>
