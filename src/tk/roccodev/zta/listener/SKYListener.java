@@ -315,6 +315,10 @@ public class SKYListener extends AbstractGameListener<SKY> {
 								double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
 							}
+							if(Setting.SKY_SHOW_KD.getValue()) {
+								double kd = (double) ((double)kills/(double)deaths);
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + df.format(kd));
+							}
 
 						
 

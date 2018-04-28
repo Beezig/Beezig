@@ -55,7 +55,8 @@ public enum Setting {
 	CAI_SHOW_CATCHES_CAUGHT(true, "CAI Advanced Records - Show Catches/Caught Ratio"), 
 	
 	SKY_SHOW_POINTS_TO_NEXT_RANK(true, "SKY Advanced Records - Show points to next rank"), 
-	SKY_SHOW_WINRATE(true, "SKY Advanced Records - Show Winrate");
+	SKY_SHOW_WINRATE(true, "SKY Advanced Records - Show Winrate"), 
+	SKY_SHOW_KD(true, "SKY Advanced Records - Show Kills/Deaths");
 	
 
 	
