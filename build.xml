@@ -19,14 +19,11 @@
  <target name="jar">
         <mkdir dir="build/jar"/>
         <jar destfile="build/jar/Beezig.jar" basedir="build/classes">
+       <zipfileset dir="${src.dir}" includes="*" prefix="libraries"/>
   	 <fileset dir="${src.dir}" casesensitive="yes">
   		<include name="plugin.json"/>
   		<include name="modules.json"/>
   		<include name="core/messages/*"/>
-		<include name="libraries/darwin/*.dylib"/>
-  	 	<include name="libraries/linux-x86-64/*.so"/>
-  	 	<include name="libraries/win32-x86/*.dll"/>
-  	 	<include name="libraries/win32-x86-64/*.dll"/>
   		<include name="lang/*"/>
   	
 </fileset>
