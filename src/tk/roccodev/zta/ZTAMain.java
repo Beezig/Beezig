@@ -52,6 +52,7 @@ import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.command.ShrugCommand;
 import tk.roccodev.zta.command.TokensCommand;
 import tk.roccodev.zta.command.WRCommand;
+import tk.roccodev.zta.command.ZigCheckCommand;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.CAI;
 import tk.roccodev.zta.games.DR;
@@ -203,6 +204,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new PlayerStatsCommand());
 		CommandManager.registerCommand(new CustomTestCommand());
 		CommandManager.registerCommand(new SetDisplayNameCommand());
+		CommandManager.registerCommand(new ZigCheckCommand());
 		
 		//if(The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d") ||
 		//		The5zigAPI.getAPI().getGameProfile().getId().toString().equals("bba224a2-0bff-4913-b042-27ca3b60973f")){

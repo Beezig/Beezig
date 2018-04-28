@@ -54,6 +54,10 @@ public class APIGameMode {
 		return object.get(field);
 	}
 	
+	public String getUUID() {
+		return uuid;
+	}
+	
 	public JSONObject jsonObject(){
 		return APIUtils.getObject(APIUtils.Parser.read(APIUtils.Parser.game(uuid, getShortcode())));
 	}
