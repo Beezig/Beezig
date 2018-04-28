@@ -1,11 +1,18 @@
 package tk.roccodev.zta.utils.rpc;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordEventHandlers.OnReady;
-import tk.roccodev.zta.settings.Setting;
+import eu.the5zig.mod.The5zigAPI;
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
 import club.minnced.discord.rpc.DiscordUser;
+import tk.roccodev.zta.Log;
+import tk.roccodev.zta.settings.Setting;
 
 public class DiscordUtils {
 
@@ -33,7 +40,23 @@ public class DiscordUtils {
 			@Override
 			public void accept(DiscordUser user) {
 				
-				System.out.println("Connected to Discord as " + user.username + "#" + user.discriminator + "!");
+				System.out.println("Connected to Discord as " + user.username + "#" + user.discriminator + "! (" + user.userId + ")");
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/check/" + user.userId);
+							HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+							if(conn.getResponseCode() == 404) {
+								The5zigAPI.getAPI().messagePlayer(Log.info + "You are using Discord, but you're not in our server! Make sure to join.\nInvite: §ehttp://discord.gg/se7zJsU");
+							}
+						
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}, "Server Ping").start();
 				
 			}
 		};
