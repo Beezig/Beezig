@@ -25,6 +25,7 @@ public class SKY extends GameMode {
 
 	
 	public static long gamePoints;
+	public static int totalKills;
 	
 	public static int kills;
 	

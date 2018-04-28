@@ -168,6 +168,12 @@
       "items": [
         {
           "type": "skypoints"
+        },
+         {
+          "type": "skyteam"
+        },
+         {
+          "type": "skykills"
         }
       ]
     }

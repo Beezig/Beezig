@@ -31,6 +31,7 @@ import tk.roccodev.zta.hiveapi.stuff.sky.SKYRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiSKY;
 import tk.roccodev.zta.settings.Setting;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 public class SKYListener extends AbstractGameListener<SKY> {
 
@@ -65,8 +66,11 @@ public class SKYListener extends AbstractGameListener<SKY> {
 						APIValues.SKYpoints = (long) points;
 					}
 
+					
+					ApiSKY api = new ApiSKY(The5zigAPI.getAPI().getGameProfile().getName());
+					SKY.totalKills = Math.toIntExact(api.getKills());
 					SKY.rankObject = SKYRank
-							.getFromDisplay(new ApiSKY(The5zigAPI.getAPI().getGameProfile().getName()).getTitle());
+							.getFromDisplay(api.getTitle());
 					SKY.rank = SKY.rankObject.getTotalDisplay();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -168,8 +172,9 @@ public class SKYListener extends AbstractGameListener<SKY> {
 			SKY.votesToParse.add(message);
 		}
 		else if(message.contains("§e, noble fighter for the ")) {
-			String team = message.split("§7")[1].split("§e")[0];
+			String team = ChatColor.stripColor(message.split("the")[1].replace("§eteam!", "").replaceAll("team!", "")).trim();
 			SKY.team = team;
+			DiscordUtils.updatePresence("Crossing the skies in SkyWars", "Playing", "0", team + " Team");
 		}
 
 		// Advanced Records
