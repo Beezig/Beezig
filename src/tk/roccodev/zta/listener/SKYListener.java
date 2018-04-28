@@ -172,7 +172,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 			SKY.votesToParse.add(message);
 		}
 		else if(message.contains("§e, noble fighter for the ")) {
-			String team = ChatColor.stripColor(message.split("the")[1].replace("§eteam!", "").replaceAll("team!", "")).trim();
+			String team = message.split("the")[1].replace("§eteam!", "").replaceAll("team!", "").trim();
 			SKY.team = team;
 			DiscordUtils.updatePresence("Crossing the skies in SkyWars", "Playing", "0", team + " Team");
 		}
