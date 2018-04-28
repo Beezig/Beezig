@@ -71,6 +71,7 @@ public class AutovoteUtils {
 	}
 	
 	public static Object get(String key){
+		if(!ymlObject.containsKey(key)) return new ArrayList<String>();
 		return ymlObject.get(key);
 	}
 	
