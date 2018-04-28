@@ -12,6 +12,7 @@ import tk.roccodev.zta.listener.DRListener;
 import tk.roccodev.zta.listener.GiantListener;
 import tk.roccodev.zta.listener.HIDEListener;
 import tk.roccodev.zta.listener.HiveListener;
+import tk.roccodev.zta.listener.SKYListener;
 import tk.roccodev.zta.listener.TIMVListener;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
@@ -49,6 +50,7 @@ public class IHive extends ServerInstance {
 		getGameListener().registerListener(new GiantListener());
 		getGameListener().registerListener(new HIDEListener());
 		getGameListener().registerListener(new CAIListener());
+		getGameListener().registerListener(new SKYListener());
 	}
 
 	public static void genericReset(String... optionalParams){

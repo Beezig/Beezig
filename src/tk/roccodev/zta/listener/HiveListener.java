@@ -120,7 +120,12 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			The5zigAPI.getLogger().info("Connected to CAI! -Hive");
 			DiscordUtils.updatePresence("Battling in Cowboys and Indians");
 		}
-		
+		else if(key.equals("sky.welcome")) {
+			getGameListener().switchLobby("SKY");
+			The5zigAPI.getLogger().info("Connected to SKY! - Hive");
+			DiscordUtils.updatePresence("Crossing the skies in SkyWars");
+			
+		}
 		
 	}
 

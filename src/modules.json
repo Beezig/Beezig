@@ -161,6 +161,15 @@
           "type": "caiteam"
         }
       ]
+    },
+    {
+      "id": "SkyWars",
+      "name": "SkyWars",
+      "items": [
+        {
+          "type": "skypoints"
+        }
+      ]
     }
   ]
 }
