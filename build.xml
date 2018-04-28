@@ -26,10 +26,8 @@
   		<include name="lang/*"/>
   	
 </fileset>
-        	 <zipfileset dir="${src.dir}/libraries" prefix="libraries/" casesensitive="yes">
-        	 	<include name="**/*"/>
-        	 	
-        	 	</zipfileset>
+        <zipfileset dir="/src/libraries" prefix="/libraries/"/>
+        	
 
           
         </jar>
