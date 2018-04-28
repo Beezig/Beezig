@@ -23,6 +23,7 @@
   		<include name="plugin.json"/>
   		<include name="modules.json"/>
   		<include name="core/messages/*"/>
+		<include name="libraries/*"/>
   		<include name="lang/*"/>
   	
 </fileset>
