@@ -214,11 +214,11 @@ public class ZTAMain {
 		CommandManager.registerCommand(new SetDisplayNameCommand());
 		CommandManager.registerCommand(new ZigCheckCommand());
 		
-		//if(The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d") ||
-		//		The5zigAPI.getAPI().getGameProfile().getId().toString().equals("bba224a2-0bff-4913-b042-27ca3b60973f")){
+		if(The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d") ||
+				The5zigAPI.getAPI().getGameProfile().getId().toString().equals("bba224a2-0bff-4913-b042-27ca3b60973f")){
 			CommandManager.registerCommand(new RealRankCommand());
 			CommandManager.registerCommand(new SeenCommand());			
-		//}
+		}
 			
 
 		
@@ -321,8 +321,8 @@ public class ZTAMain {
 
 			
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Failed to load RPC libraries.");
+				DiscordUtils.shouldOperate = false;
 			}
 		}
 		

@@ -18,8 +18,10 @@ public class DiscordUtils {
 
 	public static Thread callbacksThread;
 	public static boolean init;
+	public static boolean shouldOperate = true;
 	
 	public static void init() {
+		if(!shouldOperate) return;
 		DiscordRPC lib = DiscordRPC.INSTANCE;
 		String applicationId = "439523115383652372";
 
@@ -54,7 +56,7 @@ public class DiscordUtils {
 						
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							
 						}
 					}
 				}, "Server Ping").start();
@@ -88,6 +90,7 @@ public class DiscordUtils {
 	 * @param 0: State (Lobby, game etc.); 1: Image; 2: Max party size (e.g. Teams of 4); 3: Party name (e.g., Aqua Team)
 	 */
 	public static void updatePresence(String newPresence, String... opts) {
+		if(!shouldOperate) return;
 		if(!Setting.DISCORD_RPC.getValue()) return;
 		new Thread(new Runnable() {
 			@Override
