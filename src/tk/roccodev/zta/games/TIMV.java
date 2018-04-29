@@ -70,6 +70,7 @@ public class TIMV extends GameMode{
 	
 	public static int lastTestMsg = -1;
 	
+	public static String mapStr;
 
 	//CSV Stuff
 	
@@ -142,7 +143,7 @@ public class TIMV extends GameMode{
 		if(role == null) return false;
 		if(role.isEmpty()) return false;
 		The5zigAPI.getLogger().info("writing2");
-		String mapName = activeMap == null ? "Unknown Map" : activeMap.getDisplayName();
+		String mapName = mapStr == null ? "Unknown Map" : mapStr;
 		String[] entries = {role, karmaCounter + "", mapName };
 		CsvWriter writer = null;
 		
@@ -183,11 +184,13 @@ public class TIMV extends GameMode{
 			writer.close();
 		
 		} catch (Exception e) {
+			if(The5zigAPI.getAPI().isInWorld())
 			The5zigAPI.getAPI().messagePlayer(Log.error + "Failed to write game csv.");
 		}
 		role = null;
 		resetCounter();
 		TIMV.activeMap = null;
+		mapStr = "";
 		return true;
 	}
 	
@@ -266,6 +269,7 @@ public class TIMV extends GameMode{
 		
 		if(!TIMV.writeCsv()){
 			TIMV.activeMap = null;
+			mapStr = "";
 			role = null;
 			resetCounter();
 		}
