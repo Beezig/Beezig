@@ -1,19 +1,18 @@
 package tk.roccodev.zta.hiveapi;
 
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import tk.roccodev.zta.games.TIMV;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.games.TIMV;
 
 public class HiveAPI {
 
@@ -252,7 +251,7 @@ public class HiveAPI {
 			o = (JSONObject) parser.parse(readUrl(parseMojangPlayerAPI(ign)));
 		}  catch (Exception e) {
 			The5zigAPI.getLogger().info("Failed getUUID (Mojang)");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}		
 		return (String) o.get("id");
 	}
