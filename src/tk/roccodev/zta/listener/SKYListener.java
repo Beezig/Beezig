@@ -176,7 +176,10 @@ public class SKYListener extends AbstractGameListener<SKY> {
 		else if(message.contains("§e, noble fighter for the ")) {
 			String team = message.split("the")[1].replace("§eteam!", "").replaceAll("team!", "").trim();
 			SKY.team = team;
-			DiscordUtils.updatePresence("Crossing the skies in SkyWars", "Playing", "0", team + " Team");
+			
+			String teamSize = SKY.mode == null ? "0" : (SKY.mode.equals("Solo") ? "1" : (SKY.mode.equals("Duos") ? "2" : "4"));
+			
+			DiscordUtils.updatePresence("Crossing the skies in SkyWars", "Playing", teamSize, team + " Team");
 		}
 
 		// Advanced Records
