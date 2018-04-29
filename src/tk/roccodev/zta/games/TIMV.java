@@ -174,7 +174,7 @@ public class TIMV extends GameMode{
 		
 		writer.write(role);
 		writer.write(karmaCounter + "");
-		writer.write(activeMap.getDisplayName());
+		writer.write(mapStr == null ? "Unknown Map" : mapStr);
 		writer.write(iPoints + dPoints + tPoints + "");
 		writer.write(iPoints + "");
 		writer.write(dPoints + "");
