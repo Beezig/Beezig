@@ -186,12 +186,12 @@ public class CAIListener extends AbstractGameListener<CAI> {
 			
 			CAI.gamePoints += 5;
 			
+			
+		} else if (message.endsWith("§7[Leader Alive Bonus]")
+				&& message.startsWith("§8▍ §bCAI§8 ▏ §2+")) {
 
-		} else if (message.endsWith("points for staying alive as a leader for another minute.")
-				&& message.startsWith("§8▍ §bCAI§8 ▏ §7You gained")) {
-
-			String points = message.replaceAll("points for staying alive as a leader for another minute.", "")
-					.replaceAll("§8▍ §6CaI§8 ▏ §6You gained", "");
+			String points = message.replace(" Points §7[Leader Alive Bonus]", "")
+					.replace("§8▍ §bCAI§8 ▏ §2+ §a", "");
 
 			CAI.gamePoints += Long.parseLong(points.trim());
 
