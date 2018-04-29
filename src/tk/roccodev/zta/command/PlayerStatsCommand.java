@@ -69,7 +69,7 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "TIMV Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "TIMV Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
@@ -113,7 +113,7 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "BED Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "BED Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
@@ -149,7 +149,7 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "DR Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "DR Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
@@ -185,7 +185,7 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "CAI Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "CAI Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
@@ -221,7 +221,7 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "HIDE Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "HIDE Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
@@ -257,11 +257,13 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "SKY Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "SKY Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
-		
+		else {
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Specified mode not found.");
+		}
 		return true;
 	}
 }

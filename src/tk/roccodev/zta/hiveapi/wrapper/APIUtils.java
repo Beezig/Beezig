@@ -1,54 +1,48 @@
 package tk.roccodev.zta.hiveapi.wrapper;
 
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import tk.roccodev.zta.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.Log;
+import java.util.*;
 
 public class APIUtils {
 
-	public static String getUUID(String ign){
-		if(ign.length() == 32) return ign;
+	public static String getUUID(String ign) {
+		if (ign.length() == 32) return ign;
 		// ^ input is already a uuid
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		try {
 			o = (JSONObject) parser.parse(Parser.read(Parser.mojang(ign)));
-		}  catch (Exception e) {
+		} catch (Exception e) {
 			The5zigAPI.getLogger().info("Failed getUUID (Mojang)");
-			e.printStackTrace();
-		}		
+			//e.printStackTrace();
+		}
 		return (String) o.get("id");
 	}
-	
-	public static JSONObject getObject(String toParse){
+
+	public static JSONObject getObject(String toParse) {
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		try {
 			o = (JSONObject) parser.parse(toParse);
-		}  catch (Exception e) {
+		} catch (Exception e) {
 			The5zigAPI.getLogger().info("Failed");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return o;
 	}
 
-	public static <T extends Comparable<T>> void concurrentSort(final List<T> key, List<?>... lists){
+	public static <T extends Comparable<T>> void concurrentSort(final List<T> key, List<?>... lists) {
 
 		//
 		//
@@ -57,20 +51,20 @@ public class APIUtils {
 		//
 
 		// Do validation
-		if(key == null || lists == null)
+		if (key == null || lists == null)
 			throw new NullPointerException("key cannot be null.");
 
-		for(List<?> list : lists)
-			if(list.size() != key.size())
+		for (List<?> list : lists)
+			if (list.size() != key.size())
 				throw new IllegalArgumentException("all lists must be the same size");
 
 		// Lists are size 0 or 1, nothing to sort
-		if(key.size() < 2)
+		if (key.size() < 2)
 			return;
 
 		// Create a List of indices
 		List<Integer> indices = new ArrayList<>();
-		for(int i = 0; i < key.size(); i++)
+		for (int i = 0; i < key.size(); i++)
 			indices.add(i);
 
 		// Sort the indices list based on the key
@@ -78,12 +72,12 @@ public class APIUtils {
 
 		Map<Integer, Integer> swapMap = new HashMap<>(indices.size());
 		List<Integer> swapFrom = new ArrayList<>(indices.size()),
-				swapTo   = new ArrayList<>(indices.size());
+				swapTo = new ArrayList<>(indices.size());
 
 		// create a mapping that allows sorting of the List by N swaps.
-		for(int i = 0; i < key.size(); i++){
+		for (int i = 0; i < key.size(); i++) {
 			int k = indices.get(i);
-			while(i != k && swapMap.containsKey(k))
+			while (i != k && swapMap.containsKey(k))
 				k = swapMap.get(k);
 
 			swapFrom.add(i);
@@ -92,8 +86,8 @@ public class APIUtils {
 		}
 
 		// use the swap order to sort each list by swapping elements
-		for(List<?> list : lists)
-			for(int i = 0; i < list.size(); i++)
+		for (List<?> list : lists)
+			for (int i = 0; i < list.size(); i++)
 				Collections.swap(list, swapFrom.get(i), swapTo.get(i));
 	}
 
@@ -114,93 +108,93 @@ public class APIUtils {
 		 * See the License for the specific language governing permissions and
 		 * limitations under the License.
 		 */
-		
+
 		if (time < 1000000000000L) {
-		        // if timestamp given in seconds, convert to millis
-		        time *= 1000;
-		    }
-		
+			// if timestamp given in seconds, convert to millis
+			time *= 1000;
+		}
+
 		int SECOND_MILLIS = 1000;
 		int MINUTE_MILLIS = 60 * SECOND_MILLIS;
 		int HOUR_MILLIS = 60 * MINUTE_MILLIS;
 		int DAY_MILLIS = 24 * HOUR_MILLIS;
 		long MONTH_MILLIS = 30L * DAY_MILLIS;
 		long YEAR_MILLIS = 12L * MONTH_MILLIS;
-	    long now = System.currentTimeMillis();
-	    
-	    if (time > now || time <= 0) {
-	        return null;	
-	    }
-	    
-	    final long diff = now - time;
+		long now = System.currentTimeMillis();
 
-	    if (diff < MINUTE_MILLIS) {
-	        return "Just now";
-	    } else if (diff < 2 * MINUTE_MILLIS) {
-	        return "A minute ago";
-	    } else if (diff < 50 * MINUTE_MILLIS) {
-	        return diff / MINUTE_MILLIS + " minutes ago";
-	    } else if (diff < 90 * MINUTE_MILLIS) {
-	        return "An hour ago";
-	    } else if (diff < 24 * HOUR_MILLIS) {
-	        return diff / HOUR_MILLIS + " hours ago";
-	    } else if (diff < 48L * HOUR_MILLIS) {
-	        return "Yesterday";
-	    } else if (diff < 29L * DAY_MILLIS){
-	        return diff / DAY_MILLIS + " days ago";
-	    } else if (diff < 2L * MONTH_MILLIS){
-		    return "1 month ago";
-	    } else if (diff < 11L * MONTH_MILLIS){
-	        return diff / MONTH_MILLIS + " months ago";
-	    }  else if (diff < 2L * YEAR_MILLIS){
-		    return "1 year ago";  
-	    } else {
-	    	return diff / YEAR_MILLIS + " years ago";
-	    }
+		if (time > now || time <= 0) {
+			return null;
+		}
+
+		final long diff = now - time;
+
+		if (diff < MINUTE_MILLIS) {
+			return "Just now";
+		} else if (diff < 2 * MINUTE_MILLIS) {
+			return "A minute ago";
+		} else if (diff < 50 * MINUTE_MILLIS) {
+			return diff / MINUTE_MILLIS + " minutes ago";
+		} else if (diff < 90 * MINUTE_MILLIS) {
+			return "An hour ago";
+		} else if (diff < 24 * HOUR_MILLIS) {
+			return diff / HOUR_MILLIS + " hours ago";
+		} else if (diff < 48L * HOUR_MILLIS) {
+			return "Yesterday";
+		} else if (diff < 29L * DAY_MILLIS) {
+			return diff / DAY_MILLIS + " days ago";
+		} else if (diff < 2L * MONTH_MILLIS) {
+			return "1 month ago";
+		} else if (diff < 11L * MONTH_MILLIS) {
+			return diff / MONTH_MILLIS + " months ago";
+		} else if (diff < 2L * YEAR_MILLIS) {
+			return "1 year ago";
+		} else {
+			return diff / YEAR_MILLIS + " years ago";
+		}
 	}
-	
+
 	public static String getTimePassed(long time) {
-		
-		
+
+
 		if (time < 1000000000000L) {
-		        // if timestamp given in seconds, convert to millis
-		        time *= 1000;
-		    }
-		
+			// if timestamp given in seconds, convert to millis
+			time *= 1000;
+		}
+
 		if (time < 0) {
-	        // HiveAPI error
-	        return "Error";
-	    }
-		
-		
+			// HiveAPI error
+			return "Error";
+		}
+
+
 		int SECOND_MILLIS = 1000;
 		int MINUTE_MILLIS = 60 * SECOND_MILLIS;
 		int HOUR_MILLIS = 60 * MINUTE_MILLIS;
 		int DAY_MILLIS = 24 * HOUR_MILLIS;
 		long MONTH_MILLIS = 30L * DAY_MILLIS;
 
-	    if (time < MINUTE_MILLIS) {
-	        return "Less a minute";
-	    } else if (time < 2 * MINUTE_MILLIS) {
-	        return "A minute";
-	    } else if (time < 50 * MINUTE_MILLIS) {
-	        return time / MINUTE_MILLIS + " minutes";
-	    } else if (time < 90 * MINUTE_MILLIS) {
-	        return "An hour";
-	    } else if (time < 24 * HOUR_MILLIS) {
-	        return time / HOUR_MILLIS + " hours";
-	    } else if (time < 48L * HOUR_MILLIS) {
-	        return "A day";
-	    } else if (time < 29L * DAY_MILLIS){
-	        return time / DAY_MILLIS + " days";
-	    } else if (time < 2L * MONTH_MILLIS){
-		    return "1 month";
-	    } else {
-	        return time / MONTH_MILLIS + " months";
-	    }
+		if (time < MINUTE_MILLIS) {
+			return "Less a minute";
+		} else if (time < 2 * MINUTE_MILLIS) {
+			return "A minute";
+		} else if (time < 50 * MINUTE_MILLIS) {
+			return time / MINUTE_MILLIS + " minutes";
+		} else if (time < 90 * MINUTE_MILLIS) {
+			return "An hour";
+		} else if (time < 24 * HOUR_MILLIS) {
+			return time / HOUR_MILLIS + " hours";
+		} else if (time < 48L * HOUR_MILLIS) {
+			return "A day";
+		} else if (time < 29L * DAY_MILLIS) {
+			return time / DAY_MILLIS + " days";
+		} else if (time < 2L * MONTH_MILLIS) {
+			return "1 month";
+		} else {
+			return time / MONTH_MILLIS + " months";
+		}
 	}
 
-	public static String capitalize(String sentence){
+	public static String capitalize(String sentence) {
 
 		//Thanks to "Samet öztoprak" on stackoverflow :^)
 
@@ -208,11 +202,23 @@ public class APIUtils {
 		String newSentence = "";
 		for (String word : words) {
 			for (int i = 0; i < word.length(); i++)
-				newSentence = newSentence + ((i == 0) ? word.substring(i, i + 1).toUpperCase():
+				newSentence = newSentence + ((i == 0) ? word.substring(i, i + 1).toUpperCase() :
 													 (i != word.length() - 1) ? word.substring(i, i + 1).toLowerCase() : word.substring(i, i + 1).toLowerCase().toLowerCase() + " ");
 		}
 
 		return newSentence.trim();
+	}
+
+
+	public static Long average(Object[] arr){
+
+		Long sum = 0L;
+
+		for (int i = 0; i < arr.length; i++) {
+			sum += Long.valueOf(String.valueOf(arr[i]));
+		}
+
+		return sum / arr.length;
 	}
 
 	public static ChatColor getLevelColorHIDE(int level){
@@ -280,7 +286,7 @@ public class APIUtils {
 				return new URL(url.replaceAll("@player@", uuid));
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
 				return null;
 			}
 		}
