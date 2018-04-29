@@ -188,7 +188,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		    }
 		    The5zigAPI.getLogger().info(map);
 		    TIMV.mapStr = map;
-		    DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "Playing on " + map, "game_timv", "24", map);
+		    DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "Playing on " + map, "game_timv");
 		    
 			TIMV.activeMap = TIMVMap.getFromDisplay(map);
 			
