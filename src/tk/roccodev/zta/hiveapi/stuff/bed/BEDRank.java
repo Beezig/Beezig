@@ -33,7 +33,7 @@ public enum BEDRank {
 	SNORLAX(ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Snorlax", 409500, 418600, 427800, 437100, 446500),
 	SANDMAN(ChatColor.RED +""+ ChatColor.BOLD +""+ ChatColor.ITALIC + "Sandman", 456000, 465600, 475300, 485100, 495000),
 	
-	LULLABY(ChatColor.RED +""+ ChatColor.BOLD +""+ ChatColor.UNDERLINE + "Lullaby", 505000, 515100, 525300, 535600, 546000),
+	LULLABY(ChatColor.YELLOW +""+ ChatColor.BOLD +""+ ChatColor.UNDERLINE + "Lullaby", 505000, 515100, 525300, 535600, 546000),
 	BED_BUG(ChatColor.GREEN +""+ ChatColor.BOLD +""+ ChatColor.UNDERLINE + "Bed Bug", 556500, 567100, 577800, 588800, 600300),
 	SLEEPING_LION(ChatColor.AQUA +""+ ChatColor.BOLD +""+ ChatColor.UNDERLINE + "Sleeping Lion", 612500, 625600, 639800, 655300, 672300),
 	TRANQUILISED(ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD +""+ ChatColor.UNDERLINE + "Tranquilised", 691000, 711600, 734300, 759300, 786800),
