@@ -73,7 +73,7 @@ public class PlayerStatsCommand implements Command {
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
-		if(game.equalsIgnoreCase("bed")){
+		else if(game.equalsIgnoreCase("bed")){
 			long startT = System.currentTimeMillis();
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
 			new Thread(() -> {
@@ -117,7 +117,7 @@ public class PlayerStatsCommand implements Command {
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
-		if(game.equalsIgnoreCase("dr")){
+		else if(game.equalsIgnoreCase("dr")){
 			long startT = System.currentTimeMillis();
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
 			new Thread(() -> {
@@ -153,7 +153,7 @@ public class PlayerStatsCommand implements Command {
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
-		if(game.equalsIgnoreCase("cai")){
+		else if(game.equalsIgnoreCase("cai")){
 			long startT = System.currentTimeMillis();
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
 			new Thread(() -> {
@@ -189,7 +189,7 @@ public class PlayerStatsCommand implements Command {
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
-		if(game.equalsIgnoreCase("hide")){
+		else if(game.equalsIgnoreCase("hide")){
 			long startT = System.currentTimeMillis();
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
 			new Thread(() -> {
@@ -225,7 +225,7 @@ public class PlayerStatsCommand implements Command {
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
-		if(game.equalsIgnoreCase("sky")){
+		else if(game.equalsIgnoreCase("sky")){
 			long startT = System.currentTimeMillis();
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
 			new Thread(() -> {

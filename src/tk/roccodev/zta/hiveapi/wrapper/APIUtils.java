@@ -1,18 +1,25 @@
 package tk.roccodev.zta.hiveapi.wrapper;
 
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.util.minecraft.ChatColor;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import tk.roccodev.zta.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.Log;
 
 public class APIUtils {
 
@@ -30,7 +37,7 @@ public class APIUtils {
 		return (String) o.get("id");
 	}
 
-	public static JSONObject getObject(String toParse) {
+	public static JSONObject getObject(Reader toParse) {
 		JSONParser parser = new JSONParser();
 		JSONObject o = null;
 		try {
@@ -254,7 +261,7 @@ public class APIUtils {
 		return " +" + ((int) percent) + "%";
 	}
 	
-	public static String readURL(URL url){
+	public static Reader readURL(URL url){
 		return Parser.read(url);
 	}
 	
@@ -339,22 +346,15 @@ public class APIUtils {
 			}
 		}
 		
-		public static String read(URL url){
+		public static Reader read(URL url){
 			BufferedReader reader = null;
 		    try {
 				URLConnection conn = url.openConnection();
 		       	conn.addRequestProperty("User-Agent", Log.getUserAgent());
 		        conn.setRequestProperty("Accept", "application/json");
 		        
-		       	reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		        StringBuffer buffer = new StringBuffer();
-		        int read;
-		        char[] chars = new char[1024];
-		        while ((read = reader.read(chars)) != -1)
-		            buffer.append(chars, 0, read); 
-
-		        
-		        return buffer.toString();
+		       	return new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		      
 		    } catch(Exception e){
 		    	
 		    	e.printStackTrace();
