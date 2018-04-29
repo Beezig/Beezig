@@ -98,10 +98,14 @@ public class DiscordUtils {
 				DiscordRichPresence presence = new DiscordRichPresence();
 		        presence.startTimestamp = System.currentTimeMillis() / 1000; // epoch second
 		        presence.details = newPresence;
+		        
 		        presence.largeImageKey = "background";
 		        if(opts.length >= 1) presence.state = opts[0];
 		        if(opts.length >= 2) presence.smallImageKey = opts[1];
-		        if(opts.length >= 3) presence.partyMax = Integer.parseInt(opts[2]);
+		        if(opts.length >= 3) {
+		        	presence.partyMax = Integer.parseInt(opts[2]);
+		        	presence.partySize = 1;
+		        }
 		        if(opts.length >= 4) presence.partyId = opts[3];
 		        DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
 			}

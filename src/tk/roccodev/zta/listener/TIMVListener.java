@@ -32,6 +32,7 @@ import tk.roccodev.zta.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.zta.settings.Setting;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 public class TIMVListener extends AbstractGameListener<TIMV>{
 
@@ -187,6 +188,8 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		    }
 		    The5zigAPI.getLogger().info(map);
 
+		    DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "Playing on " + map, "game_timv", "24", map);
+		    
 			TIMV.activeMap = TIMVMap.getFromDisplay(map);
 			
 		}
