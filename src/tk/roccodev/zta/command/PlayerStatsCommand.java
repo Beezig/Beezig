@@ -1,8 +1,5 @@
 package tk.roccodev.zta.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
@@ -15,12 +12,10 @@ import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.zta.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.zta.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiCAI;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
+import tk.roccodev.zta.hiveapi.wrapper.modes.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerStatsCommand implements Command {
 	@Override
@@ -64,7 +59,7 @@ public class PlayerStatsCommand implements Command {
 				APIUtils.concurrentSort(points,	points,title,name);
 
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
-				for(int i = name.size()-1; i != 0; i--){
+				for(int i = 0; i < name.size(); i++){
 					try {
 						if (points.get(i) != 0) {
 							The5zigAPI.getAPI().messagePlayer(Log.info + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §e- " + title.get(i) + " §r" + name.get(i));
@@ -73,8 +68,8 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "TIMV Playerstats: " + name.size() + "P / " + (System.currentTimeMillis() - startT) + "ms");
-				The5zigAPI.getAPI().messagePlayer("");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "TIMV Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s");
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
 		if(game.equalsIgnoreCase("bed")){
@@ -108,7 +103,7 @@ public class PlayerStatsCommand implements Command {
 				APIUtils.concurrentSort(points,	points,titlecolor,title,name);
 
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
-				for(int i = name.size()-1; i != 0; i--){
+				for(int i = 0; i < name.size(); i++){
 					try {
 						if (points.get(i) != 0) {
 							The5zigAPI.getAPI().messagePlayer(Log.info + titlecolor.get(i) + points.get(i) + " §e- " + titlecolor.get(i) + title.get(i) + " §r" + name.get(i));
@@ -117,8 +112,8 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "BED Playerstats: " + name.size() + "P / " + (System.currentTimeMillis() - startT) + "ms");
-				The5zigAPI.getAPI().messagePlayer("");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "BED Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s");
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
 		if(game.equalsIgnoreCase("dr")){
@@ -144,7 +139,7 @@ public class PlayerStatsCommand implements Command {
 				APIUtils.concurrentSort(points,	points,title,name);
 
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
-				for(int i = name.size()-1; i != 0; i--){
+				for(int i = 0; i < name.size(); i++){
 					try {
 						if (points.get(i) != 0) {
 							The5zigAPI.getAPI().messagePlayer(Log.info + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §e- " + title.get(i) + " §r" + name.get(i));
@@ -153,8 +148,8 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "DR Playerstats: " + name.size() + "P / " + (System.currentTimeMillis() - startT) + "ms");
-				The5zigAPI.getAPI().messagePlayer("");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "DR Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s");
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
 		if(game.equalsIgnoreCase("cai")){
@@ -180,7 +175,7 @@ public class PlayerStatsCommand implements Command {
 				APIUtils.concurrentSort(points,	points,title,name);
 
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
-				for(int i = name.size()-1; i != 0; i--){
+				for(int i = 0; i < name.size(); i++){
 					try {
 						if (points.get(i) != 0) {
 							The5zigAPI.getAPI().messagePlayer(Log.info + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §e- " + title.get(i) + " §r" + name.get(i));
@@ -189,8 +184,8 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "CAI Playerstats: " + name.size() + "P / " + (System.currentTimeMillis() - startT) + "ms");
-				The5zigAPI.getAPI().messagePlayer("");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "CAI Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s");
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
 		if(game.equalsIgnoreCase("hide")){
@@ -216,7 +211,7 @@ public class PlayerStatsCommand implements Command {
 				APIUtils.concurrentSort(points,	points,title,name);
 
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
-				for(int i = name.size()-1; i != 0; i--){
+				for(int i = 0; i < name.size(); i++){
 					try {
 						if (points.get(i) != 0) {
 							The5zigAPI.getAPI().messagePlayer(Log.info + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §e- " + title.get(i) + " §r" + name.get(i));
@@ -225,11 +220,11 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "HIDE Playerstats: " + name.size() + "P / " + (System.currentTimeMillis() - startT) + "ms");
-				The5zigAPI.getAPI().messagePlayer("");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "HIDE Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s");
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
-		
+
 		return true;
 	}
 }
