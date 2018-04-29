@@ -28,6 +28,7 @@ import tk.roccodev.zta.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
 import tk.roccodev.zta.settings.Setting;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 public class HIDEListener extends AbstractGameListener<HIDE> {
 
@@ -91,6 +92,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 		        map = matcher.group(1);
 		    }
 			HIDE.activeMap = map;
+			DiscordUtils.updatePresence("Hiding in Hide&Seek", "Hiding in " + HIDE.activeMap, "game_hide");
 		}
 
 		//Autovoting
@@ -181,6 +183,9 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 			The5zigAPI.getLogger().info("Found Player URL");
 
 			return true;
+		}
+		else if(message.equals("                          §6§lYou are a §c§lSEEKER!")) {
+			DiscordUtils.updatePresence("Hiding in Hide&Seek", "Seeking in " + HIDE.activeMap, "game_hide");
 		}
 		else if((message.equals("                      §6§m                  §6§m                  ")&& !message.startsWith("§o "))){
 			The5zigAPI.getLogger().info("found footer");
