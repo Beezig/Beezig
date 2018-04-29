@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 import java.util.zip.GZIPOutputStream;
 

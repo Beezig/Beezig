@@ -5,11 +5,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.zta.ActiveGame;
-import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
-import tk.roccodev.zta.notes.NotesManager;
 
 public class ZigCheckCommand implements Command{
 

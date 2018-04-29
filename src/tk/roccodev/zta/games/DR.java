@@ -1,6 +1,7 @@
 package tk.roccodev.zta.games;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import eu.the5zig.mod.The5zigAPI;
@@ -23,6 +24,8 @@ public class DR extends GameMode{
 	public static int checkpoints;
 	public static int deaths;
 	public static int kills;
+	
+	public static HashMap<String, DRMap> mapsPool;
 	
 	public static String rank;
 	

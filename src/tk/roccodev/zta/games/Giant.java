@@ -1,14 +1,14 @@
 package tk.roccodev.zta.games;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.hiveapi.stuff.gnt.GiantMap;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Giant extends GameMode{
 

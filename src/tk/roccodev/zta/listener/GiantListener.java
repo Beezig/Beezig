@@ -1,5 +1,13 @@
 package tk.roccodev.zta.listener;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
@@ -16,9 +24,6 @@ import tk.roccodev.zta.hiveapi.stuff.gnt.GiantRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiGiant;
 import tk.roccodev.zta.settings.Setting;
-
-import java.io.FileNotFoundException;
-import java.util.*;
 
 public class GiantListener extends AbstractGameListener<Giant> {
 

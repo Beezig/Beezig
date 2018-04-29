@@ -1,12 +1,12 @@
 package tk.roccodev.zta.command;
 
+import java.util.Calendar;
+
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
-
-import java.util.Calendar;
 
 public class SeenCommand implements Command{
 

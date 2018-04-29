@@ -63,6 +63,7 @@ import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.StuffFetcher;
 import tk.roccodev.zta.hiveapi.stuff.bed.StreakUtils;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
@@ -222,6 +223,12 @@ public class ZTAMain {
 
 		
 	
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				DR.mapsPool = StuffFetcher.getDeathRunMaps();
+			}
+		}, "Maps Fetcher").start();
 		
 		The5zigAPI.getLogger().info("Loaded Beezig");
 		
@@ -584,7 +591,7 @@ public class ZTAMain {
 			if(map.equals("HiveMC.EU")) return;
 			if(map.equals("play.HiveMC.com")) return;
 			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
-			DR.activeMap = DRMap.getFromDisplay(map);
+			DR.activeMap = DR.mapsPool.get(map.toLowerCase());
 		    
 		    new Thread(new Runnable(){
 		    	@Override

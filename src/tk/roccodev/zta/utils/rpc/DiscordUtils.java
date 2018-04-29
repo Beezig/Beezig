@@ -2,15 +2,14 @@ package tk.roccodev.zta.utils.rpc;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordEventHandlers.OnReady;
-import eu.the5zig.mod.The5zigAPI;
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
 import club.minnced.discord.rpc.DiscordUser;
+import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.settings.Setting;

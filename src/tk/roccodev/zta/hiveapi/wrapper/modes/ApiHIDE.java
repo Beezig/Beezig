@@ -1,11 +1,12 @@
 package tk.roccodev.zta.hiveapi.wrapper.modes;
 
-import eu.the5zig.mod.server.GameMode;
+import java.util.Date;
+
 import org.json.simple.JSONObject;
+
+import eu.the5zig.mod.server.GameMode;
 import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.hiveapi.wrapper.APIGameMode;
-
-import java.util.Date;
 
 public class ApiHIDE extends APIGameMode {
 

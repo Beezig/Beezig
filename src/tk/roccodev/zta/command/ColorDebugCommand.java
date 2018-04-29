@@ -4,8 +4,6 @@ import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 
-import java.util.UUID;
-
 public class ColorDebugCommand implements Command {
 
 	@Override

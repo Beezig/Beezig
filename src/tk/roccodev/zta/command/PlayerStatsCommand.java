@@ -1,5 +1,8 @@
 package tk.roccodev.zta.command;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
@@ -12,10 +15,12 @@ import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.zta.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.zta.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
-import tk.roccodev.zta.hiveapi.wrapper.modes.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiCAI;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 
 public class PlayerStatsCommand implements Command {
 	@Override

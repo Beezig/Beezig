@@ -8,8 +8,6 @@ import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
-import tk.roccodev.zta.hiveapi.stuff.cai.CAIMap;
-import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.zta.hiveapi.stuff.sky.SKYRank;
 
 public class SKY extends GameMode {

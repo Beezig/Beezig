@@ -2,7 +2,6 @@ package tk.roccodev.zta.modules.sky;
 
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.games.CAI;
 import tk.roccodev.zta.games.SKY;
 
 public class TeamItem extends GameModeItem<SKY> {

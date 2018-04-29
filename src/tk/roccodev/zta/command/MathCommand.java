@@ -1,11 +1,11 @@
 package tk.roccodev.zta.command;
 
-import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.zta.Log;
-
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+
+import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.zta.Log;
 
 public class MathCommand implements Command{
 

@@ -1,8 +1,9 @@
 package tk.roccodev.zta.hiveapi.wrapper.modes;
 
+import org.json.simple.JSONObject;
+
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.util.minecraft.ChatColor;
-import org.json.simple.JSONObject;
 import tk.roccodev.zta.hiveapi.wrapper.APIGameMode;
 import tk.roccodev.zta.hiveapi.wrapper.NetworkRank;
 

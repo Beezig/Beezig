@@ -33,8 +33,9 @@ public class WRCommand implements Command{
 			}).start();
 	
 		}
-		else if(args.length == 1){			
-			DRMap map = DRMap.getFromDisplay(args[0]);			
+		else {			
+			String mapName = String.join(" ", args);
+			DRMap map = DR.mapsPool.get(mapName.toLowerCase());			
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
@@ -43,21 +44,7 @@ public class WRCommand implements Command{
 				}
 			}).start();
 	
-		}
-		else if(args.length == 2){
-			String map1 = args[0] + " " + args[1];
-			
-			DRMap map = DRMap.getFromDisplay(map1);
-			new Thread(new Runnable(){
-				@Override
-				public void run(){
-					ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
-					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + map.getDisplayName() + "§e is §6" + api.getWorldRecord(map) + "§e by §6" + api.getWorldRecordHolder(map));
-				}
-			}).start();
-		}
-		else{
-			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /wr or /wr [map]");
+		
 		}
 		
 		return true;

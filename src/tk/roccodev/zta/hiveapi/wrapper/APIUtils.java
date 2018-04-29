@@ -1,19 +1,24 @@
 package tk.roccodev.zta.hiveapi.wrapper;
 
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.ZTAMain;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.Log;
 
 public class APIUtils {
 
@@ -332,7 +337,7 @@ public class APIUtils {
 			BufferedReader reader = null;
 		    try {
 				URLConnection conn = url.openConnection();
-		       	conn.addRequestProperty("User-Agent", "Beezig v" + ZTAMain.BEEZIG_VERSION + " (5zig v" + The5zigAPI.getAPI().getMinecraftVersion() + " on " + The5zigAPI.getAPI().getMinecraftVersion() + ")");
+		       	conn.addRequestProperty("User-Agent", Log.getUserAgent());
 		        conn.setRequestProperty("Accept", "application/json");
 		        
 		       	reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));

@@ -1,5 +1,9 @@
 package tk.roccodev.zta.games;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.GameMode;
@@ -10,10 +14,6 @@ import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.bed.BEDMap;
 import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class BED extends GameMode{
 	

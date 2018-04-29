@@ -1,9 +1,9 @@
 
 package tk.roccodev.zta.settings;
 
-import eu.the5zig.mod.The5zigAPI;
-
 import java.io.IOException;
+
+import eu.the5zig.mod.The5zigAPI;
 
 public enum Setting {
 
