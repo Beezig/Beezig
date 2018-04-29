@@ -32,6 +32,7 @@ import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.settings.Setting;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 public class DRListener extends AbstractGameListener<DR> {
 
@@ -86,6 +87,7 @@ public class DRListener extends AbstractGameListener<DR> {
 				map = matcher.group(1);
 			}
 			DR.activeMap = DR.mapsPool.get(map.toLowerCase());
+			
 		}
 
 		else if (message.contains("§lYou are a ") && gameMode != null) {
@@ -121,6 +123,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
 				break;
 			}
+			DiscordUtils.updatePresence("Running in DeathRun", (DR.role.equals("Runner") ? "Running" : "Killing") + " in " + DR.activeMap.getDisplayName(), "game_dr");
 		} else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §aCheckpoint Reached! §7") && ActiveGame.is("dr")
 				&& DR.role == "Runner") {
 			// No more double tokens weekends Niklas :>)
