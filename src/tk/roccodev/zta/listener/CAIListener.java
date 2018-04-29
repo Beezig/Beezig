@@ -30,6 +30,7 @@ import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiCAI;
 import tk.roccodev.zta.settings.Setting;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 public class CAIListener extends AbstractGameListener<CAI> {
 
@@ -168,11 +169,12 @@ public class CAIListener extends AbstractGameListener<CAI> {
 		
 			CAI.team = "§eIndians";
 			
-			
+			DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as Ⓘ in " + CAI.activeMap, "game_cai");
 			
 		}
 		else if(message.endsWith("§eIndians Leader§7.")) {
 			CAI.team = "§cCowboys";
+			DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as Ⓒ in " + CAI.activeMap, "game_cai");
 		}
 		else if (message.equals("§8▍ §bCAI§8 ▏ §7You received §f10 points §7for your team's capture.")) {
 
