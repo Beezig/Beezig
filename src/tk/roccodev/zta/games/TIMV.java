@@ -142,7 +142,8 @@ public class TIMV extends GameMode{
 		if(role == null) return false;
 		if(role.isEmpty()) return false;
 		The5zigAPI.getLogger().info("writing2");
-		String[] entries = {role, karmaCounter + "", activeMap.getDisplayName() };
+		String mapName = activeMap == null ? "Unknown Map" : activeMap.getDisplayName();
+		String[] entries = {role, karmaCounter + "", mapName };
 		CsvWriter writer = null;
 		
 		boolean alreadyExists = new File(ZTAMain.mcFile.getAbsolutePath() + "/timv/games.csv").exists();
