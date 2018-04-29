@@ -21,6 +21,7 @@ public class SKY extends GameMode {
 	public static boolean hasVoted = false;
 	public static List<String> votesToParse = new ArrayList<String>();
 
+	public static String mode;
 	
 	public static long gamePoints;
 	public static int totalKills;
@@ -44,6 +45,7 @@ public class SKY extends GameMode {
 		SKY.hasVoted = false;
 		gamePoints = 0;
 		team = "";
+		mode = "";
 		kills = 0;
 		ActiveGame.reset("sky");
 		IHive.genericReset();

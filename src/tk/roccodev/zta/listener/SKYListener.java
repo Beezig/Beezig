@@ -60,6 +60,10 @@ public class SKYListener extends AbstractGameListener<SKY> {
 					The5zigAPI.getLogger().info(sb.getTitle());
 
 					if (sb != null && sb.getTitle().contains("Your SKY")) {
+						if(sb.getTitle().contains("Your SKYT")) SKY.mode = "Teams";
+						else if(sb.getTitle().contains("Your SKYD")) SKY.mode = "Duos";
+						else SKY.mode = "Solo";
+					
 						int points = sb.getLines().get(ChatColor.AQUA + "Points");
 						APIValues.SKYpoints = (long) points;
 					}

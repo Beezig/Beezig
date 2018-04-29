@@ -173,6 +173,9 @@
           "type": "skyteam"
         },
          {
+          "type": "skymode"
+        },
+        {
           "type": "skykills"
         }
       ]
