@@ -186,6 +186,7 @@ public class TIMV extends GameMode{
 		} catch (Exception e) {
 			if(The5zigAPI.getAPI().isInWorld())
 			The5zigAPI.getAPI().messagePlayer(Log.error + "Failed to write game csv.");
+			e.printStackTrace();
 		}
 		role = null;
 		resetCounter();
