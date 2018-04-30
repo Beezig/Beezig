@@ -35,7 +35,7 @@ public class NewsServer {
 
 		The5zigAPI.getAPI().messagePlayer(
 				"§f                     §b§m                  §f §f§lBeezig Briefing§f §b§m                  "
-						+ (news.size() == 0 ? "" : "- " + ChatColor.ITALIC + "\n\n§fOur news:"));
+						+ (news.size() == 0 ? "" : "- " + "\n\n§f - " + ChatColor.ITALIC + "Our news:"));
 		if (news.size() != 0) {
 			for (News n : news) {
 				The5zigAPI.getAPI().messagePlayer("\n§e" + ChatColor.UNDERLINE + n.getTitle());
