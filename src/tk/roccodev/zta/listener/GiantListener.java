@@ -24,6 +24,7 @@ import tk.roccodev.zta.hiveapi.stuff.gnt.GiantRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiGiant;
 import tk.roccodev.zta.settings.Setting;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 public class GiantListener extends AbstractGameListener<Giant> {
 
@@ -190,14 +191,15 @@ public class GiantListener extends AbstractGameListener<Giant> {
 			Giant.team = message.replaceAll(getPrefix(ActiveGame.current()) + "§3You are now playing on the ", "")
 					.replaceAll("Team!", "");
 			gameMode.setState(GameState.GAME);
+			DiscordUtils.updatePresence("Slaying giants in SkyGiants" + (ActiveGame.is("gntm") ? ":Mini" : ""), "Battling in " + Giant.activeMap, "game_giant");
 		} else if (message.startsWith(getPrefix(ActiveGame.current()) + "§3Voting has ended! §bThe map §f")) {
 			String data[] = message.replaceAll(getPrefix(ActiveGame.current()) + "§3Voting has ended! §bThe map §f", "")
 					.split("§b");
 			String mapString = data[0].trim();
 			The5zigAPI.getLogger().info(mapString.trim() + " / " + ActiveGame.is("GNTM"));
-			GiantMap map = GiantMap.get(ChatColor.stripColor(mapString.trim()), ActiveGame.is("GNTM") ? true : false);
-			Giant.activeMap = map;
-			The5zigAPI.getLogger().info(map.getDisplay());
+			
+			Giant.activeMap = ChatColor.stripColor(mapString.trim());
+			
 
 		} else if (message.startsWith(getPrefix(ActiveGame.current()) + "§a✚ §3You gained")
 				&& message.contains("for killing")) {

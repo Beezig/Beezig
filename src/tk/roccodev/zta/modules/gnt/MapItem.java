@@ -19,7 +19,7 @@ public class MapItem extends GameModeItem<Giant>{
 	protected Object getValue(boolean dummy) {
 		try{
 			if(Giant.activeMap == null) return "No Map";
-			return Giant.activeMap.getDisplay().trim();
+			return Giant.activeMap;
 		}catch(Exception e){
 			e.printStackTrace();
 			return "No Map";
