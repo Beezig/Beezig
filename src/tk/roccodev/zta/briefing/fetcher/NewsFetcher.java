@@ -29,7 +29,7 @@ public class NewsFetcher {
 		try {
 			JSONParser parser = new JSONParser();
 			JSONArray arr = (JSONArray) parser.parse(APIUtils.readURL(new URL(Links.OUR_NEWS)));
-			
+			System.out.println("Fetched " + arr.size() + " news. Lastlogin is " + lastLogin);
 			for(Object o : arr) {
 				JSONObject j = (JSONObject)o;
 				
@@ -56,6 +56,7 @@ public class NewsFetcher {
 		try {
 			JSONParser parser = new JSONParser();
 			JSONArray arr = (JSONArray) parser.parse(APIUtils.readURL(new URL(Links.LERGIN_MAP)));
+			System.out.println("Fetched " + arr.size() + " maps. Lastlogin is " + lastLogin);
 			
 			for(Object o : arr) {
 				JSONObject j = (JSONObject) o;
@@ -83,6 +84,7 @@ public class NewsFetcher {
 		try {
 			JSONParser parser = new JSONParser();
 			JSONArray arr = (JSONArray) parser.parse(APIUtils.readURL(new URL(Links.LERGIN_STAFF)));
+			System.out.println("Fetched " + arr.size() + " staff updates. Lastlogin is " + lastLogin);
 			
 			for(Object o : arr) {
 				JSONObject j = (JSONObject) o;
