@@ -3,6 +3,7 @@ package tk.roccodev.zta;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.core.helpers.Charsets;
 import org.bstats.MetricsLite;
 
 import club.minnced.discord.rpc.DiscordRPC;
@@ -302,7 +302,7 @@ public class ZTAMain {
 				
 				List<String> lines = new ArrayList<String>(Arrays.asList(System.currentTimeMillis() + ""));
 				try {
-					Files.write(Paths.get(f.getPath()), lines, Charsets.UTF_8);
+					Files.write(Paths.get(f.getPath()), lines, Charset.forName("UTF-8"));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
