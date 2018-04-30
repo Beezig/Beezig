@@ -16,8 +16,13 @@ import tk.roccodev.zta.settings.Setting;
 public class NewsServer {
 
 	public static void serveNews(ArrayList<News> news, ArrayList<NewMap> maps, ArrayList<StaffUpdate> staff) {
-		if (!Setting.BRIEFING.getValue())
+		if (!Setting.BRIEFING.getValue()) {
+			
+			System.out.println("Briefing is disabled.");
+			
 			return;
+		}
+			
 		
 		if(Pools.error && news.size() == 0) {
 			The5zigAPI.getAPI().messagePlayer(Log.error + "An error has occurred while attempting to load your Briefing. This may be caused by Minecraft using the wrong Java installation. Please follow this guide: https://github.com/RoccoDev/5zig-TIMV-Plugin/wiki/Fixing-the-Issue-with-WR-for-Deathrun");
