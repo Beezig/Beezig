@@ -7,7 +7,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -34,8 +33,8 @@ import eu.the5zig.util.minecraft.ChatColor;
 import io.netty.util.internal.ThreadLocalRandom;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
-import tk.roccodev.zta.briefing.News;
 import tk.roccodev.zta.briefing.NewsServer;
+import tk.roccodev.zta.briefing.Pools;
 import tk.roccodev.zta.briefing.fetcher.NewsFetcher;
 import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.AutoVoteCommand;
@@ -96,7 +95,7 @@ public class ZTAMain {
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
 	
 	
-	public static ArrayList<News> newsPool;
+	
 	
 	public static File mcFile;
 	public static boolean isColorDebug = false;
@@ -308,7 +307,9 @@ public class ZTAMain {
 				}
 				
 				
-				newsPool = NewsFetcher.getApplicableNews(lastLogin);
+				Pools.newsPool = NewsFetcher.getApplicableNews(lastLogin);
+				Pools.newMapsPool = NewsFetcher.getApplicableNewMaps(lastLogin);
+				Pools.staffPool = NewsFetcher.getApplicableStaffUpdates(lastLogin);
 				
 			}
 		}, "News Fetcher").start();
@@ -645,7 +646,7 @@ public class ZTAMain {
 		}
 		if(evt.getTitle().equals("§r§aplay§r§8.§r§bHiveMC§r§8.§r§acom§r") && !hasServedNews) {
 			hasServedNews = true;
-			NewsServer.serveNews(newsPool);
+			NewsServer.serveNews(Pools.newsPool, Pools.newMapsPool, Pools.staffPool);
 		}
 		//Map fallback
 		if(ActiveGame.is("dr") && DR.activeMap == null){
