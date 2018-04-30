@@ -113,7 +113,7 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 		else if(key.equals("hide.welcome")){		
 			getGameListener().switchLobby("HIDE");			
 			The5zigAPI.getLogger().info("Connected to HIDE! -Hive");
-			DiscordUtils.updatePresence("Seeking in Hide&Seek", "In Lobby", "game_hide");
+			DiscordUtils.updatePresence("Playing Hide & Seek", "In Lobby", "game_hide");
 		}
 		else if(key.equals("cai.welcome")){		
 			getGameListener().switchLobby("CAI");			
