@@ -1,17 +1,5 @@
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -29,6 +17,13 @@ import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HIDEListener extends AbstractGameListener<HIDE> {
 
@@ -92,7 +87,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 		        map = matcher.group(1);
 		    }
 			HIDE.activeMap = map;
-			DiscordUtils.updatePresence("Hiding in Hide&Seek", "Hiding in " + HIDE.activeMap, "game_hide");
+			DiscordUtils.updatePresence("Playing Hide & Seek", "Hiding in " + HIDE.activeMap, "game_hide");
 		}
 
 		//Autovoting
@@ -185,7 +180,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 			return true;
 		}
 		else if(message.equals("                          §6§lYou are a §c§lSEEKER!")) {
-			DiscordUtils.updatePresence("Hiding in Hide&Seek", "Seeking in " + HIDE.activeMap, "game_hide");
+			DiscordUtils.updatePresence("Playing Hide & Seek", "Seeking in " + HIDE.activeMap, "game_hide");
 		}
 		else if((message.equals("                      §6§m                  §6§m                  ")&& !message.startsWith("§o "))){
 			The5zigAPI.getLogger().info("found footer");
