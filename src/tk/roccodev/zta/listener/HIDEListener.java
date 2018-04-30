@@ -87,7 +87,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 		        map = matcher.group(1);
 		    }
 			HIDE.activeMap = map;
-			DiscordUtils.updatePresence("Playing Hide & Seek", "Hiding in " + HIDE.activeMap, "game_hide");
+			DiscordUtils.updatePresence("Playing Hide & Seek", "Hiding on " + HIDE.activeMap, "game_hide");
 		}
 
 		//Autovoting
@@ -180,7 +180,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 			return true;
 		}
 		else if(message.equals("                          §6§lYou are a §c§lSEEKER!")) {
-			DiscordUtils.updatePresence("Playing Hide & Seek", "Seeking in " + HIDE.activeMap, "game_hide");
+			DiscordUtils.updatePresence("Playing Hide & Seek", "Seeking on " + HIDE.activeMap, "game_hide");
 		}
 		else if((message.equals("                      §6§m                  §6§m                  ")&& !message.startsWith("§o "))){
 			The5zigAPI.getLogger().info("found footer");

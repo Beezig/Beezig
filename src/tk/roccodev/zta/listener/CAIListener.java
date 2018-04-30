@@ -1,17 +1,5 @@
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -30,6 +18,13 @@ import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiCAI;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CAIListener extends AbstractGameListener<CAI> {
 
@@ -168,12 +163,12 @@ public class CAIListener extends AbstractGameListener<CAI> {
 		
 			CAI.team = "§eIndians";
 			
-			DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as Ⓘ in " + CAI.activeMap, "game_cai");
+			DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as I on " + CAI.activeMap, "game_cai");
 			
 		}
 		else if(message.endsWith("§eIndians Leader§7.")) {
 			CAI.team = "§cCowboys";
-			DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as Ⓒ in " + CAI.activeMap, "game_cai");
+			DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as C on " + CAI.activeMap, "game_cai");
 		}
 		else if (message.equals("§8▍ §bCAI§8 ▏ §7You received §f10 points §7for your team's capture.")) {
 

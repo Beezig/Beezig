@@ -1,13 +1,5 @@
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
@@ -19,12 +11,14 @@ import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.stuff.gnt.GiantMap;
 import tk.roccodev.zta.hiveapi.stuff.gnt.GiantRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiGiant;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.util.*;
 
 public class GiantListener extends AbstractGameListener<Giant> {
 
@@ -191,7 +185,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
 			Giant.team = message.replaceAll(getPrefix(ActiveGame.current()) + "§3You are now playing on the ", "")
 					.replaceAll("Team!", "");
 			gameMode.setState(GameState.GAME);
-			DiscordUtils.updatePresence("Slaying giants in SkyGiants" + (ActiveGame.is("gntm") ? ":Mini" : ""), "Battling in " + Giant.activeMap, "game_giant");
+			DiscordUtils.updatePresence("Slaying giants in SkyGiants" + (ActiveGame.is("gntm") ? ":Mini" : ""), "Battling on " + Giant.activeMap, "game_giant");
 		} else if (message.startsWith(getPrefix(ActiveGame.current()) + "§3Voting has ended! §bThe map §f")) {
 			String data[] = message.replaceAll(getPrefix(ActiveGame.current()) + "§3Voting has ended! §bThe map §f", "")
 					.split("§b");

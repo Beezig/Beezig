@@ -1,18 +1,5 @@
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -31,6 +18,15 @@ import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.zta.settings.Setting;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BEDListener extends AbstractGameListener<BED>{
 
@@ -121,6 +117,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 		    		BED.mode = "Duo";
 		    	}
 		    }
+
+			DiscordUtils.updatePresence("Housekeeping in BedWars: " + BED.mode, "Playing on " + BED.activeMap.getDisplayName(), "game_bedwars");
 		}
 
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained") && message.contains("§a points for killing")){
@@ -507,6 +505,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 		else if(message.contains("§lYou are on ")){
 			//"                        §6§lYou are on Gold Team!"
             //§9§lYou are on Blue Team!
+
 			String team = null;
 			Pattern pattern = Pattern.compile(Pattern.quote("the ") + "(.*?)" + Pattern.quote(" Team!"));
 			Matcher matcher = pattern.matcher(message.trim());

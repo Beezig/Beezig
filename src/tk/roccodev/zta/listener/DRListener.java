@@ -1,18 +1,5 @@
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -27,12 +14,16 @@ import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DRListener extends AbstractGameListener<DR> {
 
@@ -123,7 +114,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
 				break;
 			}
-			DiscordUtils.updatePresence("Running in DeathRun", (DR.role.equals("Runner") ? "Running" : "Killing") + " in " + DR.activeMap.getDisplayName(), "game_dr");
+			DiscordUtils.updatePresence("Running in DeathRun", (DR.role.equals("Runner") ? "Running" : "Killing") + " on " + DR.activeMap.getDisplayName(), "game_dr");
 		} else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §aCheckpoint Reached! §7") && ActiveGame.is("dr")
 				&& DR.role == "Runner") {
 			// No more double tokens weekends Niklas :>)

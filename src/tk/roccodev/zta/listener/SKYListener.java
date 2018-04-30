@@ -1,17 +1,5 @@
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -30,6 +18,13 @@ import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiSKY;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SKYListener extends AbstractGameListener<SKY> {
 
@@ -178,8 +173,9 @@ public class SKYListener extends AbstractGameListener<SKY> {
 			SKY.team = team;
 			
 			String teamSize = SKY.mode == null ? "0" : (SKY.mode.equals("Solo") ? "1" : (SKY.mode.equals("Duos") ? "2" : "4"));
-			
-			DiscordUtils.updatePresence("Crossing the skies in SkyWars", "Playing as team " + team, teamSize);
+
+
+			DiscordUtils.updatePresence("Crossing the skies in SkyWars: " + SKY.mode, "Playing on " + SKY.map, "game_skywars");
 		}
 
 		// Advanced Records
