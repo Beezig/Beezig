@@ -182,7 +182,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 			String teamSize = SKY.mode == null ? "0" : (SKY.mode.equals("Solo") ? "1" : (SKY.mode.equals("Duos") ? "2" : "4"));
 
 
-			DiscordUtils.updatePresence("Crossing the skies in SkyWars: " + SKY.mode, "Playing on " + SKY.map, "game_skywars");
+			DiscordUtils.updatePresence("Fighting in SkyWars: " + SKY.mode, "Playing on " + SKY.map, "game_skywars");
 		}
 
 		// Advanced Records

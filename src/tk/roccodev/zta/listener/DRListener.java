@@ -114,7 +114,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
 				break;
 			}
-			DiscordUtils.updatePresence("Running in DeathRun", (DR.role.equals("Runner") ? "Running" : "Killing") + " on " + DR.activeMap.getDisplayName(), "game_dr");
+			DiscordUtils.updatePresence("Parkouring in DeathRun", (DR.role.equals("Runner") ? "Running" : "Killing") + " on " + DR.activeMap.getDisplayName(), "game_dr");
 		} else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §aCheckpoint Reached! §7") && ActiveGame.is("dr")
 				&& DR.role == "Runner") {
 			// No more double tokens weekends Niklas :>)
