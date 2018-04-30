@@ -22,6 +22,8 @@ public class NewsServer {
 			e.printStackTrace();
 		}
 
+		if(news.size() == 0 && maps.size() == 0 && staff.size() == 0) return;
+		
 		The5zigAPI.getAPI().messagePlayer(Log.info + "Here's your briefing!\n\n "
 				+ (news.size() == 0 ? "" : "- " + ChatColor.ITALIC + "§fOur news:"));
 		if (news.size() != 0) {
