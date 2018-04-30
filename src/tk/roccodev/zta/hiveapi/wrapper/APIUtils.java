@@ -1,5 +1,12 @@
 package tk.roccodev.zta.hiveapi.wrapper;
 
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
+import org.apache.logging.log4j.core.helpers.Charsets;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import tk.roccodev.zta.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,19 +14,7 @@ import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.Log;
+import java.util.*;
 
 public class APIUtils {
 
@@ -353,7 +348,7 @@ public class APIUtils {
 		       	conn.addRequestProperty("User-Agent", Log.getUserAgent());
 		        conn.setRequestProperty("Accept", "application/json");
 		        
-		       	return new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		       	return new BufferedReader(new InputStreamReader(conn.getInputStream(), Charsets.UTF_8));
 		      
 		    } catch(Exception e){
 		    	
