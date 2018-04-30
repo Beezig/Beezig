@@ -381,6 +381,9 @@ public class ZTAMain {
 				DiscordUtils.shouldOperate = false;
 			}
 		}
+		else {
+			DiscordUtils.shouldOperate = false;
+		}
 		
 		//Instantiate GNT Classes
 		new Giant();
@@ -610,9 +613,11 @@ public class ZTAMain {
 		NotesManager.notes.clear();
 		hasServedNews = false;
 		System.out.println("Disconnecting...");
+		if(DiscordUtils.shouldOperate)
 		DiscordRPC.INSTANCE.Discord_ClearPresence();
 		if(DiscordUtils.callbacksThread != null)
 			DiscordUtils.callbacksThread.interrupt();
+		if(DiscordUtils.shouldOperate)
 		DiscordRPC.INSTANCE.Discord_Shutdown();
 		
 
