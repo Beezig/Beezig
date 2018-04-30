@@ -25,7 +25,6 @@ import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.CAI;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.stuff.cai.CAIMap;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiCAI;
@@ -93,7 +92,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
 			while (matcher.find()) {
 				map = matcher.group(1);
 			}
-			CAI.activeMap = CAIMap.getFromDisplay(map);
+			CAI.activeMap = map;
 		}
 
 		// Autovoting
