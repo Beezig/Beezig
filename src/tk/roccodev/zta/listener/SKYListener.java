@@ -342,6 +342,15 @@ public class SKYListener extends AbstractGameListener<SKY> {
 								double kd = (double) ((double)kills/(double)deaths);
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + df.format(kd));
 							}
+							if(Setting.SKY_SHOW_PPG.getValue()) {
+								double ppg = (double) ((double)points / (double)gamesPlayed);
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df.format(ppg));
+							}
+							if(Setting.SKY_SHOW_KPG.getValue()) {
+								double kpg = (double) ((double)kills / (double)gamesPlayed);
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills Per Game: §b" + df.format(kpg));
+							}
+							
 
 						
 

@@ -57,7 +57,9 @@ public enum Setting {
 	
 	SKY_SHOW_POINTS_TO_NEXT_RANK(true, "SKY Advanced Records - Show points to next rank"), 
 	SKY_SHOW_WINRATE(true, "SKY Advanced Records - Show Winrate"), 
-	SKY_SHOW_KD(true, "SKY Advanced Records - Show Kills/Deaths");
+	SKY_SHOW_KD(true, "SKY Advanced Records - Show Kills/Deaths"),
+	SKY_SHOW_KPG(true, "SKY Advanced Records - Show Kills per game"),
+	SKY_SHOW_PPG(true, "SKY Advanced Records - Show Points per game");
 	
 
 	
