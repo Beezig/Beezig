@@ -89,7 +89,7 @@ import tk.roccodev.zta.utils.rpc.NativeUtils;
 @Plugin(name="Beezig", version=ZTAMain.BEEZIG_VERSION)
 public class ZTAMain {
 	
-	public static final String BEEZIG_VERSION = "4.5.0";
+	public static final String BEEZIG_VERSION = "4.5.1";
 	
 	public static boolean hasServedNews;
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
