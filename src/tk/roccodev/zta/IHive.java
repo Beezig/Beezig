@@ -6,6 +6,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.ServerInstance;
+import tk.roccodev.zta.briefing.NewsServer;
 import tk.roccodev.zta.listener.BEDListener;
 import tk.roccodev.zta.listener.CAIListener;
 import tk.roccodev.zta.listener.DRListener;

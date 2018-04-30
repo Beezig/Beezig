@@ -17,7 +17,7 @@ public class NewsFetcher {
 
 	
 	
-	public static ArrayList<News> getApplicableNews(){
+	public static ArrayList<News> getApplicableNews(long lastLogin){
 		
 		ArrayList<News> tr = new ArrayList<News>();
 		
@@ -29,9 +29,10 @@ public class NewsFetcher {
 				JSONObject j = (JSONObject)o;
 				
 				long postedAt = (long) j.get("postedAt");
-				if(postedAt < System.currentTimeMillis()) continue;
+				System.out.println(postedAt + " / " + lastLogin);
+				if(postedAt < lastLogin) continue;
 				
-				tr.add(new News((String)j.get("title"), (String)j.get("content"), Math.toIntExact((long)j.get("priority")), (long)j.get("postedAt")));
+				tr.add(new News((String)j.get("title"), (String)j.get("content"), (long)j.get("postedAt")));
 				
 			}
 			

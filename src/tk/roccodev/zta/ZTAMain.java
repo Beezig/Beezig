@@ -1,18 +1,76 @@
 package tk.roccodev.zta;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.core.helpers.Charsets;
+import org.bstats.MetricsLite;
+
 import club.minnced.discord.rpc.DiscordRPC;
 import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.event.*;
+import eu.the5zig.mod.event.ActionBarEvent;
+import eu.the5zig.mod.event.ChatEvent;
+import eu.the5zig.mod.event.ChatSendEvent;
+import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.EventHandler.Priority;
+import eu.the5zig.mod.event.LoadEvent;
+import eu.the5zig.mod.event.ServerQuitEvent;
+import eu.the5zig.mod.event.TitleEvent;
 import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.util.minecraft.ChatColor;
 import io.netty.util.internal.ThreadLocalRandom;
-import org.bstats.MetricsLite;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
-import tk.roccodev.zta.command.*;
-import tk.roccodev.zta.games.*;
+import tk.roccodev.zta.briefing.News;
+import tk.roccodev.zta.briefing.NewsServer;
+import tk.roccodev.zta.briefing.fetcher.NewsFetcher;
+import tk.roccodev.zta.command.AddNoteCommand;
+import tk.roccodev.zta.command.AutoVoteCommand;
+import tk.roccodev.zta.command.BlockstatsCommand;
+import tk.roccodev.zta.command.CheckPingCommand;
+import tk.roccodev.zta.command.ColorDebugCommand;
+import tk.roccodev.zta.command.CustomTestCommand;
+import tk.roccodev.zta.command.DebugCommand;
+import tk.roccodev.zta.command.MathCommand;
+import tk.roccodev.zta.command.MedalsCommand;
+import tk.roccodev.zta.command.MessageOverlayCommand;
+import tk.roccodev.zta.command.MonthlyCommand;
+import tk.roccodev.zta.command.NotesCommand;
+import tk.roccodev.zta.command.PBCommand;
+import tk.roccodev.zta.command.PlayerStatsCommand;
+import tk.roccodev.zta.command.RanksCommand;
+import tk.roccodev.zta.command.ReVoteCommand;
+import tk.roccodev.zta.command.RealRankCommand;
+import tk.roccodev.zta.command.SayCommand;
+import tk.roccodev.zta.command.SeenCommand;
+import tk.roccodev.zta.command.SetDisplayNameCommand;
+import tk.roccodev.zta.command.SettingsCommand;
+import tk.roccodev.zta.command.ShrugCommand;
+import tk.roccodev.zta.command.TokensCommand;
+import tk.roccodev.zta.command.WRCommand;
+import tk.roccodev.zta.command.ZigCheckCommand;
+import tk.roccodev.zta.games.BED;
+import tk.roccodev.zta.games.CAI;
+import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.games.GNT;
+import tk.roccodev.zta.games.GNTM;
+import tk.roccodev.zta.games.Giant;
+import tk.roccodev.zta.games.HIDE;
+import tk.roccodev.zta.games.SKY;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.StuffFetcher;
 import tk.roccodev.zta.hiveapi.stuff.bed.StreakUtils;
@@ -28,25 +86,17 @@ import tk.roccodev.zta.utils.TIMVTest;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
 import tk.roccodev.zta.utils.rpc.NativeUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 
 @Plugin(name="Beezig", version=ZTAMain.BEEZIG_VERSION)
 public class ZTAMain {
 	
 	public static final String BEEZIG_VERSION = "4.5.0";
 	
+	public static boolean hasServedNews;
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
 	
+	
+	public static ArrayList<News> newsPool;
 	
 	public static File mcFile;
 	public static boolean isColorDebug = false;
@@ -183,7 +233,7 @@ public class ZTAMain {
 			CommandManager.registerCommand(new SeenCommand());			
 		}
 			
-
+		
 		
 	
 		new Thread(new Runnable() {
@@ -221,6 +271,47 @@ public class ZTAMain {
 		checkForFileExist(new File(mcFile + "/bedwars/"), true);
 		checkForFileExist(new File(mcFile + "/bedwars/streak.txt"), false);
 		StreakUtils.init();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				File f = new File(mcFile + "/lastlogin.txt");
+				long lastLogin = 0;
+				if(!f.exists()) {
+					try {
+						f.createNewFile();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						ArrayList<String> bloccs = new ArrayList<String>(
+								Files.readAllLines(Paths.get(f.getPath())).stream().collect(Collectors.toList()));
+						lastLogin = Long.parseLong(bloccs.get(0));
+						
+					
+						
+						
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+				
+				List<String> lines = new ArrayList<String>(Arrays.asList(System.currentTimeMillis() + ""));
+				try {
+					Files.write(Paths.get(f.getPath()), lines, Charsets.UTF_8);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				newsPool = NewsFetcher.getApplicableNews(lastLogin);
+				
+			}
+		}, "News Fetcher").start();
 		
 		
 		try {
@@ -515,6 +606,7 @@ public class ZTAMain {
 	@EventHandler(priority=Priority.HIGHEST)
 	public void onDisconnect(ServerQuitEvent evt){
 		NotesManager.notes.clear();
+		hasServedNews = false;
 		System.out.println("Disconnecting...");
 		DiscordRPC.INSTANCE.Discord_ClearPresence();
 		if(DiscordUtils.callbacksThread != null)
@@ -548,6 +640,13 @@ public class ZTAMain {
 
 	@EventHandler(priority = EventHandler.Priority.LOW)
 	public void onTitle(TitleEvent evt){
+		if(isColorDebug) {
+			System.out.println("Title Color Debug [Global]: (" + evt.getTitle() + ") / (" + evt.getSubTitle() + ")");
+		}
+		if(evt.getTitle().equals("§r§aplay§r§8.§r§bHiveMC§r§8.§r§acom§r") && !hasServedNews) {
+			hasServedNews = true;
+			NewsServer.serveNews(newsPool);
+		}
 		//Map fallback
 		if(ActiveGame.is("dr") && DR.activeMap == null){
 			String map = ChatColor.stripColor(evt.getTitle());
