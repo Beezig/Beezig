@@ -27,6 +27,12 @@ public class SKY extends GameMode {
 	public static int totalKills;
 	
 	public static int kills;
+	public static int deaths;
+	
+	public static int apiKills, apiDeaths;
+	
+	public static double apiKdr;
+	public static double gameKdr;
 	
 	public static String rank;
 	public static String team;
@@ -34,6 +40,11 @@ public class SKY extends GameMode {
 	public static String map;
 
 
+	public static void updateKdr(){
+		apiKdr = (double) apiKills / (apiDeaths == 0 ? 1 : apiDeaths);
+		gameKdr = (double)(kills + apiKills) / (deaths  + apiDeaths == 0 ? 1 : apiDeaths + deaths);
+	}
+	
 	public static void reset(SKY gameMode){
 		
 		gameMode.setState(GameState.FINISHED);
@@ -47,6 +58,7 @@ public class SKY extends GameMode {
 		team = "";
 		mode = "";
 		kills = 0;
+		deaths = 0;
 		ActiveGame.reset("sky");
 		IHive.genericReset();
 		if(The5zigAPI.getAPI().getActiveServer() != null)

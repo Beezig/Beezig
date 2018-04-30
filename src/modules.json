@@ -177,6 +177,9 @@
         },
         {
           "type": "skykills"
+        },
+        {
+          "type": "skykdr"
         }
       ]
     }

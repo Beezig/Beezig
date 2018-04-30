@@ -199,6 +199,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "skyteam", tk.roccodev.zta.modules.sky.TeamItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "skykills", tk.roccodev.zta.modules.sky.KillsItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "skymode", tk.roccodev.zta.modules.sky.ModeItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "skykdr", tk.roccodev.zta.modules.sky.KDRChangeItem.class, "serverhivemc");
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		

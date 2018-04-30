@@ -60,6 +60,8 @@ public class SKYListener extends AbstractGameListener<SKY> {
 						else SKY.mode = "Solo";
 					
 						int points = sb.getLines().get(ChatColor.AQUA + "Points");
+						SKY.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
+						SKY.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
 						APIValues.SKYpoints = (long) points;
 					}
 
@@ -69,6 +71,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 					SKY.rankObject = SKYRank
 							.getFromDisplay(api.getTitle());
 					SKY.rank = SKY.rankObject.getTotalDisplay();
+					SKY.updateKdr();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -101,6 +104,10 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
 		// Autovoting
 
+		else if(message.endsWith("§c§lYou died. §6Better luck next time!")) {
+			SKY.deaths++;
+			SKY.updateKdr();
+		}
 		else if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §a§lVote received. §3Your map now has")
 				&& Setting.AUTOVOTE.getValue()) {
 			SKY.hasVoted = true;
@@ -183,6 +190,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 		else if(message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f15§7 tokens!")) {
 			SKY.kills++;
 			SKY.totalKills++;
+			SKY.updateKdr();
 		}
 		
 		else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
