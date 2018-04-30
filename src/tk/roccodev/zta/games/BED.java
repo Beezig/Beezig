@@ -20,7 +20,7 @@ public class BED extends GameMode{
 	public static char[] NUMBERS = {' ', '➊','➋','➌','➍','➎'};
 	
 	
-	public static BEDMap activeMap;
+	public static String activeMap;
 	public static String team;
 	public static String lastRecords = "";
 	public static Long lastRecordsPoints = null;

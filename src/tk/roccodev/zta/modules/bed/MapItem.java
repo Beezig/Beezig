@@ -12,10 +12,9 @@ public class MapItem extends GameModeItem<BED>{
 
 	@Override
 	protected Object getValue(boolean dummy) {
-		BEDMap map = BED.activeMap;
-		if(map == null) return "Unknown map";
-		if((boolean) getProperties().getSetting("mode").get()) return map.getDisplayName() + " (" + BED.mode + ")";
-		return map.getDisplayName();	
+		
+		if((boolean) getProperties().getSetting("mode").get()) return BED.activeMap + " (" + BED.mode + ")";
+		return BED.activeMap;	
 	}
 	
 	@Override
