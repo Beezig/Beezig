@@ -39,7 +39,7 @@ public class NewsFetcher {
 				tr.add(new News((String)j.get("title"), (String)j.get("content"), (long)j.get("postedAt")));
 				
 			}
-			System.out.println("Loaded " + tr.size() + "news.");
+			System.out.println("Loaded " + tr.size() + " news.");
 			
 		} catch (IOException | ParseException e) {
 			// TODO Auto-generated catch block
@@ -65,7 +65,7 @@ public class NewsFetcher {
 				
 				tr.add(new NewMap((String)j.get("gameType"), (String)j.get("mapName")));
 			}
-			System.out.println("Loaded " + tr.size() + "maps.");
+			System.out.println("Loaded " + tr.size() + " maps.");
 			
 		} catch (Exception e) {
 			
@@ -94,7 +94,7 @@ public class NewsFetcher {
 				
 				tr.add(s);
 			}
-			System.out.println("Loaded " + tr.size() + "staff updates.");
+			System.out.println("Loaded " + tr.size() + " staff updates.");
 			
 		} catch (IOException | ParseException e) {
 			// TODO Auto-generated catch block
