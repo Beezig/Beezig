@@ -106,7 +106,7 @@ public class NewsServer {
 			The5zigAPI.getAPI().messagePlayer("§e" + sb.toString().trim());
 			
 		}
-		The5zigAPI.getAPI().messagePlayer("§f     §b§m            §f §7Map & staff data gently provided by Lergin§f §b§m            ");
+		The5zigAPI.getAPI().messagePlayer("\n§f     §b§m            §f §7Map & staff data gently provided by Lergin§f §b§m            ");
 		The5zigAPI.getAPI().messagePlayer("§f       §b§m                                  §f §7hive.lergin.de§f §b§m                                   ");
 	}
 
