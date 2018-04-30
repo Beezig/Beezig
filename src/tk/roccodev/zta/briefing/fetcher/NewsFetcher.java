@@ -12,6 +12,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import tk.roccodev.zta.briefing.News;
+import tk.roccodev.zta.briefing.Pools;
 import tk.roccodev.zta.briefing.lergin.NewMap;
 import tk.roccodev.zta.briefing.lergin.StaffChangeType;
 import tk.roccodev.zta.briefing.lergin.StaffUpdate;
@@ -65,8 +66,9 @@ public class NewsFetcher {
 				tr.add(new NewMap((String)j.get("gameType"), (String)j.get("mapName")));
 			}
 			
-		} catch (IOException | ParseException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
+			
+			Pools.error = true;
 			e.printStackTrace();
 		}
 		if(tr.size() < 10) return tr;

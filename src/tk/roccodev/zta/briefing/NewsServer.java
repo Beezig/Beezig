@@ -7,6 +7,7 @@ import java.util.Map;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.Log;
 import tk.roccodev.zta.briefing.lergin.NewMap;
 import tk.roccodev.zta.briefing.lergin.StaffChangeType;
 import tk.roccodev.zta.briefing.lergin.StaffUpdate;
@@ -17,8 +18,20 @@ public class NewsServer {
 	public static void serveNews(ArrayList<News> news, ArrayList<NewMap> maps, ArrayList<StaffUpdate> staff) {
 		if (!Setting.BRIEFING.getValue())
 			return;
+		
+		if(Pools.error && news.size() == 0) {
+			The5zigAPI.getAPI().messagePlayer(Log.error + "An error has occurred while attempting to load your Briefing. This may be caused by Minecraft using the wrong Java installation. Please follow this guide: https://github.com/RoccoDev/5zig-TIMV-Plugin/wiki/Fixing-the-Issue-with-WR-for-Deathrun");
+			return;
+		}
+		else if(Pools.error) {
+			The5zigAPI.getAPI().messagePlayer(Log.error + "An error has occurred while attempting to load your Briefing. This may be caused by Minecraft using the wrong Java installation. Please follow this guide: https://github.com/RoccoDev/5zig-TIMV-Plugin/wiki/Fixing-the-Issue-with-WR-for-Deathrun");
+			The5zigAPI.getAPI().messagePlayer(Log.info + "However, we're still able to serve you our latest news!");
+			
+		}
+		
 		if (news.size() == 0 && maps.size() == 0 && staff.size() == 0)
 			return;
+		
 
 		The5zigAPI.getAPI().messagePlayer(
 				"§f                     §b§m                  §f §f§lBeezig Briefing§f §b§m                  "
