@@ -1,0 +1,16 @@
+package tk.roccodev.zta.briefing.lergin;
+
+public enum StaffChangeType {
+
+	MODERATOR_ADD,
+	MODERATOR_REMOVE,
+	SENIOR_MODERATOR_ADD,
+	SENIOR_MODERATOR_REMOVE,
+	DEVELOPER_ADD,
+	DEVELOPER_REMOVE,
+	OWNER_ADD,
+	OWNER_REMOVE,
+	NECTAR_ADD,
+	NECTAR_REMOVE
+	
+}
