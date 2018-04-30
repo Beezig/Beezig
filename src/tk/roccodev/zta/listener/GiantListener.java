@@ -195,7 +195,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
 			Giant.activeMap = ChatColor.stripColor(mapString.trim());
 			
 
-		} else if (message.startsWith(getPrefix(ActiveGame.current()) + "§a✚ §3You gained")
+		} else if (message.startsWith("§8▍ §6§lGold§8 ▏ §a✚ §3You gained")
 				&& message.contains("for killing")) {
 			if (message.contains("as a team")) {
 				Giant.giantKills++; // Giant kill
