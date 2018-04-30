@@ -1,20 +1,78 @@
 package tk.roccodev.zta;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.core.helpers.Charsets;
+import org.bstats.MetricsLite;
+
+import club.minnced.discord.rpc.DiscordRPC;
 import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.event.*;
+import eu.the5zig.mod.event.ActionBarEvent;
+import eu.the5zig.mod.event.ChatEvent;
+import eu.the5zig.mod.event.ChatSendEvent;
+import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.EventHandler.Priority;
+import eu.the5zig.mod.event.LoadEvent;
+import eu.the5zig.mod.event.ServerQuitEvent;
+import eu.the5zig.mod.event.TitleEvent;
 import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.util.minecraft.ChatColor;
 import io.netty.util.internal.ThreadLocalRandom;
-import org.bstats.MetricsLite;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.autovote.watisdis;
-import tk.roccodev.zta.command.*;
-import tk.roccodev.zta.games.*;
+import tk.roccodev.zta.briefing.NewsServer;
+import tk.roccodev.zta.briefing.Pools;
+import tk.roccodev.zta.briefing.fetcher.NewsFetcher;
+import tk.roccodev.zta.command.AddNoteCommand;
+import tk.roccodev.zta.command.AutoVoteCommand;
+import tk.roccodev.zta.command.BlockstatsCommand;
+import tk.roccodev.zta.command.CheckPingCommand;
+import tk.roccodev.zta.command.ColorDebugCommand;
+import tk.roccodev.zta.command.CustomTestCommand;
+import tk.roccodev.zta.command.DebugCommand;
+import tk.roccodev.zta.command.MathCommand;
+import tk.roccodev.zta.command.MedalsCommand;
+import tk.roccodev.zta.command.MessageOverlayCommand;
+import tk.roccodev.zta.command.MonthlyCommand;
+import tk.roccodev.zta.command.NotesCommand;
+import tk.roccodev.zta.command.PBCommand;
+import tk.roccodev.zta.command.PlayerStatsCommand;
+import tk.roccodev.zta.command.RanksCommand;
+import tk.roccodev.zta.command.ReVoteCommand;
+import tk.roccodev.zta.command.RealRankCommand;
+import tk.roccodev.zta.command.SayCommand;
+import tk.roccodev.zta.command.SeenCommand;
+import tk.roccodev.zta.command.SetDisplayNameCommand;
+import tk.roccodev.zta.command.SettingsCommand;
+import tk.roccodev.zta.command.ShrugCommand;
+import tk.roccodev.zta.command.TokensCommand;
+import tk.roccodev.zta.command.WRCommand;
+import tk.roccodev.zta.command.ZigCheckCommand;
+import tk.roccodev.zta.games.BED;
+import tk.roccodev.zta.games.CAI;
+import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.games.GNT;
+import tk.roccodev.zta.games.GNTM;
+import tk.roccodev.zta.games.Giant;
+import tk.roccodev.zta.games.HIDE;
+import tk.roccodev.zta.games.SKY;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.StuffFetcher;
 import tk.roccodev.zta.hiveapi.stuff.bed.StreakUtils;
-import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
@@ -24,23 +82,19 @@ import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
 import tk.roccodev.zta.utils.TIMVDay;
 import tk.roccodev.zta.utils.TIMVTest;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
+import tk.roccodev.zta.utils.rpc.NativeUtils;
 
 
-@Plugin(name="Beezig", version="4.4.0")
+@Plugin(name="Beezig", version=ZTAMain.BEEZIG_VERSION)
 public class ZTAMain {
 	
+	public static final String BEEZIG_VERSION = "4.5.0";
+	
+	public static boolean hasServedNews;
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
+	
+	
 	
 	
 	public static File mcFile;
@@ -53,6 +107,7 @@ public class ZTAMain {
 			return Integer.parseInt(toParse);
 		
 	}
+	
 	
 	
 	
@@ -140,6 +195,12 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "caigame", tk.roccodev.zta.modules.cai.GamePointsItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "caiteam", tk.roccodev.zta.modules.cai.TeamItem.class, "serverhivemc");
 		
+		The5zigAPI.getAPI().registerModuleItem(this, "skypoints", tk.roccodev.zta.modules.sky.PointsItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "skyteam", tk.roccodev.zta.modules.sky.TeamItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "skykills", tk.roccodev.zta.modules.sky.KillsItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "skymode", tk.roccodev.zta.modules.sky.ModeItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "skykdr", tk.roccodev.zta.modules.sky.KDRChangeItem.class, "serverhivemc");
+		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		
 		CommandManager.registerCommand(new NotesCommand());
@@ -163,16 +224,25 @@ public class ZTAMain {
 		CommandManager.registerCommand(new PlayerStatsCommand());
 		CommandManager.registerCommand(new CustomTestCommand());
 		CommandManager.registerCommand(new SetDisplayNameCommand());
+		CommandManager.registerCommand(new ZigCheckCommand());
+		CommandManager.registerCommand(new RanksCommand());
 		
-		//if(The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d") ||
-		//		The5zigAPI.getAPI().getGameProfile().getId().toString().equals("bba224a2-0bff-4913-b042-27ca3b60973f")){
+		if(The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d") ||
+				The5zigAPI.getAPI().getGameProfile().getId().toString().equals("bba224a2-0bff-4913-b042-27ca3b60973f")){
 			CommandManager.registerCommand(new RealRankCommand());
 			CommandManager.registerCommand(new SeenCommand());			
-		//}
+		}
 			
-
+		
 		
 	
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				DR.mapsPool = StuffFetcher.getDeathRunMaps();
+				TIMV.mapsPool = StuffFetcher.getTroubleInMinevilleMaps();
+			}
+		}, "Maps Fetcher").start();
 		
 		The5zigAPI.getLogger().info("Loaded Beezig");
 		
@@ -202,6 +272,49 @@ public class ZTAMain {
 		checkForFileExist(new File(mcFile + "/bedwars/"), true);
 		checkForFileExist(new File(mcFile + "/bedwars/streak.txt"), false);
 		StreakUtils.init();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				File f = new File(mcFile + "/lastlogin.txt");
+				long lastLogin = 0;
+				if(!f.exists()) {
+					try {
+						f.createNewFile();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						ArrayList<String> bloccs = new ArrayList<String>(
+								Files.readAllLines(Paths.get(f.getPath())).stream().collect(Collectors.toList()));
+						lastLogin = Long.parseLong(bloccs.get(0));
+						
+					
+						
+						
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+				
+				List<String> lines = new ArrayList<String>(Arrays.asList(System.currentTimeMillis() + ""));
+				try {
+					Files.write(Paths.get(f.getPath()), lines, Charsets.UTF_8);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				Pools.newsPool = NewsFetcher.getApplicableNews(lastLogin);
+				Pools.newMapsPool = NewsFetcher.getApplicableNewMaps(lastLogin);
+				Pools.staffPool = NewsFetcher.getApplicableStaffUpdates(lastLogin);
+				
+			}
+		}, "News Fetcher").start();
 		
 		
 		try {
@@ -243,6 +356,34 @@ public class ZTAMain {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		if (Setting.DISCORD_RPC.getValue()) {
+			try {
+				String OS1 = System.getProperty("os.name").toLowerCase();
+				if (OS1.contains("mac")) {
+					NativeUtils.loadLibraryFromJar("/libraries/darwin/libdiscord-rpc.dylib");
+				} else if (OS1.contains("nix") || OS1.contains("nux") || OS1.indexOf("aix") > 0) {
+					NativeUtils.loadLibraryFromJar("/libraries/linux-x86-64/libdiscord-rpc.so");
+				} else if (OS1.contains("win")) {
+					if (System.getProperty("os.arch").equals("x86")) {
+						NativeUtils.loadLibraryFromJar("/libraries/win32-x86/discord-rpc.dll");
+					} else {
+						NativeUtils.loadLibraryFromJar("/libraries/win32-x86-64/discord-rpc.dll");
+					}
+
+				} else {
+					NativeUtils.loadLibraryFromJar("/libraries/linux-x86-64/libdiscord-rpc.so");
+				}
+
+			
+			} catch (IOException e) {
+				System.out.println("Failed to load RPC libraries.");
+				DiscordUtils.shouldOperate = false;
+			}
+		}
+		else {
+			DiscordUtils.shouldOperate = false;
 		}
 		
 		//Instantiate GNT Classes
@@ -388,6 +529,14 @@ public class ZTAMain {
 					}
 					CAI.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
+				else if(ActiveGame.is("sky")){
+					if(SKY.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					SKY.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				}
 				
 			}
 			else{
@@ -439,19 +588,40 @@ public class ZTAMain {
 					}
 					CAI.lastRecords = args[1].trim();	
 				}
+				else if(ActiveGame.is("sky")){
+					if(SKY.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					SKY.lastRecords = args[1].trim();
+				}
 			}
 		}
 		if(evt.getMessage().endsWith(" test") && (evt.getMessage().split(" ").length == 2) && ActiveGame.is("TIMV") && Setting.TIMV_USE_TESTREQUESTS.getValue()){
-			evt.setCancelled(true);
+			
 			int random = ThreadLocalRandom.current().ints(0, TIMV.testRequests.size()).distinct().filter(i -> i != TIMV.lastTestMsg).findFirst().getAsInt();
 			TIMV.lastTestMsg = random;
-			The5zigAPI.getAPI().sendPlayerMessage(TIMV.testRequests.get(random).replaceAll("\\{p\\}", evt.getMessage().replaceAll(" test", "").trim()));
+			String player = evt.getMessage().replaceAll(" test", "").trim();
+			if(player.equalsIgnoreCase("i'll") || player.equalsIgnoreCase("ill")) return;
+			evt.setCancelled(true);
+			The5zigAPI.getAPI().sendPlayerMessage(TIMV.testRequests.get(random).replaceAll("\\{p\\}", player));
 		}
 	}
 	 
 	@EventHandler(priority=Priority.HIGHEST)
 	public void onDisconnect(ServerQuitEvent evt){
 		NotesManager.notes.clear();
+		hasServedNews = false;
+		System.out.println("Disconnecting...");
+		if(DiscordUtils.shouldOperate)
+		DiscordRPC.INSTANCE.Discord_ClearPresence();
+		if(DiscordUtils.callbacksThread != null)
+			DiscordUtils.callbacksThread.interrupt();
+		if(DiscordUtils.shouldOperate)
+		DiscordRPC.INSTANCE.Discord_Shutdown();
+		
+
 		if(ActiveGame.current() == null || ActiveGame.current().isEmpty()) return;
 		new Thread(new Runnable(){
 			@Override
@@ -478,13 +648,20 @@ public class ZTAMain {
 
 	@EventHandler(priority = EventHandler.Priority.LOW)
 	public void onTitle(TitleEvent evt){
+		if(isColorDebug) {
+			System.out.println("Title Color Debug [Global]: (" + evt.getTitle() + ") / (" + evt.getSubTitle() + ")");
+		}
+		if(evt.getTitle().equals("§r§aplay§r§8.§r§bHiveMC§r§8.§r§acom§r") && !hasServedNews) {
+			hasServedNews = true;
+			NewsServer.serveNews(Pools.newsPool, Pools.newMapsPool, Pools.staffPool);
+		}
 		//Map fallback
 		if(ActiveGame.is("dr") && DR.activeMap == null){
 			String map = ChatColor.stripColor(evt.getTitle());
 			if(map.equals("HiveMC.EU")) return;
 			if(map.equals("play.HiveMC.com")) return;
 			The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
-			DR.activeMap = DRMap.getFromDisplay(map);
+			DR.activeMap = DR.mapsPool.get(map.toLowerCase());
 		    
 		    new Thread(new Runnable(){
 		    	@Override

@@ -1,17 +1,5 @@
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -25,11 +13,18 @@ import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.CAI;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.stuff.cai.CAIMap;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiCAI;
 import tk.roccodev.zta.settings.Setting;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CAIListener extends AbstractGameListener<CAI> {
 
@@ -83,26 +78,26 @@ public class CAIListener extends AbstractGameListener<CAI> {
 			The5zigAPI.getLogger().info("CAI Color Debug: (" + message + ")");
 		}
 
-		if (message.startsWith("§8▍ §6CaI§8 ▏ §3Voting has ended! §bThe map §f")) {
+		if (message.startsWith("§8▍ §bCAI§8 ▏ §3Voting has ended! §bThe map §f")) {
 			The5zigAPI.getLogger().info("Voting ended, parsing map");
-			String afterMsg = message.split("§8▍ §6CaI§8 ▏ §3Voting has ended! §bThe map ")[1];
+			String afterMsg = message.split("§8▍ §bCAI§8 ▏ §3Voting has ended! §bThe map ")[1];
 			String map = "";
 			Pattern pattern = Pattern.compile(Pattern.quote("§f") + "(.*?)" + Pattern.quote("§b"));
 			Matcher matcher = pattern.matcher(afterMsg);
 			while (matcher.find()) {
 				map = matcher.group(1);
 			}
-			CAI.activeMap = CAIMap.getFromDisplay(map);
+			CAI.activeMap = map;
 		}
 
 		// Autovoting
 
-		else if (message.startsWith("§8▍ §6CaI§8 ▏ §a§lVote received. §3Your map now has ")
+		else if (message.startsWith("§8▍ §bCAI§8 ▏ §a§lVote received. §3Your map now has")
 				&& Setting.AUTOVOTE.getValue()) {
 			CAI.hasVoted = true;
-		} else if (message.startsWith("§8▍ §6CaI§8 ▏ §6§e§e§l6. §f§6") && !CAI.hasVoted
+		} else if (message.startsWith("§8▍ §bCAI§8 ▏ §6§e§e§l6. §f§cRandom map") && !CAI.hasVoted
 				&& Setting.AUTOVOTE.getValue()) {
-			CAI.votesToParse.add(message);
+			
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -117,8 +112,8 @@ public class CAIListener extends AbstractGameListener<CAI> {
 					for (String s : votesCopy) {
 
 						String[] data = s.split("\\.");
-						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §6CaI§8 ▏ §6§e§e§l", "")
-								.replaceAll("▍ CaI ▏", "").trim();
+						String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §bCAI§8 ▏ §6§e§e§l", "")
+								.replaceAll("▍ CAI ▏", "").trim();
 						String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
 						String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
 
@@ -147,9 +142,11 @@ public class CAIListener extends AbstractGameListener<CAI> {
 								The5zigAPI.getAPI().messagePlayer(
 										"§8▍ §6CaI§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
 								return;
-							} else {
-								The5zigAPI.getLogger().info("Done, couldn't find matches");
-
+							} else if(Setting.AUTOVOTE_RANDOM.getValue()) {
+								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting random");
+								The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+								The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for §cRandom map");
+							
 								CAI.votesToParse.clear();
 								CAI.hasVoted = true;
 								// he hasn't but we don't want to check again and again
@@ -159,40 +156,36 @@ public class CAIListener extends AbstractGameListener<CAI> {
 					}
 				}
 			}).start();
-		} else if (message.startsWith("§8▍ §6CaI§8 ▏ §6§e§e§l") && !CAI.hasVoted && Setting.AUTOVOTE.getValue()) {
+		} else if (message.startsWith("§8▍ §bCAI§8 ▏ §6§e§e§l") && !CAI.hasVoted && Setting.AUTOVOTE.getValue()) {
 			CAI.votesToParse.add(message);
 		} 
-		else if(message.startsWith("§8▍ §6CaI§8 ▏ §aYou are part of the")) {
+		else if(message.endsWith("§cCowboys Leader§7.")) {
 		
-			String team = message.replaceAll("§8▍ §6CaI§8 ▏ §aYou are part of the ", "").replaceAll(", good luck!", "").trim();
+			CAI.team = "§eIndians";
 			
-			switch(team) {
-			case "§bindians§a":
-				CAI.team = "§eIndians";
-				break;
-			case "§bcowboys§a":
-				CAI.team = "§cCowboys";
-				break;
-			}
-			
+			DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as I on " + CAI.activeMap, "game_cai");
 			
 		}
-		else if (message.equals("§8▍ §6CaI§8 ▏ §6You receive 10 points and 5 tokens for your teams capture.")) {
+		else if(message.endsWith("§eIndians Leader§7.")) {
+			CAI.team = "§cCowboys";
+			DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as C on " + CAI.activeMap, "game_cai");
+		}
+		else if (message.equals("§8▍ §bCAI§8 ▏ §7You received §f10 points §7for your team's capture.")) {
 
 			HiveAPI.tokens += 5;
 			CAI.gamePoints += 10;
 
-		} else if (message.startsWith("§8▍ §6CaI§8 ▏ §6You gained 5 points for killing")) {
+		} else if (message.startsWith("§8▍ §bCAI§8 ▏ §7You gained §f5 points §7for killing")) {
 			
 			
 			CAI.gamePoints += 5;
 			
+			
+		} else if (message.endsWith("§7[Leader Alive Bonus]")
+				&& message.startsWith("§8▍ §bCAI§8 ▏ §2+")) {
 
-		} else if (message.endsWith("points for staying alive as a leader for another minute.")
-				&& message.startsWith("§8▍ §6CaI§8 ▏ §6You gained")) {
-
-			String points = message.replaceAll("points for staying alive as a leader for another minute.", "")
-					.replaceAll("§8▍ §6CaI§8 ▏ §6You gained", "");
+			String points = message.replace(" Points §7[Leader Alive Bonus]", "")
+					.replace("§8▍ §bCAI§8 ▏ §2+ §a", "");
 
 			CAI.gamePoints += Long.parseLong(points.trim());
 

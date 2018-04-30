@@ -8,12 +8,11 @@ import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
-import tk.roccodev.zta.hiveapi.stuff.cai.CAIMap;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
 
 public class CAI extends GameMode {
 	
-	public static CAIMap activeMap;
+	public static String activeMap;
 	
 	public static List<String> messagesToSend = new ArrayList<String>();
 	public static List<String> footerToSend = new ArrayList<String>();

@@ -1,5 +1,9 @@
 package tk.roccodev.zta.command;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
@@ -36,10 +40,12 @@ public class PBCommand implements Command{
 			}).start();
 	
 		}
-		else if(args.length == 2){
+		else {
 			
 			String ign = args[0];
-			DRMap map = DRMap.getFromDisplay(args[1]);
+			List<String> argsL = new ArrayList<String>(Arrays.asList(args));
+			argsL.remove(0);
+			DRMap map = DR.mapsPool.get(String.join(" ", argsL).toLowerCase());
 			
 				
 			new Thread(new Runnable(){
@@ -51,21 +57,7 @@ public class PBCommand implements Command{
 			}).start();
 	
 		}
-		else if(args.length == 3){
-			String map1 = args[1] + " " + args[2];
-			String ign = args[0];
-			DRMap map = DRMap.getFromDisplay(map1);
-			new Thread(new Runnable(){
-				@Override
-				public void run(){
-					ApiDR api = new ApiDR(ign);
-					The5zigAPI.getAPI().messagePlayer(Log.info + api.getParentMode().getNetworkRankColor() + api.getParentMode().getCorrectName() + "§e's Personal Best on map §6" + map.getDisplayName() + "§e is §6" + api.getPersonalBest(map));
-				}
-			}).start();
-		}
-		else{
-			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /pb [player] or /pb [player] [map]");
-		}		
+			
 		return true;
 	}
 

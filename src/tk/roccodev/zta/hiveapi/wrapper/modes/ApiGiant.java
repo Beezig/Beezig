@@ -1,10 +1,10 @@
 package tk.roccodev.zta.hiveapi.wrapper.modes;
 
+import java.util.Date;
+
 import eu.the5zig.mod.server.GameMode;
 import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.hiveapi.wrapper.APIGameMode;
-
-import java.util.Date;
 
 public class ApiGiant extends APIGameMode{
 

@@ -18,7 +18,7 @@
     </target>
  <target name="jar">
         <mkdir dir="build/jar"/>
-        <jar destfile="build/jar/Beezig.jar" basedir="build/classes">
+        <jar destfile="build/jar/Beezig.jar" basedir="build/classes" keepcompression="true">
   	 <fileset dir="${src.dir}" casesensitive="yes">
   		<include name="plugin.json"/>
   		<include name="modules.json"/>
@@ -26,6 +26,8 @@
   		<include name="lang/*"/>
   	
 </fileset>
+        <zipfileset dir="src/libraries" prefix="libraries"/>
+        	
 
           
         </jar>

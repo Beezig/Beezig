@@ -18,6 +18,7 @@ import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.zta.settings.Setting;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
@@ -103,19 +104,11 @@ public class BEDListener extends AbstractGameListener<BED>{
 		    while (matcher.find()) {
 		        map = matcher.group(1);
 		    }
-		    BEDMap map1 = BEDMap.getFromDisplay(map);
-		    BED.activeMap = map1;
-		    if(BED.mode == null){
-		    	if(map1 == BEDMap.BED_RUINS ||
-		    			map1 == BEDMap.BED_FLORAL ||
-		    			map1 == BEDMap.BED_HELL||
-		    			map1 == BEDMap.BED_PIRATES){
-		    		BED.mode = "Teams";	    		
-		    	}
-		    	if(map1 == BEDMap.BED_FOOD){
-		    		BED.mode = "Duo";
-		    	}
-		    }
+		   
+		    BED.activeMap = map;
+		    
+
+			DiscordUtils.updatePresence("Housekeeping in BedWars: " + BED.mode, "Playing on " + BED.activeMap, "game_bedwars");
 		}
 
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained") && message.contains("§a points for killing")){
@@ -502,6 +495,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 		else if(message.contains("§lYou are on ")){
 			//"                        §6§lYou are on Gold Team!"
             //§9§lYou are on Blue Team!
+
 			String team = null;
 			Pattern pattern = Pattern.compile(Pattern.quote("the ") + "(.*?)" + Pattern.quote(" Team!"));
 			Matcher matcher = pattern.matcher(message.trim());

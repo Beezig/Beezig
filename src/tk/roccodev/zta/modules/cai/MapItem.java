@@ -17,7 +17,7 @@ public class MapItem extends GameModeItem<CAI>{
 		protected Object getValue(boolean dummy) {
 			try{
 				if(CAI.activeMap == null) return "No Map";
-				return CAI.activeMap.getDisplayName().trim();
+				return CAI.activeMap;
 			}catch(Exception e){
 				e.printStackTrace();
 				return "No Map";

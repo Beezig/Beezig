@@ -161,6 +161,27 @@
           "type": "caiteam"
         }
       ]
+    },
+    {
+      "id": "SkyWars",
+      "name": "SkyWars",
+      "items": [
+        {
+          "type": "skypoints"
+        },
+         {
+          "type": "skyteam"
+        },
+         {
+          "type": "skymode"
+        },
+        {
+          "type": "skykills"
+        },
+        {
+          "type": "skykdr"
+        }
+      ]
     }
   ]
 }

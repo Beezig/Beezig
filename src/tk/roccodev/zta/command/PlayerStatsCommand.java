@@ -10,6 +10,7 @@ import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.zta.hiveapi.stuff.hide.HIDERank;
+import tk.roccodev.zta.hiveapi.stuff.sky.SKYRank;
 import tk.roccodev.zta.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.*;
@@ -59,7 +60,7 @@ public class PlayerStatsCommand implements Command {
 				APIUtils.concurrentSort(points,	points,title,name);
 
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
-				for(int i = name.size()-1; i != 0; i--){
+				for(int i = 0; i < name.size(); i++){
 					try {
 						if (points.get(i) != 0) {
 							The5zigAPI.getAPI().messagePlayer(Log.info + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §e- " + title.get(i) + " §r" + name.get(i));
@@ -68,11 +69,11 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "TIMV Playerstats: " + name.size() + "P / " + (System.currentTimeMillis() - startT) + "ms");
-				The5zigAPI.getAPI().messagePlayer("");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "TIMV Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
-		if(game.equalsIgnoreCase("bed")){
+		else if(game.equalsIgnoreCase("bed")){
 			long startT = System.currentTimeMillis();
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
 			new Thread(() -> {
@@ -103,7 +104,7 @@ public class PlayerStatsCommand implements Command {
 				APIUtils.concurrentSort(points,	points,titlecolor,title,name);
 
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
-				for(int i = name.size()-1; i != 0; i--){
+				for(int i = 0; i < name.size(); i++){
 					try {
 						if (points.get(i) != 0) {
 							The5zigAPI.getAPI().messagePlayer(Log.info + titlecolor.get(i) + points.get(i) + " §e- " + titlecolor.get(i) + title.get(i) + " §r" + name.get(i));
@@ -112,11 +113,11 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "BED Playerstats: " + name.size() + "P / " + (System.currentTimeMillis() - startT) + "ms");
-				The5zigAPI.getAPI().messagePlayer("");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "BED Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
-		if(game.equalsIgnoreCase("dr")){
+		else if(game.equalsIgnoreCase("dr")){
 			long startT = System.currentTimeMillis();
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
 			new Thread(() -> {
@@ -139,7 +140,7 @@ public class PlayerStatsCommand implements Command {
 				APIUtils.concurrentSort(points,	points,title,name);
 
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
-				for(int i = name.size()-1; i != 0; i--){
+				for(int i = 0; i < name.size(); i++){
 					try {
 						if (points.get(i) != 0) {
 							The5zigAPI.getAPI().messagePlayer(Log.info + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §e- " + title.get(i) + " §r" + name.get(i));
@@ -148,11 +149,11 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "DR Playerstats: " + name.size() + "P / " + (System.currentTimeMillis() - startT) + "ms");
-				The5zigAPI.getAPI().messagePlayer("");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "DR Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
-		if(game.equalsIgnoreCase("cai")){
+		else if(game.equalsIgnoreCase("cai")){
 			long startT = System.currentTimeMillis();
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
 			new Thread(() -> {
@@ -175,7 +176,7 @@ public class PlayerStatsCommand implements Command {
 				APIUtils.concurrentSort(points,	points,title,name);
 
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
-				for(int i = name.size()-1; i != 0; i--){
+				for(int i = 0; i < name.size(); i++){
 					try {
 						if (points.get(i) != 0) {
 							The5zigAPI.getAPI().messagePlayer(Log.info + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §e- " + title.get(i) + " §r" + name.get(i));
@@ -184,11 +185,11 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "CAI Playerstats: " + name.size() + "P / " + (System.currentTimeMillis() - startT) + "ms");
-				The5zigAPI.getAPI().messagePlayer("");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "CAI Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
-		if(game.equalsIgnoreCase("hide")){
+		else if(game.equalsIgnoreCase("hide")){
 			long startT = System.currentTimeMillis();
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
 			new Thread(() -> {
@@ -211,7 +212,7 @@ public class PlayerStatsCommand implements Command {
 				APIUtils.concurrentSort(points,	points,title,name);
 
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
-				for(int i = name.size()-1; i != 0; i--){
+				for(int i = 0; i < name.size(); i++){
 					try {
 						if (points.get(i) != 0) {
 							The5zigAPI.getAPI().messagePlayer(Log.info + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §e- " + title.get(i) + " §r" + name.get(i));
@@ -220,11 +221,49 @@ public class PlayerStatsCommand implements Command {
 						//e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI().messagePlayer(Log.info + "HIDE Playerstats: " + name.size() + "P / " + (System.currentTimeMillis() - startT) + "ms");
-				The5zigAPI.getAPI().messagePlayer("");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "HIDE Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
-		
+		else if(game.equalsIgnoreCase("sky")){
+			long startT = System.currentTimeMillis();
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
+			new Thread(() -> {
+				List<Long> points = new ArrayList<>();
+				List<String> title = new ArrayList<>();
+				List<String> name = new ArrayList<>();
+
+				for(NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
+					try {
+						ApiSKY apiSKY = new ApiSKY(npi.getGameProfile().getName(), npi.getGameProfile().getId().toString());
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(npi.getGameProfile().getName(), npi.getGameProfile().getId().toString());
+						points.add(apiSKY.getPoints());
+						title.add(SKYRank.getFromDisplay(apiSKY.getTitle()).getTotalDisplay());
+						name.add(apiHIVE.getNetworkRankColor() + npi.getGameProfile().getName());
+					}catch (Exception e){
+						//e.printStackTrace();
+					}
+				}
+
+				APIUtils.concurrentSort(points,	points,title,name);
+
+				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
+				for(int i = 0; i < name.size(); i++){
+					try {
+						if (points.get(i) != 0) {
+							The5zigAPI.getAPI().messagePlayer(Log.info + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §e- " + title.get(i) + " §r" + name.get(i));
+						}
+					} catch (Exception e){
+						//e.printStackTrace();
+					}
+				}
+				The5zigAPI.getAPI().messagePlayer(Log.info + "SKY Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
+			}).start();
+		}
+		else {
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Specified mode not found.");
+		}
 		return true;
 	}
 }

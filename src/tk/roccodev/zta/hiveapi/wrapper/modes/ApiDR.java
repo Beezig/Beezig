@@ -1,10 +1,11 @@
 package tk.roccodev.zta.hiveapi.wrapper.modes;
 
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.server.GameMode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.server.GameMode;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
@@ -34,7 +35,7 @@ public class ApiDR extends PvPMode {
 	public String getPersonalBest(DRMap map){
 		try {
 			JSONObject mapRecords = (JSONObject) object("maprecords");
-			Long time = (long) mapRecords.get(map.toString());
+			Long time = (long) mapRecords.get(map.getHiveAPIName());
 
 			if (time >= 60) {
 				int seconds = Math.toIntExact(time) % 60;

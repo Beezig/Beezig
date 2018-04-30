@@ -12,11 +12,11 @@ import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.hiveapi.APIValues;
-import tk.roccodev.zta.hiveapi.stuff.hide.HIDEMap;
 import tk.roccodev.zta.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
 import tk.roccodev.zta.settings.Setting;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
@@ -86,7 +86,8 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 		    while (matcher.find()) {
 		        map = matcher.group(1);
 		    }
-			HIDE.activeMap = HIDEMap.getFromDisplay(map);
+			HIDE.activeMap = map;
+			DiscordUtils.updatePresence("Playing Hide & Seek", "Hiding on " + HIDE.activeMap, "game_hide");
 		}
 
 		//Autovoting
@@ -140,7 +141,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 								The5zigAPI.getAPI().messagePlayer("§8▍ §bHide§aAnd§eSeek§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
 								return;
 							}
-							else{
+							else if(Setting.AUTOVOTE_RANDOM.getValue()){
 								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting Random");
 								The5zigAPI.getAPI().sendPlayerMessage("/v 6");
 								The5zigAPI.getAPI().messagePlayer("§8▍ §bHide§aAnd§eSeek§8 ▏ " + "§eAutomatically voted for §cRandom map");
@@ -177,6 +178,9 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 			The5zigAPI.getLogger().info("Found Player URL");
 
 			return true;
+		}
+		else if(message.equals("                          §6§lYou are a §c§lSEEKER!")) {
+			DiscordUtils.updatePresence("Playing Hide & Seek", "Seeking on " + HIDE.activeMap, "game_hide");
 		}
 		else if((message.equals("                      §6§m                  §6§m                  ")&& !message.startsWith("§o "))){
 			The5zigAPI.getLogger().info("found footer");

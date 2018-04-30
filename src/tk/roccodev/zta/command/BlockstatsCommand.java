@@ -1,15 +1,16 @@
 package tk.roccodev.zta.command;
 
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.util.minecraft.ChatColor;
-import org.json.simple.JSONObject;
-import tk.roccodev.zta.Log;
-import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.json.simple.JSONObject;
+
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.Log;
+import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
 
 public class BlockstatsCommand implements Command{
 

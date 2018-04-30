@@ -251,7 +251,7 @@ public class HiveAPI {
 			o = (JSONObject) parser.parse(readUrl(parseMojangPlayerAPI(ign)));
 		}  catch (Exception e) {
 			The5zigAPI.getLogger().info("Failed getUUID (Mojang)");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}		
 		return (String) o.get("id");
 	}

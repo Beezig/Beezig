@@ -14,11 +14,11 @@ import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.settings.Setting;
+import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -77,7 +77,8 @@ public class DRListener extends AbstractGameListener<DR> {
 			while (matcher.find()) {
 				map = matcher.group(1);
 			}
-			DR.activeMap = DRMap.getFromDisplay(map);
+			DR.activeMap = DR.mapsPool.get(map.toLowerCase());
+			
 		}
 
 		else if (message.contains("§lYou are a ") && gameMode != null) {
@@ -113,6 +114,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
 				break;
 			}
+			DiscordUtils.updatePresence("Parkouring in DeathRun", (DR.role.equals("Runner") ? "Running" : "Killing") + " on " + DR.activeMap.getDisplayName(), "game_dr");
 		} else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §aCheckpoint Reached! §7") && ActiveGame.is("dr")
 				&& DR.role == "Runner") {
 			// No more double tokens weekends Niklas :>)
@@ -190,7 +192,7 @@ public class DRListener extends AbstractGameListener<DR> {
 								The5zigAPI.getAPI()
 										.messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
 								return;
-							} else {
+							} else if(Setting.AUTOVOTE_RANDOM.getValue()){
 								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting Random");
 								The5zigAPI.getAPI().sendPlayerMessage("/v 6");
 								The5zigAPI.getAPI().messagePlayer(Log.info + "§eAutomatically voted for §cRandom map");

@@ -1,9 +1,9 @@
 
 package tk.roccodev.zta.settings;
 
-import eu.the5zig.mod.The5zigAPI;
-
 import java.io.IOException;
+
+import eu.the5zig.mod.The5zigAPI;
 
 public enum Setting {
 
@@ -13,7 +13,10 @@ public enum Setting {
 	SHOW_RECORDS_MONTHLYRANK(true, "Advanced Records - Show players' rank on the Monthly Leaderboards by Maxthat"),
 	SHOW_RECORDS_ACHIEVEMENTS(true, "Advanced Records - Show achievements"),
 	SHOW_RECORDS_RANK(true, "BED Advanced Records - Show point based rank"),
+	DISCORD_RPC(true, "Use Discord Rich Presence"),
 	AUTOVOTE(true, "Turn the autovote feature on or off"),
+	AUTOVOTE_RANDOM(true, "Autovote for random map if no favorites are found"),
+	BRIEFING(true, "Opt-in or opt-out for the news briefing"),
 	
 	TIMV_SHOW_KRR(true, "TIMV Advanced Records - Show Karma/rolepoints"),
 	TIMV_SHOW_MOSTPOINTS(true, "TIMV Advanced Records - Show Karma record"),
@@ -50,7 +53,13 @@ public enum Setting {
 	CAI_SHOW_WINRATE(true, "CAI Advanced Records - Show Winrate"), 
 	CAI_SHOW_POINTSPG(true, "CAI Advanced Records - Show Points per Game"),
 	CAI_SHOW_POINTS_TO_NEXT_RANK(true, "CAI Advanced Records - Show points to next rank"),
-	CAI_SHOW_CATCHES_CAUGHT(true, "CAI Advenced Records - Show Catches/Caught Ratio");
+	CAI_SHOW_CATCHES_CAUGHT(true, "CAI Advanced Records - Show Catches/Caught Ratio"), 
+	
+	SKY_SHOW_POINTS_TO_NEXT_RANK(true, "SKY Advanced Records - Show points to next rank"), 
+	SKY_SHOW_WINRATE(true, "SKY Advanced Records - Show Winrate"), 
+	SKY_SHOW_KD(true, "SKY Advanced Records - Show Kills/Deaths"),
+	SKY_SHOW_KPG(true, "SKY Advanced Records - Show Kills per game"),
+	SKY_SHOW_PPG(true, "SKY Advanced Records - Show Points per game");
 	
 
 	

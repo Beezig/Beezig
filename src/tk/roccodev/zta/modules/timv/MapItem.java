@@ -14,26 +14,14 @@ public class MapItem extends GameModeItem<TIMV>{
 	protected Object getValue(boolean dummy) {
 		TIMVMap map = TIMV.activeMap;
 		if(map == null) return "Unknown map";
-		String name = map.getDisplayName();
+		String name = map.getName();
 		StringBuilder tr = new StringBuilder();
 		tr.append(name);
 		if((boolean)getProperties().getSetting("showenderchests").get()){
-			int a = map.getAccessibleEnderchests();
-			int t = map.getTotalEnderchests();
-			tr.append(" (");
-			if((boolean)getProperties().getSetting("showaccessible").get()){
-				tr.append(a);
-			}
-			if((boolean)getProperties().getSetting("showendertotal").get()){
-				if((boolean)getProperties().getSetting("showaccessible").get()){
-					tr.append(" / ").append(t);
-				}
-				else{
-					tr.append(t);
-				}
-			}
-			tr.append(")");
 			
+			int t = map.getEnderchests();
+			
+			tr.append(" (" + t + ")");
 			
 			
 		}
@@ -45,8 +33,6 @@ public class MapItem extends GameModeItem<TIMV>{
 	@Override
 	public void registerSettings() {
 		// TODO Auto-generated method stub
-		getProperties().addSetting("showaccessible", true);
-		getProperties().addSetting("showendertotal", false);
 		getProperties().addSetting("showenderchests", true);
 	}
 
