@@ -239,6 +239,7 @@ public class ZTAMain {
 			@Override
 			public void run() {
 				DR.mapsPool = StuffFetcher.getDeathRunMaps();
+				TIMV.mapsPool = StuffFetcher.getTroubleInMinevilleMaps();
 			}
 		}, "Maps Fetcher").start();
 		

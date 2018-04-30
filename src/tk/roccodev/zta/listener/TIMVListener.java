@@ -190,7 +190,8 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 		    TIMV.mapStr = map;
 		    DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "Playing on " + map, "game_timv");
 		    
-			TIMV.activeMap = TIMVMap.getFromDisplay(map);
+			TIMV.activeMap = TIMV.mapsPool.get(map.toLowerCase());
+			
 			
 		}
 
@@ -205,7 +206,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			}
 			The5zigAPI.getLogger().info("FALLBACK: " + map);
 
-			TIMV.activeMap = TIMVMap.getFromDisplay(map);
+			TIMV.activeMap = TIMV.mapsPool.get(map.toLowerCase());
 		}
 		
 		else if(message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")){
