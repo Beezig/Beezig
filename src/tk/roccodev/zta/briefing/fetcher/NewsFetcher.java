@@ -70,7 +70,7 @@ public class NewsFetcher {
 			e.printStackTrace();
 		}
 		if(tr.size() < 10) return tr;
-		return new ArrayList<NewMap>(tr.subList(0, 9));
+		return new ArrayList<NewMap>(tr.subList(0, 10));
 	}
 	
 	public static ArrayList<StaffUpdate> getApplicableStaffUpdates(long lastLogin){
@@ -97,7 +97,7 @@ public class NewsFetcher {
 			e.printStackTrace();
 		}
 		
-		if(tr.size() > 10) tr = new ArrayList<StaffUpdate>(tr.subList(0, 9));
+		if(tr.size() > 10) tr = new ArrayList<StaffUpdate>(tr.subList(0, 10));
 		Collections.sort(tr, new Comparator<StaffUpdate>() {
 
 			@Override
