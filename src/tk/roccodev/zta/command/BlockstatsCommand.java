@@ -1,16 +1,15 @@
 package tk.roccodev.zta.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.json.simple.JSONObject;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
+import org.json.simple.JSONObject;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class BlockstatsCommand implements Command{
 
@@ -63,9 +62,18 @@ public class BlockstatsCommand implements Command{
 							blockName = "Oak Planks";
 						}
 						if (blockName.equals("Wood:1")) {
-							//no idea
 							blockName = "Wood";
 						}
+						if (blockName.equals("Wood:3")) {
+							blockName = "Jungle Planks";
+						}
+						if (blockName.equals("Stone:6")) {
+							blockName = "Polished Andesite";
+						}
+						if (blockName.equals("Prismarine:2")) {
+							blockName = "Dark Prismarine";
+						}
+
 						The5zigAPI.getAPI().messagePlayer("§3" + blockName + ": " + APIUtils.getLevelColorHIDE(levels.get(i).intValue()) + "" + levels.get(i) + APIUtils.getNextPecentHIDE(rawExp.get(i).intValue(), levels.get(i).intValue()));
 					}
 					The5zigAPI.getAPI().messagePlayer("");

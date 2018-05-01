@@ -3,6 +3,7 @@ package tk.roccodev.zta;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.core.helpers.Charsets;
 import org.bstats.MetricsLite;
 
 import club.minnced.discord.rpc.DiscordRPC;
@@ -89,7 +89,7 @@ import tk.roccodev.zta.utils.rpc.NativeUtils;
 @Plugin(name="Beezig", version=ZTAMain.BEEZIG_VERSION)
 public class ZTAMain {
 	
-	public static final String BEEZIG_VERSION = "4.5.0";
+	public static final String BEEZIG_VERSION = "4.5.1";
 	
 	public static boolean hasServedNews;
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -302,7 +302,7 @@ public class ZTAMain {
 				
 				List<String> lines = new ArrayList<String>(Arrays.asList(System.currentTimeMillis() + ""));
 				try {
-					Files.write(Paths.get(f.getPath()), lines, Charsets.UTF_8);
+					Files.write(Paths.get(f.getPath()), lines, Charset.forName("UTF-8"));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -651,7 +651,7 @@ public class ZTAMain {
 		if(isColorDebug) {
 			System.out.println("Title Color Debug [Global]: (" + evt.getTitle() + ") / (" + evt.getSubTitle() + ")");
 		}
-		if(evt.getTitle().equals("§r§aplay§r§8.§r§bHiveMC§r§8.§r§acom§r") && !hasServedNews) {
+		if((evt.getTitle().equals("§r§aplay§r§8.§r§bHiveMC§r§8.§r§acom§r") || evt.getTitle().equals("§aplay§r§8.§r§bHiveMC§r§8.§r§acom§r")) && !hasServedNews) {
 			hasServedNews = true;
 			NewsServer.serveNews(Pools.newsPool, Pools.newMapsPool, Pools.staffPool);
 		}

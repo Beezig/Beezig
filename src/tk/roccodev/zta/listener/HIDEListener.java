@@ -1,5 +1,17 @@
 package tk.roccodev.zta.listener;
 
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -17,13 +29,6 @@ import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class HIDEListener extends AbstractGameListener<HIDE> {
 
@@ -53,12 +58,17 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					The5zigAPI.getLogger().info(sb.getTitle());
 					
+					ApiHIDE api = new ApiHIDE(The5zigAPI.getAPI().getGameProfile().getName());
+					
 					if(sb != null && sb.getTitle().contains("Your HIDE Stats")){
 						int points = sb.getLines().get(ChatColor.AQUA + "Points");
 						APIValues.HIDEpoints = (long) points;
 					}
+					else {
+						APIValues.HIDEpoints = api.getPoints();
+					}
 
-					HIDE.rank = HIDERank.getFromDisplay(new ApiHIDE(The5zigAPI.getAPI().getGameProfile().getName()).getTitle()).getTotalDisplay();
+					HIDE.rank = HIDERank.getFromDisplay(api.getTitle()).getTotalDisplay();
 
 				} catch (Exception e) {
 					e.printStackTrace();

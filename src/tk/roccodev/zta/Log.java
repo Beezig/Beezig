@@ -9,7 +9,7 @@ public class Log {
 	
 	
 	public static String getUserAgent() {
-		return "Beezig v" + ZTAMain.BEEZIG_VERSION + " (5zig v" + The5zigAPI.getAPI().getModVersion() + " on " + The5zigAPI.getAPI().getMinecraftVersion() + "; Forge=" + The5zigAPI.getAPI().isForgeEnvironment() + ")";
+		return "Beezig/" + ZTAMain.BEEZIG_VERSION + " (5zig/" + The5zigAPI.getAPI().getModVersion() + " on " + The5zigAPI.getAPI().getMinecraftVersion() + "; Forge=" + The5zigAPI.getAPI().isForgeEnvironment() + ")";
 	}
 
 }

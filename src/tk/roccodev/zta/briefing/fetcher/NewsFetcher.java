@@ -29,7 +29,7 @@ public class NewsFetcher {
 		try {
 			JSONParser parser = new JSONParser();
 			JSONArray arr = (JSONArray) parser.parse(APIUtils.readURL(new URL(Links.OUR_NEWS)));
-			
+			System.out.println("Fetched " + arr.size() + " news. Lastlogin is " + lastLogin);
 			for(Object o : arr) {
 				JSONObject j = (JSONObject)o;
 				
@@ -39,7 +39,7 @@ public class NewsFetcher {
 				tr.add(new News((String)j.get("title"), (String)j.get("content"), (long)j.get("postedAt")));
 				
 			}
-			
+			System.out.println("Loaded " + tr.size() + " news.");
 			
 		} catch (IOException | ParseException e) {
 			// TODO Auto-generated catch block
@@ -56,6 +56,7 @@ public class NewsFetcher {
 		try {
 			JSONParser parser = new JSONParser();
 			JSONArray arr = (JSONArray) parser.parse(APIUtils.readURL(new URL(Links.LERGIN_MAP)));
+			System.out.println("Fetched " + arr.size() + " maps. Lastlogin is " + lastLogin);
 			
 			for(Object o : arr) {
 				JSONObject j = (JSONObject) o;
@@ -65,6 +66,7 @@ public class NewsFetcher {
 				
 				tr.add(new NewMap((String)j.get("gameType"), (String)j.get("mapName")));
 			}
+			System.out.println("Loaded " + tr.size() + " maps.");
 			
 		} catch (Exception e) {
 			
@@ -82,6 +84,7 @@ public class NewsFetcher {
 		try {
 			JSONParser parser = new JSONParser();
 			JSONArray arr = (JSONArray) parser.parse(APIUtils.readURL(new URL(Links.LERGIN_STAFF)));
+			System.out.println("Fetched " + arr.size() + " staff updates. Lastlogin is " + lastLogin);
 			
 			for(Object o : arr) {
 				JSONObject j = (JSONObject) o;
@@ -93,6 +96,7 @@ public class NewsFetcher {
 				
 				tr.add(s);
 			}
+			System.out.println("Loaded " + tr.size() + " staff updates.");
 			
 		} catch (IOException | ParseException e) {
 			// TODO Auto-generated catch block
