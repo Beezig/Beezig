@@ -7,6 +7,7 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
+import tk.roccodev.zta.hiveapi.stuff.grav.GRAVRank;
 import tk.roccodev.zta.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.zta.hiveapi.stuff.sky.SKYRank;
 import tk.roccodev.zta.hiveapi.stuff.timv.TIMVRank;
@@ -92,6 +93,17 @@ public class RanksCommand implements Command {
 
 				for(SKYRank skyRank : SKYRank.values()){
 					The5zigAPI.getAPI().messagePlayer(Log.info + skyRank.getTotalDisplay()  + " §e- " + skyRank.getTotalDisplay().replaceAll(skyRank.getDisplay(), "") + skyRank.getStart());
+				}
+
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
+			}).start();
+		}
+		if(game.equalsIgnoreCase("grav")){
+			new Thread(() -> {
+				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
+
+				for(GRAVRank gravRank : GRAVRank.values()){
+					The5zigAPI.getAPI().messagePlayer(Log.info + gravRank.getTotalDisplay()  + " §e- " + gravRank.getTotalDisplay().replaceAll(gravRank.getDisplay(), "") + gravRank.getStart());
 				}
 
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");

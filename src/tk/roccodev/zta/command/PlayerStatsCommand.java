@@ -9,6 +9,7 @@ import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
+import tk.roccodev.zta.hiveapi.stuff.grav.GRAVRank;
 import tk.roccodev.zta.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.zta.hiveapi.stuff.sky.SKYRank;
 import tk.roccodev.zta.hiveapi.stuff.timv.TIMVRank;
@@ -258,6 +259,42 @@ public class PlayerStatsCommand implements Command {
 					}
 				}
 				The5zigAPI.getAPI().messagePlayer(Log.info + "SKY Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
+				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
+			}).start();
+		}
+		else if(game.equalsIgnoreCase("grav")){
+			long startT = System.currentTimeMillis();
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
+			new Thread(() -> {
+				List<Long> points = new ArrayList<>();
+				List<String> title = new ArrayList<>();
+				List<String> name = new ArrayList<>();
+
+				for(NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
+					try {
+						ApiGRAV apiGRAV = new ApiGRAV(npi.getGameProfile().getName(), npi.getGameProfile().getId().toString());
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(npi.getGameProfile().getName(), npi.getGameProfile().getId().toString());
+						points.add(apiGRAV.getPoints());
+						title.add(GRAVRank.getFromDisplay(apiGRAV.getTitle()).getTotalDisplay());
+						name.add(apiHIVE.getNetworkRankColor() + npi.getGameProfile().getName());
+					}catch (Exception e){
+						//e.printStackTrace();
+					}
+				}
+
+				APIUtils.concurrentSort(points,	points,title,name);
+
+				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
+				for(int i = 0; i < name.size(); i++){
+					try {
+						if (points.get(i) != 0) {
+							The5zigAPI.getAPI().messagePlayer(Log.info + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §e- " + title.get(i) + " §r" + name.get(i));
+						}
+					} catch (Exception e){
+						//e.printStackTrace();
+					}
+				}
+				The5zigAPI.getAPI().messagePlayer(Log.info + "GRAV Playerstats: " + name.size() + "P / " + ((System.currentTimeMillis() - startT)/1000) + "s / " + APIUtils.average(points.toArray()) + " Average");
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
 			}).start();
 		}
