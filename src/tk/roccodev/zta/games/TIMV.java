@@ -31,6 +31,7 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.timv.TIMVMap;
+import tk.roccodev.zta.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.zta.notes.NotesManager;
 
 public class TIMV extends GameMode {
@@ -55,6 +56,7 @@ public class TIMV extends GameMode {
 	public static int dailyKarma;
 
 	public static String rank;
+	public static TIMVRank rankObject;
 
 	// Advanced Records
 	public static List<String> messagesToSend = new ArrayList<String>();
