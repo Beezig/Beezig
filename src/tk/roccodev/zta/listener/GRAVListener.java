@@ -227,7 +227,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 
 							if(Setting.GRAV_SHOW_PPG.getValue()) {
 								double ppg = (double) ((double)points / (double)gamesPlayed);
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df.format(ppg));
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df1f.format(ppg));
 							}
 							if(Setting.GRAV_SHOW_FINISHRATE.getValue()) {
 								double fr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
