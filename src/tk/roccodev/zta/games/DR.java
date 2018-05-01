@@ -10,6 +10,7 @@ import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
+import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
 
 public class DR extends GameMode{
 
@@ -28,6 +29,7 @@ public class DR extends GameMode{
 	public static HashMap<String, DRMap> mapsPool;
 	
 	public static String rank;
+	public static DRRank rankObject;
 	
 	public static List<String> votesToParse = new ArrayList<String>();
 	public static boolean hasVoted = false;
