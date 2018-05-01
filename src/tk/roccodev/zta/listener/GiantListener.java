@@ -10,10 +10,13 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.Giant;
+import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.stuff.gnt.GiantRank;
+import tk.roccodev.zta.hiveapi.stuff.sky.SKYRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiGiant;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiSKY;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
@@ -73,6 +76,12 @@ public class GiantListener extends AbstractGameListener<Giant> {
 				Giant.totalKdr = (double) Giant.totalKills / Giant.totalDeaths;
 				Giant.gameKdr = Giant.totalKdr;
 				The5zigAPI.getLogger().info(Giant.totalKdr);
+			
+				
+				
+				Giant.rankObject = GiantRank
+						.getFromDisplay(HiveAPI.GiantgetRank(The5zigAPI.getAPI().getGameProfile().getName(), lobby));
+				Giant.rank = Giant.rankObject.getTotalDisplay();
 
 			}
 		}).start();
