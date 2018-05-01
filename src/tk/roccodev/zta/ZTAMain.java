@@ -651,7 +651,7 @@ public class ZTAMain {
 		if(isColorDebug) {
 			System.out.println("Title Color Debug [Global]: (" + evt.getTitle() + ") / (" + evt.getSubTitle() + ")");
 		}
-		if(evt.getTitle().equals("§r§aplay§r§8.§r§bHiveMC§r§8.§r§acom§r") || evt.getTitle().equals("§aplay§r§8.§r§bHiveMC§r§8.§r§acom§r") && !hasServedNews) {
+		if((evt.getTitle().equals("§r§aplay§r§8.§r§bHiveMC§r§8.§r§acom§r") || evt.getTitle().equals("§aplay§r§8.§r§bHiveMC§r§8.§r§acom§r")) && !hasServedNews) {
 			hasServedNews = true;
 			NewsServer.serveNews(Pools.newsPool, Pools.newMapsPool, Pools.staffPool);
 		}
