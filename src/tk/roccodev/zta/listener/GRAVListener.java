@@ -83,96 +83,15 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 		if (message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps")) {
 			The5zigAPI.getLogger().info("Voting ended, parsing maps");
 			String afterMsg = message.split("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps ")[1];
-			/*
-			String map = "";
-			Pattern pattern = Pattern.compile(Pattern.quote("§f") + "(.*?)" + Pattern.quote("§b"));
-			Matcher matcher = pattern.matcher(afterMsg);
-			while (matcher.find()) {
-				map = matcher.group(1);
-			}
-			*/
-
-			//GRAV.map = map;
-
+		
 		}
-
-		// Autovoting
-
-		else if (message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §a§lVote received. §3Your map now has")
-						 && Setting.AUTOVOTE.getValue()) {
-			GRAV.hasVoted = true;
-		} else if (message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §6§e§e§l5.") && !GRAV.hasVoted
-						   && Setting.AUTOVOTE.getValue()) {
-			/*GRAV.votesToParse.add(message);
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					List<String> votesCopy = new ArrayList<String>();
-					votesCopy.addAll(GRAV.votesToParse);
-					List<String> parsedMaps = new ArrayList<String>();
-					parsedMaps.addAll(AutovoteUtils.getMapsForMode("grav"));
-
-					List<String> votesindex = new ArrayList<String>();
-					List<String> finalvoting = new ArrayList<String>();
-
-					for (String s : votesCopy) {
-
-						String[] data = s.split("\\.");
-						String index = ChatColor.stripColor(data[0])
-											   .replaceAll("§8▍ §b§b§lGrav§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l", "")
-											   .replaceAll("▍ GravWars ▏", "").trim();
-						String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
-						String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
-
-						String votes = toConsider[1].split(" ")[0].trim();
-
-						The5zigAPI.getLogger().info("trying to match " + consider);
-						if (parsedMaps.contains(consider)) {
-							votesindex.add(votes + "-" + index);
-							The5zigAPI.getLogger()
-									.info("Added " + consider + " Index #" + index + " with " + votes + " votes");
-						} else {
-							The5zigAPI.getLogger().info(consider + " is not a favourite");
-						}
-						if (index.equals("5")) {
-							if (votesindex.size() != 0) {
-								for (String n : votesindex) {
-									finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
-								}
-								int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
-								The5zigAPI.getLogger().info("Voting " + finalindex);
-								The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
-
-								GRAV.votesToParse.clear();
-								GRAV.hasVoted = true;
-								// we can't really get the map name at this point
-								The5zigAPI.getAPI().messagePlayer(
-										"§8▍ §6GRAV§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
-								return;
-							} else {
-								The5zigAPI.getLogger().info("Done, couldn't find matches");
-
-								GRAV.votesToParse.clear();
-								GRAV.hasVoted = true;
-								// he hasn't but we don't want to check again and again
-								return;
-							}
-						}
-					}
-				}
-			}).start();
-			*/
-
-		} else if (message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §6§e§e§l") && !GRAV.hasVoted
-						   && Setting.AUTOVOTE.getValue()) {
-			// GRAV.votesToParse.add(message);
-		}
+	
 		else if(message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §a§lVote received. §3Your map")) {
 			GRAV.hasVoted = true;
 		}
 
-		else if(message.contains("§e, noble fighter for the ")) {
-			DiscordUtils.updatePresence("Freefalling in Gravity" , "Falling on " + GRAV.maps[GRAV.currentMap], "game_grav");
+		else if(message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §6Map §7» §b")) {
+			DiscordUtils.updatePresence("Freefalling in Gravity" , "Falling on " + message.replace("§8▍ §bGra§avi§ety§8 ▏ §6Map §7» §b", ""), "game_grav");
 		}
 
 		// Advanced Records
