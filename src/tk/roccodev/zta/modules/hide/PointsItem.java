@@ -4,6 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.HIDE;
+import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.hiveapi.APIValues;
 
 public class PointsItem extends GameModeItem<HIDE>{
@@ -33,11 +34,28 @@ public class PointsItem extends GameModeItem<HIDE>{
 	protected Object getValue(boolean dummy) {
 		try{
 			if((boolean) getProperties().getSetting("showrank").get()){
+				StringBuilder sb = new StringBuilder();
 				if((boolean) getProperties().getSetting("showcolor").get()){
-					return APIValues.HIDEpoints + " (" + HIDE.rank + getMainFormatting() + ")";
+					sb.append(APIValues.HIDEpoints).append(" (").append(HIDE.rank).append(getMainFormatting());
+					
+				}else{
+				
+					sb.append(APIValues.HIDEpoints).append(" (").append(ChatColor.stripColor(HIDE.rank));
 				}
-				return APIValues.HIDEpoints + " (" + ChatColor.stripColor(HIDE.rank) + ")";
-			}
+				
+				if((boolean)getProperties().getSetting("showpointstonextrank").get()){
+					if(HIDE.rankObject == null) return APIValues.HIDEpoints;
+					sb.append((boolean)getProperties().getSetting("showcolor").get() ? " / " + HIDE.rankObject.getPointsToNextRank((int)APIValues.HIDEpoints) : " / " + ChatColor.stripColor(HIDE.rankObject.getPointsToNextRank((int)APIValues.HIDEpoints)));
+						
+				}
+				sb.append(
+						
+						(boolean)getProperties().getSetting("showcolor").get() ?
+						
+								getMainFormatting() + ")" :
+						")");
+				return sb.toString().trim();
+				}
 			return APIValues.HIDEpoints;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -54,6 +72,7 @@ public class PointsItem extends GameModeItem<HIDE>{
 	public void registerSettings() {
 		getProperties().addSetting("showrank", false);
 		getProperties().addSetting("showcolor", true);
+		getProperties().addSetting("showpointstonextrank", false);
 	}
 
 	@Override
