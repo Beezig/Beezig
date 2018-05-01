@@ -80,7 +80,6 @@ import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
-import tk.roccodev.zta.utils.ChatComponentUtils;
 import tk.roccodev.zta.utils.TIMVDay;
 import tk.roccodev.zta.utils.TIMVTest;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
@@ -205,6 +204,8 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "mimvkarma", tk.roccodev.zta.modules.mimv.KarmaItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "mimvrole", tk.roccodev.zta.modules.mimv.RoleItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "mimvmap", tk.roccodev.zta.modules.mimv.MapItem.class, "serverhivemc");
+		
+		The5zigAPI.getAPI().registerModuleItem(this, "gravpoints", tk.roccodev.zta.modules.grav.PointsItem.class, "serverhivemc");
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
 		

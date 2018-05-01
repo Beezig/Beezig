@@ -10,7 +10,6 @@ import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
-import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.sky.SKYRank;
@@ -113,7 +112,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 			SKY.hasVoted = true;
 		} else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l6. §f§6") && !SKY.hasVoted
 				&& Setting.AUTOVOTE.getValue()) {
-			BED.votesToParse.add(message);
+			SKY.votesToParse.add(message);
 			new Thread(new Runnable() {
 				@Override
 				public void run() {

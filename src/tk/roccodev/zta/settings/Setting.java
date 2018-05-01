@@ -1,9 +1,9 @@
 
 package tk.roccodev.zta.settings;
 
-import java.io.IOException;
-
 import eu.the5zig.mod.The5zigAPI;
+
+import java.io.IOException;
 
 public enum Setting {
 
@@ -49,7 +49,6 @@ public enum Setting {
 	HIDE_SHOW_AMOUNT_UNLOCKED(true, "HIDE Advanced Records - Show amount of unlocked blocks"),
 	HIDE_SHOW_POINTS_TO_NEXT_RANK(true, "HIDE Advanced Records - Show points to next rank"),
 	
-	
 	CAI_SHOW_WINRATE(true, "CAI Advanced Records - Show Winrate"), 
 	CAI_SHOW_POINTSPG(true, "CAI Advanced Records - Show Points per Game"),
 	CAI_SHOW_POINTS_TO_NEXT_RANK(true, "CAI Advanced Records - Show points to next rank"),
@@ -59,7 +58,13 @@ public enum Setting {
 	SKY_SHOW_WINRATE(true, "SKY Advanced Records - Show Winrate"), 
 	SKY_SHOW_KD(true, "SKY Advanced Records - Show Kills/Deaths"),
 	SKY_SHOW_KPG(true, "SKY Advanced Records - Show Kills per game"),
-	SKY_SHOW_PPG(true, "SKY Advanced Records - Show Points per game");
+	SKY_SHOW_PPG(true, "SKY Advanced Records - Show Points per game"),
+
+	GRAV_SHOW_POINTS_TO_NEXT_RANK(true, "GRAV Advanced Records - Show points to next rank"),
+	GRAV_SHOW_FINISHRATE(false, "GRAV Advanced Records - Show Finishrate"),
+	GRAV_SHOW_PPG(true, "GRAV Advanced Records - Show Points per game");
+	
+	
 	
 
 	

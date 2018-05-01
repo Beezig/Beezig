@@ -197,6 +197,15 @@
           "type": "mimvmap"
         }
       ]
+    },
+    {
+      "id": "Gravity",
+      "name": "Gravity",
+      "items": [
+        {
+          "type": "gravpoints"
+        }
+      ]
     }
   ]
 }
