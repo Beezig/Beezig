@@ -126,6 +126,12 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			DiscordUtils.updatePresence("Fighting in SkyWars", "In Lobby", "game_skywars");
 			
 		}
+		else if(key.equals("mimv.welcome")) {
+			getGameListener().switchLobby("MIMV");
+			The5zigAPI.getLogger().info("Connected to MIMV! - Hive");
+			DiscordUtils.updatePresence("Investigating in Murder in Mineville", "In Lobby", "game_mimv");
+			
+		}
 		
 	}
 

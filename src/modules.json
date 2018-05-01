@@ -182,6 +182,21 @@
           "type": "skykdr"
         }
       ]
+    },
+     {
+      "id": "MurderInMineville",
+      "name": "Murder in Mineville",
+      "items": [
+        {
+          "type": "mimvkarma"
+        },
+        {
+          "type": "mimvrole"
+        },
+         {
+          "type": "mimvmap"
+        }
+      ]
     }
   ]
 }
