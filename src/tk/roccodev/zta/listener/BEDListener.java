@@ -322,7 +322,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills per Game: §b" + df1f.format(kpg));
 						}
 						if(Setting.BED_SHOW_POINTS_PER_GAME.getValue()){
-							double ppg = BED.lastRecordsPoints / (double)(deaths == 0 ? 1 : deaths);
+							double ppg = BED.lastRecordsPoints / (double)(gamesPlayed == 0 ? 1 : gamesPlayed);
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + df1f.format(ppg));
 						}
 						if(Setting.BED_SHOW_KD.getValue()){
