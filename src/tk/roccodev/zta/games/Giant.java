@@ -8,6 +8,7 @@ import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
+import tk.roccodev.zta.hiveapi.stuff.gnt.GiantRank;
 
 public class Giant extends GameMode{
 
@@ -20,6 +21,10 @@ public class Giant extends GameMode{
 	public static int giantKills;
 	
 	public static boolean hasVoted;
+	
+	public static String rank;
+	public static GiantRank rankObject;
+	
 	
 	//KDR
 	

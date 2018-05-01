@@ -4,6 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.hiveapi.APIValues;
 
 public class PointsItem extends GameModeItem<DR>{
@@ -33,11 +34,28 @@ public class PointsItem extends GameModeItem<DR>{
 	protected Object getValue(boolean dummy) {
 		try{
 			if((boolean) getProperties().getSetting("showrank").get()){
+				StringBuilder sb = new StringBuilder();
 				if((boolean) getProperties().getSetting("showcolor").get()){
-					return APIValues.DRpoints + " (" + DR.rank + getMainFormatting() + ")";
+					sb.append(APIValues.DRpoints).append(" (").append(DR.rank).append(getMainFormatting());
+					
+				}else{
+				
+					sb.append(APIValues.DRpoints).append(" (").append(ChatColor.stripColor(DR.rank));
 				}
-				return APIValues.DRpoints + " (" + ChatColor.stripColor(DR.rank) + ")";
-			}
+				
+				if((boolean)getProperties().getSetting("showpointstonextrank").get()){
+					if(DR.rankObject == null) return APIValues.DRpoints;
+					sb.append((boolean)getProperties().getSetting("showcolor").get() ? " / " + DR.rankObject.getPointsToNextRank((int)APIValues.DRpoints) : " / " + ChatColor.stripColor(DR.rankObject.getPointsToNextRank((int)APIValues.DRpoints)));
+						
+				}
+				sb.append(
+						
+						(boolean)getProperties().getSetting("showcolor").get() ?
+						
+								getMainFormatting() + ")" :
+						")");
+				return sb.toString().trim();
+				}
 			return APIValues.DRpoints;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -54,6 +72,7 @@ public class PointsItem extends GameModeItem<DR>{
 	public void registerSettings() {
 		getProperties().addSetting("showrank", false);
 		getProperties().addSetting("showcolor", true);
+		getProperties().addSetting("showpointstonextrank", false);
 	}
 	
 	@Override

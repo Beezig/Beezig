@@ -47,8 +47,8 @@ public class DRListener extends AbstractGameListener<DR> {
 			@Override
 			public void run() {
 				Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-				DR.rank = DRRank.getFromDisplay(new ApiDR(The5zigAPI.getAPI().getGameProfile().getName()).getTitle())
-						.getTotalDisplay();
+				DR.rankObject = DRRank.getFromDisplay(new ApiDR(The5zigAPI.getAPI().getGameProfile().getName()).getTitle());
+				DR.rank = DR.rankObject.getTotalDisplay();
 				// Should've read the docs ¯\_(ツ)_/¯
 				if (sb != null)
 					The5zigAPI.getLogger().info(sb.getTitle());

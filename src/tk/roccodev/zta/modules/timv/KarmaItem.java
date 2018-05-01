@@ -4,6 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.TIMV;
+import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.APIValues;
 
 public class KarmaItem extends GameModeItem<TIMV> {
@@ -33,11 +34,28 @@ public class KarmaItem extends GameModeItem<TIMV> {
 	protected Object getValue(boolean dummy) {		
 		try{
 			if((boolean) getProperties().getSetting("showrank").get()){
+				StringBuilder sb = new StringBuilder();
 				if((boolean) getProperties().getSetting("showcolor").get()){
-					return APIValues.TIMVkarma + " (" + TIMV.rank + getMainFormatting() + ")";
+					sb.append(APIValues.TIMVkarma).append(" (").append(TIMV.rank).append(getMainFormatting());
+					
+				}else{
+				
+					sb.append(APIValues.TIMVkarma).append(" (").append(ChatColor.stripColor(TIMV.rank));
 				}
-				return APIValues.TIMVkarma + " (" + ChatColor.stripColor(TIMV.rank) + ")";
-			}
+				
+				if((boolean)getProperties().getSetting("showpointstonextrank").get()){
+					if(TIMV.rankObject == null) return APIValues.TIMVkarma;
+					sb.append((boolean)getProperties().getSetting("showcolor").get() ? " / " + TIMV.rankObject.getKarmaToNextRank((int)APIValues.TIMVkarma) : " / " + ChatColor.stripColor(TIMV.rankObject.getKarmaToNextRank((int)APIValues.TIMVkarma)));
+						
+				}
+				sb.append(
+						
+						(boolean)getProperties().getSetting("showcolor").get() ?
+						
+								getMainFormatting() + ")" :
+						")");
+				return sb.toString().trim();
+				}
 			return APIValues.TIMVkarma;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -54,6 +72,7 @@ public class KarmaItem extends GameModeItem<TIMV> {
 	public void registerSettings() {
 		getProperties().addSetting("showrank", false);
 		getProperties().addSetting("showcolor", true);
+		getProperties().addSetting("showpointstonextrank", false);
 	}
 	
 	@Override

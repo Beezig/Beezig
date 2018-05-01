@@ -99,6 +99,11 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						
 				
 			}
+				
+			ApiTIMV api = new ApiTIMV(The5zigAPI.getAPI().getGameProfile().getName());
+			TIMV.rankObject = TIMVRank.getFromDisplay(api.getTitle());
+			TIMV.rank = TIMV.rankObject.getTotalDisplay();
+				
 		}}).start();
 		
 		
