@@ -73,6 +73,7 @@ import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.StuffFetcher;
 import tk.roccodev.zta.hiveapi.stuff.bed.StreakUtils;
+import tk.roccodev.zta.hiveapi.stuff.grav.GRAVListenerv2;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
@@ -208,6 +209,8 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "gravpoints", tk.roccodev.zta.modules.grav.PointsItem.class, "serverhivemc");
 		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
+		
+		The5zigAPI.getAPI().getPluginManager().registerListener(this, new GRAVListenerv2());
 		
 		CommandManager.registerCommand(new NotesCommand());
 		CommandManager.registerCommand(new AddNoteCommand());

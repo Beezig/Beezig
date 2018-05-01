@@ -165,7 +165,10 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 
 		} else if (message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §6§e§e§l") && !GRAV.hasVoted
 						   && Setting.AUTOVOTE.getValue()) {
-			GRAV.votesToParse.add(message);
+			// GRAV.votesToParse.add(message);
+		}
+		else if(message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §a§lVote received. §3Your map")) {
+			GRAV.hasVoted = true;
 		}
 
 		else if(message.contains("§e, noble fighter for the ")) {

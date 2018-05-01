@@ -8,6 +8,7 @@ import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.hiveapi.stuff.grav.GRAVRank;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GRAV extends GameMode {
@@ -19,7 +20,7 @@ public class GRAV extends GameMode {
 	public static String lastRecords = "";
 
 	public static boolean hasVoted = false;
-	public static List<String> votesToParse = new ArrayList<String>();
+	public static HashMap<Integer, ArrayList<String>> mapsToParse = new HashMap<Integer, ArrayList<String>>();
 	
 	public static long gamePoints;
 	
@@ -39,7 +40,7 @@ public class GRAV extends GameMode {
 
 		GRAV.messagesToSend.clear();
 		GRAV.footerToSend.clear();
-		GRAV.votesToParse.clear();
+		GRAV.mapsToParse.clear();
 		GRAV.isRecordsRunning = false;
 		GRAV.hasVoted = false;
 		gamePoints = 0;
