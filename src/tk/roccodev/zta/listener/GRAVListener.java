@@ -169,7 +169,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 		}
 
 		else if(message.contains("§e, noble fighter for the ")) {
-			DiscordUtils.updatePresence("Freefalling in Gravity" , "Falling on " + GRAV.maps[GRAV.currentMap], "game_gravity");
+			DiscordUtils.updatePresence("Freefalling in Gravity" , "Falling on " + GRAV.maps[GRAV.currentMap], "game_grav");
 		}
 
 		// Advanced Records
