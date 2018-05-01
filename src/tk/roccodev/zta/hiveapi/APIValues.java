@@ -9,5 +9,5 @@ public class APIValues {
 	public static long HIDEpoints;
 	public static long CAIpoints;
 	public static long SKYpoints;
-
+	public static long MIMVpoints;
 }

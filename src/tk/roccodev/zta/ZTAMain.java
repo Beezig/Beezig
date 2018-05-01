@@ -80,6 +80,7 @@ import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
+import tk.roccodev.zta.utils.ChatComponentUtils;
 import tk.roccodev.zta.utils.TIMVDay;
 import tk.roccodev.zta.utils.TIMVTest;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
@@ -688,6 +689,8 @@ public class ZTAMain {
 	
 	@EventHandler
 	public void onChat(ChatEvent evt){
+		
+		
 		
 		if(evt.getMessage() != null){
 			if(The5zigAPI.getAPI().getActiveServer() instanceof IHive) {
