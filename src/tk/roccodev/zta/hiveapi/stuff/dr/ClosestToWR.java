@@ -70,7 +70,7 @@ public class ClosestToWR {
 				The5zigAPI.getAPI().messagePlayer(Log.info + "§3Best map: §b" + first.getKey().getDisplayName() + " (" + df.format(time) + " seconds §cbehind§b WR)");
 			}
 			double avg = sorted.values().stream().mapToDouble(Double::doubleValue).average().getAsDouble();
-			The5zigAPI.getAPI().messagePlayer(Log.info + "§3Average: §b" + (avg < 0 ? df.format(avg) + " seconds §aahead§b of " : df.format(avg) + " seconds §cbehind§b ") + "WR" );
+			The5zigAPI.getAPI().messagePlayer(Log.info + "§3Average: §b" + (avg < 0 ? df.format(Math.abs(avg)) + " seconds §aahead§b of " : df.format(avg) + " seconds §cbehind§b ") + "WR" );
 			The5zigAPI.getAPI().messagePlayer(Log.info + "§3Next refresh:§b " + new SimpleDateFormat("MMM d, hh:mm a").format(new Date(cachedUntil)));
 
 		} catch (IOException | ParseException e) {
