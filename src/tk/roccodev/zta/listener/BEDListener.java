@@ -13,7 +13,6 @@ import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.stuff.bed.BEDMap;
 import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
@@ -300,8 +299,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 						
 							
 						if(achievements != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
-																											//^ API Achievements vs ingame - currently bad
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/67");
 						}
 						// "§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing"
 						

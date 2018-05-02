@@ -293,7 +293,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 							}
 
 							if (achievements != null) {
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/37");
 							}
 
 							if (Setting.MIMV_SHOW_WINRATE.getValue()) {

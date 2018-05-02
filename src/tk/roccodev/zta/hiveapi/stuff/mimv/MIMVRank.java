@@ -21,7 +21,7 @@ public enum MIMVRank {
 	ENFORCER("Enforcer", "§a§l", 100000),
 	ALTAIR("Altair", "§e§l", 125000),
 	EZIO("Ezio", "§d§l", 175000),
-	MUCKDUCK("Muckduck", "&5&l❖ ", -1);
+	MUCKDUCK("❖ Muckduck", "§5§l", -1);
 	
 	private String display, prefix;
 	private int start;
@@ -56,8 +56,8 @@ public enum MIMVRank {
 	}
 	
 	public String getPointsToNextRank(int points){
-		if(this == EZIO) return "Leaderboard Rank";
-		if(this == MUCKDUCK) return "Highest Rank";
+		if(this == MUCKDUCK) return "Leaderboard Rank";
+		if(this == EZIO) return "Highest Rank";
 		ArrayList<MIMVRank> ranks = new ArrayList<MIMVRank>(Arrays.asList(values()));
 		int newIndex = ranks.indexOf(this) + 1;
 		MIMVRank next = null;

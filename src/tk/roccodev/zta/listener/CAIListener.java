@@ -339,7 +339,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
 							}
 
 							if (achievements != null) {
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/44");
 							}
 							if (Setting.CAI_SHOW_WINRATE.getValue()) {
 								double wr = (double) victories / (double) gamesPlayed;
