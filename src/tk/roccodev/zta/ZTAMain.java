@@ -1,8 +1,10 @@
 package tk.roccodev.zta;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
@@ -13,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -152,13 +153,14 @@ public class ZTAMain {
 			e.printStackTrace();
 		}
 		
-		InputStream expHash = getClass().getResourceAsStream("/version");
+		InputStream expHash = getClass().getResourceAsStream("/version.txt");
 		if(expHash != null) {
 			
-			Scanner scanner = new Scanner(expHash);
-			Scanner s = scanner.useDelimiter("\\A");
-			String result = s.hasNext() ? s.next() : "";
-			s.close();
+			
+			String result = new BufferedReader(new InputStreamReader(expHash))
+					  .lines().collect(Collectors.joining("\n"));
+			System.out.println(result);
+			
 			try {
 				expHash.close();
 				
