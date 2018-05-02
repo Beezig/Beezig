@@ -159,7 +159,7 @@ public class ZTAMain {
 			
 			String result = new BufferedReader(new InputStreamReader(expHash))
 					  .lines().collect(Collectors.joining("\n"));
-			System.out.println(result);
+			
 			
 			try {
 				expHash.close();
