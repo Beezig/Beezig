@@ -1,5 +1,10 @@
 package tk.roccodev.zta.hiveapi.wrapper.modes;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.simple.JSONObject;
+
 import eu.the5zig.mod.server.GameMode;
 import tk.roccodev.zta.games.GRAV;
 import tk.roccodev.zta.hiveapi.wrapper.APIGameMode;
@@ -30,11 +35,6 @@ public class ApiGRAV extends APIGameMode {
 		return false;
 	}
 
-	/**
-	 * Just a mirror to {@link tk.roccodev.zta.hiveapi.wrapper.APIGameMode#getPoints()}
-	 *
-	 * @return karma fetched
-	 */
 
 	@Override
 	public long getPoints(){
@@ -48,6 +48,17 @@ public class ApiGRAV extends APIGameMode {
 
 	public long getVictories(){
 		return (long) object("victories");
+	}
+	
+	public HashMap<String, Double> getMapTimes(){
+		HashMap<String, Double> tr = new HashMap<String, Double>();
+		JSONObject times = (JSONObject) object("maprecords");
+		for(Object o : times.entrySet()) {
+			Map.Entry<String, Long> e = (Map.Entry<String, Long>) o;
+			tr.put(e.getKey(), (double)((double)e.getValue() / 1000D));
+		}
+		
+		return tr;
 	}
 
 }

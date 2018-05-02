@@ -82,11 +82,31 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 
 		if (message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps")) {
 			The5zigAPI.getLogger().info("Voting ended, parsing maps");
-			String afterMsg = message.split("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps ")[1].replace("have won!", "").trim(); // No stripColor because we want difficulties
-			String[] maps = afterMsg.split(", ");
-			GRAV.maps.addAll(Arrays.asList(maps));
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					String afterMsg = message.split("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps ")[1].replace("have won!", "").trim(); // No stripColor because we want difficulties
+					String[] maps = afterMsg.split(", ");
+					GRAV.maps.addAll(Arrays.asList(maps));
+					
+					HashMap<String, Double> pbs = new ApiGRAV(The5zigAPI.getAPI().getGameProfile().getName()).getMapTimes();
+					int i = 0;
+					for(String s : maps) {
+						String apiMap = GRAV.mapsPool.get(ChatColor.stripColor(s));
+						System.out.println(apiMap);
+						pbs.entrySet().forEach(e -> {
+							System.out.println(e.getKey() + " / " + e.getValue());
+						});
+						double pb = pbs.get(apiMap);
+						GRAV.toDisplay.put(++i, s + " | " + pb + " | " + 0);
+						GRAV.mapPBs.put(ChatColor.stripColor(s), pb);
+					}
+					GRAV.toDisplay.entrySet().forEach(e -> {
+						The5zigAPI.getAPI().messagePlayer(e.getValue());
+					});
+				}
+			}).start();
 			
-			//TODO Fetch PBs
 		
 		}
 		else if(message.contains(The5zigAPI.getAPI().getGameProfile().getName() + " §afinished Stage")) {

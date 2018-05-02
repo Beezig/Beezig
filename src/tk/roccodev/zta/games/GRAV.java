@@ -13,6 +13,7 @@ import java.util.List;
 
 public class GRAV extends GameMode {
 
+	public static HashMap<String, String> mapsPool = new HashMap<String, String>();
 
 	public static List<String> messagesToSend = new ArrayList<String>();
 	public static List<String> footerToSend = new ArrayList<String>();
