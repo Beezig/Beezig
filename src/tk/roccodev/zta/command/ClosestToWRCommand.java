@@ -1,11 +1,8 @@
 package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.zta.ActiveGame;
-import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.stuff.dr.ClosestToWR;
-import tk.roccodev.zta.notes.NotesManager;
 
 public class ClosestToWRCommand implements Command{
 
@@ -29,8 +26,15 @@ public class ClosestToWRCommand implements Command{
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				ClosestToWR.fetch(args.length == 0 ? The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "") : args[0], args.length > 1 );
-				
+				try {
+					ClosestToWR.fetch(args.length == 0 ? The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "") : args[0], args.length > 1);
+
+					The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
+				}
+				catch(Exception e){
+					The5zigAPI.getAPI().messagePlayer(Log.error + "An error occured.");
+				}
+
 			}
 		}).start();
 		
