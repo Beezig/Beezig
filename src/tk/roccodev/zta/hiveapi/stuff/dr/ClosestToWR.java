@@ -44,7 +44,7 @@ public class ClosestToWR {
 			for (Object o : times.entrySet()) {
 				Map.Entry<String, Double> entry = (Map.Entry<String, Double>) o;
 				if(entry.getValue() == null) continue;
-				System.out.println(entry.getValue());
+				
 				timesHash.put(DR.mapsPool.values().stream().filter(v -> v.getHiveAPIName().equals(entry.getKey()))
 						.findFirst().get(), entry.getValue());
 
