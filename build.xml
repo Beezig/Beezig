@@ -24,6 +24,7 @@
   		<include name="modules.json"/>
   		<include name="core/messages/*"/>
   		<include name="lang/*"/>
+  	 	<include name="version"/>
   	
 </fileset>
         <zipfileset dir="src/libraries" prefix="libraries"/>
