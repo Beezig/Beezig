@@ -82,10 +82,17 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 
 		if (message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps")) {
 			The5zigAPI.getLogger().info("Voting ended, parsing maps");
-			String afterMsg = message.split("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps ")[1];
+			String afterMsg = message.split("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps ")[1].replace("have won!", "").trim(); // No stripColor because we want difficulties
+			String[] maps = afterMsg.split(", ");
+			GRAV.maps.addAll(Arrays.asList(maps));
+			
+			//TODO Fetch PBs
 		
 		}
-	
+		else if(message.contains(The5zigAPI.getAPI().getGameProfile().getName() + " §afinished Stage")) {
+			String secs = message.split("§d")[1].replaceAll("seconds", "").trim();
+			double d = Double.parseDouble(secs);
+		}
 		else if(message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §a§lVote received. §3Your map")) {
 			GRAV.hasVoted = true;
 		}

@@ -30,8 +30,11 @@ public class GRAV extends GameMode {
 
 	public static String rank;
 	public static GRAVRank rankObject;
-	public static String[] maps;
-	public static int currentMap; //(0,1,2,3,4)
+	
+	public static ArrayList<String> maps = new ArrayList<String>();
+	public static HashMap<String, Double> mapPBs = new HashMap<String, Double>();
+	public static HashMap<Integer, String> toDisplay = new HashMap<Integer, String>();
+	public static int currentMap = 0; //(0,1,2,3,4)
 	
 
 	public static void reset(GRAV gameMode){
@@ -43,8 +46,12 @@ public class GRAV extends GameMode {
 		GRAV.mapsToParse.clear();
 		GRAV.isRecordsRunning = false;
 		GRAV.hasVoted = false;
+		currentMap = 0;
 		gamePoints = 0;
 		deaths = 0;
+		toDisplay.clear();
+		maps.clear();
+		mapPBs.clear();
 		ActiveGame.reset("grav");
 		IHive.genericReset();
 		if(The5zigAPI.getAPI().getActiveServer() != null)
@@ -59,6 +66,9 @@ public class GRAV extends GameMode {
 		return false;
 	}
 
+	
+ 
+	
 
 	@Override
 	public String getName() {
