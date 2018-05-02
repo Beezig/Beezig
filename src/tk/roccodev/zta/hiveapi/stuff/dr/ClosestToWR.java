@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.DoubleStream;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -43,6 +44,7 @@ public class ClosestToWR {
 			for (Object o : times.entrySet()) {
 				Map.Entry<String, Double> entry = (Map.Entry<String, Double>) o;
 				if(entry.getValue() == null) continue;
+				System.out.println(entry.getValue());
 				timesHash.put(DR.mapsPool.values().stream().filter(v -> v.getHiveAPIName().equals(entry.getKey()))
 						.findFirst().get(), entry.getValue());
 
@@ -67,6 +69,8 @@ public class ClosestToWR {
 			else {
 				The5zigAPI.getAPI().messagePlayer(Log.info + "§3Best map: §b" + first.getKey().getDisplayName() + " (" + df.format(time) + " seconds §cbehind§b WR)");
 			}
+			double avg = sorted.values().stream().mapToDouble(Double::doubleValue).average().getAsDouble();
+			The5zigAPI.getAPI().messagePlayer(Log.info + "§3Average: " + (avg < 0 ? df.format(avg) + " seconds §aahead§b of " : df.format(avg) + " seconds §cbehind§b ") + "WR" );
 			The5zigAPI.getAPI().messagePlayer(Log.info + "§3Next refresh:§b " + new SimpleDateFormat("MMM d, hh:mm a").format(new Date(cachedUntil)));
 
 		} catch (IOException | ParseException e) {
