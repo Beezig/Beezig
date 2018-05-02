@@ -70,7 +70,7 @@ public class GRAVListenerv2 {
 					return;
 				}
 				
-				final String index1 = index.trim();
+				final String index1 = maxEntry.getKey() + "";
 				
 				//Voting
 				new Thread(new Runnable() {
