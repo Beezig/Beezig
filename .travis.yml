@@ -14,7 +14,7 @@ before_install:
  - wget $DOWNLOAD_LINK/jna-4.5.0.jar
  - wget $DOWNLOAD_LINK/jsr305-3.0.2.jar
  - cd ..
- - echo "${TRAVIS_BRANCH} ${TRAVIS_COMMIT}" > src/version
+ - echo "${TRAVIS_BRANCH} ${TRAVIS_COMMIT}" > src/version.txt
 before_deploy:
  - mkdir todeploy
  - mkdir todeploy/$TRAVIS_BRANCH
