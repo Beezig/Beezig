@@ -156,7 +156,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 								SKY.hasVoted = true;
 								// we can't really get the map name at this point
 								The5zigAPI.getAPI().messagePlayer(
-										"§8▍ §6SKY§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
+										"§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + finalindex);
 								return;
 							} else {
 								The5zigAPI.getLogger().info("Done, couldn't find matches");
