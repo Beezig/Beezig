@@ -2,6 +2,7 @@ package tk.roccodev.zta;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -94,6 +96,7 @@ import tk.roccodev.zta.utils.rpc.NativeUtils;
 public class ZTAMain {
 	
 	public static final String BEEZIG_VERSION = "4.6.0";
+	public static String VERSION_HASH = "";
 	
 	public static boolean hasServedNews;
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -149,7 +152,30 @@ public class ZTAMain {
 			e.printStackTrace();
 		}
 		
+		InputStream expHash = getClass().getResourceAsStream("/version");
+		if(expHash != null) {
+			
+			Scanner scanner = new Scanner(expHash);
+			Scanner s = scanner.useDelimiter("\\A");
+			String result = s.hasNext() ? s.next() : "";
+			s.close();
+			try {
+				expHash.close();
+				
+				
+			} catch (IOException e) {
+				
+			}
+			String[] data = result.split(" ");
+			if(data.length != 0 && data[0].equals("experimental")) {
+				VERSION_HASH = data[1].substring(0, 7);
+			}
+			
+			
+		}
+		
 		The5zigAPI.getLogger().info("Loading Beezig");
+		The5zigAPI.getLogger().info("Version is " + BEEZIG_VERSION + ". Hash is " + VERSION_HASH);
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "karma", tk.roccodev.zta.modules.timv.KarmaItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "karmacounter", tk.roccodev.zta.modules.timv.KarmaCounterItem.class, "serverhivemc");
