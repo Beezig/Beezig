@@ -70,6 +70,7 @@ import tk.roccodev.zta.games.GNTM;
 import tk.roccodev.zta.games.GRAV;
 import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.games.HIDE;
+import tk.roccodev.zta.games.MIMV;
 import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -557,6 +558,14 @@ public class ZTAMain {
 					}
 					GRAV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
+				else if(ActiveGame.is("mimv")){
+					if(MIMV.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					MIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				}
 				
 			}
 			else{
@@ -623,6 +632,14 @@ public class ZTAMain {
 						return;
 					}
 					GRAV.lastRecords = args[1].trim();
+				}
+				else if(ActiveGame.is("mimv")){
+					if(MIMV.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					MIMV.lastRecords = args[1].trim();
 				}
 			}
 		}

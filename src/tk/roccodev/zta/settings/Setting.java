@@ -62,7 +62,13 @@ public enum Setting {
 
 	GRAV_SHOW_POINTS_TO_NEXT_RANK(true, "GRAV Advanced Records - Show points to next rank"),
 	GRAV_SHOW_FINISHRATE(false, "GRAV Advanced Records - Show Finishrate"),
-	GRAV_SHOW_PPG(true, "GRAV Advanced Records - Show Points per game");
+	GRAV_SHOW_PPG(true, "GRAV Advanced Records - Show Points per game"),
+	
+	MIMV_SHOW_POINTS_TO_NEXT_RANK(true, "MIMV Advanced Records - Show points to next rank"),
+	MIMV_SHOW_WINRATE(true, "MIMV Advanced Records - Show Winrate"), 
+	MIMV_SHOW_KD(true, "MIMV Advanced Records - Show Kills/Deaths"),
+	MIMV_SHOW_KPG(true, "MIMV Advanced Records - Show Kills per game"),
+	MIMV_SHOW_PPG(true, "MIMV Advanced Records - Show Karma per game");
 	
 	
 	

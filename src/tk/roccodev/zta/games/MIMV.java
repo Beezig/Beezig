@@ -18,6 +18,11 @@ public class MIMV extends GameMode {
 		return "Murder in Mineville";
 	}
 
+	public static List<String> messagesToSend = new ArrayList<String>();
+	public static List<String> footerToSend = new ArrayList<String>();
+	public static boolean isRecordsRunning = false;
+	public static String lastRecords = "";
+	
 	public static String role;
 	public static boolean hasVoted = false;
 	public static String map;
