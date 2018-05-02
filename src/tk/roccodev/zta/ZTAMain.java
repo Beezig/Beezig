@@ -40,6 +40,7 @@ import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.AutoVoteCommand;
 import tk.roccodev.zta.command.BlockstatsCommand;
 import tk.roccodev.zta.command.CheckPingCommand;
+import tk.roccodev.zta.command.ClosestToWRCommand;
 import tk.roccodev.zta.command.ColorDebugCommand;
 import tk.roccodev.zta.command.CustomTestCommand;
 import tk.roccodev.zta.command.DebugCommand;
@@ -236,6 +237,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new SetDisplayNameCommand());
 		CommandManager.registerCommand(new ZigCheckCommand());
 		CommandManager.registerCommand(new RanksCommand());
+		CommandManager.registerCommand(new ClosestToWRCommand());
 		
 		if(The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d") ||
 				The5zigAPI.getAPI().getGameProfile().getId().toString().equals("bba224a2-0bff-4913-b042-27ca3b60973f")){
