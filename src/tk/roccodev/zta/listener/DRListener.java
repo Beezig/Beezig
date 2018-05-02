@@ -404,10 +404,9 @@ public class DRListener extends AbstractGameListener<DR> {
 			timer.schedule(sft, 1500);
 		}
 
-		else if (message.startsWith("§8▍ §cDeathRun§8 ▏") && message.contains("§3 finished §b")
-				&& message.contains(The5zigAPI.getAPI().getGameProfile().getName()) && !message.endsWith(" ")) {
-			// "§8▍ §cDeathRun§8 ▏ §b §aItsNiklass§3 finished §b1st§3. §7(01:10.574)"
-			String time = (message.split("§7\\("))[1].replaceAll("\\)", "");
+		else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in ")) {
+			// §8▍ §cDeathRun§8 ▏ §bYou finished your run in 03:07.479§b!
+			String time = (message.split("in "))[1].replace("§b!", "").trim();
 			String[] data = time.split(":");
 			int minutes = Integer.parseInt(data[0]);
 			// data[1 ] is seconds.milliseconds
