@@ -1,5 +1,8 @@
 package tk.roccodev.zta.games;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
@@ -16,10 +19,13 @@ public class MIMV extends GameMode {
 	}
 
 	public static String role;
+	public static boolean hasVoted = false;
 	public static String map;
 	
 	public static String rank;
 	public static MIMVRank rankObject;
+	
+	public static List<String> votesToParse = new ArrayList<String>();
 
 	public static void reset(MIMV gameMode) {
 
@@ -27,7 +33,8 @@ public class MIMV extends GameMode {
 
 		role = "";
 		map = "";
-
+		votesToParse.clear();
+		hasVoted = false;
 		ActiveGame.reset("mimv");
 		IHive.genericReset();
 		if (The5zigAPI.getAPI().getActiveServer() != null)
