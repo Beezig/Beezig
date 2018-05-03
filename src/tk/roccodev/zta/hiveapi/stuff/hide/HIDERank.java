@@ -1,22 +1,9 @@
 package tk.roccodev.zta.hiveapi.stuff.hide;
 
-import static eu.the5zig.util.minecraft.ChatColor.AQUA;
-import static eu.the5zig.util.minecraft.ChatColor.BLACK;
-import static eu.the5zig.util.minecraft.ChatColor.BOLD;
-import static eu.the5zig.util.minecraft.ChatColor.DARK_AQUA;
-import static eu.the5zig.util.minecraft.ChatColor.DARK_BLUE;
-import static eu.the5zig.util.minecraft.ChatColor.DARK_PURPLE;
-import static eu.the5zig.util.minecraft.ChatColor.DARK_RED;
-import static eu.the5zig.util.minecraft.ChatColor.GOLD;
-import static eu.the5zig.util.minecraft.ChatColor.GRAY;
-import static eu.the5zig.util.minecraft.ChatColor.LIGHT_PURPLE;
-import static eu.the5zig.util.minecraft.ChatColor.MAGIC;
-import static eu.the5zig.util.minecraft.ChatColor.RED;
-import static eu.the5zig.util.minecraft.ChatColor.WHITE;
-import static eu.the5zig.util.minecraft.ChatColor.YELLOW;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static eu.the5zig.util.minecraft.ChatColor.*;
 
 public enum HIDERank {
 
@@ -34,7 +21,7 @@ public enum HIDERank {
 	INVISIBLE("Invisible", DARK_BLUE + "" , 300000),
 	SHADOW("Shadow", DARK_PURPLE + "" , 500000),
 	HOUDINI("Houdini", AQUA + "" + BOLD + "" , 1000000),
-	NINJA("Ninja", BLACK + "" + BOLD + "" , 1750000),
+	NINJA("Ninja", DARK_GRAY + "" + BOLD + "" , 1750000),
 	WALLY("Wally", DARK_RED + "" + BOLD + "", 2500000),
 	GHOST("Ghost", WHITE + "" + BOLD + "", 4000000),
 	MASTER_OF_DISGUISE("Master of Disguise",  BOLD + "" + MAGIC + "" , -1);
