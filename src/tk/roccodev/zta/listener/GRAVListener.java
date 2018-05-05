@@ -1,5 +1,16 @@
 package tk.roccodev.zta.listener;
 
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -16,11 +27,6 @@ import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiGRAV;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
 
 public class GRAVListener extends AbstractGameListener<GRAV> {
 
@@ -48,7 +54,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 				try {
 
 					Thread.sleep(1000);
-					//Scoreboard doesn't load otherwise ???
+					// Scoreboard doesn't load otherwise ???
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					The5zigAPI.getLogger().info(sb.getTitle());
 
@@ -85,40 +91,66 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					String afterMsg = message.split("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps ")[1].replace("have won!", "").trim(); // No stripColor because we want difficulties
+					String afterMsg = message.split("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps ")[1]
+							.replace("have won!", "").trim(); // No stripColor because we want difficulties
 					String[] maps = afterMsg.split(", ");
 					GRAV.maps.addAll(Arrays.asList(maps));
-					
-					HashMap<String, Double> pbs = new ApiGRAV(The5zigAPI.getAPI().getGameProfile().getName()).getMapTimes();
+
+					HashMap<String, Double> pbs = new ApiGRAV(The5zigAPI.getAPI().getGameProfile().getName())
+							.getMapTimes();
 					int i = 0;
-					for(String s : maps) {
+					for (String s : maps) {
 						String apiMap = GRAV.mapsPool.get(ChatColor.stripColor(s));
 						System.out.println(apiMap);
 						pbs.entrySet().forEach(e -> {
 							System.out.println(e.getKey() + " / " + e.getValue());
 						});
-						double pb = pbs.get(apiMap);
-						GRAV.toDisplay.put(++i, s + " | " + pb + " | " + 0);
+						Double pb = pbs.get(apiMap);
+
+						if (pb == null)
+							pb = 0D;
+						GRAV.toDisplay.put(++i, s + " §f| " + pb + "s §f| §c{f}");
 						GRAV.mapPBs.put(ChatColor.stripColor(s), pb);
 					}
+					GRAV.toDisplayWithFails.putAll(GRAV.toDisplay);
 					GRAV.toDisplay.entrySet().forEach(e -> {
 						The5zigAPI.getAPI().messagePlayer(e.getValue());
 					});
 				}
 			}).start();
-			
-		
-		}
-		else if(message.contains(The5zigAPI.getAPI().getGameProfile().getName() + " §afinished Stage")) {
+
+		} else if (message.contains(The5zigAPI.getAPI().getGameProfile().getName() + " §afinished §bStage")) {
 			String secs = message.split("§d")[1].replaceAll("seconds", "").trim();
-			double d = Double.parseDouble(secs);
-		}
-		else if(message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §a§lVote received. §3Your map")) {
+
+			double d = 0D;
+			if (secs.contains(":")) {
+				String data[] = secs.split(":"); // E.g., 1:04.212
+				d = Double.parseDouble(Integer.parseInt(data[0]) * 60 + ""); // e.g, 60
+				d += Double.parseDouble(data[1]); // e.g, 60 + 4.212
+			} else {
+				d = Double.parseDouble(secs);
+			}
+			String map = GRAV.maps.get(GRAV.currentMap);
+			Double mapPb = GRAV.mapPBs.get(ChatColor.stripColor(map));
+			if (mapPb == null)
+				mapPb = 0D;
+			double diff = mapPb == 0 ? mapPb - d : d - mapPb;
+			DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+			df.setMaximumFractionDigits(3);
+			GRAV.toDisplay.put(GRAV.currentMap + 1, map + " §f| "
+					+ (diff < 0 ? "§a-" + df.format(Math.abs(diff)) : "§c+" + df.format(diff)) + "s §f| §c{f}");
+			GRAV.toDisplayWithFails.put(GRAV.currentMap + 1,
+					map + " §f| " + (diff < 0 ? "§a-" + df.format(Math.abs(diff)) : "§c+" + df.format(diff))
+							+ "s §f| §c" + GRAV.fails);
+		} else if (message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §a§lVote received. §3Your map")) {
 			GRAV.hasVoted = true;
 		}
 
-		else if(message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §6Map §7» §b")) {
-			DiscordUtils.updatePresence("Freefalling in Gravity" , "Falling on " + message.replace("§8▍ §bGra§avi§ety§8 ▏ §6Map §7» §b", ""), "game_grav");
+		else if (message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §6Map §7» §b")) {
+			DiscordUtils.updatePresence("Freefalling in Gravity",
+					"Falling on " + message.replace("§8▍ §bGra§avi§ety§8 ▏ §6Map §7» §b", ""), "game_grav");
+			GRAV.currentMap++;
+			GRAV.fails = 0;
 		}
 
 		// Advanced Records
@@ -139,7 +171,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 
 			return true;
 		} else if ((message.equals("                      §6§m                  §6§m                  ")
-							&& !message.startsWith("§o "))) {
+				&& !message.startsWith("§o "))) {
 			The5zigAPI.getLogger().info("found footer");
 			GRAV.footerToSend.add(message);
 			The5zigAPI.getLogger().info("executed /records");
@@ -166,8 +198,8 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 							df1f.setMinimumFractionDigits(1);
 
 							String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
-													   ? api.getParentMode().getNetworkTitle()
-													   : "";
+									? api.getParentMode().getNetworkTitle()
+									: "";
 							ChatColor rankColor = null;
 							if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
 								rankColor = api.getParentMode().getNetworkRankColor();
@@ -181,7 +213,8 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 							int victories = 0;
 
 							Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-							//Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
+							// Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ?
+							// api.getAchievements() : null;
 
 							// int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
 							// HiveAPI.getLeaderboardsPlacePoints(349, "GRAV") <
@@ -217,7 +250,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 										if (rankColor == null)
 											rankColor = ChatColor.WHITE;
 										The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " ("
-																				  + rankColor + rankTitle + "§6) " + "§m       ");
+												+ rankColor + rankTitle + "§6) " + "§m       ");
 									}
 									continue;
 								} else if (s.startsWith("§3 Points: §b")) {
@@ -248,15 +281,16 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 
 							}
 
-							/*if (achievements != null) {
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
-							}*/
+							/*
+							 * if (achievements != null) { The5zigAPI.getAPI().messagePlayer("§o " +
+							 * "§3 Achievements: §b" + achievements + ""); }
+							 */
 
-							if(Setting.GRAV_SHOW_PPG.getValue()) {
-								double ppg = (double) ((double)points / (double)gamesPlayed);
+							if (Setting.GRAV_SHOW_PPG.getValue()) {
+								double ppg = (double) ((double) points / (double) gamesPlayed);
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df1f.format(ppg));
 							}
-							if(Setting.GRAV_SHOW_FINISHRATE.getValue()) {
+							if (Setting.GRAV_SHOW_FINISHRATE.getValue()) {
 								double fr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Finish-Rate: §b" + df1f.format(fr) + "%");
 							}
@@ -286,7 +320,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 								return;
 							}
 							The5zigAPI.getAPI().messagePlayer(Log.error
-																	  + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
+									+ "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
 
 							for (String s : GRAV.messagesToSend) {
 								The5zigAPI.getAPI().messagePlayer("§o " + s);
@@ -313,19 +347,37 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 	}
 
 	@Override
+	public boolean onActionBar(GRAV gameMode, String message) {
+		if (ZTAMain.isColorDebug) {
+			The5zigAPI.getLogger().info("GRAV ActionBar Debug: (" + message + ")");
+		}
+		if (message.contains("Fails§8 » §c")) {
+			String fails = message.split("Fails§8 » §c")[1];
+			int f = Integer.parseInt(fails);
+			if (f != GRAV.failsCache) {
+				GRAV.toDisplayWithFails.put(GRAV.currentMap + 1,
+						GRAV.toDisplay.get(GRAV.currentMap + 1).replace("{f}", ++GRAV.fails + ""));
+				GRAV.failsCache = f;
+			}
+
+		}
+		return false;
+	}
+
+	@Override
 	public void onTitle(GRAV gameMode, String title, String subTitle) {
 		if (ZTAMain.isColorDebug) {
 			The5zigAPI.getLogger().info("GRAV TitleColor Debug: (" +
 
-												title != null ? title
-												: "ERR_TITLE_NULL"
+					title != null ? title
+							: "ERR_TITLE_NULL"
 
-														  + " *§* " +
+									+ " *§* " +
 
-														  subTitle != null ? subTitle
-														  : "ERR_SUBTITLE_NULL"
+									subTitle != null ? subTitle
+											: "ERR_SUBTITLE_NULL"
 
-																	+ ")");
+													+ ")");
 		}
 	}
 

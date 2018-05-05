@@ -204,6 +204,9 @@
       "items": [
         {
           "type": "gravpoints"
+        },
+        {
+          "type": "gravstages"
         }
       ]
     }

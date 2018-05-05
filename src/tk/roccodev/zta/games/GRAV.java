@@ -25,8 +25,10 @@ public class GRAV extends GameMode {
 	
 	public static long gamePoints;
 	
-	public static int deaths;
-
+	
+	public static int fails;
+	public static int failsCache;
+	
 	public static int apiGamesPlayed, apiVictories;
 
 	public static String rank;
@@ -35,7 +37,8 @@ public class GRAV extends GameMode {
 	public static ArrayList<String> maps = new ArrayList<String>();
 	public static HashMap<String, Double> mapPBs = new HashMap<String, Double>();
 	public static HashMap<Integer, String> toDisplay = new HashMap<Integer, String>();
-	public static int currentMap = 0; //(0,1,2,3,4)
+	public static HashMap<Integer, String> toDisplayWithFails = new HashMap<Integer, String>();
+	public static int currentMap = -1;
 	
 
 	public static void reset(GRAV gameMode){
@@ -47,10 +50,12 @@ public class GRAV extends GameMode {
 		GRAV.mapsToParse.clear();
 		GRAV.isRecordsRunning = false;
 		GRAV.hasVoted = false;
-		currentMap = 0;
+		currentMap = -1;
 		gamePoints = 0;
-		deaths = 0;
+		fails = 0;
+		failsCache = 0;
 		toDisplay.clear();
+		toDisplayWithFails.clear();
 		maps.clear();
 		mapPBs.clear();
 		ActiveGame.reset("grav");
