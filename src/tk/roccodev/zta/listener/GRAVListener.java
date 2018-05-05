@@ -1,16 +1,5 @@
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -27,6 +16,11 @@ import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiGRAV;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
 
 public class GRAVListener extends AbstractGameListener<GRAV> {
 
@@ -101,21 +95,25 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 					int i = 0;
 					for (String s : maps) {
 						String apiMap = GRAV.mapsPool.get(ChatColor.stripColor(s));
-						System.out.println(apiMap);
-						pbs.entrySet().forEach(e -> {
-							System.out.println(e.getKey() + " / " + e.getValue());
-						});
+						The5zigAPI.getLogger().info(apiMap);
+						DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+						df.setMinimumFractionDigits(3);
+						/*pbs.entrySet().forEach(e -> {
+							The5zigAPI.getLogger().info(e.getKey() + " / " + e.getValue());
+						});*/
 						Double pb = pbs.get(apiMap);
 
-						if (pb == null)
+						if (pb == null) {
 							pb = 0D;
-						GRAV.toDisplay.put(++i, s + " §f| " + pb + "s §f| §c{f}");
+							GRAV.toDisplay.put(++i, s + " §f| §7No PB §f| §c{f}");
+						} else GRAV.toDisplay.put(++i, s + " §f| " + df.format(pb) + "s §f| §c{f}");
+
 						GRAV.mapPBs.put(ChatColor.stripColor(s), pb);
 					}
 					GRAV.toDisplayWithFails.putAll(GRAV.toDisplay);
-					GRAV.toDisplay.entrySet().forEach(e -> {
+					/*GRAV.toDisplay.entrySet().forEach(e -> {
 						The5zigAPI.getAPI().messagePlayer(e.getValue());
-					});
+					});*/
 				}
 			}).start();
 
@@ -130,18 +128,26 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 			} else {
 				d = Double.parseDouble(secs);
 			}
+			//The5zigAPI.getLogger().info("D="+d);
 			String map = GRAV.maps.get(GRAV.currentMap);
 			Double mapPb = GRAV.mapPBs.get(ChatColor.stripColor(map));
-			if (mapPb == null)
-				mapPb = 0D;
-			double diff = mapPb == 0 ? mapPb - d : d - mapPb;
-			DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
-			df.setMaximumFractionDigits(3);
-			GRAV.toDisplay.put(GRAV.currentMap + 1, map + " §f| "
-					+ (diff < 0 ? "§a-" + df.format(Math.abs(diff)) : "§c+" + df.format(diff)) + "s §f| §c{f}");
-			GRAV.toDisplayWithFails.put(GRAV.currentMap + 1,
-					map + " §f| " + (diff < 0 ? "§a-" + df.format(Math.abs(diff)) : "§c+" + df.format(diff))
-							+ "s §f| §c" + GRAV.fails);
+			//The5zigAPI.getLogger().info(mapPb.toString());
+			if (mapPb == 0.0D) {
+				DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+				df.setMinimumFractionDigits(3);
+				GRAV.toDisplay.put(GRAV.currentMap + 1, map + " §f| §7" + df.format(d) + "s §f| §c{f}");
+				GRAV.toDisplayWithFails.put(GRAV.currentMap + 1, map + " §f| §7" + df.format(d) + "s §f| §c" + GRAV.fails);
+
+			} else {
+				double diff = mapPb == 0 ? mapPb - d : d - mapPb;
+				DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+				df.setMinimumFractionDigits(3);
+				GRAV.toDisplay.put(GRAV.currentMap + 1, map + " §f| "
+																+ (diff < 0 ? "§a-" + df.format(Math.abs(diff)) : "§c+" + df.format(diff)) + "s §f| §c{f}");
+				GRAV.toDisplayWithFails.put(GRAV.currentMap + 1,
+						map + " §f| " + (diff < 0 ? "§a-" + df.format(Math.abs(diff)) : "§c+" + df.format(diff))
+								+ "s §f| §c" + GRAV.fails);
+			}
 		} else if (message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §a§lVote received. §3Your map")) {
 			GRAV.hasVoted = true;
 		}
