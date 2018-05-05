@@ -26,6 +26,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static tk.roccodev.zta.games.TIMV.traitorTeam;
+
 public class TIMVListener extends AbstractGameListener<TIMV>{
 
 	
@@ -97,11 +99,6 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.rank = TIMV.rankObject.getTotalDisplay();
 				
 		}}).start();
-		
-		
-		
-		
-		
 	}
 	
 
@@ -156,6 +153,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			if(!TIMV.dead){
 				TIMV.applyPoints(20);
 			}
+			traitorTeam.addAll(Collections.nCopies(7, "fin"));
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
@@ -503,6 +501,31 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
 			timer.schedule(sft, 1500);
 			
+		}
+		else if(message.contains("   §4") && traitorTeam.size() < 7 && TIMV.role.equals("Traitor")){
+			//§4jordix03, ItsNiklass, Vpnce, BatHex
+			//The5zigAPI.getLogger().info(ChatColor.stripColor(message).split(", "));
+			traitorTeam.addAll(Arrays.asList(ChatColor.stripColor(message).replaceAll(" ","").split(",")));
+			The5zigAPI.getLogger().info(traitorTeam.toString());
+		}
+		else if(message.equals("                        §c§m                                ") && traitorTeam.size() < 7 && traitorTeam.size() > 0 && TIMV.role.equals("Traitor")){
+
+
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+
+					ArrayList<Long> TraitorKarma = new ArrayList<>();
+					for(String name : traitorTeam){
+						ApiTIMV api = new ApiTIMV(name);
+						TraitorKarma.add(api.getKarma());
+					}
+
+					The5zigAPI.getAPI().messagePlayer("                               §4Traitor Karma: " + APIUtils.average(TraitorKarma.toArray()));
+					The5zigAPI.getAPI().messagePlayer("                        §c§m                                ");
+
+				}
+			}).start();
 		}
 		//glorious
 		/*else if(ActiveGame.is("timv") && message.contains("ItsNiklass§8 » ") && !message.contains("§b§lParty§8")){

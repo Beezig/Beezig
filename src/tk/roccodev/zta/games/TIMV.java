@@ -1,26 +1,6 @@
 package tk.roccodev.zta.games;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
-
 import com.csvreader.CsvWriter;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
@@ -33,6 +13,17 @@ import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.timv.TIMVMap;
 import tk.roccodev.zta.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.zta.notes.NotesManager;
+
+import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public class TIMV extends GameMode {
 
@@ -48,6 +39,8 @@ public class TIMV extends GameMode {
 	public static int traitorsDiscovered = 0;
 	public static int detectivesBefore = 0;
 	public static int detectivesDiscovered = 0;
+
+	public static ArrayList<String> traitorTeam = new ArrayList<>();
 
 	public static String gameID;
 
@@ -283,6 +276,7 @@ public class TIMV extends GameMode {
 		TIMV.traitorsDiscovered = 0;
 		TIMV.detectivesBefore = 0;
 		TIMV.detectivesDiscovered = 0;
+		traitorTeam.clear();
 		NotesManager.notes.clear();
 		TIMV.messagesToSend.clear();
 		TIMV.footerToSend.clear();
