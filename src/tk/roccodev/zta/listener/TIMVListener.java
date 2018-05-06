@@ -520,8 +520,9 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 						ApiTIMV api = new ApiTIMV(name);
 						TraitorKarma.add(api.getKarma());
 					}
-
-					The5zigAPI.getAPI().messagePlayer("                               §4Traitor Karma: " + APIUtils.average(TraitorKarma.toArray()));
+					Long avg = APIUtils.average(TraitorKarma.toArray());
+					The5zigAPI.getAPI().messagePlayer("                        §c§m                                ");
+					The5zigAPI.getAPI().messagePlayer("                           §4Traitor Karma: " + avg);
 					The5zigAPI.getAPI().messagePlayer("                        §c§m                                ");
 
 				}
