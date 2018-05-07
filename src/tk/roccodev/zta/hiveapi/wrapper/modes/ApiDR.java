@@ -1,12 +1,12 @@
 package tk.roccodev.zta.hiveapi.wrapper.modes;
 
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.server.GameMode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.server.GameMode;
 import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.hiveapi.StuffFetcher;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.PvPMode;
@@ -34,6 +34,7 @@ public class ApiDR extends PvPMode {
 	
 	public String getPersonalBest(DRMap map){
 		try {
+
 			JSONObject mapRecords = (JSONObject) object("maprecords");
 			Long time = (long) mapRecords.get(map.getHiveAPIName());
 
@@ -46,14 +47,42 @@ public class ApiDR extends PvPMode {
 				return (minutes + ":" + seconds);
 			}
 			return "0:" + time;
+
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+
+	public String getTotalPB() {
+		try {
+			JSONObject mapRecords = (JSONObject) object("maprecords");
+			The5zigAPI.getLogger().info("mr-s" + mapRecords.size());
+			The5zigAPI.getLogger().info("sf-s" + StuffFetcher.getDeathRunMaps().size());
+			if(mapRecords.size() != StuffFetcher.getDeathRunMaps().size()) return null;
+			//Doesn't have a time on every map
+
+			long time = 0;
+
+			for(Object x : mapRecords.values()){
+				time += (long) x;
+			}
+
+			int seconds = Math.toIntExact(time) % 60;
+			int minutes = Math.floorDiv(Math.toIntExact(time), 60);
+			if (seconds < 10) {
+				return (minutes + ":0" + seconds);
+			}
+			return (minutes + ":" + seconds);
+
 		}catch(Exception e){
 			e.printStackTrace();
 
 			return null;
 		}
-		
 	}
-	
+
 	public Double getRawWorldRecord(DRMap map){
 		String mapid = map.getSpeedrunID();
 		JSONParser parser = new JSONParser();
@@ -150,6 +179,10 @@ public class ApiDR extends PvPMode {
 	
 	public long getGamesPlayedAsRunner(){
 		return (long) object("runnergamesplayed");
+	}
+
+	public long getGamesPlayedAsDeath(){
+		return (long) object("deathgamesplayed");
 	}
 	
 	public long getVictoriesAsRunner(){

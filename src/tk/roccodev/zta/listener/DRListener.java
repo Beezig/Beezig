@@ -258,6 +258,12 @@ public class DRListener extends AbstractGameListener<DR> {
 											((double) api.getDeaths() / (double) api.getGamesPlayedAsRunner()) * 10d)
 											/ 10d)
 									: null;
+							Double kpg = Setting.DR_SHOW_KILLSPERGAME.getValue()
+										 ? Math.round(((double) api.getKills() / (double) api.getGamesPlayedAsDeath()) * 10d) / 10d
+										 : null;
+							String tpb = Setting.DR_SHOW_TOTALPB.getValue()
+										 ? api.getTotalPB()
+										 : null;
 							String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
 									? api.getParentMode().getNetworkTitle()
 									: "";
@@ -342,6 +348,12 @@ public class DRListener extends AbstractGameListener<DR> {
 							}
 							if (dpg != null) {
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Deaths per Game: §b" + dpg);
+							}
+							if (kpg != null) {
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills per Game: §b" + kpg);
+							}
+							if (tpb != null){
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Total Personal Best: §b" + tpb);
 							}
 							if (monthlyRank != 0) {
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);

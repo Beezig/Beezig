@@ -24,10 +24,12 @@ public enum Setting {
 	TIMV_SHOW_TRAITORRATIO(false, "TIMV Advanced Records - Show the Traitor Points / Rolepoints ratio"),
 	TIMV_USE_TESTREQUESTS(true, "Replace \" test\" with nicer phrases to avoid HAS"),
 	
-	DR_SHOW_POINTSPERGAME(true, "DR Advanced Records - Show the average Points per Game"),
-	DR_SHOW_RUNNERWINRATE(true, "DR Advanced Records - Show the Winrate as a Runner"),
-	DR_SHOW_DEATHSPERGAME(true, "DR Advanced Records - Show the avg. Deaths as Runner"),
+	DR_SHOW_POINTSPERGAME(true, "DR Advanced Records - Show the avg. points per game"),
+	DR_SHOW_RUNNERWINRATE(true, "DR Advanced Records - Show the winrate as a runner"),
+	DR_SHOW_DEATHSPERGAME(true, "DR Advanced Records - Show the avg. deaths as runner"),
 	DR_SHOW_POINTS_TO_NEXT_RANK(false, "DR Advanced Records - Show points to next rank"),
+	DR_SHOW_KILLSPERGAME(true, "DR Advanced Records - Show the avg. kills as death"),
+	DR_SHOW_TOTALPB(true, "DR Advanced Records - Show the cumulative amount of personal bests"),
 	
 	BED_SHOW_POINTS_TO_NEXT_RANK(true, "BED Advanced Records - Show points to next rank"),
 	BED_SHOW_ELIMINATIONS_PER_GAME(false, "BED Advanced Records - Show Eliminations per Game"),
@@ -69,11 +71,8 @@ public enum Setting {
 	MIMV_SHOW_KD(true, "MIMV Advanced Records - Show Kills/Deaths"),
 	MIMV_SHOW_KPG(true, "MIMV Advanced Records - Show Kills per game"),
 	MIMV_SHOW_PPG(true, "MIMV Advanced Records - Show Karma per game");
-	
-	
-	
 
-	
+
 	private boolean value;
 	private String briefDesc;
 	
