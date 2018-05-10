@@ -47,9 +47,8 @@ public class RanksCommand implements Command {
 		if(game.equalsIgnoreCase("bed")){
 			new Thread(() -> {
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
-
 				for(BEDRank bedRank : BEDRank.values()){
-					The5zigAPI.getAPI().messagePlayer(Log.info + bedRank.name()  + " §e- " + bedRank.name().replaceAll(ChatColor.stripColor(bedRank.name()), "") + bedRank.getStart());
+					The5zigAPI.getAPI().messagePlayer(Log.info + "" + bedRank.getName() + "" + "§e - " + "" + bedRank.getName().replaceAll(ChatColor.stripColor(bedRank.getName()), "") + "" + bedRank.getStart());
 				}
 
 				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
