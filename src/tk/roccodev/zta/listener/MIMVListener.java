@@ -377,7 +377,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 
 													+ ")");
 		}
-		if (subTitle.contains("You will be") && subTitle.contains("this round!")) {
+		if (subTitle != null && subTitle.contains("You will be") && subTitle.contains("this round!")) {
 			String role = APIUtils.capitalize(title.replace("§r", "").toLowerCase().trim());
 			MIMV.role = role.startsWith("§a") ? "§aCitizen" : (role.startsWith("§c") ? "§cMurderer" : "§9Detective");
 			DiscordUtils.updatePresence("Investigating in Murder in Mineville", "Playing on " + MIMV.map, "game_mimv");
