@@ -29,7 +29,7 @@ public class ClosestToWRCommand implements Command{
 				try {
 					ClosestToWR.fetch(args.length == 0 ? The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "") : args[0], args.length > 1);
 
-					The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    " + "\n");
+					The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
 				}
 				catch(Exception e){
 					The5zigAPI.getAPI().messagePlayer(Log.error + "An error occured.");

@@ -1,9 +1,7 @@
 package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.zta.games.BED;
-import tk.roccodev.zta.games.DR;
-import tk.roccodev.zta.games.TIMV;
+import tk.roccodev.zta.games.*;
 
 public class ReVoteCommand implements Command{
 	@Override
@@ -24,7 +22,12 @@ public class ReVoteCommand implements Command{
 		TIMV.hasVoted = false;
 		DR.hasVoted = false;
 		BED.hasVoted = false;
-		//Giant.hasVoted = false;
+		Giant.hasVoted = false;
+		CAI.hasVoted = false;
+		GRAV.hasVoted = false;
+		HIDE.hasVoted = false;
+		MIMV.hasVoted = false;
+		SKY.hasVoted = false;
 		
 		The5zigAPI.getAPI().sendPlayerMessage("/v");
 		return true;

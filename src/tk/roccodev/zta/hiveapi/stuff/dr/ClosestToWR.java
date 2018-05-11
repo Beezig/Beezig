@@ -48,34 +48,35 @@ public class ClosestToWR {
 			
 			Map<DRMap, Double> sorted = sortByValue(timesHash);
 
-			The5zigAPI.getAPI().messagePlayer("\n" + "    §e§m                                                                                    ");
+			The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
 
 			if (all) {
 				for (Map.Entry<DRMap, Double> e : sorted.entrySet()) {
-					The5zigAPI.getAPI().messagePlayer(Log.info + "§3" + e.getKey().getDisplayName() + ": §b" + df.format(e.getValue()));
+					if(e.getValue() > 0 )The5zigAPI.getAPI().messagePlayer(Log.info + "§3" + e.getKey().getDisplayName() + ": §b+" + df.format(e.getValue()) + "s");
+					if(e.getValue() < 0 )The5zigAPI.getAPI().messagePlayer(Log.info + "§3" + e.getKey().getDisplayName() + ": §a" + df.format(e.getValue()) + "s");
 				}
-				The5zigAPI.getAPI().messagePlayer("    §e§m                                                                                    ");
+				The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    ");
 			}
 			Map.Entry<DRMap, Double> first = sorted.entrySet().stream().findFirst().get();
 			double time = first.getValue();
 			if(time < 0) {
-				The5zigAPI.getAPI().messagePlayer(Log.info + "§3Best map: §b" + first.getKey().getDisplayName() + " (" + df.format(Math.abs(time)) + " seconds §aahead§b of WR)");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "§3Best map: §b" + first.getKey().getDisplayName() + " (" + df.format(Math.abs(time)) + "s §aahead§b of WR)");
 			}
 			else {
-				The5zigAPI.getAPI().messagePlayer(Log.info + "§3Best map: §b" + first.getKey().getDisplayName() + " (" + df.format(time) + " seconds §cbehind§b WR)");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "§3Best map: §b" + first.getKey().getDisplayName() + " (" + df.format(time) + "s behind WR)");
 			}
 			Map<DRMap, Double> sortedRev = sortByValueReversed(timesHash);
 			Map.Entry<DRMap, Double> last = sortedRev.entrySet().stream().findFirst().get();
 			time = last.getValue();
 			if(time < 0) {
-				The5zigAPI.getAPI().messagePlayer(Log.info + "§3Worst map: §b" + last.getKey().getDisplayName() + " (" + df.format(Math.abs(time)) + " seconds §aahead§b of WR)");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "§3Worst map: §b" + last.getKey().getDisplayName() + " (" + df.format(Math.abs(time)) + "s §aahead§b of WR)");
 			}
 			else {
-				The5zigAPI.getAPI().messagePlayer(Log.info + "§3Worst map: §b" + last.getKey().getDisplayName() + " (" + df.format(time) + " seconds §cbehind§b WR)");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "§3Worst map: §b" + last.getKey().getDisplayName() + " (" + df.format(time) + "s behind WR)");
 			}
 
 			double avg = sorted.values().stream().mapToDouble(Double::doubleValue).average().getAsDouble();
-			The5zigAPI.getAPI().messagePlayer(Log.info + "§3Average: §b" + (avg < 0 ? df.format(Math.abs(avg)) + " seconds §aahead§b of " : df.format(avg) + " seconds §cbehind§b ") + "WR" );
+			The5zigAPI.getAPI().messagePlayer(Log.info + "§3Average: §b" + (avg < 0 ? df.format(Math.abs(avg)) + " seconds §aahead§b of " : df.format(avg) + "s behind ") + "WR" );
 			The5zigAPI.getAPI().messagePlayer(Log.info + "§3Next refresh:§b " + new SimpleDateFormat("MMM d, hh:mm a").format(new Date(cachedUntil)));
 
 		} catch (IOException | ParseException e) {

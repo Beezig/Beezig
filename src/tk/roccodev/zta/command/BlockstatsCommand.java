@@ -27,7 +27,7 @@ public class BlockstatsCommand implements Command{
 	public boolean execute(String[] args) {
 		if(args.length == 0) {
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Blockstats Usage:");
-			The5zigAPI.getAPI().messagePlayer(ChatColor.YELLOW + "/bs list (player) - Returns the levels of all blocks by the player");
+			The5zigAPI.getAPI().messagePlayer(ChatColor.AQUA + "/bs list (player) §7- §3Returns the levels of all blocks by the player");
 		}
 		if (args.length > 0) {
 			if (args[0].equalsIgnoreCase("list") && args.length < 3) {
@@ -42,7 +42,6 @@ public class BlockstatsCommand implements Command{
 					ApiHIDE api = new ApiHIDE(ign);
 					JSONObject blockExp = api.getBlockExperience();
 					JSONObject rawBlockEx = api.getRawBlockExperience();
-					The5zigAPI.getAPI().messagePlayer("\n" + Log.info + "§3Blockstats of §b" + api.getParentMode().getNetworkRankColor() +  api.getParentMode().getCorrectName() + "§3:");
 
 
 					List<Object> blocks = new ArrayList<>(Arrays.asList(blockExp.keySet().toArray()));
@@ -54,6 +53,9 @@ public class BlockstatsCommand implements Command{
 					}
 
 					APIUtils.concurrentSort(rawExp, blocks,levels,rawExp);
+
+					The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
+					The5zigAPI.getAPI().messagePlayer(Log.info + "§bBlockstats of §b" + api.getParentMode().getNetworkRankColor() +  api.getParentMode().getCorrectName() + "§3:");
 
 					for(int i = blocks.size()-1; i != 0; i--){
 
@@ -74,9 +76,10 @@ public class BlockstatsCommand implements Command{
 							blockName = "Dark Prismarine";
 						}
 
-						The5zigAPI.getAPI().messagePlayer("§3" + blockName + ": " + APIUtils.getLevelColorHIDE(levels.get(i).intValue()) + "" + levels.get(i) + APIUtils.getNextPecentHIDE(rawExp.get(i).intValue(), levels.get(i).intValue()));
+						The5zigAPI.getAPI().messagePlayer(Log.info + "§3" + blockName + ": " + APIUtils.getLevelColorHIDE(levels.get(i).intValue()) + "" + levels.get(i) + APIUtils.getNextPecentHIDE(rawExp.get(i).intValue(), levels.get(i).intValue()));
 					}
-					The5zigAPI.getAPI().messagePlayer("");
+					The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    \n");
+
 				}).start();
 			}
 		}

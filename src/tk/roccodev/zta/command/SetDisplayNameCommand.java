@@ -2,6 +2,7 @@ package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
+import eu.the5zig.util.minecraft.ChatColor;
 
 public class SetDisplayNameCommand implements Command{
 
@@ -42,7 +43,7 @@ public class SetDisplayNameCommand implements Command{
 
 		for(NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()){
 			if(npi.getGameProfile().getName().equalsIgnoreCase(targetPlayer)){
-				npi.setDisplayName(displayName);
+				npi.setDisplayName(ChatColor.translateAlternateColorCodes('&', targetPlayer));
 			}
 		}
 		return true;

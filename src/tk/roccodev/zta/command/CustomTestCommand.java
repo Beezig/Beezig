@@ -1,14 +1,14 @@
 package tk.roccodev.zta.command;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.utils.TIMVTest;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CustomTestCommand implements Command {
 
@@ -46,6 +46,7 @@ public class CustomTestCommand implements Command {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					The5zigAPI.getAPI().messagePlayer(Log.error + "Failed to add message.");
 				}
 				The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully added message.");
 				break;
@@ -55,6 +56,7 @@ public class CustomTestCommand implements Command {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					The5zigAPI.getAPI().messagePlayer(Log.error + "Failed to add message.");
 				}
 				The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully removed message.");
 				break;
@@ -62,7 +64,7 @@ public class CustomTestCommand implements Command {
 				
 				The5zigAPI.getAPI().messagePlayer(Log.info + "Test messages:");
 				
-				TIMV.testRequests.forEach(s -> The5zigAPI.getAPI().messagePlayer("§e - " + s));
+				TIMV.testRequests.forEach(s -> The5zigAPI.getAPI().messagePlayer("§7 - §b" + s));
 				
 				break;
 			}

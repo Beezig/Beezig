@@ -1,11 +1,11 @@
 package tk.roccodev.zta.command;
 
+import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.zta.Log;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-
-import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.zta.Log;
 
 public class MathCommand implements Command{
 
@@ -25,8 +25,8 @@ public class MathCommand implements Command{
 	public boolean execute(String[] args) {
 		if(args.length == 0){
 			
-			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /math [expression]\n"
-					+ "Clueless? More info at§ahttp://roccodev.tk/beezigmath");
+			The5zigAPI.getAPI().messagePlayer(Log.info + "§bUsage: /math [expression]\n"
+					+ "Clueless? More info at §bhttp://roccodev.tk/beezigmath");
 			
 			return true;
 			
@@ -73,7 +73,7 @@ public class MathCommand implements Command{
 		ScriptEngineManager sem = new ScriptEngineManager(null);
 		ScriptEngine engine = sem.getEngineByName("JavaScript");
 		
-		The5zigAPI.getAPI().messagePlayer(Log.info + "Result: §6" + engine.eval(expression));
+		The5zigAPI.getAPI().messagePlayer(Log.info + "Result: §b" + engine.eval(expression));
 		}catch(ScriptException ex){
 			The5zigAPI.getAPI().messagePlayer(Log.error + "Error while calculating.");
 		}

@@ -37,7 +37,7 @@ public class MessageOverlayCommand implements Command{
 			@Override
 			public void run(){
 				ApiHiveGlobal api = new ApiHiveGlobal(toggledName);
-				The5zigAPI.getAPI().messagePlayer(Log.info + "Now sending messages to " + api.getNetworkRankColor() + api.getCorrectName() + "§e.");
+				The5zigAPI.getAPI().messagePlayer(Log.info + "Now sending messages to " + api.getNetworkRankColor() + api.getCorrectName() + "§3.");
 			}
 		}).start();
 		

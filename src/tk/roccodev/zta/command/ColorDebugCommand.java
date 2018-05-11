@@ -23,7 +23,7 @@ public class ColorDebugCommand implements Command {
 
 		if(args.length != 0) {
 			String txt = String.join(" ", args);
-			The5zigAPI.getAPI().messagePlayer("§eCDebug: §r" + ChatColor.translateAlternateColorCodes('&', txt));
+			The5zigAPI.getAPI().messagePlayer(Log.info + "§r" + ChatColor.translateAlternateColorCodes('&', txt));
 			return true;
 		}
 		
