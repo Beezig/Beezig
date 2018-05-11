@@ -118,7 +118,14 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 			}).start();
 
 		} else if (message.contains(The5zigAPI.getAPI().getGameProfile().getName() + " §afinished §bStage")) {
-			String secs = message.split("§d")[1].replaceAll("seconds", "").trim();
+			String[] dataFirst = message.split("§d");
+			String secs = "";
+			if(dataFirst.length == 2) {
+				secs = message.split("§d")[1].replaceAll("seconds", "").trim();
+			}
+			else if(dataFirst.length == 3) {
+				secs = message.split("§d")[2].replaceAll("seconds", "").trim();
+			}
 
 			double d = 0D;
 			if (secs.contains(":")) {

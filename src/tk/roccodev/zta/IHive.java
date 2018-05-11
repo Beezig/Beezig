@@ -51,6 +51,7 @@ public class IHive extends ServerInstance {
 		getGameListener().registerListener(new SKYListener());
 		getGameListener().registerListener(new MIMVListener());
 		getGameListener().registerListener(new GRAVListener());
+		
 	}
 
 	public static void genericReset(String... optionalParams) {
