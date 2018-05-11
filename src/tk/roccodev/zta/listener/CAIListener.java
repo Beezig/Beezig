@@ -159,6 +159,10 @@ public class CAIListener extends AbstractGameListener<CAI> {
 		} else if (message.startsWith("§8▍ §bCAI§8 ▏ §6§e§e§l") && !CAI.hasVoted && Setting.AUTOVOTE.getValue()) {
 			CAI.votesToParse.add(message);
 		} 
+		else if(message.equals("§8▍ §bCAI§8 ▏ §aYou have captured the enemy's team leader!")) {
+			CAI.gamePoints += 5;
+			APIValues.CAIpoints += 5;
+		}
 		else if(message.endsWith("§cCowboys Leader§7.")) {
 		
 			CAI.team = "§eIndians";
@@ -174,12 +178,22 @@ public class CAIListener extends AbstractGameListener<CAI> {
 
 			HiveAPI.tokens += 5;
 			CAI.gamePoints += 10;
+			APIValues.CAIpoints += 10;
 
-		} else if (message.startsWith("§8▍ §bCAI§8 ▏ §7You gained §f5 points §7for killing")) {
+		}
+		else if(message.equals("                             §eIndians have won!") && CAI.team != null && CAI.team.equals("§eIndians")) {
+			CAI.gamePoints += 50;
+			APIValues.CAIpoints += 50;
+		}
+		else if(message.equals("                             §cCowboys have won!") && CAI.team != null && CAI.team.equals("§cCowboys")) {
+			CAI.gamePoints += 50;
+			APIValues.CAIpoints += 50;
+		}
+		else if (message.startsWith("§8▍ §bCAI§8 ▏ §7You gained §f5 points §7for killing")) {
 			
 			
 			CAI.gamePoints += 5;
-			
+			APIValues.CAIpoints += 5;
 			
 		} else if (message.endsWith("§7[Leader Alive Bonus]")
 				&& message.startsWith("§8▍ §bCAI§8 ▏ §2+")) {
@@ -188,6 +202,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
 					.replace("§8▍ §bCAI§8 ▏ §2+ §a", "");
 
 			CAI.gamePoints += Long.parseLong(points.trim());
+			APIValues.CAIpoints += Long.parseLong(points.trim());
 
 		}
 
