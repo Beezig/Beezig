@@ -204,7 +204,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "bedkdrchange", tk.roccodev.zta.modules.bed.KDRChangeItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedteamsleft", tk.roccodev.zta.modules.bed.TeamsLeftItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedsummoners", tk.roccodev.zta.modules.bed.SummonersItem.class , "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "bedwinstreak", tk.roccodev.zta.modules.bed.WinstreakItem.class , "serverhivemc");
+		// The5zigAPI.getAPI().registerModuleItem(this, "bedwinstreak", tk.roccodev.zta.modules.bed.WinstreakItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "globalmedals", tk.roccodev.zta.modules.global.MedalsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "globaltokens", tk.roccodev.zta.modules.global.TokensItem.class , "serverhivemc");
