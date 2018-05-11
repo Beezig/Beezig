@@ -1,7 +1,10 @@
 package tk.roccodev.zta;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
@@ -40,6 +43,7 @@ import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.AutoVoteCommand;
 import tk.roccodev.zta.command.BlockstatsCommand;
 import tk.roccodev.zta.command.CheckPingCommand;
+import tk.roccodev.zta.command.ClosestToWRCommand;
 import tk.roccodev.zta.command.ColorDebugCommand;
 import tk.roccodev.zta.command.CustomTestCommand;
 import tk.roccodev.zta.command.DebugCommand;
@@ -66,13 +70,16 @@ import tk.roccodev.zta.games.CAI;
 import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.games.GNT;
 import tk.roccodev.zta.games.GNTM;
+import tk.roccodev.zta.games.GRAV;
 import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.games.HIDE;
+import tk.roccodev.zta.games.MIMV;
 import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.StuffFetcher;
 import tk.roccodev.zta.hiveapi.stuff.bed.StreakUtils;
+import tk.roccodev.zta.hiveapi.stuff.grav.GRAVListenerv2;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
@@ -89,7 +96,8 @@ import tk.roccodev.zta.utils.rpc.NativeUtils;
 @Plugin(name="Beezig", version=ZTAMain.BEEZIG_VERSION)
 public class ZTAMain {
 	
-	public static final String BEEZIG_VERSION = "4.5.1";
+	public static final String BEEZIG_VERSION = "4.6.0";
+	public static String VERSION_HASH = "";
 	
 	public static boolean hasServedNews;
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -145,7 +153,31 @@ public class ZTAMain {
 			e.printStackTrace();
 		}
 		
+		InputStream expHash = getClass().getResourceAsStream("/version.txt");
+		if(expHash != null) {
+			
+			
+			String result = new BufferedReader(new InputStreamReader(expHash))
+					  .lines().collect(Collectors.joining("\n"));
+			
+			
+			try {
+				expHash.close();
+				
+				
+			} catch (IOException e) {
+				
+			}
+			String[] data = result.split(" ");
+			if(data.length != 0 && data[0].equals("experimental")) {
+				VERSION_HASH = data[1].substring(0, 7);
+			}
+			
+			
+		}
+		
 		The5zigAPI.getLogger().info("Loading Beezig");
+		The5zigAPI.getLogger().info("Version is " + BEEZIG_VERSION + ". Hash is " + VERSION_HASH);
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "karma", tk.roccodev.zta.modules.timv.KarmaItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "karmacounter", tk.roccodev.zta.modules.timv.KarmaCounterItem.class, "serverhivemc");
@@ -172,7 +204,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "bedkdrchange", tk.roccodev.zta.modules.bed.KDRChangeItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedteamsleft", tk.roccodev.zta.modules.bed.TeamsLeftItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedsummoners", tk.roccodev.zta.modules.bed.SummonersItem.class , "serverhivemc");
-		The5zigAPI.getAPI().registerModuleItem(this, "bedwinstreak", tk.roccodev.zta.modules.bed.WinstreakItem.class , "serverhivemc");
+		// The5zigAPI.getAPI().registerModuleItem(this, "bedwinstreak", tk.roccodev.zta.modules.bed.WinstreakItem.class , "serverhivemc");
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "globalmedals", tk.roccodev.zta.modules.global.MedalsItem.class , "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "globaltokens", tk.roccodev.zta.modules.global.TokensItem.class , "serverhivemc");
@@ -201,7 +233,17 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "skymode", tk.roccodev.zta.modules.sky.ModeItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "skykdr", tk.roccodev.zta.modules.sky.KDRChangeItem.class, "serverhivemc");
 		
+		The5zigAPI.getAPI().registerModuleItem(this, "mimvkarma", tk.roccodev.zta.modules.mimv.KarmaItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "mimvrole", tk.roccodev.zta.modules.mimv.RoleItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "mimvmap", tk.roccodev.zta.modules.mimv.MapItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "mimvcounter", tk.roccodev.zta.modules.mimv.KarmaCounterItem.class, "serverhivemc");
+		
+		The5zigAPI.getAPI().registerModuleItem(this, "gravpoints", tk.roccodev.zta.modules.grav.PointsItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "gravstages", tk.roccodev.zta.modules.grav.StagesItem.class, "serverhivemc");
+		
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);	
+		
+		The5zigAPI.getAPI().getPluginManager().registerListener(this, new GRAVListenerv2());
 		
 		CommandManager.registerCommand(new NotesCommand());
 		CommandManager.registerCommand(new AddNoteCommand());
@@ -226,6 +268,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new SetDisplayNameCommand());
 		CommandManager.registerCommand(new ZigCheckCommand());
 		CommandManager.registerCommand(new RanksCommand());
+		CommandManager.registerCommand(new ClosestToWRCommand());
 		
 		if(The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d") ||
 				The5zigAPI.getAPI().getGameProfile().getId().toString().equals("bba224a2-0bff-4913-b042-27ca3b60973f")){
@@ -241,6 +284,7 @@ public class ZTAMain {
 			public void run() {
 				DR.mapsPool = StuffFetcher.getDeathRunMaps();
 				TIMV.mapsPool = StuffFetcher.getTroubleInMinevilleMaps();
+				GRAV.mapsPool = StuffFetcher.getGravityMaps();
 			}
 		}, "Maps Fetcher").start();
 		
@@ -537,6 +581,22 @@ public class ZTAMain {
 					}
 					SKY.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
+				else if(ActiveGame.is("grav")){
+					if(GRAV.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					GRAV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				}
+				else if(ActiveGame.is("mimv")){
+					if(MIMV.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					MIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				}
 				
 			}
 			else{
@@ -595,6 +655,22 @@ public class ZTAMain {
 						return;
 					}
 					SKY.lastRecords = args[1].trim();
+				}
+				else if(ActiveGame.is("grav")){
+					if(GRAV.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					GRAV.lastRecords = args[1].trim();
+				}
+				else if(ActiveGame.is("mimv")){
+					if(MIMV.isRecordsRunning){
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					MIMV.lastRecords = args[1].trim();
 				}
 			}
 		}
@@ -688,6 +764,8 @@ public class ZTAMain {
 	
 	@EventHandler
 	public void onChat(ChatEvent evt){
+		
+		
 		
 		if(evt.getMessage() != null){
 			if(The5zigAPI.getAPI().getActiveServer() instanceof IHive) {

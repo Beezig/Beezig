@@ -10,7 +10,6 @@ import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
-import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.sky.SKYRank;
@@ -55,21 +54,22 @@ public class SKYListener extends AbstractGameListener<SKY> {
 					The5zigAPI.getLogger().info(sb.getTitle());
 
 					if (sb != null && sb.getTitle().contains("Your SKY")) {
-						if(sb.getTitle().contains("Your SKYT")) SKY.mode = "Teams";
-						else if(sb.getTitle().contains("Your SKYD")) SKY.mode = "Duos";
-						else SKY.mode = "Solo";
-					
+						if (sb.getTitle().contains("Your SKYT"))
+							SKY.mode = "Teams";
+						else if (sb.getTitle().contains("Your SKYD"))
+							SKY.mode = "Duos";
+						else
+							SKY.mode = "Solo";
+
 						int points = sb.getLines().get(ChatColor.AQUA + "Points");
 						SKY.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
 						SKY.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
 						APIValues.SKYpoints = (long) points;
 					}
 
-					
 					ApiSKY api = new ApiSKY(The5zigAPI.getAPI().getGameProfile().getName());
 					SKY.totalKills = Math.toIntExact(api.getKills());
-					SKY.rankObject = SKYRank
-							.getFromDisplay(api.getTitle());
+					SKY.rankObject = SKYRank.getFromDisplay(api.getTitle());
 					SKY.rank = SKY.rankObject.getTotalDisplay();
 					SKY.updateKdr();
 				} catch (Exception e) {
@@ -104,16 +104,15 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
 		// Autovoting
 
-		else if(message.endsWith("§c§lYou died. §6Better luck next time!")) {
+		else if (message.endsWith("§c§lYou died. §6Better luck next time!")) {
 			SKY.deaths++;
 			SKY.updateKdr();
-		}
-		else if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §a§lVote received. §3Your map now has")
+		} else if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §a§lVote received. §3Your map now has")
 				&& Setting.AUTOVOTE.getValue()) {
 			SKY.hasVoted = true;
 		} else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l6. §f§6") && !SKY.hasVoted
 				&& Setting.AUTOVOTE.getValue()) {
-			BED.votesToParse.add(message);
+			SKY.votesToParse.add(message);
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -144,7 +143,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 						} else {
 							The5zigAPI.getLogger().info(consider + " is not a favourite");
 						}
-						if (index.equals("5")) {
+						if (index.equals("6")) {
 							if (votesindex.size() != 0) {
 								for (String n : votesindex) {
 									finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
@@ -157,7 +156,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 								SKY.hasVoted = true;
 								// we can't really get the map name at this point
 								The5zigAPI.getAPI().messagePlayer(
-										"§8▍ §6SKY§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
+										"§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + finalindex);
 								return;
 							} else {
 								The5zigAPI.getLogger().info("Done, couldn't find matches");
@@ -174,25 +173,24 @@ public class SKYListener extends AbstractGameListener<SKY> {
 		} else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l") && !SKY.hasVoted
 				&& Setting.AUTOVOTE.getValue()) {
 			SKY.votesToParse.add(message);
-		}
-		else if(message.contains("§e, noble fighter for the ")) {
+		} else if (message.contains("§e, noble fighter for the ")) {
 			String team = message.split("the")[1].replace("§eteam!", "").replaceAll("team!", "").trim();
 			SKY.team = team;
-			
-			String teamSize = SKY.mode == null ? "0" : (SKY.mode.equals("Solo") ? "1" : (SKY.mode.equals("Duos") ? "2" : "4"));
 
+			String teamSize = SKY.mode == null ? "0"
+					: (SKY.mode.equals("Solo") ? "1" : (SKY.mode.equals("Duos") ? "2" : "4"));
 
 			DiscordUtils.updatePresence("Fighting in SkyWars: " + SKY.mode, "Playing on " + SKY.map, "game_skywars");
 		}
 
 		// Advanced Records
 
-		else if(message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f15§7 tokens!")) {
+		else if (message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f15§7 tokens!")) {
 			SKY.kills++;
 			SKY.totalKills++;
 			SKY.updateKdr();
 		}
-		
+
 		else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
 			SKY.messagesToSend.add(message);
 			The5zigAPI.getLogger().info("found header");
@@ -338,21 +336,18 @@ public class SKYListener extends AbstractGameListener<SKY> {
 								double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
 							}
-							if(Setting.SKY_SHOW_KD.getValue()) {
-								double kd = (double) ((double)kills/(double)deaths);
+							if (Setting.SKY_SHOW_KD.getValue()) {
+								double kd = (double) ((double) kills / (double) deaths);
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + df.format(kd));
 							}
-							if(Setting.SKY_SHOW_PPG.getValue()) {
-								double ppg = (double) ((double)points / (double)gamesPlayed);
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df.format(ppg));
+							if (Setting.SKY_SHOW_PPG.getValue()) {
+								double ppg = (double) ((double) points / (double) gamesPlayed);
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df1f.format(ppg));
 							}
-							if(Setting.SKY_SHOW_KPG.getValue()) {
-								double kpg = (double) ((double)kills / (double)gamesPlayed);
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills Per Game: §b" + df.format(kpg));
+							if (Setting.SKY_SHOW_KPG.getValue()) {
+								double kpg = (double) ((double) kills / (double) gamesPlayed);
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills Per Game: §b" + df1f.format(kpg));
 							}
-							
-
-						
 
 							if (lastGame != null) {
 								Calendar lastSeen = Calendar.getInstance();

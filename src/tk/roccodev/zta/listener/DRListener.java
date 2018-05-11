@@ -258,6 +258,12 @@ public class DRListener extends AbstractGameListener<DR> {
 											((double) api.getDeaths() / (double) api.getGamesPlayedAsRunner()) * 10d)
 											/ 10d)
 									: null;
+							Double kpg = Setting.DR_SHOW_KILLSPERGAME.getValue()
+										 ? Math.round(((double) api.getKills() / (double) api.getGamesPlayedAsDeath()) * 10d) / 10d
+										 : null;
+							String tpb = Setting.DR_SHOW_TOTALPB.getValue()
+										 ? api.getTotalPB()
+										 : null;
 							String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
 									? api.getParentMode().getNetworkTitle()
 									: "";
@@ -335,13 +341,19 @@ public class DRListener extends AbstractGameListener<DR> {
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + ppg);
 							}
 							if (achievements != null) {
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/65");
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/68");
 							}
 							if (rwr != null) {
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Runner-Winrate: §b" + rwr + "%");
 							}
 							if (dpg != null) {
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Deaths per Game: §b" + dpg);
+							}
+							if (kpg != null) {
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills per Game: §b" + kpg);
+							}
+							if (tpb != null){
+								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Total Personal Best: §b" + tpb);
 							}
 							if (monthlyRank != 0) {
 								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
@@ -404,10 +416,9 @@ public class DRListener extends AbstractGameListener<DR> {
 			timer.schedule(sft, 1500);
 		}
 
-		else if (message.startsWith("§8▍ §cDeathRun§8 ▏") && message.contains("§3 finished §b")
-				&& message.contains(The5zigAPI.getAPI().getGameProfile().getName()) && !message.endsWith(" ")) {
-			// "§8▍ §cDeathRun§8 ▏ §b §aItsNiklass§3 finished §b1st§3. §7(01:10.574)"
-			String time = (message.split("§7\\("))[1].replaceAll("\\)", "");
+		else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in ")) {
+			// §8▍ §cDeathRun§8 ▏ §bYou finished your run in 03:07.479§b!
+			String time = (message.split("in "))[1].replace("§b!", "").trim();
 			String[] data = time.split(":");
 			int minutes = Integer.parseInt(data[0]);
 			// data[1 ] is seconds.milliseconds

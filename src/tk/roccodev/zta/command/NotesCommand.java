@@ -22,10 +22,11 @@ public class NotesCommand implements Command{
 	@Override
 	public boolean execute(String[] args) {
 		if(The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("timv")){
-			The5zigAPI.getAPI().messagePlayer(Log.info + "Notes:");
+			The5zigAPI.getAPI().messagePlayer("\n" + Log.info + "Notes:");
 			for(String s : NotesManager.notes){
-				The5zigAPI.getAPI().messagePlayer("§e - §r" + s);
+				The5zigAPI.getAPI().messagePlayer("§7 - §b" + s);
 			}
+			The5zigAPI.getAPI().messagePlayer("\n");
 			return true;
 		}
 		else{

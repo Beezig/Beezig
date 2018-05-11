@@ -13,7 +13,6 @@ import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
-import tk.roccodev.zta.hiveapi.stuff.bed.BEDMap;
 import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
@@ -300,8 +299,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 						
 							
 						if(achievements != null){
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
-																											//^ API Achievements vs ingame - currently bad
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/67");
 						}
 						// "§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing"
 						
@@ -322,7 +320,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills per Game: §b" + df1f.format(kpg));
 						}
 						if(Setting.BED_SHOW_POINTS_PER_GAME.getValue()){
-							double ppg = BED.lastRecordsPoints / (double)(deaths == 0 ? 1 : deaths);
+							double ppg = BED.lastRecordsPoints / (double)(gamesPlayed == 0 ? 1 : gamesPlayed);
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + df1f.format(ppg));
 						}
 						if(Setting.BED_SHOW_KD.getValue()){

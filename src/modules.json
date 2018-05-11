@@ -182,6 +182,36 @@
           "type": "skykdr"
         }
       ]
+    },
+     {
+      "id": "MurderInMineville",
+      "name": "Murder in Mineville",
+      "items": [
+        {
+          "type": "mimvkarma"
+        },
+        {
+          "type": "mimvrole"
+        },
+         {
+          "type": "mimvmap"
+        },
+         {
+          "type": "mimvcounter"
+        }
+      ]
+    },
+    {
+      "id": "Gravity",
+      "name": "Gravity",
+      "items": [
+        {
+          "type": "gravpoints"
+        },
+        {
+          "type": "gravstages"
+        }
+      ]
     }
   ]
 }

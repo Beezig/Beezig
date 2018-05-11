@@ -28,7 +28,7 @@ public class WRCommand implements Command{
 				@Override
 				public void run(){
 					ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
-					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + DR.activeMap.getDisplayName() + "§e is §6" + api.getWorldRecord(DR.activeMap) + "§e by §6" + DR.currentMapWRHolder);
+					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + api.getWorldRecord(DR.activeMap) + "§3 by §b" + DR.currentMapWRHolder);
 				}
 			}).start();
 	
@@ -40,7 +40,7 @@ public class WRCommand implements Command{
 				@Override
 				public void run(){
 					ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
-					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §6" + map.getDisplayName() + "§e is §6" + api.getWorldRecord(map) + "§e by §6" + api.getWorldRecordHolder(map));
+					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §b" + map.getDisplayName() + "§3 is §b" + api.getWorldRecord(map) + "§3 by §b" + api.getWorldRecordHolder(map));
 				}
 			}).start();
 	

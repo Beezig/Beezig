@@ -1,7 +1,6 @@
 package tk.roccodev.zta.command;
 
 import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
@@ -40,8 +39,8 @@ public class RealRankCommand implements Command{
 				//§r§aItsNiklass§r
 				//§r§diElena§r
 				if(NetworkRank.fromDisplay(networkRank).getLevel() >= 50 && NetworkRank.fromDisplay(networkRank).getLevel() < 80){
-					//Only checks for VIPs & Moderators
-					//TODO check if tampered displayName - e.g. TIMV
+					/*Only checks for VIPs & Moderators
+					//check if tampered displayName - e.g. TIMV
 					rankColor = null;
 					for(NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
 						if (ChatColor.stripColor(npi.getDisplayName()).equalsIgnoreCase(ign)) {
@@ -49,11 +48,11 @@ public class RealRankCommand implements Command{
 							The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.YELLOW + ign + "'s Rank: " + rankColor + NetworkRank.fromColor(rankColor).getDisplay());
 						}
 					}
-					if(rankColor == null) /*???*/  The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.YELLOW + ign + "'s Rank: " + NetworkRank.REGULAR.getColor() + NetworkRank.REGULAR.getDisplay());
-
-					//Never works outside the Hub - the reason being Hive's game plugins & .getDisplayName()
-
-				} else /*default*/ The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.YELLOW + ign + "'s Rank: " + rankColor + networkRank);
+					if(rankColor == null)  The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.YELLOW + ign + "'s Rank: " + NetworkRank.REGULAR.getColor() + NetworkRank.REGULAR.getDisplay());
+					*/
+					//TODO Never works outside the Hub - the reason being Hive's game plugins & .getDisplayName()
+					The5zigAPI.getAPI().messagePlayer(Log.info + "¯\\_(ツ)_/¯");
+				} else /*default*/ The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + ign + "§3's Rank: " + rankColor + networkRank);
 			}
 		}).start();
 		return true;

@@ -1,20 +1,6 @@
 
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -27,12 +13,20 @@ import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.APIValues;
-import tk.roccodev.zta.hiveapi.stuff.timv.TIMVMap;
 import tk.roccodev.zta.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static tk.roccodev.zta.games.TIMV.traitorTeam;
 
 public class TIMVListener extends AbstractGameListener<TIMV>{
 
@@ -105,11 +99,6 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			TIMV.rank = TIMV.rankObject.getTotalDisplay();
 				
 		}}).start();
-		
-		
-		
-		
-		
 	}
 	
 
@@ -164,6 +153,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			if(!TIMV.dead){
 				TIMV.applyPoints(20);
 			}
+			traitorTeam.addAll(Collections.nCopies(7, "fin"));
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
@@ -342,7 +332,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 							The5zigAPI.getAPI().messagePlayer("§o§3 Most Points: §b" + mostPoints + " ");
 						}
 						if(achievements != null){
-							The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/63 ");
+							The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/64 ");
 						}
 						if(krr != null){
 							The5zigAPI.getAPI().messagePlayer("§o§3 Karma/Rolepoints: §b" + krr + " ");
@@ -511,6 +501,32 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 			ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
 			timer.schedule(sft, 1500);
 			
+		}
+		else if(message.contains("   §4") && traitorTeam.size() < 7 && TIMV.role.equals("Traitor")){
+			//§4jordix03, ItsNiklass, Vpnce, BatHex
+			//The5zigAPI.getLogger().info(ChatColor.stripColor(message).split(", "));
+			traitorTeam.addAll(Arrays.asList(ChatColor.stripColor(message).replaceAll(" ","").split(",")));
+			The5zigAPI.getLogger().info(traitorTeam.toString());
+		}
+		else if(message.equals("                        §c§m                                ") && traitorTeam.size() < 7 && traitorTeam.size() > 0 && TIMV.role.equals("Traitor")){
+
+
+			new Thread(new Runnable(){
+				@Override
+				public void run(){
+
+					ArrayList<Long> TraitorKarma = new ArrayList<>();
+					for(String name : traitorTeam){
+						ApiTIMV api = new ApiTIMV(name);
+						TraitorKarma.add(api.getKarma());
+					}
+					Long avg = APIUtils.average(TraitorKarma.toArray());
+					The5zigAPI.getAPI().messagePlayer("                        §c§m                                ");
+					The5zigAPI.getAPI().messagePlayer("                           §4Traitor Karma: " + avg);
+					The5zigAPI.getAPI().messagePlayer("                        §c§m                                ");
+
+				}
+			}).start();
 		}
 		//glorious
 		/*else if(ActiveGame.is("timv") && message.contains("ItsNiklass§8 » ") && !message.contains("§b§lParty§8")){

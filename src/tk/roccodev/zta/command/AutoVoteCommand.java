@@ -1,13 +1,13 @@
 package tk.roccodev.zta.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.autovote.AutovoteUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AutoVoteCommand implements Command {
 
@@ -56,7 +56,7 @@ public class AutoVoteCommand implements Command {
 
 				The5zigAPI.getAPI().messagePlayer(Log.info + "Maps for mode " + game.toUpperCase());
 				for (String s : AutovoteUtils.getMapsForMode(game.toLowerCase())) {
-					The5zigAPI.getAPI().messagePlayer("§e - " + s);
+					The5zigAPI.getAPI().messagePlayer("§7 - §b" + s);
 				}
 
 			} else if (mode.equalsIgnoreCase("remove")) {
@@ -83,10 +83,9 @@ public class AutoVoteCommand implements Command {
 
 		} else {
 			The5zigAPI.getAPI().messagePlayer(
-					Log.info + "Usage:" + "\n" + "/autovote add mode_map - Adds a favorite map to a gamemode" + "\n"
-							+ "/autovote list mode - Lists your favorite maps for that gamemode" + "\n"
-							+ "/autovote listmaps mode - Lists the available maps for that gamemode" + "\n"
-							+ "/autovote remove mode_map - Removes a favorite map from a gamemode");
+					Log.info + "Usage:" + "\n" + "§b/autovote add mode_map §7- §3Adds a favorite map to a gamemode" + "\n"
+							+ "§b/autovote list mode §7- §3Lists your favorite maps for that gamemode" + "\n"
+							+ "§b/autovote remove mode_map §7- §3Removes a favorite map from a gamemode");
 		}
 
 		return true;

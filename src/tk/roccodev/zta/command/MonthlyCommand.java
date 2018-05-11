@@ -40,10 +40,10 @@ public class MonthlyCommand implements Command{
 						String[] data = HiveAPI.getMonthlyLeaderboardsPlayerInfo(index, mode).split(",");
 						switch(ActiveGame.current()){
 						
-						case "DR": The5zigAPI.getAPI().messagePlayer(Log.info + "§6#" + (index+1) + "§e is §6" + data[0] + "§e with §6" + data[1] + " §e" + unit + " (PpG: §6" + data[2] + " §e| W/L: §6" + data[3] + "%§e)");
+						case "DR": The5zigAPI.getAPI().messagePlayer(Log.info + "§B#" + (index+1) + "§3 is §B" + data[0] + "§3 with §B" + data[1] + " §3" + unit + " (PpG: §B" + data[2] + " §3| W/L: §B" + data[3] + "%§3)");
 									break;
 						
-						case "TIMV": The5zigAPI.getAPI().messagePlayer(Log.info + "§6#" + (index+1) + "§e is §6" + data[0] + "§e with §6" + data[1] + " §e" + unit + " (K/R: §6" + data[2] + " §e| T/R: " + data[3] + "%§e)");
+						case "TIMV": The5zigAPI.getAPI().messagePlayer(Log.info + "§B#" + (index+1) + "§3 is §B" + data[0] + "§3 with §B" + data[1] + " §3" + unit + " (K/R: §B" + data[2] + " §3| T/R: " + data[3] + "%§3)");
 									break;
 						
 						}

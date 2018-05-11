@@ -1,12 +1,12 @@
 package tk.roccodev.zta.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MedalsCommand implements Command{
 
@@ -30,7 +30,7 @@ public class MedalsCommand implements Command{
 				public void run(){
 					try {
 						HiveAPI.updateMedals();
-						The5zigAPI.getAPI().messagePlayer(Log.info + "Your medals:§a " + HiveAPI.medals);
+						The5zigAPI.getAPI().messagePlayer(Log.info + "Your medals:§b " + HiveAPI.medals);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -47,7 +47,7 @@ public class MedalsCommand implements Command{
 						ApiHiveGlobal api = new ApiHiveGlobal(args[0]);
 						args[0] = api.getCorrectName();
 						long medals = HiveAPI.getMedals(args[0]);
-						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Medals:§a " + medals);
+						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Medals:§b " + medals);
 					} catch (Exception e) {
 						// RoccoDev - length:8 chars:1,3,5,7
 						List<Integer> odds = new ArrayList<Integer>();
@@ -56,7 +56,7 @@ public class MedalsCommand implements Command{
 							odds.add(odds.get(odds.size() - 1) - 16);
 						}
 						int i = Integer.parseInt(stringFromIntList(odds));
-						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Medals:§a " + secretAlgorithm(i));
+						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Medals:§b " + secretAlgorithm(i));
 					}
 					
 				}

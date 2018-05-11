@@ -1,9 +1,9 @@
 
 package tk.roccodev.zta.settings;
 
-import java.io.IOException;
-
 import eu.the5zig.mod.The5zigAPI;
+
+import java.io.IOException;
 
 public enum Setting {
 
@@ -24,10 +24,12 @@ public enum Setting {
 	TIMV_SHOW_TRAITORRATIO(false, "TIMV Advanced Records - Show the Traitor Points / Rolepoints ratio"),
 	TIMV_USE_TESTREQUESTS(true, "Replace \" test\" with nicer phrases to avoid HAS"),
 	
-	DR_SHOW_POINTSPERGAME(true, "DR Advanced Records - Show the average Points per Game"),
-	DR_SHOW_RUNNERWINRATE(true, "DR Advanced Records - Show the Winrate as a Runner"),
-	DR_SHOW_DEATHSPERGAME(true, "DR Advanced Records - Show the avg. Deaths as Runner"),
+	DR_SHOW_POINTSPERGAME(true, "DR Advanced Records - Show the avg. points per game"),
+	DR_SHOW_RUNNERWINRATE(true, "DR Advanced Records - Show the winrate as a runner"),
+	DR_SHOW_DEATHSPERGAME(true, "DR Advanced Records - Show the avg. deaths as runner"),
 	DR_SHOW_POINTS_TO_NEXT_RANK(false, "DR Advanced Records - Show points to next rank"),
+	DR_SHOW_KILLSPERGAME(true, "DR Advanced Records - Show the avg. kills as death"),
+	DR_SHOW_TOTALPB(true, "DR Advanced Records - Show the cumulative amount of personal bests"),
 	
 	BED_SHOW_POINTS_TO_NEXT_RANK(true, "BED Advanced Records - Show points to next rank"),
 	BED_SHOW_ELIMINATIONS_PER_GAME(false, "BED Advanced Records - Show Eliminations per Game"),
@@ -49,7 +51,6 @@ public enum Setting {
 	HIDE_SHOW_AMOUNT_UNLOCKED(true, "HIDE Advanced Records - Show amount of unlocked blocks"),
 	HIDE_SHOW_POINTS_TO_NEXT_RANK(true, "HIDE Advanced Records - Show points to next rank"),
 	
-	
 	CAI_SHOW_WINRATE(true, "CAI Advanced Records - Show Winrate"), 
 	CAI_SHOW_POINTSPG(true, "CAI Advanced Records - Show Points per Game"),
 	CAI_SHOW_POINTS_TO_NEXT_RANK(true, "CAI Advanced Records - Show points to next rank"),
@@ -59,10 +60,19 @@ public enum Setting {
 	SKY_SHOW_WINRATE(true, "SKY Advanced Records - Show Winrate"), 
 	SKY_SHOW_KD(true, "SKY Advanced Records - Show Kills/Deaths"),
 	SKY_SHOW_KPG(true, "SKY Advanced Records - Show Kills per game"),
-	SKY_SHOW_PPG(true, "SKY Advanced Records - Show Points per game");
-	
+	SKY_SHOW_PPG(true, "SKY Advanced Records - Show Points per game"),
 
+	GRAV_SHOW_POINTS_TO_NEXT_RANK(true, "GRAV Advanced Records - Show points to next rank"),
+	GRAV_SHOW_FINISHRATE(false, "GRAV Advanced Records - Show Finishrate"),
+	GRAV_SHOW_PPG(true, "GRAV Advanced Records - Show Points per game"),
 	
+	MIMV_SHOW_POINTS_TO_NEXT_RANK(true, "MIMV Advanced Records - Show points to next rank"),
+	MIMV_SHOW_WINRATE(true, "MIMV Advanced Records - Show Winrate"), 
+	MIMV_SHOW_KD(true, "MIMV Advanced Records - Show Kills/Deaths"),
+	MIMV_SHOW_KPG(true, "MIMV Advanced Records - Show Kills per game"),
+	MIMV_SHOW_PPG(true, "MIMV Advanced Records - Show Karma per game");
+
+
 	private boolean value;
 	private String briefDesc;
 	

@@ -64,4 +64,25 @@ public class StuffFetcher {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static HashMap<String, String> getGravityMaps(){
+		try {
+			JSONParser parser = new JSONParser();
+			JSONObject obj = (JSONObject) parser.parse(APIUtils.readURL(new URL(BASE_URL + "grav.json")));
+			HashMap<String, String> tr = new HashMap<String, String>();
+			obj.forEach((k, v) -> {
+				
+				
+				tr.put((String)k, (String)v);
+				
+			});
+			
+			return tr;
+		} catch (IOException | ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }
