@@ -195,6 +195,9 @@
         },
          {
           "type": "mimvmap"
+        },
+         {
+          "type": "mimvcounter"
         }
       ]
     },

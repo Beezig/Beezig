@@ -78,7 +78,15 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 
 		if (ZTAMain.isColorDebug) {
 			The5zigAPI.getLogger().info("MIMV Color Debug: (" + message + ")");
-		} else if (message.startsWith("§8▍ §c§lMurder§8 ▏ §a§lVote received. §3Your map now")) {
+		} 
+		else if(message.startsWith("§8▍ §c§lMurder§8 ▏ §2§l+§a") && message.endsWith("karma")) {
+			String k = message.split("§a")[1].replace(" karma", "").trim();
+			int karma = Integer.parseInt(k);
+			APIValues.MIMVpoints += karma;
+			MIMV.gamePts += karma;
+		
+		}
+		else if (message.startsWith("§8▍ §c§lMurder§8 ▏ §a§lVote received. §3Your map now")) {
 			MIMV.hasVoted = true;
 		} else if (message.startsWith("§8▍ §c§c§lMurder§8§l ▏ §6§l§e§l§e§l6. §f§6") && Setting.AUTOVOTE.getValue()
 				&& !MIMV.hasVoted) {

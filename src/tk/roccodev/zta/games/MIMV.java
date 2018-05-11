@@ -27,6 +27,8 @@ public class MIMV extends GameMode {
 	public static boolean hasVoted = false;
 	public static String map;
 	
+	public static int gamePts;
+	
 	public static String rank;
 	public static MIMVRank rankObject;
 	
@@ -38,6 +40,7 @@ public class MIMV extends GameMode {
 
 		role = "";
 		map = "";
+		gamePts = 0;
 		votesToParse.clear();
 		hasVoted = false;
 		ActiveGame.reset("mimv");

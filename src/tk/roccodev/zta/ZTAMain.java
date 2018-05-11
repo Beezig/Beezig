@@ -236,6 +236,7 @@ public class ZTAMain {
 		The5zigAPI.getAPI().registerModuleItem(this, "mimvkarma", tk.roccodev.zta.modules.mimv.KarmaItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "mimvrole", tk.roccodev.zta.modules.mimv.RoleItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "mimvmap", tk.roccodev.zta.modules.mimv.MapItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "mimvcounter", tk.roccodev.zta.modules.mimv.KarmaCounterItem.class, "serverhivemc");
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "gravpoints", tk.roccodev.zta.modules.grav.PointsItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gravstages", tk.roccodev.zta.modules.grav.StagesItem.class, "serverhivemc");
