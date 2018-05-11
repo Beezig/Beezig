@@ -24,11 +24,16 @@ public class IHive extends ServerInstance {
 
 	@Override
 	public boolean handleServer(String host, int port) {
-		if(host.toUpperCase().contains("HIVEMC.") || host.toUpperCase().endsWith("HIVE.SEXY")) {
+		if (host.toUpperCase().contains("HIVEMC.") || host.toUpperCase().endsWith("HIVE.SEXY")) {
 			System.out.println("Joined Hive.");
-			DiscordUtils.init();
-			DiscordUtils.updatePresence("Relaxing in the Hub", "In Lobby", "lobby");
-		return true;	
+			try {
+				DiscordUtils.init();
+			} catch (Exception e) {
+				DiscordUtils.shouldOperate = false;
+			} finally {
+				DiscordUtils.updatePresence("Relaxing in the Hub", "In Lobby", "lobby");
+			}
+			return true;
 		}
 		return false;
 	}
@@ -48,21 +53,17 @@ public class IHive extends ServerInstance {
 		getGameListener().registerListener(new GRAVListener());
 	}
 
-	public static void genericReset(String... optionalParams){
+	public static void genericReset(String... optionalParams) {
 		DiscordUtils.updatePresence("Relaxing in the Hub", "In Lobby", "lobby");
 	}
-	
-	public static void genericJoin(String... optionalParams){
-		if(NotesManager.HR1cm5z){
+
+	public static void genericJoin(String... optionalParams) {
+		if (NotesManager.HR1cm5z) {
 			The5zigAPI.getAPI().messagePlayer(
 					new String(DatatypeConverter.parseBase64Binary("V293ISBJdHNOaWtsYXNzIHRvZGF5IHR1cm5zIA=="))
-					+
-					(Calendar.getInstance().get(Calendar.YEAR) - 0x7D0)
-					+
-					new String(DatatypeConverter.parseBase64Binary("ISBNYWtlIHN1cmUgdG8gd2lzaCBoaW0gYSBoYXBweSBiaXJ0aGRheSE="))
-					);
+							+ (Calendar.getInstance().get(Calendar.YEAR) - 0x7D0) + new String(DatatypeConverter
+									.parseBase64Binary("ISBNYWtlIHN1cmUgdG8gd2lzaCBoaW0gYSBoYXBweSBiaXJ0aGRheSE=")));
 		}
 	}
-	
 
 }
