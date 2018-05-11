@@ -138,6 +138,12 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 			DiscordUtils.updatePresence("Freefalling in Gravity", "In Lobby", "game_grav");
 
 		}
+		else if(key.equals("bp.welcome")) {
+			getGameListener().switchLobby("BP");
+			The5zigAPI.getLogger().info("Connected to BP! - Hive");
+			DiscordUtils.updatePresence("Dancing in BlockParty", "In Lobby", "game_grav");
+
+		}
 		
 	}
 
