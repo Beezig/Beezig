@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.briefing.News;
 import tk.roccodev.zta.briefing.Pools;
@@ -53,6 +54,7 @@ public class NewsFetcher {
 					}
 					if(cont) continue;
 				}
+				
 				
 				if(postedAt < lastLogin) continue;
 				
