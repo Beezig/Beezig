@@ -1,13 +1,14 @@
 package tk.roccodev.zta.updater;
 
+import tk.roccodev.zta.Log;
+import tk.roccodev.zta.ZTAMain;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Scanner;
-
-import tk.roccodev.zta.ZTAMain;
 
 public class Updater {
 
@@ -18,7 +19,7 @@ public class Updater {
 	public static boolean checkForUpdates() throws Exception{
 		URL url = new URL(FETCH_URL + "latest.txt");
 		 URLConnection conn = url.openConnection();
-	       conn.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36(KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36");
+	       conn.addRequestProperty("User-Agent", Log.getUserAgent());
 		Scanner sc = new Scanner(conn.getInputStream());
 		boolean tr = sc.nextInt() > ZTAMain.getCustomVersioning();
 		sc.close();
@@ -30,7 +31,7 @@ public class Updater {
 		URL url = new URL(FETCH_URL + "disabled.txt");
 		
 		 URLConnection conn = url.openConnection();
-	       conn.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36(KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36");
+	       conn.addRequestProperty("User-Agent", Log.getUserAgent());
 	        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		String strLine;
 
