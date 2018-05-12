@@ -29,7 +29,6 @@ import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.EventHandler.Priority;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.event.ServerQuitEvent;
-import eu.the5zig.mod.event.TickEvent;
 import eu.the5zig.mod.event.TitleEvent;
 import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
@@ -42,6 +41,7 @@ import tk.roccodev.zta.briefing.Pools;
 import tk.roccodev.zta.briefing.fetcher.NewsFetcher;
 import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.AutoVoteCommand;
+import tk.roccodev.zta.command.BeezigCommand;
 import tk.roccodev.zta.command.BlockstatsCommand;
 import tk.roccodev.zta.command.CheckPingCommand;
 import tk.roccodev.zta.command.ClosestToWRCommand;
@@ -100,6 +100,7 @@ public class ZTAMain {
 	public static final String BEEZIG_VERSION = "4.6.1";
 	public static String VERSION_HASH = "";
 	public static String OS;
+	public static boolean newUpdate;
 
 	public static boolean hasServedNews;
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -144,6 +145,7 @@ public class ZTAMain {
 			if (Updater.checkForUpdates()
 					&& !ZTAMain.class.getAnnotation(Plugin.class).version().contains("experimental")) {
 				The5zigAPI.getLogger().fatal("Beezig: A new version of the plugin is available!");
+				newUpdate = true;
 				news.displayMessage("Beezig: A new version of the plugin is available!");
 			}
 		} catch (Exception e) {
@@ -312,6 +314,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new ZigCheckCommand());
 		CommandManager.registerCommand(new RanksCommand());
 		CommandManager.registerCommand(new ClosestToWRCommand());
+		CommandManager.registerCommand(new BeezigCommand());
 
 		if (The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d")
 				|| The5zigAPI.getAPI().getGameProfile().getId().toString()
