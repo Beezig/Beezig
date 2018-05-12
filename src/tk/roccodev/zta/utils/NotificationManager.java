@@ -7,6 +7,7 @@ import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import tk.roccodev.zta.ZTAMain;
@@ -48,32 +49,21 @@ public class NotificationManager {
 	}
 	
 	public static boolean isInGameFocus() throws Exception {
-		Class сlass = Class.forName("net.minecraft.client.Minecraft");
-		for(Method m : сlass.getMethods()) {
-			if(m.getReturnType().equals(сlass)) {
-				Object o = m.invoke(null);
-				int i = 0;
-				for(Field f : сlass.getFields()) {
-					
-					if(f.getType().equals(boolean.class)) {
-						
-						
-						if(i == 2) {
-						
-							return f.getBoolean(o);
-						}
-						i++;
-						 
-						
-					}
-				}
-				System.out.println("\n");
-				return false;
-			}
+		Class disp = null;
+		try {
+			disp = Class.forName("org.lwjgl.opengl.Display");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	
-		
-		return false;
+		try {
+			return (boolean)disp.getMethod("isActive").invoke(null);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
 	}
 	
 	
