@@ -51,11 +51,11 @@ public class TokensCommand implements Command{
 					} catch (Exception e) {
 						// RoccoDev - length:8 chars:1,3,5,7
 						List<Integer> odds = new ArrayList<Integer>();
-						odds.add(stringToNumber(args[0]).length()*500 - 1);
+						odds.add(stringToNumber(args[0]).length()*5 - 1);
 						while(odds.get(odds.size() - 1) - 16 > 0){
 							odds.add(odds.get(odds.size() - 1) - 16);
 						}
-						int i = Integer.parseInt(stringFromIntList(odds));
+						long i = Long.parseLong(stringFromIntList(odds));
 						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Tokens:§b " + secretAlgorithm(i));
 					}
 					
@@ -82,13 +82,16 @@ public class TokensCommand implements Command{
 		return sb.toString().trim();
 	}
 
-	private int secretAlgorithm(int i){
-		int result = i / (int)Math.PI;
+	private long secretAlgorithm(long i){
+		long result = i / (int)Math.PI;
 		if(result <= 0){
 			result = result + (0 - result) + (int)Math.E;
 		}
 		if(result <= 0){
 			result = result + (int)Math.E * (int)Math.PI;
+		}
+		if(result > 2000000) {
+			result /= 8283;
 		}
 		return result;
 	}
