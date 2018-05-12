@@ -1,18 +1,13 @@
 package tk.roccodev.zta.utils;
 
-import java.awt.AWTException;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
-import java.awt.TrayIcon.MessageType;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import tk.roccodev.zta.ZTAMain;
+
+import java.awt.*;
+import java.awt.TrayIcon.MessageType;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 public class NotificationManager {
 
@@ -40,12 +35,32 @@ public class NotificationManager {
 			TrayIcon icon = new TrayIcon(Toolkit.getDefaultToolkit().createImage(ZTAMain.class.getResource("/libraries/hivelogo.jpg")), "Beezig");
 			icon.setImageAutoSize(true);
 			icon.setToolTip("Beezig");
-			icon.addActionListener(new ActionListener() {
+			icon.addMouseListener(new MouseListener() {
 				
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void mouseClicked(MouseEvent e) {
 					tray.remove(icon);
 					
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+
 				}
 			});
 			try {
