@@ -1,5 +1,10 @@
 package tk.roccodev.zta.utils;
 
+import java.awt.AWTException;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.TrayIcon.MessageType;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -26,6 +31,19 @@ public class NotificationManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		else if(ZTAMain.OS.equals("win")) {
+			SystemTray tray = SystemTray.getSystemTray();
+			TrayIcon icon = new TrayIcon(Toolkit.getDefaultToolkit().createImage(ZTAMain.class.getResource("/libraries/hivelogo.jpg")), "Beezig");
+			icon.setImageAutoSize(true);
+			icon.setToolTip("Beezig");
+			try {
+				tray.add(icon);
+			} catch (AWTException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			icon.displayMessage(title, content, MessageType.INFO);
 		}
 	}
 	
