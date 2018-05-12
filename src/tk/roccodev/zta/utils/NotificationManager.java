@@ -5,6 +5,8 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -38,6 +40,14 @@ public class NotificationManager {
 			TrayIcon icon = new TrayIcon(Toolkit.getDefaultToolkit().createImage(ZTAMain.class.getResource("/libraries/hivelogo.jpg")), "Beezig");
 			icon.setImageAutoSize(true);
 			icon.setToolTip("Beezig");
+			icon.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					tray.remove(icon);
+					
+				}
+			});
 			try {
 				tray.add(icon);
 			} catch (AWTException e) {
