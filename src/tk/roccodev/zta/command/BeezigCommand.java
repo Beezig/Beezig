@@ -21,7 +21,7 @@ public class BeezigCommand implements Command{
 	@Override
 	public boolean execute(String[] args) {
 		The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
-		The5zigAPI.getAPI().messagePlayer(Log.info + "Running Beezig v§b" + ZTAMain.BEEZIG_VERSION + "(" + (ZTAMain.VERSION_HASH.isEmpty() ? "Stable" : "Beta/" + ZTAMain.VERSION_HASH) + ")");
+		The5zigAPI.getAPI().messagePlayer(Log.info + "Running Beezig §bv" + ZTAMain.BEEZIG_VERSION + " (" + (ZTAMain.VERSION_HASH.isEmpty() ? "Stable" : "Beta/" + ZTAMain.VERSION_HASH) + ")");
 		The5zigAPI.getAPI().messagePlayer(Log.info + (ZTAMain.newUpdate ? "There is a new version available!" : "You're running the latest version.") + "\n");
 		The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
 		return true;
