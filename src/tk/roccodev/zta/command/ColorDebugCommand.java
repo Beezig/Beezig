@@ -23,12 +23,7 @@ public class ColorDebugCommand implements Command {
 	public boolean execute(String[] args) {
 
 		if(args.length != 0) {
-			try {
-				The5zigAPI.getAPI().messagePlayer(NotificationManager.isInGameFocus() + "");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			String txt = String.join(" ", args);
 			The5zigAPI.getAPI().messagePlayer(Log.info + "§r" + ChatColor.translateAlternateColorCodes('&', txt));
 			
