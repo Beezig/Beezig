@@ -803,12 +803,15 @@ public class ZTAMain {
 				
 				
 				try {
-					if(!NotificationManager.isInGameFocus() && Setting.PM_NOTIFICATION.getValue()) {
+					if(!NotificationManager.isInGameFocus()) {
+						if(Setting.PM_NOTIFICATION.getValue()) {
 						String message = evt.getMessage().split("» §b")[1].trim();
 						String recipient = ChatColor.stripColor(evt.getMessage().replace("§3§lPRIVATE§3│ ", "").split("⇉")[0]).trim();
 						NotificationManager.sendNotification(recipient, message);
+						}
+						The5zigAPI.getAPI().playSound("note.pling", 1f);
 					}
-					The5zigAPI.getAPI().playSound("note.pling", 1f);
+					
 				} catch (Exception e) {
 					
 					e.printStackTrace();
