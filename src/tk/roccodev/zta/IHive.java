@@ -6,7 +6,16 @@ import javax.xml.bind.DatatypeConverter;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.ServerInstance;
-import tk.roccodev.zta.listener.*;
+import tk.roccodev.zta.listener.BEDListener;
+import tk.roccodev.zta.listener.CAIListener;
+import tk.roccodev.zta.listener.DRListener;
+import tk.roccodev.zta.listener.GRAVListener;
+import tk.roccodev.zta.listener.GiantListener;
+import tk.roccodev.zta.listener.HIDEListener;
+import tk.roccodev.zta.listener.HiveListener;
+import tk.roccodev.zta.listener.MIMVListener;
+import tk.roccodev.zta.listener.SKYListener;
+import tk.roccodev.zta.listener.TIMVListener;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
@@ -28,7 +37,7 @@ public class IHive extends ServerInstance {
 			System.out.println("Joined Hive.");
 			try {
 				DiscordUtils.init();
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				DiscordUtils.shouldOperate = false;
 			} finally {
 				DiscordUtils.updatePresence("Relaxing in the Hub", "In Lobby", "lobby");
