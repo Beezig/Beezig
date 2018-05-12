@@ -5,6 +5,7 @@ import eu.the5zig.util.minecraft.ChatColor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import tk.roccodev.zta.Log;
 import tk.roccodev.zta.games.TIMV;
 
 import java.io.BufferedReader;
@@ -323,7 +324,7 @@ public class HiveAPI {
 	    BufferedReader reader = null;
 	    try {
 	       URLConnection conn = url.openConnection();
-	       conn.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36(KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36");
+	       conn.addRequestProperty("User-Agent", Log.getUserAgent());
 	        reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 	        StringBuffer buffer = new StringBuffer();
 	        int read;

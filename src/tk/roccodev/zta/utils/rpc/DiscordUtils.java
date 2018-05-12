@@ -1,9 +1,5 @@
 package tk.roccodev.zta.utils.rpc;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordEventHandlers.OnReady;
 import club.minnced.discord.rpc.DiscordRPC;
@@ -11,8 +7,11 @@ import club.minnced.discord.rpc.DiscordRichPresence;
 import club.minnced.discord.rpc.DiscordUser;
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.settings.Setting;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class DiscordUtils {
 
@@ -49,7 +48,7 @@ public class DiscordUtils {
 						try {
 							URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/check/" + user.userId);
 							HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-							conn.addRequestProperty("User-Agent", "Beezig v" + ZTAMain.BEEZIG_VERSION + " on " + System.getProperty("os.name"));
+							conn.addRequestProperty("User-Agent", Log.getUserAgent());
 							if(conn.getResponseCode() == 404) {
 								The5zigAPI.getAPI().messagePlayer(Log.info + "You are using Discord, but you're not in our server! Make sure to join.\nInvite: §ehttp://discord.gg/se7zJsU");
 							}
@@ -86,8 +85,8 @@ public class DiscordUtils {
 	 * 
 	 * Updates the RPC presence.
 	 * 
-	 * @param Presence details
-	 * @param 0: State (Lobby, game etc.); 1: Image; 2: Max party size (e.g. Teams of 4); 3: Party name (e.g., Aqua Team)
+	 * @param newPresence details
+	 * @param opts: State (Lobby, game etc.); 1: Image; 2: Max party size (e.g. Teams of 4); 3: Party name (e.g., Aqua Team)
 	 */
 	public static void updatePresence(String newPresence, String... opts) {
 		if(!shouldOperate) return;
