@@ -18,7 +18,7 @@ public enum Setting {
 	AUTOVOTE_RANDOM(true, "Autovote for random map if no favorites are found"),
 	BRIEFING(true, "Opt-in or opt-out for the news briefing"),
 	PM_PING(false, "Play a ping sound when a PM is received."),
-	PM_NOTIFICATION(false, "Receive a system notification when a PM is received. (Mac/Linux only)"),
+	PM_NOTIFICATION(false, "Receive a system notification when a PM is received."),
 	
 	TIMV_SHOW_KRR(true, "TIMV Advanced Records - Show Karma/rolepoints"),
 	TIMV_SHOW_MOSTPOINTS(true, "TIMV Advanced Records - Show Karma record"),
