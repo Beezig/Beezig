@@ -81,7 +81,13 @@ public class RanksCommand implements Command {
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
 
 				for(HIDERank hideRank : HIDERank.values()){
-					The5zigAPI.getAPI().messagePlayer(Log.info + hideRank.getTotalDisplay()  + " §7- " + hideRank.getTotalDisplay().replaceAll(hideRank.getDisplay(), "") + hideRank.getStart());
+					if(hideRank == HIDERank.MASTER_OF_DISGUISE) {
+						The5zigAPI.getAPI().messagePlayer(Log.info + hideRank.getTotalDisplay()  + " §7- §e§l" +  hideRank.getStart());
+					}
+					else {
+						The5zigAPI.getAPI().messagePlayer(Log.info + hideRank.getTotalDisplay()  + " §7- " + hideRank.getTotalDisplay().replaceAll(hideRank.getDisplay(), "") + hideRank.getStart());
+					}
+					
 				}
 
 				The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
