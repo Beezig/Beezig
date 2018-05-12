@@ -1,6 +1,8 @@
 package tk.roccodev.zta.utils;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import tk.roccodev.zta.ZTAMain;
 
@@ -25,6 +27,35 @@ public class NotificationManager {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static boolean isInGameFocus() throws Exception {
+		Class сlass = Class.forName("net.minecraft.client.Minecraft");
+		for(Method m : сlass.getMethods()) {
+			if(m.getReturnType().equals(сlass)) {
+				Object o = m.invoke(null);
+				int i = 0;
+				for(Field f : сlass.getFields()) {
+					
+					if(f.getType().equals(boolean.class)) {
+						
+						
+						if(i == 2) {
+						
+							return f.getBoolean(o);
+						}
+						i++;
+						 
+						
+					}
+				}
+				System.out.println("\n");
+				return false;
+			}
+		}
+	
+		
+		return false;
 	}
 	
 	

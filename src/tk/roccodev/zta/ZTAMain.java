@@ -29,6 +29,7 @@ import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.EventHandler.Priority;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.event.ServerQuitEvent;
+import eu.the5zig.mod.event.TickEvent;
 import eu.the5zig.mod.event.TitleEvent;
 import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
@@ -87,6 +88,7 @@ import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
+import tk.roccodev.zta.utils.NotificationManager;
 import tk.roccodev.zta.utils.TIMVDay;
 import tk.roccodev.zta.utils.TIMVTest;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
@@ -798,13 +800,26 @@ public class ZTAMain {
 					&& evt.getMessage().contains(The5zigAPI.getAPI().getGameProfile().getName() + "§8 » §b")
 					&& Setting.PM_PING.getValue()) {
 
-				The5zigAPI.getAPI().playSound("note.pling", 1f);
+				
+				
+				try {
+					if(!NotificationManager.isInGameFocus() && Setting.PM_NOTIFICATION.getValue()) {
+						String message = evt.getMessage().split("» §b")[1].trim();
+						String recipient = ChatColor.stripColor(evt.getMessage().replace("§3§lPRIVATE§3│ ", "").split("⇉")[0]).trim();
+						NotificationManager.sendNotification(recipient, message);
+					}
+					The5zigAPI.getAPI().playSound("note.pling", 1f);
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+				}
 				
 			}
 		}
 
 	}
 
+	
 	@EventHandler
 	public void onActionBar(ActionBarEvent bar) {
 		// The5zigAPI.getLogger().info(bar.getMessage());

@@ -1,17 +1,10 @@
 package tk.roccodev.zta.command;
 
-import java.awt.AWTException;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
-import java.awt.TrayIcon.MessageType;
-import java.io.IOException;
-
-import javax.swing.ImageIcon;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
+import tk.roccodev.zta.utils.NotificationManager;
 
 public class ColorDebugCommand implements Command {
 
@@ -30,6 +23,12 @@ public class ColorDebugCommand implements Command {
 	public boolean execute(String[] args) {
 
 		if(args.length != 0) {
+			try {
+				The5zigAPI.getAPI().messagePlayer(NotificationManager.isInGameFocus() + "");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			String txt = String.join(" ", args);
 			The5zigAPI.getAPI().messagePlayer(Log.info + "§r" + ChatColor.translateAlternateColorCodes('&', txt));
 			
