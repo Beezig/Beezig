@@ -97,6 +97,7 @@ public class ZTAMain {
 
 	public static final String BEEZIG_VERSION = "4.6.1";
 	public static String VERSION_HASH = "";
+	public static String OS;
 
 	public static boolean hasServedNews;
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
@@ -335,10 +336,13 @@ public class ZTAMain {
 		String OS = System.getProperty("os.name").toLowerCase();
 		try {
 			if (OS.contains("mac")) {
+				ZTAMain.OS = "mac";
 				mcFile = new File(System.getProperty("user.home") + "/Library/Application Support/minecraft/5zigtimv");
 			} else if (OS.contains("nix") || OS.contains("nux") || OS.indexOf("aix") > 0) {
+				ZTAMain.OS = "unix";
 				mcFile = new File(System.getProperty("user.home") + "/.minecraft/5zigtimv");
 			} else if (OS.contains("win")) {
+				ZTAMain.OS = "win";
 				mcFile = new File(System.getenv("APPDATA") + "/.minecraft/5zigtimv");
 			} else {
 				mcFile = new File(System.getProperty("user.home") + "/Minecraft5zig/5zigtimv");

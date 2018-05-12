@@ -1,5 +1,13 @@
 package tk.roccodev.zta.command;
 
+import java.awt.AWTException;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.awt.TrayIcon.MessageType;
+import java.io.IOException;
+
+import javax.swing.ImageIcon;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.Log;
@@ -24,6 +32,7 @@ public class ColorDebugCommand implements Command {
 		if(args.length != 0) {
 			String txt = String.join(" ", args);
 			The5zigAPI.getAPI().messagePlayer(Log.info + "§r" + ChatColor.translateAlternateColorCodes('&', txt));
+			
 			return true;
 		}
 		
