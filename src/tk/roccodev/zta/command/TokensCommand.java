@@ -90,7 +90,7 @@ public class TokensCommand implements Command{
 		if(result <= 0){
 			result = result + (int)Math.E * (int)Math.PI;
 		}
-		if(result > 2000000) {
+		while (result > 2000000) {
 			result /= 8283;
 		}
 		return result;

@@ -55,7 +55,7 @@ public class MedalsCommand implements Command{
 						while(odds.get(odds.size() - 1) - 16 > 0){
 							odds.add(odds.get(odds.size() - 1) - 16);
 						}
-						int i = Integer.parseInt(stringFromIntList(odds));
+						long i = Long.parseLong(stringFromIntList(odds));
 						The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Medals:§b " + secretAlgorithm(i));
 					}
 					
@@ -82,13 +82,16 @@ public class MedalsCommand implements Command{
 		return sb.toString().trim();
 	}
 
-	private int secretAlgorithm(int i){
-		int result = i / (int)Math.PI;
+	private long secretAlgorithm(long i){
+		long result = i / (long)Math.PI;
 		if(result <= 0){
 			result = result + (0 - result) + (int)Math.E;
 		}
 		if(result <= 0){
 			result = result + (int)Math.E * (int)Math.PI;
+		}
+		while (result > 5000) {
+			result /= 58;
 		}
 		return result;
 	}
