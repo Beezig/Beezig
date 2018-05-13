@@ -35,7 +35,6 @@ import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.util.minecraft.ChatColor;
 import io.netty.util.internal.ThreadLocalRandom;
 import tk.roccodev.zta.autovote.AutovoteUtils;
-import tk.roccodev.zta.autovote.watisdis;
 import tk.roccodev.zta.briefing.NewsServer;
 import tk.roccodev.zta.briefing.Pools;
 import tk.roccodev.zta.briefing.fetcher.NewsFetcher;
@@ -48,6 +47,7 @@ import tk.roccodev.zta.command.ClosestToWRCommand;
 import tk.roccodev.zta.command.ColorDebugCommand;
 import tk.roccodev.zta.command.CustomTestCommand;
 import tk.roccodev.zta.command.DebugCommand;
+import tk.roccodev.zta.command.LeaderboardCommand;
 import tk.roccodev.zta.command.MathCommand;
 import tk.roccodev.zta.command.MedalsCommand;
 import tk.roccodev.zta.command.MessageOverlayCommand;
@@ -84,7 +84,6 @@ import tk.roccodev.zta.hiveapi.stuff.bed.StreakUtils;
 import tk.roccodev.zta.hiveapi.stuff.grav.GRAVListenerv2;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.settings.SettingsFetcher;
@@ -317,6 +316,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new ClosestToWRCommand());
 		CommandManager.registerCommand(new BeezigCommand());
 		CommandManager.registerCommand(new ReportCommand());
+		CommandManager.registerCommand(new LeaderboardCommand());
 
 		if (The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d")
 				|| The5zigAPI.getAPI().getGameProfile().getId().toString()

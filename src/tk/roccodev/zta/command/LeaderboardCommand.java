@@ -40,7 +40,8 @@ public class LeaderboardCommand implements Command {
 		String game;
 		if (args.length == 2) {
 			game = ActiveGame.current();
-		} else game = args[2];
+		} else
+			game = args[2];
 
 		long humanStart = Long.valueOf(args[0]);
 		long humanEnd = Long.valueOf(args[1]);
@@ -58,14 +59,12 @@ public class LeaderboardCommand implements Command {
 				List<String> title = new ArrayList<>();
 				List<String> name = new ArrayList<>();
 
-				for(int i = 0; i < (humanEnd - humanStart + 1L); i++){
+				for (int i = 0; i < (humanEnd - humanStart + 1L); i++) {
 					try {
-						ApiTIMV apiTIMV = new ApiTIMV(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiTIMV apiTIMV = new ApiTIMV(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
 						points.add(apiTIMV.getKarma());
@@ -81,17 +80,17 @@ public class LeaderboardCommand implements Command {
 				for (int i = 0; i < name.size(); i++) {
 					try {
 						if (points.get(i) != 0) {
-							The5zigAPI.getAPI().messagePlayer(
-									Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3" + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+							The5zigAPI.getAPI()
+									.messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
+											+ title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
+											+ points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
 						}
 					} catch (Exception e) {
 						// e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI()
-						.messagePlayer(Log.info + "TIMV Leaderboards: §b" + name.size() + "P / "
-								+ ((System.currentTimeMillis() - startT) / 1000) + "s / "
-								+ "#" + humanStart + "-" + humanEnd);
+				The5zigAPI.getAPI().messagePlayer(Log.info + "TIMV Leaderboards: §b" + name.size() + "P / "
+						+ ((System.currentTimeMillis() - startT) / 1000) + "s / " + "#" + humanStart + "-" + humanEnd);
 				The5zigAPI.getAPI().messagePlayer(
 						"    §7§m                                                                                    "
 								+ "\n");
@@ -108,33 +107,35 @@ public class LeaderboardCommand implements Command {
 				List<String> title = new ArrayList<>();
 				List<String> name = new ArrayList<>();
 
-				for(int i = 0; i < (humanEnd - humanStart + 1L); i++){
+				for (int i = 0; i < (humanEnd - humanStart + 1L); i++) {
 					try {
-						ApiBED apiBED = new ApiBED(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiBED apiBED = new ApiBED(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
 						points.add(apiBED.getPoints());
-						//BEDRank rank = BEDRank.isNo1(((JSONObject) data.get(i)).get("username").toString()) ? BEDRank.ZZZZZZ : BEDRank.getRank(Long.valueOf(((JSONObject) data.get(i)).get("points").toString()));
-						//BEDRank rank = BEDRank.getRank(Long.valueOf(((JSONObject) data.get(i)).get("points").toString()));
+						// BEDRank rank = BEDRank.isNo1(((JSONObject)
+						// data.get(i)).get("username").toString()) ? BEDRank.ZZZZZZ :
+						// BEDRank.getRank(Long.valueOf(((JSONObject)
+						// data.get(i)).get("points").toString()));
+						// BEDRank rank = BEDRank.getRank(Long.valueOf(((JSONObject)
+						// data.get(i)).get("points").toString()));
 						BEDRank rank = BEDRank.getRank(apiBED.getPoints());
 						if (rank != null) {
 							int level = rank.getLevel((int) apiBED.getPoints());
 
-							if(i == 0 && humanStart == 1){
+							if (i == 0 && humanStart == 1) {
 								title.add(BEDRank.ZZZZZZ.getName());
-								titlecolor.add(BEDRank.ZZZZZZ.getName().replaceAll(ChatColor.stripColor(BEDRank.ZZZZZZ.getName()), ""));
+								titlecolor.add(BEDRank.ZZZZZZ.getName()
+										.replaceAll(ChatColor.stripColor(BEDRank.ZZZZZZ.getName()), ""));
 							} else {
 								titlecolor.add(rank.getName().replaceAll(ChatColor.stripColor(rank.getName()), ""));
 								title.add(BED.NUMBERS[level] + " " + rank.getName());
 							}
 
 						}
-
 
 						name.add(apiHIVE.getNetworkRankColor() + ((JSONObject) data.get(i)).get("username").toString());
 					} catch (Exception e) {
@@ -143,21 +144,21 @@ public class LeaderboardCommand implements Command {
 				}
 
 				The5zigAPI.getAPI().messagePlayer("\n"
-														  + "    §7§m                                                                                    ");
+						+ "    §7§m                                                                                    ");
 				for (int i = 0; i < name.size(); i++) {
 					try {
 						if (points.get(i) != 0) {
-							The5zigAPI.getAPI().messagePlayer(
-									Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3" + titlecolor.get(i) + points.get(i) + "§7 - " + titlecolor.get(i) + title.get(i) + "§r " + name.get(i));
+							The5zigAPI.getAPI()
+									.messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3" + titlecolor.get(i)
+											+ points.get(i) + "§7 - " + titlecolor.get(i) + title.get(i) + "§r "
+											+ name.get(i));
 						}
 					} catch (Exception e) {
 						// e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI()
-						.messagePlayer(Log.info + "BED Leaderboards: §b" + name.size() + "P / "
-											   + ((System.currentTimeMillis() - startT) / 1000) + "s / "
-											   + "#" + humanStart + "-" + humanEnd);
+				The5zigAPI.getAPI().messagePlayer(Log.info + "BED Leaderboards: §b" + name.size() + "P / "
+						+ ((System.currentTimeMillis() - startT) / 1000) + "s / " + "#" + humanStart + "-" + humanEnd);
 				The5zigAPI.getAPI().messagePlayer(
 						"    §7§m                                                                                    "
 								+ "\n");
@@ -172,14 +173,12 @@ public class LeaderboardCommand implements Command {
 				List<String> title = new ArrayList<>();
 				List<String> name = new ArrayList<>();
 
-				for(int i = 0; i < (humanEnd - humanStart + 1L); i++){
+				for (int i = 0; i < (humanEnd - humanStart + 1L); i++) {
 					try {
-						ApiDR apiDR = new ApiDR(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiDR apiDR = new ApiDR(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
 						points.add(apiDR.getPoints());
@@ -191,21 +190,21 @@ public class LeaderboardCommand implements Command {
 				}
 
 				The5zigAPI.getAPI().messagePlayer("\n"
-														  + "    §7§m                                                                                    ");
+						+ "    §7§m                                                                                    ");
 				for (int i = 0; i < name.size(); i++) {
 					try {
 						if (points.get(i) != 0) {
-							The5zigAPI.getAPI().messagePlayer(
-									Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3" + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+							The5zigAPI.getAPI()
+									.messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
+											+ title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
+											+ points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
 						}
 					} catch (Exception e) {
 						// e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI()
-						.messagePlayer(Log.info + "DR Leaderboards: §b" + name.size() + "P / "
-											   + ((System.currentTimeMillis() - startT) / 1000) + "s / "
-											   + "#" + humanStart + "-" + humanEnd);
+				The5zigAPI.getAPI().messagePlayer(Log.info + "DR Leaderboards: §b" + name.size() + "P / "
+						+ ((System.currentTimeMillis() - startT) / 1000) + "s / " + "#" + humanStart + "-" + humanEnd);
 				The5zigAPI.getAPI().messagePlayer(
 						"    §7§m                                                                                    "
 								+ "\n");
@@ -220,14 +219,12 @@ public class LeaderboardCommand implements Command {
 				List<String> title = new ArrayList<>();
 				List<String> name = new ArrayList<>();
 
-				for(int i = 0; i < (humanEnd - humanStart + 1L); i++){
+				for (int i = 0; i < (humanEnd - humanStart + 1L); i++) {
 					try {
-						ApiCAI apiCAI = new ApiCAI(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiCAI apiCAI = new ApiCAI(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
 						points.add(apiCAI.getPoints());
@@ -239,21 +236,21 @@ public class LeaderboardCommand implements Command {
 				}
 
 				The5zigAPI.getAPI().messagePlayer("\n"
-														  + "    §7§m                                                                                    ");
+						+ "    §7§m                                                                                    ");
 				for (int i = 0; i < name.size(); i++) {
 					try {
 						if (points.get(i) != 0) {
-							The5zigAPI.getAPI().messagePlayer(
-									Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3" + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+							The5zigAPI.getAPI()
+									.messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
+											+ title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
+											+ points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
 						}
 					} catch (Exception e) {
 						// e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI()
-						.messagePlayer(Log.info + "CAI Leaderboards: §b" + name.size() + "P / "
-											   + ((System.currentTimeMillis() - startT) / 1000) + "s / "
-											   + "#" + humanStart + "-" + humanEnd);
+				The5zigAPI.getAPI().messagePlayer(Log.info + "CAI Leaderboards: §b" + name.size() + "P / "
+						+ ((System.currentTimeMillis() - startT) / 1000) + "s / " + "#" + humanStart + "-" + humanEnd);
 				The5zigAPI.getAPI().messagePlayer(
 						"    §7§m                                                                                    "
 								+ "\n");
@@ -268,14 +265,12 @@ public class LeaderboardCommand implements Command {
 				List<String> title = new ArrayList<>();
 				List<String> name = new ArrayList<>();
 
-				for(int i = 0; i < (humanEnd - humanStart + 1L); i++){
+				for (int i = 0; i < (humanEnd - humanStart + 1L); i++) {
 					try {
-						ApiHIDE apiHIDE = new ApiHIDE(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiHIDE apiHIDE = new ApiHIDE(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
 						points.add(apiHIDE.getPoints());
@@ -287,21 +282,29 @@ public class LeaderboardCommand implements Command {
 				}
 
 				The5zigAPI.getAPI().messagePlayer("\n"
-														  + "    §7§m                                                                                    ");
+						+ "    §7§m                                                                                    ");
 				for (int i = 0; i < name.size(); i++) {
 					try {
 						if (points.get(i) != 0) {
-							The5zigAPI.getAPI().messagePlayer(
-									Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3" + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+							if (title.get(i).equals("§e§lMaster §a§lof §b§lDisguise")) {
+								The5zigAPI.getAPI()
+								.messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
+										+ "§e§l"
+										+ points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+							} else {
+								The5zigAPI.getAPI()
+										.messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
+												+ title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
+												+ points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+
+							}
 						}
 					} catch (Exception e) {
 						// e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI()
-						.messagePlayer(Log.info + "HIDE Leaderboards: §b" + name.size() + "P / "
-											   + ((System.currentTimeMillis() - startT) / 1000) + "s / "
-											   + "#" + humanStart + "-" + humanEnd);
+				The5zigAPI.getAPI().messagePlayer(Log.info + "HIDE Leaderboards: §b" + name.size() + "P / "
+						+ ((System.currentTimeMillis() - startT) / 1000) + "s / " + "#" + humanStart + "-" + humanEnd);
 				The5zigAPI.getAPI().messagePlayer(
 						"    §7§m                                                                                    "
 								+ "\n");
@@ -316,14 +319,12 @@ public class LeaderboardCommand implements Command {
 				List<String> title = new ArrayList<>();
 				List<String> name = new ArrayList<>();
 
-				for(int i = 0; i < (humanEnd - humanStart + 1L); i++){
+				for (int i = 0; i < (humanEnd - humanStart + 1L); i++) {
 					try {
-						ApiSKY apiSKY = new ApiSKY(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiSKY apiSKY = new ApiSKY(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
 						points.add(apiSKY.getPoints());
@@ -335,21 +336,21 @@ public class LeaderboardCommand implements Command {
 				}
 
 				The5zigAPI.getAPI().messagePlayer("\n"
-														  + "    §7§m                                                                                    ");
+						+ "    §7§m                                                                                    ");
 				for (int i = 0; i < name.size(); i++) {
 					try {
 						if (points.get(i) != 0) {
-							The5zigAPI.getAPI().messagePlayer(
-									Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3" + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+							The5zigAPI.getAPI()
+									.messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
+											+ title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
+											+ points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
 						}
 					} catch (Exception e) {
 						// e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI()
-						.messagePlayer(Log.info + "SKY Leaderboards: §b" + name.size() + "P / "
-											   + ((System.currentTimeMillis() - startT) / 1000) + "s / "
-											   + "#" + humanStart + "-" + humanEnd);
+				The5zigAPI.getAPI().messagePlayer(Log.info + "SKY Leaderboards: §b" + name.size() + "P / "
+						+ ((System.currentTimeMillis() - startT) / 1000) + "s / " + "#" + humanStart + "-" + humanEnd);
 				The5zigAPI.getAPI().messagePlayer(
 						"    §7§m                                                                                    "
 								+ "\n");
@@ -364,14 +365,12 @@ public class LeaderboardCommand implements Command {
 				List<String> title = new ArrayList<>();
 				List<String> name = new ArrayList<>();
 
-				for(int i = 0; i < (humanEnd - humanStart + 1L); i++){
+				for (int i = 0; i < (humanEnd - humanStart + 1L); i++) {
 					try {
-						ApiGRAV apiGRAV = new ApiGRAV(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiGRAV apiGRAV = new ApiGRAV(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
 						points.add(apiGRAV.getPoints());
@@ -383,21 +382,21 @@ public class LeaderboardCommand implements Command {
 				}
 
 				The5zigAPI.getAPI().messagePlayer("\n"
-														  + "    §7§m                                                                                    ");
+						+ "    §7§m                                                                                    ");
 				for (int i = 0; i < name.size(); i++) {
 					try {
 						if (points.get(i) != 0) {
-							The5zigAPI.getAPI().messagePlayer(
-									Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3" + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+							The5zigAPI.getAPI()
+									.messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
+											+ title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
+											+ points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
 						}
 					} catch (Exception e) {
 						// e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI()
-						.messagePlayer(Log.info + "GRAV Leaderboards: §b" + name.size() + "P / "
-											   + ((System.currentTimeMillis() - startT) / 1000) + "s / "
-											   + "#" + humanStart + "-" + humanEnd);
+				The5zigAPI.getAPI().messagePlayer(Log.info + "GRAV Leaderboards: §b" + name.size() + "P / "
+						+ ((System.currentTimeMillis() - startT) / 1000) + "s / " + "#" + humanStart + "-" + humanEnd);
 				The5zigAPI.getAPI().messagePlayer(
 						"    §7§m                                                                                    "
 								+ "\n");
@@ -414,12 +413,10 @@ public class LeaderboardCommand implements Command {
 
 				for (int i = 0; i < (humanEnd - humanStart + 1L); i++) {
 					try {
-						ApiMIMV apiMIMV = new ApiMIMV(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiMIMV apiMIMV = new ApiMIMV(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(
-								((JSONObject) data.get(i)).get("username").toString(),
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
 						points.add(apiMIMV.getPoints());
@@ -431,27 +428,26 @@ public class LeaderboardCommand implements Command {
 				}
 
 				The5zigAPI.getAPI().messagePlayer("\n"
-														  + "    §7§m                                                                                    ");
+						+ "    §7§m                                                                                    ");
 				for (int i = 0; i < name.size(); i++) {
 					try {
 						if (points.get(i) != 0) {
-							The5zigAPI.getAPI().messagePlayer(
-									Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3" + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "") + points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+							The5zigAPI.getAPI()
+									.messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
+											+ title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
+											+ points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
 						}
 					} catch (Exception e) {
 						// e.printStackTrace();
 					}
 				}
-				The5zigAPI.getAPI()
-						.messagePlayer(Log.info + "MIMV Leaderboards: §b" + name.size() + "P / "
-											   + ((System.currentTimeMillis() - startT) / 1000) + "s / "
-											   + "#" + humanStart + "-" + humanEnd);
+				The5zigAPI.getAPI().messagePlayer(Log.info + "MIMV Leaderboards: §b" + name.size() + "P / "
+						+ ((System.currentTimeMillis() - startT) / 1000) + "s / " + "#" + humanStart + "-" + humanEnd);
 				The5zigAPI.getAPI().messagePlayer(
 						"    §7§m                                                                                    "
 								+ "\n");
 			}).start();
-		}
-		else {
+		} else {
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Specified mode not found.");
 		}
 		return true;
