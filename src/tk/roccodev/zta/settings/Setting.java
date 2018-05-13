@@ -72,7 +72,11 @@ public enum Setting {
 	MIMV_SHOW_WINRATE(true, "MIMV Advanced Records - Show Winrate"), 
 	MIMV_SHOW_KD(true, "MIMV Advanced Records - Show Kills/Deaths"),
 	MIMV_SHOW_KPG(true, "MIMV Advanced Records - Show Kills per game"),
-	MIMV_SHOW_PPG(true, "MIMV Advanced Records - Show Karma per game");
+	MIMV_SHOW_PPG(true, "MIMV Advanced Records - Show Karma per game"),
+	
+	BP_SHOW_POINTS_TO_NEXT_RANK(true, "BP Advanced Records - Show points to next rank"), 
+	BP_SHOW_WINRATE(true, "BP Advanced Records - Show Winrate"), 
+	BP_SHOW_PPG(true, "BP Advanced Records - Show Points per game");
 
 
 	private boolean value;

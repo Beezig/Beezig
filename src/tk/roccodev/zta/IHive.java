@@ -7,6 +7,7 @@ import javax.xml.bind.DatatypeConverter;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.ServerInstance;
 import tk.roccodev.zta.listener.BEDListener;
+import tk.roccodev.zta.listener.BPListener;
 import tk.roccodev.zta.listener.CAIListener;
 import tk.roccodev.zta.listener.DRListener;
 import tk.roccodev.zta.listener.GRAVListener;
@@ -60,6 +61,7 @@ public class IHive extends ServerInstance {
 		getGameListener().registerListener(new SKYListener());
 		getGameListener().registerListener(new MIMVListener());
 		getGameListener().registerListener(new GRAVListener());
+		getGameListener().registerListener(new BPListener());
 		
 	}
 
