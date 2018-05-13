@@ -316,7 +316,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new RanksCommand());
 		CommandManager.registerCommand(new ClosestToWRCommand());
 		CommandManager.registerCommand(new BeezigCommand());
-     // CommandManager.registerCommand(new ReportCommand());
+		CommandManager.registerCommand(new ReportCommand());
 
 		if (The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d")
 				|| The5zigAPI.getAPI().getGameProfile().getId().toString()

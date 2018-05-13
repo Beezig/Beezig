@@ -47,43 +47,49 @@ public class ReportCommand implements Command{
 		}
 		lastOne = System.currentTimeMillis();
 		// RoccoDev, ItsNiklass AntiKnockback, Kill Aura
-		String rawArgs = String.join(" ", args);
-		String[] rawPlayers = rawArgs.replaceAll(", ", ",").split(" ");
-		String data0 = rawPlayers[0];
-		ArrayList<String> argsL = new ArrayList<String>(Arrays.asList(rawPlayers));
-		argsL.remove(0);
-		String data1 = String.join(" ", argsL);
-		System.out.println(data0 + " / " + data1);
-		String players = data0;
-		
-		String reason = data1;
-		
-		try {
-			URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/report");
-			URLConnection con = url.openConnection();
-			HttpURLConnection http = (HttpURLConnection)con;
-			http.setRequestMethod("POST"); // PUT is another valid option
-			http.setDoOutput(true);
-			Map<String,String> arguments = new HashMap<>();
-			arguments.put("sender", The5zigAPI.getAPI().getGameProfile().getName());
-			arguments.put("destination", players);
-			arguments.put("reason", reason);
-			StringJoiner sj = new StringJoiner("&");
-			for(Map.Entry<String,String> entry : arguments.entrySet())
-			    sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "=" 
-			         + URLEncoder.encode(entry.getValue(), "UTF-8"));
-			byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
-			int length = out.length;
-			http.setFixedLengthStreamingMode(length);
-			http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-			http.setRequestProperty("User-Agent", Log.getUserAgent());
-			http.connect();
-			try(OutputStream os = http.getOutputStream()) {
-			    os.write(out);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String rawArgs = String.join(" ", args);
+				String[] rawPlayers = rawArgs.replaceAll(", ", ",").split(" ");
+				String data0 = rawPlayers[0];
+				ArrayList<String> argsL = new ArrayList<String>(Arrays.asList(rawPlayers));
+				argsL.remove(0);
+				String data1 = String.join(" ", argsL);
+				System.out.println(data0 + " / " + data1);
+				String players = data0;
+				
+				String reason = data1;
+				
+				try {
+					URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/report");
+					URLConnection con = url.openConnection();
+					HttpURLConnection http = (HttpURLConnection)con;
+					http.setRequestMethod("POST"); // PUT is another valid option
+					http.setDoOutput(true);
+					Map<String,String> arguments = new HashMap<>();
+					arguments.put("sender", The5zigAPI.getAPI().getGameProfile().getName());
+					arguments.put("destination", players);
+					arguments.put("reason", reason);
+					StringJoiner sj = new StringJoiner("&");
+					for(Map.Entry<String,String> entry : arguments.entrySet())
+					    sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "=" 
+					         + URLEncoder.encode(entry.getValue(), "UTF-8"));
+					byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
+					int length = out.length;
+					http.setFixedLengthStreamingMode(length);
+					http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+					http.setRequestProperty("User-Agent", Log.getUserAgent());
+					http.connect();
+					try(OutputStream os = http.getOutputStream()) {
+					    os.write(out);
+					}
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+				
 			}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
+		}).start();
 		
 		The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully submitted report. Please wait for a moderator to take action.");
 		
