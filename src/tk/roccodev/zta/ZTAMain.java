@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
@@ -30,7 +29,6 @@ import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.EventHandler.Priority;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.event.ServerQuitEvent;
-import eu.the5zig.mod.event.TickEvent;
 import eu.the5zig.mod.event.TitleEvent;
 import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
@@ -60,6 +58,7 @@ import tk.roccodev.zta.command.PlayerStatsCommand;
 import tk.roccodev.zta.command.RanksCommand;
 import tk.roccodev.zta.command.ReVoteCommand;
 import tk.roccodev.zta.command.RealRankCommand;
+import tk.roccodev.zta.command.ReportCommand;
 import tk.roccodev.zta.command.SayCommand;
 import tk.roccodev.zta.command.SeenCommand;
 import tk.roccodev.zta.command.SetDisplayNameCommand;
@@ -317,6 +316,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new RanksCommand());
 		CommandManager.registerCommand(new ClosestToWRCommand());
 		CommandManager.registerCommand(new BeezigCommand());
+     // CommandManager.registerCommand(new ReportCommand());
 
 		if (The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d")
 				|| The5zigAPI.getAPI().getGameProfile().getId().toString()

@@ -1,10 +1,19 @@
 package tk.roccodev.zta.command;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringJoiner;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
-import tk.roccodev.zta.utils.NotificationManager;
 
 public class ColorDebugCommand implements Command {
 
