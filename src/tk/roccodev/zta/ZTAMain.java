@@ -433,7 +433,7 @@ public class ZTAMain {
 
 		checkForFileExist(new File(mcFile + "/autovote.yml"), false);
 		AutovoteUtils.load();
-		watisdis.wat = new ApiTIMV("RoccoDev").getTitle();
+		// watisdis.wat = new ApiTIMV("RoccoDev").getTitle();
 
 		ApiHiveGlobal api = new ApiHiveGlobal(The5zigAPI.getAPI().getGameProfile().getName());
 		playerRank = api.getNetworkTitle();

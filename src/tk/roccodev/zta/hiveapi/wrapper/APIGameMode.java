@@ -1,15 +1,14 @@
 package tk.roccodev.zta.hiveapi.wrapper;
 
-import java.util.Date;
-
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.server.GameMode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.server.GameMode;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
+
+import java.util.Date;
 
 public class APIGameMode {
 
@@ -17,19 +16,21 @@ public class APIGameMode {
 	private String uuid;
 	private ApiHiveGlobal parent;
 	private JSONObject object;
-	
+
 	public APIGameMode(String playerName, String... UUID){
 
 		if(UUID.length == 0) {
 			this.playerName = playerName;
+			//The5zigAPI.getLogger().info("REQUESTING MOJANG UUID: " + playerName);
 			this.uuid = APIUtils.getUUID(playerName);
 		} else {
 			this.playerName = playerName;
+			//The5zigAPI.getLogger().info("UUID FOUND");
 			this.uuid = UUID[0].replaceAll("-","");
 		}
 		if(!(this instanceof ApiHiveGlobal))
-		this.parent = new ApiHiveGlobal(playerName);
-		
+		this.parent = new ApiHiveGlobal(playerName, this.uuid);
+		// #fixed
 	}
 	
 	
