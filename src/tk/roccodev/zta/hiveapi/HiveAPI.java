@@ -251,8 +251,8 @@ public class HiveAPI {
 		try {
 			o = (JSONObject) parser.parse(readUrl(parseMojangPlayerAPI(ign)));
 		}  catch (Exception e) {
-			The5zigAPI.getLogger().info("Failed getUUID (Mojang)");
-			//e.printStackTrace();
+			The5zigAPI.getLogger().info("Failed getUUID (Mojang) - " + ign);
+			e.printStackTrace();
 		}		
 		return (String) o.get("id");
 	}
@@ -318,6 +318,22 @@ public class HiveAPI {
 			}
 		
 		
+	}
+
+	public static JSONArray getLeaderboardData(String game, long startIndex, long endIndex){
+		JSONParser parser = new JSONParser();
+		String urlstring = "http://api.hivemc.com/v1/game/@game@/leaderboard/" + startIndex + "/" + endIndex;
+
+		try {
+			URL url = new URL(urlstring.replaceAll("@game@", game));
+			return (JSONArray)
+						   ((JSONObject) parser.parse(readUrl(url)))
+								   .get("leaderboard");
+		} catch (Exception e) {
+			The5zigAPI.getLogger().info("Failed getLBData (JSON 0)");
+			e.printStackTrace();
+		}
+		return null;
 	}
 		
 	private static String readUrl(URL url) throws Exception {

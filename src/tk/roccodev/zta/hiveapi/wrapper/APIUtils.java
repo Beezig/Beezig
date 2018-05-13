@@ -1,5 +1,11 @@
 package tk.roccodev.zta.hiveapi.wrapper;
 
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import tk.roccodev.zta.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,20 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.zta.Log;
+import java.util.*;
 
 public class APIUtils {
 
@@ -33,8 +26,8 @@ public class APIUtils {
 		try {
 			o = (JSONObject) parser.parse(Parser.read(Parser.mojang(ign)));
 		} catch (Exception e) {
-			The5zigAPI.getLogger().info("Failed getUUID (Mojang)");
-			//e.printStackTrace();
+			The5zigAPI.getLogger().info("Failed getUUID (Mojang) - " + ign);
+			e.printStackTrace();
 		}
 		return (String) o.get("id");
 	}
@@ -359,7 +352,7 @@ public class APIUtils {
 		      
 		    } catch(Exception e){
 		    	
-		    	e.printStackTrace();
+		    	//e.printStackTrace();
 				return null;
 		    } finally {
 		        if (reader != null)
