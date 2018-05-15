@@ -21,6 +21,7 @@ import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,6 +47,7 @@ public class DRListener extends AbstractGameListener<DR> {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				
 				Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 				DR.rankObject = DRRank.getFromDisplay(new ApiDR(The5zigAPI.getAPI().getGameProfile().getName()).getTitle());
 				DR.rank = DR.rankObject.getTotalDisplay();

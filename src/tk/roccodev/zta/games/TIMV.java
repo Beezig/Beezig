@@ -104,17 +104,17 @@ public class TIMV extends GameMode {
 		}
 		stream.close();
 
-		dailyKarmaWriter = new PrintWriter(ZTAMain.mcFile + "/timv/dailykarma/" + dailyKarmaName, "UTF-8");
+		dailyKarmaWriter = new PrintWriter(ZTAMain.mcFile + "/timv/dailykarma" + dailyKarmaName, "UTF-8");
 
 	}
 
 	private static void initKarmaWriterWithZero() throws FileNotFoundException, UnsupportedEncodingException {
-		dailyKarmaWriter = new PrintWriter(ZTAMain.mcFile + "/timv/dailykarma/" + dailyKarmaName, "UTF-8");
+		dailyKarmaWriter = new PrintWriter(ZTAMain.mcFile + "/timv/dailykarma" + dailyKarmaName, "UTF-8");
 		dailyKarmaWriter.println(0);
 
 		dailyKarmaWriter.close();
 
-		dailyKarmaWriter = new PrintWriter(ZTAMain.mcFile + "/timv/dailykarma/" + dailyKarmaName, "UTF-8");
+		dailyKarmaWriter = new PrintWriter(ZTAMain.mcFile + "/timv/dailykarma" + dailyKarmaName, "UTF-8");
 
 	}
 

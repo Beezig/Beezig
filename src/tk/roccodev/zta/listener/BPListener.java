@@ -1,6 +1,7 @@
 package tk.roccodev.zta.listener;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.BP;
+import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.bp.BPRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
@@ -53,6 +55,12 @@ public class BPListener extends AbstractGameListener<BP> {
 			@Override
 			public void run() {
 				try {
+					try {
+						BP.initDailyPointsWriter();
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
 					Thread.sleep(500);
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					The5zigAPI.getLogger().info(sb.getTitle());
@@ -87,16 +95,15 @@ public class BPListener extends AbstractGameListener<BP> {
 			
 			APIValues.BPpoints += 10;
 			BP.gamePts += 10;
-		  
+			BP.dailyPoints += 10;
 		    
 		}
-		else if (message.startsWith("§8▍ §c§lMurder§8 ▏ §2§l+§a") && message.endsWith("Points")) {
-			String k = message.split("§a")[1].replace(" Points", "").trim();
-			int Points = Integer.parseInt(k);
-			APIValues.BPpoints += Points;
-			BP.gamePts += Points;
-
-		} else if (message.equals("        §a§m                      §f§l NOW PLAYING §a§m                      ")) {
+		else if(message.equals("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚§b§l 5 points§7")) {
+			APIValues.BPpoints += 5;
+			BP.gamePts += 5;
+			BP.dailyPoints += 5;
+		}
+		else if (message.equals("        §a§m                      §f§l NOW PLAYING §a§m                      ")) {
 			gameMode.setState(GameState.GAME);
 			DiscordUtils.updatePresence("Dancing in BlockParty", "Dancing", "game_bp");
 		} else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
@@ -117,6 +124,7 @@ public class BPListener extends AbstractGameListener<BP> {
 		} else if (message.equals("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚§b§l 1 point")) {
 			APIValues.BPpoints++;
 			BP.gamePts++;
+			BP.dailyPoints++;
 		} else if ((message.equals("                      §6§m                  §6§m                  ")
 				&& !message.startsWith("§o "))) {
 			The5zigAPI.getLogger().info("found footer");

@@ -1,5 +1,13 @@
 package tk.roccodev.zta.games;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +17,7 @@ import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
+import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
 
@@ -26,6 +35,7 @@ public class DR extends GameMode{
 	public static int deaths;
 	public static int kills;
 	
+	
 	public static HashMap<String, DRMap> mapsPool;
 	
 	public static String rank;
@@ -37,6 +47,8 @@ public class DR extends GameMode{
 	public static List<String> messagesToSend = new ArrayList<String>();
 	public static List<String> footerToSend = new ArrayList<String>();
 	public static boolean isRecordsRunning = false;
+	
+	
 	
 	public static void reset(DR gm){
 		
@@ -54,6 +66,8 @@ public class DR extends GameMode{
 		IHive.genericReset();
 		if(The5zigAPI.getAPI().getActiveServer() != null)
 		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
+		
+		
 	}
 	
 	@Override

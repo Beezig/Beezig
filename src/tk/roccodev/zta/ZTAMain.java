@@ -291,6 +291,8 @@ public class ZTAMain {
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bpcounter", tk.roccodev.zta.modules.bp.PointsCounterItem.class,
 				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bpdaily", tk.roccodev.zta.modules.bp.DailyItem.class,
+				"serverhivemc");
 
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 
@@ -368,6 +370,10 @@ public class ZTAMain {
 		checkForFileExist(new File(mcFile + "/timv/testMessages.txt"), false);
 		checkForFileExist(new File(mcFile + "/bedwars/"), true);
 		checkForFileExist(new File(mcFile + "/bedwars/streak.txt"), false);
+		
+		checkForFileExist(new File(mcFile + "/bp/"), true);
+		checkForFileExist(new File(mcFile + "/bp/dailyPoints/"), true);
+		
 		StreakUtils.init();
 		new Thread(new Runnable() {
 			@Override
@@ -482,7 +488,10 @@ public class ZTAMain {
 		new GNT();
 		new GNTM();
 
-		TIMV.setDailyKarmaFileName(TIMVDay.fromCalendar(Calendar.getInstance()) + ".txt");
+		String dailyName = TIMVDay.fromCalendar(Calendar.getInstance()) + ".txt";
+		
+		TIMV.setDailyKarmaFileName(dailyName);
+		BP.setDailyPointsFileName(dailyName);
 
 		Calendar cal = Calendar.getInstance();
 		if (cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA) {
