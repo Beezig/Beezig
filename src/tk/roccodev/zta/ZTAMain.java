@@ -340,11 +340,8 @@ public class ZTAMain {
 			}
 		}, "Maps Fetcher").start();
 
-		The5zigAPI.getLogger().info("Loaded Beezig");
+		The5zigAPI.getLogger().info("Loaded BeezigCore");
 
-		The5zigAPI.getLogger().info("Loading bStats");
-		MetricsLite metrics = new MetricsLite(this);
-		The5zigAPI.getLogger().info("Loaded bStats");
 
 		String OS = System.getProperty("os.name").toLowerCase();
 		try {
@@ -420,6 +417,7 @@ public class ZTAMain {
 		}
 
 		checkOldCsvPath();
+		The5zigAPI.getLogger().info("Loading BeezigConfig...");
 		File settingsFile = new File(ZTAMain.mcFile.getAbsolutePath() + "/settings.properties");
 		if (!settingsFile.exists()) {
 			try {
@@ -452,6 +450,7 @@ public class ZTAMain {
 			e.printStackTrace();
 		}
 
+		The5zigAPI.getLogger().info("Loaded BeezigConfig.");
 		if (Setting.DISCORD_RPC.getValue()) {
 			try {
 				String OS1 = System.getProperty("os.name").toLowerCase();
