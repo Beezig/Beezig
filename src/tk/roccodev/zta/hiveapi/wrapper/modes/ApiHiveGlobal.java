@@ -57,7 +57,9 @@ public class ApiHiveGlobal extends APIGameMode {
 		return (String) o.get("game");
 	}
 	
-	
+	public boolean isOnline() {
+		return !getPlayerLocation().equals("the Land of Nods!");
+	}
 	
 	
 

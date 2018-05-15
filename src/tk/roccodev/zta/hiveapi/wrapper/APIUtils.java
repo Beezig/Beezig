@@ -28,6 +28,7 @@ public class APIUtils {
 		} catch (Exception e) {
 			The5zigAPI.getLogger().info("Failed getUUID (Mojang) - " + ign);
 			e.printStackTrace();
+			return "\\invalid";
 		}
 		return (String) o.get("id");
 	}

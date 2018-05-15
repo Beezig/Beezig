@@ -15,10 +15,12 @@ import java.util.StringJoiner;
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 public class ReportCommand implements Command{
 	
 	private long lastOne;
+	private boolean shouldConfirm = false;
 
 	@Override
 	public String getName() {
@@ -40,13 +42,14 @@ public class ReportCommand implements Command{
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /report [player] [reason]");
 			return true;
 		}
-		if(lastOne != 0 && (System.currentTimeMillis() - lastOne < 30000)) {
+		if(lastOne != 0 && !shouldConfirm && (System.currentTimeMillis() - lastOne < 30000)) {
 		
 			The5zigAPI.getAPI().messagePlayer(Log.error + "You must wait 30 seconds between reports!");
 			return true;
 		}
 		lastOne = System.currentTimeMillis();
 		// RoccoDev, ItsNiklass AntiKnockback, Kill Aura
+		The5zigAPI.getAPI().messagePlayer(Log.info + "Checking...");
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -58,11 +61,29 @@ public class ReportCommand implements Command{
 				String data1 = String.join(" ", argsL);
 				System.out.println(data0 + " / " + data1);
 				String players = data0;
+				for(String s : players.split(",")) {
+					ApiHiveGlobal api = new ApiHiveGlobal(s);
+					// Trigger an error if needed
+					api.getCorrectName();
+					if(api.getError() != null) {
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Player §4" + s + "§c does not exist.");
+						return;
+					}
+					if(!api.isOnline() && !shouldConfirm) {
+						The5zigAPI.getAPI().messagePlayer(Log.info + "Player §b" + s + "§3 is not online. Please run the command again to confirm the report.");
+						shouldConfirm = true;
+						return;
+					}
+					else {
+						shouldConfirm = false;
+					}
+					
+				}
 				
 				String reason = data1;
 				
 				try {
-					URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/report");
+					URL url = new URL("http://localhost:8080/report");
 					URLConnection con = url.openConnection();
 					HttpURLConnection http = (HttpURLConnection)con;
 					http.setRequestMethod("POST"); // PUT is another valid option
@@ -87,11 +108,12 @@ public class ReportCommand implements Command{
 					} catch(Exception e) {
 						e.printStackTrace();
 					}
+				The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully submitted report. Please wait for a moderator to take action.");
 				
 			}
 		}).start();
 		
-		The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully submitted report. Please wait for a moderator to take action.");
+		
 		
 		return true;
 	}
