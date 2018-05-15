@@ -83,7 +83,7 @@ public class ReportCommand implements Command{
 				String reason = data1;
 				
 				try {
-					URL url = new URL("http://localhost:8080/report");
+					URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/report");
 					URLConnection con = url.openConnection();
 					HttpURLConnection http = (HttpURLConnection)con;
 					http.setRequestMethod("POST"); // PUT is another valid option

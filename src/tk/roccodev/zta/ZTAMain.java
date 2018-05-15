@@ -289,6 +289,8 @@ public class ZTAMain {
 		
 		The5zigAPI.getAPI().registerModuleItem(this, "bppoints", tk.roccodev.zta.modules.bp.PointsItem.class,
 				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "bpcounter", tk.roccodev.zta.modules.bp.PointsCounterItem.class,
+				"serverhivemc");
 
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 

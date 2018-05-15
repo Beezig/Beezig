@@ -219,6 +219,9 @@
       "items": [
         {
           "type": "bppoints"
+        },
+        {
+          "type": "bpcounter"
         }
       ]
     }

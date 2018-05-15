@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
@@ -18,6 +20,7 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
+import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.BP;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.bp.BPRank;
@@ -79,7 +82,15 @@ public class BPListener extends AbstractGameListener<BP> {
 
 		if (ZTAMain.isColorDebug) {
 			The5zigAPI.getLogger().info("BP Color Debug: (" + message + ")");
-		} else if (message.startsWith("§8▍ §c§lMurder§8 ▏ §2§l+§a") && message.endsWith("Points")) {
+		} 
+		if(message.startsWith("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §bCongrats! You earned §a")) {
+			
+			APIValues.BPpoints += 10;
+			BP.gamePts += 10;
+		  
+		    
+		}
+		else if (message.startsWith("§8▍ §c§lMurder§8 ▏ §2§l+§a") && message.endsWith("Points")) {
 			String k = message.split("§a")[1].replace(" Points", "").trim();
 			int Points = Integer.parseInt(k);
 			APIValues.BPpoints += Points;
@@ -103,6 +114,9 @@ public class BPListener extends AbstractGameListener<BP> {
 			The5zigAPI.getLogger().info("Found Player URL");
 
 			return true;
+		} else if (message.equals("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚§b§l 1 point")) {
+			APIValues.BPpoints++;
+			BP.gamePts++;
 		} else if ((message.equals("                      §6§m                  §6§m                  ")
 				&& !message.startsWith("§o "))) {
 			The5zigAPI.getLogger().info("found footer");
