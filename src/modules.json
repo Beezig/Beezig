@@ -212,6 +212,15 @@
           "type": "gravstages"
         }
       ]
+    },
+    {
+      "id": "BlockParty",
+      "name": "BlockParty",
+      "items": [
+        {
+          "type": "bppoints"
+        }
+      ]
     }
   ]
 }
