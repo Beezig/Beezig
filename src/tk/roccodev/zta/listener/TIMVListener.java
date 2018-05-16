@@ -449,7 +449,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 								TIMV.votesToParse.clear();
 								TIMV.hasVoted = true;
 																										//we can't really get the map name at this point
-								The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
+								The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "Automatically voted for map §6#" + finalindex);
 								return;
 							}
 							else if(Setting.AUTOVOTE_RANDOM.getValue()){

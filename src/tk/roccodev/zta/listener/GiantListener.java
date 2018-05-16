@@ -10,13 +10,10 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.Giant;
-import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.stuff.gnt.GiantRank;
-import tk.roccodev.zta.hiveapi.stuff.sky.SKYRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiGiant;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiSKY;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
@@ -171,7 +168,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
 								Giant.hasVoted = true;
 								// we can't really get the map name at this point
 								The5zigAPI.getAPI()
-										.messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
+										.messagePlayer(getPrefix(ActiveGame.current()) + "Automatically voted for map §6#" + finalindex);
 								return;
 							} else {
 								The5zigAPI.getLogger().info("Done, couldn't find matches");

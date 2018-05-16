@@ -21,7 +21,6 @@ import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -192,12 +191,12 @@ public class DRListener extends AbstractGameListener<DR> {
 								DR.hasVoted = true;
 								// we can't really get the map name at this point
 								The5zigAPI.getAPI()
-										.messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
+										.messagePlayer("§8▍ §cDeathRun§8 ▏ " + "Automatically voted for map §6#" + finalindex);
 								return;
 							} else if(Setting.AUTOVOTE_RANDOM.getValue()){
 								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting Random");
 								The5zigAPI.getAPI().sendPlayerMessage("/v 6");
-								The5zigAPI.getAPI().messagePlayer(Log.info + "§eAutomatically voted for §cRandom map");
+								The5zigAPI.getAPI().messagePlayer("§8▍ §cDeathRun§8 ▏ §eAutomatically voted for §cRandom map");
 								DR.votesToParse.clear();
 								DR.hasVoted = true;
 								// he hasn't but we don't want to check again and again
