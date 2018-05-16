@@ -7,6 +7,7 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
+import tk.roccodev.zta.hiveapi.stuff.bp.BPRank;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.zta.hiveapi.stuff.grav.GRAVRank;
@@ -414,7 +415,53 @@ public class PlayerStatsCommand implements Command {
 						"    §7§m                                                                                    "
 								+ "\n");
 			}).start();
-		} else {
+		} else if (game.equalsIgnoreCase("bp")) {
+			long startT = System.currentTimeMillis();
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
+			new Thread(() -> {
+				List<Long> points = new ArrayList<>();
+				List<String> title = new ArrayList<>();
+				List<String> name = new ArrayList<>();
+
+				for (NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
+					try {
+						ApiBP apiBP = new ApiBP(npi.getGameProfile().getName(),
+								npi.getGameProfile().getId().toString());
+						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(npi.getGameProfile().getName(),
+								npi.getGameProfile().getId().toString());
+						points.add(apiBP.getPoints());
+						title.add(BPRank.getFromDisplay(apiBP.getTitle()).getTotalDisplay());
+						name.add(apiHIVE.getNetworkRankColor() + npi.getGameProfile().getName());
+					} catch (Exception e) {
+						// e.printStackTrace();
+					}
+				}
+
+				APIUtils.concurrentSort(points, points, title, name);
+
+				The5zigAPI.getAPI().messagePlayer("\n"
+														  + "    §7§m                                                                                    ");
+				for (int i = 0; i < name.size(); i++) {
+					try {
+						if (points.get(i) != 0) {
+							The5zigAPI.getAPI().messagePlayer(
+									Log.info + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
+											+ points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+						}
+					} catch (Exception e) {
+						// e.printStackTrace();
+					}
+				}
+				The5zigAPI.getAPI()
+						.messagePlayer(Log.info + "BP Playerstats: §b" + name.size() + "P / "
+											   + ((System.currentTimeMillis() - startT) / 1000) + "s / "
+											   + APIUtils.average(points.toArray()) + " Average");
+				The5zigAPI.getAPI().messagePlayer(
+						"    §7§m                                                                                    "
+								+ "\n");
+			}).start();
+		}
+		else {
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Specified mode not found.");
 		}
 		return true;

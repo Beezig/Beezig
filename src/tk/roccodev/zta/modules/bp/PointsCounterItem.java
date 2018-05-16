@@ -11,7 +11,7 @@ public class PointsCounterItem extends GameModeItem<BP> {
 
 	@Override
 	protected Object getValue(boolean dummy) {
-		return BP.gamePts;
+		return BP.gamePts + " Points";
 	}
 
 	@Override
