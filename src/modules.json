@@ -225,6 +225,9 @@
         },
         {
           "type": "bpdaily"
+        },
+        {
+          "type": "bpsong"
         }
       ]
     }

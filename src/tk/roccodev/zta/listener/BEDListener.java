@@ -8,7 +8,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.hiveapi.APIValues;
@@ -88,10 +87,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 	@Override
 	public boolean onServerChat(BED gameMode, String message) {
-		
-		if(ZTAMain.isColorDebug){
-			The5zigAPI.getLogger().info("BedWars Color Debug: (" + message + ")");
-		}
+
 		//§8▍ §3§lBed§b§lWars§8 ▏ §3Voting has ended! §bThe map §fEthereal§b has won!
 		if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §3Voting has ended! §bThe map")){
 			The5zigAPI.getLogger().info("Voting ended, parsing map");
@@ -543,19 +539,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 	@Override
 	public void onTitle(BED gameMode, String title, String subTitle) {
-		if(ZTAMain.isColorDebug){
-			The5zigAPI.getLogger().info("BedWars TitleColor Debug: (" + 
-		
-					title != null ? title : "ERR_TITLE_NULL"
-						
-						+ " *§* " +
-						
-						
-					subTitle != null ? subTitle : "ERR_SUBTITLE_NULL"
-					
-						+ ")"
-					);
-		}
+
 		if(subTitle != null && ChatColor.stripColor(subTitle).trim().equals("Respawning in 2 seconds")){
 			BED.deaths++;
 			BED.updateKdr();

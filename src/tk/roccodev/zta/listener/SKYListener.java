@@ -8,7 +8,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.hiveapi.APIValues;
@@ -83,10 +82,6 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
 	@Override
 	public boolean onServerChat(SKY gameMode, String message) {
-
-		if (ZTAMain.isColorDebug) {
-			The5zigAPI.getLogger().info("SKY Color Debug: (" + message + ")");
-		}
 
 		if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §3Voting has ended! §bThe map §f")) {
 			The5zigAPI.getLogger().info("Voting ended, parsing map");
@@ -398,23 +393,6 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
 		return false;
 
-	}
-
-	@Override
-	public void onTitle(SKY gameMode, String title, String subTitle) {
-		if (ZTAMain.isColorDebug) {
-			The5zigAPI.getLogger().info("SKY TitleColor Debug: (" +
-
-					title != null ? title
-							: "ERR_TITLE_NULL"
-
-									+ " *§* " +
-
-									subTitle != null ? subTitle
-											: "ERR_SUBTITLE_NULL"
-
-													+ ")");
-		}
 	}
 
 	@Override

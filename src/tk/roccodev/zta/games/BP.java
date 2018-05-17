@@ -1,16 +1,5 @@
 package tk.roccodev.zta.games;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
@@ -18,6 +7,10 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.stuff.bp.BPRank;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BP extends GameMode {
 
@@ -32,7 +25,8 @@ public class BP extends GameMode {
 	public static boolean isRecordsRunning = false;
 	public static String lastRecords = "";
 	
-	
+	public static String song;
+	public static String artist;
 	
 	public static int gamePts;
 	
@@ -94,6 +88,9 @@ public class BP extends GameMode {
 	public static void reset(BP gameMode) {
 
 		gameMode.setState(GameState.FINISHED);
+
+		song = null;
+		artist = null;
 
 		gamePts = 0;
 		votesToParse.clear();

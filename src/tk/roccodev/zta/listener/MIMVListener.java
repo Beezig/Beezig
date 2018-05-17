@@ -8,7 +8,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.MIMV;
 import tk.roccodev.zta.hiveapi.APIValues;
@@ -76,10 +75,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 	@Override
 	public boolean onServerChat(MIMV gameMode, String message) {
 
-		if (ZTAMain.isColorDebug) {
-			The5zigAPI.getLogger().info("MIMV Color Debug: (" + message + ")");
-		} 
-		else if(message.startsWith("§8▍ §c§lMurder§8 ▏ §2§l+§a") && message.endsWith("karma")) {
+		if(message.startsWith("§8▍ §c§lMurder§8 ▏ §2§l+§a") && message.endsWith("karma")) {
 			String k = message.split("§a")[1].replace(" karma", "").trim();
 			int karma = Integer.parseInt(k);
 			APIValues.MIMVpoints += karma;
@@ -372,19 +368,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 
 	@Override
 	public void onTitle(MIMV gameMode, String title, String subTitle) {
-		if (ZTAMain.isColorDebug) {
-			The5zigAPI.getLogger().info("MIMV TitleColor Debug: (" +
 
-					title != null ? title
-							: "ERR_TITLE_NULL"
-
-									+ " *§* " +
-
-									subTitle != null ? subTitle
-											: "ERR_SUBTITLE_NULL"
-
-													+ ")");
-		}
 		if (subTitle != null && subTitle.contains("You will be") && subTitle.contains("this round!")) {
 			String role = APIUtils.capitalize(title.replace("§r", "").toLowerCase().trim());
 			MIMV.role = role.startsWith("§a") ? "§aCitizen" : (role.startsWith("§c") ? "§cMurderer" : "§9Detective");

@@ -1,17 +1,5 @@
 package tk.roccodev.zta.listener;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -20,16 +8,19 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
-import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.BP;
-import tk.roccodev.zta.games.DR;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.bp.BPRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBP;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
 
 public class BPListener extends AbstractGameListener<BP> {
 
@@ -88,15 +79,18 @@ public class BPListener extends AbstractGameListener<BP> {
 	@Override
 	public boolean onServerChat(BP gameMode, String message) {
 
-		if (ZTAMain.isColorDebug) {
-			The5zigAPI.getLogger().info("BP Color Debug: (" + message + ")");
-		} 
 		if(message.startsWith("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §bCongrats! You earned §a")) {
 			
 			APIValues.BPpoints += 10;
 			BP.gamePts += 10;
 			BP.dailyPoints += 10;
 		    
+		}
+		else if(message.contains("§b§l") && message.startsWith("   ") && !message.contains("bp.hivemc.com")) {
+			BP.song = ChatColor.stripColor(message).trim();
+		}
+		else if(message.contains(" §7") && message.startsWith("   ") && !message.contains("§n")) {
+			BP.artist = ChatColor.stripColor(message).trim();
 		}
 		else if(message.equals("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚§b§l 5 points§7")) {
 			APIValues.BPpoints += 5;
@@ -306,24 +300,6 @@ public class BPListener extends AbstractGameListener<BP> {
 		}
 
 		return false;
-
-	}
-
-	@Override
-	public void onTitle(BP gameMode, String title, String subTitle) {
-		if (ZTAMain.isColorDebug) {
-			The5zigAPI.getLogger().info("BP TitleColor Debug: (" +
-
-					title != null ? title
-							: "ERR_TITLE_NULL"
-
-									+ " *§* " +
-
-									subTitle != null ? subTitle
-											: "ERR_SUBTITLE_NULL"
-
-													+ ")");
-		}
 
 	}
 

@@ -8,7 +8,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.hiveapi.APIValues;
@@ -78,10 +77,6 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
 	@Override
 	public boolean onServerChat(HIDE gameMode, String message) {
-
-		if(ZTAMain.isColorDebug){
-			The5zigAPI.getLogger().info("HIDE Color Debug: (" + message + ")");
-		}
 
 		if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §3Voting has ended! §bThe map §f")){
 			The5zigAPI.getLogger().info("Voting ended, parsing map");
@@ -400,23 +395,6 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
 		return false;
 
-	}
-
-	@Override
-	public void onTitle(HIDE gameMode, String title, String subTitle) {
-		if(ZTAMain.isColorDebug){
-			The5zigAPI.getLogger().info("HIDE TitleColor Debug: (" +
-
-					title != null ? title : "ERR_TITLE_NULL"
-
-						+ " *§* " +
-
-
-					subTitle != null ? subTitle : "ERR_SUBTITLE_NULL"
-
-						+ ")"
-					);
-		}
 	}
 
 	@Override

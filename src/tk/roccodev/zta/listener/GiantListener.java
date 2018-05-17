@@ -7,7 +7,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -108,9 +107,6 @@ public class GiantListener extends AbstractGameListener<Giant> {
 
 	@Override
 	public boolean onServerChat(Giant gameMode, String message) {
-		if (ZTAMain.isColorDebug) {
-			The5zigAPI.getLogger().info(gameMode.getName() + " Color Debug: (" + message + ")");
-		}
 
 		if (message.startsWith(getPrefixWithBoldDivider(ActiveGame.current()) + "§a§lVote received. §3Your map now has")
 				&& Setting.AUTOVOTE.getValue()) {
