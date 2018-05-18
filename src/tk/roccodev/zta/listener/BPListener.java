@@ -89,7 +89,7 @@ public class BPListener extends AbstractGameListener<BP> {
 		else if(message.contains("§b§l") && message.startsWith("   ") && !message.contains("bp.hivemc.com")) {
 			BP.song = ChatColor.stripColor(message).trim();
 			gameMode.setState(GameState.GAME);
-			DiscordUtils.updatePresence("Dancing in BlockParty", "Dancing to " + BP.song, "game_bp");
+			DiscordUtils.updatePresence("Dancing in BlockParty", "Partying to " + BP.song, "game_bp");
 		}
 		else if(message.contains(" §7") && message.startsWith("   ") && !message.contains("§n")) {
 			BP.artist = ChatColor.stripColor(message).trim();
