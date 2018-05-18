@@ -88,6 +88,8 @@ public class BPListener extends AbstractGameListener<BP> {
 		}
 		else if(message.contains("§b§l") && message.startsWith("   ") && !message.contains("bp.hivemc.com")) {
 			BP.song = ChatColor.stripColor(message).trim();
+			gameMode.setState(GameState.GAME);
+			DiscordUtils.updatePresence("Dancing in BlockParty", "Dancing to " + BP.song, "game_bp");
 		}
 		else if(message.contains(" §7") && message.startsWith("   ") && !message.contains("§n")) {
 			BP.artist = ChatColor.stripColor(message).trim();
@@ -97,10 +99,7 @@ public class BPListener extends AbstractGameListener<BP> {
 			BP.gamePts += 5;
 			BP.dailyPoints += 5;
 		}
-		else if (message.equals("        §a§m                      §f§l NOW PLAYING §a§m                      ")) {
-			gameMode.setState(GameState.GAME);
-			DiscordUtils.updatePresence("Dancing in BlockParty", "Dancing", "game_bp");
-		} else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+		else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
 			BP.messagesToSend.add(message);
 			The5zigAPI.getLogger().info("found header");
 			return true;
