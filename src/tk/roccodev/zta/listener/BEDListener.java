@@ -434,7 +434,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 								BED.votesToParse.clear();
 								BED.hasVoted = true;
 																										//we can't really get the map name at this point
-								The5zigAPI.getAPI().messagePlayer("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ " + "Automatically voted for map §6#" + finalindex);
+								The5zigAPI.getAPI().messagePlayer("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + finalindex);
 								return;
 							}
 							else{
