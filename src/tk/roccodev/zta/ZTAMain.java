@@ -203,6 +203,8 @@ public class ZTAMain {
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "hidepoints", tk.roccodev.zta.modules.hide.PointsItem.class,
 				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "hidedaily", tk.roccodev.zta.modules.hide.DailyItem.class,
+				"serverhivemc");
 
 		The5zigAPI.getAPI().registerModuleItem(this, "caimap", tk.roccodev.zta.modules.cai.MapItem.class,
 				"serverhivemc");
@@ -341,6 +343,9 @@ public class ZTAMain {
 		checkForFileExist(new File(mcFile + "/sky/"), true);
 		checkForFileExist(new File(mcFile + "/sky/dailyPoints/"), true);
 		
+		checkForFileExist(new File(mcFile + "/hide/"), true);
+		checkForFileExist(new File(mcFile + "/hide/dailyPoints/"), true);
+		
 		StreakUtils.init();
 		new Thread(new Runnable() {
 			@Override
@@ -462,6 +467,7 @@ public class ZTAMain {
 		CAI.setDailyPointsFileName(dailyName);
 		BED.setDailyPointsFileName(dailyName);
 		SKY.setDailyPointsFileName(dailyName);
+		HIDE.setDailyPointsFileName(dailyName);
 
 		Calendar cal = Calendar.getInstance();
 		if (cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA) {
