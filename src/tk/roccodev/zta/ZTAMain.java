@@ -201,6 +201,8 @@ public class ZTAMain {
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gntgold", tk.roccodev.zta.modules.gnt.GoldItem.class,
 				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "gntdaily", tk.roccodev.zta.modules.gnt.DailyItem.class,
+				"serverhivemc");
 
 		The5zigAPI.getAPI().registerModuleItem(this, "hidemap", tk.roccodev.zta.modules.hide.MapItem.class,
 				"serverhivemc");
@@ -358,6 +360,9 @@ public class ZTAMain {
 		checkForFileExist(new File(mcFile + "/dr/"), true);
 		checkForFileExist(new File(mcFile + "/dr/dailyPoints/"), true);
 		
+		checkForFileExist(new File(mcFile + "/gnt/"), true);
+		checkForFileExist(new File(mcFile + "/gnt/dailyPoints/"), true);
+		
 		StreakUtils.init();
 		new Thread(new Runnable() {
 			@Override
@@ -482,6 +487,7 @@ public class ZTAMain {
 		HIDE.setDailyPointsFileName(dailyName);
 		MIMV.setDailyPointsFileName(dailyName);
 		DR.setDailyPointsFileName(dailyName);
+		Giant.setDailyPointsFileName(dailyName);
 
 		Calendar cal = Calendar.getInstance();
 		if (cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA) {
