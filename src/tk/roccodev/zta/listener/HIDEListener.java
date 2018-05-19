@@ -193,11 +193,11 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
 			return true;
 		}
-		else if(message.startsWith("(§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e200 points§6")) {
+		else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e200 points§6")) {
 			APIValues.HIDEpoints += 200;
 			HIDE.dailyPoints += 200;
 		}
-		else if(message.startsWith("(§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e50 points§6")) {
+		else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e50 points§6")) {
 			APIValues.HIDEpoints += 50;
 			HIDE.dailyPoints += 50;
 		}
