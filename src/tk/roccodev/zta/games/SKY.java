@@ -71,7 +71,7 @@ public class SKY extends GameMode {
 			stream.close();
 			return;
 		} else {
-			BP.dailyPoints = Integer.parseInt(line);
+			SKY.dailyPoints = Integer.parseInt(line);
 		}
 		stream.close();
 

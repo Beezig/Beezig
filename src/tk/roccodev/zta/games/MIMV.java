@@ -62,7 +62,7 @@ public class MIMV extends GameMode {
 			stream.close();
 			return;
 		} else {
-			BP.dailyPoints = Integer.parseInt(line);
+			MIMV.dailyPoints = Integer.parseInt(line);
 		}
 		stream.close();
 

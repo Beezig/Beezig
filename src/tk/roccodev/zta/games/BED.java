@@ -83,7 +83,7 @@ public class BED extends GameMode {
 			stream.close();
 			return;
 		} else {
-			BP.dailyPoints = Integer.parseInt(line);
+			BED.dailyPoints = Integer.parseInt(line);
 		}
 		stream.close();
 

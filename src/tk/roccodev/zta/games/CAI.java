@@ -56,7 +56,7 @@ public class CAI extends GameMode {
 			stream.close();
 			return;
 		} else {
-			BP.dailyPoints = Integer.parseInt(line);
+			CAI.dailyPoints = Integer.parseInt(line);
 		}
 		stream.close();
 

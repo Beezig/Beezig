@@ -67,7 +67,7 @@ public class DR extends GameMode {
 			stream.close();
 			return;
 		} else {
-			BP.dailyPoints = Integer.parseInt(line);
+			DR.dailyPoints = Integer.parseInt(line);
 		}
 		stream.close();
 
