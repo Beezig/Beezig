@@ -225,6 +225,10 @@ public class ZTAMain {
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "skykdr", tk.roccodev.zta.modules.sky.KDRChangeItem.class,
 				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "skygame", tk.roccodev.zta.modules.sky.GamePointsItem.class,
+				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "skydaily", tk.roccodev.zta.modules.sky.DailyItem.class,
+				"serverhivemc");
 
 		The5zigAPI.getAPI().registerModuleItem(this, "mimvkarma", tk.roccodev.zta.modules.mimv.KarmaItem.class,
 				"serverhivemc");
@@ -333,6 +337,9 @@ public class ZTAMain {
 		checkForFileExist(new File(mcFile + "/cai/dailyPoints/"), true);
 		
 		checkForFileExist(new File(mcFile + "/bedwars/dailyPoints/"), true);
+		
+		checkForFileExist(new File(mcFile + "/sky/"), true);
+		checkForFileExist(new File(mcFile + "/sky/dailyPoints/"), true);
 		
 		StreakUtils.init();
 		new Thread(new Runnable() {

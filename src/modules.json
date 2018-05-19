@@ -186,6 +186,12 @@
         },
         {
           "type": "skykdr"
+        },
+        {
+          "type": "skygame"
+        },
+        {
+          "type": "skydaily"
         }
       ]
     },

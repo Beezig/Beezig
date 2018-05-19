@@ -21,7 +21,6 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.APIValues;
-import tk.roccodev.zta.hiveapi.stuff.bed.BEDMap;
 import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
 
 public class BED extends GameMode {
