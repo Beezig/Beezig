@@ -1,5 +1,18 @@
 package tk.roccodev.zta.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -16,13 +29,6 @@ import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiMIMV;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MIMVListener extends AbstractGameListener<MIMV> {
 
@@ -48,7 +54,12 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 			@Override
 			public void run() {
 				try {
-
+					try {
+						MIMV.initDailyPointsWriter();
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					The5zigAPI.getLogger().info(sb.getTitle());
 
@@ -80,6 +91,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 			int karma = Integer.parseInt(k);
 			APIValues.MIMVpoints += karma;
 			MIMV.gamePts += karma;
+			MIMV.dailyPoints += karma;
 		
 		}
 		else if (message.startsWith("§8▍ §c§lMurder§8 ▏ §a§lVote received. §3Your map now")) {
@@ -163,8 +175,15 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 			MIMV.messagesToSend.add(message);
 			The5zigAPI.getLogger().info("found header");
 			return true;
-		} else if (message.startsWith("§3 ")) {
-
+		}
+		else if(message.startsWith("§8▍ §c§lMurder§8 ▏ §6Karma: §b§l")) {
+			int karma = Integer.parseInt(message.split("§b§l")[1]);
+			APIValues.MIMVpoints += (karma - MIMV.gamePts);
+			MIMV.dailyPoints += (karma - MIMV.gamePts);
+			MIMV.gamePts = karma;
+			
+		}
+		else if (message.startsWith("§3 ")) {
 			MIMV.messagesToSend.add(message);
 			The5zigAPI.getLogger().info("found entry");
 

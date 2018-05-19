@@ -240,6 +240,8 @@ public class ZTAMain {
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "mimvcounter", tk.roccodev.zta.modules.mimv.KarmaCounterItem.class,
 				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "mimvdaily", tk.roccodev.zta.modules.mimv.DailyItem.class,
+				"serverhivemc");
 
 		The5zigAPI.getAPI().registerModuleItem(this, "gravpoints", tk.roccodev.zta.modules.grav.PointsItem.class,
 				"serverhivemc");
@@ -345,6 +347,9 @@ public class ZTAMain {
 		
 		checkForFileExist(new File(mcFile + "/hide/"), true);
 		checkForFileExist(new File(mcFile + "/hide/dailyPoints/"), true);
+		
+		checkForFileExist(new File(mcFile + "/mimv/"), true);
+		checkForFileExist(new File(mcFile + "/mimv/dailyPoints/"), true);
 		
 		StreakUtils.init();
 		new Thread(new Runnable() {
@@ -468,6 +473,7 @@ public class ZTAMain {
 		BED.setDailyPointsFileName(dailyName);
 		SKY.setDailyPointsFileName(dailyName);
 		HIDE.setDailyPointsFileName(dailyName);
+		MIMV.setDailyPointsFileName(dailyName);
 
 		Calendar cal = Calendar.getInstance();
 		if (cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA) {

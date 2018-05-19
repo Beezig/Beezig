@@ -213,6 +213,9 @@
         },
          {
           "type": "mimvcounter"
+        },
+        {
+          "type": "mimvdaily"
         }
       ]
     },
