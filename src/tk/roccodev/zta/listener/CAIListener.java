@@ -141,13 +141,12 @@ public class CAIListener extends AbstractGameListener<CAI> {
 								CAI.votesToParse.clear();
 								CAI.hasVoted = true;
 								// we can't really get the map name at this point
-								The5zigAPI.getAPI().messagePlayer(
-										"§8▍ §6CaI§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
+								The5zigAPI.getAPI().messagePlayer("§8▍ §6CaI§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
 								return;
 							} else if(Setting.AUTOVOTE_RANDOM.getValue()) {
 								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting random");
 								The5zigAPI.getAPI().sendPlayerMessage("/v 6");
-								The5zigAPI.getAPI().messagePlayer("(§8▍ §bCAI§8 ▏ " + "§eAutomatically voted for §cRandom map");
+								The5zigAPI.getAPI().messagePlayer("§8▍ §bCAI§8 ▏ " + "§eAutomatically voted for §cRandom map");
 							
 								CAI.votesToParse.clear();
 								CAI.hasVoted = true;

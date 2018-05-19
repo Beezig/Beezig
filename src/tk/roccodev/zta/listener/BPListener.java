@@ -86,12 +86,12 @@ public class BPListener extends AbstractGameListener<BP> {
 			BP.dailyPoints += 10;
 		    
 		}
-		else if(message.contains("§b§l") && message.startsWith("   ") && !message.contains("bp.hivemc.com")) {
+		else if(message.contains("§b§l") && message.startsWith("   ") && BP.song == null && !message.contains("hivemc.com")) {
 			BP.song = ChatColor.stripColor(message).trim();
 			gameMode.setState(GameState.GAME);
-			DiscordUtils.updatePresence("Dancing in BlockParty", "Dancing to " + BP.song, "game_bp");
+			DiscordUtils.updatePresence("Dancing in BlockParty", "In rhythm with \"" + BP.song + "\"", "game_bp");
 		}
-		else if(message.contains(" §7") && message.startsWith("   ") && !message.contains("§n")) {
+		else if(message.contains(" §7") && message.startsWith("   ") && BP.artist == null && !message.startsWith("    §7§m")) {
 			BP.artist = ChatColor.stripColor(message).trim();
 		}
 		else if(message.equals("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚§b§l 5 points§7")) {

@@ -191,7 +191,7 @@ public class DRListener extends AbstractGameListener<DR> {
 								DR.hasVoted = true;
 								// we can't really get the map name at this point
 								The5zigAPI.getAPI()
-										.messagePlayer("§8▍ §cDeathRun§8 ▏ " + "Automatically voted for map §6#" + finalindex);
+										.messagePlayer("§8▍ §cDeathRun§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
 								return;
 							} else if(Setting.AUTOVOTE_RANDOM.getValue()){
 								The5zigAPI.getLogger().info("Done, couldn't find matches - Voting Random");

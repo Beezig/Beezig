@@ -164,7 +164,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
 								Giant.hasVoted = true;
 								// we can't really get the map name at this point
 								The5zigAPI.getAPI()
-										.messagePlayer(getPrefix(ActiveGame.current()) + "Automatically voted for map §6#" + finalindex);
+										.messagePlayer(getPrefix(ActiveGame.current()) + "§eAutomatically voted for map §6#" + finalindex);
 								return;
 							} else {
 								The5zigAPI.getLogger().info("Done, couldn't find matches");
