@@ -83,6 +83,9 @@
           "type": "bedsummoners"
         },
         {
+          "type": "beddaily"
+        },
+        {
           "type": "bedresources"
         }
         ]

@@ -1,5 +1,19 @@
 package tk.roccodev.zta.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -17,14 +31,6 @@ import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class BEDListener extends AbstractGameListener<BED>{
 
@@ -54,7 +60,12 @@ public class BEDListener extends AbstractGameListener<BED>{
 			@Override
 			public void run(){
 				try {
-										
+					try {
+						BED.initDailyPointsWriter();
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}		
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					The5zigAPI.getLogger().info(sb.getTitle());
 					BED.updateMode();
@@ -112,6 +123,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 			BED.kills++;
 			BED.pointsCounter += i;
+			BED.dailyPoints += i;
 			APIValues.BEDpoints += i;
 			BED.updateKdr();
 			
@@ -123,12 +135,14 @@ public class BEDListener extends AbstractGameListener<BED>{
 			
 			BED.pointsCounter += i;
 			BED.bedsDestroyed++;
+			BED.dailyPoints += i;
 			APIValues.BEDpoints += i;
 			
 		}
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §e✯ §6Notable Win! §eGold Medal Awarded!")){
 			
 			BED.pointsCounter += 100;
+			BED.dailyPoints += 100;
 			APIValues.BEDpoints += 100;
 			HiveAPI.medals++;
 			HiveAPI.tokens += 100;

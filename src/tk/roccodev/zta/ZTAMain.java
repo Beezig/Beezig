@@ -170,6 +170,8 @@ public class ZTAMain {
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bedsummoners", tk.roccodev.zta.modules.bed.SummonersItem.class,
 				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "beddaily", tk.roccodev.zta.modules.bed.DailyItem.class,
+				"serverhivemc");
 		// The5zigAPI.getAPI().registerModuleItem(this, "bedwinstreak",
 		// tk.roccodev.zta.modules.bed.WinstreakItem.class , "serverhivemc");
 
@@ -329,6 +331,8 @@ public class ZTAMain {
 		
 		checkForFileExist(new File(mcFile + "/cai/"), true);
 		checkForFileExist(new File(mcFile + "/cai/dailyPoints/"), true);
+		
+		checkForFileExist(new File(mcFile + "/bedwars/dailyPoints/"), true);
 		
 		StreakUtils.init();
 		new Thread(new Runnable() {
