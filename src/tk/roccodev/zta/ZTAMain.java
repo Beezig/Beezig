@@ -124,6 +124,7 @@ public class ZTAMain {
 
 		The5zigAPI.getLogger().info("Loading Beezig");
 		The5zigAPI.getLogger().info("Version is " + BEEZIG_VERSION + ". Hash is " + VERSION_HASH);
+		The5zigAPI.getLogger().info("Using Java version: " + Runtime.class.getPackage().getImplementationVersion());
 
 		The5zigAPI.getAPI().registerModuleItem(this, "karma", tk.roccodev.zta.modules.timv.KarmaItem.class,
 				"serverhivemc");
