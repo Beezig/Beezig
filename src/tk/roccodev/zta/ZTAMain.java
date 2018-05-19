@@ -147,6 +147,8 @@ public class ZTAMain {
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drpb", tk.roccodev.zta.modules.dr.PBItem.class, "serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "drwr", tk.roccodev.zta.modules.dr.WRItem.class, "serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "drdaily", tk.roccodev.zta.modules.dr.DailyItem.class,
+				"serverhivemc");
 
 		The5zigAPI.getAPI().registerModuleItem(this, "bedpoints", tk.roccodev.zta.modules.bed.PointsItem.class,
 				"serverhivemc");
@@ -249,7 +251,7 @@ public class ZTAMain {
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "gravstages", tk.roccodev.zta.modules.grav.StagesItem.class,
 				"serverhivemc");
-		
+
 		The5zigAPI.getAPI().registerModuleItem(this, "bppoints", tk.roccodev.zta.modules.bp.PointsItem.class,
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bpcounter", tk.roccodev.zta.modules.bp.PointsCounterItem.class,
@@ -309,7 +311,6 @@ public class ZTAMain {
 
 		The5zigAPI.getLogger().info("Loaded BeezigCore");
 
-
 		String OS = System.getProperty("os.name").toLowerCase();
 		try {
 			if (OS.contains("mac")) {
@@ -335,23 +336,26 @@ public class ZTAMain {
 		checkForFileExist(new File(mcFile + "/timv/testMessages.txt"), false);
 		checkForFileExist(new File(mcFile + "/bedwars/"), true);
 		checkForFileExist(new File(mcFile + "/bedwars/streak.txt"), false);
-		
+
 		checkForFileExist(new File(mcFile + "/bp/"), true);
 		checkForFileExist(new File(mcFile + "/bp/dailyPoints/"), true);
-		
+
 		checkForFileExist(new File(mcFile + "/cai/"), true);
 		checkForFileExist(new File(mcFile + "/cai/dailyPoints/"), true);
-		
+
 		checkForFileExist(new File(mcFile + "/bedwars/dailyPoints/"), true);
-		
+
 		checkForFileExist(new File(mcFile + "/sky/"), true);
 		checkForFileExist(new File(mcFile + "/sky/dailyPoints/"), true);
-		
+
 		checkForFileExist(new File(mcFile + "/hide/"), true);
 		checkForFileExist(new File(mcFile + "/hide/dailyPoints/"), true);
-		
+
 		checkForFileExist(new File(mcFile + "/mimv/"), true);
 		checkForFileExist(new File(mcFile + "/mimv/dailyPoints/"), true);
+
+		checkForFileExist(new File(mcFile + "/dr/"), true);
+		checkForFileExist(new File(mcFile + "/dr/dailyPoints/"), true);
 		
 		StreakUtils.init();
 		new Thread(new Runnable() {
@@ -468,7 +472,7 @@ public class ZTAMain {
 		new GNTM();
 
 		String dailyName = TIMVDay.fromCalendar(Calendar.getInstance()) + ".txt";
-		
+
 		TIMV.setDailyKarmaFileName(dailyName);
 		BP.setDailyPointsFileName(dailyName);
 		CAI.setDailyPointsFileName(dailyName);
@@ -476,6 +480,7 @@ public class ZTAMain {
 		SKY.setDailyPointsFileName(dailyName);
 		HIDE.setDailyPointsFileName(dailyName);
 		MIMV.setDailyPointsFileName(dailyName);
+		DR.setDailyPointsFileName(dailyName);
 
 		Calendar cal = Calendar.getInstance();
 		if (cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA) {
@@ -483,8 +488,6 @@ public class ZTAMain {
 		}
 
 	}
-	
-	
 
 	private void checkForFileExist(File f, boolean directory) {
 		if (!f.exists())
@@ -632,8 +635,7 @@ public class ZTAMain {
 						return;
 					}
 					MIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-				}
-				else if (ActiveGame.is("bp")) {
+				} else if (ActiveGame.is("bp")) {
 					if (BP.isRecordsRunning) {
 						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
 						evt.setCancelled(true);
@@ -706,8 +708,7 @@ public class ZTAMain {
 						return;
 					}
 					MIMV.lastRecords = args[1].trim();
-				}
-				else if (ActiveGame.is("bp")) {
+				} else if (ActiveGame.is("bp")) {
 					if (BP.isRecordsRunning) {
 						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
 						evt.setCancelled(true);
@@ -715,7 +716,7 @@ public class ZTAMain {
 					}
 					BP.lastRecords = args[1].trim();
 				}
-				
+
 			}
 		}
 		if (evt.getMessage().endsWith(" test") && (evt.getMessage().split(" ").length == 2) && ActiveGame.is("TIMV")
@@ -822,29 +823,27 @@ public class ZTAMain {
 					&& evt.getMessage().contains(The5zigAPI.getAPI().getGameProfile().getName() + "§8 » §b")
 					&& Setting.PM_PING.getValue()) {
 
-				
-				
 				try {
-					if(!NotificationManager.isInGameFocus()) {
-						if(Setting.PM_NOTIFICATION.getValue()) {
-						String message = evt.getMessage().split("» §b")[1].trim();
-						String recipient = ChatColor.stripColor(evt.getMessage().replace("§3§lPRIVATE§3│ ", "").split("⇉")[0]).trim();
-						NotificationManager.sendNotification(recipient, message);
+					if (!NotificationManager.isInGameFocus()) {
+						if (Setting.PM_NOTIFICATION.getValue()) {
+							String message = evt.getMessage().split("» §b")[1].trim();
+							String recipient = ChatColor
+									.stripColor(evt.getMessage().replace("§3§lPRIVATE§3│ ", "").split("⇉")[0]).trim();
+							NotificationManager.sendNotification(recipient, message);
 						}
 						The5zigAPI.getAPI().playSound("note.pling", 1f);
 					}
-					
+
 				} catch (Exception e) {
-					
+
 					e.printStackTrace();
 				}
-				
+
 			}
 		}
 
 	}
 
-	
 	@EventHandler
 	public void onActionBar(ActionBarEvent bar) {
 		// The5zigAPI.getLogger().info(bar.getMessage());

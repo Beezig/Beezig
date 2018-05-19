@@ -21,7 +21,7 @@ import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
 
-public class DR extends GameMode{
+public class DR extends GameMode {
 
 	public static DRMap activeMap;
 	public static String currentMapPB;
@@ -34,24 +34,69 @@ public class DR extends GameMode{
 	public static int checkpoints;
 	public static int deaths;
 	public static int kills;
-	
-	
+	public static int lastPts;
+
 	public static HashMap<String, DRMap> mapsPool;
-	
+
+	private static PrintWriter dailyPointsWriter;
+	private static String dailyPointsName;
+	public static int dailyPoints;
+
 	public static String rank;
 	public static DRRank rankObject;
-	
+
 	public static List<String> votesToParse = new ArrayList<String>();
 	public static boolean hasVoted = false;
-	
+
 	public static List<String> messagesToSend = new ArrayList<String>();
 	public static List<String> footerToSend = new ArrayList<String>();
 	public static boolean isRecordsRunning = false;
-	
-	
-	
-	public static void reset(DR gm){
-		
+
+	public static void initDailyPointsWriter() throws IOException {
+		File f = new File(ZTAMain.mcFile + "/dr/dailyPoints/" + dailyPointsName);
+		if (!f.exists()) {
+			f.createNewFile();
+			initPointsWriterWithZero();
+			return;
+		}
+		FileInputStream stream = new FileInputStream(f);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		String line = reader.readLine();
+		if (line == null) {
+			initPointsWriterWithZero();
+			stream.close();
+			return;
+		} else {
+			BP.dailyPoints = Integer.parseInt(line);
+		}
+		stream.close();
+
+		dailyPointsWriter = new PrintWriter(ZTAMain.mcFile + "/dr/dailyPoints/" + dailyPointsName, "UTF-8");
+
+	}
+
+	private static void initPointsWriterWithZero() throws FileNotFoundException, UnsupportedEncodingException {
+		dailyPointsWriter = new PrintWriter(ZTAMain.mcFile + "/dr/dailyPoints/" + dailyPointsName, "UTF-8");
+		dailyPointsWriter.println(0);
+
+		dailyPointsWriter.close();
+
+		dailyPointsWriter = new PrintWriter(ZTAMain.mcFile + "/dr/dailyPoints/" + dailyPointsName, "UTF-8");
+
+	}
+
+	public static void setDailyPointsFileName(String newName) {
+		dailyPointsName = newName;
+	}
+
+	private static void saveDailyPoints() {
+		dailyPointsWriter.println(dailyPoints);
+		dailyPointsWriter.flush();
+		dailyPointsWriter.close();
+	}
+
+	public static void reset(DR gm) {
+
 		gm.setState(GameState.FINISHED);
 		activeMap = null;
 		currentMapPB = null;
@@ -61,25 +106,29 @@ public class DR extends GameMode{
 		checkpoints = 0;
 		deaths = 0;
 		kills = 0;
+		lastPts = 0;
 		DR.hasVoted = false;
 		ActiveGame.reset("dr");
 		IHive.genericReset();
-		if(The5zigAPI.getAPI().getActiveServer() != null)
-		The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
-		
-		
+		if (The5zigAPI.getAPI().getActiveServer() != null)
+			The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
+		saveDailyPoints();
+
 	}
-	
+
 	@Override
-	public String getName(){
+	public String getName() {
 		return "Deathrun";
 	}
 
-	public static boolean shouldRender(GameState state){
-		
-		if(state == GameState.GAME) return true;
-		if(state == GameState.PREGAME) return true;
-		if(state == GameState.STARTING) return true;
+	public static boolean shouldRender(GameState state) {
+
+		if (state == GameState.GAME)
+			return true;
+		if (state == GameState.PREGAME)
+			return true;
+		if (state == GameState.STARTING)
+			return true;
 		return false;
 	}
 

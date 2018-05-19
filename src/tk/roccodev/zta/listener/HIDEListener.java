@@ -423,10 +423,11 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
 	@Override
 	public void onTick(HIDE gameMode) {
+		if(The5zigAPI.getAPI().getSideScoreboard() == null) return;
 		int i = HIDE.seeking ? 4 : 5;
 		HashMap<String, Integer> lines = The5zigAPI.getAPI().getSideScoreboard().getLines();
 		for(Map.Entry<String, Integer> e : lines.entrySet()) {
-			if(e.getValue() == i) {
+			if(e.getValue() == i && e.getKey().contains("§7 Points§6")) {
 				int pts = Integer.parseInt(e.getKey().replace("§7 Points§6", "").replace("§f", ""));
 				if(pts != HIDE.lastPts) {
 					HIDE.dailyPoints += (pts - HIDE.lastPts);

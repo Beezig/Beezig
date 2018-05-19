@@ -1,5 +1,20 @@
 package tk.roccodev.zta.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -11,6 +26,7 @@ import tk.roccodev.zta.Log;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.DR;
+import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -19,11 +35,6 @@ import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DRListener extends AbstractGameListener<DR> {
 
@@ -46,7 +57,12 @@ public class DRListener extends AbstractGameListener<DR> {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				
+				try {
+					DR.initDailyPointsWriter();
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
 				Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 				DR.rankObject = DRRank.getFromDisplay(new ApiDR(The5zigAPI.getAPI().getGameProfile().getName()).getTitle());
 				DR.rank = DR.rankObject.getTotalDisplay();
@@ -497,6 +513,23 @@ public class DRListener extends AbstractGameListener<DR> {
 		DR.reset(gameMode);
 	}
 
+	@Override
+	public void onTick(DR gameMode) {
+		int i = 5;
+		if(The5zigAPI.getAPI().getSideScoreboard() == null) return;
+		HashMap<String, Integer> lines = The5zigAPI.getAPI().getSideScoreboard().getLines();
+		for(Map.Entry<String, Integer> e : lines.entrySet()) {
+			if(e.getValue() == i && e.getKey().contains("§7Points: ")) {
+				int pts = Integer.parseInt(e.getKey().replace("§7Points: ", "").replace("§9", "").replaceAll("§f", ""));
+				if(pts != HIDE.lastPts) {
+					DR.dailyPoints += (pts - DR.lastPts);
+					APIValues.DRpoints += (pts - DR.lastPts);
+					DR.lastPts = pts;
+				}
+			}
+		}
+	}
+	
 	private class ScoreboardFetcherTask extends TimerTask {
 
 		@Override
