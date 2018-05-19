@@ -159,6 +159,9 @@
         },
         {
           "type": "caiteam"
+        },
+         {
+          "type": "caidaily"
         }
       ]
     },

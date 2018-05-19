@@ -9,6 +9,7 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.autovote.AutovoteUtils;
+import tk.roccodev.zta.games.BP;
 import tk.roccodev.zta.games.CAI;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -19,6 +20,7 @@ import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
@@ -49,7 +51,12 @@ public class CAIListener extends AbstractGameListener<CAI> {
 			@Override
 			public void run() {
 				try {
-
+					try {
+						CAI.initDailyPointsWriter();
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					The5zigAPI.getLogger().info(sb.getTitle());
 
@@ -157,6 +164,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
 		else if(message.equals("§8▍ §bCAI§8 ▏ §aYou have captured the enemy's team leader!")) {
 			CAI.gamePoints += 5;
 			APIValues.CAIpoints += 5;
+			CAI.dailyPoints += 5;
 		}
 		else if(message.endsWith("§cCowboys Leader§7.")) {
 		
@@ -174,21 +182,25 @@ public class CAIListener extends AbstractGameListener<CAI> {
 			HiveAPI.tokens += 5;
 			CAI.gamePoints += 10;
 			APIValues.CAIpoints += 10;
+			CAI.dailyPoints += 10;
 
 		}
 		else if(message.equals("                             §eIndians have won!") && CAI.team != null && CAI.team.equals("§eIndians")) {
 			CAI.gamePoints += 50;
 			APIValues.CAIpoints += 50;
+			CAI.dailyPoints += 50;
 		}
 		else if(message.equals("                             §cCowboys have won!") && CAI.team != null && CAI.team.equals("§cCowboys")) {
 			CAI.gamePoints += 50;
 			APIValues.CAIpoints += 50;
+			CAI.dailyPoints += 50;
 		}
 		else if (message.startsWith("§8▍ §bCAI§8 ▏ §7You gained §f5 points §7for killing")) {
 			
 			
 			CAI.gamePoints += 5;
 			APIValues.CAIpoints += 5;
+			CAI.dailyPoints += 5;
 			
 		} else if (message.endsWith("§7[Leader Alive Bonus]")
 				&& message.startsWith("§8▍ §bCAI§8 ▏ §2+")) {
@@ -198,6 +210,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
 
 			CAI.gamePoints += Long.parseLong(points.trim());
 			APIValues.CAIpoints += Long.parseLong(points.trim());
+			CAI.dailyPoints += Long.parseLong(points.trim());
 
 		}
 

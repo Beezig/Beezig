@@ -210,6 +210,8 @@ public class ZTAMain {
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "caiteam", tk.roccodev.zta.modules.cai.TeamItem.class,
 				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "caidaily", tk.roccodev.zta.modules.cai.DailyItem.class,
+				"serverhivemc");
 
 		The5zigAPI.getAPI().registerModuleItem(this, "skypoints", tk.roccodev.zta.modules.sky.PointsItem.class,
 				"serverhivemc");
@@ -324,6 +326,9 @@ public class ZTAMain {
 		
 		checkForFileExist(new File(mcFile + "/bp/"), true);
 		checkForFileExist(new File(mcFile + "/bp/dailyPoints/"), true);
+		
+		checkForFileExist(new File(mcFile + "/cai/"), true);
+		checkForFileExist(new File(mcFile + "/cai/dailyPoints/"), true);
 		
 		StreakUtils.init();
 		new Thread(new Runnable() {
