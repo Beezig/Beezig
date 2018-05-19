@@ -231,6 +231,8 @@ public class ZTAMain {
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "skydaily", tk.roccodev.zta.modules.sky.DailyItem.class,
 				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "skymap", tk.roccodev.zta.modules.sky.MapItem.class,
+				"serverhivemc");
 
 		The5zigAPI.getAPI().registerModuleItem(this, "mimvkarma", tk.roccodev.zta.modules.mimv.KarmaItem.class,
 				"serverhivemc");

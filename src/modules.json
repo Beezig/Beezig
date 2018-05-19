@@ -195,6 +195,9 @@
         },
         {
           "type": "skydaily"
+        },
+        {
+          "type": "skymap"
         }
       ]
     },
