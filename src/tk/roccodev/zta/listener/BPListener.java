@@ -86,6 +86,12 @@ public class BPListener extends AbstractGameListener<BP> {
 			BP.dailyPoints += 10;
 		    
 		}
+		else if(message.startsWith("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚§b§l 10 points")) {
+
+			APIValues.BPpoints += 10;
+			BP.gamePts += 10;
+			BP.dailyPoints += 10;
+		}
 		else if(message.contains("§b§l") && message.startsWith("   ") && BP.song == null && !message.contains("hivemc.com")) {
 			BP.song = ChatColor.stripColor(message).trim();
 			gameMode.setState(GameState.GAME);

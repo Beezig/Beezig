@@ -459,6 +459,9 @@ public class ZTAMain {
 		
 		TIMV.setDailyKarmaFileName(dailyName);
 		BP.setDailyPointsFileName(dailyName);
+		CAI.setDailyPointsFileName(dailyName);
+		BED.setDailyPointsFileName(dailyName);
+		SKY.setDailyPointsFileName(dailyName);
 
 		Calendar cal = Calendar.getInstance();
 		if (cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA) {
