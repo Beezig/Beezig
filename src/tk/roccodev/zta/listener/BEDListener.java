@@ -27,6 +27,7 @@ import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
+import tk.roccodev.zta.hiveapi.stuff.bed.MonthlyPlayer;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.zta.settings.Setting;
@@ -200,6 +201,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 						int bedsDestroyed = 0;
 						int eliminations = 0;
 						
+						
+						
 						NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
 						DecimalFormat df = (DecimalFormat) nf;
 						df.setMaximumFractionDigits(2);
@@ -222,7 +225,14 @@ public class BEDListener extends AbstractGameListener<BED>{
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
 						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
 
-						//int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "BED") < HiveAPI.DRgetPoints(BED.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+						int monthlyRank = 0;
+						if(Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
+							MonthlyPlayer monthly = api.getMonthlyStatus();
+							if(monthly != null) {
+								monthlyRank = monthly.getPlace();
+							}
+						}
+						
 						List<String> messages = new ArrayList<String>();
 						messages.addAll(BED.messagesToSend);
 							for(String s : messages){
@@ -341,10 +351,11 @@ public class BEDListener extends AbstractGameListener<BED>{
 							double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
 						}
-					/*	if(monthlyRank != 0){					
-					 *		The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
-					 *	}
-					 */	
+						if(monthlyRank != 0) {
+							
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Place: §b#" + monthlyRank);
+						}
+					
 						
 						if(lastGame != null){
 							Calendar lastSeen = Calendar.getInstance();
