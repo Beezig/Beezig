@@ -4,6 +4,8 @@ import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+import tk.roccodev.zta.hiveapi.stuff.bed.MonthlyPlayer;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
 
 public class MonthlyCommand implements Command{
 
@@ -20,15 +22,28 @@ public class MonthlyCommand implements Command{
 
 	@Override
 	public boolean execute(String[] args) {
-		if(!(ActiveGame.is("dr")) && !(ActiveGame.is("timv"))) return false;
+		if(!(ActiveGame.is("dr")) && !(ActiveGame.is("timv")) && !ActiveGame.is("bed")) return false;
 		if(args.length == 1){
 			try{
-				int index = Integer.parseInt(args[0]) - 1;	
+				
 				new Thread(new Runnable(){
 					@Override
 					public void run(){
 						String mode = null;
 						String unit = null;
+						if(ActiveGame.is("bed")) {
+							
+							ApiBED api = new ApiBED(args[0]);
+							MonthlyPlayer monthly = api.getMonthlyStatus();
+							if(monthly == null) {
+								The5zigAPI.getAPI().messagePlayer(Log.error + "No monthly profile found.");
+								return;
+							}
+							The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + api.getParentMode().getCorrectName() + " §3is §b#" + monthly.getPlace() + " §3with §b" + monthly.getPoints() + " §3points." );
+							
+							return;
+						}
+						int index = Integer.parseInt(args[0]) - 1;	
 						if(ActiveGame.is("timv")){
 							mode = "TIMV";
 							unit = "karma.";
