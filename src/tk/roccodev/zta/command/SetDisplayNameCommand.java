@@ -22,31 +22,23 @@ public class SetDisplayNameCommand implements Command{
 	@Override
 	public boolean execute(String[] args) {
 
-		/*
-			Just a test:
-
-		Color codes don't work at all, § blocked in chat by MC
-		--> White name
-		Doesn't affect tablist sorting
-		Only changes in tablist - not even over your head via 5zig setting
-		Changes void after server change
-
-		= Not good
-
-		 */
 		// "/sdn §6HotBoy3294 ItsNiklass"
+
+		if(args.length < 1){
+			The5zigAPI.getAPI().messagePlayer(Log.info + "§3Usage: /sdn <colorLetter+name> <targetPlayer>");
+			return true;
+		}
 
 		String displayName = args[0];
 		String targetPlayer = The5zigAPI.getAPI().getGameProfile().getName();
 		if(args.length > 1){
 			targetPlayer = args[1];
-            The5zigAPI.getAPI().messagePlayer(Log.info + "§3Usage: /sdn <name> <color>");
 		}
 
 		for(NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()){
 			if(npi.getGameProfile().getName().equalsIgnoreCase(targetPlayer)){
                 npi.setDisplayName(ChatColor.translateAlternateColorCodes('&', "§" + displayName));
-                The5zigAPI.getAPI().messagePlayer(Log.info + "§3Your display name has been updated to §r" + npi.getDisplayName());
+                The5zigAPI.getAPI().messagePlayer(Log.info + "The name has been updated to §r" + npi.getDisplayName());
 			}
 		}
 		return true;
