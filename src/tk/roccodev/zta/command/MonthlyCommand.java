@@ -55,8 +55,8 @@ public class MonthlyCommand implements Command {
 								df1f.setMaximumFractionDigits(1);
 								
 								The5zigAPI.getAPI()
-										.messagePlayer(Log.info + "§b" + monthly.getUsername()
-												+ " §3is §b#" + monthly.getPlace() + " §3with §b" + monthly.getPoints()
+										.messagePlayer(Log.info + "§b#" + monthly.getPlace()
+												+ " §3is §b" + monthly.getUsername() + " §3with §b" + monthly.getPoints()
 												+ " §3points. (K/D: §b" + df.format(kd) + " §3| W/G: §b" + df1f.format(wg) + "%§3)");
 								
 							} else {
