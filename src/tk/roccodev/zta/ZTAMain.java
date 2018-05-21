@@ -288,7 +288,6 @@ public class ZTAMain {
 		CommandManager.registerCommand(new BlockstatsCommand());
 		CommandManager.registerCommand(new PlayerStatsCommand());
 		CommandManager.registerCommand(new CustomTestCommand());
-		CommandManager.registerCommand(new SetDisplayNameCommand());
 		CommandManager.registerCommand(new ZigCheckCommand());
 		CommandManager.registerCommand(new RanksCommand());
 		CommandManager.registerCommand(new ClosestToWRCommand());
