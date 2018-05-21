@@ -3,6 +3,7 @@ package tk.roccodev.zta.command;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.zta.Log;
 
 public class SetDisplayNameCommand implements Command{
 
@@ -39,11 +40,13 @@ public class SetDisplayNameCommand implements Command{
 		String targetPlayer = The5zigAPI.getAPI().getGameProfile().getName();
 		if(args.length > 1){
 			targetPlayer = args[1];
+            The5zigAPI.getAPI().messagePlayer(Log.info + "§3Usage: /sdn <name> <color>");
 		}
 
 		for(NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()){
 			if(npi.getGameProfile().getName().equalsIgnoreCase(targetPlayer)){
-				npi.setDisplayName(ChatColor.translateAlternateColorCodes('&', targetPlayer));
+                npi.setDisplayName(ChatColor.translateAlternateColorCodes('&', "§" + displayName));
+                The5zigAPI.getAPI().messagePlayer(Log.info + "§3Your display name has been updated to §r" + npi.getDisplayName());
 			}
 		}
 		return true;
