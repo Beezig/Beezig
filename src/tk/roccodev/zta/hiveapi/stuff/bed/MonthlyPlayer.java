@@ -3,6 +3,7 @@ package tk.roccodev.zta.hiveapi.stuff.bed;
 public class MonthlyPlayer {
 
 	private int place;
+	private String uuid, username;
 	private long points, kills, deaths, victories, played, beds, teams;
 	
 	public int getPlace() {
@@ -29,7 +30,13 @@ public class MonthlyPlayer {
 	public long getTeams() {
 		return teams;
 	}
-	public MonthlyPlayer(int place, long points, long kills, long deaths, long victories, long played, long beds,
+	public String getUUID() {
+		return uuid;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public MonthlyPlayer(String uuid, String username, int place, long points, long kills, long deaths, long victories, long played, long beds,
 			long teams) {
 		
 		this.place = place;
@@ -40,6 +47,8 @@ public class MonthlyPlayer {
 		this.played = played;
 		this.beds = beds;
 		this.teams = teams;
+		this.uuid = uuid;
+		this.username = username;
 	}
 	
 	
