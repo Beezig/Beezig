@@ -58,10 +58,12 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 
 	@Override
     public void onMatch(GameMode gameMode, String key, IPatternResult match) {
+		System.out.println(gameMode == null);
 		 if (gameMode != null && gameMode.getState() != GameState.FINISHED) {
 	            return;
 	        }
-		 
+		 if(key != null)
+		 System.out.println(key);
 		 if(key.equals(TIMV.joinMessage)){
 				getGameListener().switchLobby("TIMV");
 				
@@ -141,7 +143,7 @@ public class HiveListener extends AbstractGameListener<GameMode>{
 		else if(key.equals("bp.welcome")) {
 			getGameListener().switchLobby("BP");
 			The5zigAPI.getLogger().info("Connected to BP! - Hive");
-			DiscordUtils.updatePresence("Dancing in BlockParty", "In Lobby", "game_grav");
+			DiscordUtils.updatePresence("Dancing in BlockParty", "Startup", "game_bp");
 
 		}
 		

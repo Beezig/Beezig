@@ -3,6 +3,7 @@ package tk.roccodev.zta.briefing.fetcher;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -11,6 +12,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.briefing.News;
 import tk.roccodev.zta.briefing.Pools;
 import tk.roccodev.zta.briefing.lergin.NewMap;
@@ -34,6 +37,25 @@ public class NewsFetcher {
 				JSONObject j = (JSONObject)o;
 				
 				long postedAt = (long) j.get("postedAt");
+				if(j.containsKey("versionExclusive")) {
+					JSONArray versions = (JSONArray) j.get("versionExclusive");
+					boolean cont = true;
+					for(Object o1 : versions) {
+						Long l = (long) o1;
+						if(l < 0) { //e.g, -460 is exclusive to all versions below 4.6.0
+							if(ZTAMain.getCustomVersioning() >= Math.abs(l)) {
+								break;
+							}
+							
+						} else if(ZTAMain.getCustomVersioning() == l){
+							cont = false;
+							break;
+						}
+					}
+					if(cont) continue;
+				}
+				
+				
 				if(postedAt < lastLogin) continue;
 				
 				tr.add(new News((String)j.get("title"), (String)j.get("content"), (long)j.get("postedAt")));

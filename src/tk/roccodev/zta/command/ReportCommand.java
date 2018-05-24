@@ -1,0 +1,125 @@
+package tk.roccodev.zta.command;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringJoiner;
+
+import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.zta.IHive;
+import tk.roccodev.zta.Log;
+import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHiveGlobal;
+
+public class ReportCommand implements Command{
+	
+	private long lastOne;
+	private boolean shouldConfirm = false;
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return "report";
+	}
+
+	@Override
+	public String[] getAliases() {
+		return new String[]{"/report"};
+	}
+	
+
+	@Override
+	public boolean execute(String[] args) {
+		
+		if(!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
+		if( args.length < 2 ){
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /report [player] [reason]");
+			return true;
+		}
+		if(lastOne != 0 && !shouldConfirm && (System.currentTimeMillis() - lastOne < 30000)) {
+		
+			The5zigAPI.getAPI().messagePlayer(Log.error + "You must wait 30 seconds between reports!");
+			return true;
+		}
+		lastOne = System.currentTimeMillis();
+		// RoccoDev, ItsNiklass AntiKnockback, Kill Aura
+		The5zigAPI.getAPI().messagePlayer(Log.info + "Checking...");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String rawArgs = String.join(" ", args);
+				String[] rawPlayers = rawArgs.replaceAll(", ", ",").split(" ");
+				String data0 = rawPlayers[0];
+				ArrayList<String> argsL = new ArrayList<String>(Arrays.asList(rawPlayers));
+				argsL.remove(0);
+				String data1 = String.join(" ", argsL);
+				System.out.println(data0 + " / " + data1);
+				String players = data0;
+				for(String s : players.split(",")) {
+					ApiHiveGlobal api = new ApiHiveGlobal(s);
+					// Trigger an error if needed
+					api.getCorrectName();
+					if(api.getError() != null) {
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Player §4" + s + "§c does not exist.");
+						return;
+					}
+					if(!api.isOnline() && !shouldConfirm) {
+						The5zigAPI.getAPI().messagePlayer(Log.info + "Player §b" + s + "§3 is not online. Please run the command again to confirm the report.");
+						shouldConfirm = true;
+						return;
+					}
+					else {
+						shouldConfirm = false;
+					}
+					
+				}
+				
+				String reason = data1;
+				
+				try {
+					URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/report");
+					URLConnection con = url.openConnection();
+					HttpURLConnection http = (HttpURLConnection)con;
+					http.setRequestMethod("POST"); // PUT is another valid option
+					http.setDoOutput(true);
+					Map<String,String> arguments = new HashMap<>();
+					arguments.put("sender", The5zigAPI.getAPI().getGameProfile().getName());
+					arguments.put("destination", players);
+					arguments.put("reason", reason);
+					StringJoiner sj = new StringJoiner("&");
+					for(Map.Entry<String,String> entry : arguments.entrySet())
+					    sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "=" 
+					         + URLEncoder.encode(entry.getValue(), "UTF-8"));
+					byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
+					int length = out.length;
+					http.setFixedLengthStreamingMode(length);
+					http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+					http.setRequestProperty("User-Agent", Log.getUserAgent());
+					http.connect();
+					try(OutputStream os = http.getOutputStream()) {
+					    os.write(out);
+					}
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+				The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully submitted report. Please wait for a moderator to take action.");
+				
+			}
+		}).start();
+		
+		
+		
+		return true;
+	}
+
+	
+
+	
+
+}

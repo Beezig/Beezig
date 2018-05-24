@@ -28,5 +28,15 @@ public class TIMVDay {
 		return path.exists();
 	}
 	
+	public static boolean containsDayfile(Date date, String mode){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		String fileName = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
+		File path = new File(ZTAMain.mcFile + "/" + mode.toLowerCase() + "/dailykarma/" + fileName);
+		
+		return path.exists();
+	}
+	
+	
 
 }

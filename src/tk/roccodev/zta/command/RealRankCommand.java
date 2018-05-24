@@ -51,7 +51,8 @@ public class RealRankCommand implements Command{
 					if(rankColor == null)  The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.YELLOW + ign + "'s Rank: " + NetworkRank.REGULAR.getColor() + NetworkRank.REGULAR.getDisplay());
 					*/
 					//TODO Never works outside the Hub - the reason being Hive's game plugins & .getDisplayName()
-					The5zigAPI.getAPI().messagePlayer(Log.info + "¯\\_(ツ)_/¯");
+					The5zigAPI.getAPI().messagePlayer("§7▏ §aBeezig§7 ▏ §c§lCouldn't check " + ign + " !");
+					The5zigAPI.getAPI().messagePlayer("§7▏ §aBeezig§7 ▏ §7You can't check VIP's or above!");
 				} else /*default*/ The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + ign + "§3's Rank: " + rankColor + networkRank);
 			}
 		}).start();

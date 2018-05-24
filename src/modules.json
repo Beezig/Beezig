@@ -45,6 +45,9 @@
         },
 		{
           "type": "drwr"
+        },
+        {
+          "type": "drdaily"
         }	
         ]
      },
@@ -81,6 +84,9 @@
         },
         {
           "type": "bedsummoners"
+        },
+        {
+          "type": "beddaily"
         },
         {
           "type": "bedresources"
@@ -129,6 +135,9 @@
         },
         {
           "type": "gntgold"
+        },
+        {
+          "type": "gntdaily"
         }
         ]
      },
@@ -141,8 +150,11 @@
         },
         {
           "type": "hidemap"
+        },
+        {
+          "type": "hidedaily"
         }
-      ]
+        ]
     },
     {
       "id": "CowboysAndIndians",
@@ -159,6 +171,9 @@
         },
         {
           "type": "caiteam"
+        },
+         {
+          "type": "caidaily"
         }
       ]
     },
@@ -180,6 +195,15 @@
         },
         {
           "type": "skykdr"
+        },
+        {
+          "type": "skygame"
+        },
+        {
+          "type": "skydaily"
+        },
+        {
+          "type": "skymap"
         }
       ]
     },
@@ -198,6 +222,9 @@
         },
          {
           "type": "mimvcounter"
+        },
+        {
+          "type": "mimvdaily"
         }
       ]
     },
@@ -210,6 +237,24 @@
         },
         {
           "type": "gravstages"
+        }
+      ]
+    },
+    {
+      "id": "BlockParty",
+      "name": "BlockParty",
+      "items": [
+        {
+          "type": "bppoints"
+        },
+        {
+          "type": "bpcounter"
+        },
+        {
+          "type": "bpdaily"
+        },
+        {
+          "type": "bpsong"
         }
       ]
     }

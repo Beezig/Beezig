@@ -5,6 +5,7 @@ import eu.the5zig.util.minecraft.ChatColor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import tk.roccodev.zta.Log;
 import tk.roccodev.zta.games.TIMV;
 
 import java.io.BufferedReader;
@@ -250,8 +251,8 @@ public class HiveAPI {
 		try {
 			o = (JSONObject) parser.parse(readUrl(parseMojangPlayerAPI(ign)));
 		}  catch (Exception e) {
-			The5zigAPI.getLogger().info("Failed getUUID (Mojang)");
-			//e.printStackTrace();
+			The5zigAPI.getLogger().info("Failed getUUID (Mojang) - " + ign);
+			e.printStackTrace();
 		}		
 		return (String) o.get("id");
 	}
@@ -318,12 +319,28 @@ public class HiveAPI {
 		
 		
 	}
+
+	public static JSONArray getLeaderboardData(String game, long startIndex, long endIndex){
+		JSONParser parser = new JSONParser();
+		String urlstring = "http://api.hivemc.com/v1/game/@game@/leaderboard/" + startIndex + "/" + endIndex;
+
+		try {
+			URL url = new URL(urlstring.replaceAll("@game@", game));
+			return (JSONArray)
+						   ((JSONObject) parser.parse(readUrl(url)))
+								   .get("leaderboard");
+		} catch (Exception e) {
+			The5zigAPI.getLogger().info("Failed getLBData (JSON 0)");
+			e.printStackTrace();
+		}
+		return null;
+	}
 		
 	private static String readUrl(URL url) throws Exception {
 	    BufferedReader reader = null;
 	    try {
 	       URLConnection conn = url.openConnection();
-	       conn.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36(KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36");
+	       conn.addRequestProperty("User-Agent", Log.getUserAgent());
 	        reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 	        StringBuffer buffer = new StringBuffer();
 	        int read;

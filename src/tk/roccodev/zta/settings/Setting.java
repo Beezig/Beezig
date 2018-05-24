@@ -12,11 +12,13 @@ public enum Setting {
 	SHOW_RECORDS_LASTGAME(true, "Advanced Records - Show last time the player played that game"),
 	SHOW_RECORDS_MONTHLYRANK(true, "Advanced Records - Show players' rank on the Monthly Leaderboards by Maxthat"),
 	SHOW_RECORDS_ACHIEVEMENTS(true, "Advanced Records - Show achievements"),
-	SHOW_RECORDS_RANK(true, "BED Advanced Records - Show point based rank"),
+	SHOW_RECORDS_RANK(true, "Advanced Records - Show point based rank"),
 	DISCORD_RPC(true, "Use Discord Rich Presence"),
 	AUTOVOTE(true, "Turn the autovote feature on or off"),
 	AUTOVOTE_RANDOM(true, "Autovote for random map if no favorites are found"),
 	BRIEFING(true, "Opt-in or opt-out for the news briefing"),
+	PM_PING(false, "Play a ping sound when a PM is received."),
+	PM_NOTIFICATION(false, "Receive a system notification when a PM is received."),
 	
 	TIMV_SHOW_KRR(true, "TIMV Advanced Records - Show Karma/rolepoints"),
 	TIMV_SHOW_MOSTPOINTS(true, "TIMV Advanced Records - Show Karma record"),
@@ -70,7 +72,11 @@ public enum Setting {
 	MIMV_SHOW_WINRATE(true, "MIMV Advanced Records - Show Winrate"), 
 	MIMV_SHOW_KD(true, "MIMV Advanced Records - Show Kills/Deaths"),
 	MIMV_SHOW_KPG(true, "MIMV Advanced Records - Show Kills per game"),
-	MIMV_SHOW_PPG(true, "MIMV Advanced Records - Show Karma per game");
+	MIMV_SHOW_PPG(true, "MIMV Advanced Records - Show Karma per game"),
+	
+	BP_SHOW_POINTS_TO_NEXT_RANK(true, "BP Advanced Records - Show points to next rank"), 
+	BP_SHOW_WINRATE(true, "BP Advanced Records - Show Winrate"), 
+	BP_SHOW_PPG(true, "BP Advanced Records - Show Points per game");
 
 
 	private boolean value;

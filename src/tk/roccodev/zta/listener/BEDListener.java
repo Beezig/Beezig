@@ -1,5 +1,19 @@
 package tk.roccodev.zta.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -8,24 +22,16 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
+import tk.roccodev.zta.hiveapi.stuff.bed.MonthlyPlayer;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class BEDListener extends AbstractGameListener<BED>{
 
@@ -55,7 +61,12 @@ public class BEDListener extends AbstractGameListener<BED>{
 			@Override
 			public void run(){
 				try {
-										
+					try {
+						BED.initDailyPointsWriter();
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}		
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					The5zigAPI.getLogger().info(sb.getTitle());
 					BED.updateMode();
@@ -88,10 +99,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 	@Override
 	public boolean onServerChat(BED gameMode, String message) {
-		
-		if(ZTAMain.isColorDebug){
-			The5zigAPI.getLogger().info("BedWars Color Debug: (" + message + ")");
-		}
+
 		//§8▍ §3§lBed§b§lWars§8 ▏ §3Voting has ended! §bThe map §fEthereal§b has won!
 		if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §3Voting has ended! §bThe map")){
 			The5zigAPI.getLogger().info("Voting ended, parsing map");
@@ -116,6 +124,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 			BED.kills++;
 			BED.pointsCounter += i;
+			BED.dailyPoints += i;
 			APIValues.BEDpoints += i;
 			BED.updateKdr();
 			
@@ -127,12 +136,14 @@ public class BEDListener extends AbstractGameListener<BED>{
 			
 			BED.pointsCounter += i;
 			BED.bedsDestroyed++;
+			BED.dailyPoints += i;
 			APIValues.BEDpoints += i;
 			
 		}
 		else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §e✯ §6Notable Win! §eGold Medal Awarded!")){
 			
 			BED.pointsCounter += 100;
+			BED.dailyPoints += 100;
 			APIValues.BEDpoints += 100;
 			HiveAPI.medals++;
 			HiveAPI.tokens += 100;
@@ -190,6 +201,8 @@ public class BEDListener extends AbstractGameListener<BED>{
 						int bedsDestroyed = 0;
 						int eliminations = 0;
 						
+						
+						
 						NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
 						DecimalFormat df = (DecimalFormat) nf;
 						df.setMaximumFractionDigits(2);
@@ -212,7 +225,14 @@ public class BEDListener extends AbstractGameListener<BED>{
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
 						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
 
-						//int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "BED") < HiveAPI.DRgetPoints(BED.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+						int monthlyRank = 0;
+						if(Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
+							MonthlyPlayer monthly = api.getMonthlyStatus();
+							if(monthly != null) {
+								monthlyRank = monthly.getPlace();
+							}
+						}
+						
 						List<String> messages = new ArrayList<String>();
 						messages.addAll(BED.messagesToSend);
 							for(String s : messages){
@@ -331,10 +351,11 @@ public class BEDListener extends AbstractGameListener<BED>{
 							double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
 						}
-					/*	if(monthlyRank != 0){					
-					 *		The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
-					 *	}
-					 */	
+						if(monthlyRank != 0) {
+							
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Place: §b#" + monthlyRank);
+						}
+					
 						
 						if(lastGame != null){
 							Calendar lastSeen = Calendar.getInstance();
@@ -438,7 +459,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 								BED.votesToParse.clear();
 								BED.hasVoted = true;
 																										//we can't really get the map name at this point
-								The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
+								The5zigAPI.getAPI().messagePlayer("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + finalindex);
 								return;
 							}
 							else{
@@ -543,19 +564,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 
 	@Override
 	public void onTitle(BED gameMode, String title, String subTitle) {
-		if(ZTAMain.isColorDebug){
-			The5zigAPI.getLogger().info("BedWars TitleColor Debug: (" + 
-		
-					title != null ? title : "ERR_TITLE_NULL"
-						
-						+ " *§* " +
-						
-						
-					subTitle != null ? subTitle : "ERR_SUBTITLE_NULL"
-					
-						+ ")"
-					);
-		}
+
 		if(subTitle != null && ChatColor.stripColor(subTitle).trim().equals("Respawning in 2 seconds")){
 			BED.deaths++;
 			BED.updateKdr();

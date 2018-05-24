@@ -1,5 +1,18 @@
 package tk.roccodev.zta.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -8,7 +21,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.hiveapi.APIValues;
@@ -17,13 +29,6 @@ import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiSKY;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SKYListener extends AbstractGameListener<SKY> {
 
@@ -49,7 +54,12 @@ public class SKYListener extends AbstractGameListener<SKY> {
 			@Override
 			public void run() {
 				try {
-
+					try {
+						SKY.initDailyPointsWriter();
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}	
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					The5zigAPI.getLogger().info(sb.getTitle());
 
@@ -83,10 +93,6 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
 	@Override
 	public boolean onServerChat(SKY gameMode, String message) {
-
-		if (ZTAMain.isColorDebug) {
-			The5zigAPI.getLogger().info("SKY Color Debug: (" + message + ")");
-		}
 
 		if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §3Voting has ended! §bThe map §f")) {
 			The5zigAPI.getLogger().info("Voting ended, parsing map");
@@ -188,9 +194,16 @@ public class SKYListener extends AbstractGameListener<SKY> {
 		else if (message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f15§7 tokens!")) {
 			SKY.kills++;
 			SKY.totalKills++;
+			APIValues.SKYpoints += 5;
+			SKY.gamePoints += 5;
+			SKY.dailyPoints += 5;
 			SKY.updateKdr();
 		}
-
+		else if(message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f50§7 tokens!")) {
+			APIValues.SKYpoints += 20;
+			SKY.dailyPoints += 20;
+			SKY.gamePoints += 20;
+		}
 		else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
 			SKY.messagesToSend.add(message);
 			The5zigAPI.getLogger().info("found header");
@@ -398,23 +411,6 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
 		return false;
 
-	}
-
-	@Override
-	public void onTitle(SKY gameMode, String title, String subTitle) {
-		if (ZTAMain.isColorDebug) {
-			The5zigAPI.getLogger().info("SKY TitleColor Debug: (" +
-
-					title != null ? title
-							: "ERR_TITLE_NULL"
-
-									+ " *§* " +
-
-									subTitle != null ? subTitle
-											: "ERR_SUBTITLE_NULL"
-
-													+ ")");
-		}
 	}
 
 	@Override

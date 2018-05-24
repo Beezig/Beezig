@@ -7,20 +7,19 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
+import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.Giant;
-import tk.roccodev.zta.games.SKY;
+import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.stuff.gnt.GiantRank;
-import tk.roccodev.zta.hiveapi.stuff.sky.SKYRank;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiGiant;
-import tk.roccodev.zta.hiveapi.wrapper.modes.ApiSKY;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 public class GiantListener extends AbstractGameListener<Giant> {
@@ -69,6 +68,12 @@ public class GiantListener extends AbstractGameListener<Giant> {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				try {
+					Giant.initDailyPointsWriter();
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
 				String ign = The5zigAPI.getAPI().getGameProfile().getName();
 				Giant.totalKills = (int) HiveAPI.getKills(ign, ActiveGame.current());
 				Giant.totalDeaths = (int) HiveAPI.getDeaths(ign, ActiveGame.current());
@@ -111,9 +116,6 @@ public class GiantListener extends AbstractGameListener<Giant> {
 
 	@Override
 	public boolean onServerChat(Giant gameMode, String message) {
-		if (ZTAMain.isColorDebug) {
-			The5zigAPI.getLogger().info(gameMode.getName() + " Color Debug: (" + message + ")");
-		}
 
 		if (message.startsWith(getPrefixWithBoldDivider(ActiveGame.current()) + "§a§lVote received. §3Your map now has")
 				&& Setting.AUTOVOTE.getValue()) {
@@ -171,7 +173,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
 								Giant.hasVoted = true;
 								// we can't really get the map name at this point
 								The5zigAPI.getAPI()
-										.messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
+										.messagePlayer(getPrefix(ActiveGame.current()) + "§eAutomatically voted for map §6#" + finalindex);
 								return;
 							} else {
 								The5zigAPI.getLogger().info("Done, couldn't find matches");
@@ -186,7 +188,8 @@ public class GiantListener extends AbstractGameListener<Giant> {
 				}
 			}).start();
 
-		} else if (message.startsWith(getPrefixWithBoldDivider(ActiveGame.current()) + "§6§l§e§l§e§l")
+		}
+		else if (message.startsWith(getPrefixWithBoldDivider(ActiveGame.current()) + "§6§l§e§l§e§l")
 				&& !Giant.hasVoted && Setting.AUTOVOTE.getValue()) {
 			Giant.votesToParse.add(message);
 			The5zigAPI.getLogger().info("Added map");
@@ -208,8 +211,12 @@ public class GiantListener extends AbstractGameListener<Giant> {
 				&& message.contains("for killing")) {
 			if (message.contains("as a team")) {
 				Giant.giantKills++; // Giant kill
+				APIValues.Giantpoints += 50;
+				Giant.dailyPoints += 50;
 			} else {
 				Giant.gameKills++;
+				APIValues.Giantpoints += 10;
+				Giant.dailyPoints += 10;
 				Giant.gameKdr = ((double) (Giant.totalKills + Giant.gameKills)
 						/ (double) (Giant.gameDeaths + Giant.totalDeaths == 0 ? 1
 								: Giant.gameDeaths + Giant.totalDeaths));

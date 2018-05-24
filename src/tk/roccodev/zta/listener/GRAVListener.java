@@ -76,10 +76,6 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 	@Override
 	public boolean onServerChat(GRAV gameMode, String message) {
 
-		if (ZTAMain.isColorDebug) {
-			The5zigAPI.getLogger().info("GRAV Color Debug: (" + message + ")");
-		}
-
 		if (message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps")) {
 			The5zigAPI.getLogger().info("Voting ended, parsing maps");
 			new Thread(new Runnable() {
@@ -375,23 +371,6 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 
 		}
 		return false;
-	}
-
-	@Override
-	public void onTitle(GRAV gameMode, String title, String subTitle) {
-		if (ZTAMain.isColorDebug) {
-			The5zigAPI.getLogger().info("GRAV TitleColor Debug: (" +
-
-					title != null ? title
-							: "ERR_TITLE_NULL"
-
-									+ " *§* " +
-
-									subTitle != null ? subTitle
-											: "ERR_SUBTITLE_NULL"
-
-													+ ")");
-		}
 	}
 
 	@Override

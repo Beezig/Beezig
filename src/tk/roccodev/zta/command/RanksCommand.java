@@ -5,6 +5,7 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
+import tk.roccodev.zta.hiveapi.stuff.bp.BPRank;
 import tk.roccodev.zta.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.zta.hiveapi.stuff.grav.GRAVRank;
@@ -81,7 +82,13 @@ public class RanksCommand implements Command {
 				The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
 
 				for(HIDERank hideRank : HIDERank.values()){
-					The5zigAPI.getAPI().messagePlayer(Log.info + hideRank.getTotalDisplay()  + " §7- " + hideRank.getTotalDisplay().replaceAll(hideRank.getDisplay(), "") + hideRank.getStart());
+					if(hideRank == HIDERank.MASTER_OF_DISGUISE) {
+						The5zigAPI.getAPI().messagePlayer(Log.info + hideRank.getTotalDisplay()  + " §7- §e§l" +  hideRank.getStart());
+					}
+					else {
+						The5zigAPI.getAPI().messagePlayer(Log.info + hideRank.getTotalDisplay()  + " §7- " + hideRank.getTotalDisplay().replaceAll(hideRank.getDisplay(), "") + hideRank.getStart());
+					}
+					
 				}
 
 				The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
@@ -115,6 +122,17 @@ public class RanksCommand implements Command {
 
 				for(MIMVRank mimvRank : MIMVRank.values()){
 					The5zigAPI.getAPI().messagePlayer(Log.info + mimvRank.getTotalDisplay()  + " §7- " + mimvRank.getTotalDisplay().replaceAll(mimvRank.getDisplay(), "") + mimvRank.getStart());
+				}
+
+				The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
+			}).start();
+		}
+		if(game.equalsIgnoreCase("bp")){
+			new Thread(() -> {
+				The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
+
+				for(BPRank bpRank : BPRank.values()){
+					The5zigAPI.getAPI().messagePlayer(Log.info + bpRank.getTotalDisplay()  + " §7- " + bpRank.getTotalDisplay().replaceAll(bpRank.getDisplay(), "") + bpRank.getStart());
 				}
 
 				The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");

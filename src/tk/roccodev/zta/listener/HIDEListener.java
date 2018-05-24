@@ -1,5 +1,20 @@
 package tk.roccodev.zta.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -8,7 +23,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
-import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.hiveapi.APIValues;
@@ -17,13 +31,6 @@ import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiHIDE;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class HIDEListener extends AbstractGameListener<HIDE> {
 
@@ -49,7 +56,12 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 			@Override
 			public void run(){
 				try {
-
+					try {
+						HIDE.initDailyPointsWriter();
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
 					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 					The5zigAPI.getLogger().info(sb.getTitle());
 					
@@ -78,10 +90,6 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
 	@Override
 	public boolean onServerChat(HIDE gameMode, String message) {
-
-		if(ZTAMain.isColorDebug){
-			The5zigAPI.getLogger().info("HIDE Color Debug: (" + message + ")");
-		}
 
 		if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §3Voting has ended! §bThe map §f")){
 			The5zigAPI.getLogger().info("Voting ended, parsing map");
@@ -185,7 +193,16 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
 			return true;
 		}
+		else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e200 points§6")) {
+			APIValues.HIDEpoints += 200;
+			HIDE.dailyPoints += 200;
+		}
+		else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e50 points§6")) {
+			APIValues.HIDEpoints += 50;
+			HIDE.dailyPoints += 50;
+		}
 		else if(message.equals("                          §6§lYou are a §c§lSEEKER!")) {
+			HIDE.seeking = true;
 			DiscordUtils.updatePresence("Playing Hide & Seek", "Seeking on " + HIDE.activeMap, "game_hide");
 		}
 		else if((message.equals("                      §6§m                  §6§m                  ")&& !message.startsWith("§o "))){
@@ -401,21 +418,23 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 		return false;
 
 	}
+	
+	
 
 	@Override
-	public void onTitle(HIDE gameMode, String title, String subTitle) {
-		if(ZTAMain.isColorDebug){
-			The5zigAPI.getLogger().info("HIDE TitleColor Debug: (" +
-
-					title != null ? title : "ERR_TITLE_NULL"
-
-						+ " *§* " +
-
-
-					subTitle != null ? subTitle : "ERR_SUBTITLE_NULL"
-
-						+ ")"
-					);
+	public void onTick(HIDE gameMode) {
+		if(The5zigAPI.getAPI().getSideScoreboard() == null) return;
+		int i = HIDE.seeking ? 4 : 5;
+		HashMap<String, Integer> lines = The5zigAPI.getAPI().getSideScoreboard().getLines();
+		for(Map.Entry<String, Integer> e : lines.entrySet()) {
+			if(e.getValue() == i && e.getKey().contains("§7 Points§6")) {
+				int pts = Integer.parseInt(e.getKey().replace("§7 Points§6", "").replace("§f", ""));
+				if(pts != HIDE.lastPts) {
+					HIDE.dailyPoints += (pts - HIDE.lastPts);
+					APIValues.HIDEpoints += (pts - HIDE.lastPts);
+					HIDE.lastPts = pts;
+				}
+			}
 		}
 	}
 

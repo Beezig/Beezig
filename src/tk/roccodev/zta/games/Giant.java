@@ -1,5 +1,13 @@
 package tk.roccodev.zta.games;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +16,7 @@ import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
+import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.stuff.gnt.GiantRank;
 
 public class Giant extends GameMode{
@@ -35,6 +44,10 @@ public class Giant extends GameMode{
 	public static double gameKdr;
 	public static double totalKdr;
 	
+	private static PrintWriter dailyPointsWriter;
+	private static String dailyPointsName;
+	public static int dailyPoints;
+	
 	public static List<String> messagesToSend = new ArrayList<String>();
 	public static List<String> footerToSend = new ArrayList<String>();
 	public static boolean isRecordsRunning = false;
@@ -49,6 +62,49 @@ public class Giant extends GameMode{
 	public boolean isMini(){return false;}
 
 
+	public static void initDailyPointsWriter() throws IOException {
+		File f = new File(ZTAMain.mcFile + "/gnt/dailyPoints/" + dailyPointsName);
+		if (!f.exists()) {
+			f.createNewFile();
+			initPointsWriterWithZero();
+			return;
+		}
+		FileInputStream stream = new FileInputStream(f);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		String line = reader.readLine();
+		if (line == null) {
+			initPointsWriterWithZero();
+			stream.close();
+			return;
+		} else {
+			Giant.dailyPoints = Integer.parseInt(line);
+		}
+		stream.close();
+
+		dailyPointsWriter = new PrintWriter(ZTAMain.mcFile + "/gnt/dailyPoints/" + dailyPointsName, "UTF-8");
+
+	}
+
+	private static void initPointsWriterWithZero() throws FileNotFoundException, UnsupportedEncodingException {
+		dailyPointsWriter = new PrintWriter(ZTAMain.mcFile + "/gnt/dailyPoints/" + dailyPointsName, "UTF-8");
+		dailyPointsWriter.println(0);
+
+		dailyPointsWriter.close();
+
+		dailyPointsWriter = new PrintWriter(ZTAMain.mcFile + "/gnt/dailyPoints/" + dailyPointsName, "UTF-8");
+
+	}
+
+	public static void setDailyPointsFileName(String newName) {
+		dailyPointsName = newName;
+	}
+
+	private static void saveDailyPoints() {
+		dailyPointsWriter.println(dailyPoints);
+		dailyPointsWriter.flush();
+		dailyPointsWriter.close();
+	}
+	
 	public static void reset(Giant gameMode){
 		
 		teamsEliminated = 0;

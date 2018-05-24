@@ -22,7 +22,7 @@ public class CheckPingCommand implements Command{
 		for(int i = 0; i<The5zigAPI.getAPI().getServerPlayers().size(); i++){
 			if(The5zigAPI.getAPI().getServerPlayers().get(i).getGameProfile().getName().equalsIgnoreCase(args[0])){
 				int ping = The5zigAPI.getAPI().getServerPlayers().get(i).getPing();
-				The5zigAPI.getAPI().messagePlayer(Log.info + args[0] + "'s Ping is: §6" + ping + "ms");
+				The5zigAPI.getAPI().messagePlayer(Log.info + args[0] + "'s Ping is: §b" + ping + "ms");
 				return true;
 			}
 		}

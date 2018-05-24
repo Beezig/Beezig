@@ -121,7 +121,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				TIMV.applyPoints(-1);
 			}
 	
-		} // Assumption, haven't tested yet
+		}
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §c§l- 40 Karma") && gameMode != null){
 			TIMV.minus40();
 			if(TIMV.role.equals("Traitor")){
@@ -449,7 +449,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 								TIMV.votesToParse.clear();
 								TIMV.hasVoted = true;
 																										//we can't really get the map name at this point
-								The5zigAPI.getAPI().messagePlayer(Log.info + "Automatically voted for map §6#" + finalindex);
+								The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
 								return;
 							}
 							else if(Setting.AUTOVOTE_RANDOM.getValue()){
