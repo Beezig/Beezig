@@ -732,7 +732,7 @@ public class ZTAMain {
 					.filter(i -> i != TIMV.lastTestMsg).findFirst().getAsInt();
 			TIMV.lastTestMsg = random;
 			String player = evt.getMessage().replaceAll(" test", "").trim();
-			if (player.equalsIgnoreCase("i'll") || player.equalsIgnoreCase("ill"))
+			if (player.equalsIgnoreCase("i'll") || player.equalsIgnoreCase("ill") || player.equalsIgnoreCase("i") || player.equalsIgnoreCase("go"))
 				return;
 			evt.setCancelled(true);
 			The5zigAPI.getAPI().sendPlayerMessage(TIMV.testRequests.get(random).replaceAll("\\{p\\}", player));

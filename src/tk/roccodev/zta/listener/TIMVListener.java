@@ -121,7 +121,7 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				TIMV.applyPoints(-1);
 			}
 	
-		} // Assumption, haven't tested yet
+		}
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §c§l- 40 Karma") && gameMode != null){
 			TIMV.minus40();
 			if(TIMV.role.equals("Traitor")){
