@@ -27,7 +27,7 @@ public class RigCommand implements Command{
 		
 		
 		if(!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
-		if(System.currentTimeMillis() % 5 == 0) {
+		if(ThreadLocalRandom.current().nextDouble(1, 101) < 36D) {
 			The5zigAPI.getAPI().messagePlayer(Log.info + "I can feel it! It's the §bbest moment§3 to open a crate! Good luck.");
 		}
 		else {
