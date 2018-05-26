@@ -62,7 +62,6 @@ public class ZTAMain {
 		String v = ZTAMain.class.getAnnotation(Plugin.class).version();
 		String toParse = v.replaceAll("\\.", "");
 		return Integer.parseInt(toParse);
-
 	}
 
 	@EventHandler(priority = EventHandler.Priority.LOW)

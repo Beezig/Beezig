@@ -1,17 +1,14 @@
 package tk.roccodev.zta.hiveapi.wrapper.modes;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Map;
-
-import org.json.simple.JSONObject;
-
 import eu.the5zig.mod.server.GameMode;
+import org.json.simple.JSONObject;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.hiveapi.stuff.bed.MonthlyPlayer;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.PvPMode;
+
+import java.net.URL;
+import java.util.Map;
 
 public class ApiBED extends PvPMode {
 

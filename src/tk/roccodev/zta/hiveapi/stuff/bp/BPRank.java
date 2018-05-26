@@ -62,9 +62,9 @@ public enum BPRank {
 	public String getPointsToNextRank(int points){
 		if(this == LEGENDARY) return "Leaderboard Rank";
 		if(this == BILLYELLIOT) return "Highest Rank";
-		ArrayList<BPRank> ranks = new ArrayList<BPRank>(Arrays.asList(values()));
+		ArrayList<BPRank> ranks = new ArrayList<>(Arrays.asList(values()));
 		int newIndex = ranks.indexOf(this) + 1;
-		BPRank next = null;
+		BPRank next;
 		try{
 			next = ranks.get(newIndex);
 			

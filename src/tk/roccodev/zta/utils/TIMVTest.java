@@ -1,5 +1,8 @@
 package tk.roccodev.zta.utils;
 
+import tk.roccodev.zta.ZTAMain;
+import tk.roccodev.zta.games.TIMV;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,17 +13,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import tk.roccodev.zta.ZTAMain;
-import tk.roccodev.zta.games.TIMV;
-
 public class TIMVTest {
 
 	public static File file;
 
 	public static void init() throws IOException {
 		file = new File(ZTAMain.mcFile + "/timv/testMessages.txt");
-		ArrayList<String> bloccs = new ArrayList<String>(
-				Files.readAllLines(Paths.get(file.getPath())).stream().collect(Collectors.toList()));
+		ArrayList<String> bloccs = Files.readAllLines(Paths.get(file.getPath())).stream().collect(Collectors.toCollection(ArrayList::new));
 
 		bloccs.forEach(s -> {
 			if (!TIMV.testRequests.contains(s))
@@ -28,14 +27,12 @@ public class TIMVTest {
 		});
 
 		if (TIMV.testRequests.size() == 0) {
-			TIMV.testRequests.addAll(Arrays.asList(new String[] { "{p} go test please", "{p} test please",
+			TIMV.testRequests.addAll(Arrays.asList("{p} go test please", "{p} test please",
 					"{p} pls test", "{p}, would you mind testing?", "{p}, could you test please?",
 					"{p}, please go into the tester", "{p}, I'd appreciate it if you would test",
-					"{p}, how about testing?", "{p}, would you test for me?"
-
-			}));
+					"{p}, how about testing?", "{p}, would you test for me?"));
 			PrintWriter wr = new PrintWriter(new FileWriter(file, false));
-			TIMV.testRequests.forEach(s1 -> wr.println(s1));
+			TIMV.testRequests.forEach(wr::println);
 
 			wr.flush();
 			wr.close();
@@ -63,7 +60,7 @@ public class TIMVTest {
 
 		PrintWriter wr = new PrintWriter(new FileWriter(file, false));
 
-		TIMV.testRequests.forEach(s1 -> wr.println(s1));
+		TIMV.testRequests.forEach(wr::println);
 
 		wr.flush();
 		wr.close();

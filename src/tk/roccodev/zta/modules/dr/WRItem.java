@@ -36,7 +36,7 @@ public class WRItem extends GameModeItem<DR>{
 	public boolean shouldRender(boolean dummy){		
 		try{
 			if(!(getGameMode() instanceof DR)) return false;
-		return dummy || (DR.shouldRender(getGameMode().getState()) && DR.activeMap != null && DR.role == "Runner");
+		return dummy || (DR.shouldRender(getGameMode().getState()) && DR.activeMap != null && DR.role.equals("Runner"));
 		}
 		catch(Exception e){
 			return false;

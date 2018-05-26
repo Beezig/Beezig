@@ -58,9 +58,9 @@ public enum GRAVRank {
 	public String getPointsToNextRank(int points){
 		if(this == FELIX_BAUMGARTNER) return "Leaderboard Rank";
 		if(this == GRAVITY_DEFIANCE) return "Highest Rank";
-		ArrayList<GRAVRank> ranks = new ArrayList<GRAVRank>(Arrays.asList(values()));
+		ArrayList<GRAVRank> ranks = new ArrayList<>(Arrays.asList(values()));
 		int newIndex = ranks.indexOf(this) + 1;
-		GRAVRank next = null;
+		GRAVRank next;
 		try{
 			next = ranks.get(newIndex);
 

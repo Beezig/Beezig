@@ -33,7 +33,7 @@ public class SummonersItem extends GameModeItem<BED>{
 	@Override
 	protected Object getValue(boolean dummy) {
 		if(!The5zigAPI.getAPI().isInWorld()) return "Not in world";
-		if((ResourcesMode)getProperties().getSetting("mode").get() == ResourcesMode.INLINE){
+		if(getProperties().getSetting("mode").get() == ResourcesMode.INLINE){
 			try{
 			StringBuilder sb = new StringBuilder();
 			boolean colors = (boolean)getProperties().getSetting("showcolors").get();
@@ -50,7 +50,7 @@ public class SummonersItem extends GameModeItem<BED>{
 				e.printStackTrace();
 				return "Error";
 			}
-		} else if((ResourcesMode)getProperties().getSetting("mode").get() == ResourcesMode.INLINE_SHORTENED){
+		} else if(getProperties().getSetting("mode").get() == ResourcesMode.INLINE_SHORTENED){
 			try{
 			StringBuilder sb = new StringBuilder();
 			
@@ -77,7 +77,7 @@ public class SummonersItem extends GameModeItem<BED>{
 	
     @Override
     public void render(int x, int y, RenderLocation renderLocation, boolean dummy) {
-    if((ResourcesMode)getProperties().getSetting("mode").get() != ResourcesMode.EXTENDED) {
+    if(getProperties().getSetting("mode").get() != ResourcesMode.EXTENDED) {
     	super.render(x, y, renderLocation, dummy);
     	return;  
     }

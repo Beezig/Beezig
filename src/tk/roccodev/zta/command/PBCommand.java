@@ -31,29 +31,23 @@ public class PBCommand implements Command{
 			
 			String ign = args[0];
 			
-			new Thread(new Runnable(){
-				@Override
-				public void run(){
-					ApiDR api = new ApiDR(ign);
-					The5zigAPI.getAPI().messagePlayer(Log.info + api.getParentMode().getNetworkRankColor() + api.getParentMode().getCorrectName() + "§3's Personal Best on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + api.getPersonalBest(DR.activeMap));
-				}
+			new Thread(() -> {
+				ApiDR api = new ApiDR(ign);
+				The5zigAPI.getAPI().messagePlayer(Log.info + api.getParentMode().getNetworkRankColor() + api.getParentMode().getCorrectName() + "§3's Personal Best on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + api.getPersonalBest(DR.activeMap));
 			}).start();
 	
 		}
 		else {
 			
 			String ign = args[0];
-			List<String> argsL = new ArrayList<String>(Arrays.asList(args));
+			List<String> argsL = new ArrayList<>(Arrays.asList(args));
 			argsL.remove(0);
 			DRMap map = DR.mapsPool.get(String.join(" ", argsL).toLowerCase());
 			
 				
-			new Thread(new Runnable(){
-				@Override
-				public void run(){
-					ApiDR api = new ApiDR(ign);
-					The5zigAPI.getAPI().messagePlayer(Log.info + api.getParentMode().getNetworkRankColor() + api.getParentMode().getCorrectName() + "§3's Personal Best on map §b" + map.getDisplayName() + "§3 is §b" + api.getPersonalBest(map));
-				}
+			new Thread(() -> {
+				ApiDR api = new ApiDR(ign);
+				The5zigAPI.getAPI().messagePlayer(Log.info + api.getParentMode().getNetworkRankColor() + api.getParentMode().getCorrectName() + "§3's Personal Best on map §b" + map.getDisplayName() + "§3 is §b" + api.getPersonalBest(map));
 			}).start();
 	
 		}

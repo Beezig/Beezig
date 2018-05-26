@@ -63,9 +63,9 @@ public enum HIDERank {
 	public String getPointsToNextRank(int points){
 		if(this == MASTER_OF_DISGUISE) return "Leaderboard Rank";
 		if(this == GHOST) return "Highest Rank";
-		ArrayList<HIDERank> ranks = new ArrayList<HIDERank>(Arrays.asList(values()));
+		ArrayList<HIDERank> ranks = new ArrayList<>(Arrays.asList(values()));
 		int newIndex = ranks.indexOf(this) + 1;
-		HIDERank next = null;
+		HIDERank next;
 		try{
 			next = ranks.get(newIndex);
 		} catch(Exception e){ return "";}

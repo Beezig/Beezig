@@ -31,10 +31,7 @@ public class MathCommand implements Command{
 			return true;
 			
 		}
-		new Thread(new Runnable(){
-			
-		@Override
-		public void run(){
+		new Thread(() -> {
 		try{
 		StringBuilder sb = new StringBuilder();
 		for(String s : args){
@@ -57,12 +54,12 @@ public class MathCommand implements Command{
 			}
 			else{
 				//No static method, return
-				
+
 				Character operator = null;
 				try{
 				 operator = expression.charAt(expression.indexOf('(') - 1);
-				}catch(StringIndexOutOfBoundsException e){
-					
+				}catch(StringIndexOutOfBoundsException ignored){
+
 				}
 				if(operator != null && !isOperator(operator)){
 				The5zigAPI.getAPI().messagePlayer(Log.error + "You can only invoke methods from the Math class!");
@@ -72,11 +69,10 @@ public class MathCommand implements Command{
 		}
 		ScriptEngineManager sem = new ScriptEngineManager(null);
 		ScriptEngine engine = sem.getEngineByName("JavaScript");
-		
+
 		The5zigAPI.getAPI().messagePlayer(Log.info + "Result: §b" + engine.eval(expression));
 		}catch(ScriptException ex){
 			The5zigAPI.getAPI().messagePlayer(Log.error + "Error while calculating.");
-		}
 		}
 		}).start();
 		return true;
@@ -87,8 +83,7 @@ public class MathCommand implements Command{
 		if(sign == '-') return true;
 		if(sign == '+') return true;
 		if(sign == '/') return true;
-		if(sign == '*') return true;
-		return false;
+		return sign == '*';
 	}
 
 	

@@ -41,34 +41,29 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 		ActiveGame.set("GRAV");
 		IHive.genericJoin();
 
-		new Thread(new Runnable() {
+		new Thread(() -> {
+			try {
 
-			@Override
-			public void run() {
-				try {
+				Thread.sleep(1000);
+				// Scoreboard doesn't load otherwise ???
+				Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+				The5zigAPI.getLogger().info(sb.getTitle());
 
-					Thread.sleep(1000);
-					// Scoreboard doesn't load otherwise ???
-					Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-					The5zigAPI.getLogger().info(sb.getTitle());
+				if (sb != null && sb.getTitle().contains("Your GRAV")) {
 
-					if (sb != null && sb.getTitle().contains("Your GRAV")) {
+					int points = sb.getLines().get(ChatColor.AQUA + "Points");
+					GRAV.apiGamesPlayed = sb.getLines().get(ChatColor.AQUA + "Games Played");
+					GRAV.apiVictories = sb.getLines().get(ChatColor.AQUA + "Victories");
 
-						int points = sb.getLines().get(ChatColor.AQUA + "Points");
-						GRAV.apiGamesPlayed = sb.getLines().get(ChatColor.AQUA + "Games Played");
-						GRAV.apiVictories = sb.getLines().get(ChatColor.AQUA + "Victories");
-
-						APIValues.GRAVpoints = (long) points;
-					}
-
-					ApiGRAV api = new ApiGRAV(The5zigAPI.getAPI().getGameProfile().getName());
-					GRAV.rankObject = GRAVRank.getFromDisplay(api.getTitle());
-					GRAV.rank = GRAV.rankObject.getTotalDisplay();
-				} catch (Exception e) {
-					e.printStackTrace();
+					APIValues.GRAVpoints = (long) points;
 				}
-			}
 
+				ApiGRAV api = new ApiGRAV(The5zigAPI.getAPI().getGameProfile().getName());
+				GRAV.rankObject = GRAVRank.getFromDisplay(api.getTitle());
+				GRAV.rank = GRAV.rankObject.getTotalDisplay();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}).start();
 
 	}
@@ -78,39 +73,36 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 
 		if (message.startsWith("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps")) {
 			The5zigAPI.getLogger().info("Voting ended, parsing maps");
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					String afterMsg = message.split("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps ")[1]
-							.replace("have won!", "").trim(); // No stripColor because we want difficulties
-					String[] maps = afterMsg.split(", ");
-					GRAV.maps.addAll(Arrays.asList(maps));
+			new Thread(() -> {
+				String afterMsg = message.split("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe maps ")[1]
+						.replace("have won!", "").trim(); // No stripColor because we want difficulties
+				String[] maps = afterMsg.split(", ");
+				GRAV.maps.addAll(Arrays.asList(maps));
 
-					HashMap<String, Double> pbs = new ApiGRAV(The5zigAPI.getAPI().getGameProfile().getName())
-							.getMapTimes();
-					int i = 0;
-					for (String s : maps) {
-						String apiMap = GRAV.mapsPool.get(ChatColor.stripColor(s));
-						The5zigAPI.getLogger().info(apiMap);
-						DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
-						df.setMinimumFractionDigits(3);
-						/*pbs.entrySet().forEach(e -> {
-							The5zigAPI.getLogger().info(e.getKey() + " / " + e.getValue());
-						});*/
-						Double pb = pbs.get(apiMap);
-
-						if (pb == null) {
-							pb = 0D;
-							GRAV.toDisplay.put(++i, s + " §f| §7No PB §f| §c{f}");
-						} else GRAV.toDisplay.put(++i, s + " §f| " + df.format(pb) + "s §f| §c{f}");
-
-						GRAV.mapPBs.put(ChatColor.stripColor(s), pb);
-					}
-					GRAV.toDisplayWithFails.putAll(GRAV.toDisplay);
-					/*GRAV.toDisplay.entrySet().forEach(e -> {
-						The5zigAPI.getAPI().messagePlayer(e.getValue());
+				HashMap<String, Double> pbs = new ApiGRAV(The5zigAPI.getAPI().getGameProfile().getName())
+						.getMapTimes();
+				int i = 0;
+				for (String s : maps) {
+					String apiMap = GRAV.mapsPool.get(ChatColor.stripColor(s));
+					The5zigAPI.getLogger().info(apiMap);
+					DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+					df.setMinimumFractionDigits(3);
+					/*pbs.entrySet().forEach(e -> {
+						The5zigAPI.getLogger().info(e.getKey() + " / " + e.getValue());
 					});*/
+					Double pb = pbs.get(apiMap);
+
+					if (pb == null) {
+						pb = 0D;
+						GRAV.toDisplay.put(++i, s + " §f| §7No PB §f| §c{f}");
+					} else GRAV.toDisplay.put(++i, s + " §f| " + df.format(pb) + "s §f| §c{f}");
+
+					GRAV.mapPBs.put(ChatColor.stripColor(s), pb);
 				}
+				GRAV.toDisplayWithFails.putAll(GRAV.toDisplay);
+				/*GRAV.toDisplay.entrySet().forEach(e -> {
+					The5zigAPI.getAPI().messagePlayer(e.getValue());
+				});*/
 			}).start();
 
 		} else if (message.contains(The5zigAPI.getAPI().getGameProfile().getName() + " §afinished §bStage")) {
@@ -123,7 +115,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 				secs = message.split("§d")[2].replaceAll("seconds", "").trim();
 			}
 
-			double d = 0D;
+			double d;
 			if (secs.contains(":")) {
 				String data[] = secs.split(":"); // E.g., 1:04.212
 				d = Double.parseDouble(Integer.parseInt(data[0]) * 60 + ""); // e.g, 60
@@ -187,162 +179,158 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 			if (GRAV.footerToSend.contains("                      §6§m                  §6§m                  ")) {
 				// Advanced Records - send
 				The5zigAPI.getLogger().info("Sending adv rec");
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						GRAV.isRecordsRunning = true;
-						The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
-						try {
+				new Thread(() -> {
+					GRAV.isRecordsRunning = true;
+					The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
+					try {
 
-							ApiGRAV api = new ApiGRAV(GRAV.lastRecords);
-							GRAVRank rank = null;
+						ApiGRAV api = new ApiGRAV(GRAV.lastRecords);
+						GRAVRank rank = null;
 
-							NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-							DecimalFormat df = (DecimalFormat) nf;
-							df.setMaximumFractionDigits(2);
-							df.setMinimumFractionDigits(2);
+						NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+						DecimalFormat df = (DecimalFormat) nf;
+						df.setMaximumFractionDigits(2);
+						df.setMinimumFractionDigits(2);
 
-							DecimalFormat df1f = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
-							df1f.setMaximumFractionDigits(1);
-							df1f.setMinimumFractionDigits(1);
+						DecimalFormat df1f = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+						df1f.setMaximumFractionDigits(1);
+						df1f.setMinimumFractionDigits(1);
 
-							String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
-									? api.getParentMode().getNetworkTitle()
-									: "";
-							ChatColor rankColor = null;
-							if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
-								rankColor = api.getParentMode().getNetworkRankColor();
-							}
-							String rankTitleGRAV = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
-							if (rankTitleGRAV != null)
-								rank = GRAVRank.getFromDisplay(rankTitleGRAV);
-
-							long points = 0;
-							int gamesPlayed = 0;
-							int victories = 0;
-
-							Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-							// Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ?
-							// api.getAchievements() : null;
-
-							// int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
-							// HiveAPI.getLeaderboardsPlacePoints(349, "GRAV") <
-							// HiveAPI.DRgetPoints(GRAV.lastRecords)) ?
-							// HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
-
-							List<String> messages = new ArrayList<String>();
-							messages.addAll(GRAV.messagesToSend);
-							for (String s : messages) {
-
-								if (s.trim().endsWith("'s Stats §6§m")) {
-									The5zigAPI.getLogger().info("Editing Header...");
-									StringBuilder sb = new StringBuilder();
-									String correctUser = api.getParentMode().getCorrectName();
-									if (correctUser.contains("nicked player"))
-										correctUser = "Nicked/Not found";
-									sb.append("          §6§m                  §f ");
-									The5zigAPI.getLogger().info("Added base...");
-									if (rankColor != null) {
-										sb.append(rankColor).append(correctUser);
-										The5zigAPI.getLogger().info("Added colored user...");
-									} else {
-										sb.append(correctUser);
-										The5zigAPI.getLogger().info("Added white user...");
-									}
-									sb.append("§f's Stats §6§m                  ");
-									The5zigAPI.getLogger().info("Added end...");
-									The5zigAPI.getAPI().messagePlayer("§o " + sb.toString());
-
-									if (rankTitle != null && rankTitle.contains("nicked player"))
-										rankTitle = "Nicked/Not found";
-									if (!rankTitle.equals("Nicked/Not found") && !rankTitle.isEmpty()) {
-										if (rankColor == null)
-											rankColor = ChatColor.WHITE;
-										The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " ("
-												+ rankColor + rankTitle + "§6) " + "§m       ");
-									}
-									continue;
-								} else if (s.startsWith("§3 Points: §b")) {
-									StringBuilder sb = new StringBuilder();
-									sb.append("§3 Points: §b");
-									points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
-									sb.append(points);
-									if (rank != null)
-										sb.append(" (").append(rank.getTotalDisplay());
-									if (Setting.GRAV_SHOW_POINTS_TO_NEXT_RANK.getValue())
-										sb.append(" / ").append(rank.getPointsToNextRank((int) points));
-									if (rank != null)
-										sb.append("§b)");
-
-									// if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
-
-									The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
-									continue;
-								} else if (s.startsWith("§3 Victories: §b")) {
-									victories = Integer.parseInt(
-											ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
-								} else if (s.startsWith("§3 Games Played: §b")) {
-									gamesPlayed = Integer.parseInt(
-											ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
-								}
-
-								The5zigAPI.getAPI().messagePlayer("§o " + s);
-
-							}
-
-							/*
-							 * if (achievements != null) { The5zigAPI.getAPI().messagePlayer("§o " +
-							 * "§3 Achievements: §b" + achievements + ""); }
-							 */
-
-							if (Setting.GRAV_SHOW_PPG.getValue()) {
-								double ppg = (double) ((double) points / (double) gamesPlayed);
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df1f.format(ppg));
-							}
-							if (Setting.GRAV_SHOW_FINISHRATE.getValue()) {
-								double fr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
-								The5zigAPI.getAPI().messagePlayer("§o " + "§3 Finish-Rate: §b" + df1f.format(fr) + "%");
-							}
-
-							if (lastGame != null) {
-								Calendar lastSeen = Calendar.getInstance();
-								lastSeen.setTimeInMillis(lastGame.getTime());
-								The5zigAPI.getAPI().messagePlayer(
-										"§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
-							}
-
-							for (String s : GRAV.footerToSend) {
-								The5zigAPI.getAPI().messagePlayer("§o " + s);
-							}
-
-							GRAV.messagesToSend.clear();
-							GRAV.footerToSend.clear();
-							GRAV.isRecordsRunning = false;
-
-						} catch (Exception e) {
-							e.printStackTrace();
-							if (e.getCause() instanceof FileNotFoundException) {
-								The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
-								GRAV.messagesToSend.clear();
-								GRAV.footerToSend.clear();
-								GRAV.isRecordsRunning = false;
-								return;
-							}
-							The5zigAPI.getAPI().messagePlayer(Log.error
-									+ "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
-
-							for (String s : GRAV.messagesToSend) {
-								The5zigAPI.getAPI().messagePlayer("§o " + s);
-							}
-							for (String s : GRAV.footerToSend) {
-								The5zigAPI.getAPI().messagePlayer("§o " + s);
-							}
-							The5zigAPI.getAPI().messagePlayer(
-									"§o " + "                      §6§m                  §6§m                  ");
-							GRAV.messagesToSend.clear();
-							GRAV.footerToSend.clear();
-							GRAV.isRecordsRunning = false;
+						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
+								? api.getParentMode().getNetworkTitle()
+								: "";
+						ChatColor rankColor = null;
+						if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
+							rankColor = api.getParentMode().getNetworkRankColor();
 						}
+						String rankTitleGRAV = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
+						if (rankTitleGRAV != null)
+							rank = GRAVRank.getFromDisplay(rankTitleGRAV);
+
+						long points = 0;
+						int gamesPlayed = 0;
+						int victories = 0;
+
+						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
+						// Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ?
+						// api.getAchievements() : null;
+
+						// int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
+						// HiveAPI.getLeaderboardsPlacePoints(349, "GRAV") <
+						// HiveAPI.DRgetPoints(GRAV.lastRecords)) ?
+						// HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+
+						List<String> messages = new ArrayList<>(GRAV.messagesToSend);
+						for (String s : messages) {
+
+							if (s.trim().endsWith("'s Stats §6§m")) {
+								The5zigAPI.getLogger().info("Editing Header...");
+								StringBuilder sb = new StringBuilder();
+								String correctUser = api.getParentMode().getCorrectName();
+								if (correctUser.contains("nicked player"))
+									correctUser = "Nicked/Not found";
+								sb.append("          §6§m                  §f ");
+								The5zigAPI.getLogger().info("Added base...");
+								if (rankColor != null) {
+									sb.append(rankColor).append(correctUser);
+									The5zigAPI.getLogger().info("Added colored user...");
+								} else {
+									sb.append(correctUser);
+									The5zigAPI.getLogger().info("Added white user...");
+								}
+								sb.append("§f's Stats §6§m                  ");
+								The5zigAPI.getLogger().info("Added end...");
+								The5zigAPI.getAPI().messagePlayer("§o " + sb.toString());
+
+								if (rankTitle != null && rankTitle.contains("nicked player"))
+									rankTitle = "Nicked/Not found";
+								if (!rankTitle.equals("Nicked/Not found") && !rankTitle.isEmpty()) {
+									if (rankColor == null)
+										rankColor = ChatColor.WHITE;
+									The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " ("
+											+ rankColor + rankTitle + "§6) " + "§m       ");
+								}
+								continue;
+							} else if (s.startsWith("§3 Points: §b")) {
+								StringBuilder sb = new StringBuilder();
+								sb.append("§3 Points: §b");
+								points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
+								sb.append(points);
+								if (rank != null)
+									sb.append(" (").append(rank.getTotalDisplay());
+								if (Setting.GRAV_SHOW_POINTS_TO_NEXT_RANK.getValue())
+									sb.append(" / ").append(rank.getPointsToNextRank((int) points));
+								if (rank != null)
+									sb.append("§b)");
+
+								// if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
+
+								The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+								continue;
+							} else if (s.startsWith("§3 Victories: §b")) {
+								victories = Integer.parseInt(
+										ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+							} else if (s.startsWith("§3 Games Played: §b")) {
+								gamesPlayed = Integer.parseInt(
+										ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+							}
+
+							The5zigAPI.getAPI().messagePlayer("§o " + s);
+
+						}
+
+						/*
+						 * if (achievements != null) { The5zigAPI.getAPI().messagePlayer("§o " +
+						 * "§3 Achievements: §b" + achievements + ""); }
+						 */
+
+						if (Setting.GRAV_SHOW_PPG.getValue()) {
+							double ppg = (double) points / (double) gamesPlayed;
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df1f.format(ppg));
+						}
+						if (Setting.GRAV_SHOW_FINISHRATE.getValue()) {
+							double fr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Finish-Rate: §b" + df1f.format(fr) + "%");
+						}
+
+						if (lastGame != null) {
+							Calendar lastSeen = Calendar.getInstance();
+							lastSeen.setTimeInMillis(lastGame.getTime());
+							The5zigAPI.getAPI().messagePlayer(
+									"§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+						}
+
+						for (String s : GRAV.footerToSend) {
+							The5zigAPI.getAPI().messagePlayer("§o " + s);
+						}
+
+						GRAV.messagesToSend.clear();
+						GRAV.footerToSend.clear();
+						GRAV.isRecordsRunning = false;
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						if (e.getCause() instanceof FileNotFoundException) {
+							The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
+							GRAV.messagesToSend.clear();
+							GRAV.footerToSend.clear();
+							GRAV.isRecordsRunning = false;
+							return;
+						}
+						The5zigAPI.getAPI().messagePlayer(Log.error
+								+ "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
+
+						for (String s : GRAV.messagesToSend) {
+							The5zigAPI.getAPI().messagePlayer("§o " + s);
+						}
+						for (String s : GRAV.footerToSend) {
+							The5zigAPI.getAPI().messagePlayer("§o " + s);
+						}
+						The5zigAPI.getAPI().messagePlayer(
+								"§o " + "                      §6§m                  §6§m                  ");
+						GRAV.messagesToSend.clear();
+						GRAV.footerToSend.clear();
+						GRAV.isRecordsRunning = false;
 					}
 				}).start();
 				return true;

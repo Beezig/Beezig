@@ -31,7 +31,7 @@ public class CustomTestCommand implements Command {
 			String mode = args[0];
 			StringBuilder msg = new StringBuilder();
 
-			List<String> args1 = new ArrayList<String>(Arrays.asList(args));
+			List<String> args1 = new ArrayList<>(Arrays.asList(args));
 			args1.remove(0);
 
 			args1.forEach(s -> msg.append(s).append(" "));

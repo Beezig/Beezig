@@ -12,7 +12,6 @@ import java.util.Date;
 
 public class APIGameMode {
 
-	private String playerName;
 	private String uuid;
 	private ApiHiveGlobal parent;
 	private JSONObject object;
@@ -20,12 +19,11 @@ public class APIGameMode {
 
 	public APIGameMode(String playerName, String... UUID) {
 
+		String playerName1;
 		if (UUID.length == 0) {
-			this.playerName = playerName;
 			// The5zigAPI.getLogger().info("REQUESTING MOJANG UUID: " + playerName);
 			this.uuid = APIUtils.getUUID(playerName);
 		} else {
-			this.playerName = playerName;
 			// The5zigAPI.getLogger().info("UUID FOUND");
 			this.uuid = UUID[0].replaceAll("-", "");
 		}
@@ -147,7 +145,7 @@ public class APIGameMode {
 			throw new UnsupportedOperationException("Mode does not support Monthly Leaderboards!");
 		JSONParser parser = new JSONParser();
 		JSONArray o1 = null;
-		JSONObject o2 = null;
+		JSONObject o2;
 		try {
 			o1 = (JSONArray) parser.parse(((JSONObject) parser
 					.parse(APIUtils.Parser.read(APIUtils.Parser.monthlyLB(getShortcode().toLowerCase()))))

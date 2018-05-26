@@ -1,16 +1,15 @@
 package tk.roccodev.zta.hiveapi;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.stuff.timv.TIMVMap;
 import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
 
 public class StuffFetcher {
 
@@ -21,7 +20,7 @@ public class StuffFetcher {
 		try {
 			JSONParser parser = new JSONParser();
 			JSONObject obj = (JSONObject) parser.parse(APIUtils.readURL(new URL(BASE_URL + "dr.json")));
-			HashMap<String, DRMap> tr = new HashMap<String, DRMap>();
+			HashMap<String, DRMap> tr = new HashMap<>();
 			obj.forEach((k, v) -> {
 				
 				String key = (String) k;
@@ -45,7 +44,7 @@ public class StuffFetcher {
 		try {
 			JSONParser parser = new JSONParser();
 			JSONObject obj = (JSONObject) parser.parse(APIUtils.readURL(new URL(BASE_URL + "timv.json")));
-			HashMap<String, TIMVMap> tr = new HashMap<String, TIMVMap>();
+			HashMap<String, TIMVMap> tr = new HashMap<>();
 			obj.forEach((k, v) -> {
 				
 				String key = (String) k;
@@ -69,13 +68,8 @@ public class StuffFetcher {
 		try {
 			JSONParser parser = new JSONParser();
 			JSONObject obj = (JSONObject) parser.parse(APIUtils.readURL(new URL(BASE_URL + "grav.json")));
-			HashMap<String, String> tr = new HashMap<String, String>();
-			obj.forEach((k, v) -> {
-				
-				
-				tr.put((String)k, (String)v);
-				
-			});
+			HashMap<String, String> tr = new HashMap<>();
+			obj.forEach((k, v) -> tr.put((String)k, (String)v));
 			
 			return tr;
 		} catch (IOException | ParseException e) {

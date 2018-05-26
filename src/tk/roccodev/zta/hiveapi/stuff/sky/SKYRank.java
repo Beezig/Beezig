@@ -1,18 +1,9 @@
 package tk.roccodev.zta.hiveapi.stuff.sky;
 
-import static eu.the5zig.util.minecraft.ChatColor.AQUA;
-import static eu.the5zig.util.minecraft.ChatColor.BLUE;
-import static eu.the5zig.util.minecraft.ChatColor.BOLD;
-import static eu.the5zig.util.minecraft.ChatColor.DARK_PURPLE;
-import static eu.the5zig.util.minecraft.ChatColor.GOLD;
-import static eu.the5zig.util.minecraft.ChatColor.GRAY;
-import static eu.the5zig.util.minecraft.ChatColor.GREEN;
-import static eu.the5zig.util.minecraft.ChatColor.LIGHT_PURPLE;
-import static eu.the5zig.util.minecraft.ChatColor.RED;
-import static eu.the5zig.util.minecraft.ChatColor.YELLOW;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static eu.the5zig.util.minecraft.ChatColor.*;
 
 public enum SKYRank {
 
@@ -69,9 +60,9 @@ public enum SKYRank {
 	public String getPointsToNextRank(int points){
 		if(this == SKYLORD) return "Leaderboard Rank";
 		if(this == GODLY) return "Highest Rank";
-		ArrayList<SKYRank> ranks = new ArrayList<SKYRank>(Arrays.asList(values()));
+		ArrayList<SKYRank> ranks = new ArrayList<>(Arrays.asList(values()));
 		int newIndex = ranks.indexOf(this) + 1;
-		SKYRank next = null;
+		SKYRank next;
 		try{
 			next = ranks.get(newIndex);
 			

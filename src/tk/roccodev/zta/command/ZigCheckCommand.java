@@ -33,37 +33,31 @@ public class ZigCheckCommand implements Command{
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Checking...");
 			if(args[0].equals("-a")) {
 				List<String> players = new ArrayList<>();
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						int t = The5zigAPI.getAPI().getServerPlayers().size();
-						for(NetworkPlayerInfo i : The5zigAPI.getAPI().getServerPlayers()) {
-							if(check(i.getGameProfile().getId().toString().replace("-", ""))) players.add(ChatColor.stripColor(i.getGameProfile().getName()));
-						}
-						The5zigAPI.getAPI().messagePlayer("\n"
-								+ "    §7§m                                                                                    ");
-						for(String s : players) {
-							The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + s);
-						}
-						The5zigAPI.getAPI().messagePlayer("\n" + Log.info + "Found §b" + players.size() + "§3 5zig users out of §b" + t + " §3players.");
-						The5zigAPI.getAPI().messagePlayer(
-								"    §7§m                                                                                    "
-										+ "\n");
+				new Thread(() -> {
+					int t = The5zigAPI.getAPI().getServerPlayers().size();
+					for(NetworkPlayerInfo i : The5zigAPI.getAPI().getServerPlayers()) {
+						if(check(i.getGameProfile().getId().toString().replace("-", ""))) players.add(ChatColor.stripColor(i.getGameProfile().getName()));
 					}
+					The5zigAPI.getAPI().messagePlayer("\n"
+							+ "    §7§m                                                                                    ");
+					for(String s : players) {
+						The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + s);
+					}
+					The5zigAPI.getAPI().messagePlayer("\n" + Log.info + "Found §b" + players.size() + "§3 5zig users out of §b" + t + " §3players.");
+					The5zigAPI.getAPI().messagePlayer(
+							"    §7§m                                                                                    "
+									+ "\n");
 				}).start();
 				
 			}
 			else {
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						ApiHiveGlobal hv = new ApiHiveGlobal(args[0]);
-						if(check(hv.getUUID())) {
-							The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + hv.getCorrectName() + "§3 is a 5zig user.");
-							
-						} else {
-							The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + hv.getCorrectName() + "§c is not a 5zig user.");
-						}
+				new Thread(() -> {
+					ApiHiveGlobal hv = new ApiHiveGlobal(args[0]);
+					if(check(hv.getUUID())) {
+						The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + hv.getCorrectName() + "§3 is a 5zig user.");
+
+					} else {
+						The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + hv.getCorrectName() + "§c is not a 5zig user.");
 					}
 				}).start();
 			}
@@ -80,11 +74,7 @@ public class ZigCheckCommand implements Command{
 			ApiHiveGlobal hv = new ApiHiveGlobal(user);
 			URL url = new URL("http://textures.5zig.net/checkUser/" + hv.getUUID());
 			conn = (HttpURLConnection) url.openConnection();
-			if (conn.getResponseCode() == 200) {
-				return true;
-			} else {
-				return false;
-			}
+			return conn.getResponseCode() == 200;
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

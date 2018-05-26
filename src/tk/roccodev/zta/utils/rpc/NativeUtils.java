@@ -1,15 +1,11 @@
 package tk.roccodev.zta.utils.rpc;
 
 
-	import java.io.File;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileSystemNotFoundException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.ProviderNotFoundException;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 public class NativeUtils {
 	/**
 	 * A simple library class which helps with loading dynamic libraries stored in the
@@ -100,13 +96,10 @@ public class NativeUtils {
 
 	    private static boolean isPosixCompliant() {
 	        try {
-	            if (FileSystems.getDefault()
-	                    .supportedFileAttributeViews()
-	                    .contains("posix")) {
-	                return true;
-	            }
-	            return false;
-	        } catch (FileSystemNotFoundException
+				return FileSystems.getDefault()
+							   .supportedFileAttributeViews()
+							   .contains("posix");
+			} catch (FileSystemNotFoundException
 	                | ProviderNotFoundException
 	                | SecurityException e) {
 	            return false;

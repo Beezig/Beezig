@@ -1,15 +1,9 @@
 package tk.roccodev.zta.hiveapi.stuff.gnt;
-import static eu.the5zig.util.minecraft.ChatColor.AQUA;
-import static eu.the5zig.util.minecraft.ChatColor.GOLD;
-import static eu.the5zig.util.minecraft.ChatColor.GRAY;
-import static eu.the5zig.util.minecraft.ChatColor.GREEN;
-import static eu.the5zig.util.minecraft.ChatColor.RED;
-import static eu.the5zig.util.minecraft.ChatColor.YELLOW;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
+import static eu.the5zig.util.minecraft.ChatColor.*;
 
 public enum GiantRank {
 	
@@ -65,9 +59,9 @@ public enum GiantRank {
 	public String getPointsToNextRank(int points){
 		if(this == SKYGIANT) return "Leaderboard Rank";
 		if(this == GOLIATH) return "Highest Rank";
-		ArrayList<GiantRank> ranks = new ArrayList<GiantRank>(Arrays.asList(values()));
+		ArrayList<GiantRank> ranks = new ArrayList<>(Arrays.asList(values()));
 		int newIndex = ranks.indexOf(this) + 1;
-		GiantRank next = null;
+		GiantRank next;
 		try{
 			next = ranks.get(newIndex);			
 		} catch(Exception e){ return "";}

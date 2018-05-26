@@ -1,7 +1,6 @@
 package tk.roccodev.zta.modules.cai;
 
 import eu.the5zig.mod.modules.GameModeItem;
-import tk.roccodev.zta.games.BP;
 import tk.roccodev.zta.games.CAI;
 
 public class DailyItem extends GameModeItem<CAI> {
