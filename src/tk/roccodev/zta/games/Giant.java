@@ -1,16 +1,5 @@
 package tk.roccodev.zta.games;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
@@ -18,6 +7,10 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.stuff.gnt.GiantRank;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Giant extends GameMode{
 
@@ -48,11 +41,11 @@ public class Giant extends GameMode{
 	private static String dailyPointsName;
 	public static int dailyPoints;
 	
-	public static List<String> messagesToSend = new ArrayList<String>();
-	public static List<String> footerToSend = new ArrayList<String>();
+	public static List<String> messagesToSend = new ArrayList<>();
+	public static List<String> footerToSend = new ArrayList<>();
 	public static boolean isRecordsRunning = false;
 	public static String lastRecords = "";
-	public static List<String> votesToParse = new ArrayList<String>();
+	public static List<String> votesToParse = new ArrayList<>();
 	
 	public Giant(){
 		instance = this;
@@ -130,9 +123,6 @@ public class Giant extends GameMode{
 	}
 
 
-	public void cast(){}
-	
-	
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub

@@ -47,9 +47,9 @@ public class BlockstatsCommand implements Command{
 					List<Object> blocks = new ArrayList<>(Arrays.asList(blockExp.keySet().toArray()));
 					List<Long> levels = new ArrayList<>();
 					List<Long> rawExp = new ArrayList<>();
-					for(int i = 0; i < blocks.size(); i++){
-						levels.add(Long.valueOf(blockExp.get(blocks.get(i)).toString()));
-						rawExp.add(Long.valueOf(rawBlockEx.get(blocks.get(i)).toString()));
+					for (Object block : blocks) {
+						levels.add(Long.valueOf(blockExp.get(block).toString()));
+						rawExp.add(Long.valueOf(rawBlockEx.get(block).toString()));
 					}
 
 					APIUtils.concurrentSort(rawExp, blocks,levels,rawExp);

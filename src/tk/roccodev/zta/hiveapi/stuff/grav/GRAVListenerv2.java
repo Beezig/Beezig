@@ -1,17 +1,5 @@
 package tk.roccodev.zta.hiveapi.stuff.grav;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.EventHandler;
@@ -21,6 +9,13 @@ import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.GRAV;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.ChatComponentUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GRAVListenerv2 {
 	
@@ -35,7 +30,7 @@ public class GRAVListenerv2 {
 			}
 			String componentMaps = ChatComponentUtils.getHoverEventValue(evt.getChatComponent().toString());
 			String[] maps = componentMaps.split("\n");
-			ArrayList<String> mapsL = new ArrayList<String>();
+			ArrayList<String> mapsL = new ArrayList<>();
 			for(String s : maps) {
 				mapsL.add(ChatColor.stripColor(s.replaceFirst("\\-", "").trim().replace(' ', '_').toUpperCase()));
 			}
@@ -44,7 +39,7 @@ public class GRAVListenerv2 {
 			
 			if(evt.getMessage().startsWith("§8▍ §bGra§avi§ety§8 ▏ §6§e§e§l5.§f§6")) {
 				
-				HashMap<Integer, Integer> indexFavorites = new HashMap<Integer, Integer>();
+				HashMap<Integer, Integer> indexFavorites = new HashMap<>();
 				List<String> mapsav = AutovoteUtils.getMapsForMode("grav");
 				
 				for(Map.Entry<Integer,ArrayList<String>> e : GRAV.mapsToParse.entrySet()) {
@@ -73,18 +68,15 @@ public class GRAVListenerv2 {
 				final String index1 = maxEntry.getKey() + "";
 				
 				//Voting
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							Thread.sleep(500);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						The5zigAPI.getAPI().sendPlayerMessage("/v " + index1);
-						The5zigAPI.getAPI().messagePlayer("§8▍ §bGra§avi§ety§8 ▏ §eAutomatically voted for map §6#" + index1);
+				new Thread(() -> {
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+					The5zigAPI.getAPI().sendPlayerMessage("/v " + index1);
+					The5zigAPI.getAPI().messagePlayer("§8▍ §bGra§avi§ety§8 ▏ §eAutomatically voted for map §6#" + index1);
 				}).start();
 				
 				

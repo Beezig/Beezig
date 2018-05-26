@@ -1,18 +1,11 @@
 package tk.roccodev.zta.hiveapi.stuff.cai;
 
-import static eu.the5zig.util.minecraft.ChatColor.AQUA;
-import static eu.the5zig.util.minecraft.ChatColor.BLUE;
-import static eu.the5zig.util.minecraft.ChatColor.BOLD;
-import static eu.the5zig.util.minecraft.ChatColor.DARK_PURPLE;
-import static eu.the5zig.util.minecraft.ChatColor.GOLD;
-import static eu.the5zig.util.minecraft.ChatColor.LIGHT_PURPLE;
-import static eu.the5zig.util.minecraft.ChatColor.RED;
-import static eu.the5zig.util.minecraft.ChatColor.YELLOW;
+import eu.the5zig.util.minecraft.ChatColor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import eu.the5zig.util.minecraft.ChatColor;
+import static eu.the5zig.util.minecraft.ChatColor.*;
 
 public enum CAIRank {
 
@@ -69,9 +62,9 @@ public enum CAIRank {
 	public String getPointsToNextRank(int points){
 		if(this == SHERIFF) return "Leaderboard Rank";
 		if(this == TOMAHAWK) return "Highest Rank";
-		ArrayList<CAIRank> ranks = new ArrayList<CAIRank>(Arrays.asList(values()));
+		ArrayList<CAIRank> ranks = new ArrayList<>(Arrays.asList(values()));
 		int newIndex = ranks.indexOf(this) + 1;
-		CAIRank next = null;
+		CAIRank next;
 		try{
 			next = ranks.get(newIndex);
 			

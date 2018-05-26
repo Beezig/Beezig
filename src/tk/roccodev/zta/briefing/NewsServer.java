@@ -9,7 +9,7 @@ import tk.roccodev.zta.briefing.lergin.StaffUpdate;
 import tk.roccodev.zta.settings.Setting;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,11 +52,11 @@ public class NewsServer {
 
 			The5zigAPI.getAPI().messagePlayer("\n - " + ChatColor.ITALIC + "New maps:");
 			StringBuilder sb = new StringBuilder();
-			HashMap<String, ArrayList<NewMap>> grouped = new HashMap<String, ArrayList<NewMap>>();
+			HashMap<String, ArrayList<NewMap>> grouped = new HashMap<>();
 			for (NewMap m : maps) {
 
 				if (!grouped.containsKey(m.getGameMode())) {
-					grouped.put(m.getGameMode(), new ArrayList<NewMap>(Arrays.asList(m)));
+					grouped.put(m.getGameMode(), new ArrayList<>(Collections.singletonList(m)));
 				} else {
 					ArrayList<NewMap> tmp = grouped.get(m.getGameMode());
 					tmp.add(m);
@@ -82,12 +82,12 @@ public class NewsServer {
 		if (staff.size() != 0) {
 			The5zigAPI.getAPI().messagePlayer("\n - " + ChatColor.ITALIC + "Staff changes:");
 			StringBuilder sb = new StringBuilder();
-			HashMap<StaffChangeType, ArrayList<StaffUpdate>> grouped = new HashMap<StaffChangeType, ArrayList<StaffUpdate>>();
+			HashMap<StaffChangeType, ArrayList<StaffUpdate>> grouped = new HashMap<>();
 			for (StaffUpdate s : staff) {
 
 				if (!grouped.containsKey(s.getType())) {
 
-					grouped.put(s.getType(), new ArrayList<StaffUpdate>(Arrays.asList(s)));
+					grouped.put(s.getType(), new ArrayList<>(Collections.singletonList(s)));
 
 				} else {
 					ArrayList<StaffUpdate> tmp = grouped.get(s.getType());

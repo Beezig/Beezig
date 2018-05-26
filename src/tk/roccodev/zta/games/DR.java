@@ -1,17 +1,5 @@
 package tk.roccodev.zta.games;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
@@ -20,6 +8,11 @@ import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.zta.hiveapi.stuff.dr.DRRank;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class DR extends GameMode {
 
@@ -45,11 +38,11 @@ public class DR extends GameMode {
 	public static String rank;
 	public static DRRank rankObject;
 
-	public static List<String> votesToParse = new ArrayList<String>();
+	public static List<String> votesToParse = new ArrayList<>();
 	public static boolean hasVoted = false;
 
-	public static List<String> messagesToSend = new ArrayList<String>();
-	public static List<String> footerToSend = new ArrayList<String>();
+	public static List<String> messagesToSend = new ArrayList<>();
+	public static List<String> footerToSend = new ArrayList<>();
 	public static boolean isRecordsRunning = false;
 
 	public static void initDailyPointsWriter() throws IOException {
@@ -127,9 +120,7 @@ public class DR extends GameMode {
 			return true;
 		if (state == GameState.PREGAME)
 			return true;
-		if (state == GameState.STARTING)
-			return true;
-		return false;
+		return state == GameState.STARTING;
 	}
 
 }

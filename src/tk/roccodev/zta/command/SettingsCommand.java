@@ -72,7 +72,7 @@ public class SettingsCommand implements Command{
 				return true;
 			}
 			boolean b = Boolean.valueOf(value);
-			Setting sett = null;
+			Setting sett;
 			try{
 				sett = Setting.valueOf(setting.toUpperCase());
 			}

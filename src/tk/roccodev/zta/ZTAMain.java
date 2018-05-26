@@ -1,6 +1,6 @@
 package tk.roccodev.zta;
 
-import club.minnced.discord.rpc.DiscordRPC;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.*;
 import eu.the5zig.mod.event.EventHandler.Priority;
@@ -62,7 +62,6 @@ public class ZTAMain {
 		String v = ZTAMain.class.getAnnotation(Plugin.class).version();
 		String toParse = v.replaceAll("\\.", "");
 		return Integer.parseInt(toParse);
-
 	}
 
 	@EventHandler(priority = EventHandler.Priority.LOW)
@@ -743,12 +742,12 @@ public class ZTAMain {
 		NotesManager.notes.clear();
 		hasServedNews = false;
 		System.out.println("Disconnecting...");
-		if (DiscordUtils.shouldOperate)
-			DiscordRPC.INSTANCE.Discord_ClearPresence();
+		if (DiscordUtils.shouldOperate && Setting.DISCORD_RPC.getValue())
+			club.minnced.discord.rpc.DiscordRPC.INSTANCE.Discord_ClearPresence();
 		if (DiscordUtils.callbacksThread != null)
 			DiscordUtils.callbacksThread.interrupt();
-		if (DiscordUtils.shouldOperate)
-			DiscordRPC.INSTANCE.Discord_Shutdown();
+		if (DiscordUtils.shouldOperate && Setting.DISCORD_RPC.getValue())
+			club.minnced.discord.rpc.DiscordRPC.INSTANCE.Discord_Shutdown();
 
 		if (ActiveGame.current() == null || ActiveGame.current().isEmpty())
 			return;

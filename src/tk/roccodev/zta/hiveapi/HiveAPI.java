@@ -80,7 +80,7 @@ public class HiveAPI {
 	public static void GiantupdatePoints(boolean mini) throws Exception{
 		String playername = The5zigAPI.getAPI().getGameProfile().getName();
 		JSONParser parser = new JSONParser();
-		JSONObject o = null;
+		JSONObject o;
 		
 			o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
 		
@@ -207,7 +207,7 @@ public class HiveAPI {
 	public static long getMedals(String ign) throws Exception{
 		
 		JSONParser parser = new JSONParser();
-		JSONObject o = null;
+		JSONObject o;
 		
 			o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(ign)));
 		
@@ -221,7 +221,7 @@ public class HiveAPI {
 	public static long getTokens(String ign) throws Exception{
 		
 		JSONParser parser = new JSONParser();
-		JSONObject o = null;
+		JSONObject o;
 		
 			o = (JSONObject) parser.parse(readUrl(parsePlayerURLGeneric(ign)));
 		
@@ -264,7 +264,7 @@ public class HiveAPI {
 		}	
 		JSONParser parser = new JSONParser();
 		JSONArray o1 = null;
-		JSONObject o2 = null;
+		JSONObject o2;
 			try {
 				o1 = (JSONArray) parser.parse(((JSONObject) parser.parse(readUrl(parseMonthlyURL(game.toLowerCase())))).get("leaderboard").toString());
 			} catch (Exception e) {
@@ -310,7 +310,7 @@ public class HiveAPI {
 			e.printStackTrace();
 		}
 		try {
-				return (String) o1.get("username").toString();
+				return o1.get("username").toString();
 			} catch (Exception e) {
 				The5zigAPI.getLogger().info("Failed getLBPlacePoints (JSON 1)");
 				e.printStackTrace();
@@ -337,27 +337,23 @@ public class HiveAPI {
 	}
 		
 	private static String readUrl(URL url) throws Exception {
-	    BufferedReader reader = null;
-	    try {
-	       URLConnection conn = url.openConnection();
-	       conn.addRequestProperty("User-Agent", Log.getUserAgent());
-	        reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-	        StringBuffer buffer = new StringBuffer();
-	        int read;
-	        char[] chars = new char[1024];
-	        while ((read = reader.read(chars)) != -1)
-	            buffer.append(chars, 0, read); 
 
-	        
-	        return buffer.toString();
-	    } catch(Exception e){
-	    	
-	    	e.printStackTrace();
+		URLConnection conn = url.openConnection();
+		conn.addRequestProperty("User-Agent", Log.getUserAgent());
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+			StringBuilder buffer = new StringBuilder();
+			int read;
+			char[] chars = new char[1024];
+			while ((read = reader.read(chars)) != -1)
+				buffer.append(chars, 0, read);
+
+
+			return buffer.toString();
+		} catch (Exception e) {
+
+			e.printStackTrace();
 			return null;
-	    } finally {
-	        if (reader != null)
-	            reader.close();
-	    }
+		}
 
 	}
 

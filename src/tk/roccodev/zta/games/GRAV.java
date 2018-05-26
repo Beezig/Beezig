@@ -13,15 +13,15 @@ import java.util.List;
 
 public class GRAV extends GameMode {
 
-	public static HashMap<String, String> mapsPool = new HashMap<String, String>();
+	public static HashMap<String, String> mapsPool = new HashMap<>();
 
-	public static List<String> messagesToSend = new ArrayList<String>();
-	public static List<String> footerToSend = new ArrayList<String>();
+	public static List<String> messagesToSend = new ArrayList<>();
+	public static List<String> footerToSend = new ArrayList<>();
 	public static boolean isRecordsRunning = false;
 	public static String lastRecords = "";
 
 	public static boolean hasVoted = false;
-	public static HashMap<Integer, ArrayList<String>> mapsToParse = new HashMap<Integer, ArrayList<String>>();
+	public static HashMap<Integer, ArrayList<String>> mapsToParse = new HashMap<>();
 	
 	public static long gamePoints;
 	
@@ -34,10 +34,10 @@ public class GRAV extends GameMode {
 	public static String rank;
 	public static GRAVRank rankObject;
 	
-	public static ArrayList<String> maps = new ArrayList<String>();
-	public static HashMap<String, Double> mapPBs = new HashMap<String, Double>();
-	public static HashMap<Integer, String> toDisplay = new HashMap<Integer, String>();
-	public static HashMap<Integer, String> toDisplayWithFails = new HashMap<Integer, String>();
+	public static ArrayList<String> maps = new ArrayList<>();
+	public static HashMap<String, Double> mapPBs = new HashMap<>();
+	public static HashMap<Integer, String> toDisplay = new HashMap<>();
+	public static HashMap<Integer, String> toDisplayWithFails = new HashMap<>();
 	public static int currentMap = -1;
 	
 
@@ -68,8 +68,7 @@ public class GRAV extends GameMode {
 
 		if(state == GameState.GAME) return true;
 		if(state == GameState.PREGAME) return true;
-		if(state == GameState.STARTING) return true;
-		return false;
+		return state == GameState.STARTING;
 	}
 
 	

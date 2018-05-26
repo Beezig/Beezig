@@ -1,13 +1,12 @@
 package tk.roccodev.zta.hiveapi.wrapper.modes;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.simple.JSONObject;
-
 import eu.the5zig.mod.server.GameMode;
+import org.json.simple.JSONObject;
 import tk.roccodev.zta.games.GRAV;
 import tk.roccodev.zta.hiveapi.wrapper.APIGameMode;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ApiGRAV extends APIGameMode {
 
@@ -51,11 +50,11 @@ public class ApiGRAV extends APIGameMode {
 	}
 	
 	public HashMap<String, Double> getMapTimes(){
-		HashMap<String, Double> tr = new HashMap<String, Double>();
+		HashMap<String, Double> tr = new HashMap<>();
 		JSONObject times = (JSONObject) object("maprecords");
 		for(Object o : times.entrySet()) {
 			Map.Entry<String, Long> e = (Map.Entry<String, Long>) o;
-			tr.put(e.getKey(), (double)((double)e.getValue() / 1000D));
+			tr.put(e.getKey(), (double)e.getValue() / 1000D);
 		}
 		
 		return tr;

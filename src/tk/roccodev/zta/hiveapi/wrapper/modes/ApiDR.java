@@ -143,9 +143,9 @@ public class ApiDR extends PvPMode {
 
 	public String getWorldRecordHolder(DRMap map){
 		String mapid = map.getSpeedrunID();
-		String WRHolder = null;
+		String WRHolder;
 		JSONParser parser = new JSONParser();
-		JSONObject run0 = null;
+		JSONObject run0;
 			// run0 = Information about the WR run entry on speedrun.com
 			try {
 				run0 = (JSONObject) parser.parse(((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(APIUtils.readURL(APIUtils.speedrunPublic(mapid, 0)))).get("data").toString())).get("runs").toString())).get(0).toString())).get("run").toString());
@@ -156,7 +156,7 @@ public class ApiDR extends PvPMode {
 			}
 			try {
 				//Returns the world record holder username... lmao
-				WRHolder = (String) ((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(APIUtils.readURL(APIUtils.speedrunPublic((String) ((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("id"), 1)))).toJSONString())).get("data").toString())).get("names").toString())).get("international").toString();
+				WRHolder = ((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(((JSONObject) parser.parse(APIUtils.readURL(APIUtils.speedrunPublic((String) ((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("id"), 1)))).toJSONString())).get("data").toString())).get("names").toString())).get("international").toString();
 			} catch (Exception e) {
 				The5zigAPI.getLogger().info("Failed DRgetWRHolder (WRHolder)");
 				e.printStackTrace();
@@ -164,7 +164,7 @@ public class ApiDR extends PvPMode {
 			}
 			if (WRHolder == null){
 				try {
-					WRHolder = (String) (((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("name")).toString();
+					WRHolder = (((JSONObject) parser.parse(((JSONArray) parser.parse(((JSONObject) parser.parse(run0.toJSONString())).get("players").toString())).get(0).toString())).get("name")).toString();
 				} catch (Exception e) {
 					The5zigAPI.getLogger().info("Failed DRgetWRHolder (guest)");
 					e.printStackTrace();

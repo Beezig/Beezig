@@ -1,12 +1,12 @@
 package tk.roccodev.zta.hiveapi.stuff.bed;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.hiveapi.HiveAPI;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public enum BEDRank {
 
@@ -104,7 +104,7 @@ public enum BEDRank {
 	
 	public static BEDRank getRank(long points){
 		
-		ArrayList<BEDRank> ranks = new ArrayList<BEDRank>(Arrays.asList(values()));
+		ArrayList<BEDRank> ranks = new ArrayList<>(Arrays.asList(values()));
 		Collections.reverse(ranks);
 		for(BEDRank rank : ranks){
 			if(rank.getStart() != -1 && rank.getStart() <= points){
@@ -158,9 +158,9 @@ public enum BEDRank {
 		}
 		int level = getLevel(points);
 		if(level == 1){
-			ArrayList<BEDRank> ranks = new ArrayList<BEDRank>(Arrays.asList(values()));
+			ArrayList<BEDRank> ranks = new ArrayList<>(Arrays.asList(values()));
 			int newIndex = ranks.indexOf(this) + 1;
-			BEDRank next = null;
+			BEDRank next;
 			try{
 				next = ranks.get(newIndex);
 				

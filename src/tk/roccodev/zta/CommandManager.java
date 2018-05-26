@@ -1,17 +1,13 @@
 package tk.roccodev.zta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.zta.command.Command;
 
+import java.util.*;
+
 public class CommandManager {
 	
-	public static Set<Command> commandExecutors = new HashSet<Command>();
+	public static Set<Command> commandExecutors = new HashSet<>();
 	
 	
 	/*
@@ -36,7 +32,7 @@ public class CommandManager {
 		}
 		if(cmdFound == null) return false;
 		
-		List<String> dataList = new ArrayList<String>(Arrays.asList(data));
+		List<String> dataList = new ArrayList<>(Arrays.asList(data));
 		dataList.remove(0); //Remove alias
 		
 		

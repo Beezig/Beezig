@@ -24,24 +24,18 @@ public class WRCommand implements Command{
 	public boolean execute(String[] args) {
 		if(!(ActiveGame.is("dr"))) return false;
 		if(args.length == 0 && DR.activeMap != null){
-			new Thread(new Runnable(){
-				@Override
-				public void run(){
-					ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
-					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + api.getWorldRecord(DR.activeMap) + "§3 by §b" + DR.currentMapWRHolder);
-				}
+			new Thread(() -> {
+				ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
+				The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + api.getWorldRecord(DR.activeMap) + "§3 by §b" + DR.currentMapWRHolder);
 			}).start();
 	
 		}
 		else {			
 			String mapName = String.join(" ", args);
 			DRMap map = DR.mapsPool.get(mapName.toLowerCase());			
-			new Thread(new Runnable(){
-				@Override
-				public void run(){
-					ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
-					The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §b" + map.getDisplayName() + "§3 is §b" + api.getWorldRecord(map) + "§3 by §b" + api.getWorldRecordHolder(map));
-				}
+			new Thread(() -> {
+				ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
+				The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §b" + map.getDisplayName() + "§3 is §b" + api.getWorldRecord(map) + "§3 by §b" + api.getWorldRecordHolder(map));
 			}).start();
 	
 		

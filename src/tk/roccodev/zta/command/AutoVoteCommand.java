@@ -35,11 +35,11 @@ public class AutoVoteCommand implements Command {
 				String map = args[1];
 				String[] data = map.split("_");
 				String gamemode = data[0]; // ex: dr
-				List<String> mapStr = new ArrayList<String>(Arrays.asList(data));
+				List<String> mapStr = new ArrayList<>(Arrays.asList(data));
 				mapStr.remove(0);
 
 				StringBuilder sb = new StringBuilder();
-				String mapString = "";
+				String mapString;
 				for (String s : mapStr) {
 					sb.append(s + "_");
 				}
@@ -64,16 +64,16 @@ public class AutoVoteCommand implements Command {
 				String[] data = map.split("_");
 				String gamemode = data[0]; // ex: dr
 
-				List<String> mapStr = new ArrayList<String>(Arrays.asList(data));
+				List<String> mapStr = new ArrayList<>(Arrays.asList(data));
 				mapStr.remove(0);
 				StringBuilder sb = new StringBuilder();
-				String mapString = "";
+				String mapString;
 				for (String s : mapStr) {
 					sb.append(s + "_");
 				}
 				mapString = sb.deleteCharAt(sb.length() - 1).toString().trim();
 
-				List<String> maps = (List<String>) AutovoteUtils.getMapsForMode(gamemode.toLowerCase());
+				List<String> maps = AutovoteUtils.getMapsForMode(gamemode.toLowerCase());
 				maps.remove(mapString.trim().toUpperCase());
 				AutovoteUtils.set(gamemode.toLowerCase(), maps);
 				AutovoteUtils.dump();

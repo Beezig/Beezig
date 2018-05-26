@@ -6,7 +6,6 @@ import eu.the5zig.mod.render.RenderLocation;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.games.GRAV;
-import tk.roccodev.zta.games.HIDE;
 
 public class StagesItem extends GameModeItem<GRAV> {
 
