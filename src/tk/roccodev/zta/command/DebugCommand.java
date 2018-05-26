@@ -18,11 +18,8 @@ public class DebugCommand implements Command{
 	public boolean execute(String[] args) {
 			//some debug code here v
 			
-			new Thread(new Runnable(){
-				@Override
-				public void run(){
+			new Thread(() -> {
 
-				}
 			}).start();
 				 
 			return true;

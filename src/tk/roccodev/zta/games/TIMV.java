@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Formatter;
-import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
 public class TIMV extends GameMode {
@@ -52,15 +51,15 @@ public class TIMV extends GameMode {
 	public static TIMVRank rankObject;
 
 	// Advanced Records
-	public static List<String> messagesToSend = new ArrayList<String>();
-	public static List<String> footerToSend = new ArrayList<String>();
+	public static List<String> messagesToSend = new ArrayList<>();
+	public static List<String> footerToSend = new ArrayList<>();
 	public static boolean isRecordsRunning = false;
 
 	// Autovoting
-	public static List<String> votesToParse = new ArrayList<String>();
+	public static List<String> votesToParse = new ArrayList<>();
 
 	// Anti HAS 'test'
-	public static List<String> testRequests = new ArrayList<String>();
+	public static List<String> testRequests = new ArrayList<>();
 
 	public static HashMap<String, TIMVMap> mapsPool;
 
@@ -140,7 +139,7 @@ public class TIMV extends GameMode {
 		The5zigAPI.getLogger().info("writing2");
 		String mapName = mapStr == null ? "Unknown Map" : mapStr;
 		String[] entries = { role, karmaCounter + "", mapName };
-		CsvWriter writer = null;
+		CsvWriter writer;
 
 		boolean alreadyExists = new File(ZTAMain.mcFile.getAbsolutePath() + "/timv/games.csv").exists();
 		if (!alreadyExists) {
@@ -306,9 +305,7 @@ public class TIMV extends GameMode {
 			return true;
 		if (state == GameState.PREGAME)
 			return true;
-		if (state == GameState.STARTING)
-			return true;
-		return false;
+		return state == GameState.STARTING;
 	}
 
 	static class DateFormatter extends Formatter {
@@ -325,14 +322,6 @@ public class TIMV extends GameMode {
 			builder.append(formatMessage(record));
 			builder.append("\n");
 			return builder.toString();
-		}
-
-		public String getHead(Handler h) {
-			return super.getHead(h);
-		}
-
-		public String getTail(Handler h) {
-			return super.getTail(h);
 		}
 
 	}

@@ -31,7 +31,7 @@ public class ClosestToWR {
 			long cachedUntil = (long) j.get("cachedUntil");
 
 			JSONObject times = (JSONObject) j.get("times");
-			HashMap<DRMap, Double> timesHash = new HashMap<DRMap, Double>();
+			HashMap<DRMap, Double> timesHash = new HashMap<>();
 
 			for (Object o : times.entrySet()) {
 				Map.Entry<String, Double> entry = (Map.Entry<String, Double>) o;

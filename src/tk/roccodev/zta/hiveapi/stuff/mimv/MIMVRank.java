@@ -58,9 +58,9 @@ public enum MIMVRank {
 	public String getPointsToNextRank(int points){
 		if(this == MUCKDUCK) return "Leaderboard Rank";
 		if(this == EZIO) return "Highest Rank";
-		ArrayList<MIMVRank> ranks = new ArrayList<MIMVRank>(Arrays.asList(values()));
+		ArrayList<MIMVRank> ranks = new ArrayList<>(Arrays.asList(values()));
 		int newIndex = ranks.indexOf(this) + 1;
-		MIMVRank next = null;
+		MIMVRank next;
 		try{
 			next = ranks.get(newIndex);
 			

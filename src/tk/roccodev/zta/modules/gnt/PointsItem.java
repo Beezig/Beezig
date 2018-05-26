@@ -6,8 +6,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.games.Giant;
-import tk.roccodev.zta.games.Giant;
-import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 
 public class PointsItem extends GameModeItem<Giant>{

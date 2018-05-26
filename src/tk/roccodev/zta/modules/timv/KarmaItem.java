@@ -4,7 +4,6 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.zta.games.TIMV;
-import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.APIValues;
 
 public class KarmaItem extends GameModeItem<TIMV> {

@@ -1,14 +1,14 @@
 package tk.roccodev.zta.notes;
 
+import eu.the5zig.mod.The5zigAPI;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import eu.the5zig.mod.The5zigAPI;
-
 public class NotesManager {
 
-	public static List<String>  notes = new ArrayList<String>();
+	public static List<String>  notes = new ArrayList<>();
 
 	public static boolean HR1cm5z = false;
 	

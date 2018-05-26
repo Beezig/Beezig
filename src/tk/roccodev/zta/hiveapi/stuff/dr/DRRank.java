@@ -1,19 +1,9 @@
 package tk.roccodev.zta.hiveapi.stuff.dr;
 
-import static eu.the5zig.util.minecraft.ChatColor.AQUA;
-import static eu.the5zig.util.minecraft.ChatColor.BLUE;
-import static eu.the5zig.util.minecraft.ChatColor.BOLD;
-import static eu.the5zig.util.minecraft.ChatColor.DARK_BLUE;
-import static eu.the5zig.util.minecraft.ChatColor.DARK_PURPLE;
-import static eu.the5zig.util.minecraft.ChatColor.GOLD;
-import static eu.the5zig.util.minecraft.ChatColor.GRAY;
-import static eu.the5zig.util.minecraft.ChatColor.GREEN;
-import static eu.the5zig.util.minecraft.ChatColor.LIGHT_PURPLE;
-import static eu.the5zig.util.minecraft.ChatColor.RED;
-import static eu.the5zig.util.minecraft.ChatColor.YELLOW;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static eu.the5zig.util.minecraft.ChatColor.*;
 
 public enum DRRank {
 
@@ -75,9 +65,9 @@ public enum DRRank {
 	public String getPointsToNextRank(int points){
 		if(this == SPEED_OF_LIGHT) return "Leaderboard Rank";
 		if(this == HYPERSPACE) return "Highest Rank";
-		ArrayList<DRRank> ranks = new ArrayList<DRRank>(Arrays.asList(values()));
+		ArrayList<DRRank> ranks = new ArrayList<>(Arrays.asList(values()));
 		int newIndex = ranks.indexOf(this) + 1;
-		DRRank next = null;
+		DRRank next;
 		try{
 			next = ranks.get(newIndex);			
 		} catch(Exception e){ return "";}

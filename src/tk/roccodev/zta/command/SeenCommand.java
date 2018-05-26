@@ -29,28 +29,25 @@ public class SeenCommand implements Command{
 			
 			String ign = args[0];
 			ApiHiveGlobal api = new ApiHiveGlobal(ign);
-			new Thread(new Runnable(){
-				@Override
-				public void run(){
-					if(!api.getPlayerLocation().equals("the Land of Nods!")){
-						The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + api.getCorrectName() + "§3 is online and in §b" + api.getPlayerLocation());
+			new Thread(() -> {
+				if(!api.getPlayerLocation().equals("the Land of Nods!")){
+					The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + api.getCorrectName() + "§3 is online and in §b" + api.getPlayerLocation());
+				}
+				else{
+					Calendar lastSeen = Calendar.getInstance();
+					lastSeen.setTimeInMillis(api.getLastLogout()*1000);
+
+					String minute = Integer.toString(lastSeen.get(Calendar.MINUTE));
+					if(lastSeen.get(Calendar.MINUTE) < 10){
+						minute = "0" + minute;
 					}
-					else{
-						Calendar lastSeen = Calendar.getInstance();
-						lastSeen.setTimeInMillis(api.getLastLogout()*1000);
-					
-						String minute = Integer.toString(lastSeen.get(lastSeen.MINUTE));
-						if(lastSeen.get(lastSeen.MINUTE) < 10){
-							minute = "0" + minute;
-						}
-						String hour = Integer.toString(lastSeen.get(lastSeen.HOUR_OF_DAY));
-						if(lastSeen.get(lastSeen.HOUR_OF_DAY) < 10){
-							hour = "0" + hour;
-						}
-					// Never again
-						The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + api.getCorrectName() + "§3 was last seen on §b" + lastSeen.get(lastSeen.DAY_OF_MONTH) + "." + (lastSeen.get(lastSeen.MONTH) + 1) + "." + lastSeen.get(lastSeen.YEAR) + " " + hour + ":" + minute
-							+ "§b (§b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()) + ".§b)");
+					String hour = Integer.toString(lastSeen.get(Calendar.HOUR_OF_DAY));
+					if(lastSeen.get(Calendar.HOUR_OF_DAY) < 10){
+						hour = "0" + hour;
 					}
+				// Never again
+					The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + api.getCorrectName() + "§3 was last seen on §b" + lastSeen.get(Calendar.DAY_OF_MONTH) + "." + (lastSeen.get(Calendar.MONTH) + 1) + "." + lastSeen.get(Calendar.YEAR) + " " + hour + ":" + minute
+						+ "§b (§b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()) + ".§b)");
 				}
 			}).start();
 			

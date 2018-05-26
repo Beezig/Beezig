@@ -1,16 +1,5 @@
 package tk.roccodev.zta.games;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
@@ -18,6 +7,10 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.ZTAMain;
 import tk.roccodev.zta.hiveapi.stuff.mimv.MIMVRank;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MIMV extends GameMode {
 
@@ -27,8 +20,8 @@ public class MIMV extends GameMode {
 		return "Murder in Mineville";
 	}
 
-	public static List<String> messagesToSend = new ArrayList<String>();
-	public static List<String> footerToSend = new ArrayList<String>();
+	public static List<String> messagesToSend = new ArrayList<>();
+	public static List<String> footerToSend = new ArrayList<>();
 	public static boolean isRecordsRunning = false;
 	public static String lastRecords = "";
 	
@@ -45,7 +38,7 @@ public class MIMV extends GameMode {
 	public static String rank;
 	public static MIMVRank rankObject;
 	
-	public static List<String> votesToParse = new ArrayList<String>();
+	public static List<String> votesToParse = new ArrayList<>();
 
 	public static void initDailyPointsWriter() throws IOException {
 		File f = new File(ZTAMain.mcFile + "/mimv/dailyPoints/" + dailyPointsName);
@@ -112,9 +105,7 @@ public class MIMV extends GameMode {
 			return true;
 		if (state == GameState.PREGAME)
 			return true;
-		if (state == GameState.STARTING)
-			return true;
-		return false;
+		return state == GameState.STARTING;
 	}
 
 }

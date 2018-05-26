@@ -1,19 +1,9 @@
 package tk.roccodev.zta.hiveapi.stuff.timv;
 
-import static eu.the5zig.util.minecraft.ChatColor.AQUA;
-import static eu.the5zig.util.minecraft.ChatColor.BLUE;
-import static eu.the5zig.util.minecraft.ChatColor.BOLD;
-import static eu.the5zig.util.minecraft.ChatColor.DARK_AQUA;
-import static eu.the5zig.util.minecraft.ChatColor.DARK_PURPLE;
-import static eu.the5zig.util.minecraft.ChatColor.GOLD;
-import static eu.the5zig.util.minecraft.ChatColor.GRAY;
-import static eu.the5zig.util.minecraft.ChatColor.LIGHT_PURPLE;
-import static eu.the5zig.util.minecraft.ChatColor.RED;
-import static eu.the5zig.util.minecraft.ChatColor.WHITE;
-import static eu.the5zig.util.minecraft.ChatColor.YELLOW;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static eu.the5zig.util.minecraft.ChatColor.*;
 
 public enum TIMVRank {
 
@@ -73,9 +63,9 @@ public enum TIMVRank {
 	public String getKarmaToNextRank(int karma){
 		if(this == SHERLOCK) return "Leaderboard Rank";
 		if(this == WATSON) return "Highest Rank";
-		ArrayList<TIMVRank> ranks = new ArrayList<TIMVRank>(Arrays.asList(values()));
+		ArrayList<TIMVRank> ranks = new ArrayList<>(Arrays.asList(values()));
 		int newIndex = ranks.indexOf(this) + 1;
-		TIMVRank next = null;
+		TIMVRank next;
 		try{
 			next = ranks.get(newIndex);
 			

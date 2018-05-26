@@ -12,68 +12,70 @@ import java.lang.reflect.InvocationTargetException;
 public class NotificationManager {
 
 	public static void sendNotification(String title, String content) {
-		if(ZTAMain.OS.equals("unix")) {
-			try {
-				String[] cmd = {"notify-send", title, content};
-			Runtime.getRuntime().exec(cmd);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else if(ZTAMain.OS.equals("mac")) {
-			try {
-				String[] cmd = {"osascript", "-e", "display notification \"" + content + "\" with title \"" + title +"\""};
-			Runtime.getRuntime().exec(cmd);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else if(ZTAMain.OS.equals("win")) {
-			SystemTray tray = SystemTray.getSystemTray();
-			TrayIcon icon = new TrayIcon(Toolkit.getDefaultToolkit().createImage(ZTAMain.class.getResource("/libraries/hivelogo.jpg")), "Beezig");
-			icon.setImageAutoSize(true);
-			icon.setToolTip("Beezig");
-			icon.addMouseListener(new MouseListener() {
-				
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					tray.remove(icon);
-					
+		switch (ZTAMain.OS) {
+			case "unix":
+				try {
+					String[] cmd = {"notify-send", title, content};
+					Runtime.getRuntime().exec(cmd);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {
-
+				break;
+			case "mac":
+				try {
+					String[] cmd = {"osascript", "-e", "display notification \"" + content + "\" with title \"" + title + "\""};
+					Runtime.getRuntime().exec(cmd);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+				break;
+			case "win":
+				SystemTray tray = SystemTray.getSystemTray();
+				TrayIcon icon = new TrayIcon(Toolkit.getDefaultToolkit().createImage(ZTAMain.class.getResource("/libraries/hivelogo.jpg")), "Beezig");
+				icon.setImageAutoSize(true);
+				icon.setToolTip("Beezig");
+				icon.addMouseListener(new MouseListener() {
 
-				@Override
-				public void mouseReleased(MouseEvent e) {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						tray.remove(icon);
 
+					}
+
+					@Override
+					public void mousePressed(MouseEvent e) {
+
+					}
+
+					@Override
+					public void mouseReleased(MouseEvent e) {
+
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {
+
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+
+					}
+				});
+				try {
+					tray.add(icon);
+				} catch (AWTException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-
-				@Override
-				public void mouseEntered(MouseEvent e) {
-
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-
-				}
-			});
-			try {
-				tray.add(icon);
-			} catch (AWTException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			icon.displayMessage(title, content, MessageType.INFO);
+				icon.displayMessage(title, content, MessageType.INFO);
+				break;
 		}
 	}
 	
-	public static boolean isInGameFocus() throws Exception {
+	public static boolean isInGameFocus() {
 		Class disp = null;
 		try {
 			disp = Class.forName("org.lwjgl.opengl.Display");

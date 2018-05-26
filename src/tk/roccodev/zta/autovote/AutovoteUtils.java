@@ -1,20 +1,14 @@
 package tk.roccodev.zta.autovote;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
+import org.yaml.snakeyaml.Yaml;
+import tk.roccodev.zta.ZTAMain;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.yaml.snakeyaml.Yaml;
-
-import tk.roccodev.zta.ZTAMain;
 
 public class AutovoteUtils {
 
@@ -24,7 +18,7 @@ public class AutovoteUtils {
 	
 	
 	public static List<String> getMapsForMode(String mode){
-		List<String> tr = new ArrayList<String>();
+		List<String> tr = new ArrayList<>();
 		if(get(mode) == null)
 			return tr;
 		
@@ -44,7 +38,7 @@ public class AutovoteUtils {
 		
 		ymlObject = (HashMap<String, Object>) yml.load(input);
 		if(ymlObject == null) {
-			ymlObject = new HashMap<String, Object>();
+			ymlObject = new HashMap<>();
 			dump();
 		}
 		
@@ -97,14 +91,6 @@ public class AutovoteUtils {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public static void migrate() {
-		
-		
-		
-		
-	}
-	
+
 
 }

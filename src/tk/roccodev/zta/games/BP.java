@@ -20,8 +20,8 @@ public class BP extends GameMode {
 		return "BlockParty";
 	}
 
-	public static List<String> messagesToSend = new ArrayList<String>();
-	public static List<String> footerToSend = new ArrayList<String>();
+	public static List<String> messagesToSend = new ArrayList<>();
+	public static List<String> footerToSend = new ArrayList<>();
 	public static boolean isRecordsRunning = false;
 	public static String lastRecords = "";
 	
@@ -38,7 +38,7 @@ public class BP extends GameMode {
 	public static String rank;
 	public static BPRank rankObject;
 	
-	public static List<String> votesToParse = new ArrayList<String>();
+	public static List<String> votesToParse = new ArrayList<>();
 
 	
 	public static void initDailyPointsWriter() throws IOException {
@@ -107,9 +107,7 @@ public class BP extends GameMode {
 			return true;
 		if (state == GameState.PREGAME)
 			return true;
-		if (state == GameState.STARTING)
-			return true;
-		return false;
+		return state == GameState.STARTING;
 	}
 
 }

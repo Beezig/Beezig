@@ -37,7 +37,7 @@ public class Updater {
 
 		
 		while ((strLine = reader.readLine()) != null)   {
-		int ver1 = 0;
+		int ver1;
 		try{
 			ver1 = Integer.parseInt(strLine);
 		}catch(Exception e){

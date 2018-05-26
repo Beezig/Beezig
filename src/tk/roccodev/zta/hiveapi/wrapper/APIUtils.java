@@ -22,7 +22,7 @@ public class APIUtils {
 		if (ign.length() == 32) return ign;
 		// ^ input is already a uuid
 		JSONParser parser = new JSONParser();
-		JSONObject o = null;
+		JSONObject o;
 		try {
 			o = (JSONObject) parser.parse(Parser.read(Parser.mojang(ign)));
 		} catch (Exception e) {
@@ -202,14 +202,14 @@ public class APIUtils {
 		//Thanks to "Samet öztoprak" on stackoverflow :^)
 
 		String words[] = sentence.replaceAll("\\s+", " ").trim().split(" ");
-		String newSentence = "";
+		StringBuilder newSentence = new StringBuilder();
 		for (String word : words) {
 			for (int i = 0; i < word.length(); i++)
-				newSentence = newSentence + ((i == 0) ? word.substring(i, i + 1).toUpperCase() :
-													 (i != word.length() - 1) ? word.substring(i, i + 1).toLowerCase() : word.substring(i, i + 1).toLowerCase().toLowerCase() + " ");
+				newSentence.append((i == 0) ? word.substring(i, i + 1).toUpperCase() :
+										   (i != word.length() - 1) ? word.substring(i, i + 1).toLowerCase() : word.substring(i, i + 1).toLowerCase().toLowerCase() + " ");
 		}
 
-		return newSentence.trim();
+		return newSentence.toString().trim();
 	}
 
 
@@ -217,8 +217,8 @@ public class APIUtils {
 
 		Long sum = 0L;
 
-		for (int i = 0; i < arr.length; i++) {
-			sum += Long.valueOf(String.valueOf(arr[i]));
+		for (Object anArr : arr) {
+			sum += Long.valueOf(String.valueOf(anArr));
 		}
 
 		return sum / arr.length;
