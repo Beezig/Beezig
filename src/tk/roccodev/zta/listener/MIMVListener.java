@@ -9,6 +9,7 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.autovote.AutovoteUtils;
+import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.games.MIMV;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.mimv.MIMVRank;
@@ -93,17 +94,44 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 				List<String> votesCopy = new ArrayList<>(MIMV.votesToParse);
 				List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("mimv"));
 
-				List<String> votesindex = new ArrayList<>();
-				List<String> finalvoting = new ArrayList<>();
 
-				for (String s : votesCopy) {
+				TreeMap<String, Integer> votesindex = new TreeMap<>();
+				LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();
 
+				for(String s : votesCopy) {
 					String[] data = s.split("\\.");
 					String index = ChatColor.stripColor(data[0])
 							.replaceAll("§8▍ §c§c§lMurder§8§l ▏ §6§l§e§l§e§l", "").replaceAll("▍ Murder ▏", "")
 							.trim();
 					String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
 					String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
+					System.out.println("VoteCopy: " + consider);
+					
+					finalvoting.put(consider, Integer.parseInt(index));
+				}
+				
+
+				for(String s : parsedMaps) {
+					if(finalvoting.containsKey(s)) {
+						votesindex.put(s, finalvoting.get(s));
+						break;
+					}
+				}
+				
+				if(votesindex.size() != 0) {
+					System.out.println(votesindex.firstEntry().getKey());
+					The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
+					The5zigAPI.getAPI().messagePlayer(
+							"§8▍ §c§c§lMurder§8§l ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
+					
+				}
+				MIMV.votesToParse.clear();
+				MIMV.hasVoted = true;
+				
+				/*
+				for (String s : votesCopy) {
+
+					
 
 					String votes = toConsider[1].split(" ")[0].trim();
 
@@ -140,6 +168,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 						}
 					}
 				}
+				*/
 			}).start();
 		} else if (message.startsWith("§8▍ §c§c§lMurder§8§l ▏ §6§l§e§l§e§") && Setting.AUTOVOTE.getValue()
 				&& !MIMV.hasVoted) {

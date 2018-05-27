@@ -129,17 +129,16 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 				if(votesindex.size() == 0 && Setting.AUTOVOTE_RANDOM.getValue()) {
 					The5zigAPI.getAPI().sendPlayerMessage("/v 6");
 					The5zigAPI.getAPI().messagePlayer("§8▍ §bHide§aAnd§eSeek§8 ▏ " + "§eAutomatically voted for §cRandom map");
-					HIDE.votesToParse.clear();
-					HIDE.hasVoted = true;
+		
 				}
 				else {
 					System.out.println(votesindex.firstEntry().getKey());
 					The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
 					The5zigAPI.getAPI().messagePlayer("§8▍ §bHide§aAnd§eSeek§8 ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
-					HIDE.votesToParse.clear();
-					HIDE.hasVoted = true;
 				}
-
+				HIDE.votesToParse.clear();
+				HIDE.hasVoted = true;
+				
 			}).start();
 		}
 		else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6§e§e§l") && !HIDE.hasVoted && Setting.AUTOVOTE.getValue()){

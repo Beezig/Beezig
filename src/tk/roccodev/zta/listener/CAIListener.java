@@ -125,16 +125,14 @@ public class CAIListener extends AbstractGameListener<CAI> {
 				if(votesindex.size() == 0 && Setting.AUTOVOTE_RANDOM.getValue()) {
 					The5zigAPI.getAPI().sendPlayerMessage("/v 6");
 					The5zigAPI.getAPI().messagePlayer("§8▍ §bCAI§8 ▏ " + "§eAutomatically voted for §cRandom map");
-					CAI.votesToParse.clear();
-					CAI.hasVoted = true;
 				}
 				else {
 					System.out.println(votesindex.firstEntry().getKey());
 					The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
 					The5zigAPI.getAPI().messagePlayer("§8▍ §bCAI§8 ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
-					CAI.votesToParse.clear();
-					CAI.hasVoted = true;
 				}
+				CAI.votesToParse.clear();
+				CAI.hasVoted = true;
 
 			}).start();
 		} else if (message.startsWith("§8▍ §bCAI§8 ▏ §6§e§e§l") && !CAI.hasVoted && Setting.AUTOVOTE.getValue()) {
