@@ -10,6 +10,7 @@ import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.BED;
+import tk.roccodev.zta.games.MIMV;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.stuff.bed.BEDRank;
@@ -404,59 +405,40 @@ public class BEDListener extends AbstractGameListener<BED>{
 			new Thread(() -> {
 				try { TimeUnit.MILLISECONDS.sleep(200); } catch (Exception ignored) {}
 
-				List<String> votesCopy = new ArrayList<>();
-				votesCopy.addAll(BED.votesToParse);
-				List<String> parsedMaps = new ArrayList<>();
-				parsedMaps.addAll(AutovoteUtils.getMapsForMode("bed"));
+				List<String> votesCopy = new ArrayList<>(BED.votesToParse);
+				List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("bed"));
 
-				List<String> votesindex = new ArrayList<>();
-				List<String> finalvoting = new ArrayList<>();
 
-				The5zigAPI.getLogger().info(votesCopy.size());
-				for(String s : votesCopy){
+				TreeMap<String, Integer> votesindex = new TreeMap<>();
+				LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();
 
+				for(String s : votesCopy) {
 					String[] data = s.split("\\.");
 					String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l", "").replaceAll("▍ BedWars ▏", "").trim();
 					String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
 					String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
-
-					String votes = toConsider[1].split(" ")[0].trim();
-
-
-					The5zigAPI.getLogger().info("trying to match " + consider);
-					if(parsedMaps.contains(consider)){
-						votesindex.add(votes + "-" + index);
-						The5zigAPI.getLogger().info("Added " + consider + " Index #" + index + " with " + votes + " votes");
-					}else{
-						The5zigAPI.getLogger().info(consider + " is not a favourite");
-					}
-
-					if(index.equals("6")){
-						if(votesindex.size() != 0){
-							for(String n : votesindex){
-								finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
-							}
-							int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
-							The5zigAPI.getLogger().info("Voting " + finalindex);
-							The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
-
-							BED.votesToParse.clear();
-							BED.hasVoted = true;
-																									//we can't really get the map name at this point
-							The5zigAPI.getAPI().messagePlayer("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + finalindex);
-							return;
-						}
-						else{
-							The5zigAPI.getLogger().info("Done, couldn't find matches");
-							BED.votesToParse.clear();
-							BED.hasVoted = true;
-							//he hasn't but we don't want to check again and again
-						return;
-						}
-					}
-
+					System.out.println("VoteCopy: " + consider);
+					
+					finalvoting.put(consider, Integer.parseInt(index));
 				}
+				
 
+				for(String s : parsedMaps) {
+					if(finalvoting.containsKey(s)) {
+						votesindex.put(s, finalvoting.get(s));
+						break;
+					}
+				}
+				
+				if(votesindex.size() != 0) {
+					System.out.println(votesindex.firstEntry().getKey());
+					The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
+					The5zigAPI.getAPI().messagePlayer("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
+					
+				}
+				BED.votesToParse.clear();
+				BED.hasVoted = true;
+				
 			}).start();
 		}
 		else if(message.equals("                 §e§lGold Ingot Summoner Activated!")) {

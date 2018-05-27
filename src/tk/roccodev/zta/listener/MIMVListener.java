@@ -128,47 +128,6 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 				MIMV.votesToParse.clear();
 				MIMV.hasVoted = true;
 				
-				/*
-				for (String s : votesCopy) {
-
-					
-
-					String votes = toConsider[1].split(" ")[0].trim();
-
-					The5zigAPI.getLogger().info("trying to match " + consider);
-					if (parsedMaps.contains(consider)) {
-						votesindex.add(votes + "-" + index);
-						The5zigAPI.getLogger()
-								.info("Added " + consider + " Index #" + index + " with " + votes + " votes");
-					} else {
-						The5zigAPI.getLogger().info(consider + " is not a favourite");
-					}
-					if (index.equals("6")) {
-						if (votesindex.size() != 0) {
-							for (String n : votesindex) {
-								finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
-							}
-							int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
-							The5zigAPI.getLogger().info("Voting " + finalindex);
-							The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
-
-							MIMV.votesToParse.clear();
-							MIMV.hasVoted = true;
-							// we can't really get the map name at this point
-							The5zigAPI.getAPI().messagePlayer(
-									"§8▍ §c§c§lMurder§8§l ▏ " + "§eAutomatically voted for map §6#" + finalindex);
-							return;
-						} else {
-							The5zigAPI.getLogger().info("Done, couldn't find matches");
-
-							MIMV.votesToParse.clear();
-							MIMV.hasVoted = true;
-							// he hasn't but we don't want to check again and again
-							return;
-						}
-					}
-				}
-				*/
 			}).start();
 		} else if (message.startsWith("§8▍ §c§c§lMurder§8§l ▏ §6§l§e§l§e§") && Setting.AUTOVOTE.getValue()
 				&& !MIMV.hasVoted) {
