@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 
 @Plugin(name = "Beezig", version = ZTAMain.BEEZIG_VERSION)
 public class ZTAMain {
-	public static final String BEEZIG_VERSION = "4.7.0";
+	public static final String BEEZIG_VERSION = "4.7.1";
 	public static String VERSION_HASH = "";
 	public static String OS;
 	public static boolean newUpdate;
