@@ -17,7 +17,7 @@ public class MapItem extends GameModeItem<DR>{
 		String name = map.getDisplayName();
 		StringBuilder tr = new StringBuilder();
 		tr.append(name);
-			if((boolean)getProperties().getSetting("showcheckpoints").get() && DR.role.equals("Runner")){
+			if((boolean)getProperties().getSetting("showcheckpoints").get() && "Runner".equals(DR.role)){
 				int totalc = map.getCheckpoints();
 				tr.append(" (").append(DR.checkpoints).append("/").append(totalc).append(" Checkpoints)");
 			}
