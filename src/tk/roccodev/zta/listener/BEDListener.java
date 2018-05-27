@@ -399,7 +399,7 @@ public class BEDListener extends AbstractGameListener<BED>{
 			BED.hasVoted = true;
 		}
 		
-		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l4. ") && !BED.hasVoted && Setting.AUTOVOTE.getValue()){
+		else if(message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l6. ") && !BED.hasVoted && Setting.AUTOVOTE.getValue()){
 			//Adding the 6th option, the normal method doesn't work
 			BED.votesToParse.add(message);
 			new Thread(() -> {
