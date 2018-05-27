@@ -63,6 +63,7 @@ import tk.roccodev.zta.command.SeenCommand;
 import tk.roccodev.zta.command.SettingsCommand;
 import tk.roccodev.zta.command.ShrugCommand;
 import tk.roccodev.zta.command.TokensCommand;
+import tk.roccodev.zta.command.UUIDCommand;
 import tk.roccodev.zta.command.WRCommand;
 import tk.roccodev.zta.command.ZigCheckCommand;
 import tk.roccodev.zta.games.BED;
@@ -342,6 +343,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new ReportCommand());
 		CommandManager.registerCommand(new LeaderboardCommand());
 		CommandManager.registerCommand(new RigCommand());
+		CommandManager.registerCommand(new UUIDCommand());
 
 		if (The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d")
 				|| The5zigAPI.getAPI().getGameProfile().getId().toString()
