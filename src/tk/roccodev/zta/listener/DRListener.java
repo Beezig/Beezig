@@ -176,12 +176,14 @@ public class DRListener extends AbstractGameListener<DR> {
 				if(votesindex.size() == 0 && Setting.AUTOVOTE_RANDOM.getValue()) {
 					The5zigAPI.getAPI().sendPlayerMessage("/v 6");
 					The5zigAPI.getAPI().messagePlayer("§8▍ §cDeathRun§8 ▏ §eAutomatically voted for §cRandom map");
+					DR.votesToParse.clear();
 					DR.hasVoted = true;
 				}
 				else {
 					System.out.println(votesindex.firstEntry().getKey());
 					The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
 					The5zigAPI.getAPI().messagePlayer("§8▍ §cDeathRun§8 ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
+					DR.votesToParse.clear();
 					DR.hasVoted = true;
 				}
 
