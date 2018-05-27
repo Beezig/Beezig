@@ -162,54 +162,6 @@ public class GiantListener extends AbstractGameListener<Giant> {
 				Giant.hasVoted = true;
 
 
-
-/*
-				for (String s : votesCopy) {
-
-					String[] data = s.split("\\.");
-					String index = ChatColor.stripColor(data[0])
-							.replaceAll(getPrefixWithBoldDivider(ActiveGame.current()) + "§6§l§e§l§e§l", "")
-							.replaceAll(ChatColor.stripColor(getPrefixWithBoldDivider(ActiveGame.current())), "")
-							.trim();
-					String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
-					String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
-
-					String votes = toConsider[1].split(" ")[0].trim();
-
-					The5zigAPI.getLogger().info("trying to match " + consider);
-					if (parsedMaps.contains(consider)) {
-						votesindex.add(votes + "-" + index);
-						The5zigAPI.getLogger()
-								.info("Added " + consider + " Index #" + index + " with " + votes + " votes");
-					} else {
-						The5zigAPI.getLogger().info(consider + " is not a favourite");
-					}
-					if (index.equals("6")) {
-						if (votesindex.size() != 0) {
-							for (String n : votesindex) {
-								finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
-							}
-							int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
-							The5zigAPI.getLogger().info("Voting " + finalindex);
-							The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
-
-							Giant.votesToParse.clear();
-							Giant.hasVoted = true;
-							// we can't really get the map name at this point
-							The5zigAPI.getAPI()
-									.messagePlayer(getPrefix(ActiveGame.current()) + "§eAutomatically voted for map §6#" + finalindex);
-							return;
-						} else {
-							The5zigAPI.getLogger().info("Done, couldn't find matches");
-
-							Giant.votesToParse.clear();
-							Giant.hasVoted = true;
-							// he hasn't but we don't want to check again and again
-							return;
-						}
-					}
-				}
-				*/
 			}).start();
 
 		}
