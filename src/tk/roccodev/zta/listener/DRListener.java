@@ -151,56 +151,41 @@ public class DRListener extends AbstractGameListener<DR> {
 				List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("dr"));
 
 
-				List<String> votesindex = new ArrayList<>();
-				List<String> finalvoting = new ArrayList<>();
+				TreeMap<String, Integer> votesindex = new TreeMap<>();
+				LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();
 
-
-				for (String s : votesCopy) {
-
+				for(String s : votesCopy) {
 					String[] data = s.split("\\.");
 					String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §cDeathRun§8 ▏ §6§e§e§l", "")
 							.replaceAll("▍ DeathRun ▏", "").trim();
 					String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
 					String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
-
-					String votes = toConsider[1].split(" ")[0].trim();
-
-					The5zigAPI.getLogger().info("trying to match " + consider);
-					if (parsedMaps.contains(consider)) {
-						votesindex.add(votes + "-" + index);
-						The5zigAPI.getLogger()
-								.info("Added " + consider + " Index #" + index + " with " + votes + " votes");
-					} else {
-						The5zigAPI.getLogger().info(consider + " is not a favourite");
-					}
-
-					if (index.equals("5")) {
-						if (votesindex.size() != 0) {
-							for (String n : votesindex) {
-								finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
-							}
-							int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
-							The5zigAPI.getLogger().info("Voting " + finalindex);
-							The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
-
-							DR.votesToParse.clear();
-							DR.hasVoted = true;
-							// we can't really get the map name at this point
-							The5zigAPI.getAPI()
-									.messagePlayer("§8▍ §cDeathRun§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
-							return;
-						} else if(Setting.AUTOVOTE_RANDOM.getValue()){
-							The5zigAPI.getLogger().info("Done, couldn't find matches - Voting Random");
-							The5zigAPI.getAPI().sendPlayerMessage("/v 6");
-							The5zigAPI.getAPI().messagePlayer("§8▍ §cDeathRun§8 ▏ §eAutomatically voted for §cRandom map");
-							DR.votesToParse.clear();
-							DR.hasVoted = true;
-							// he hasn't but we don't want to check again and again
-							return;
-						}
-					}
-
+					System.out.println("VoteCopy: " + consider);
+					
+					finalvoting.put(consider, Integer.parseInt(index));
 				}
+				
+
+				for(String s : parsedMaps) {
+					if(finalvoting.containsKey(s)) {
+						votesindex.put(s, finalvoting.get(s));
+						break;
+					}
+				}
+				
+				if(votesindex.size() == 0 && Setting.AUTOVOTE_RANDOM.getValue()) {
+					The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+					The5zigAPI.getAPI().messagePlayer("§8▍ §cDeathRun§8 ▏ §eAutomatically voted for §cRandom map");
+					DR.hasVoted = true;
+				}
+				else {
+					System.out.println(votesindex.firstEntry().getKey());
+					The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
+					The5zigAPI.getAPI().messagePlayer("§8▍ §cDeathRun§8 ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
+					DR.hasVoted = true;
+				}
+
+
 
 			}).start();
 		} else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l") && !DR.hasVoted && Setting.AUTOVOTE.getValue()) {
