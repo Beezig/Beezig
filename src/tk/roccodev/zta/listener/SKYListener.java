@@ -9,6 +9,7 @@ import tk.roccodev.zta.ActiveGame;
 import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.autovote.AutovoteUtils;
+import tk.roccodev.zta.games.BED;
 import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.stuff.sky.SKYRank;
@@ -113,11 +114,11 @@ public class SKYListener extends AbstractGameListener<SKY> {
 				List<String> votesCopy = new ArrayList<>(SKY.votesToParse);
 				List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("sky"));
 
-				List<String> votesindex = new ArrayList<>();
-				List<String> finalvoting = new ArrayList<>();
 
-				for (String s : votesCopy) {
+				TreeMap<String, Integer> votesindex = new TreeMap<>();
+				LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();
 
+				for(String s : votesCopy) {
 					String[] data = s.split("\\.");
 					String index = ChatColor.stripColor(data[0])
 							.replaceAll("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l", "")
@@ -125,41 +126,30 @@ public class SKYListener extends AbstractGameListener<SKY> {
 					String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
 					String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
 
-					String votes = toConsider[1].split(" ")[0].trim();
+					System.out.println("VoteCopy: " + consider);
+					
+					finalvoting.put(consider, Integer.parseInt(index));
+				}
+				
 
-					The5zigAPI.getLogger().info("trying to match " + consider);
-					if (parsedMaps.contains(consider)) {
-						votesindex.add(votes + "-" + index);
-						The5zigAPI.getLogger()
-								.info("Added " + consider + " Index #" + index + " with " + votes + " votes");
-					} else {
-						The5zigAPI.getLogger().info(consider + " is not a favourite");
-					}
-					if (index.equals("6")) {
-						if (votesindex.size() != 0) {
-							for (String n : votesindex) {
-								finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
-							}
-							int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
-							The5zigAPI.getLogger().info("Voting " + finalindex);
-							The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
-
-							SKY.votesToParse.clear();
-							SKY.hasVoted = true;
-							// we can't really get the map name at this point
-							The5zigAPI.getAPI().messagePlayer(
-									"§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + finalindex);
-							return;
-						} else {
-							The5zigAPI.getLogger().info("Done, couldn't find matches");
-
-							SKY.votesToParse.clear();
-							SKY.hasVoted = true;
-							// he hasn't but we don't want to check again and again
-							return;
-						}
+				for(String s : parsedMaps) {
+					if(finalvoting.containsKey(s)) {
+						votesindex.put(s, finalvoting.get(s));
+						break;
 					}
 				}
+				
+				if(votesindex.size() != 0) {
+					System.out.println(votesindex.firstEntry().getKey());
+					The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
+					The5zigAPI.getAPI().messagePlayer(
+							"§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
+					
+				}
+				SKY.votesToParse.clear();
+				SKY.hasVoted = true;
+
+				
 			}).start();
 		} else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l") && !SKY.hasVoted
 				&& Setting.AUTOVOTE.getValue()) {
