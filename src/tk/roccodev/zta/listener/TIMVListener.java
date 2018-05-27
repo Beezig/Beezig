@@ -1,6 +1,25 @@
 
 package tk.roccodev.zta.listener;
 
+import static tk.roccodev.zta.games.TIMV.traitorTeam;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -18,15 +37,6 @@ import tk.roccodev.zta.hiveapi.wrapper.APIUtils;
 import tk.roccodev.zta.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static tk.roccodev.zta.games.TIMV.traitorTeam;
 
 public class TIMVListener extends AbstractGameListener<TIMV>{
 
@@ -402,54 +412,39 @@ public class TIMVListener extends AbstractGameListener<TIMV>{
 				List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("timv"));
 
 
-				List<String> votesindex = new ArrayList<>();
-				List<String> finalvoting = new ArrayList<>();
+				TreeMap<String, Integer> votesindex = new TreeMap<>();
+				LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();
 
-
-
-				for(String s : votesCopy){
-
+				for(String s : votesCopy) {
 					String[] data = s.split("\\.");
 					String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §6TIMV§8 ▏ §6§6§l", "").replaceAll("▍ TIMV ▏", "").trim();
 					String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
 					String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
+					System.out.println("VoteCopy: " + consider);
+					
+					finalvoting.put(consider, Integer.parseInt(index));
+				}
+				
 
-					String votes = toConsider[1].split(" ")[0].trim();
-
-
-					The5zigAPI.getLogger().info("trying to match " + consider);
-					if(parsedMaps.contains(consider)){
-						votesindex.add(votes + "-" + index);
-						The5zigAPI.getLogger().info("Added " + consider + " Index #" + index + " with " + votes + " votes");
-					}else{
-						The5zigAPI.getLogger().info(consider + " is not a favourite");
-					}
-					if(index.equals("5")){
-						if(votesindex.size() != 0){
-							for(String n : votesindex){
-								finalvoting.add(n.split("-")[0] + "-" + (10 - Integer.valueOf(n.split("-")[1])));
-							}
-							int finalindex = (10 - Integer.valueOf(Collections.max(finalvoting).split("-")[1]));
-							The5zigAPI.getLogger().info("Voting " + finalindex);
-							The5zigAPI.getAPI().sendPlayerMessage("/v " + finalindex);
-
-							TIMV.votesToParse.clear();
-							TIMV.hasVoted = true;
-																									//we can't really get the map name at this point
-							The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for map §6#" + finalindex);
-							return;
-						}
-						else if(Setting.AUTOVOTE_RANDOM.getValue()){
-							The5zigAPI.getLogger().info("Done, couldn't find matches - Voting Random");
-							The5zigAPI.getAPI().sendPlayerMessage("/v 6");
-							The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for §cRandom map");
-							TIMV.votesToParse.clear();
-							TIMV.hasVoted = true;
-							//he hasn't but we don't want to check again and again
-						return;
-						}
+				for(String s : parsedMaps) {
+					if(finalvoting.containsKey(s)) {
+						votesindex.put(s, finalvoting.get(s));
+						break;
 					}
 				}
+				
+				if(votesindex.size() == 0 && Setting.AUTOVOTE_RANDOM.getValue()) {
+					The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+					The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for §cRandom map");
+					TIMV.hasVoted = true;
+				}
+				else {
+					System.out.println(votesindex.firstEntry().getKey());
+					The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
+					The5zigAPI.getAPI().messagePlayer("§8▍ §6TIMV§8 ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
+					TIMV.hasVoted = true;
+				}
+				
 			}).start();
 		}
 		else if(message.startsWith("§8▍ §6TIMV§8 ▏ §6§e§e§l") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()){
