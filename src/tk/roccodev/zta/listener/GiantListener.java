@@ -9,6 +9,7 @@ import tk.roccodev.zta.IHive;
 import tk.roccodev.zta.Log;
 import tk.roccodev.zta.autovote.AutovoteUtils;
 import tk.roccodev.zta.games.Giant;
+import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.hiveapi.APIValues;
 import tk.roccodev.zta.hiveapi.HiveAPI;
 import tk.roccodev.zta.hiveapi.stuff.gnt.GiantRank;
@@ -123,11 +124,46 @@ public class GiantListener extends AbstractGameListener<Giant> {
 				List<String> votesCopy = new ArrayList<>(Giant.votesToParse);
 				List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("gnt"));
 
-				List<String> votesindex = new ArrayList<>();
-				List<String> finalvoting = new ArrayList<>();
+
+				TreeMap<String, Integer> votesindex = new TreeMap<>();
+				LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();
+
+				for(String s : votesCopy) {
+
+					String[] data = s.split("\\.");
+					String index = ChatColor.stripColor(data[0])
+							.replaceAll(getPrefixWithBoldDivider(ActiveGame.current()) + "§6§l§e§l§e§l", "")
+							.replaceAll(ChatColor.stripColor(getPrefixWithBoldDivider(ActiveGame.current())), "")
+							.trim();
+					String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
+					String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
+
+					System.out.println("VoteCopy: " + consider);
+					
+					finalvoting.put(consider, Integer.parseInt(index));
+				}
+				
+
+				for(String s : parsedMaps) {
+					if(finalvoting.containsKey(s)) {
+						votesindex.put(s, finalvoting.get(s));
+						break;
+					}
+				}
+				
+				if(votesindex.size() != 0) {
+					System.out.println(votesindex.firstEntry().getKey());
+					The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
+					The5zigAPI.getAPI()
+					.messagePlayer(getPrefix(ActiveGame.current()) + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
+					
+				}
+				Giant.votesToParse.clear();
+				Giant.hasVoted = true;
 
 
 
+/*
 				for (String s : votesCopy) {
 
 					String[] data = s.split("\\.");
@@ -173,6 +209,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
 						}
 					}
 				}
+				*/
 			}).start();
 
 		}
