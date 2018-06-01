@@ -257,10 +257,12 @@ public class TIMV extends GameMode {
 
 	public static void calculateTraitors(int playersOnline) {
 		TIMV.traitorsBefore = (int) Math.floor(playersOnline / 4.0);
+		if(TIMV.traitorsBefore == 0) TIMV.traitorsBefore = 1;
 	}
 
 	public static void calculateDetectives(int playersOnline) {
 		TIMV.detectivesBefore = (int) Math.floor(playersOnline / 8);
+		if(TIMV.detectivesBefore == 0) TIMV.detectivesBefore = 1;
 	}
 
 	public static void reset(TIMV gm) {
