@@ -40,6 +40,7 @@ import tk.roccodev.zta.command.AddNoteCommand;
 import tk.roccodev.zta.command.AutoVoteCommand;
 import tk.roccodev.zta.command.BeezigCommand;
 import tk.roccodev.zta.command.BlockstatsCommand;
+import tk.roccodev.zta.command.ChatReportCommand;
 import tk.roccodev.zta.command.CheckPingCommand;
 import tk.roccodev.zta.command.ClosestToWRCommand;
 import tk.roccodev.zta.command.ColorDebugCommand;
@@ -76,6 +77,7 @@ import tk.roccodev.zta.games.GRAV;
 import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.games.MIMV;
+import tk.roccodev.zta.games.SGN;
 import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -88,9 +90,11 @@ import tk.roccodev.zta.notes.NotesManager;
 import tk.roccodev.zta.settings.Setting;
 import tk.roccodev.zta.settings.SettingsFetcher;
 import tk.roccodev.zta.updater.Updater;
+import tk.roccodev.zta.utils.ChatComponentUtils;
 import tk.roccodev.zta.utils.NotificationManager;
 import tk.roccodev.zta.utils.TIMVDay;
 import tk.roccodev.zta.utils.TIMVTest;
+import tk.roccodev.zta.utils.acr.Connector;
 import tk.roccodev.zta.utils.rpc.DiscordUtils;
 import tk.roccodev.zta.utils.rpc.NativeUtils;
 
@@ -102,6 +106,10 @@ public class ZTAMain {
 	public static boolean newUpdate;
 
 	public static boolean hasServedNews;
+	public static boolean checkForNewLR; // Login Report
+	public static boolean crInteractive;
+	public static String lrID;
+	public static String lrRS;
 	public static List<Class<?>> services = new ArrayList<Class<?>>();
 
 	public static File mcFile;
@@ -311,6 +319,16 @@ public class ZTAMain {
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bpsong", tk.roccodev.zta.modules.bp.SongItem.class,
 				"serverhivemc");
+		
+		The5zigAPI.getAPI().registerModuleItem(this, "sgnpoints", tk.roccodev.zta.modules.sgn.PointsItem.class,
+				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "sgngame", tk.roccodev.zta.modules.sgn.GamePointsItem.class,
+				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "sgndaily", tk.roccodev.zta.modules.sgn.DailyItem.class,
+				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "sgnmap", tk.roccodev.zta.modules.sgn.MapItem.class,
+				"serverhivemc");
+
 
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 
@@ -344,6 +362,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new LeaderboardCommand());
 		CommandManager.registerCommand(new RigCommand());
 		CommandManager.registerCommand(new UUIDCommand());
+		// CommandManager.registerCommand(new ChatReportCommand());
 
 		if (The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d")
 				|| The5zigAPI.getAPI().getGameProfile().getId().toString()
@@ -411,6 +430,9 @@ public class ZTAMain {
 		
 		checkForFileExist(new File(mcFile + "/gnt/"), true);
 		checkForFileExist(new File(mcFile + "/gnt/dailyPoints/"), true);
+		
+		checkForFileExist(new File(mcFile + "/sgn/"), true);
+		checkForFileExist(new File(mcFile + "/sgn/dailyPoints/"), true);
 		
 		StreakUtils.init();
 		new Thread(new Runnable() {
@@ -537,6 +559,7 @@ public class ZTAMain {
 		MIMV.setDailyPointsFileName(dailyName);
 		DR.setDailyPointsFileName(dailyName);
 		Giant.setDailyPointsFileName(dailyName);
+		SGN.setDailyPointsFileName(dailyName);
 
 		Calendar cal = Calendar.getInstance();
 		if (cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA) {
@@ -699,6 +722,14 @@ public class ZTAMain {
 					}
 					BP.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
+				else if (ActiveGame.is("sgn")) {
+					if (SGN.isRecordsRunning) {
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					SGN.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				}
 
 			} else {
 				if (ActiveGame.is("timv")) {
@@ -771,6 +802,14 @@ public class ZTAMain {
 						return;
 					}
 					BP.lastRecords = args[1].trim();
+				}
+				else if (ActiveGame.is("sgn")) {
+					if (SGN.isRecordsRunning) {
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					SGN.lastRecords = args[1].trim();
 				}
 
 			}
@@ -871,6 +910,49 @@ public class ZTAMain {
 			if (The5zigAPI.getAPI().getActiveServer() instanceof IHive) {
 				if (ZTAMain.isColorDebug)
 					The5zigAPI.getLogger().info("Global Color Debug: (" + evt.getMessage() + ")");
+				if(ZTAMain.crInteractive && (evt.getMessage().startsWith("§8▏ §aLink§8 ▏ §e") || evt.getMessage().contains("§6Log link generated: §6"))) {
+					crInteractive = false;
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							String chatLog = evt.getMessage().contains("§6Log link generated: §6") ? evt.getMessage().split("§6Log link generated\\: §6")[1] : evt.getMessage().replace("§8▏ §aLink§8 ▏ §ehttp://chatlog.hivemc.com/?logId=", "");
+							The5zigAPI.getAPI().messagePlayer(Log.info + "Running chatreport in §binteractive mode§3. Please wait while we fetch the report token. Do NOT click on the link below.");
+								checkForNewLR = true;
+								lrID = chatLog;
+								The5zigAPI.getAPI().sendPlayerMessage("/login report");
+							
+						}
+					}).start();
+					
+				}
+				if(ZTAMain.checkForNewLR && evt.getMessage().equals("§8▍ §e§lHive§6§lMC§8 ▏§a §b§lPlease click §b§lHERE§a to login to our website.")) {
+					checkForNewLR = false;
+					String id = new String(lrID);
+					String reason = new String(lrRS);
+					lrID = "";
+					lrRS = "";
+					String url = ChatComponentUtils.getClickEventValue(evt.getChatComponent().toString());
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								The5zigAPI.getAPI().messagePlayer(Log.info + "Acquiring the token...");
+								Connector.acquireReportToken(url);
+								The5zigAPI.getAPI().messagePlayer(Log.info + "Submitting the report...");
+								if(Connector.sendReport(id, reason)) {
+									The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully submitted chatreport.");
+								}
+								else {
+									The5zigAPI.getAPI().messagePlayer(Log.error + "An error occurred while attempting to submit the chatreport.");
+								}
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}).start();
+					
+				}
 			}
 			if (ChatColor.stripColor(evt.getMessage().trim()).equals("▍ Friends ▏ ✚ Toccata")) {
 				NotesManager.tramontoccataStelle();

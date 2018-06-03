@@ -12,4 +12,5 @@ public class APIValues {
 	public static long GRAVpoints;
 	public static long MIMVpoints;
 	public static long BPpoints;
+	public static long SGNpoints;
 }
