@@ -76,7 +76,11 @@ public enum Setting {
 	
 	BP_SHOW_POINTS_TO_NEXT_RANK(true, "BP Advanced Records - Show points to next rank"), 
 	BP_SHOW_WINRATE(true, "BP Advanced Records - Show Winrate"), 
-	BP_SHOW_PPG(true, "BP Advanced Records - Show Points per game");
+	BP_SHOW_PPG(true, "BP Advanced Records - Show Points per game"),
+	
+	SGN_SHOW_POINTS_TO_NEXT_RANK(true, "SG2 Advanced Records - Show points to next rank"), 
+	SGN_SHOW_WINRATE(true, "SG2 Advanced Records - Show Winrate"), 
+	SGN_SHOW_PPG(true, "SG2 Advanced Records - Show Points per game");
 
 
 	private boolean value;

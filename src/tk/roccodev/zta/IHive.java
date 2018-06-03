@@ -15,6 +15,7 @@ import tk.roccodev.zta.listener.GiantListener;
 import tk.roccodev.zta.listener.HIDEListener;
 import tk.roccodev.zta.listener.HiveListener;
 import tk.roccodev.zta.listener.MIMVListener;
+import tk.roccodev.zta.listener.SGNListener;
 import tk.roccodev.zta.listener.SKYListener;
 import tk.roccodev.zta.listener.TIMVListener;
 import tk.roccodev.zta.notes.NotesManager;
@@ -62,6 +63,7 @@ public class IHive extends ServerInstance {
 		getGameListener().registerListener(new MIMVListener());
 		getGameListener().registerListener(new GRAVListener());
 		getGameListener().registerListener(new BPListener());
+		getGameListener().registerListener(new SGNListener());
 		
 	}
 

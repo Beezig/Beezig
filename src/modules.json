@@ -241,20 +241,20 @@
       ]
     },
     {
-      "id": "BlockParty",
-      "name": "BlockParty",
+      "id": "SurvivalGames2",
+      "name": "Survival Games 2",
       "items": [
         {
-          "type": "bppoints"
+          "type": "sgnpoints"
         },
         {
-          "type": "bpcounter"
+          "type": "sgngame"
         },
         {
-          "type": "bpdaily"
+          "type": "sgndaily"
         },
         {
-          "type": "bpsong"
+          "type": "sgnmap"
         }
       ]
     }

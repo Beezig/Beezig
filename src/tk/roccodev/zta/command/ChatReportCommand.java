@@ -26,7 +26,6 @@ public class ChatReportCommand implements Command{
 	@Override
 	public boolean execute(String[] args) {
 		
-		
 		if(!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
 		if(args.length == 2){
 			String pl = args[0];

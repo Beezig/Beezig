@@ -77,6 +77,7 @@ import tk.roccodev.zta.games.GRAV;
 import tk.roccodev.zta.games.Giant;
 import tk.roccodev.zta.games.HIDE;
 import tk.roccodev.zta.games.MIMV;
+import tk.roccodev.zta.games.SGN;
 import tk.roccodev.zta.games.SKY;
 import tk.roccodev.zta.games.TIMV;
 import tk.roccodev.zta.hiveapi.HiveAPI;
@@ -318,6 +319,16 @@ public class ZTAMain {
 				"serverhivemc");
 		The5zigAPI.getAPI().registerModuleItem(this, "bpsong", tk.roccodev.zta.modules.bp.SongItem.class,
 				"serverhivemc");
+		
+		The5zigAPI.getAPI().registerModuleItem(this, "sgnpoints", tk.roccodev.zta.modules.sgn.PointsItem.class,
+				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "sgngame", tk.roccodev.zta.modules.sgn.GamePointsItem.class,
+				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "sgndaily", tk.roccodev.zta.modules.sgn.DailyItem.class,
+				"serverhivemc");
+		The5zigAPI.getAPI().registerModuleItem(this, "sgnmap", tk.roccodev.zta.modules.sgn.MapItem.class,
+				"serverhivemc");
+
 
 		The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 
@@ -351,7 +362,7 @@ public class ZTAMain {
 		CommandManager.registerCommand(new LeaderboardCommand());
 		CommandManager.registerCommand(new RigCommand());
 		CommandManager.registerCommand(new UUIDCommand());
-		CommandManager.registerCommand(new ChatReportCommand());
+		// CommandManager.registerCommand(new ChatReportCommand());
 
 		if (The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d")
 				|| The5zigAPI.getAPI().getGameProfile().getId().toString()
@@ -419,6 +430,9 @@ public class ZTAMain {
 		
 		checkForFileExist(new File(mcFile + "/gnt/"), true);
 		checkForFileExist(new File(mcFile + "/gnt/dailyPoints/"), true);
+		
+		checkForFileExist(new File(mcFile + "/sgn/"), true);
+		checkForFileExist(new File(mcFile + "/sgn/dailyPoints/"), true);
 		
 		StreakUtils.init();
 		new Thread(new Runnable() {
@@ -545,6 +559,7 @@ public class ZTAMain {
 		MIMV.setDailyPointsFileName(dailyName);
 		DR.setDailyPointsFileName(dailyName);
 		Giant.setDailyPointsFileName(dailyName);
+		SGN.setDailyPointsFileName(dailyName);
 
 		Calendar cal = Calendar.getInstance();
 		if (cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA) {
@@ -707,6 +722,14 @@ public class ZTAMain {
 					}
 					BP.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
 				}
+				else if (ActiveGame.is("sgn")) {
+					if (SGN.isRecordsRunning) {
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					SGN.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+				}
 
 			} else {
 				if (ActiveGame.is("timv")) {
@@ -779,6 +802,14 @@ public class ZTAMain {
 						return;
 					}
 					BP.lastRecords = args[1].trim();
+				}
+				else if (ActiveGame.is("sgn")) {
+					if (SGN.isRecordsRunning) {
+						The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+						evt.setCancelled(true);
+						return;
+					}
+					SGN.lastRecords = args[1].trim();
 				}
 
 			}
