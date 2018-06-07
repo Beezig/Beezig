@@ -21,7 +21,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.plugin.Plugin;
-import tk.roccodev.zta.ZTAMain;
+import tk.roccodev.beezig.BeezigMain;
 
 public class MetricsLite {
 
@@ -51,14 +51,14 @@ public class MetricsLite {
     private static String serverUUID;
 
     // The plugin
-    private final ZTAMain plugin;
+    private final BeezigMain plugin;
 
     /**
      * Class constructor.
      *
      * @param plugin The plugin which stats should be submitted.
      */
-    public MetricsLite(ZTAMain plugin) {
+    public MetricsLite(BeezigMain plugin) {
     
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null!");
