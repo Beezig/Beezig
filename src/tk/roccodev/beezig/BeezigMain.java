@@ -390,22 +390,22 @@ public class BeezigMain {
 		The5zigAPI.getLogger().info("Loaded BeezigCore");
 
 		String OS = System.getProperty("os.name").toLowerCase();
-		try {
+
 			if (OS.contains("mac")) {
 				BeezigMain.OS = "mac";
-				mcFile = new File(System.getProperty("user.home") + "/Library/Application Support/minecraft/5zigtimv");
 			} else if (OS.contains("nix") || OS.contains("nux") || OS.indexOf("aix") > 0) {
 				BeezigMain.OS = "unix";
-				mcFile = new File(System.getProperty("user.home") + "/.minecraft/5zigtimv");
 			} else if (OS.contains("win")) {
 				BeezigMain.OS = "win";
-				mcFile = new File(System.getenv("APPDATA") + "/.minecraft/5zigtimv");
-			} else {
-				mcFile = new File(System.getProperty("user.home") + "/Minecraft5zig/5zigtimv");
-			}
-		} catch (Exception e) {
-			mcFile = new File(System.getProperty("user.home") + "/Minecraft5zig/5zigtimv");
+		} 
+		// Code source is the path to the jar, parent1 is "plugins", parent2 is "the5zigmod", parent3 is the mc dir.
+		try {
+			mcFile = new File(new File(BeezigMain.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getParentFile().getParentFile().getPath() + "/5zigtimv");
+		} catch (URISyntaxException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
 		}
+			
 		if (!mcFile.exists())
 			mcFile.mkdir();
 		The5zigAPI.getLogger().info("MC Folder is at: " + mcFile.getAbsolutePath());
