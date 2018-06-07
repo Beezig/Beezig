@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -40,7 +41,6 @@ import tk.roccodev.beezig.command.AddNoteCommand;
 import tk.roccodev.beezig.command.AutoVoteCommand;
 import tk.roccodev.beezig.command.BeezigCommand;
 import tk.roccodev.beezig.command.BlockstatsCommand;
-import tk.roccodev.beezig.command.ChatReportCommand;
 import tk.roccodev.beezig.command.CheckPingCommand;
 import tk.roccodev.beezig.command.ClosestToWRCommand;
 import tk.roccodev.beezig.command.ColorDebugCommand;
@@ -125,6 +125,13 @@ public class BeezigMain {
 	@EventHandler(priority = EventHandler.Priority.LOW)
 	public void onLoad(LoadEvent event) {
 
+		try {
+			System.out.println(new File(BeezigMain.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath());
+		} catch (URISyntaxException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
+		
 		IOverlay news = The5zigAPI.getAPI().createOverlay();
 		try {
 			if (Updater.isVersionBlacklisted(getCustomVersioning())
