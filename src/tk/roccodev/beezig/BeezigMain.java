@@ -124,13 +124,6 @@ public class BeezigMain {
 
 	@EventHandler(priority = EventHandler.Priority.LOW)
 	public void onLoad(LoadEvent event) {
-
-		try {
-			System.out.println(new File(BeezigMain.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath());
-		} catch (URISyntaxException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
 		
 		IOverlay news = The5zigAPI.getAPI().createOverlay();
 		try {
