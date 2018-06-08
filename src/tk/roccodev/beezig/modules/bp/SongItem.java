@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.bp;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BP;
 
 public class SongItem extends GameModeItem<BP> {
@@ -18,7 +19,7 @@ public class SongItem extends GameModeItem<BP> {
 
 	@Override
 	public String getName() {
-		return "Song";
+		return Log.t("beezig.module.bp.song");
 	}
 
 	@Override

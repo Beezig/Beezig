@@ -2,6 +2,7 @@ package tk.roccodev.beezig.modules.mimv;
 
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.MIMV;
 
 public class RoleItem extends GameModeItem<MIMV>{
@@ -30,7 +31,7 @@ public class RoleItem extends GameModeItem<MIMV>{
 	
 	@Override
 	public String getName() {
-		return "Role";
+		return Log.t("beezig.module.role");
 	}
 	@Override
 	public boolean shouldRender(boolean dummy){

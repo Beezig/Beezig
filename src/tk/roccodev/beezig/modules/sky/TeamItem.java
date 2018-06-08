@@ -2,6 +2,7 @@ package tk.roccodev.beezig.modules.sky;
 
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.SKY;
 
 public class TeamItem extends GameModeItem<SKY> {
@@ -26,7 +27,7 @@ public class TeamItem extends GameModeItem<SKY> {
 
 	@Override
 	public String getName() {
-		return "Team";
+		return Log.t("beezig.module.sky.team");
 	}
 
 	

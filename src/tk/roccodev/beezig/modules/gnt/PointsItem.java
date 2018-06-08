@@ -5,6 +5,7 @@ import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.Giant;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 
@@ -68,7 +69,7 @@ public class PointsItem extends GameModeItem<Giant>{
 	
 	@Override
 	public String getName() {
-		return "Points";
+		return Log.t("beezig.module.points");
 	}
 	
 	

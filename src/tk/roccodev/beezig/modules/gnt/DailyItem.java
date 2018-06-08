@@ -4,6 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.Giant;
 
 public class DailyItem extends GameModeItem<Giant> {
@@ -15,13 +16,13 @@ public class DailyItem extends GameModeItem<Giant> {
 	@Override
 	protected Object getValue(boolean dummy) {
 
-		return Giant.dailyPoints + " Points";
+		return Giant.dailyPoints + " " + Log.t("beezig.module.points");
 
 	}
 
 	@Override
 	public String getName() {
-		return "Daily";
+		return Log.t("beezig.module.daily");
 	}
 
 	@Override

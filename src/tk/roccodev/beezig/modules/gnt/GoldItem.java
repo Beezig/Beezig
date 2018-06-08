@@ -5,6 +5,7 @@ import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.Giant;
 
 public class GoldItem extends GameModeItem<Giant>{
@@ -30,7 +31,7 @@ public class GoldItem extends GameModeItem<Giant>{
 	
 	@Override
 	public String getName() {
-		return "Gold";
+		return Log.t("beezig.module.gnt.gold");
 	}
 	
 	@Override

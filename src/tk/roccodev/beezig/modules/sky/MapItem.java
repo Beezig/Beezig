@@ -4,6 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.SKY;
 
 public class MapItem extends GameModeItem<SKY>{
@@ -26,7 +27,7 @@ public class MapItem extends GameModeItem<SKY>{
 
 		@Override
 		public String getName() {
-			return "Map";
+			return Log.t("beezig.module.map");
 		}
 
 

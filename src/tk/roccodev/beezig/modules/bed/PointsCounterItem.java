@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.bed;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 
 public class PointsCounterItem extends GameModeItem<BED>{
@@ -21,7 +22,7 @@ public class PointsCounterItem extends GameModeItem<BED>{
 	
 	@Override
 	public String getName() {
-		return "Game";
+		return Log.t("beezig.module.game");
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.mimv;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.MIMV;
 
 public class KarmaCounterItem extends GameModeItem<MIMV> {
@@ -16,7 +17,7 @@ public class KarmaCounterItem extends GameModeItem<MIMV> {
 
 	@Override
 	public String getName() {
-		return "Game";
+		return Log.t("beezig.module.game");
 	}
 
 	@Override

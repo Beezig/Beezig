@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.timv;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.TIMV;
 import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVMap;
 
@@ -38,7 +39,7 @@ public class MapItem extends GameModeItem<TIMV>{
 
 	@Override
 	public String getName() {
-		return "Map";
+		return Log.t("beezig.module.map");
 	}
 	@Override
 	public boolean shouldRender(boolean dummy){

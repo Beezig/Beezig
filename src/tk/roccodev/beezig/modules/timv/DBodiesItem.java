@@ -2,6 +2,7 @@ package tk.roccodev.beezig.modules.timv;
 
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.server.GameState;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.TIMV;
 
 public class DBodiesItem extends GameModeItem<TIMV> {
@@ -13,13 +14,13 @@ public class DBodiesItem extends GameModeItem<TIMV> {
 	@Override
 	protected Object getValue(boolean dummy) {
 		
-		return TIMV.detectivesDiscovered + "/" + TIMV.detectivesBefore + " Detectives";
+		return TIMV.detectivesDiscovered + "/" + TIMV.detectivesBefore + " " + Log.t("beezig.str.timv.detectives");
 		
 	}
 
 	@Override
 	public String getName() {
-		return "Discovered";
+		return Log.t("beezig.module.timv.dbodies");
 	}
 	
 	

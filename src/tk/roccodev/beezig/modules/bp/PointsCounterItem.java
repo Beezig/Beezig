@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.bp;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BP;
 
 public class PointsCounterItem extends GameModeItem<BP> {
@@ -11,12 +12,12 @@ public class PointsCounterItem extends GameModeItem<BP> {
 
 	@Override
 	protected Object getValue(boolean dummy) {
-		return BP.gamePts + " Points";
+		return BP.gamePts + " " + Log.t("beezig.module.points");
 	}
 
 	@Override
 	public String getName() {
-		return "Game";
+		return Log.t("beezig.module.game");
 	}
 
 	@Override

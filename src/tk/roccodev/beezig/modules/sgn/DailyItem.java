@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.sgn;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.SGN;
 
 public class DailyItem extends GameModeItem<SGN> {
@@ -12,13 +13,12 @@ public class DailyItem extends GameModeItem<SGN> {
 	@Override
 	protected Object getValue(boolean dummy) {
 
-		return SGN.dailyPoints + " Points";
-
+		return SGN.dailyPoints + " " + Log.t("beezig.module.points");
 	}
 
 	@Override
 	public String getName() {
-		return "Daily";
+		return Log.t("beezig.module.daily");
 	}
 
 	@Override

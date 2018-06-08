@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.dr;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.DR;
 
 public class WRItem extends GameModeItem<DR>{
@@ -24,7 +25,7 @@ public class WRItem extends GameModeItem<DR>{
 	
 	@Override
 	public String getName() {
-		return "World Record";
+		return Log.t("beezig.module.dr.wr");
 	}
 	
 	@Override

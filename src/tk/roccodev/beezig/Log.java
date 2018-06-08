@@ -12,4 +12,8 @@ public class Log {
 		return "Beezig/" + BeezigMain.BEEZIG_VERSION + " (5zig/" + The5zigAPI.getAPI().getModVersion() + " on " + The5zigAPI.getAPI().getMinecraftVersion() + "; Forge=" + The5zigAPI.getAPI().isForgeEnvironment() + ")";
 	}
 
+	public static String t(String key) {
+		return The5zigAPI.getAPI().translate(key);
+	}
+	
 }

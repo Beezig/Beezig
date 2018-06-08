@@ -4,6 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.server.GameMode;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 
 public class MedalsItem extends GameModeItem<GameMode>{
@@ -28,7 +29,7 @@ public class MedalsItem extends GameModeItem<GameMode>{
 	
 	@Override
 	public String getName() {
-		return "Medals";
+		return Log.t("beezig.module.global.medals");
 	}
 	
 	

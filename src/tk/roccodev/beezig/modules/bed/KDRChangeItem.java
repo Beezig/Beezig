@@ -3,6 +3,7 @@ package tk.roccodev.beezig.modules.bed;
 import java.text.DecimalFormat;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 
 public class KDRChangeItem extends GameModeItem<BED>{
@@ -28,7 +29,7 @@ public class KDRChangeItem extends GameModeItem<BED>{
 	
 	@Override
 	public String getName() {
-		return "KDR Change";
+		return Log.t("beezig.module.bed.kdchange");
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.render.RenderLocation;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 
 public class ResourcesItem extends GameModeItem<BED>{
@@ -141,7 +142,7 @@ public class ResourcesItem extends GameModeItem<BED>{
 	
 	@Override
 	public String getName() {
-		return "Resources";
+		return Log.t("beezig.module.bed.resources");
 	}
 	
 	

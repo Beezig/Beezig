@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.dr;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.DR;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRMap;
 
@@ -26,7 +27,7 @@ public class MapItem extends GameModeItem<DR>{
 	
 	@Override
 	public String getName() {
-		return "Map";
+		return Log.t("beezig.module.map");
 	}
 	
 	@Override

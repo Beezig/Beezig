@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.hide;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.HIDE;
 
 public class DailyItem extends GameModeItem<HIDE> {
@@ -12,13 +13,13 @@ public class DailyItem extends GameModeItem<HIDE> {
 	@Override
 	protected Object getValue(boolean dummy) {
 
-		return HIDE.dailyPoints + " Points";
+		return HIDE.dailyPoints + " " + Log.t("beezig.module.points");
 
 	}
 
 	@Override
 	public String getName() {
-		return "Daily";
+		return Log.t("beezig.module.daily");
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.dr;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.DR;
 
 public class DeathsItem extends GameModeItem<DR>{
@@ -16,7 +17,7 @@ public class DeathsItem extends GameModeItem<DR>{
 	
 	@Override
 	public String getName() {
-		return "Deaths";
+		return Log.t("beezig.module.deaths");
 	}
 	@Override
 	public boolean shouldRender(boolean dummy){		

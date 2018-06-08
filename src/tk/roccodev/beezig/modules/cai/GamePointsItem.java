@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.cai;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.CAI;
 
 public class GamePointsItem extends GameModeItem<CAI> {
@@ -22,7 +23,7 @@ public class GamePointsItem extends GameModeItem<CAI> {
 
 	@Override
 	public String getName() {
-		return "Game";
+		return Log.t("beezig.module.game");
 	}
 
 	@Override

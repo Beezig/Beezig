@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.sgn;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.SGN;
 
 public class GamePointsItem extends GameModeItem<SGN> {
@@ -22,7 +23,7 @@ public class GamePointsItem extends GameModeItem<SGN> {
 
 	@Override
 	public String getName() {
-		return "Game";
+		return Log.t("beezig.module.game");
 	}
 
 	@Override

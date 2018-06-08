@@ -4,6 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.Giant;
 
 public class ModeItem extends GameModeItem<Giant>{
@@ -30,7 +31,7 @@ public class ModeItem extends GameModeItem<Giant>{
 	
 	@Override
 	public String getName() {
-		return "Mode";
+		return Log.t("beezig.module.gnt.mode");
 	}
 	
 	

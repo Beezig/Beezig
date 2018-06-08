@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.bed;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 
 public class BedsDestroyedItem extends GameModeItem<BED>{
@@ -21,7 +22,7 @@ public class BedsDestroyedItem extends GameModeItem<BED>{
 	
 	@Override
 	public String getName() {
-		return "Destroyed";
+		return Log.t("beezig.module.bed.beds");
 	}
 	
 	@Override

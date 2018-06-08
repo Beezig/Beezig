@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.bed;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 
 public class TeamsLeftItem extends GameModeItem<BED>{
@@ -18,7 +19,7 @@ public class TeamsLeftItem extends GameModeItem<BED>{
 	
 	@Override
 	public String getName() {
-		return "Teams Left";
+		return Log.t("beezig.module.bed.teamsleft");
 	}
 	
 	@Override

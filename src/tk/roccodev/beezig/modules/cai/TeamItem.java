@@ -2,6 +2,7 @@ package tk.roccodev.beezig.modules.cai;
 
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.CAI;
 
 public class TeamItem extends GameModeItem<CAI> {
@@ -26,7 +27,7 @@ public class TeamItem extends GameModeItem<CAI> {
 
 	@Override
 	public String getName() {
-		return "Team";
+		return Log.t("beezig.module.cai.team");
 	}
 
 	

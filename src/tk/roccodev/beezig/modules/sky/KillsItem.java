@@ -4,6 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.SKY;
 
 public class KillsItem extends GameModeItem<SKY>{
@@ -29,7 +30,7 @@ public class KillsItem extends GameModeItem<SKY>{
 	
 	@Override
 	public String getName() {
-		return "Kills";
+		return Log.t("beezig.module.kills");
 	}
 	
 	@Override

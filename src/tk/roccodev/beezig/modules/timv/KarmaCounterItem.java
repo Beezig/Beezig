@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.timv;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.TIMV;
 
 public class KarmaCounterItem extends GameModeItem<TIMV>{
@@ -14,17 +15,17 @@ public class KarmaCounterItem extends GameModeItem<TIMV>{
 		
 		
 	StringBuilder sb = new StringBuilder();
-	sb.append(TIMV.karmaCounter).append(" Karma");
+	sb.append(TIMV.karmaCounter).append(" " + Log.t("beezig.module.timv.karma"));
 	if((boolean)getProperties().getSetting("showrolepoints").get()){
 		
 		if(TIMV.dPoints != 0){
-			sb.append(" / ").append(TIMV.dPoints).append(" Detective Points");
+			sb.append(" / ").append(TIMV.dPoints).append(" " + Log.t("beezig.str.timv.dpoints"));
 		}
 		if(TIMV.iPoints != 0){
-			sb.append(" / ").append(TIMV.iPoints).append(" Innocent Points");
+			sb.append(" / ").append(TIMV.iPoints).append(" " + Log.t("beezig.str.timv.ipoints"));
 		}
 		if(TIMV.tPoints != 0){
-			sb.append(" / ").append(TIMV.tPoints).append(" Traitor Points");
+			sb.append(" / ").append(TIMV.tPoints).append(" " + Log.t("beezig.str.timv.tpoints"));
 		}
 		
 		
@@ -46,7 +47,7 @@ public class KarmaCounterItem extends GameModeItem<TIMV>{
 	
 	@Override
 	public String getName() {
-		return "Game";
+		return Log.t("beezig.module.game");
 	}
 	@Override
 	public boolean shouldRender(boolean dummy){

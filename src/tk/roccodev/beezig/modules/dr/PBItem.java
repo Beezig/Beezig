@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.dr;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.DR;
 
 public class PBItem extends GameModeItem<DR>{
@@ -21,7 +22,7 @@ public class PBItem extends GameModeItem<DR>{
 	
 	@Override
 	public String getName() {
-		return "Personal Best";
+		return Log.t("beezig.module.dr.pb");
 	}
 	
 	@Override

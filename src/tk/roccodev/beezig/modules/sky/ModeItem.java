@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.sky;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.SKY;
 
 public class ModeItem extends GameModeItem<SKY> {
@@ -23,7 +24,7 @@ public class ModeItem extends GameModeItem<SKY> {
 
 	@Override
 	public String getName() {
-		return "Mode";
+		return Log.t("beezig.module.sky.mode");
 	}
 
 	

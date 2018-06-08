@@ -3,6 +3,7 @@ package tk.roccodev.beezig.modules.bed;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.hiveapi.APIValues;
 
@@ -64,7 +65,7 @@ public class PointsItem extends GameModeItem<BED>{
 	
 	@Override
 	public String getName() {
-		return "Points";
+		return Log.t("beezig.module.points");
 	}
 	
 	@Override

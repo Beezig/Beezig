@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.timv;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.TIMV;
 
 public class DailyKarmaItem extends GameModeItem<TIMV>{
@@ -13,7 +14,7 @@ public class DailyKarmaItem extends GameModeItem<TIMV>{
 	protected Object getValue(boolean dummy) {
 		
 		
-	return TIMV.dailyKarma + " Karma";
+	return TIMV.dailyKarma + " " + Log.t("beezig.module.timv.karma");
 	
 		
 	}
@@ -23,7 +24,7 @@ public class DailyKarmaItem extends GameModeItem<TIMV>{
 	
 	@Override
 	public String getName() {
-		return "Daily";
+		return Log.t("beezig.module.daily");
 	}
 	@Override
 	public boolean shouldRender(boolean dummy){

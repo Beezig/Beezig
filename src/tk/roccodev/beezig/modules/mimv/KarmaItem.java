@@ -3,6 +3,7 @@ package tk.roccodev.beezig.modules.mimv;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.MIMV;
 import tk.roccodev.beezig.hiveapi.APIValues;
 
@@ -64,7 +65,7 @@ public class KarmaItem extends GameModeItem<MIMV> {
 
 	@Override
 	public String getName() {
-		return "Karma";
+		return Log.t("beezig.module.timv.karma");
 	}
 	
 	@Override
