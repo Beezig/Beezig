@@ -1,5 +1,6 @@
 package tk.roccodev.beezig.hiveapi.stuff.cai;
 
+import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public enum CAIRank {
 		
 		
 		
-		return next.prefix + (next.getStart() - points) + " to " +  next.getTotalDisplay();
+		return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getStart() - points), next.getTotalDisplay());
 	}
 	
 }

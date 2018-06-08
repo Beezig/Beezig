@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 
 
@@ -79,7 +80,7 @@ public enum SGNRank {
 		
 		
 		
-		return next.prefix + (next.getRequiredPoints() - points) + " to " +  next.getTotalDisplay();
+		return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getRequiredPoints() - points), next.getTotalDisplay());
 	}
 	
 	

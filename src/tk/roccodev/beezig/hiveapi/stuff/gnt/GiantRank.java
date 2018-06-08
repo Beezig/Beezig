@@ -3,6 +3,8 @@ package tk.roccodev.beezig.hiveapi.stuff.gnt;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import eu.the5zig.mod.The5zigAPI;
+
 import static eu.the5zig.util.minecraft.ChatColor.*;
 
 public enum GiantRank {
@@ -66,7 +68,7 @@ public enum GiantRank {
 			next = ranks.get(newIndex);			
 		} catch(Exception e){ return "";}
 			
-		return next.prefix + (next.getStart() - points)+ " to " +  next.getTotalDisplay();
+		return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getStart() - points), next.getTotalDisplay());
 	}
 
 }

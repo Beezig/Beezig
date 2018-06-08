@@ -3,6 +3,8 @@ package tk.roccodev.beezig.hiveapi.stuff.timv;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import eu.the5zig.mod.The5zigAPI;
+
 import static eu.the5zig.util.minecraft.ChatColor.*;
 
 public enum TIMVRank {
@@ -75,7 +77,7 @@ public enum TIMVRank {
 		
 		
 		
-		return next.prefix + (next.getStart() - karma)  + " to " + next.getTotalDisplay();
+		return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getStart() - karma), next.getTotalDisplay());
 	}
 	
 }

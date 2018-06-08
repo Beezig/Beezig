@@ -3,6 +3,8 @@ package tk.roccodev.beezig.hiveapi.stuff.bp;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import eu.the5zig.mod.The5zigAPI;
+
 public enum BPRank {
 
 	FIRST_STEP("First Step", "§7", 0),
@@ -75,7 +77,7 @@ public enum BPRank {
 		
 		
 		
-		return next.prefix + (next.getStart() - points) + " to " +  next.getTotalDisplay();
+		return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getStart() - points), next.getTotalDisplay());
 	}
 	
 }

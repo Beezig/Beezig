@@ -3,6 +3,9 @@ package tk.roccodev.beezig.hiveapi.stuff.dr;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.beezig.Log;
+
 import static eu.the5zig.util.minecraft.ChatColor.*;
 
 public enum DRRank {
@@ -72,6 +75,7 @@ public enum DRRank {
 			next = ranks.get(newIndex);			
 		} catch(Exception e){ return "";}
 			
-		return next.prefix + (next.getStart() - points)+ " to " +  next.getTotalDisplay();
+		return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getStart() - points), next.getTotalDisplay());
+		
 	}
 }
