@@ -102,8 +102,9 @@ public class TIMV extends GameMode {
 			TIMV.dailyKarma = Integer.parseInt(line);
 		}
 		stream.close();
+		reader.close();
 
-		dailyKarmaWriter = new PrintWriter(BeezigMain.mcFile + "/timv/dailykarma/" + dailyKarmaName, "UTF-8");
+		
 
 	}
 
@@ -113,11 +114,16 @@ public class TIMV extends GameMode {
 
 		dailyKarmaWriter.close();
 
-		dailyKarmaWriter = new PrintWriter(BeezigMain.mcFile + "/timv/dailykarma/" + dailyKarmaName, "UTF-8");
 
 	}
 
 	private static void saveDailyKarma() {
+		try {
+			dailyKarmaWriter = new PrintWriter(BeezigMain.mcFile + "/timv/dailykarma/" + dailyKarmaName, "UTF-8");
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		dailyKarmaWriter.println(dailyKarma);
 		dailyKarmaWriter.flush();
 		dailyKarmaWriter.close();

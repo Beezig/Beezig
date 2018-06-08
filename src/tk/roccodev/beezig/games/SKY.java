@@ -67,8 +67,7 @@ public class SKY extends GameMode {
 			SKY.dailyPoints = Integer.parseInt(line);
 		}
 		stream.close();
-
-		dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/sky/dailyPoints/" + dailyPointsName, "UTF-8");
+		reader.close();
 
 	}
 
@@ -78,7 +77,6 @@ public class SKY extends GameMode {
 
 		dailyPointsWriter.close();
 
-		dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/sky/dailyPoints/" + dailyPointsName, "UTF-8");
 
 	}
 
@@ -87,6 +85,12 @@ public class SKY extends GameMode {
 	}
 
 	private static void saveDailyPoints() {
+		try {
+			dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/sky/dailyPoints/" + dailyPointsName, "UTF-8");
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		dailyPointsWriter.println(dailyPoints);
 		dailyPointsWriter.flush();
 		dailyPointsWriter.close();

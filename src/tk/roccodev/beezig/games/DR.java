@@ -63,8 +63,7 @@ public class DR extends GameMode {
 			DR.dailyPoints = Integer.parseInt(line);
 		}
 		stream.close();
-
-		dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/dr/dailyPoints/" + dailyPointsName, "UTF-8");
+		reader.close();
 
 	}
 
@@ -74,7 +73,6 @@ public class DR extends GameMode {
 
 		dailyPointsWriter.close();
 
-		dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/dr/dailyPoints/" + dailyPointsName, "UTF-8");
 
 	}
 
@@ -83,6 +81,12 @@ public class DR extends GameMode {
 	}
 
 	private static void saveDailyPoints() {
+		try {
+			dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/dr/dailyPoints/" + dailyPointsName, "UTF-8");
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		dailyPointsWriter.println(dailyPoints);
 		dailyPointsWriter.flush();
 		dailyPointsWriter.close();

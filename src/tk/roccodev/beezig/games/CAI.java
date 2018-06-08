@@ -52,8 +52,8 @@ public class CAI extends GameMode {
 			CAI.dailyPoints = Integer.parseInt(line);
 		}
 		stream.close();
-
-		dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/cai/dailyPoints/" + dailyPointsName, "UTF-8");
+		reader.close();
+	
 
 	}
 
@@ -63,7 +63,6 @@ public class CAI extends GameMode {
 
 		dailyPointsWriter.close();
 
-		dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/cai/dailyPoints/" + dailyPointsName, "UTF-8");
 
 	}
 
@@ -72,6 +71,12 @@ public class CAI extends GameMode {
 	}
 
 	private static void saveDailyPoints() {
+		try {
+			dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/cai/dailyPoints/" + dailyPointsName, "UTF-8");
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		dailyPointsWriter.println(dailyPoints);
 		dailyPointsWriter.flush();
 		dailyPointsWriter.close();
