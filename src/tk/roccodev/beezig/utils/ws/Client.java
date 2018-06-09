@@ -41,6 +41,9 @@ public class Client extends WebSocketClient{
 				NotificationManager.sendNotification("New Report Received", users + " reported for " + reason);
 			}
 		}
+		else if(data[0].equals("0nline cl1ents")) {
+			The5zigAPI.getAPI().messagePlayer(Log.info + "There are §b" + data[1] + "§3 connected clients.");
+		}
 		
 		
 	}

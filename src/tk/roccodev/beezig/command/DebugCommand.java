@@ -1,16 +1,18 @@
 package tk.roccodev.beezig.command;
 
+import tk.roccodev.beezig.utils.ws.Connector;
+
 public class DebugCommand implements Command{
 	public static boolean go = false;
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "debug";
+		return "bdev";
 	}
 
 	@Override
 	public String[] getAliases() {
-		return new String[]{"/debug"};
+		return new String[]{"/bdev"};
 	}
 	
 
@@ -20,6 +22,8 @@ public class DebugCommand implements Command{
 			
 			new Thread(() -> {
 
+				Connector.client.send("Hello there pls get online people");
+				
 			}).start();
 				 
 			return true;
