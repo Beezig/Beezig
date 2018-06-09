@@ -27,7 +27,7 @@ public class Client extends WebSocketClient{
 
 	@Override
 	public void onMessage(String message) {
-		String data[] = message.split("\\:");
+		String data[] = message.split("\\:", 2);
 		if(data.length == 0) return;
 		if(data[0].equals("newReport") && Setting.MOD_REPORT_NOTIFICATION.getValue() && BeezigMain.isStaffChat()) {
 			String[] data2 = data[1].split("§");
