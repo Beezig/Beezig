@@ -115,6 +115,10 @@ public class APIGameMode {
 	public String getTitle() {
 		return (String) object("title");
 	}
+	
+	public long getVictories() {
+		return (long) object("victories");
+	}
 
 	public Date lastPlayed() {
 		long time = (long) object("lastlogin");

@@ -57,6 +57,7 @@ public enum Setting {
 	CAI_SHOW_POINTSPG(true, "CAI Advanced Records - Show Points per Game"),
 	CAI_SHOW_POINTS_TO_NEXT_RANK(true, "CAI Advanced Records - Show points to next rank"),
 	CAI_SHOW_CATCHES_CAUGHT(true, "CAI Advanced Records - Show Catches/Caught Ratio"), 
+	CAI_SHOW_CAPTURES_GAME(true, "CAI Advanced Records - Show Captures/Games Ratio"),
 	
 	SKY_SHOW_POINTS_TO_NEXT_RANK(true, "SKY Advanced Records - Show points to next rank"), 
 	SKY_SHOW_WINRATE(true, "SKY Advanced Records - Show Winrate"), 
@@ -80,7 +81,8 @@ public enum Setting {
 	
 	SGN_SHOW_POINTS_TO_NEXT_RANK(true, "SG2 Advanced Records - Show points to next rank"), 
 	SGN_SHOW_WINRATE(true, "SG2 Advanced Records - Show Winrate"), 
-	SGN_SHOW_PPG(true, "SG2 Advanced Records - Show Points per game");
+	SGN_SHOW_PPG(true, "SG2 Advanced Records - Show Points per game"),
+	SGN_SHOW_KD(true, "SG2 Advanced Records - Show Kills/Deaths");
 
 
 	private boolean value;

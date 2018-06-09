@@ -354,7 +354,12 @@ public class CAIListener extends AbstractGameListener<CAI> {
 							double ppg = (double) points / (double) gamesPlayed;
 							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + df1f.format(ppg));
 						}
-
+						if(Setting.CAI_SHOW_CAPTURES_GAME.getValue()) {
+							if(captures == 0) captures = api.getCaptures();
+							if(gamesPlayed == 0) gamesPlayed = Math.toIntExact(api.getGamesPlayed());
+							double cpg = (double) ((double)captures / (double)gamesPlayed);
+							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Captures per Game: §b" + df1f.format(cpg));
+						}
 						/*
 						 * if(Setting.CAI_SHOW_WINRATE.getValue()){ double wr = Math.floor(((double)
 						 * victories / (double) gamesPlayed) * 1000d) / 10d;
