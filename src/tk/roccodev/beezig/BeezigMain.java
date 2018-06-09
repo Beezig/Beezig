@@ -363,6 +363,18 @@ public class BeezigMain {
 		CommandManager.registerCommand(new RigCommand());
 		CommandManager.registerCommand(new UUIDCommand());
 		// CommandManager.registerCommand(new ChatReportCommand());
+		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					tk.roccodev.beezig.utils.ws.Connector.connect();
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
 
 		if (The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d")
 				|| The5zigAPI.getAPI().getGameProfile().getId().toString()
@@ -610,7 +622,7 @@ public class BeezigMain {
 
 	}
 
-	private boolean isStaffChat() {
+	public static boolean isStaffChat() {
 		if (playerRank.endsWith("Hive Moderator"))
 			return true;
 		if (playerRank.equalsIgnoreCase("Hive Developer"))
