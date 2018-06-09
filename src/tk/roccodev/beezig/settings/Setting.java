@@ -20,6 +20,7 @@ public enum Setting {
 	PM_PING(false, "Play a ping sound when a PM is received."),
 	PM_NOTIFICATION(false, "Receive a system notification when a PM is received."),
 	MOD_REPORT_NOTIFICATION(true, "Receive a notification when a report is made through Beezig. (Only for staff)"),
+	RECEIVE_PARTY_INVITES(true, "Receive global party invites through Beezig"),
 	
 	TIMV_SHOW_KRR(true, "TIMV Advanced Records - Show Karma/rolepoints"),
 	TIMV_SHOW_MOSTPOINTS(true, "TIMV Advanced Records - Show Karma record"),

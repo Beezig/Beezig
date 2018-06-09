@@ -45,7 +45,7 @@ public class Client extends WebSocketClient{
 		else if(data[0].equals("0nline cl1ents")) {
 			The5zigAPI.getAPI().messagePlayer(Log.info + "There are §b" + data[1] + "§3 connected clients.");
 		}
-		else if(data[0].equals("lookingForParty")) {
+		else if(data[0].equals("lookingForParty") && Setting.RECEIVE_PARTY_INVITES.getValue()) {
 			String data2[] = data[1].split("§");
 			String who = data2[0];
 			String mode = data2[1];
