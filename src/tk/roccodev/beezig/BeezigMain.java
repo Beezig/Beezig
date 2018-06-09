@@ -40,6 +40,7 @@ import tk.roccodev.beezig.briefing.fetcher.NewsFetcher;
 import tk.roccodev.beezig.command.AddNoteCommand;
 import tk.roccodev.beezig.command.AutoVoteCommand;
 import tk.roccodev.beezig.command.BeezigCommand;
+import tk.roccodev.beezig.command.BeezigPartyCommand;
 import tk.roccodev.beezig.command.BlockstatsCommand;
 import tk.roccodev.beezig.command.CheckPingCommand;
 import tk.roccodev.beezig.command.ClosestToWRCommand;
@@ -362,6 +363,7 @@ public class BeezigMain {
 		CommandManager.registerCommand(new LeaderboardCommand());
 		CommandManager.registerCommand(new RigCommand());
 		CommandManager.registerCommand(new UUIDCommand());
+		CommandManager.registerCommand(new BeezigPartyCommand());
 		// CommandManager.registerCommand(new ChatReportCommand());
 		
 		new Thread(new Runnable() {

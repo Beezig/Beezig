@@ -4,6 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.CommandManager;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.utils.ws.Connector;
 
 public class BeezigCommand implements Command {
 
@@ -44,6 +45,10 @@ public class BeezigCommand implements Command {
 			The5zigAPI.getAPI().messagePlayer(
 					"\n    §7§m                                                                                    "
 							+ "\n");
+		}
+		else if(args[0].equalsIgnoreCase("reconnect")) {
+			Connector.client.reconnect();
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Reconnected.");
 		}
 		return true;
 	}

@@ -22,6 +22,7 @@ public class Client extends WebSocketClient{
 	public void onOpen(ServerHandshake handshakedata) {
 		// TODO Auto-generated method stub
 		System.out.println("Connected!");
+		this.send("I am " + The5zigAPI.getAPI().getGameProfile().getName());
 		
 	}
 
@@ -43,6 +44,16 @@ public class Client extends WebSocketClient{
 		}
 		else if(data[0].equals("0nline cl1ents")) {
 			The5zigAPI.getAPI().messagePlayer(Log.info + "There are §b" + data[1] + "§3 connected clients.");
+		}
+		else if(data[0].equals("lookingForParty")) {
+			String data2[] = data[1].split("§");
+			String who = data2[0];
+			String mode = data2[1];
+			String amount = data2[2];
+			The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + who.trim() + "§3 is looking for §b" + amount.trim() + "§3 player(s) to play §b" + mode.trim() + "§3.");
+		}
+		else if(data[0].equals("partyAccepted")) {
+			The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + data[1].trim() + "§3 accepted your party invite!");
 		}
 		
 		
