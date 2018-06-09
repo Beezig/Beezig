@@ -7,8 +7,10 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,8 +22,11 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.games.SGN;
+import tk.roccodev.beezig.games.SKY;
+import tk.roccodev.beezig.games.TIMV;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
@@ -80,35 +85,87 @@ public class SGNListener extends AbstractGameListener<SGN> {
 
 	@Override
 	public boolean onServerChat(SGN gameMode, String message) {
+		// (§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ §6§l§e§l§e§l1. §f§6SG3: Mini
+		// §a[§f0§a Votes])
 
-		if(message.startsWith("§8▍ §e§lHive§3§lSG§b§l2§8 ▏ §3Voting has ended! §bThe map §f")){
+		if (message.startsWith("§8▍ §e§lHive§3§lSG§b§l2§8 ▏ §3Voting has ended! §bThe map §f")) {
 			The5zigAPI.getLogger().info("Voting ended, parsing map");
 			String afterMsg = message.split("§8▍ §e§lHive§3§lSG§b§l2§8 ▏ §3Voting has ended! §bThe map")[1];
-			String map = "";    
-		    Pattern pattern = Pattern.compile(Pattern.quote("§f") + "(.*?)" + Pattern.quote("§b"));
-		    Matcher matcher = pattern.matcher(afterMsg);
-		    while (matcher.find()) {
-		        map = matcher.group(1);
-		    }
-		   
-		    SGN.activeMap = map;
-		    
+			String map = "";
+			Pattern pattern = Pattern.compile(Pattern.quote("§f") + "(.*?)" + Pattern.quote("§b"));
+			Matcher matcher = pattern.matcher(afterMsg);
+			while (matcher.find()) {
+				map = matcher.group(1);
+			}
+
+			SGN.activeMap = map;
 
 			DiscordUtils.updatePresence("Battling in SG2", "Playing on " + SGN.activeMap, "game_sgn");
+		} else if (message.startsWith("§8▍ §e§lHive§3§lSG§b§l2§8 ▏ §a§lVote received.")
+				&& Setting.AUTOVOTE.getValue()) {
+			SGN.hasVoted = true;
 		}
-		else if(message.startsWith("§8▍ §b§lCombat§8 ▏ §6Global Points Lost: §e")) {
+
+		else if (message.startsWith("§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ §6§l§e§l§e§l6.") && !SGN.hasVoted
+				&& Setting.AUTOVOTE.getValue()) {
+			/*
+			 * 
+			 * Multi-threading to avoid lag on older machines
+			 * 
+			 */
+			SGN.votesToParse.add(message);
+
+			new Thread(() -> {
+				List<String> votesCopy = new ArrayList<>(SGN.votesToParse);
+				List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("sgn"));
+
+				TreeMap<String, Integer> votesindex = new TreeMap<>();
+				LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();
+
+				for (String s : votesCopy) {
+					String[] data = s.split("\\.");
+					String index = ChatColor.stripColor(data[0])
+							.replaceAll("§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ §6§l§e§l§e§l", "")
+							.replaceAll(ChatColor.stripColor("§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ §6§l§e§l§e§l"),
+									"")
+							.trim();
+					String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
+					String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
+					System.out.println("VoteCopy: " + consider);
+
+					finalvoting.put(consider, Integer.parseInt(index));
+				}
+
+				for (String s : parsedMaps) {
+					if (finalvoting.containsKey(s)) {
+						votesindex.put(s, finalvoting.get(s));
+						break;
+					}
+				}
+
+				if (votesindex.size() != 0) {
+					System.out.println(votesindex.firstEntry().getKey());
+					The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
+					The5zigAPI.getAPI().messagePlayer("§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ "
+							+ "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
+				}
+				SGN.votesToParse.clear();
+				SGN.hasVoted = true;
+			}).start();
+		} else if (message.startsWith("§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ §6§l§e§l§e§l") && !SKY.hasVoted
+				&& Setting.AUTOVOTE.getValue()) {
+			SGN.votesToParse.add(message);
+		} else if (message.startsWith("§8▍ §b§lCombat§8 ▏ §6Global Points Lost: §e")) {
 			int pts = Integer.parseInt(message.replace("§8▍ §b§lCombat§8 ▏ §6Global Points Lost: §e", ""));
 			APIValues.SGNpoints -= pts;
 			SGN.gamePts -= pts;
 			SGN.dailyPoints -= pts;
-		}
-		 else if(message.endsWith("§3§lGlobal points gained.")) {
-			 int pts = Integer.parseInt(message.replace("§3§lGlobal points gained.", "").replace(" §b§l", ""));
-			 APIValues.SGNpoints += pts;
-				SGN.gamePts += pts;
-				SGN.dailyPoints += pts;
-		 }
-		else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+		} else if (message.endsWith("§3§lGlobal points gained.")) {
+			int pts = Integer.parseInt(message.replace("§3§lGlobal points gained.", "").replace(" §b§l", ""));
+			APIValues.SGNpoints += pts;
+			SGN.gamePts += pts;
+			SGN.dailyPoints += pts;
+		} else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
 			SGN.messagesToSend.add(message);
 			The5zigAPI.getLogger().info("found header");
 			return true;
@@ -172,7 +229,6 @@ public class SGNListener extends AbstractGameListener<SGN> {
 						long timeAlive = 0;
 
 						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-						
 
 						// int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
 						// HiveAPI.getLeaderboardsPlacePoints(349, "SGN") <
@@ -227,14 +283,13 @@ public class SGNListener extends AbstractGameListener<SGN> {
 								The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
 								continue;
 							} else if (s.startsWith("§3 Victories: §b")) {
-								victories = Integer.parseInt(
-										ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+								victories = Integer
+										.parseInt(ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
 							} else if (s.startsWith("§3 Games Played: §b")) {
-								gamesPlayed = Integer.parseInt(
-										ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+								gamesPlayed = Integer
+										.parseInt(ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
 							} else if (s.startsWith("§3 Kills: §b")) {
-								kills = Integer
-										.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
+								kills = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
 							} else if (s.startsWith("§3 Deaths: §b")) {
 								deaths = Integer
 										.parseInt(ChatColor.stripColor(s.replaceAll("§3 Deaths: §b", "").trim()));
@@ -243,7 +298,6 @@ public class SGNListener extends AbstractGameListener<SGN> {
 							The5zigAPI.getAPI().messagePlayer("§o " + s);
 
 						}
-
 
 						if (Setting.SGN_SHOW_WINRATE.getValue()) {
 							double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;

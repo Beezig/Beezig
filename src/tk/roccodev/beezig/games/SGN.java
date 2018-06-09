@@ -32,6 +32,8 @@ public class SGN extends GameMode {
 	public static boolean isRecordsRunning = false;
 	public static String lastRecords = "";
 	
+	public static List<String> votesToParse = new ArrayList<>();
+	public static boolean hasVoted = false;
 	
 	public static int gamePts;
 	public static String activeMap;
@@ -44,7 +46,6 @@ public class SGN extends GameMode {
 	public static String rank;
 	public static SGNRank rankObject;
 	
-	public static List<String> votesToParse = new ArrayList<>();
 
 	
 	public static void initDailyPointsWriter() throws IOException {
@@ -103,6 +104,7 @@ public class SGN extends GameMode {
 		gamePts = 0;
 		activeMap = "";
 		votesToParse.clear();
+		SGN.hasVoted = false;
 		ActiveGame.reset("sgn");
 		IHive.genericReset();
 		if (The5zigAPI.getAPI().getActiveServer() != null)
