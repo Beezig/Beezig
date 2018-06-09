@@ -13,6 +13,7 @@ import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVRank;
 import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.beezig.hiveapi.stuff.mimv.MIMVRank;
+import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
 import tk.roccodev.beezig.hiveapi.stuff.sky.SKYRank;
 import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.*;
@@ -66,8 +67,7 @@ public class LeaderboardCommand implements Command {
 						ApiTIMV apiTIMV = new ApiTIMV(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
-								((JSONObject) data.get(i)).get("UUID").toString());
+						ApiHiveGlobal apiHIVE = apiTIMV.getParentMode();
 
 						points.add(apiTIMV.getKarma());
 						title.add(TIMVRank.getFromDisplay(apiTIMV.getTitle()).getTotalDisplay());
@@ -114,8 +114,7 @@ public class LeaderboardCommand implements Command {
 						ApiBED apiBED = new ApiBED(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
-								((JSONObject) data.get(i)).get("UUID").toString());
+						ApiHiveGlobal apiHIVE = apiBED.getParentMode();
 
 						points.add(apiBED.getPoints());
 						// BEDRank rank = BEDRank.isNo1(((JSONObject)
@@ -180,8 +179,7 @@ public class LeaderboardCommand implements Command {
 						ApiDR apiDR = new ApiDR(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
-								((JSONObject) data.get(i)).get("UUID").toString());
+						ApiHiveGlobal apiHIVE = apiDR.getParentMode();
 
 						points.add(apiDR.getPoints());
 						title.add(DRRank.getFromDisplay(apiDR.getTitle()).getTotalDisplay());
@@ -226,8 +224,7 @@ public class LeaderboardCommand implements Command {
 						ApiCAI apiCAI = new ApiCAI(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
-								((JSONObject) data.get(i)).get("UUID").toString());
+						ApiHiveGlobal apiHIVE = apiCAI.getParentMode();
 
 						points.add(apiCAI.getPoints());
 						title.add(CAIRank.getFromDisplay(apiCAI.getTitle()).getTotalDisplay());
@@ -272,8 +269,7 @@ public class LeaderboardCommand implements Command {
 						ApiHIDE apiHIDE = new ApiHIDE(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
-								((JSONObject) data.get(i)).get("UUID").toString());
+						ApiHiveGlobal apiHIVE = apiHIDE.getParentMode();
 
 						points.add(apiHIDE.getPoints());
 						title.add(HIDERank.getFromDisplay(apiHIDE.getTitle()).getTotalDisplay());
@@ -326,8 +322,7 @@ public class LeaderboardCommand implements Command {
 						ApiSKY apiSKY = new ApiSKY(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
-								((JSONObject) data.get(i)).get("UUID").toString());
+						ApiHiveGlobal apiHIVE = apiSKY.getParentMode();
 
 						points.add(apiSKY.getPoints());
 						title.add(SKYRank.getFromDisplay(apiSKY.getTitle()).getTotalDisplay());
@@ -372,8 +367,7 @@ public class LeaderboardCommand implements Command {
 						ApiGRAV apiGRAV = new ApiGRAV(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
-								((JSONObject) data.get(i)).get("UUID").toString());
+						ApiHiveGlobal apiHIVE = apiGRAV.getParentMode();
 
 						points.add(apiGRAV.getPoints());
 						title.add(GRAVRank.getFromDisplay(apiGRAV.getTitle()).getTotalDisplay());
@@ -418,8 +412,7 @@ public class LeaderboardCommand implements Command {
 						ApiMIMV apiMIMV = new ApiMIMV(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
-								((JSONObject) data.get(i)).get("UUID").toString());
+						ApiHiveGlobal apiHIVE = apiMIMV.getParentMode();
 
 						points.add(apiMIMV.getPoints());
 						title.add(MIMVRank.getFromDisplay(apiMIMV.getTitle()).getTotalDisplay());
@@ -464,8 +457,7 @@ public class LeaderboardCommand implements Command {
 						ApiBP apiBP = new ApiBP(((JSONObject) data.get(i)).get("username").toString(),
 								((JSONObject) data.get(i)).get("UUID").toString());
 
-						ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
-								((JSONObject) data.get(i)).get("UUID").toString());
+						ApiHiveGlobal apiHIVE = apiBP.getParentMode();
 
 						points.add(apiBP.getPoints());
 						title.add(BPRank.getFromDisplay(apiBP.getTitle()).getTotalDisplay());
@@ -495,7 +487,54 @@ public class LeaderboardCommand implements Command {
 						"    §7§m                                                                                    "
 								+ "\n");
 			}).start();
-		} else {
+		} 
+		else if (game.equalsIgnoreCase("sgn")) {
+			long startT = System.currentTimeMillis();
+			The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
+			new Thread(() -> {
+				JSONArray data = HiveAPI.getLeaderboardData(game, indexStart, indexEnd);
+
+				List<Long> points = new ArrayList<>();
+				List<String> title = new ArrayList<>();
+				List<String> name = new ArrayList<>();
+
+				for (int i = 0; i < (humanEnd - humanStart + 1L); i++) {
+					try {
+						ApiSGN apiSGN = new ApiSGN(((JSONObject) data.get(i)).get("username").toString(),
+								((JSONObject) data.get(i)).get("UUID").toString());
+
+						ApiHiveGlobal apiHIVE = apiSGN.getParentMode();
+
+						points.add(apiSGN.getPoints());
+						title.add(SGNRank.getRank(apiSGN.getPoints()).getTotalDisplay());
+						name.add(apiHIVE.getNetworkRankColor() + ((JSONObject) data.get(i)).get("username").toString());
+					} catch (Exception e) {
+						// e.printStackTrace();
+					}
+				}
+
+				The5zigAPI.getAPI().messagePlayer("\n"
+														  + "    §7§m                                                                                    ");
+				for (int i = 0; i < name.size(); i++) {
+					try {
+						if (points.get(i) != 0) {
+							The5zigAPI.getAPI()
+									.messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
+														   + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
+														   + points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+						}
+					} catch (Exception e) {
+						// e.printStackTrace();
+					}
+				}
+				The5zigAPI.getAPI().messagePlayer(Log.info + "SGN Leaderboards: §b" + name.size() + "P / "
+														  + ((System.currentTimeMillis() - startT) / 1000) + "s / " + "#" + humanStart + "-" + humanEnd);
+				The5zigAPI.getAPI().messagePlayer(
+						"    §7§m                                                                                    "
+								+ "\n");
+			}).start();
+		}
+		else {
 			The5zigAPI.getAPI().messagePlayer(Log.info + "Specified mode not found.");
 		}
 		return true;
