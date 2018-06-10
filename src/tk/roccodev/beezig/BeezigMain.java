@@ -345,9 +345,7 @@ public class BeezigMain {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                DR.mapsPool = StuffFetcher.getDeathRunMaps();
-                TIMV.mapsPool = StuffFetcher.getTroubleInMinevilleMaps();
-                GRAV.mapsPool = StuffFetcher.getGravityMaps();
+                BeezigMain.refetchMaps();
             }
         }, "Maps Fetcher").start();
 
@@ -786,6 +784,12 @@ public class BeezigMain {
             evt.setCancelled(true);
             The5zigAPI.getAPI().sendPlayerMessage(TIMV.testRequests.get(random).replaceAll("\\{p\\}", player));
         }
+    }
+
+    public static void refetchMaps(){
+        DR.mapsPool = StuffFetcher.getDeathRunMaps();
+        TIMV.mapsPool = StuffFetcher.getTroubleInMinevilleMaps();
+        GRAV.mapsPool = StuffFetcher.getGravityMaps();
     }
 
     @EventHandler(priority = Priority.HIGHEST)

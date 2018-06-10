@@ -65,9 +65,7 @@ public class Client extends WebSocketClient {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    DR.mapsPool = StuffFetcher.getDeathRunMaps();
-                    TIMV.mapsPool = StuffFetcher.getTroubleInMinevilleMaps();
-                    GRAV.mapsPool = StuffFetcher.getGravityMaps();
+                    BeezigMain.refetchMaps();
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Maps data have been re-fetched due to a remote request.");
                 }
             }, "Maps Fetcher").start();
@@ -75,6 +73,8 @@ public class Client extends WebSocketClient {
 
 
     }
+
+
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
