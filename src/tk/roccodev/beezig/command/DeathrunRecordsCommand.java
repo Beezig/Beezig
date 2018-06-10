@@ -25,7 +25,8 @@ public class DeathrunRecordsCommand implements Command {
                 ApiDR api = new ApiDR(player);
                 String mapInput = args.length <= 1 ? args[0] : args[1];
                 String map = DR.mapsPool.get(mapInput.replace("_", " ").toLowerCase()).getHiveAPIName();
-                The5zigAPI.getAPI().messagePlayer(Log.info + "Record:§b " + api.getKillRecords().get(map));
+                The5zigAPI.getAPI().messagePlayer(Log.info + "Kills Record:§b " + api.getKillRecords().get(map));
+                The5zigAPI.getAPI().messagePlayer(Log.info + "Deaths Record:§b " + api.getDeathRecords().get(map));
             } catch(ClassCastException e) {
                 The5zigAPI.getAPI().messagePlayer(Log.error + "The player has no records!");
             }
