@@ -15,6 +15,7 @@ import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiLAB;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -259,5 +260,12 @@ public class LABListener extends AbstractGameListener<LAB> {
     @Override
     public void onServerConnect(LAB gameMode) {
         LAB.reset(gameMode);
+    }
+
+    @Override
+    public void onTitle(LAB gameMode, String title, String subTitle) {
+        if(subTitle != null && subTitle.startsWith("§r§3Experiment §r§b§l") && title != null) {
+            DiscordUtils.updatePresence("Experimenting in TheLab", "Playing " + ChatColor.stripColor(title.trim()), "game_lab");
+        }
     }
 }
