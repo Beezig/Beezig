@@ -20,6 +20,7 @@ import tk.roccodev.beezig.hiveapi.stuff.bed.StreakUtils;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVListenerv2;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
+import tk.roccodev.beezig.listener.HiveListener;
 import tk.roccodev.beezig.notes.NotesManager;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.settings.SettingsFetcher;
@@ -287,6 +288,11 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "sgnmap", tk.roccodev.beezig.modules.sgn.MapItem.class,
                 "serverhivemc");
 
+        The5zigAPI.getAPI().registerModuleItem(this, "labpoints", tk.roccodev.beezig.modules.lab.PointsItem.class,
+                "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "labdaily", tk.roccodev.beezig.modules.lab.DailyItem.class,
+                "serverhivemc");
+
 
         The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 
@@ -402,6 +408,9 @@ public class BeezigMain {
 
         checkForFileExist(new File(mcFile + "/sgn/"), true);
         checkForFileExist(new File(mcFile + "/sgn/dailyPoints/"), true);
+
+        checkForFileExist(new File(mcFile + "/lab/"), true);
+        checkForFileExist(new File(mcFile + "/lab/dailyPoints/"), true);
 
         StreakUtils.init();
         new Thread(new Runnable() {
@@ -529,6 +538,7 @@ public class BeezigMain {
         DR.setDailyPointsFileName(dailyName);
         Giant.setDailyPointsFileName(dailyName);
         SGN.setDailyPointsFileName(dailyName);
+        LAB.setDailyPointsFileName(dailyName);
 
         Calendar cal = Calendar.getInstance();
         if (cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA) {
@@ -689,6 +699,14 @@ public class BeezigMain {
                     }
                     SGN.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
                 }
+                else if (ActiveGame.is("lab")) {
+                    if (LAB.isRecordsRunning) {
+                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+                        evt.setCancelled(true);
+                        return;
+                    }
+                    LAB.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
+                }
 
             } else {
                 if (ActiveGame.is("timv")) {
@@ -768,6 +786,14 @@ public class BeezigMain {
                         return;
                     }
                     SGN.lastRecords = args[1].trim();
+                }
+                else if (ActiveGame.is("lab")) {
+                    if (LAB.isRecordsRunning) {
+                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
+                        evt.setCancelled(true);
+                        return;
+                    }
+                    LAB.lastRecords = args[1].trim();
                 }
 
             }
@@ -864,6 +890,18 @@ public class BeezigMain {
                     }
                 }
             }).start();
+        }
+    }
+
+    @EventHandler
+    public void onTick(TickEvent evt) {
+
+        if(The5zigAPI.getAPI().isInWorld() && The5zigAPI.getAPI().getSideScoreboard() != null && The5zigAPI.getAPI().getSideScoreboard().getTitle().equals("   §eYour LAB Stats   ") && !ActiveGame.is("lab")) {
+            ActiveGame.set("LAB");
+            System.out.println("Connected to LAB -Hive");
+            DiscordUtils.updatePresence("Experimenting in TheLab", "In Lobby", "game_lab");
+            IHive.gameListener.switchLobby("LAB");
+
         }
     }
 

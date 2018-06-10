@@ -257,6 +257,18 @@
           "type": "sgnmap"
         }
       ]
+    },
+    {
+      "id": "TheLab",
+      "name": "TheLab",
+      "items": [
+        {
+          "type": "labpoints"
+        },
+        {
+          "type": "labdaily"
+        }
+      ]
     }
   ]
 }

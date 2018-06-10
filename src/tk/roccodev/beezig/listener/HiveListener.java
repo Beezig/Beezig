@@ -1,10 +1,7 @@
 package tk.roccodev.beezig.listener;
 
 import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.server.AbstractGameListener;
-import eu.the5zig.mod.server.GameMode;
-import eu.the5zig.mod.server.GameState;
-import eu.the5zig.mod.server.IPatternResult;
+import eu.the5zig.mod.server.*;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.games.GNT;
 import tk.roccodev.beezig.games.GNTM;
@@ -13,6 +10,7 @@ import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 public class HiveListener extends AbstractGameListener<GameMode> {
+
 
     @Override
     public Class<GameMode> getGameMode() {

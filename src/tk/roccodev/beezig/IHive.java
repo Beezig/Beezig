@@ -1,6 +1,7 @@
 package tk.roccodev.beezig;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.server.GameListenerRegistry;
 import eu.the5zig.mod.server.ServerInstance;
 import tk.roccodev.beezig.listener.*;
 import tk.roccodev.beezig.notes.NotesManager;
@@ -10,6 +11,9 @@ import javax.xml.bind.DatatypeConverter;
 import java.util.Calendar;
 
 public class IHive extends ServerInstance {
+
+    static GameListenerRegistry gameListener;
+
 
     public static void genericReset(String... optionalParams) {
         DiscordUtils.updatePresence("Relaxing in the Hub", "In Lobby", "lobby");
@@ -52,6 +56,7 @@ public class IHive extends ServerInstance {
 
     @Override
     public void registerListeners() {
+        gameListener = getGameListener();
         // TODO Auto-generated method stub
         getGameListener().registerListener(new TIMVListener());
         getGameListener().registerListener(new HiveListener());
@@ -65,6 +70,7 @@ public class IHive extends ServerInstance {
         getGameListener().registerListener(new GRAVListener());
         getGameListener().registerListener(new BPListener());
         getGameListener().registerListener(new SGNListener());
+        getGameListener().registerListener(new LABListener());
 
     }
 
