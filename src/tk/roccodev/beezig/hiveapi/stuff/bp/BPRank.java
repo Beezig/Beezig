@@ -22,7 +22,7 @@ public enum BPRank {
     FABULOUS("Fabulous", "§3", 150000),
     KING("King of Dance", "§6§l", 200000),
     CHOREOGRAPHER("Choreographer", "§b§l", 300000),
-    HAPPY_FEET("Happy Feet", "§v§l", 400000),
+    HAPPY_FEET("Happy Feet", "§c§l", 400000),
     JACKSON("Jackson", "§e§l", 500000),
     ASTAIRE("Astaire", "§9§l", 625000),
     SWAYZE("Swayze", "§a§l", 750000),
