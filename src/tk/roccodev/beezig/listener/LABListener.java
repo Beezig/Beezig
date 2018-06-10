@@ -69,6 +69,15 @@ public class LABListener extends AbstractGameListener<LAB> {
 
     @Override
     public boolean onServerChat(LAB gameMode, String message) {
+        if(message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l2 atoms and 10 tokens§a for participating!")) {
+            LAB.dailyPoints += 2;
+            APIValues.LABpoints += 2;
+        }
+        else if(message.contains(The5zigAPI.getAPI().getGameProfile().getName() + "§7 [+ ")) {
+            int atoms = Integer.parseInt(message.split("\\[\\+")[1].replace(" Atom", "").replace("s", "").trim());
+            LAB.dailyPoints += atoms;
+            APIValues.LABpoints += atoms;
+        }
         if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
             LAB.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
