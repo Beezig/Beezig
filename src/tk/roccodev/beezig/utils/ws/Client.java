@@ -5,6 +5,10 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.games.DR;
+import tk.roccodev.beezig.games.GRAV;
+import tk.roccodev.beezig.games.TIMV;
+import tk.roccodev.beezig.hiveapi.StuffFetcher;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.NotificationManager;
 
@@ -50,6 +54,23 @@ public class Client extends WebSocketClient {
             The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + who.trim() + "§3 is looking for §b" + amount.trim() + "§3 player(s) to play §b" + mode.trim() + "§3.");
         } else if (data[0].equals("partyAccepted")) {
             The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + data[1].trim() + "§3 accepted your party invite!");
+        }
+        else if(data[0].equals("newAnnouncement")) {
+            String data2[] = data[1].trim().split("§");
+            The5zigAPI.getAPI().messagePlayer(Log.info + "§bNEW ANNOUNCEMENT!");
+            The5zigAPI.getAPI().messagePlayer(Log.info + data2[0].trim());
+            The5zigAPI.getAPI().messagePlayer(Log.info + data2[1].trim());
+        }
+        else if(data[0].equals("forceRefetch")) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    DR.mapsPool = StuffFetcher.getDeathRunMaps();
+                    TIMV.mapsPool = StuffFetcher.getTroubleInMinevilleMaps();
+                    GRAV.mapsPool = StuffFetcher.getGravityMaps();
+                    The5zigAPI.getAPI().messagePlayer(Log.info + "Maps data have been re-fetched due to a remote request.");
+                }
+            }, "Maps Fetcher").start();
         }
 
 

@@ -11,6 +11,8 @@ import tk.roccodev.beezig.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.PvPMode;
 
+import java.util.Map;
+
 public class ApiDR extends PvPMode {
 
     public ApiDR(String playerName, String... UUID) {
@@ -30,6 +32,15 @@ public class ApiDR extends PvPMode {
         // TODO Auto-generated method stub
         return "DR";
     }
+
+    public Map<String, Long> getKillRecords() {
+        return ((JSONObject) object("mapkills"));
+    }
+
+    public Map<String, Long> getDeathRecords() {
+        return ((JSONObject) object("mapkills"));
+    }
+
 
     public String getPersonalBest(DRMap map) {
         try {
