@@ -38,7 +38,7 @@ public class ApiDR extends PvPMode {
     }
 
     public Map<String, Long> getDeathRecords() {
-        return ((JSONObject) object("mapkills"));
+        return ((JSONObject) object("mapdeaths"));
     }
 
 
