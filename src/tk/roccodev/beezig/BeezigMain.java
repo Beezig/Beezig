@@ -874,7 +874,7 @@ public class BeezigMain {
             if (The5zigAPI.getAPI().getActiveServer() instanceof IHive) {
                 if (BeezigMain.isColorDebug)
                     The5zigAPI.getLogger().info("Global Color Debug: (" + evt.getMessage() + ")");
-                if (BeezigMain.crInteractive && (evt.getMessage().startsWith("§8▏ §aLink§8 ▏ §e") || evt.getMessage().contains("§6Log link generated: §6"))) {
+                if (BeezigMain.crInteractive && (evt.getMessage().startsWith("§8▏ §aLink§8 ▏ §e"))) {
                     crInteractive = false;
                     new Thread(new Runnable() {
                         @Override
@@ -888,6 +888,10 @@ public class BeezigMain {
                         }
                     }).start();
 
+                }
+                else if(evt.getMessage().contains("§6Log link generated: §6")) {
+                    crInteractive = false;
+                    lrRS = "";
                 }
                 if (BeezigMain.checkForNewLR && evt.getMessage().equals("§8▍ §e§lHive§6§lMC§8 ▏§a §b§lPlease click §b§lHERE§a to login to our website.")) {
                     checkForNewLR = false;
