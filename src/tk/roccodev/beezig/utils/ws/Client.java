@@ -60,6 +60,7 @@ public class Client extends WebSocketClient {
             The5zigAPI.getAPI().messagePlayer(Log.info + "§bNEW ANNOUNCEMENT!");
             The5zigAPI.getAPI().messagePlayer(Log.info + data2[0].trim());
             The5zigAPI.getAPI().messagePlayer(Log.info + data2[1].trim());
+            The5zigAPI.getAPI().playSound("note.pling", 1f);
         }
         else if(data[0].equals("forceRefetch")) {
             new Thread(new Runnable() {
