@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,14 +15,14 @@
  */
 package org.yaml.snakeyaml.resolver;
 
+import org.yaml.snakeyaml.nodes.NodeId;
+import org.yaml.snakeyaml.nodes.Tag;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import org.yaml.snakeyaml.nodes.NodeId;
-import org.yaml.snakeyaml.nodes.Tag;
 
 /**
  * Resolver tries to detect a type by content (when the tag is implicit)
@@ -49,6 +49,10 @@ public class Resolver {
 
     protected Map<Character, List<ResolverTuple>> yamlImplicitResolvers = new HashMap<Character, List<ResolverTuple>>();
 
+    public Resolver() {
+        addImplicitResolvers();
+    }
+
     protected void addImplicitResolvers() {
         addImplicitResolver(Tag.BOOL, BOOL, "yYnNtTfFoO");
         /*
@@ -67,10 +71,6 @@ public class Resolver {
         // It cannot work
         // because plain scalars cannot start with '!', '&', or '*'.
         addImplicitResolver(Tag.YAML, YAML, "!&*");
-    }
-
-    public Resolver() {
-        addImplicitResolvers();
     }
 
     public void addImplicitResolver(Tag tag, Pattern regexp, String first) {
@@ -127,12 +127,12 @@ public class Resolver {
             }
         }
         switch (kind) {
-        case scalar:
-            return Tag.STR;
-        case sequence:
-            return Tag.SEQ;
-        default:
-            return Tag.MAP;
+            case scalar:
+                return Tag.STR;
+            case sequence:
+                return Tag.SEQ;
+            default:
+                return Tag.MAP;
         }
     }
 }

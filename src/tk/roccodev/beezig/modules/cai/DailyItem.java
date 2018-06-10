@@ -6,31 +6,31 @@ import tk.roccodev.beezig.games.CAI;
 
 public class DailyItem extends GameModeItem<CAI> {
 
-	public DailyItem() {
-		super(CAI.class);
-	}
+    public DailyItem() {
+        super(CAI.class);
+    }
 
-	@Override
-	protected Object getValue(boolean dummy) {
+    @Override
+    protected Object getValue(boolean dummy) {
 
-		return CAI.dailyPoints + " " + Log.t("beezig.module.points");
+        return CAI.dailyPoints + " " + Log.t("beezig.module.points");
 
-	}
+    }
 
-	@Override
-	public String getName() {
-		return Log.t("beezig.module.daily");
-	}
+    @Override
+    public String getName() {
+        return Log.t("beezig.module.daily");
+    }
 
-	@Override
-	public boolean shouldRender(boolean dummy) {
-		try {
-			if (!(getGameMode() instanceof CAI))
-				return false;
-			return dummy || (CAI.shouldRender(getGameMode().getState()));
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    @Override
+    public boolean shouldRender(boolean dummy) {
+        try {
+            if (!(getGameMode() instanceof CAI))
+                return false;
+            return dummy || (CAI.shouldRender(getGameMode().getState()));
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }

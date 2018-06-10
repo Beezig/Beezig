@@ -25,7 +25,7 @@
       ]
     },
     {
-    "id": "DeathRun",
+      "id": "DeathRun",
       "name": "DeathRun",
       "items": [
         {
@@ -37,22 +37,22 @@
         {
           "type": "drmap"
         },
-		{
+        {
           "type": "drdeaths"
         },
-		{
+        {
           "type": "drpb"
         },
-		{
+        {
           "type": "drwr"
         },
         {
           "type": "drdaily"
-        }	
-        ]
-     },
+        }
+      ]
+    },
     {
-    "id": "BedWars",
+      "id": "BedWars",
       "name": "BedWars",
       "items": [
         {
@@ -91,10 +91,10 @@
         {
           "type": "bedresources"
         }
-        ]
-     },
+      ]
+    },
     {
-    "id": "HiveMCGlobal",
+      "id": "HiveMCGlobal",
       "name": "HiveMC",
       "items": [
         {
@@ -103,10 +103,10 @@
         {
           "type": "globaltokens"
         }
-        ]
-     },
+      ]
+    },
     {
-    "id": "SkyGiants",
+      "id": "SkyGiants",
       "name": "SkyGiants",
       "items": [
         {
@@ -139,8 +139,8 @@
         {
           "type": "gntdaily"
         }
-        ]
-     },
+      ]
+    },
     {
       "id": "HideAndSeek",
       "name": "Hide and Seek",
@@ -154,7 +154,7 @@
         {
           "type": "hidedaily"
         }
-        ]
+      ]
     },
     {
       "id": "CowboysAndIndians",
@@ -166,13 +166,13 @@
         {
           "type": "caimap"
         },
-         {
+        {
           "type": "caigame"
         },
         {
           "type": "caiteam"
         },
-         {
+        {
           "type": "caidaily"
         }
       ]
@@ -184,10 +184,10 @@
         {
           "type": "skypoints"
         },
-         {
+        {
           "type": "skyteam"
         },
-         {
+        {
           "type": "skymode"
         },
         {
@@ -207,7 +207,7 @@
         }
       ]
     },
-     {
+    {
       "id": "MurderInMineville",
       "name": "Murder in Mineville",
       "items": [
@@ -217,10 +217,10 @@
         {
           "type": "mimvrole"
         },
-         {
+        {
           "type": "mimvmap"
         },
-         {
+        {
           "type": "mimvcounter"
         },
         {

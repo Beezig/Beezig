@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,20 +15,21 @@
  */
 package org.yaml.snakeyaml.reader;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.charset.Charset;
-
 import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.scanner.Constant;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.Charset;
 
 /**
  * Reader: checks if code points are in allowed range, adds '\0' to the end.
  */
 public class StreamReader {
-    private String name;
+    private static final int BUFFER_SIZE = 1025;
     private final Reader stream;
+    private String name;
     private int pointer = 0; //in characters
     private boolean eof = true;
     private String buffer;
@@ -36,8 +37,6 @@ public class StreamReader {
     private int line = 0;
     private int column = 0; //in code points
     private char[] data;
-
-    private static final int BUFFER_SIZE = 1025;
 
     public StreamReader(String stream) {
         this.name = "'string'";
@@ -56,20 +55,6 @@ public class StreamReader {
         this.eof = false;
         this.data = new char[BUFFER_SIZE];
         this.update();
-    }
-
-    void checkPrintable(String data) {
-        final int length = data.length();
-        for (int offset = 0; offset < length; ) {
-            final int codePoint = data.codePointAt(offset);
-
-            if (!isPrintable(codePoint)) {
-                throw new ReaderException(name, offset, codePoint,
-                                          "special characters are not allowed");
-            }
-
-            offset += Character.charCount(codePoint);
-        }
     }
 
     public static boolean isPrintable(final String data) {
@@ -94,6 +79,20 @@ public class StreamReader {
                 || (c >= 0x10000 && c <= 0x10FFFF);
     }
 
+    void checkPrintable(String data) {
+        final int length = data.length();
+        for (int offset = 0; offset < length; ) {
+            final int codePoint = data.codePointAt(offset);
+
+            if (!isPrintable(codePoint)) {
+                throw new ReaderException(name, offset, codePoint,
+                        "special characters are not allowed");
+            }
+
+            offset += Character.charCount(codePoint);
+        }
+    }
+
     public Mark getMark() {
         return new Mark(name, this.index, this.line, this.column, this.buffer, this.pointer);
     }
@@ -105,7 +104,7 @@ public class StreamReader {
     /**
      * read the next length characters and move the pointer.
      * if the last character is high surrogate one more character will be read
-     * 
+     *
      * @param length amount of characters to move forward
      */
     public void forward(int length) {
@@ -174,7 +173,7 @@ public class StreamReader {
 
     /**
      * peek the next length code points
-     * 
+     *
      * @param length amount of the characters to peek
      * @return the next length code points
      */
@@ -203,7 +202,7 @@ public class StreamReader {
     /**
      * prefix(length) immediately followed by forward(length)
      * @param length amount of characters to get
-     * @return  the next length code points
+     * @return the next length code points
      */
     public String prefixForward(int length) {
         final String prefix = prefix(length);
@@ -237,7 +236,7 @@ public class StreamReader {
                      * Giving correct capacity to the constructor prevents
                      * unnecessary operations in appends.
                      */
-                    StringBuilder builder  = new StringBuilder(buffer.length() + converted)
+                    StringBuilder builder = new StringBuilder(buffer.length() + converted)
                             .append(buffer)
                             .append(data, 0, converted);
                     if (eofDetected) {

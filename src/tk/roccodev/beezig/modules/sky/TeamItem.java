@@ -7,48 +7,47 @@ import tk.roccodev.beezig.games.SKY;
 
 public class TeamItem extends GameModeItem<SKY> {
 
-	public TeamItem() {
-		super(SKY.class);
-	}
+    public TeamItem() {
+        super(SKY.class);
+    }
 
-	@Override
-	protected Object getValue(boolean dummy) {
-		try {
-			
-			boolean color = (boolean) getProperties().getSetting("color").get();
-			
-			return color ? SKY.team : ChatColor.stripColor(SKY.team);
+    @Override
+    protected Object getValue(boolean dummy) {
+        try {
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Server error";
-		}
-	}
+            boolean color = (boolean) getProperties().getSetting("color").get();
 
-	@Override
-	public String getName() {
-		return Log.t("beezig.module.sky.team");
-	}
+            return color ? SKY.team : ChatColor.stripColor(SKY.team);
 
-	
-	
-	@Override
-	public void registerSettings() {
-		getProperties().addSetting("color", true);
-		super.registerSettings();
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Server error";
+        }
+    }
 
-	@Override
-	public boolean shouldRender(boolean dummy) {
-		try {
-			if (!(getGameMode() instanceof SKY))
-				return false;
-			if (SKY.team == null || SKY.team.isEmpty())
-				return false;
-			return dummy || (SKY.shouldRender(getGameMode().getState()));
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    @Override
+    public String getName() {
+        return Log.t("beezig.module.sky.team");
+    }
+
+
+    @Override
+    public void registerSettings() {
+        getProperties().addSetting("color", true);
+        super.registerSettings();
+    }
+
+    @Override
+    public boolean shouldRender(boolean dummy) {
+        try {
+            if (!(getGameMode() instanceof SKY))
+                return false;
+            if (SKY.team == null || SKY.team.isEmpty())
+                return false;
+            return dummy || (SKY.shouldRender(getGameMode().getState()));
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }

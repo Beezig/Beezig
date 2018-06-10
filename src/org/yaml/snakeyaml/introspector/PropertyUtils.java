@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,20 +15,15 @@
  */
 package org.yaml.snakeyaml.introspector;
 
+import org.yaml.snakeyaml.error.YAMLException;
+
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import org.yaml.snakeyaml.error.YAMLException;
+import java.util.*;
 
 public class PropertyUtils {
 
@@ -47,41 +42,41 @@ public class PropertyUtils {
         Map<String, Property> properties = new LinkedHashMap<String, Property>();
         boolean inaccessableFieldsExist = false;
         switch (bAccess) {
-        case FIELD:
-            for (Class<?> c = type; c != null; c = c.getSuperclass()) {
-                for (Field field : c.getDeclaredFields()) {
-                    int modifiers = field.getModifiers();
-                    if (!Modifier.isStatic(modifiers) && !Modifier.isTransient(modifiers)
-                            && !properties.containsKey(field.getName())) {
-                        properties.put(field.getName(), new FieldProperty(field));
-                    }
-                }
-            }
-            break;
-        default:
-            // add JavaBean properties
-            for (PropertyDescriptor property : Introspector.getBeanInfo(type)
-                    .getPropertyDescriptors()) {
-                Method readMethod = property.getReadMethod();
-                if (readMethod == null || !readMethod.getName().equals("getClass")) {
-                    properties.put(property.getName(), new MethodProperty(property));
-                }
-            }
-
-            // add public fields
-            for (Class<?> c = type; c != null; c = c.getSuperclass()) {
-                for (Field field : c.getDeclaredFields()) {
-                    int modifiers = field.getModifiers();
-                    if (!Modifier.isStatic(modifiers) && !Modifier.isTransient(modifiers)) {
-                        if (Modifier.isPublic(modifiers)) {
+            case FIELD:
+                for (Class<?> c = type; c != null; c = c.getSuperclass()) {
+                    for (Field field : c.getDeclaredFields()) {
+                        int modifiers = field.getModifiers();
+                        if (!Modifier.isStatic(modifiers) && !Modifier.isTransient(modifiers)
+                                && !properties.containsKey(field.getName())) {
                             properties.put(field.getName(), new FieldProperty(field));
-                        } else {
-                            inaccessableFieldsExist = true;
                         }
                     }
                 }
-            }
-            break;
+                break;
+            default:
+                // add JavaBean properties
+                for (PropertyDescriptor property : Introspector.getBeanInfo(type)
+                        .getPropertyDescriptors()) {
+                    Method readMethod = property.getReadMethod();
+                    if (readMethod == null || !readMethod.getName().equals("getClass")) {
+                        properties.put(property.getName(), new MethodProperty(property));
+                    }
+                }
+
+                // add public fields
+                for (Class<?> c = type; c != null; c = c.getSuperclass()) {
+                    for (Field field : c.getDeclaredFields()) {
+                        int modifiers = field.getModifiers();
+                        if (!Modifier.isStatic(modifiers) && !Modifier.isTransient(modifiers)) {
+                            if (Modifier.isPublic(modifiers)) {
+                                properties.put(field.getName(), new FieldProperty(field));
+                            } else {
+                                inaccessableFieldsExist = true;
+                            }
+                        }
+                    }
+                }
+                break;
         }
         if (properties.isEmpty() && inaccessableFieldsExist) {
             throw new YAMLException("No JavaBean properties found in " + type.getName());
@@ -153,7 +148,7 @@ public class PropertyUtils {
     /**
      * Skip properties that are missing during deserialization of YAML to a Java
      * object. The default is false.
-     * 
+     *
      * @param skipMissingProperties
      *            true if missing properties should be skipped, false otherwise.
      */

@@ -6,31 +6,31 @@ import tk.roccodev.beezig.games.HIDE;
 
 public class DailyItem extends GameModeItem<HIDE> {
 
-	public DailyItem() {
-		super(HIDE.class);
-	}
+    public DailyItem() {
+        super(HIDE.class);
+    }
 
-	@Override
-	protected Object getValue(boolean dummy) {
+    @Override
+    protected Object getValue(boolean dummy) {
 
-		return HIDE.dailyPoints + " " + Log.t("beezig.module.points");
+        return HIDE.dailyPoints + " " + Log.t("beezig.module.points");
 
-	}
+    }
 
-	@Override
-	public String getName() {
-		return Log.t("beezig.module.daily");
-	}
+    @Override
+    public String getName() {
+        return Log.t("beezig.module.daily");
+    }
 
-	@Override
-	public boolean shouldRender(boolean dummy) {
-		try {
-			if (!(getGameMode() instanceof HIDE))
-				return false;
-			return dummy || (HIDE.shouldRender(getGameMode().getState()));
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    @Override
+    public boolean shouldRender(boolean dummy) {
+        try {
+            if (!(getGameMode() instanceof HIDE))
+                return false;
+            return dummy || (HIDE.shouldRender(getGameMode().getState()));
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }

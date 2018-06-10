@@ -8,41 +8,38 @@ import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.Giant;
 
-public class TeamItem extends GameModeItem<Giant>{
+public class TeamItem extends GameModeItem<Giant> {
 
-	public TeamItem(){
-		super(Giant.class);
-	}
-	
-	
-	
-	
-	@Override
-	protected Object getValue(boolean dummy) {
-		try{
-			
-			return Giant.team.replaceAll("§l", "");
-		}catch(Exception e){
-			e.printStackTrace();
-			return "Server error";
-		}
-	}
-	
-	@Override
-	public String getName() {
-		return Log.t("beezig.module.gnt.team");
-	}
-	
-	
-	
-	@Override
-	public boolean shouldRender(boolean dummy){		
-		try{
-			
-		return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && (ActiveGame.is("gnt") || ActiveGame.is("gntm")) && getGameMode().getState() == GameState.GAME);
-		}catch(Exception e){
-			return false;
-		}
-	}
+    public TeamItem() {
+        super(Giant.class);
+    }
+
+
+    @Override
+    protected Object getValue(boolean dummy) {
+        try {
+
+            return Giant.team.replaceAll("§l", "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Server error";
+        }
+    }
+
+    @Override
+    public String getName() {
+        return Log.t("beezig.module.gnt.team");
+    }
+
+
+    @Override
+    public boolean shouldRender(boolean dummy) {
+        try {
+
+            return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && (ActiveGame.is("gnt") || ActiveGame.is("gntm")) && getGameMode().getState() == GameState.GAME);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }

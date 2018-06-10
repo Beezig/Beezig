@@ -6,30 +6,30 @@ import tk.roccodev.beezig.games.BP;
 
 public class PointsCounterItem extends GameModeItem<BP> {
 
-	public PointsCounterItem() {
-		super(BP.class);
-	}
+    public PointsCounterItem() {
+        super(BP.class);
+    }
 
-	@Override
-	protected Object getValue(boolean dummy) {
-		return BP.gamePts + " " + Log.t("beezig.module.points");
-	}
+    @Override
+    protected Object getValue(boolean dummy) {
+        return BP.gamePts + " " + Log.t("beezig.module.points");
+    }
 
-	@Override
-	public String getName() {
-		return Log.t("beezig.module.game");
-	}
+    @Override
+    public String getName() {
+        return Log.t("beezig.module.game");
+    }
 
-	@Override
-	public boolean shouldRender(boolean dummy) {
+    @Override
+    public boolean shouldRender(boolean dummy) {
 
-		try {
-			if (!(getGameMode() instanceof BP))
-				return false;
-			return dummy || (BP.shouldRender(getGameMode().getState()) && BP.gamePts != 0);
-		} catch (Exception e) {
-			return false;
-		}
-	}
+        try {
+            if (!(getGameMode() instanceof BP))
+                return false;
+            return dummy || (BP.shouldRender(getGameMode().getState()) && BP.gamePts != 0);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }

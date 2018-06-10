@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,39 +15,20 @@
  */
 package org.yaml.snakeyaml.emitter;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.regex.Pattern;
-
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.Version;
 import org.yaml.snakeyaml.error.YAMLException;
-import org.yaml.snakeyaml.events.AliasEvent;
-import org.yaml.snakeyaml.events.CollectionEndEvent;
-import org.yaml.snakeyaml.events.CollectionStartEvent;
-import org.yaml.snakeyaml.events.DocumentEndEvent;
-import org.yaml.snakeyaml.events.DocumentStartEvent;
-import org.yaml.snakeyaml.events.Event;
-import org.yaml.snakeyaml.events.MappingEndEvent;
-import org.yaml.snakeyaml.events.MappingStartEvent;
-import org.yaml.snakeyaml.events.NodeEvent;
-import org.yaml.snakeyaml.events.ScalarEvent;
-import org.yaml.snakeyaml.events.SequenceEndEvent;
-import org.yaml.snakeyaml.events.SequenceStartEvent;
-import org.yaml.snakeyaml.events.StreamEndEvent;
-import org.yaml.snakeyaml.events.StreamStartEvent;
+import org.yaml.snakeyaml.events.*;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.reader.StreamReader;
 import org.yaml.snakeyaml.scanner.Constant;
 import org.yaml.snakeyaml.util.ArrayStack;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.regex.Pattern;
 
 /**
  * <pre>
@@ -60,11 +41,13 @@ import org.yaml.snakeyaml.util.ArrayStack;
  * </pre>
  */
 public final class Emitter implements Emitable {
-    private static final Map<Character, String> ESCAPE_REPLACEMENTS = new HashMap<Character, String>();
     public static final int MIN_INDENT = 1;
     public static final int MAX_INDENT = 10;
-
-    private static final char[] SPACE = { ' ' };
+    private static final Map<Character, String> ESCAPE_REPLACEMENTS = new HashMap<Character, String>();
+    private static final char[] SPACE = {' '};
+    private final static Map<String, String> DEFAULT_TAG_PREFIXES = new LinkedHashMap<String, String>();
+    private final static Pattern HANDLE_FORMAT = Pattern.compile("^![-_\\w]*!$");
+    private final static Pattern ANCHOR_FORMAT = Pattern.compile("^[-_\\w]*$");
 
     static {
         ESCAPE_REPLACEMENTS.put('\0', "0");
@@ -84,38 +67,32 @@ public final class Emitter implements Emitable {
         ESCAPE_REPLACEMENTS.put('\u2029', "P");
     }
 
-    private final static Map<String, String> DEFAULT_TAG_PREFIXES = new LinkedHashMap<String, String>();
+    // Encoding is defined by Writer (cannot be overriden by STREAM-START.)
+    // private Charset encoding;
+
     static {
         DEFAULT_TAG_PREFIXES.put("!", "!");
         DEFAULT_TAG_PREFIXES.put(Tag.PREFIX, "!!");
     }
+
     // The stream should have the methods `write` and possibly `flush`.
     private final Writer stream;
-
-    // Encoding is defined by Writer (cannot be overriden by STREAM-START.)
-    // private Charset encoding;
-
     // Emitter is a state machine with a stack of states to handle nested
     // structures.
     private final ArrayStack<EmitterState> states;
-    private EmitterState state;
-
     // Current event and the event queue.
     private final Queue<Event> events;
-    private Event event;
-
     // The current indentation level and the stack of previous indents.
     private final ArrayStack<Integer> indents;
+    private EmitterState state;
+    private Event event;
     private Integer indent;
-
     // Flow level.
     private int flowLevel;
-
     // Contexts.
     private boolean rootContext;
     private boolean mappingContext;
     private boolean simpleKeyContext;
-
     //
     // Characteristics of the last emitted character:
     // - current position.
@@ -127,29 +104,26 @@ public final class Emitter implements Emitable {
     private boolean whitespace;
     private boolean indention;
     private boolean openEnded;
-
     // Formatting details.
     private Boolean canonical;
     // pretty print flow by adding extra line breaks
     private Boolean prettyFlow;
-
     private boolean allowUnicode;
     private int bestIndent;
     private int indicatorIndent;
     private int bestWidth;
     private char[] bestLineBreak;
     private boolean splitLines;
-
     // Tag prefixes.
     private Map<String, String> tagPrefixes;
-
     // Prepared anchor and tag.
     private String preparedAnchor;
     private String preparedTag;
-
     // Scalar analysis and style.
     private ScalarAnalysis analysis;
     private Character style;
+
+    // In some cases, we wait for a few next events before emitting.
 
     public Emitter(Writer stream, DumperOptions opts) {
         // The stream should have the methods `write` and possibly `flush`.
@@ -211,6 +185,16 @@ public final class Emitter implements Emitable {
         this.style = null;
     }
 
+    static String prepareAnchor(String anchor) {
+        if (anchor.length() == 0) {
+            throw new EmitterException("anchor must not be empty");
+        }
+        if (!ANCHOR_FORMAT.matcher(anchor).matches()) {
+            throw new EmitterException("invalid character in the anchor: " + anchor);
+        }
+        return anchor;
+    }
+
     public void emit(Event event) throws IOException {
         this.events.add(event);
         while (!needMoreEvents()) {
@@ -220,7 +204,9 @@ public final class Emitter implements Emitable {
         }
     }
 
-    // In some cases, we wait for a few next events before emitting.
+    // States
+
+    // Stream handlers.
 
     private boolean needMoreEvents() {
         if (events.isEmpty()) {
@@ -258,6 +244,8 @@ public final class Emitter implements Emitable {
         return events.size() < count + 1;
     }
 
+    // Document handlers.
+
     private void increaseIndent(boolean flow, boolean indentless) {
         indents.push(indent);
         if (indent == null) {
@@ -270,115 +258,6 @@ public final class Emitter implements Emitable {
             this.indent += bestIndent;
         }
     }
-
-    // States
-
-    // Stream handlers.
-
-    private class ExpectStreamStart implements EmitterState {
-        public void expect() throws IOException {
-            if (event instanceof StreamStartEvent) {
-                writeStreamStart();
-                state = new ExpectFirstDocumentStart();
-            } else {
-                throw new EmitterException("expected StreamStartEvent, but got " + event);
-            }
-        }
-    }
-
-    private class ExpectNothing implements EmitterState {
-        public void expect() throws IOException {
-            throw new EmitterException("expecting nothing, but got " + event);
-        }
-    }
-
-    // Document handlers.
-
-    private class ExpectFirstDocumentStart implements EmitterState {
-        public void expect() throws IOException {
-            new ExpectDocumentStart(true).expect();
-        }
-    }
-
-    private class ExpectDocumentStart implements EmitterState {
-        private boolean first;
-
-        public ExpectDocumentStart(boolean first) {
-            this.first = first;
-        }
-
-        public void expect() throws IOException {
-            if (event instanceof DocumentStartEvent) {
-                DocumentStartEvent ev = (DocumentStartEvent) event;
-                if ((ev.getVersion() != null || ev.getTags() != null) && openEnded) {
-                    writeIndicator("...", true, false, false);
-                    writeIndent();
-                }
-                if (ev.getVersion() != null) {
-                    String versionText = prepareVersion(ev.getVersion());
-                    writeVersionDirective(versionText);
-                }
-                tagPrefixes = new LinkedHashMap<String, String>(DEFAULT_TAG_PREFIXES);
-                if (ev.getTags() != null) {
-                    Set<String> handles = new TreeSet<String>(ev.getTags().keySet());
-                    for (String handle : handles) {
-                        String prefix = ev.getTags().get(handle);
-                        tagPrefixes.put(prefix, handle);
-                        String handleText = prepareTagHandle(handle);
-                        String prefixText = prepareTagPrefix(prefix);
-                        writeTagDirective(handleText, prefixText);
-                    }
-                }
-                boolean implicit = first && !ev.getExplicit() && !canonical
-                        && ev.getVersion() == null
-                        && (ev.getTags() == null || ev.getTags().isEmpty())
-                        && !checkEmptyDocument();
-                if (!implicit) {
-                    writeIndent();
-                    writeIndicator("---", true, false, false);
-                    if (canonical) {
-                        writeIndent();
-                    }
-                }
-                state = new ExpectDocumentRoot();
-            } else if (event instanceof StreamEndEvent) {
-                // TODO fix 313 PyYAML changeset
-                // if (openEnded) {
-                // writeIndicator("...", true, false, false);
-                // writeIndent();
-                // }
-                writeStreamEnd();
-                state = new ExpectNothing();
-            } else {
-                throw new EmitterException("expected DocumentStartEvent, but got " + event);
-            }
-        }
-    }
-
-    private class ExpectDocumentEnd implements EmitterState {
-        public void expect() throws IOException {
-            if (event instanceof DocumentEndEvent) {
-                writeIndent();
-                if (((DocumentEndEvent) event).getExplicit()) {
-                    writeIndicator("...", true, false, false);
-                    writeIndent();
-                }
-                flushStream();
-                state = new ExpectDocumentStart(false);
-            } else {
-                throw new EmitterException("expected DocumentEndEvent, but got " + event);
-            }
-        }
-    }
-
-    private class ExpectDocumentRoot implements EmitterState {
-        public void expect() throws IOException {
-            states.push(new ExpectDocumentEnd());
-            expectNode(true, false, false);
-        }
-    }
-
-    // Node handlers.
 
     private void expectNode(boolean root, boolean mapping, boolean simpleKey) throws IOException {
         rootContext = root;
@@ -426,7 +305,7 @@ public final class Emitter implements Emitable {
         state = states.pop();
     }
 
-    // Flow sequence handlers.
+    // Node handlers.
 
     private void expectFlowSequence() throws IOException {
         writeIndicator("[", true, true, false);
@@ -438,50 +317,6 @@ public final class Emitter implements Emitable {
         state = new ExpectFirstFlowSequenceItem();
     }
 
-    private class ExpectFirstFlowSequenceItem implements EmitterState {
-        public void expect() throws IOException {
-            if (event instanceof SequenceEndEvent) {
-                indent = indents.pop();
-                flowLevel--;
-                writeIndicator("]", false, false, false);
-                state = states.pop();
-            } else {
-                if (canonical || (column > bestWidth && splitLines) || prettyFlow) {
-                    writeIndent();
-                }
-                states.push(new ExpectFlowSequenceItem());
-                expectNode(false, false, false);
-            }
-        }
-    }
-
-    private class ExpectFlowSequenceItem implements EmitterState {
-        public void expect() throws IOException {
-            if (event instanceof SequenceEndEvent) {
-                indent = indents.pop();
-                flowLevel--;
-                if (canonical) {
-                    writeIndicator(",", false, false, false);
-                    writeIndent();
-                }
-                writeIndicator("]", false, false, false);
-                if (prettyFlow) {
-                    writeIndent();
-                }
-                state = states.pop();
-            } else {
-                writeIndicator(",", false, false, false);
-                if (canonical || (column > bestWidth && splitLines) || prettyFlow) {
-                    writeIndent();
-                }
-                states.push(new ExpectFlowSequenceItem());
-                expectNode(false, false, false);
-            }
-        }
-    }
-
-    // Flow mapping handlers.
-
     private void expectFlowMapping() throws IOException {
         writeIndicator("{", true, true, false);
         flowLevel++;
@@ -492,169 +327,19 @@ public final class Emitter implements Emitable {
         state = new ExpectFirstFlowMappingKey();
     }
 
-    private class ExpectFirstFlowMappingKey implements EmitterState {
-        public void expect() throws IOException {
-            if (event instanceof MappingEndEvent) {
-                indent = indents.pop();
-                flowLevel--;
-                writeIndicator("}", false, false, false);
-                state = states.pop();
-            } else {
-                if (canonical || (column > bestWidth && splitLines) || prettyFlow) {
-                    writeIndent();
-                }
-                if (!canonical && checkSimpleKey()) {
-                    states.push(new ExpectFlowMappingSimpleValue());
-                    expectNode(false, true, true);
-                } else {
-                    writeIndicator("?", true, false, false);
-                    states.push(new ExpectFlowMappingValue());
-                    expectNode(false, true, false);
-                }
-            }
-        }
-    }
-
-    private class ExpectFlowMappingKey implements EmitterState {
-        public void expect() throws IOException {
-            if (event instanceof MappingEndEvent) {
-                indent = indents.pop();
-                flowLevel--;
-                if (canonical) {
-                    writeIndicator(",", false, false, false);
-                    writeIndent();
-                }
-                if (prettyFlow) {
-                    writeIndent();
-                }
-                writeIndicator("}", false, false, false);
-                state = states.pop();
-            } else {
-                writeIndicator(",", false, false, false);
-                if (canonical || (column > bestWidth && splitLines) || prettyFlow) {
-                    writeIndent();
-                }
-                if (!canonical && checkSimpleKey()) {
-                    states.push(new ExpectFlowMappingSimpleValue());
-                    expectNode(false, true, true);
-                } else {
-                    writeIndicator("?", true, false, false);
-                    states.push(new ExpectFlowMappingValue());
-                    expectNode(false, true, false);
-                }
-            }
-        }
-    }
-
-    private class ExpectFlowMappingSimpleValue implements EmitterState {
-        public void expect() throws IOException {
-            writeIndicator(":", false, false, false);
-            states.push(new ExpectFlowMappingKey());
-            expectNode(false, true, false);
-        }
-    }
-
-    private class ExpectFlowMappingValue implements EmitterState {
-        public void expect() throws IOException {
-            if (canonical || (column > bestWidth) || prettyFlow) {
-                writeIndent();
-            }
-            writeIndicator(":", true, false, false);
-            states.push(new ExpectFlowMappingKey());
-            expectNode(false, true, false);
-        }
-    }
-
-    // Block sequence handlers.
-
     private void expectBlockSequence() throws IOException {
         boolean indentless = mappingContext && !indention;
         increaseIndent(false, indentless);
         state = new ExpectFirstBlockSequenceItem();
     }
 
-    private class ExpectFirstBlockSequenceItem implements EmitterState {
-        public void expect() throws IOException {
-            new ExpectBlockSequenceItem(true).expect();
-        }
-    }
-
-    private class ExpectBlockSequenceItem implements EmitterState {
-        private boolean first;
-
-        public ExpectBlockSequenceItem(boolean first) {
-            this.first = first;
-        }
-
-        public void expect() throws IOException {
-            if (!this.first && event instanceof SequenceEndEvent) {
-                indent = indents.pop();
-                state = states.pop();
-            } else {
-                writeIndent();
-                writeWhitespace(indicatorIndent);
-                writeIndicator("-", true, false, true);
-                states.push(new ExpectBlockSequenceItem(false));
-                expectNode(false, false, false);
-            }
-        }
-    }
+    // Flow sequence handlers.
 
     // Block mapping handlers.
     private void expectBlockMapping() throws IOException {
         increaseIndent(false, false);
         state = new ExpectFirstBlockMappingKey();
     }
-
-    private class ExpectFirstBlockMappingKey implements EmitterState {
-        public void expect() throws IOException {
-            new ExpectBlockMappingKey(true).expect();
-        }
-    }
-
-    private class ExpectBlockMappingKey implements EmitterState {
-        private boolean first;
-
-        public ExpectBlockMappingKey(boolean first) {
-            this.first = first;
-        }
-
-        public void expect() throws IOException {
-            if (!this.first && event instanceof MappingEndEvent) {
-                indent = indents.pop();
-                state = states.pop();
-            } else {
-                writeIndent();
-                if (checkSimpleKey()) {
-                    states.push(new ExpectBlockMappingSimpleValue());
-                    expectNode(false, true, true);
-                } else {
-                    writeIndicator("?", true, false, true);
-                    states.push(new ExpectBlockMappingValue());
-                    expectNode(false, true, false);
-                }
-            }
-        }
-    }
-
-    private class ExpectBlockMappingSimpleValue implements EmitterState {
-        public void expect() throws IOException {
-            writeIndicator(":", false, false, false);
-            states.push(new ExpectBlockMappingKey(false));
-            expectNode(false, true, false);
-        }
-    }
-
-    private class ExpectBlockMappingValue implements EmitterState {
-        public void expect() throws IOException {
-            writeIndent();
-            writeIndicator(":", true, false, true);
-            states.push(new ExpectBlockMappingKey(false));
-            expectNode(false, true, false);
-        }
-    }
-
-    // Checkers.
 
     private boolean checkEmptySequence() {
         return event instanceof SequenceStartEvent && !events.isEmpty() && events.peek() instanceof SequenceEndEvent;
@@ -663,6 +348,8 @@ public final class Emitter implements Emitable {
     private boolean checkEmptyMapping() {
         return event instanceof MappingStartEvent && !events.isEmpty() && events.peek() instanceof MappingEndEvent;
     }
+
+    // Flow mapping handlers.
 
     private boolean checkEmptyDocument() {
         if (!(event instanceof DocumentStartEvent) || events.isEmpty()) {
@@ -707,8 +394,6 @@ public final class Emitter implements Emitable {
                 || (event instanceof ScalarEvent && !analysis.empty && !analysis.multiline)
                 || checkEmptySequence() || checkEmptyMapping());
     }
-
-    // Anchor, Tag, and Scalar processors.
 
     private void processAnchor(String indicator) throws IOException {
         NodeEvent ev = (NodeEvent) event;
@@ -786,6 +471,8 @@ public final class Emitter implements Emitable {
         return '"';
     }
 
+    // Block sequence handlers.
+
     private void processScalar() throws IOException {
         ScalarEvent ev = (ScalarEvent) event;
         if (analysis == null) {
@@ -799,27 +486,25 @@ public final class Emitter implements Emitable {
             writePlain(analysis.scalar, split);
         } else {
             switch (style) {
-            case '"':
-                writeDoubleQuoted(analysis.scalar, split);
-                break;
-            case '\'':
-                writeSingleQuoted(analysis.scalar, split);
-                break;
-            case '>':
-                writeFolded(analysis.scalar, split);
-                break;
-            case '|':
-                writeLiteral(analysis.scalar);
-                break;
-            default:
-                throw new YAMLException("Unexpected style: " + style);
+                case '"':
+                    writeDoubleQuoted(analysis.scalar, split);
+                    break;
+                case '\'':
+                    writeSingleQuoted(analysis.scalar, split);
+                    break;
+                case '>':
+                    writeFolded(analysis.scalar, split);
+                    break;
+                case '|':
+                    writeLiteral(analysis.scalar);
+                    break;
+                default:
+                    throw new YAMLException("Unexpected style: " + style);
             }
         }
         analysis = null;
         style = null;
     }
-
-    // Analyzers.
 
     private String prepareVersion(Version version) {
         if (version.major() != 1) {
@@ -827,8 +512,6 @@ public final class Emitter implements Emitable {
         }
         return version.getRepresentation();
     }
-
-    private final static Pattern HANDLE_FORMAT = Pattern.compile("^![-_\\w]*!$");
 
     private String prepareTagHandle(String handle) {
         if (handle.length() == 0) {
@@ -887,18 +570,6 @@ public final class Emitter implements Emitable {
             return handle + suffixText;
         }
         return "!<" + suffixText + ">";
-    }
-
-    private final static Pattern ANCHOR_FORMAT = Pattern.compile("^[-_\\w]*$");
-
-    static String prepareAnchor(String anchor) {
-        if (anchor.length() == 0) {
-            throw new EmitterException("anchor must not be empty");
-        }
-        if (!ANCHOR_FORMAT.matcher(anchor).matches()) {
-            throw new EmitterException("invalid character in the anchor: " + anchor);
-        }
-        return anchor;
     }
 
     private ScalarAnalysis analyzeScalar(String scalar) {
@@ -978,8 +649,8 @@ public final class Emitter implements Emitable {
             }
             if (!(c == '\n' || (0x20 <= c && c <= 0x7E))) {
                 if (c == 0x85 || (c >= 0xA0 && c <= 0xD7FF)
-                || (c >= 0xE000 && c <= 0xFFFD)
-                || (c >= 0x10000 && c <= 0x10FFFF)) {
+                        || (c >= 0xE000 && c <= 0xFFFD)
+                        || (c >= 0x10000 && c <= 0x10FFFF)) {
                     // unicode is used
                     if (!this.allowUnicode) {
                         specialCharacters = true;
@@ -1070,8 +741,6 @@ public final class Emitter implements Emitable {
                 allowSingleQuoted, allowBlock);
     }
 
-    // Writers.
-
     void flushStream() throws IOException {
         stream.flush();
     }
@@ -1080,12 +749,14 @@ public final class Emitter implements Emitable {
         // BOM is written by Writer.
     }
 
+    // Checkers.
+
     void writeStreamEnd() throws IOException {
         flushStream();
     }
 
     void writeIndicator(String indicator, boolean needWhitespace, boolean whitespace,
-            boolean indentation) throws IOException {
+                        boolean indentation) throws IOException {
         if (!this.whitespace && needWhitespace) {
             this.column++;
             stream.write(SPACE);
@@ -1124,6 +795,8 @@ public final class Emitter implements Emitable {
         this.column += length;
         stream.write(data);
     }
+
+    // Anchor, Tag, and Scalar processors.
 
     private void writeLineBreak(String data) throws IOException {
         this.whitespace = true;
@@ -1215,6 +888,8 @@ public final class Emitter implements Emitable {
         }
         writeIndicator("'", false, false, false);
     }
+
+    // Analyzers.
 
     private void writeDoubleQuoted(String text, boolean split) throws IOException {
         writeIndicator("\"", true, false, false);
@@ -1480,6 +1155,299 @@ public final class Emitter implements Emitable {
                 breaks = Constant.LINEBR.has(ch);
             }
             end++;
+        }
+    }
+
+    private class ExpectStreamStart implements EmitterState {
+        public void expect() throws IOException {
+            if (event instanceof StreamStartEvent) {
+                writeStreamStart();
+                state = new ExpectFirstDocumentStart();
+            } else {
+                throw new EmitterException("expected StreamStartEvent, but got " + event);
+            }
+        }
+    }
+
+    private class ExpectNothing implements EmitterState {
+        public void expect() throws IOException {
+            throw new EmitterException("expecting nothing, but got " + event);
+        }
+    }
+
+    private class ExpectFirstDocumentStart implements EmitterState {
+        public void expect() throws IOException {
+            new ExpectDocumentStart(true).expect();
+        }
+    }
+
+    // Writers.
+
+    private class ExpectDocumentStart implements EmitterState {
+        private boolean first;
+
+        public ExpectDocumentStart(boolean first) {
+            this.first = first;
+        }
+
+        public void expect() throws IOException {
+            if (event instanceof DocumentStartEvent) {
+                DocumentStartEvent ev = (DocumentStartEvent) event;
+                if ((ev.getVersion() != null || ev.getTags() != null) && openEnded) {
+                    writeIndicator("...", true, false, false);
+                    writeIndent();
+                }
+                if (ev.getVersion() != null) {
+                    String versionText = prepareVersion(ev.getVersion());
+                    writeVersionDirective(versionText);
+                }
+                tagPrefixes = new LinkedHashMap<String, String>(DEFAULT_TAG_PREFIXES);
+                if (ev.getTags() != null) {
+                    Set<String> handles = new TreeSet<String>(ev.getTags().keySet());
+                    for (String handle : handles) {
+                        String prefix = ev.getTags().get(handle);
+                        tagPrefixes.put(prefix, handle);
+                        String handleText = prepareTagHandle(handle);
+                        String prefixText = prepareTagPrefix(prefix);
+                        writeTagDirective(handleText, prefixText);
+                    }
+                }
+                boolean implicit = first && !ev.getExplicit() && !canonical
+                        && ev.getVersion() == null
+                        && (ev.getTags() == null || ev.getTags().isEmpty())
+                        && !checkEmptyDocument();
+                if (!implicit) {
+                    writeIndent();
+                    writeIndicator("---", true, false, false);
+                    if (canonical) {
+                        writeIndent();
+                    }
+                }
+                state = new ExpectDocumentRoot();
+            } else if (event instanceof StreamEndEvent) {
+                // TODO fix 313 PyYAML changeset
+                // if (openEnded) {
+                // writeIndicator("...", true, false, false);
+                // writeIndent();
+                // }
+                writeStreamEnd();
+                state = new ExpectNothing();
+            } else {
+                throw new EmitterException("expected DocumentStartEvent, but got " + event);
+            }
+        }
+    }
+
+    private class ExpectDocumentEnd implements EmitterState {
+        public void expect() throws IOException {
+            if (event instanceof DocumentEndEvent) {
+                writeIndent();
+                if (((DocumentEndEvent) event).getExplicit()) {
+                    writeIndicator("...", true, false, false);
+                    writeIndent();
+                }
+                flushStream();
+                state = new ExpectDocumentStart(false);
+            } else {
+                throw new EmitterException("expected DocumentEndEvent, but got " + event);
+            }
+        }
+    }
+
+    private class ExpectDocumentRoot implements EmitterState {
+        public void expect() throws IOException {
+            states.push(new ExpectDocumentEnd());
+            expectNode(true, false, false);
+        }
+    }
+
+    private class ExpectFirstFlowSequenceItem implements EmitterState {
+        public void expect() throws IOException {
+            if (event instanceof SequenceEndEvent) {
+                indent = indents.pop();
+                flowLevel--;
+                writeIndicator("]", false, false, false);
+                state = states.pop();
+            } else {
+                if (canonical || (column > bestWidth && splitLines) || prettyFlow) {
+                    writeIndent();
+                }
+                states.push(new ExpectFlowSequenceItem());
+                expectNode(false, false, false);
+            }
+        }
+    }
+
+    private class ExpectFlowSequenceItem implements EmitterState {
+        public void expect() throws IOException {
+            if (event instanceof SequenceEndEvent) {
+                indent = indents.pop();
+                flowLevel--;
+                if (canonical) {
+                    writeIndicator(",", false, false, false);
+                    writeIndent();
+                }
+                writeIndicator("]", false, false, false);
+                if (prettyFlow) {
+                    writeIndent();
+                }
+                state = states.pop();
+            } else {
+                writeIndicator(",", false, false, false);
+                if (canonical || (column > bestWidth && splitLines) || prettyFlow) {
+                    writeIndent();
+                }
+                states.push(new ExpectFlowSequenceItem());
+                expectNode(false, false, false);
+            }
+        }
+    }
+
+    private class ExpectFirstFlowMappingKey implements EmitterState {
+        public void expect() throws IOException {
+            if (event instanceof MappingEndEvent) {
+                indent = indents.pop();
+                flowLevel--;
+                writeIndicator("}", false, false, false);
+                state = states.pop();
+            } else {
+                if (canonical || (column > bestWidth && splitLines) || prettyFlow) {
+                    writeIndent();
+                }
+                if (!canonical && checkSimpleKey()) {
+                    states.push(new ExpectFlowMappingSimpleValue());
+                    expectNode(false, true, true);
+                } else {
+                    writeIndicator("?", true, false, false);
+                    states.push(new ExpectFlowMappingValue());
+                    expectNode(false, true, false);
+                }
+            }
+        }
+    }
+
+    private class ExpectFlowMappingKey implements EmitterState {
+        public void expect() throws IOException {
+            if (event instanceof MappingEndEvent) {
+                indent = indents.pop();
+                flowLevel--;
+                if (canonical) {
+                    writeIndicator(",", false, false, false);
+                    writeIndent();
+                }
+                if (prettyFlow) {
+                    writeIndent();
+                }
+                writeIndicator("}", false, false, false);
+                state = states.pop();
+            } else {
+                writeIndicator(",", false, false, false);
+                if (canonical || (column > bestWidth && splitLines) || prettyFlow) {
+                    writeIndent();
+                }
+                if (!canonical && checkSimpleKey()) {
+                    states.push(new ExpectFlowMappingSimpleValue());
+                    expectNode(false, true, true);
+                } else {
+                    writeIndicator("?", true, false, false);
+                    states.push(new ExpectFlowMappingValue());
+                    expectNode(false, true, false);
+                }
+            }
+        }
+    }
+
+    private class ExpectFlowMappingSimpleValue implements EmitterState {
+        public void expect() throws IOException {
+            writeIndicator(":", false, false, false);
+            states.push(new ExpectFlowMappingKey());
+            expectNode(false, true, false);
+        }
+    }
+
+    private class ExpectFlowMappingValue implements EmitterState {
+        public void expect() throws IOException {
+            if (canonical || (column > bestWidth) || prettyFlow) {
+                writeIndent();
+            }
+            writeIndicator(":", true, false, false);
+            states.push(new ExpectFlowMappingKey());
+            expectNode(false, true, false);
+        }
+    }
+
+    private class ExpectFirstBlockSequenceItem implements EmitterState {
+        public void expect() throws IOException {
+            new ExpectBlockSequenceItem(true).expect();
+        }
+    }
+
+    private class ExpectBlockSequenceItem implements EmitterState {
+        private boolean first;
+
+        public ExpectBlockSequenceItem(boolean first) {
+            this.first = first;
+        }
+
+        public void expect() throws IOException {
+            if (!this.first && event instanceof SequenceEndEvent) {
+                indent = indents.pop();
+                state = states.pop();
+            } else {
+                writeIndent();
+                writeWhitespace(indicatorIndent);
+                writeIndicator("-", true, false, true);
+                states.push(new ExpectBlockSequenceItem(false));
+                expectNode(false, false, false);
+            }
+        }
+    }
+
+    private class ExpectFirstBlockMappingKey implements EmitterState {
+        public void expect() throws IOException {
+            new ExpectBlockMappingKey(true).expect();
+        }
+    }
+
+    private class ExpectBlockMappingKey implements EmitterState {
+        private boolean first;
+
+        public ExpectBlockMappingKey(boolean first) {
+            this.first = first;
+        }
+
+        public void expect() throws IOException {
+            if (!this.first && event instanceof MappingEndEvent) {
+                indent = indents.pop();
+                state = states.pop();
+            } else {
+                writeIndent();
+                if (checkSimpleKey()) {
+                    states.push(new ExpectBlockMappingSimpleValue());
+                    expectNode(false, true, true);
+                } else {
+                    writeIndicator("?", true, false, true);
+                    states.push(new ExpectBlockMappingValue());
+                    expectNode(false, true, false);
+                }
+            }
+        }
+    }
+
+    private class ExpectBlockMappingSimpleValue implements EmitterState {
+        public void expect() throws IOException {
+            writeIndicator(":", false, false, false);
+            states.push(new ExpectBlockMappingKey(false));
+            expectNode(false, true, false);
+        }
+    }
+
+    private class ExpectBlockMappingValue implements EmitterState {
+        public void expect() throws IOException {
+            writeIndent();
+            writeIndicator(":", true, false, true);
+            states.push(new ExpectBlockMappingKey(false));
+            expectNode(false, true, false);
         }
     }
 }

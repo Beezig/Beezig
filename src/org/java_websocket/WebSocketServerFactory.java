@@ -38,20 +38,20 @@ import java.util.List;
  */
 public interface WebSocketServerFactory extends WebSocketFactory {
     @Override
-    WebSocketImpl createWebSocket( WebSocketAdapter a, Draft d);
+    WebSocketImpl createWebSocket(WebSocketAdapter a, Draft d);
 
     @Override
-    WebSocketImpl createWebSocket( WebSocketAdapter a, List<Draft> drafts );
+    WebSocketImpl createWebSocket(WebSocketAdapter a, List<Draft> drafts);
 
     /**
      * Allows to wrap the Socketchannel( key.channel() ) to insert a protocol layer( like ssl or proxy authentication) beyond the ws layer.
      *
      * @param channel The SocketChannel to wrap
-     * @param key a SelectionKey of an open SocketChannel.
+     * @param key     a SelectionKey of an open SocketChannel.
      * @return The channel on which the read and write operations will be performed.<br>
      * @throws IOException may be thrown while writing on the channel
      */
-    ByteChannel wrapChannel(SocketChannel channel, SelectionKey key ) throws IOException;
+    ByteChannel wrapChannel(SocketChannel channel, SelectionKey key) throws IOException;
 
     /**
      * Allows to shutdown the websocket factory for a clean shutdown

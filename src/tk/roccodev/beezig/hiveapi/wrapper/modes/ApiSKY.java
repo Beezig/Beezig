@@ -6,31 +6,23 @@ import tk.roccodev.beezig.hiveapi.wrapper.PvPMode;
 
 public class ApiSKY extends PvPMode {
 
-	public ApiSKY(String playerName, String... UUID) {
-		super(playerName, UUID);
-		
-	}
+    public ApiSKY(String playerName, String... UUID) {
+        super(playerName, UUID);
 
-	
-	
-	@Override
-	public Class<? extends GameMode> getGameMode() {
-		// TODO Auto-generated method stub
-		return SKY.class;
-	}
+    }
 
-	@Override
-	public String getShortcode() {
-		// TODO Auto-generated method stub
-		return "SKY";
-	}
-	
-	
 
-	
-	
-	
-	
-	
+    @Override
+    public Class<? extends GameMode> getGameMode() {
+        // TODO Auto-generated method stub
+        return SKY.class;
+    }
+
+    @Override
+    public String getShortcode() {
+        // TODO Auto-generated method stub
+        return "SKY";
+    }
+
 
 }

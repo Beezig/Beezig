@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,30 +15,14 @@
  */
 package org.yaml.snakeyaml.constructor;
 
-import java.math.BigInteger;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
-import org.yaml.snakeyaml.nodes.MappingNode;
-import org.yaml.snakeyaml.nodes.Node;
-import org.yaml.snakeyaml.nodes.NodeId;
-import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.ScalarNode;
-import org.yaml.snakeyaml.nodes.SequenceNode;
-import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.nodes.*;
+
+import java.math.BigInteger;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Construct standard Java classes
@@ -46,6 +30,20 @@ import org.yaml.snakeyaml.nodes.Tag;
 public class SafeConstructor extends BaseConstructor {
 
     public static final ConstructUndefined undefinedConstructor = new ConstructUndefined();
+    private final static Map<String, Boolean> BOOL_VALUES = new HashMap<String, Boolean>();
+    private final static Pattern TIMESTAMP_REGEXP = Pattern.compile(
+            "^([0-9][0-9][0-9][0-9])-([0-9][0-9]?)-([0-9][0-9]?)(?:(?:[Tt]|[ \t]+)([0-9][0-9]?):([0-9][0-9]):([0-9][0-9])(?:\\.([0-9]*))?(?:[ \t]*(?:Z|([-+][0-9][0-9]?)(?::([0-9][0-9])?)?))?)?$");
+    private final static Pattern YMD_REGEXP = Pattern
+            .compile("^([0-9][0-9][0-9][0-9])-([0-9][0-9]?)-([0-9][0-9]?)$");
+
+    static {
+        BOOL_VALUES.put("yes", Boolean.TRUE);
+        BOOL_VALUES.put("no", Boolean.FALSE);
+        BOOL_VALUES.put("true", Boolean.TRUE);
+        BOOL_VALUES.put("false", Boolean.FALSE);
+        BOOL_VALUES.put("on", Boolean.TRUE);
+        BOOL_VALUES.put("off", Boolean.FALSE);
+    }
 
     public SafeConstructor() {
         this.yamlConstructors.put(Tag.NULL, new ConstructYamlNull());
@@ -126,7 +124,7 @@ public class SafeConstructor extends BaseConstructor {
      *         MappingNode)
      */
     private List<NodeTuple> mergeNode(MappingNode node, boolean isPreffered,
-            Map<Object, Integer> key2index, List<NodeTuple> values) {
+                                      Map<Object, Integer> key2index, List<NodeTuple> values) {
         Iterator<NodeTuple> iter = node.getValue().iterator();
         while (iter.hasNext()) {
             final NodeTuple nodeTuple = iter.next();
@@ -135,31 +133,31 @@ public class SafeConstructor extends BaseConstructor {
             if (keyNode.getTag().equals(Tag.MERGE)) {
                 iter.remove();
                 switch (valueNode.getNodeId()) {
-                case mapping:
-                    MappingNode mn = (MappingNode) valueNode;
-                    mergeNode(mn, false, key2index, values);
-                    break;
-                case sequence:
-                    SequenceNode sn = (SequenceNode) valueNode;
-                    List<Node> vals = sn.getValue();
-                    for (Node subnode : vals) {
-                        if (!(subnode instanceof MappingNode)) {
-                            throw new ConstructorException("while constructing a mapping",
-                                    node.getStartMark(),
-                                    "expected a mapping for merging, but found "
-                                            + subnode.getNodeId(),
-                                    subnode.getStartMark());
+                    case mapping:
+                        MappingNode mn = (MappingNode) valueNode;
+                        mergeNode(mn, false, key2index, values);
+                        break;
+                    case sequence:
+                        SequenceNode sn = (SequenceNode) valueNode;
+                        List<Node> vals = sn.getValue();
+                        for (Node subnode : vals) {
+                            if (!(subnode instanceof MappingNode)) {
+                                throw new ConstructorException("while constructing a mapping",
+                                        node.getStartMark(),
+                                        "expected a mapping for merging, but found "
+                                                + subnode.getNodeId(),
+                                        subnode.getStartMark());
+                            }
+                            MappingNode mnode = (MappingNode) subnode;
+                            mergeNode(mnode, false, key2index, values);
                         }
-                        MappingNode mnode = (MappingNode) subnode;
-                        mergeNode(mnode, false, key2index, values);
-                    }
-                    break;
-                default:
-                    throw new ConstructorException("while constructing a mapping",
-                            node.getStartMark(),
-                            "expected a mapping or list of mappings for merging, but found "
-                                    + valueNode.getNodeId(),
-                            valueNode.getStartMark());
+                        break;
+                    default:
+                        throw new ConstructorException("while constructing a mapping",
+                                node.getStartMark(),
+                                "expected a mapping or list of mappings for merging, but found "
+                                        + valueNode.getNodeId(),
+                                valueNode.getStartMark());
                 }
             } else {
                 // we need to construct keys to avoid duplications
@@ -169,7 +167,7 @@ public class SafeConstructor extends BaseConstructor {
                     // keep track where tuple for the key is
                     key2index.put(key, values.size() - 1);
                 } else if (isPreffered) { // there is value for the key, but we
-                                          // need to override it
+                    // need to override it
                     // change value for the key using saved position
                     values.set(key2index.get(key), nodeTuple);
                 }
@@ -189,69 +187,6 @@ public class SafeConstructor extends BaseConstructor {
         super.constructSet2ndStep(node, set);
     }
 
-    public class ConstructYamlNull extends AbstractConstruct {
-        public Object construct(Node node) {
-            constructScalar((ScalarNode) node);
-            return null;
-        }
-    }
-
-    private final static Map<String, Boolean> BOOL_VALUES = new HashMap<String, Boolean>();
-    static {
-        BOOL_VALUES.put("yes", Boolean.TRUE);
-        BOOL_VALUES.put("no", Boolean.FALSE);
-        BOOL_VALUES.put("true", Boolean.TRUE);
-        BOOL_VALUES.put("false", Boolean.FALSE);
-        BOOL_VALUES.put("on", Boolean.TRUE);
-        BOOL_VALUES.put("off", Boolean.FALSE);
-    }
-
-    public class ConstructYamlBool extends AbstractConstruct {
-        public Object construct(Node node) {
-            String val = (String) constructScalar((ScalarNode) node);
-            return BOOL_VALUES.get(val.toLowerCase());
-        }
-    }
-
-    public class ConstructYamlInt extends AbstractConstruct {
-        public Object construct(Node node) {
-            String value = constructScalar((ScalarNode) node).toString().replaceAll("_", "");
-            int sign = +1;
-            char first = value.charAt(0);
-            if (first == '-') {
-                sign = -1;
-                value = value.substring(1);
-            } else if (first == '+') {
-                value = value.substring(1);
-            }
-            int base = 10;
-            if ("0".equals(value)) {
-                return Integer.valueOf(0);
-            } else if (value.startsWith("0b")) {
-                value = value.substring(2);
-                base = 2;
-            } else if (value.startsWith("0x")) {
-                value = value.substring(2);
-                base = 16;
-            } else if (value.startsWith("0")) {
-                value = value.substring(1);
-                base = 8;
-            } else if (value.indexOf(':') != -1) {
-                String[] digits = value.split(":");
-                int bes = 1;
-                int val = 0;
-                for (int i = 0, j = digits.length; i < j; i++) {
-                    val += Long.parseLong(digits[j - i - 1]) * bes;
-                    bes *= 60;
-                }
-                return createNumber(sign, String.valueOf(val), 10);
-            } else {
-                return createNumber(sign, value, 10);
-            }
-            return createNumber(sign, value, base);
-        }
-    }
-
     private Number createNumber(int sign, String number, int radix) {
         Number result;
         if (sign < 0) {
@@ -268,53 +203,6 @@ public class SafeConstructor extends BaseConstructor {
         }
         return result;
     }
-
-    public class ConstructYamlFloat extends AbstractConstruct {
-        public Object construct(Node node) {
-            String value = constructScalar((ScalarNode) node).toString().replaceAll("_", "");
-            int sign = +1;
-            char first = value.charAt(0);
-            if (first == '-') {
-                sign = -1;
-                value = value.substring(1);
-            } else if (first == '+') {
-                value = value.substring(1);
-            }
-            String valLower = value.toLowerCase();
-            if (".inf".equals(valLower)) {
-                return new Double(sign == -1 ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
-            } else if (".nan".equals(valLower)) {
-                return new Double(Double.NaN);
-            } else if (value.indexOf(':') != -1) {
-                String[] digits = value.split(":");
-                int bes = 1;
-                double val = 0.0;
-                for (int i = 0, j = digits.length; i < j; i++) {
-                    val += Double.parseDouble(digits[j - i - 1]) * bes;
-                    bes *= 60;
-                }
-                return new Double(sign * val);
-            } else {
-                Double d = Double.valueOf(value);
-                return new Double(d.doubleValue() * sign);
-            }
-        }
-    }
-
-    public class ConstructYamlBinary extends AbstractConstruct {
-        public Object construct(Node node) {
-            // Ignore white spaces for base64 encoded scalar
-            String noWhiteSpaces = constructScalar((ScalarNode) node).toString().replaceAll("\\s",
-                    "");
-            byte[] decoded = Base64Coder.decode(noWhiteSpaces.toCharArray());
-            return decoded;
-        }
-    }
-
-    private final static Pattern TIMESTAMP_REGEXP = Pattern.compile(
-            "^([0-9][0-9][0-9][0-9])-([0-9][0-9]?)-([0-9][0-9]?)(?:(?:[Tt]|[ \t]+)([0-9][0-9]?):([0-9][0-9]):([0-9][0-9])(?:\\.([0-9]*))?(?:[ \t]*(?:Z|([-+][0-9][0-9]?)(?::([0-9][0-9])?)?))?)?$");
-    private final static Pattern YMD_REGEXP = Pattern
-            .compile("^([0-9][0-9][0-9][0-9])-([0-9][0-9]?)-([0-9][0-9]?)$");
 
     public static class ConstructYamlTimestamp extends AbstractConstruct {
         private Calendar calendar;
@@ -382,6 +270,109 @@ public class SafeConstructor extends BaseConstructor {
         }
     }
 
+    public static final class ConstructUndefined extends AbstractConstruct {
+        public Object construct(Node node) {
+            throw new ConstructorException(null, null,
+                    "could not determine a constructor for the tag " + node.getTag(),
+                    node.getStartMark());
+        }
+    }
+
+    public class ConstructYamlNull extends AbstractConstruct {
+        public Object construct(Node node) {
+            constructScalar((ScalarNode) node);
+            return null;
+        }
+    }
+
+    public class ConstructYamlBool extends AbstractConstruct {
+        public Object construct(Node node) {
+            String val = (String) constructScalar((ScalarNode) node);
+            return BOOL_VALUES.get(val.toLowerCase());
+        }
+    }
+
+    public class ConstructYamlInt extends AbstractConstruct {
+        public Object construct(Node node) {
+            String value = constructScalar((ScalarNode) node).toString().replaceAll("_", "");
+            int sign = +1;
+            char first = value.charAt(0);
+            if (first == '-') {
+                sign = -1;
+                value = value.substring(1);
+            } else if (first == '+') {
+                value = value.substring(1);
+            }
+            int base = 10;
+            if ("0".equals(value)) {
+                return Integer.valueOf(0);
+            } else if (value.startsWith("0b")) {
+                value = value.substring(2);
+                base = 2;
+            } else if (value.startsWith("0x")) {
+                value = value.substring(2);
+                base = 16;
+            } else if (value.startsWith("0")) {
+                value = value.substring(1);
+                base = 8;
+            } else if (value.indexOf(':') != -1) {
+                String[] digits = value.split(":");
+                int bes = 1;
+                int val = 0;
+                for (int i = 0, j = digits.length; i < j; i++) {
+                    val += Long.parseLong(digits[j - i - 1]) * bes;
+                    bes *= 60;
+                }
+                return createNumber(sign, String.valueOf(val), 10);
+            } else {
+                return createNumber(sign, value, 10);
+            }
+            return createNumber(sign, value, base);
+        }
+    }
+
+    public class ConstructYamlFloat extends AbstractConstruct {
+        public Object construct(Node node) {
+            String value = constructScalar((ScalarNode) node).toString().replaceAll("_", "");
+            int sign = +1;
+            char first = value.charAt(0);
+            if (first == '-') {
+                sign = -1;
+                value = value.substring(1);
+            } else if (first == '+') {
+                value = value.substring(1);
+            }
+            String valLower = value.toLowerCase();
+            if (".inf".equals(valLower)) {
+                return new Double(sign == -1 ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
+            } else if (".nan".equals(valLower)) {
+                return new Double(Double.NaN);
+            } else if (value.indexOf(':') != -1) {
+                String[] digits = value.split(":");
+                int bes = 1;
+                double val = 0.0;
+                for (int i = 0, j = digits.length; i < j; i++) {
+                    val += Double.parseDouble(digits[j - i - 1]) * bes;
+                    bes *= 60;
+                }
+                return new Double(sign * val);
+            } else {
+                Double d = Double.valueOf(value);
+                return new Double(d.doubleValue() * sign);
+            }
+        }
+    }
+
+    public class ConstructYamlBinary extends AbstractConstruct {
+        public Object construct(Node node) {
+            // Ignore white spaces for base64 encoded scalar
+            String noWhiteSpaces = constructScalar((ScalarNode) node).toString().replaceAll("\\s",
+                    "");
+            byte[] decoded = Base64Coder.decode(noWhiteSpaces.toCharArray());
+            return decoded;
+        }
+    }
+
     public class ConstructYamlOmap extends AbstractConstruct {
         public Object construct(Node node) {
             // Note: we do not check for duplicate keys, because it's too
@@ -404,7 +395,7 @@ public class SafeConstructor extends BaseConstructor {
                 if (mnode.getValue().size() != 1) {
                     throw new ConstructorException("while constructing an ordered map",
                             node.getStartMark(), "expected a single mapping item, but found "
-                                    + mnode.getValue().size() + " items",
+                            + mnode.getValue().size() + " items",
                             mnode.getStartMark());
                 }
                 Node keyNode = mnode.getValue().get(0).getKeyNode();
@@ -445,7 +436,7 @@ public class SafeConstructor extends BaseConstructor {
                 Node valueNode = mnode.getValue().get(0).getValueNode();
                 Object key = constructObject(keyNode);
                 Object value = constructObject(valueNode);
-                pairs.add(new Object[] { key, value });
+                pairs.add(new Object[]{key, value});
             }
             return pairs;
         }
@@ -512,14 +503,6 @@ public class SafeConstructor extends BaseConstructor {
             } else {
                 throw new YAMLException("Unexpected recursive mapping structure. Node: " + node);
             }
-        }
-    }
-
-    public static final class ConstructUndefined extends AbstractConstruct {
-        public Object construct(Node node) {
-            throw new ConstructorException(null, null,
-                    "could not determine a constructor for the tag " + node.getTag(),
-                    node.getStartMark());
         }
     }
 }

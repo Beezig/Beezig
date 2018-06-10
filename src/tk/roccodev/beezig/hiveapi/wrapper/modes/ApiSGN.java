@@ -6,35 +6,23 @@ import tk.roccodev.beezig.hiveapi.wrapper.PvPMode;
 
 public class ApiSGN extends PvPMode {
 
-	public ApiSGN(String playerName, String... UUID) {
-		super(playerName, UUID);
-		
-	}
+    public ApiSGN(String playerName, String... UUID) {
+        super(playerName, UUID);
 
-	
-	
-	@Override
-	public Class<? extends GameMode> getGameMode() {
-		// TODO Auto-generated method stub
-		return SGN.class;
-	}
+    }
 
-	@Override
-	public String getShortcode() {
-		// TODO Auto-generated method stub
-		return "SGN";
-	}
 
-	
-	
+    @Override
+    public Class<? extends GameMode> getGameMode() {
+        // TODO Auto-generated method stub
+        return SGN.class;
+    }
 
-	
-	
+    @Override
+    public String getShortcode() {
+        // TODO Auto-generated method stub
+        return "SGN";
+    }
 
-	
-	
-	
-	
-	
 
 }

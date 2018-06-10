@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,13 +22,8 @@ import org.yaml.snakeyaml.error.Mark;
  * of a {@link org.yaml.snakeyaml.emitter.Emitter}.
  */
 public abstract class Event {
-    public enum ID {
-        Alias, DocumentEnd, DocumentStart, MappingEnd, MappingStart, Scalar, SequenceEnd, SequenceStart, StreamEnd, StreamStart
-    }
-
     private final Mark startMark;
     private final Mark endMark;
-
     public Event(Mark startMark, Mark endMark) {
         this.startMark = startMark;
         this.endMark = endMark;
@@ -75,5 +70,9 @@ public abstract class Event {
     @Override
     public int hashCode() {
         return toString().hashCode();
+    }
+
+    public enum ID {
+        Alias, DocumentEnd, DocumentStart, MappingEnd, MappingStart, Scalar, SequenceEnd, SequenceStart, StreamEnd, StreamStart
     }
 }

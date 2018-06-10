@@ -19,16 +19,16 @@ package org.yaml.snakeyaml.external.com.google.gdata.util.common.base;
  * A {@code UnicodeEscaper} that escapes some set of Java characters using the
  * URI percent encoding scheme. The set of safe characters (those which remain
  * unescaped) can be specified on construction.
- * 
+ * <p>
  * <p>
  * For details on escaping URIs for use in web pages, see section 2.4 of <a
  * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
- * 
+ * <p>
  * <p>
  * In most cases this class should not need to be used directly. If you have no
  * special requirements for escaping your URIs, you should use either
  * {@link CharEscapers#uriEscaper()} or {@link CharEscapers#uriEscaper(boolean)}.
- * 
+ * <p>
  * <p>
  * When encoding a String, the following rules apply:
  * <ul>
@@ -42,33 +42,30 @@ package org.yaml.snakeyaml.external.com.google.gdata.util.common.base;
  * where "XY" is the two-digit, uppercase, hexadecimal representation of the
  * byte value.
  * </ul>
- * 
+ * <p>
  * <p>
  * RFC 2396 specifies the set of unreserved characters as "-", "_", ".", "!",
  * "~", "*", "'", "(" and ")". It goes on to state:
- * 
+ * <p>
  * <p>
  * <i>Unreserved characters can be escaped without changing the semantics of the
  * URI, but this should not be done unless the URI is being used in a context
  * that does not allow the unescaped character to appear.</i>
- * 
+ * <p>
  * <p>
  * For performance reasons the only currently supported character encoding of
  * this class is UTF-8.
- * 
+ * <p>
  * <p>
  * <b>Note</b>: This escaper produces uppercase hexidecimal sequences. From <a
  * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>:<br>
  * <i>"URI producers and normalizers should use uppercase hexadecimal digits for
  * all percent-encodings."</i>
- * 
- * 
  */
 public class PercentEscaper extends UnicodeEscaper {
     /**
      * A string of safe characters that mimics the behavior of
      * {@link java.net.URLEncoder}.
-     * 
      */
     public static final String SAFECHARS_URLENCODER = "-_.*";
 
@@ -87,7 +84,7 @@ public class PercentEscaper extends UnicodeEscaper {
     public static final String SAFEQUERYSTRINGCHARS_URLENCODER = "-_.!~*'()@:$,;/?:";
 
     // In some uri escapers spaces are escaped to '+'
-    private static final char[] URI_ESCAPED_SPACE = { '+' };
+    private static final char[] URI_ESCAPED_SPACE = {'+'};
 
     private static final char[] UPPER_HEX_DIGITS = "0123456789ABCDEF".toCharArray();
 
@@ -106,16 +103,13 @@ public class PercentEscaper extends UnicodeEscaper {
     /**
      * Constructs a URI escaper with the specified safe characters and optional
      * handling of the space character.
-     * 
-     * @param safeChars
-     *            a non null string specifying additional safe characters for
-     *            this escaper (the ranges 0..9, a..z and A..Z are always safe
-     *            and should not be specified here)
-     * @param plusForSpace
-     *            true if ASCII space should be escaped to {@code +} rather than
-     *            {@code %20}
-     * @throws IllegalArgumentException
-     *             if any of the parameters were invalid
+     *
+     * @param safeChars    a non null string specifying additional safe characters for
+     *                     this escaper (the ranges 0..9, a..z and A..Z are always safe
+     *                     and should not be specified here)
+     * @param plusForSpace true if ASCII space should be escaped to {@code +} rather than
+     *                     {@code %20}
+     * @throws IllegalArgumentException if any of the parameters were invalid
      */
     public PercentEscaper(String safeChars, boolean plusForSpace) {
         // Avoid any misunderstandings about the behavior of this escaper

@@ -7,37 +7,36 @@ import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.HIDE;
 
-public class MapItem extends GameModeItem<HIDE>{
+public class MapItem extends GameModeItem<HIDE> {
 
-		public MapItem(){
-			super(HIDE.class);
-		}
-
-
-		@Override
-		protected Object getValue(boolean dummy) {
-			try{
-				return HIDE.activeMap;
-			}catch(Exception e){
-				e.printStackTrace();
-				return "No Map";
-			}
-		}
-
-		@Override
-		public String getName() {
-			return Log.t("beezig.module.map");
-		}
+    public MapItem() {
+        super(HIDE.class);
+    }
 
 
+    @Override
+    protected Object getValue(boolean dummy) {
+        try {
+            return HIDE.activeMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "No Map";
+        }
+    }
 
-		@Override
-		public boolean shouldRender(boolean dummy){
-			try{
-				return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("hide") && HIDE.activeMap != null);
-			}catch(Exception e){
-				return false;
-			}
-		}
+    @Override
+    public String getName() {
+        return Log.t("beezig.module.map");
+    }
+
+
+    @Override
+    public boolean shouldRender(boolean dummy) {
+        try {
+            return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("hide") && HIDE.activeMap != null);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }

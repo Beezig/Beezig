@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,9 +15,9 @@
  */
 package org.yaml.snakeyaml.nodes;
 
-import java.util.List;
-
 import org.yaml.snakeyaml.error.Mark;
+
+import java.util.List;
 
 /**
  * Represents a sequence.
@@ -29,7 +29,7 @@ public class SequenceNode extends CollectionNode {
     final private List<Node> value;
 
     public SequenceNode(Tag tag, boolean resolved, List<Node> value, Mark startMark, Mark endMark,
-            Boolean flowStyle) {
+                        Boolean flowStyle) {
         super(tag, startMark, endMark, flowStyle);
         if (value == null) {
             throw new NullPointerException("value in a Node is required.");
@@ -49,7 +49,7 @@ public class SequenceNode extends CollectionNode {
 
     /**
      * Returns the elements in this sequence.
-     * 
+     *
      * @return Nodes in the specified order.
      */
     public List<Node> getValue() {

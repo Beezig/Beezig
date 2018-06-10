@@ -32,62 +32,62 @@ package org.java_websocket.protocols;
  */
 public class Protocol implements IProtocol {
 
-	/**
-	 * Attribute for the provided protocol
-	 */
-	private final String providedProtocol;
+    /**
+     * Attribute for the provided protocol
+     */
+    private final String providedProtocol;
 
-	/**
-	 * Constructor for a Sec-Websocket-Protocol
-	 *
-	 * @param providedProtocol the protocol string
-	 */
-	public Protocol( String providedProtocol ) {
-		if( providedProtocol == null ) {
-			throw new IllegalArgumentException();
-		}
-		this.providedProtocol = providedProtocol;
-	}
+    /**
+     * Constructor for a Sec-Websocket-Protocol
+     *
+     * @param providedProtocol the protocol string
+     */
+    public Protocol(String providedProtocol) {
+        if (providedProtocol == null) {
+            throw new IllegalArgumentException();
+        }
+        this.providedProtocol = providedProtocol;
+    }
 
-	@Override
-	public boolean acceptProvidedProtocol( String inputProtocolHeader ) {
-		String protocolHeader = inputProtocolHeader.replaceAll( " ", "" );
-		String[] headers = protocolHeader.split( "," );
-		for( String header : headers ) {
-			if( providedProtocol.equals( header ) ) {
-				return true;
-			}
-		}
-		return false;
-	}
+    @Override
+    public boolean acceptProvidedProtocol(String inputProtocolHeader) {
+        String protocolHeader = inputProtocolHeader.replaceAll(" ", "");
+        String[] headers = protocolHeader.split(",");
+        for (String header : headers) {
+            if (providedProtocol.equals(header)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	@Override
-	public String getProvidedProtocol() {
-		return this.providedProtocol;
-	}
+    @Override
+    public String getProvidedProtocol() {
+        return this.providedProtocol;
+    }
 
-	@Override
-	public IProtocol copyInstance() {
-		return new Protocol( getProvidedProtocol() );
-	}
+    @Override
+    public IProtocol copyInstance() {
+        return new Protocol(getProvidedProtocol());
+    }
 
-	@Override
-	public String toString() {
-		return getProvidedProtocol();
-	}
+    @Override
+    public String toString() {
+        return getProvidedProtocol();
+    }
 
-	@Override
-	public boolean equals( Object o ) {
-		if( this == o ) return true;
-		if( o == null || getClass() != o.getClass() ) return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-		Protocol protocol = ( Protocol ) o;
+        Protocol protocol = (Protocol) o;
 
-		return providedProtocol.equals( protocol.providedProtocol );
-	}
+        return providedProtocol.equals(protocol.providedProtocol);
+    }
 
-	@Override
-	public int hashCode() {
-		return providedProtocol.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return providedProtocol.hashCode();
+    }
 }

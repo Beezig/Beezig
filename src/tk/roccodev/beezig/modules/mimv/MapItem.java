@@ -6,30 +6,30 @@ import tk.roccodev.beezig.games.MIMV;
 
 public class MapItem extends GameModeItem<MIMV> {
 
-	public MapItem() {
-		super(MIMV.class);
-	}
+    public MapItem() {
+        super(MIMV.class);
+    }
 
-	@Override
-	protected Object getValue(boolean dummy) {
-		return MIMV.map;
-	}
+    @Override
+    protected Object getValue(boolean dummy) {
+        return MIMV.map;
+    }
 
-	@Override
-	public String getName() {
-		return Log.t("beezig.module.map");
-	}
+    @Override
+    public String getName() {
+        return Log.t("beezig.module.map");
+    }
 
-	@Override
-	public boolean shouldRender(boolean dummy) {
+    @Override
+    public boolean shouldRender(boolean dummy) {
 
-		try {
-			if (!(getGameMode() instanceof MIMV))
-				return false;
-			return dummy || (MIMV.shouldRender(getGameMode().getState()) && MIMV.map != null && !MIMV.map.isEmpty());
-		} catch (Exception e) {
-			return false;
-		}
-	}
+        try {
+            if (!(getGameMode() instanceof MIMV))
+                return false;
+            return dummy || (MIMV.shouldRender(getGameMode().getState()) && MIMV.map != null && !MIMV.map.isEmpty());
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }

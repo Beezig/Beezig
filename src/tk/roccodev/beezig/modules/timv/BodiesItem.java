@@ -7,32 +7,31 @@ import tk.roccodev.beezig.games.TIMV;
 
 public class BodiesItem extends GameModeItem<TIMV> {
 
-	public BodiesItem(){
-		super(TIMV.class);
-	}
+    public BodiesItem() {
+        super(TIMV.class);
+    }
 
-	@Override
-	protected Object getValue(boolean dummy) {
-		
-		return TIMV.traitorsDiscovered + "/" + TIMV.traitorsBefore + " " + Log.t("beezig.str.timv.traitors");
-		
-	}
+    @Override
+    protected Object getValue(boolean dummy) {
 
-	@Override
-	public String getName() {
-		return Log.t("beezig.module.timv.bodies");
-	}
-	
-	
-	
-	@Override
-	public boolean shouldRender(boolean dummy){
-		try{
-			if(!(getGameMode() instanceof TIMV)) return false;
-		return dummy || (getGameMode().getState() == GameState.GAME);
-		}catch(Exception e){
-			return false;
-		}
-	}
+        return TIMV.traitorsDiscovered + "/" + TIMV.traitorsBefore + " " + Log.t("beezig.str.timv.traitors");
+
+    }
+
+    @Override
+    public String getName() {
+        return Log.t("beezig.module.timv.bodies");
+    }
+
+
+    @Override
+    public boolean shouldRender(boolean dummy) {
+        try {
+            if (!(getGameMode() instanceof TIMV)) return false;
+            return dummy || (getGameMode().getState() == GameState.GAME);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }

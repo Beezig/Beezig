@@ -1,28 +1,24 @@
 package tk.roccodev.beezig.games;
 
-public class GNTM extends Giant{
+public class GNTM extends Giant {
 
-	public static GNTM instance;
-	
-	@Override
-	public boolean isMini() {
-		
-		return true;
-	}
+    public static GNTM instance;
 
-	public GNTM(){
-		instance = this;
-	}
-	
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return "SkyGiants:Mini";
-	}
+    public GNTM() {
+        instance = this;
+    }
 
-	
+    @Override
+    public boolean isMini() {
 
-	
-	
-	
+        return true;
+    }
+
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        return "SkyGiants:Mini";
+    }
+
+
 }

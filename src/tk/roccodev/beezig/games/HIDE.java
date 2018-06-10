@@ -4,8 +4,8 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.beezig.ActiveGame;
-import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.BeezigMain;
+import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
 
 import java.io.*;
@@ -14,103 +14,100 @@ import java.util.List;
 
 public class HIDE extends GameMode {
 
-	public static String activeMap;
+    public static String activeMap;
 
-	public static List<String> messagesToSend = new ArrayList<>();
-	public static List<String> footerToSend = new ArrayList<>();
-	public static boolean isRecordsRunning = false;
-	public static String lastRecords = "";
+    public static List<String> messagesToSend = new ArrayList<>();
+    public static List<String> footerToSend = new ArrayList<>();
+    public static boolean isRecordsRunning = false;
+    public static String lastRecords = "";
 
-	public static boolean hasVoted = false;
-	public static List<String> votesToParse = new ArrayList<>();
+    public static boolean hasVoted = false;
+    public static List<String> votesToParse = new ArrayList<>();
+    public static int dailyPoints;
+    public static boolean seeking;
+    public static int lastPts;
+    public static String rank;
+    public static HIDERank rankObject;
+    private static PrintWriter dailyPointsWriter;
+    private static String dailyPointsName;
 
-	private static PrintWriter dailyPointsWriter;
-	private static String dailyPointsName;
-	public static int dailyPoints;
-	
-	public static boolean seeking;
-	public static int lastPts;
+    public static void initDailyPointsWriter() throws IOException {
+        File f = new File(BeezigMain.mcFile + "/hide/dailyPoints/" + dailyPointsName);
+        if (!f.exists()) {
+            f.createNewFile();
+            initPointsWriterWithZero();
+            return;
+        }
+        FileInputStream stream = new FileInputStream(f);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        String line = reader.readLine();
+        if (line == null) {
+            initPointsWriterWithZero();
+            stream.close();
+            return;
+        } else {
+            HIDE.dailyPoints = Integer.parseInt(line);
+        }
+        stream.close();
+        reader.close();
 
-	public static String rank;
-	public static HIDERank rankObject;
+    }
 
-	public static void initDailyPointsWriter() throws IOException {
-		File f = new File(BeezigMain.mcFile + "/hide/dailyPoints/" + dailyPointsName);
-		if (!f.exists()) {
-			f.createNewFile();
-			initPointsWriterWithZero();
-			return;
-		}
-		FileInputStream stream = new FileInputStream(f);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		String line = reader.readLine();
-		if (line == null) {
-			initPointsWriterWithZero();
-			stream.close();
-			return;
-		} else {
-			HIDE.dailyPoints = Integer.parseInt(line);
-		}
-		stream.close();
-		reader.close();
+    private static void initPointsWriterWithZero() throws FileNotFoundException, UnsupportedEncodingException {
+        dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/hide/dailyPoints/" + dailyPointsName, "UTF-8");
+        dailyPointsWriter.println(0);
 
-	}
+        dailyPointsWriter.close();
 
-	private static void initPointsWriterWithZero() throws FileNotFoundException, UnsupportedEncodingException {
-		dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/hide/dailyPoints/" + dailyPointsName, "UTF-8");
-		dailyPointsWriter.println(0);
+    }
 
-		dailyPointsWriter.close();
+    public static void setDailyPointsFileName(String newName) {
+        dailyPointsName = newName;
+    }
 
-	}
+    private static void saveDailyPoints() {
+        try {
+            dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/hide/dailyPoints/" + dailyPointsName, "UTF-8");
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        dailyPointsWriter.println(dailyPoints);
+        dailyPointsWriter.flush();
+        dailyPointsWriter.close();
+    }
 
-	public static void setDailyPointsFileName(String newName) {
-		dailyPointsName = newName;
-	}
+    public static void reset(HIDE gameMode) {
 
-	private static void saveDailyPoints() {
-		try {
-			dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/hide/dailyPoints/" + dailyPointsName, "UTF-8");
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		dailyPointsWriter.println(dailyPoints);
-		dailyPointsWriter.flush();
-		dailyPointsWriter.close();
-	}
+        gameMode.setState(GameState.FINISHED);
 
-	public static void reset(HIDE gameMode) {
+        HIDE.messagesToSend.clear();
+        HIDE.footerToSend.clear();
+        HIDE.votesToParse.clear();
+        HIDE.isRecordsRunning = false;
+        HIDE.hasVoted = false;
+        HIDE.activeMap = null;
+        lastPts = 0;
+        seeking = false;
+        ActiveGame.reset("hide");
+        IHive.genericReset();
+        if (The5zigAPI.getAPI().getActiveServer() != null)
+            The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
+        saveDailyPoints();
+    }
 
-		gameMode.setState(GameState.FINISHED);
+    public static boolean shouldRender(GameState state) {
 
-		HIDE.messagesToSend.clear();
-		HIDE.footerToSend.clear();
-		HIDE.votesToParse.clear();
-		HIDE.isRecordsRunning = false;
-		HIDE.hasVoted = false;
-		HIDE.activeMap = null;
-		lastPts = 0;
-		seeking = false;
-		ActiveGame.reset("hide");
-		IHive.genericReset();
-		if (The5zigAPI.getAPI().getActiveServer() != null)
-			The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
-		saveDailyPoints();
-	}
+        if (state == GameState.GAME)
+            return true;
+        if (state == GameState.PREGAME)
+            return true;
+        return state == GameState.STARTING;
+    }
 
-	public static boolean shouldRender(GameState state) {
-
-		if (state == GameState.GAME)
-			return true;
-		if (state == GameState.PREGAME)
-			return true;
-		return state == GameState.STARTING;
-	}
-
-	@Override
-	public String getName() {
-		return "Hide & Seek";
-	}
+    @Override
+    public String getName() {
+        return "Hide & Seek";
+    }
 
 }

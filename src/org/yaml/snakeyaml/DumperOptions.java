@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,148 +15,15 @@
  */
 package org.yaml.snakeyaml;
 
-import java.util.Map;
-import java.util.TimeZone;
-
 import org.yaml.snakeyaml.emitter.Emitter;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.serializer.AnchorGenerator;
 import org.yaml.snakeyaml.serializer.NumberAnchorGenerator;
 
+import java.util.Map;
+import java.util.TimeZone;
+
 public class DumperOptions {
-    /**
-     * YAML provides a rich set of scalar styles. Block scalar styles include
-     * the literal style and the folded style; flow scalar styles include the
-     * plain style and two quoted styles, the single-quoted style and the
-     * double-quoted style. These styles offer a range of trade-offs between
-     * expressive power and readability.
-     *
-     * @see <a href="http://yaml.org/spec/1.1/#id903915">Chapter 9. Scalar
-     *      Styles</a>
-     * @see <a href="http://yaml.org/spec/1.1/#id858081">2.3. Scalars</a>
-     */
-    public enum ScalarStyle {
-        DOUBLE_QUOTED(Character.valueOf('"')), SINGLE_QUOTED(Character.valueOf('\'')), LITERAL(
-                Character.valueOf('|')), FOLDED(Character.valueOf('>')), PLAIN(null);
-        private Character styleChar;
-
-        private ScalarStyle(Character style) {
-            this.styleChar = style;
-        }
-
-        public Character getChar() {
-            return styleChar;
-        }
-
-        @Override
-        public String toString() {
-            return "Scalar style: '" + styleChar + "'";
-        }
-
-        public static ScalarStyle createStyle(Character style) {
-            if (style == null) {
-                return PLAIN;
-            } else {
-                switch (style) {
-                case '"':
-                    return DOUBLE_QUOTED;
-                case '\'':
-                    return SINGLE_QUOTED;
-                case '|':
-                    return LITERAL;
-                case '>':
-                    return FOLDED;
-                default:
-                    throw new YAMLException("Unknown scalar style character: " + style);
-                }
-            }
-        }
-    }
-
-    /**
-     * Block styles use indentation to denote nesting and scope within the
-     * document. In contrast, flow styles rely on explicit indicators to denote
-     * nesting and scope.
-     *
-     * @see <a href="http://www.yaml.org/spec/current.html#id2509255">3.2.3.1.
-     *      Node Styles (http://yaml.org/spec/1.1)</a>
-     */
-    public enum FlowStyle {
-        FLOW(Boolean.TRUE), BLOCK(Boolean.FALSE), AUTO(null);
-
-        private Boolean styleBoolean;
-
-        private FlowStyle(Boolean flowStyle) {
-            styleBoolean = flowStyle;
-        }
-
-        public Boolean getStyleBoolean() {
-            return styleBoolean;
-        }
-
-        @Override
-        public String toString() {
-            return "Flow style: '" + styleBoolean + "'";
-        }
-    }
-
-    /**
-     * Platform dependent line break.
-     */
-    public enum LineBreak {
-        WIN("\r\n"), MAC("\r"), UNIX("\n");
-
-        private String lineBreak;
-
-        private LineBreak(String lineBreak) {
-            this.lineBreak = lineBreak;
-        }
-
-        public String getString() {
-            return lineBreak;
-        }
-
-        @Override
-        public String toString() {
-            return "Line break: " + name();
-        }
-
-        public static LineBreak getPlatformLineBreak() {
-            String platformLineBreak = System.getProperty("line.separator");
-            for (LineBreak lb : values()) {
-                if (lb.lineBreak.equals(platformLineBreak)) {
-                    return lb;
-                }
-            }
-            return LineBreak.UNIX;
-        }
-    }
-
-    /**
-     * Specification version. Currently supported 1.0 and 1.1
-     */
-    public enum Version {
-        V1_0(new Integer[] { 1, 0 }), V1_1(new Integer[] { 1, 1 });
-
-        private Integer[] version;
-
-        private Version(Integer[] version) {
-            this.version = version;
-        }
-
-        public int major() { return version[0]; }
-        public int minor() { return version[1]; }
-
-        public String getRepresentation() {
-            return version[0] + "." + version[1];
-        }
-
-        @Override
-        public String toString() {
-            return "Version: " + getRepresentation();
-        }
-    }
-
     private ScalarStyle defaultStyle = ScalarStyle.PLAIN;
     private FlowStyle defaultFlowStyle = FlowStyle.AUTO;
     private boolean canonical = false;
@@ -170,7 +37,6 @@ public class DumperOptions {
     private boolean explicitStart = false;
     private boolean explicitEnd = false;
     private TimeZone timeZone = null;
-
     private Version version = null;
     private Map<String, String> tags = null;
     private Boolean prettyFlow = false;
@@ -212,6 +78,10 @@ public class DumperOptions {
         this.defaultStyle = defaultStyle;
     }
 
+    public int getIndent() {
+        return this.indent;
+    }
+
     public void setIndent(int indent) {
         if (indent < Emitter.MIN_INDENT) {
             throw new YAMLException("Indent must be at least " + Emitter.MIN_INDENT);
@@ -222,8 +92,8 @@ public class DumperOptions {
         this.indent = indent;
     }
 
-    public int getIndent() {
-        return this.indent;
+    public int getIndicatorIndent() {
+        return this.indicatorIndent;
     }
 
     public void setIndicatorIndent(int indicatorIndent) {
@@ -236,16 +106,16 @@ public class DumperOptions {
         this.indicatorIndent = indicatorIndent;
     }
 
-    public int getIndicatorIndent() {
-        return this.indicatorIndent;
+    public Version getVersion() {
+        return this.version;
     }
 
     public void setVersion(Version version) {
         this.version = version;
     }
 
-    public Version getVersion() {
-        return this.version;
+    public boolean isCanonical() {
+        return this.canonical;
     }
 
     /**
@@ -258,8 +128,8 @@ public class DumperOptions {
         this.canonical = canonical;
     }
 
-    public boolean isCanonical() {
-        return this.canonical;
+    public boolean isPrettyFlow() {
+        return this.prettyFlow;
     }
 
     /**
@@ -273,8 +143,8 @@ public class DumperOptions {
         this.prettyFlow = prettyFlow;
     }
 
-    public boolean isPrettyFlow() {
-        return this.prettyFlow;
+    public int getWidth() {
+        return this.bestWidth;
     }
 
     /**
@@ -289,8 +159,8 @@ public class DumperOptions {
         this.bestWidth = bestWidth;
     }
 
-    public int getWidth() {
-        return this.bestWidth;
+    public boolean getSplitLines() {
+        return this.splitLines;
     }
 
     /**
@@ -304,23 +174,8 @@ public class DumperOptions {
         this.splitLines = splitLines;
     }
 
-    public boolean getSplitLines() {
-        return this.splitLines;
-    }
-
     public LineBreak getLineBreak() {
         return lineBreak;
-    }
-
-    public void setDefaultFlowStyle(FlowStyle defaultFlowStyle) {
-        if (defaultFlowStyle == null) {
-            throw new NullPointerException("Use FlowStyle enum.");
-        }
-        this.defaultFlowStyle = defaultFlowStyle;
-    }
-
-    public FlowStyle getDefaultFlowStyle() {
-        return defaultFlowStyle;
     }
 
     /**
@@ -334,6 +189,17 @@ public class DumperOptions {
             throw new NullPointerException("Specify line break.");
         }
         this.lineBreak = lineBreak;
+    }
+
+    public FlowStyle getDefaultFlowStyle() {
+        return defaultFlowStyle;
+    }
+
+    public void setDefaultFlowStyle(FlowStyle defaultFlowStyle) {
+        if (defaultFlowStyle == null) {
+            throw new NullPointerException("Use FlowStyle enum.");
+        }
+        this.defaultFlowStyle = defaultFlowStyle;
     }
 
     public boolean isExplicitStart() {
@@ -395,12 +261,150 @@ public class DumperOptions {
         this.timeZone = timeZone;
     }
 
-
     public AnchorGenerator getAnchorGenerator() {
         return anchorGenerator;
     }
 
     public void setAnchorGenerator(AnchorGenerator anchorGenerator) {
         this.anchorGenerator = anchorGenerator;
+    }
+
+    /**
+     * YAML provides a rich set of scalar styles. Block scalar styles include
+     * the literal style and the folded style; flow scalar styles include the
+     * plain style and two quoted styles, the single-quoted style and the
+     * double-quoted style. These styles offer a range of trade-offs between
+     * expressive power and readability.
+     *
+     * @see <a href="http://yaml.org/spec/1.1/#id903915">Chapter 9. Scalar
+     *      Styles</a>
+     * @see <a href="http://yaml.org/spec/1.1/#id858081">2.3. Scalars</a>
+     */
+    public enum ScalarStyle {
+        DOUBLE_QUOTED(Character.valueOf('"')), SINGLE_QUOTED(Character.valueOf('\'')), LITERAL(
+                Character.valueOf('|')), FOLDED(Character.valueOf('>')), PLAIN(null);
+        private Character styleChar;
+
+        private ScalarStyle(Character style) {
+            this.styleChar = style;
+        }
+
+        public static ScalarStyle createStyle(Character style) {
+            if (style == null) {
+                return PLAIN;
+            } else {
+                switch (style) {
+                    case '"':
+                        return DOUBLE_QUOTED;
+                    case '\'':
+                        return SINGLE_QUOTED;
+                    case '|':
+                        return LITERAL;
+                    case '>':
+                        return FOLDED;
+                    default:
+                        throw new YAMLException("Unknown scalar style character: " + style);
+                }
+            }
+        }
+
+        public Character getChar() {
+            return styleChar;
+        }
+
+        @Override
+        public String toString() {
+            return "Scalar style: '" + styleChar + "'";
+        }
+    }
+
+    /**
+     * Block styles use indentation to denote nesting and scope within the
+     * document. In contrast, flow styles rely on explicit indicators to denote
+     * nesting and scope.
+     *
+     * @see <a href="http://www.yaml.org/spec/current.html#id2509255">3.2.3.1.
+     *      Node Styles (http://yaml.org/spec/1.1)</a>
+     */
+    public enum FlowStyle {
+        FLOW(Boolean.TRUE), BLOCK(Boolean.FALSE), AUTO(null);
+
+        private Boolean styleBoolean;
+
+        private FlowStyle(Boolean flowStyle) {
+            styleBoolean = flowStyle;
+        }
+
+        public Boolean getStyleBoolean() {
+            return styleBoolean;
+        }
+
+        @Override
+        public String toString() {
+            return "Flow style: '" + styleBoolean + "'";
+        }
+    }
+
+
+    /**
+     * Platform dependent line break.
+     */
+    public enum LineBreak {
+        WIN("\r\n"), MAC("\r"), UNIX("\n");
+
+        private String lineBreak;
+
+        private LineBreak(String lineBreak) {
+            this.lineBreak = lineBreak;
+        }
+
+        public static LineBreak getPlatformLineBreak() {
+            String platformLineBreak = System.getProperty("line.separator");
+            for (LineBreak lb : values()) {
+                if (lb.lineBreak.equals(platformLineBreak)) {
+                    return lb;
+                }
+            }
+            return LineBreak.UNIX;
+        }
+
+        public String getString() {
+            return lineBreak;
+        }
+
+        @Override
+        public String toString() {
+            return "Line break: " + name();
+        }
+    }
+
+    /**
+     * Specification version. Currently supported 1.0 and 1.1
+     */
+    public enum Version {
+        V1_0(new Integer[]{1, 0}), V1_1(new Integer[]{1, 1});
+
+        private Integer[] version;
+
+        private Version(Integer[] version) {
+            this.version = version;
+        }
+
+        public int major() {
+            return version[0];
+        }
+
+        public int minor() {
+            return version[1];
+        }
+
+        public String getRepresentation() {
+            return version[0] + "." + version[1];
+        }
+
+        @Override
+        public String toString() {
+            return "Version: " + getRepresentation();
+        }
     }
 }

@@ -9,7 +9,6 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
-import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.games.SKY;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.stuff.sky.SKYRank;
@@ -28,364 +27,362 @@ import java.util.regex.Pattern;
 
 public class SKYListener extends AbstractGameListener<SKY> {
 
-	@Override
-	public Class<SKY> getGameMode() {
-		return SKY.class;
-	}
+    @Override
+    public Class<SKY> getGameMode() {
+        return SKY.class;
+    }
 
-	@Override
-	public boolean matchLobby(String arg0) {
-		return arg0.equals("SKY");
-	}
+    @Override
+    public boolean matchLobby(String arg0) {
+        return arg0.equals("SKY");
+    }
 
-	@Override
-	public void onGameModeJoin(SKY gameMode) {
+    @Override
+    public void onGameModeJoin(SKY gameMode) {
 
-		gameMode.setState(GameState.STARTING);
-		ActiveGame.set("SKY");
-		IHive.genericJoin();
+        gameMode.setState(GameState.STARTING);
+        ActiveGame.set("SKY");
+        IHive.genericJoin();
 
-		new Thread(() -> {
-			try {
-				try {
-					SKY.initDailyPointsWriter();
-				} catch (IOException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-				Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-				The5zigAPI.getLogger().info(sb.getTitle());
+        new Thread(() -> {
+            try {
+                try {
+                    SKY.initDailyPointsWriter();
+                } catch (IOException e2) {
+                    // TODO Auto-generated catch block
+                    e2.printStackTrace();
+                }
+                Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+                The5zigAPI.getLogger().info(sb.getTitle());
 
-				if (sb != null && sb.getTitle().contains("Your SKY")) {
-					if (sb.getTitle().contains("Your SKYT"))
-						SKY.mode = "Teams";
-					else if (sb.getTitle().contains("Your SKYD"))
-						SKY.mode = "Duos";
-					else
-						SKY.mode = "Solo";
+                if (sb != null && sb.getTitle().contains("Your SKY")) {
+                    if (sb.getTitle().contains("Your SKYT"))
+                        SKY.mode = "Teams";
+                    else if (sb.getTitle().contains("Your SKYD"))
+                        SKY.mode = "Duos";
+                    else
+                        SKY.mode = "Solo";
 
-					int points = sb.getLines().get(ChatColor.AQUA + "Points");
-					SKY.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
-					SKY.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
-					APIValues.SKYpoints = (long) points;
-				}
+                    int points = sb.getLines().get(ChatColor.AQUA + "Points");
+                    SKY.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
+                    SKY.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
+                    APIValues.SKYpoints = (long) points;
+                }
 
-				ApiSKY api = new ApiSKY(The5zigAPI.getAPI().getGameProfile().getName());
-				SKY.totalKills = Math.toIntExact(api.getKills());
-				SKY.rankObject = SKYRank.getFromDisplay(api.getTitle());
-				SKY.rank = SKY.rankObject.getTotalDisplay();
-				SKY.updateKdr();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}).start();
+                ApiSKY api = new ApiSKY(The5zigAPI.getAPI().getGameProfile().getName());
+                SKY.totalKills = Math.toIntExact(api.getKills());
+                SKY.rankObject = SKYRank.getFromDisplay(api.getTitle());
+                SKY.rank = SKY.rankObject.getTotalDisplay();
+                SKY.updateKdr();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
 
-	}
+    }
 
-	@Override
-	public boolean onServerChat(SKY gameMode, String message) {
+    @Override
+    public boolean onServerChat(SKY gameMode, String message) {
 
-		if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §3Voting has ended! §bThe map §f")) {
-			The5zigAPI.getLogger().info("Voting ended, parsing map");
-			String afterMsg = message.split("§8▍ §b§lSky§e§lWars§8 ▏ §3Voting has ended! §bThe map ")[1];
-			String map = "";
-			Pattern pattern = Pattern.compile(Pattern.quote("§f") + "(.*?)" + Pattern.quote("§b"));
-			Matcher matcher = pattern.matcher(afterMsg);
-			while (matcher.find()) {
-				map = matcher.group(1);
-			}
+        if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §3Voting has ended! §bThe map §f")) {
+            The5zigAPI.getLogger().info("Voting ended, parsing map");
+            String afterMsg = message.split("§8▍ §b§lSky§e§lWars§8 ▏ §3Voting has ended! §bThe map ")[1];
+            String map = "";
+            Pattern pattern = Pattern.compile(Pattern.quote("§f") + "(.*?)" + Pattern.quote("§b"));
+            Matcher matcher = pattern.matcher(afterMsg);
+            while (matcher.find()) {
+                map = matcher.group(1);
+            }
 
-			SKY.map = map;
+            SKY.map = map;
 
-		}
+        }
 
-		// Autovoting
+        // Autovoting
 
-		else if (message.endsWith("§c§lYou died. §6Better luck next time!")) {
-			SKY.deaths++;
-			SKY.updateKdr();
-		} else if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §a§lVote received. §3Your map now has")
-				&& Setting.AUTOVOTE.getValue()) {
-			SKY.hasVoted = true;
-		} else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l6. §f§6") && !SKY.hasVoted
-				&& Setting.AUTOVOTE.getValue()) {
-			SKY.votesToParse.add(message);
-			new Thread(() -> {
-				List<String> votesCopy = new ArrayList<>(SKY.votesToParse);
-				List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("sky"));
+        else if (message.endsWith("§c§lYou died. §6Better luck next time!")) {
+            SKY.deaths++;
+            SKY.updateKdr();
+        } else if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §a§lVote received. §3Your map now has")
+                && Setting.AUTOVOTE.getValue()) {
+            SKY.hasVoted = true;
+        } else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l6. §f§6") && !SKY.hasVoted
+                && Setting.AUTOVOTE.getValue()) {
+            SKY.votesToParse.add(message);
+            new Thread(() -> {
+                List<String> votesCopy = new ArrayList<>(SKY.votesToParse);
+                List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("sky"));
 
 
-				TreeMap<String, Integer> votesindex = new TreeMap<>();
-				LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();
+                TreeMap<String, Integer> votesindex = new TreeMap<>();
+                LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();
 
-				for(String s : votesCopy) {
-					String[] data = s.split("\\.");
-					String index = ChatColor.stripColor(data[0])
-							.replaceAll("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l", "")
-							.replaceAll("▍ SkyWars ▏", "").trim();
-					String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
-					String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
+                for (String s : votesCopy) {
+                    String[] data = s.split("\\.");
+                    String index = ChatColor.stripColor(data[0])
+                            .replaceAll("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l", "")
+                            .replaceAll("▍ SkyWars ▏", "").trim();
+                    String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
+                    String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
 
-					System.out.println("VoteCopy: " + consider);
-					
-					finalvoting.put(consider, Integer.parseInt(index));
-				}
-				
+                    System.out.println("VoteCopy: " + consider);
 
-				for(String s : parsedMaps) {
-					if(finalvoting.containsKey(s)) {
-						votesindex.put(s, finalvoting.get(s));
-						break;
-					}
-				}
-				
-				if(votesindex.size() != 0) {
-					System.out.println(votesindex.firstEntry().getKey());
-					The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
-					The5zigAPI.getAPI().messagePlayer(
-							"§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
-					
-				}
-				SKY.votesToParse.clear();
-				SKY.hasVoted = true;
+                    finalvoting.put(consider, Integer.parseInt(index));
+                }
 
-				
-			}).start();
-		} else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l") && !SKY.hasVoted
-				&& Setting.AUTOVOTE.getValue()) {
-			SKY.votesToParse.add(message);
-		} else if (message.contains("§e, noble fighter for the ")) {
-			String team = message.split("the")[1].replace("§eteam!", "").replaceAll("team!", "").trim();
-			SKY.team = team;
 
-			String teamSize = SKY.mode == null ? "0"
-					: (SKY.mode.equals("Solo") ? "1" : (SKY.mode.equals("Duos") ? "2" : "4"));
+                for (String s : parsedMaps) {
+                    if (finalvoting.containsKey(s)) {
+                        votesindex.put(s, finalvoting.get(s));
+                        break;
+                    }
+                }
 
-			DiscordUtils.updatePresence("Fighting in SkyWars: " + SKY.mode, "Playing on " + SKY.map, "game_skywars");
-		}
+                if (votesindex.size() != 0) {
+                    System.out.println(votesindex.firstEntry().getKey());
+                    The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
+                    The5zigAPI.getAPI().messagePlayer(
+                            "§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
 
-		// Advanced Records
+                }
+                SKY.votesToParse.clear();
+                SKY.hasVoted = true;
 
-		else if (message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f15§7 tokens!")) {
-			SKY.kills++;
-			SKY.totalKills++;
-			APIValues.SKYpoints += 5;
-			SKY.gamePoints += 5;
-			SKY.dailyPoints += 5;
-			SKY.updateKdr();
-		}
-		else if(message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f50§7 tokens!")) {
-			APIValues.SKYpoints += 20;
-			SKY.dailyPoints += 20;
-			SKY.gamePoints += 20;
-		}
-		else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
-			SKY.messagesToSend.add(message);
-			The5zigAPI.getLogger().info("found header");
-			return true;
-		} else if (message.startsWith("§3 ")) {
 
-			SKY.messagesToSend.add(message);
-			The5zigAPI.getLogger().info("found entry");
+            }).start();
+        } else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l") && !SKY.hasVoted
+                && Setting.AUTOVOTE.getValue()) {
+            SKY.votesToParse.add(message);
+        } else if (message.contains("§e, noble fighter for the ")) {
+            String team = message.split("the")[1].replace("§eteam!", "").replaceAll("team!", "").trim();
+            SKY.team = team;
 
-			return true;
-		} else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
-			SKY.footerToSend.add(message);
-			The5zigAPI.getLogger().info("Found Player URL");
+            String teamSize = SKY.mode == null ? "0"
+                    : (SKY.mode.equals("Solo") ? "1" : (SKY.mode.equals("Duos") ? "2" : "4"));
 
-			return true;
-		} else if ((message.equals("                      §6§m                  §6§m                  ")
-				&& !message.startsWith("§o "))) {
-			The5zigAPI.getLogger().info("found footer");
-			SKY.footerToSend.add(message);
-			The5zigAPI.getLogger().info("executed /records");
-			if (SKY.footerToSend.contains("                      §6§m                  §6§m                  ")) {
-				// Advanced Records - send
-				The5zigAPI.getLogger().info("Sending adv rec");
-				new Thread(() -> {
-					SKY.isRecordsRunning = true;
-					The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
-					try {
+            DiscordUtils.updatePresence("Fighting in SkyWars: " + SKY.mode, "Playing on " + SKY.map, "game_skywars");
+        }
 
-						ApiSKY api = new ApiSKY(SKY.lastRecords);
-						SKYRank rank = null;
+        // Advanced Records
 
-						NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-						DecimalFormat df = (DecimalFormat) nf;
-						df.setMaximumFractionDigits(2);
-						df.setMinimumFractionDigits(2);
+        else if (message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f15§7 tokens!")) {
+            SKY.kills++;
+            SKY.totalKills++;
+            APIValues.SKYpoints += 5;
+            SKY.gamePoints += 5;
+            SKY.dailyPoints += 5;
+            SKY.updateKdr();
+        } else if (message.startsWith("§8▍ §eTokens§8 ▏ §7You earned §f50§7 tokens!")) {
+            APIValues.SKYpoints += 20;
+            SKY.dailyPoints += 20;
+            SKY.gamePoints += 20;
+        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+            SKY.messagesToSend.add(message);
+            The5zigAPI.getLogger().info("found header");
+            return true;
+        } else if (message.startsWith("§3 ")) {
 
-						DecimalFormat df1f = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
-						df1f.setMaximumFractionDigits(1);
-						df1f.setMinimumFractionDigits(1);
+            SKY.messagesToSend.add(message);
+            The5zigAPI.getLogger().info("found entry");
 
-						String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
-								? api.getParentMode().getNetworkTitle()
-								: "";
-						ChatColor rankColor = null;
-						if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
-							rankColor = api.getParentMode().getNetworkRankColor();
-						}
-						String rankTitleSKY = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
-						if (rankTitleSKY != null)
-							rank = SKYRank.getFromDisplay(rankTitleSKY);
+            return true;
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+            SKY.footerToSend.add(message);
+            The5zigAPI.getLogger().info("Found Player URL");
 
-						int kills = 0;
-						long points = 0;
-						int deaths = 0;
-						int gamesPlayed = 0;
-						int victories = 0;
+            return true;
+        } else if ((message.equals("                      §6§m                  §6§m                  ")
+                && !message.startsWith("§o "))) {
+            The5zigAPI.getLogger().info("found footer");
+            SKY.footerToSend.add(message);
+            The5zigAPI.getLogger().info("executed /records");
+            if (SKY.footerToSend.contains("                      §6§m                  §6§m                  ")) {
+                // Advanced Records - send
+                The5zigAPI.getLogger().info("Sending adv rec");
+                new Thread(() -> {
+                    SKY.isRecordsRunning = true;
+                    The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
+                    try {
 
-						long timeAlive = 0;
+                        ApiSKY api = new ApiSKY(SKY.lastRecords);
+                        SKYRank rank = null;
 
-						Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-						Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements()
-								: null;
+                        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+                        DecimalFormat df = (DecimalFormat) nf;
+                        df.setMaximumFractionDigits(2);
+                        df.setMinimumFractionDigits(2);
 
-						// int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
-						// HiveAPI.getLeaderboardsPlacePoints(349, "SKY") <
-						// HiveAPI.DRgetPoints(SKY.lastRecords)) ?
-						// HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+                        DecimalFormat df1f = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+                        df1f.setMaximumFractionDigits(1);
+                        df1f.setMinimumFractionDigits(1);
 
-						List<String> messages = new ArrayList<>(SKY.messagesToSend);
-						for (String s : messages) {
+                        String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
+                                ? api.getParentMode().getNetworkTitle()
+                                : "";
+                        ChatColor rankColor = null;
+                        if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
+                            rankColor = api.getParentMode().getNetworkRankColor();
+                        }
+                        String rankTitleSKY = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
+                        if (rankTitleSKY != null)
+                            rank = SKYRank.getFromDisplay(rankTitleSKY);
 
-							if (s.trim().endsWith("'s Stats §6§m")) {
-								The5zigAPI.getLogger().info("Editing Header...");
-								StringBuilder sb = new StringBuilder();
-								String correctUser = api.getParentMode().getCorrectName();
-								if (correctUser.contains("nicked player"))
-									correctUser = "Nicked/Not found";
-								sb.append("          §6§m                  §f ");
-								The5zigAPI.getLogger().info("Added base...");
-								if (rankColor != null) {
-									sb.append(rankColor).append(correctUser);
-									The5zigAPI.getLogger().info("Added colored user...");
-								} else {
-									sb.append(correctUser);
-									The5zigAPI.getLogger().info("Added white user...");
-								}
-								sb.append("§f's Stats §6§m                  ");
-								The5zigAPI.getLogger().info("Added end...");
-								The5zigAPI.getAPI().messagePlayer("§o " + sb.toString());
+                        int kills = 0;
+                        long points = 0;
+                        int deaths = 0;
+                        int gamesPlayed = 0;
+                        int victories = 0;
 
-								if (rankTitle != null && rankTitle.contains("nicked player"))
-									rankTitle = "Nicked/Not found";
-								if (!rankTitle.equals("Nicked/Not found") && !rankTitle.isEmpty()) {
-									if (rankColor == null)
-										rankColor = ChatColor.WHITE;
-									The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " ("
-											+ rankColor + rankTitle + "§6) " + "§m       ");
-								}
-								continue;
-							} else if (s.startsWith("§3 Points: §b")) {
-								StringBuilder sb = new StringBuilder();
-								sb.append("§3 Points: §b");
-								points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
-								sb.append(points);
-								if (rank != null)
-									sb.append(" (").append(rank.getTotalDisplay());
-								if (Setting.SKY_SHOW_POINTS_TO_NEXT_RANK.getValue())
-									sb.append(" / ").append(rank.getPointsToNextRank((int) points));
-								if (rank != null)
-									sb.append("§b)");
+                        long timeAlive = 0;
 
-								// if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
+                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
+                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements()
+                                : null;
 
-								The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
-								continue;
-							} else if (s.startsWith("§3 Victories: §b")) {
-								victories = Integer.parseInt(
-										ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
-							} else if (s.startsWith("§3 Games Played: §b")) {
-								gamesPlayed = Integer.parseInt(
-										ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
-							} else if (s.startsWith("§3 Kills: §b")) {
-								kills = Integer
-										.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
-							} else if (s.startsWith("§3 Deaths: §b")) {
-								deaths = Integer
-										.parseInt(ChatColor.stripColor(s.replaceAll("§3 Deaths: §b", "").trim()));
-							}
+                        // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
+                        // HiveAPI.getLeaderboardsPlacePoints(349, "SKY") <
+                        // HiveAPI.DRgetPoints(SKY.lastRecords)) ?
+                        // HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 
-							The5zigAPI.getAPI().messagePlayer("§o " + s);
+                        List<String> messages = new ArrayList<>(SKY.messagesToSend);
+                        for (String s : messages) {
 
-						}
+                            if (s.trim().endsWith("'s Stats §6§m")) {
+                                The5zigAPI.getLogger().info("Editing Header...");
+                                StringBuilder sb = new StringBuilder();
+                                String correctUser = api.getParentMode().getCorrectName();
+                                if (correctUser.contains("nicked player"))
+                                    correctUser = "Nicked/Not found";
+                                sb.append("          §6§m                  §f ");
+                                The5zigAPI.getLogger().info("Added base...");
+                                if (rankColor != null) {
+                                    sb.append(rankColor).append(correctUser);
+                                    The5zigAPI.getLogger().info("Added colored user...");
+                                } else {
+                                    sb.append(correctUser);
+                                    The5zigAPI.getLogger().info("Added white user...");
+                                }
+                                sb.append("§f's Stats §6§m                  ");
+                                The5zigAPI.getLogger().info("Added end...");
+                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString());
 
-						if (achievements != null) {
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
-						}
+                                if (rankTitle != null && rankTitle.contains("nicked player"))
+                                    rankTitle = "Nicked/Not found";
+                                if (!rankTitle.equals("Nicked/Not found") && !rankTitle.isEmpty()) {
+                                    if (rankColor == null)
+                                        rankColor = ChatColor.WHITE;
+                                    The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " ("
+                                            + rankColor + rankTitle + "§6) " + "§m       ");
+                                }
+                                continue;
+                            } else if (s.startsWith("§3 Points: §b")) {
+                                StringBuilder sb = new StringBuilder();
+                                sb.append("§3 Points: §b");
+                                points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
+                                sb.append(points);
+                                if (rank != null)
+                                    sb.append(" (").append(rank.getTotalDisplay());
+                                if (Setting.SKY_SHOW_POINTS_TO_NEXT_RANK.getValue())
+                                    sb.append(" / ").append(rank.getPointsToNextRank((int) points));
+                                if (rank != null)
+                                    sb.append("§b)");
 
-						if (Setting.SKY_SHOW_WINRATE.getValue()) {
-							double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
-						}
-						if (Setting.SKY_SHOW_KD.getValue()) {
-							double kd = (double) kills / (double) deaths;
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + df.format(kd));
-						}
-						if (Setting.SKY_SHOW_PPG.getValue()) {
-							double ppg = (double) points / (double) gamesPlayed;
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df1f.format(ppg));
-						}
-						if (Setting.SKY_SHOW_KPG.getValue()) {
-							double kpg = (double) kills / (double) gamesPlayed;
-							The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills Per Game: §b" + df1f.format(kpg));
-						}
+                                // if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-						if (lastGame != null) {
-							Calendar lastSeen = Calendar.getInstance();
-							lastSeen.setTimeInMillis(lastGame.getTime());
-							The5zigAPI.getAPI().messagePlayer(
-									"§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
-						}
+                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                continue;
+                            } else if (s.startsWith("§3 Victories: §b")) {
+                                victories = Integer.parseInt(
+                                        ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+                            } else if (s.startsWith("§3 Games Played: §b")) {
+                                gamesPlayed = Integer.parseInt(
+                                        ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+                            } else if (s.startsWith("§3 Kills: §b")) {
+                                kills = Integer
+                                        .parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
+                            } else if (s.startsWith("§3 Deaths: §b")) {
+                                deaths = Integer
+                                        .parseInt(ChatColor.stripColor(s.replaceAll("§3 Deaths: §b", "").trim()));
+                            }
 
-						for (String s : SKY.footerToSend) {
-							The5zigAPI.getAPI().messagePlayer("§o " + s);
-						}
+                            The5zigAPI.getAPI().messagePlayer("§o " + s);
 
-						SKY.messagesToSend.clear();
-						SKY.footerToSend.clear();
-						SKY.isRecordsRunning = false;
+                        }
 
-					} catch (Exception e) {
-						e.printStackTrace();
-						if (e.getCause() instanceof FileNotFoundException) {
-							The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
-							SKY.messagesToSend.clear();
-							SKY.footerToSend.clear();
-							SKY.isRecordsRunning = false;
-							return;
-						}
-						The5zigAPI.getAPI().messagePlayer(Log.error
-								+ "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
+                        if (achievements != null) {
+                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
+                        }
 
-						for (String s : SKY.messagesToSend) {
-							The5zigAPI.getAPI().messagePlayer("§o " + s);
-						}
-						for (String s : SKY.footerToSend) {
-							The5zigAPI.getAPI().messagePlayer("§o " + s);
-						}
-						The5zigAPI.getAPI().messagePlayer(
-								"§o " + "                      §6§m                  §6§m                  ");
-						SKY.messagesToSend.clear();
-						SKY.footerToSend.clear();
-						SKY.isRecordsRunning = false;
-					}
-				}).start();
-				return true;
+                        if (Setting.SKY_SHOW_WINRATE.getValue()) {
+                            double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
+                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
+                        }
+                        if (Setting.SKY_SHOW_KD.getValue()) {
+                            double kd = (double) kills / (double) deaths;
+                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + df.format(kd));
+                        }
+                        if (Setting.SKY_SHOW_PPG.getValue()) {
+                            double ppg = (double) points / (double) gamesPlayed;
+                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df1f.format(ppg));
+                        }
+                        if (Setting.SKY_SHOW_KPG.getValue()) {
+                            double kpg = (double) kills / (double) gamesPlayed;
+                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills Per Game: §b" + df1f.format(kpg));
+                        }
 
-			}
+                        if (lastGame != null) {
+                            Calendar lastSeen = Calendar.getInstance();
+                            lastSeen.setTimeInMillis(lastGame.getTime());
+                            The5zigAPI.getAPI().messagePlayer(
+                                    "§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                        }
 
-		}
+                        for (String s : SKY.footerToSend) {
+                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                        }
 
-		return false;
+                        SKY.messagesToSend.clear();
+                        SKY.footerToSend.clear();
+                        SKY.isRecordsRunning = false;
 
-	}
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        if (e.getCause() instanceof FileNotFoundException) {
+                            The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
+                            SKY.messagesToSend.clear();
+                            SKY.footerToSend.clear();
+                            SKY.isRecordsRunning = false;
+                            return;
+                        }
+                        The5zigAPI.getAPI().messagePlayer(Log.error
+                                + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
 
-	@Override
-	public void onServerConnect(SKY gameMode) {
-		SKY.reset(gameMode);
-	}
+                        for (String s : SKY.messagesToSend) {
+                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                        }
+                        for (String s : SKY.footerToSend) {
+                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                        }
+                        The5zigAPI.getAPI().messagePlayer(
+                                "§o " + "                      §6§m                  §6§m                  ");
+                        SKY.messagesToSend.clear();
+                        SKY.footerToSend.clear();
+                        SKY.isRecordsRunning = false;
+                    }
+                }).start();
+                return true;
+
+            }
+
+        }
+
+        return false;
+
+    }
+
+    @Override
+    public void onServerConnect(SKY gameMode) {
+        SKY.reset(gameMode);
+    }
 
 }

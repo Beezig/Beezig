@@ -2,29 +2,27 @@ package tk.roccodev.beezig.briefing;
 
 public class News {
 
-	private String title, content;
-	private long postedAt;
-	
-	public News(String title, String content, long postedAt) {
-		super();
-		this.title = title;
-		this.content = content;
-		this.postedAt = postedAt;
-	}
+    private String title, content;
+    private long postedAt;
 
-	public String getTitle() {
-		return title;
-	}
+    public News(String title, String content, long postedAt) {
+        super();
+        this.title = title;
+        this.content = content;
+        this.postedAt = postedAt;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public long getPostedAt() {
-		return postedAt;
-	}
-	
-	
-	
-	
+    public String getContent() {
+        return content;
+    }
+
+    public long getPostedAt() {
+        return postedAt;
+    }
+
+
 }

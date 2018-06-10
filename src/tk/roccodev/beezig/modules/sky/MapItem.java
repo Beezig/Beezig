@@ -7,38 +7,37 @@ import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.SKY;
 
-public class MapItem extends GameModeItem<SKY>{
+public class MapItem extends GameModeItem<SKY> {
 
-		public MapItem(){
-			super(SKY.class);
-		}
-
-
-		@Override
-		protected Object getValue(boolean dummy) {
-			try{
-				if(SKY.map == null) return "No Map";
-				return SKY.map;
-			}catch(Exception e){
-				e.printStackTrace();
-				return "No Map";
-			}
-		}
-
-		@Override
-		public String getName() {
-			return Log.t("beezig.module.map");
-		}
+    public MapItem() {
+        super(SKY.class);
+    }
 
 
+    @Override
+    protected Object getValue(boolean dummy) {
+        try {
+            if (SKY.map == null) return "No Map";
+            return SKY.map;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "No Map";
+        }
+    }
 
-		@Override
-		public boolean shouldRender(boolean dummy){
-			try{
-				return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("SKY") && SKY.map != null && !SKY.map.isEmpty());
-			}catch(Exception e){
-				return false;
-			}
-		}
+    @Override
+    public String getName() {
+        return Log.t("beezig.module.map");
+    }
+
+
+    @Override
+    public boolean shouldRender(boolean dummy) {
+        try {
+            return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("SKY") && SKY.map != null && !SKY.map.isEmpty());
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }

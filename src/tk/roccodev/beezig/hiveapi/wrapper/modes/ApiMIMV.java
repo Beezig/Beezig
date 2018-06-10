@@ -6,22 +6,21 @@ import tk.roccodev.beezig.hiveapi.wrapper.PvPMode;
 
 public class ApiMIMV extends PvPMode {
 
-	public ApiMIMV(String playerName, String... UUID) {
-		super(playerName, UUID);
-	}
+    public ApiMIMV(String playerName, String... UUID) {
+        super(playerName, UUID);
+    }
 
-	@Override
-	public Class<? extends GameMode> getGameMode() {
-		// TODO Auto-generated method stub
-		return MIMV.class;
-	}
+    @Override
+    public Class<? extends GameMode> getGameMode() {
+        // TODO Auto-generated method stub
+        return MIMV.class;
+    }
 
-	@Override
-	public String getShortcode() {
-		// TODO Auto-generated method stub
-		return "MIMV";
-	}
-
+    @Override
+    public String getShortcode() {
+        // TODO Auto-generated method stub
+        return "MIMV";
+    }
 
 
 }

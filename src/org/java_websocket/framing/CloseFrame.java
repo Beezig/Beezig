@@ -112,31 +112,31 @@ public class CloseFrame extends ControlFrame {
      * fulfilling the request.
      **/
     public static final int UNEXPECTED_CONDITION = 1011;
-	/**
-	 * 1012 indicates that the service is restarted.
-	 * A client may reconnect, and if it choses to do, should reconnect using a randomized delay of 5 - 30s.
-	 * See https://www.ietf.org/mail-archive/web/hybi/current/msg09670.html for more information.
-	 *
-	 * @since 1.3.8
-	 **/
-	public static final int SERVICE_RESTART = 1012;
-	/**
-	 * 1013 indicates that the service is experiencing overload.
-	 * A client should only connect to a different IP (when there are multiple for the target)
-	 * or reconnect to the same IP upon user action.
-	 * See https://www.ietf.org/mail-archive/web/hybi/current/msg09670.html for more information.
-	 *
-	 * @since 1.3.8
-	 **/
-	public static final int TRY_AGAIN_LATER = 1013;
-	/**
-	 * 1014 indicates that the server was acting as a gateway or proxy and received an
-	 * invalid response from the upstream server. This is similar to 502 HTTP Status Code
-	 * See https://www.ietf.org/mail-archive/web/hybi/current/msg10748.html fore more information.
-	 *
-	 * @since 1.3.8
-	 **/
-	public static final int BAD_GATEWAY = 1014;
+    /**
+     * 1012 indicates that the service is restarted.
+     * A client may reconnect, and if it choses to do, should reconnect using a randomized delay of 5 - 30s.
+     * See https://www.ietf.org/mail-archive/web/hybi/current/msg09670.html for more information.
+     *
+     * @since 1.3.8
+     **/
+    public static final int SERVICE_RESTART = 1012;
+    /**
+     * 1013 indicates that the service is experiencing overload.
+     * A client should only connect to a different IP (when there are multiple for the target)
+     * or reconnect to the same IP upon user action.
+     * See https://www.ietf.org/mail-archive/web/hybi/current/msg09670.html for more information.
+     *
+     * @since 1.3.8
+     **/
+    public static final int TRY_AGAIN_LATER = 1013;
+    /**
+     * 1014 indicates that the server was acting as a gateway or proxy and received an
+     * invalid response from the upstream server. This is similar to 502 HTTP Status Code
+     * See https://www.ietf.org/mail-archive/web/hybi/current/msg10748.html fore more information.
+     *
+     * @since 1.3.8
+     **/
+    public static final int BAD_GATEWAY = 1014;
     /**
      * 1015 is a reserved value and MUST NOT be set as a status code in a
      * Close control frame by an endpoint. It is designated for use in
@@ -183,11 +183,12 @@ public class CloseFrame extends ControlFrame {
         setCode(CloseFrame.NORMAL);
     }
 
-	/**
-	 * Set the close code for this close frame
-	 * @param code the close code
-	 */
-	public void setCode(int code) {
+    /**
+     * Set the close code for this close frame
+     *
+     * @param code the close code
+     */
+    public void setCode(int code) {
         this.code = code;
         // CloseFrame.TLS_ERROR is not allowed to be transfered over the wire
         if (code == CloseFrame.TLS_ERROR) {
@@ -197,10 +198,11 @@ public class CloseFrame extends ControlFrame {
         updatePayload();
     }
 
-	/**
-	 * Set the close reason for this close frame
-	 * @param reason the reason code
-	 */
+    /**
+     * Set the close reason for this close frame
+     *
+     * @param reason the reason code
+     */
     public void setReason(String reason) {
         if (reason == null) {
             reason = "";
@@ -208,6 +210,7 @@ public class CloseFrame extends ControlFrame {
         this.reason = reason;
         updatePayload();
     }
+
     /**
      * Get the used close code
      *
@@ -235,8 +238,8 @@ public class CloseFrame extends ControlFrame {
     public void isValid() throws InvalidDataException {
         super.isValid();
         if (code == CloseFrame.NO_UTF8 && reason == null) {
-        	throw new InvalidDataException( CloseFrame.NO_UTF8, "Received text is no valid utf8 string!");
-		}
+            throw new InvalidDataException(CloseFrame.NO_UTF8, "Received text is no valid utf8 string!");
+        }
         if (code == CloseFrame.NOCODE && 0 < reason.length()) {
             throw new InvalidDataException(PROTOCOL_ERROR, "A close frame must have a closecode if it has a reason");
         }
@@ -251,38 +254,38 @@ public class CloseFrame extends ControlFrame {
 
     @Override
     public void setPayload(ByteBuffer payload) {
-		code = CloseFrame.NOCODE;
-		reason = "";
-		payload.mark();
-		if( payload.remaining() == 0 ) {
-			code = CloseFrame.NORMAL;
-		} else if( payload.remaining() == 1 ) {
-			code = CloseFrame.PROTOCOL_ERROR;
-		} else {
-			if( payload.remaining() >= 2 ) {
-				ByteBuffer bb = ByteBuffer.allocate( 4 );
-				bb.position( 2 );
-				bb.putShort( payload.getShort() );
-				bb.position( 0 );
-				code = bb.getInt();
-			}
-			payload.reset();
-			try {
-				int mark = payload.position();// because stringUtf8 also creates a mark
-				try {
-					payload.position( payload.position() + 2 );
-					reason = Charsetfunctions.stringUtf8( payload );
-				} catch ( IllegalArgumentException e ) {
-					throw new InvalidDataException( CloseFrame.NO_UTF8 );
-				} finally {
-					payload.position( mark );
-				}
-			} catch ( InvalidDataException e ) {
-				code = CloseFrame.NO_UTF8;
-				reason = null;
-			}
-		}
-	}
+        code = CloseFrame.NOCODE;
+        reason = "";
+        payload.mark();
+        if (payload.remaining() == 0) {
+            code = CloseFrame.NORMAL;
+        } else if (payload.remaining() == 1) {
+            code = CloseFrame.PROTOCOL_ERROR;
+        } else {
+            if (payload.remaining() >= 2) {
+                ByteBuffer bb = ByteBuffer.allocate(4);
+                bb.position(2);
+                bb.putShort(payload.getShort());
+                bb.position(0);
+                code = bb.getInt();
+            }
+            payload.reset();
+            try {
+                int mark = payload.position();// because stringUtf8 also creates a mark
+                try {
+                    payload.position(payload.position() + 2);
+                    reason = Charsetfunctions.stringUtf8(payload);
+                } catch (IllegalArgumentException e) {
+                    throw new InvalidDataException(CloseFrame.NO_UTF8);
+                } finally {
+                    payload.position(mark);
+                }
+            } catch (InvalidDataException e) {
+                code = CloseFrame.NO_UTF8;
+                reason = null;
+            }
+        }
+    }
 
     /**
      * Update the payload to represent the close code and the reason

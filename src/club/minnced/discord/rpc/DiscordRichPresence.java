@@ -16,12 +16,12 @@
 
 package club.minnced.discord.rpc;
 
+import com.sun.jna.Structure;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import com.sun.jna.Structure;
 
 /*
 typedef struct DiscordRichPresence {
@@ -42,11 +42,11 @@ typedef struct DiscordRichPresence {
     int8_t instance;
 } DiscordRichPresence;
  */
+
 /**
  * Struct binding for a RichPresence
  */
-public class DiscordRichPresence extends Structure
-{
+public class DiscordRichPresence extends Structure {
     private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList(
             "state",
             "details",
@@ -68,7 +68,7 @@ public class DiscordRichPresence extends Structure
     /**
      * The user's current party status.
      * <br>Example: "Looking to Play", "Playing Solo", "In a Group"
-     * 
+     * <p>
      * <p><b>Maximum: 128 characters</b>
      */
     public String state;
@@ -76,7 +76,7 @@ public class DiscordRichPresence extends Structure
     /**
      * What the player is currently doing.
      * <br>Example: "Competitive - Captain's Mode", "In Queue", "Unranked PvP"
-     * 
+     * <p>
      * <p><b>Maximum: 128 characters</b>
      */
     public String details;
@@ -96,7 +96,7 @@ public class DiscordRichPresence extends Structure
     /**
      * Name of the uploaded image for the large profile artwork.
      * <br>Example: "default"
-     * 
+     * <p>
      * <p><b>Maximum: 32 characters</b>
      */
     public String largeImageKey;
@@ -104,7 +104,7 @@ public class DiscordRichPresence extends Structure
     /**
      * Tooltip for the largeImageKey.
      * <br>Example: "Blade's Edge Arena", "Numbani", "Danger Zone"
-     * 
+     * <p>
      * <p><b>Maximum: 128 characters</b>
      */
     public String largeImageText;
@@ -112,7 +112,7 @@ public class DiscordRichPresence extends Structure
     /**
      * Name of the uploaded image for the small profile artwork.
      * <br>Example: "rogue"
-     * 
+     * <p>
      * <p><b>Maximum: 32 characters</b>
      */
     public String smallImageKey;
@@ -120,7 +120,7 @@ public class DiscordRichPresence extends Structure
     /**
      * Tooltip for the smallImageKey.
      * <br>Example: "Rogue - Level 100"
-     * 
+     * <p>
      * <p><b>Maximum: 128 characters</b>
      */
     public String smallImageText;
@@ -128,7 +128,7 @@ public class DiscordRichPresence extends Structure
     /**
      * ID of the player's party, lobby, or group.
      * <br>Example: "ae488379-351d-4a4f-ad32-2b9b01c91657"
-     * 
+     * <p>
      * <p><b>Maximum: 128 characters</b>
      */
     public String partyId;
@@ -149,7 +149,7 @@ public class DiscordRichPresence extends Structure
      * Unique hashed string for Spectate and Join.
      * Required to enable match interactive buttons in the user's presence.
      * <br>Example: "MmhuZToxMjMxMjM6cWl3amR3MWlqZA=="
-     * 
+     * <p>
      * <p><b>Maximum: 128 characters</b>
      */
     public String matchSecret;
@@ -158,7 +158,7 @@ public class DiscordRichPresence extends Structure
      * Unique hashed string for Spectate button.
      * This will enable the "Spectate" button on the user's presence if whitelisted.
      * <br>Example: "MTIzNDV8MTIzNDV8MTMyNDU0"
-     * 
+     * <p>
      * <p><b>Maximum: 128 characters</b>
      */
     public String joinSecret;
@@ -167,7 +167,7 @@ public class DiscordRichPresence extends Structure
      * Unique hashed string for chat invitations and Ask to Join.
      * This will enable the "Ask to Join" button on the user's presence if whitelisted.
      * <br>Example: "MTI4NzM0OjFpMmhuZToxMjMxMjM="
-     * 
+     * <p>
      * <p><b>Maximum: 128 characters</b>
      */
     public String spectateSecret;
@@ -180,8 +180,7 @@ public class DiscordRichPresence extends Structure
     public byte instance;
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (!(o instanceof DiscordRichPresence))
@@ -205,15 +204,13 @@ public class DiscordRichPresence extends Structure
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(state, details, startTimestamp, endTimestamp, largeImageKey, largeImageText, smallImageKey,
                 smallImageText, partyId, partySize, partyMax, matchSecret, joinSecret, spectateSecret, instance);
     }
 
     @Override
-    protected List<String> getFieldOrder()
-    {
+    protected List<String> getFieldOrder() {
         return FIELD_ORDER;
     }
 }

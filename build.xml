@@ -1,36 +1,34 @@
 <project name="Beezig" basedir="." default="jar">
-    
-    <property name="lib.dir"     value="libs"/>
-    <property name="src.dir"     value="src"/>
 
-    <property name="build.dir"   value="build"/>
+    <property name="lib.dir" value="libs"/>
+    <property name="src.dir" value="src"/>
+
+    <property name="build.dir" value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir"     value="${build.dir}/jar"/>
+    <property name="jar.dir" value="${build.dir}/jar"/>
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
     </path>
 
-    
 
     <target name="compile">
         <mkdir dir="${classes.dir}"/>
         <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
     </target>
- <target name="jar">
+    <target name="jar">
         <mkdir dir="build/jar"/>
         <jar destfile="build/jar/Beezig.jar" basedir="build/classes" keepcompression="true">
-  	 <fileset dir="${src.dir}" casesensitive="yes">
-  		<include name="plugin.json"/>
-  		<include name="modules.json"/>
-  		<include name="core/messages/*"/>
-  		<include name="lang/*"/>
-  	 	<include name="version.txt"/>
-  	
-</fileset>
-        <zipfileset dir="src/libraries" prefix="libraries"/>
-        	
+            <fileset dir="${src.dir}" casesensitive="yes">
+                <include name="plugin.json"/>
+                <include name="modules.json"/>
+                <include name="core/messages/*"/>
+                <include name="lang/*"/>
+                <include name="version.txt"/>
 
-          
+            </fileset>
+            <zipfileset dir="src/libraries" prefix="libraries"/>
+
+
         </jar>
     </target>
     <target name="run" depends="jar">
@@ -41,11 +39,10 @@
             </classpath>
         </java>
     </target>
-	
-	<target name="test">
-		
-		</target>
 
-    
+    <target name="test">
+
+    </target>
+
 
 </project>

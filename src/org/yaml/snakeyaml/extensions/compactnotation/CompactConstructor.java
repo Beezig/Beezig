@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,24 +15,16 @@
  */
 package org.yaml.snakeyaml.extensions.compactnotation;
 
-import java.beans.IntrospectionException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.yaml.snakeyaml.constructor.Construct;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.Property;
-import org.yaml.snakeyaml.nodes.MappingNode;
-import org.yaml.snakeyaml.nodes.Node;
-import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.ScalarNode;
-import org.yaml.snakeyaml.nodes.SequenceNode;
+import org.yaml.snakeyaml.nodes.*;
+
+import java.beans.IntrospectionException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Construct a custom Java instance out of a compact object notation format.
@@ -155,6 +147,42 @@ public class CompactConstructor extends Constructor {
         return super.getConstructor(node);
     }
 
+    protected void applySequence(Object bean, List<?> value) {
+        try {
+            Property property = getPropertyUtils().getProperty(bean.getClass(),
+                    getSequencePropertyName(bean.getClass()));
+            property.set(bean, value);
+        } catch (Exception e) {
+            throw new YAMLException(e);
+        }
+    }
+
+    /**
+     * Provide the name of the property which is used when the entries form a
+     * sequence. The property must be a List.
+     * @param bean the class to provide exactly one List property
+     * @return name of the List property
+     * @throws IntrospectionException if the bean cannot be introspected
+     */
+    protected String getSequencePropertyName(Class<?> bean) throws IntrospectionException {
+        Set<Property> properties = getPropertyUtils().getProperties(bean);
+        for (Iterator<Property> iterator = properties.iterator(); iterator.hasNext(); ) {
+            Property property = iterator.next();
+            if (!List.class.isAssignableFrom(property.getType())) {
+                iterator.remove();
+            }
+        }
+        if (properties.size() == 0) {
+            throw new YAMLException("No list property found in " + bean);
+        } else if (properties.size() > 1) {
+            throw new YAMLException(
+                    "Many list properties found in "
+                            + bean
+                            + "; Please override getSequencePropertyName() to specify which property to use.");
+        }
+        return properties.iterator().next().getName();
+    }
+
     public class ConstructCompactObject extends ConstructMapping {
 
         @Override
@@ -197,41 +225,5 @@ public class CompactConstructor extends Constructor {
             }
             return constructCompactFormat(tmpNode, data);
         }
-    }
-
-    protected void applySequence(Object bean, List<?> value) {
-        try {
-            Property property = getPropertyUtils().getProperty(bean.getClass(),
-                    getSequencePropertyName(bean.getClass()));
-            property.set(bean, value);
-        } catch (Exception e) {
-            throw new YAMLException(e);
-        }
-    }
-
-    /**
-     * Provide the name of the property which is used when the entries form a
-     * sequence. The property must be a List.
-     * @param bean the class to provide exactly one List property
-     * @return name of the List property
-     * @throws IntrospectionException if the bean cannot be introspected
-     */
-    protected String getSequencePropertyName(Class<?> bean) throws IntrospectionException {
-        Set<Property> properties = getPropertyUtils().getProperties(bean);
-        for (Iterator<Property> iterator = properties.iterator(); iterator.hasNext();) {
-            Property property = iterator.next();
-            if (!List.class.isAssignableFrom(property.getType())) {
-                iterator.remove();
-            }
-        }
-        if (properties.size() == 0) {
-            throw new YAMLException("No list property found in " + bean);
-        } else if (properties.size() > 1) {
-            throw new YAMLException(
-                    "Many list properties found in "
-                            + bean
-                            + "; Please override getSequencePropertyName() to specify which property to use.");
-        }
-        return properties.iterator().next().getName();
     }
 }

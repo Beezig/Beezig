@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,18 +15,14 @@
  */
 package org.yaml.snakeyaml.nodes;
 
+import org.yaml.snakeyaml.error.YAMLException;
+import org.yaml.snakeyaml.util.UriEncoder;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.yaml.snakeyaml.error.YAMLException;
-import org.yaml.snakeyaml.util.UriEncoder;
+import java.util.*;
 
 public final class Tag implements Comparable<Tag> {
     public static final String PREFIX = "tag:yaml.org,2002:";
@@ -45,6 +41,7 @@ public final class Tag implements Comparable<Tag> {
     public static final Tag SEQ = new Tag(PREFIX + "seq");
     public static final Tag MAP = new Tag(PREFIX + "map");
     public static final Map<Tag, Set<Class<?>>> COMPATIBILITY_MAP;
+
     static {
         COMPATIBILITY_MAP = new HashMap<Tag, Set<Class<?>>>();
         Set<Class<?>> floatSet = new HashSet<Class<?>>();
@@ -139,7 +136,7 @@ public final class Tag implements Comparable<Tag> {
     /**
      * Java has more then 1 class compatible with a language-independent tag
      * (!!int, !!float, !!timestamp etc)
-     * 
+     *
      * @param clazz
      *            - Class to check compatibility
      * @return true when the Class can be represented by this
@@ -156,7 +153,7 @@ public final class Tag implements Comparable<Tag> {
 
     /**
      * Check whether this tag matches the global tag for the Class
-     * 
+     *
      * @param clazz
      *            - Class to check
      * @return true when the this tag can be used as a global tag for the Class

@@ -7,38 +7,37 @@ import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.CAI;
 
-public class MapItem extends GameModeItem<CAI>{
+public class MapItem extends GameModeItem<CAI> {
 
-		public MapItem(){
-			super(CAI.class);
-		}
-
-
-		@Override
-		protected Object getValue(boolean dummy) {
-			try{
-				if(CAI.activeMap == null) return "No Map";
-				return CAI.activeMap;
-			}catch(Exception e){
-				e.printStackTrace();
-				return "No Map";
-			}
-		}
-
-		@Override
-		public String getName() {
-			return Log.t("beezig.module.map");
-		}
+    public MapItem() {
+        super(CAI.class);
+    }
 
 
+    @Override
+    protected Object getValue(boolean dummy) {
+        try {
+            if (CAI.activeMap == null) return "No Map";
+            return CAI.activeMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "No Map";
+        }
+    }
 
-		@Override
-		public boolean shouldRender(boolean dummy){
-			try{
-				return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("CAI") && CAI.activeMap != null);
-			}catch(Exception e){
-				return false;
-			}
-		}
+    @Override
+    public String getName() {
+        return Log.t("beezig.module.map");
+    }
+
+
+    @Override
+    public boolean shouldRender(boolean dummy) {
+        try {
+            return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("CAI") && CAI.activeMap != null);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }

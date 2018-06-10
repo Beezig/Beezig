@@ -8,45 +8,43 @@ import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.Giant;
 
-public class GoldItem extends GameModeItem<Giant>{
+public class GoldItem extends GameModeItem<Giant> {
 
-	public GoldItem(){
-		super(Giant.class);
-	}
-	
-	
-	
-	
-	@Override
-	protected Object getValue(boolean dummy) {
-		try{
-			if((boolean) getProperties().getSetting("showcolor").get()) return ChatColor.GOLD +""+ Giant.gold;
-			return Giant.gold;
-			
-		}catch(Exception e){
-			e.printStackTrace();
-			return "Error";
-		}
-	}
-	
-	@Override
-	public String getName() {
-		return Log.t("beezig.module.gnt.gold");
-	}
-	
-	@Override
-	public void registerSettings() {
-		getProperties().addSetting("showcolor", true);
-	}
-	
-	@Override
-	public boolean shouldRender(boolean dummy){		
-		try{
-			
-		return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && (ActiveGame.is("gnt") || ActiveGame.is("gntm")) && Giant.gold != 0);
-		}catch(Exception e){
-			return false;
-		}
-	}
+    public GoldItem() {
+        super(Giant.class);
+    }
+
+
+    @Override
+    protected Object getValue(boolean dummy) {
+        try {
+            if ((boolean) getProperties().getSetting("showcolor").get()) return ChatColor.GOLD + "" + Giant.gold;
+            return Giant.gold;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
+    @Override
+    public String getName() {
+        return Log.t("beezig.module.gnt.gold");
+    }
+
+    @Override
+    public void registerSettings() {
+        getProperties().addSetting("showcolor", true);
+    }
+
+    @Override
+    public boolean shouldRender(boolean dummy) {
+        try {
+
+            return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && (ActiveGame.is("gnt") || ActiveGame.is("gntm")) && Giant.gold != 0);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }
