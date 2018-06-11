@@ -279,7 +279,8 @@
       "location": "CENTER_LEFT",
       "items": [
         {
-          "type": "lablb"
+          "type": "lablb",
+          "showPrefix": false
         }
       ]
     }
