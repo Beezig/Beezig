@@ -18,6 +18,7 @@ import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.StuffFetcher;
 import tk.roccodev.beezig.hiveapi.stuff.bed.StreakUtils;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVListenerv2;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 import tk.roccodev.beezig.listener.HiveListener;
@@ -64,7 +65,7 @@ public class BeezigMain {
 
     public static File mcFile;
     public static boolean isColorDebug = false;
-    public static String playerRank = "";
+    public static NetworkRank playerRank = null;
 
     public static int getCustomVersioning() {
         String v = BeezigMain.class.getAnnotation(Plugin.class).version();
@@ -73,12 +74,7 @@ public class BeezigMain {
     }
 
     public static boolean isStaffChat() {
-        if (playerRank.endsWith("Hive Moderator"))
-            return true;
-        if (playerRank.equalsIgnoreCase("Hive Developer"))
-            return true;
-        return playerRank.equalsIgnoreCase("Hive Founder and Owner");
-
+        return playerRank.getLevel() >= 70;
     }
 
     @EventHandler(priority = EventHandler.Priority.LOW)
@@ -484,7 +480,7 @@ public class BeezigMain {
         // watisdis.wat = new ApiTIMV("RoccoDev").getTitle();
 
         ApiHiveGlobal api = new ApiHiveGlobal(The5zigAPI.getAPI().getGameProfile().getName());
-        playerRank = api.getNetworkTitle();
+        playerRank = NetworkRank.fromDisplay(api.getNetworkTitle());
 
         try {
             HiveAPI.updateMedals();
