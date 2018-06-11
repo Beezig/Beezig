@@ -2,6 +2,7 @@ package tk.roccodev.beezig.hiveapi;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVMap;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
@@ -14,7 +15,6 @@ public class StuffFetcher {
 
     private static final String BASE_URL = "https://roccodev.pw/beezighosting/files/";
 
-    @SuppressWarnings("unchecked")
     public static HashMap<String, DRMap> getDeathRunMaps() {
         try {
             JSONParser parser = new JSONParser();
@@ -31,14 +31,13 @@ public class StuffFetcher {
             });
 
             return tr;
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static HashMap<String, TIMVMap> getTroubleInMinevilleMaps() {
         try {
             JSONParser parser = new JSONParser();
@@ -55,14 +54,13 @@ public class StuffFetcher {
             });
 
             return tr;
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static HashMap<String, String> getGravityMaps() {
         try {
             JSONParser parser = new JSONParser();
@@ -71,7 +69,7 @@ public class StuffFetcher {
             obj.forEach((k, v) -> tr.put((String) k, (String) v));
 
             return tr;
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
