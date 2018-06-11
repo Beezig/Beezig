@@ -2,7 +2,6 @@ package tk.roccodev.beezig.hiveapi;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVMap;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
@@ -32,7 +31,7 @@ public class StuffFetcher {
             });
 
             return tr;
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
@@ -56,7 +55,7 @@ public class StuffFetcher {
             });
 
             return tr;
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
@@ -72,7 +71,7 @@ public class StuffFetcher {
             obj.forEach((k, v) -> tr.put((String) k, (String) v));
 
             return tr;
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
