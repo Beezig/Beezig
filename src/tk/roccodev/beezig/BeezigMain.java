@@ -288,6 +288,10 @@ public class BeezigMain {
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "labdaily", tk.roccodev.beezig.modules.lab.DailyItem.class,
                 "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "labexperiments", tk.roccodev.beezig.modules.lab.ExperimentsItem.class,
+                "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "lablb", tk.roccodev.beezig.modules.lab.LeaderboardItem.class,
+                "serverhivemc");
 
 
         The5zigAPI.getAPI().registerServerInstance(this, IHive.class);

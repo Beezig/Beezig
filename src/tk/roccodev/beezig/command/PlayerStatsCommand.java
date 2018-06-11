@@ -12,6 +12,7 @@ import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVRank;
 import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
+import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
 import tk.roccodev.beezig.hiveapi.stuff.mimv.MIMVRank;
 import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
 import tk.roccodev.beezig.hiveapi.stuff.sky.SKYRank;
@@ -490,6 +491,51 @@ public class PlayerStatsCommand implements Command {
                 }
                 The5zigAPI.getAPI()
                         .messagePlayer(Log.info + "SGN Playerstats: §b" + name.size() + "P / "
+                                + ((System.currentTimeMillis() - startT) / 1000) + "s / "
+                                + APIUtils.average(points.toArray()) + " Average");
+                The5zigAPI.getAPI().messagePlayer(
+                        "    §7§m                                                                                    "
+                                + "\n");
+            }).start();
+        }
+        else if (game.equalsIgnoreCase("lab")) {
+            long startT = System.currentTimeMillis();
+            The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
+            new Thread(() -> {
+                List<Long> points = new ArrayList<>();
+                List<String> title = new ArrayList<>();
+                List<String> name = new ArrayList<>();
+
+                for (NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
+                    try {
+                        ApiLAB apiLAB = new ApiLAB(npi.getGameProfile().getName(),
+                                npi.getGameProfile().getId().toString());
+                        ApiHiveGlobal apiHIVE = apiLAB.getParentMode();
+                        points.add(apiLAB.getPoints());
+                        title.add(LABRank.getFromDisplay(apiLAB.getTitle()).getTotalDisplay());
+                        name.add(apiHIVE.getNetworkRankColor() + npi.getGameProfile().getName());
+                    } catch (Exception e) {
+                        // e.printStackTrace();
+                    }
+                }
+
+                APIUtils.concurrentSort(points, points, title, name);
+
+                The5zigAPI.getAPI().messagePlayer("\n"
+                        + "    §7§m                                                                                    ");
+                for (int i = 0; i < name.size(); i++) {
+                    try {
+                        if (points.get(i) != 0) {
+                            The5zigAPI.getAPI().messagePlayer(
+                                    Log.info + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
+                                            + points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+                        }
+                    } catch (Exception e) {
+                        // e.printStackTrace();
+                    }
+                }
+                The5zigAPI.getAPI()
+                        .messagePlayer(Log.info + "LAB Playerstats: §b" + name.size() + "P / "
                                 + ((System.currentTimeMillis() - startT) / 1000) + "s / "
                                 + APIUtils.average(points.toArray()) + " Average");
                 The5zigAPI.getAPI().messagePlayer(

@@ -10,8 +10,7 @@ import tk.roccodev.beezig.hiveapi.stuff.bp.BPRank;
 import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class LAB extends GameMode {
 
@@ -25,6 +24,9 @@ public class LAB extends GameMode {
     public static String rank;
     public static LABRank rankObject;
     public static List<String> votesToParse = new ArrayList<>();
+    public static List<String> experiments = new ArrayList<>();
+    public static String experiment = "";
+    public static Map<String, Integer> leaderboard = new LinkedHashMap<>();
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
 
@@ -83,6 +85,9 @@ public class LAB extends GameMode {
 
         gamePts = 0;
         votesToParse.clear();
+        experiments.clear();
+        leaderboard.clear();
+        experiment = "";
         ActiveGame.reset("lab");
         IHive.genericReset();
         if (The5zigAPI.getAPI().getActiveServer() != null)
@@ -103,6 +108,19 @@ public class LAB extends GameMode {
     public String getName() {
         // TODO Auto-generated method stub
         return "BlockParty";
+    }
+
+    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+        List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
+        list.sort(Map.Entry.comparingByValue());
+        List<Map.Entry<K, V>> shadowCopy = list.subList(0, list.size());
+        Collections.reverse(shadowCopy);
+        Map<K, V> result = new LinkedHashMap<>();
+        for (Map.Entry<K, V> entry : shadowCopy) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+
+        return result;
     }
 
 }

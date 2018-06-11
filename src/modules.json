@@ -267,6 +267,19 @@
         },
         {
           "type": "labdaily"
+        },
+        {
+          "type": "labexperiments"
+        }
+      ]
+    },
+    {
+      "id": "TheLab Leaderboard",
+      "name": "TheLab Leaderboard",
+      "location": "CENTER_LEFT",
+      "items": [
+        {
+          "type": "lablb"
         }
       ]
     }

@@ -4,6 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
+import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
@@ -11,6 +12,7 @@ import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.games.LAB;
 import tk.roccodev.beezig.hiveapi.APIValues;
+import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiLAB;
@@ -70,9 +72,45 @@ public class LABListener extends AbstractGameListener<LAB> {
 
     @Override
     public boolean onServerChat(LAB gameMode, String message) {
-        if(message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l2 atoms and 10 tokens§a for participating!")) {
+        if(message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l10 atoms and 20 tokens§a for being in the top 3!")) {
+            LAB.dailyPoints += 10;
+            APIValues.LABpoints += 10;
+            HiveAPI.tokens += 20;
+        }
+        else if(message.startsWith("§8▍ §3The§bLab§8 ▏ §a§lExperiment ")) {
+            LAB.experiments.add(ChatColor.stripColor(message.split(":")[1].trim()));
+        }
+        else if(message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l2 atoms and 10 tokens§a for participating!")) {
             LAB.dailyPoints += 2;
             APIValues.LABpoints += 2;
+            HiveAPI.tokens += 10;
+        }
+        else if(message.endsWith("[+ 3 Atoms]") && message.startsWith(" §e§lFirst:")) {
+            String name = ChatColor.stripColor(message.split("\\[")[0].trim().replace("§e§lFirst: ", ""));
+            if(name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
+                LAB.dailyPoints += 3;
+                APIValues.LABpoints += 3;
+            }
+            LAB.leaderboard.put(name, LAB.leaderboard.get(name) + 3);
+            LAB.leaderboard = LAB.sortByValue(LAB.leaderboard);
+        }
+        else if(message.endsWith("[+ 2 Atoms]") && message.startsWith(" §b§lSecond:")) {
+            String name = ChatColor.stripColor(message.split("\\[")[0].trim().replace("§b§lSecond: ", ""));
+            if(name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
+                LAB.dailyPoints += 2;
+                APIValues.LABpoints += 2;
+            }
+            LAB.leaderboard.put(name, LAB.leaderboard.get(name) + 2);
+            LAB.leaderboard = LAB.sortByValue(LAB.leaderboard);
+        }
+        else if(message.endsWith("[+ 1 Atom]") && message.startsWith(" §6§lThird:")) {
+            String name = ChatColor.stripColor(message.split("\\[")[0].trim().replace("§6§lThird: ", ""));
+            if(name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
+                LAB.dailyPoints += 1;
+                APIValues.LABpoints += 1;
+            }
+            LAB.leaderboard.put(name, LAB.leaderboard.get(name) + 1);
+            LAB.leaderboard = LAB.sortByValue(LAB.leaderboard);
         }
         else if(message.contains(The5zigAPI.getAPI().getGameProfile().getName() + "§7 [+ ")) {
             int atoms = Integer.parseInt(message.split("\\[\\+")[1].replace(" Atom", "").replace("s", "").trim());
@@ -264,8 +302,14 @@ public class LABListener extends AbstractGameListener<LAB> {
 
     @Override
     public void onTitle(LAB gameMode, String title, String subTitle) {
+        if(subTitle != null && subTitle.equals("§r§3Experiment §r§b§l1§r§3 of §r§a§l3§r")) {
+            for(NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
+                LAB.leaderboard.put(npi.getGameProfile().getName(), 0);
+            }
+        }
         if(subTitle != null && subTitle.startsWith("§r§3Experiment §r§b§l") && title != null) {
-            DiscordUtils.updatePresence("Experimenting in TheLab", "Playing " + ChatColor.stripColor(title.trim()), "game_lab");
+            LAB.experiment = ChatColor.stripColor(title.trim());
+            DiscordUtils.updatePresence("Experimenting in TheLab", "Playing " + LAB.experiment, "game_lab");
         }
     }
 }

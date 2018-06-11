@@ -10,6 +10,7 @@ import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVRank;
 import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
+import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
 import tk.roccodev.beezig.hiveapi.stuff.mimv.MIMVRank;
 import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
 import tk.roccodev.beezig.hiveapi.stuff.sky.SKYRank;
@@ -144,6 +145,17 @@ public class RanksCommand implements Command {
 
                 for (SGNRank sgnRank : SGNRank.values()) {
                     The5zigAPI.getAPI().messagePlayer(Log.info + sgnRank.getTotalDisplay() + " §7- " + sgnRank.getTotalDisplay().replaceAll(sgnRank.getDisplay(), "") + sgnRank.getRequiredPoints());
+                }
+
+                The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
+            }).start();
+        }
+        if (game.equalsIgnoreCase("lab")) {
+            new Thread(() -> {
+                The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
+
+                for (LABRank sgnRank : LABRank.values()) {
+                    The5zigAPI.getAPI().messagePlayer(Log.info + sgnRank.getTotalDisplay() + " §7- " + sgnRank.getTotalDisplay().replaceAll(sgnRank.getDisplay(), "") + sgnRank.getStart());
                 }
 
                 The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");

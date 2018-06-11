@@ -14,6 +14,7 @@ import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVRank;
 import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
+import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
 import tk.roccodev.beezig.hiveapi.stuff.mimv.MIMVRank;
 import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
 import tk.roccodev.beezig.hiveapi.stuff.sky.SKYRank;
@@ -531,7 +532,54 @@ public class LeaderboardCommand implements Command {
                         "    §7§m                                                                                    "
                                 + "\n");
             }).start();
-        } else {
+        }
+        else if (game.equalsIgnoreCase("lab")) {
+            long startT = System.currentTimeMillis();
+            The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
+            new Thread(() -> {
+                JSONArray data = HiveAPI.getLeaderboardData(game, indexStart, indexEnd);
+
+                List<Long> points = new ArrayList<>();
+                List<String> title = new ArrayList<>();
+                List<String> name = new ArrayList<>();
+
+                for (int i = 0; i < (humanEnd - humanStart + 1L); i++) {
+                    try {
+                        ApiLAB apiLAB = new ApiLAB(((JSONObject) data.get(i)).get("username").toString(),
+                                ((JSONObject) data.get(i)).get("UUID").toString());
+
+                        ApiHiveGlobal apiHIVE = apiLAB.getParentMode();
+
+                        points.add(apiLAB.getPoints());
+                        title.add(LABRank.getFromDisplay(apiLAB.getTitle()).getTotalDisplay());
+                        name.add(apiHIVE.getNetworkRankColor() + ((JSONObject) data.get(i)).get("username").toString());
+                    } catch (Exception e) {
+                        // e.printStackTrace();
+                    }
+                }
+
+                The5zigAPI.getAPI().messagePlayer("\n"
+                        + "    §7§m                                                                                    ");
+                for (int i = 0; i < name.size(); i++) {
+                    try {
+                        if (points.get(i) != 0) {
+                            The5zigAPI.getAPI()
+                                    .messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
+                                            + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
+                                            + points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+                        }
+                    } catch (Exception e) {
+                        // e.printStackTrace();
+                    }
+                }
+                The5zigAPI.getAPI().messagePlayer(Log.info + "LAB Leaderboards: §b" + name.size() + "P / "
+                        + ((System.currentTimeMillis() - startT) / 1000) + "s / " + "#" + humanStart + "-" + humanEnd);
+                The5zigAPI.getAPI().messagePlayer(
+                        "    §7§m                                                                                    "
+                                + "\n");
+            }).start();
+        }
+        else {
             The5zigAPI.getAPI().messagePlayer(Log.info + "Specified mode not found.");
         }
         return true;
