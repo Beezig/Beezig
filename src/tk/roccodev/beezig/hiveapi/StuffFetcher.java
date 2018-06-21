@@ -15,7 +15,6 @@ public class StuffFetcher {
 
     private static final String BASE_URL = "https://roccodev.pw/beezighosting/files/";
 
-    @SuppressWarnings("unchecked")
     public static HashMap<String, DRMap> getDeathRunMaps() {
         try {
             JSONParser parser = new JSONParser();
@@ -39,7 +38,6 @@ public class StuffFetcher {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static HashMap<String, TIMVMap> getTroubleInMinevilleMaps() {
         try {
             JSONParser parser = new JSONParser();
@@ -63,7 +61,6 @@ public class StuffFetcher {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static HashMap<String, String> getGravityMaps() {
         try {
             JSONParser parser = new JSONParser();

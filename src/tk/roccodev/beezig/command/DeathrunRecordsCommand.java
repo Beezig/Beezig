@@ -13,7 +13,7 @@ public class DeathrunRecordsCommand implements Command {
 
     @Override
     public String[] getAliases() {
-        return new String[] {"/drbest"};
+        return new String[] {"/drbest", "/drrec"};
     }
 
     @Override
@@ -27,8 +27,10 @@ public class DeathrunRecordsCommand implements Command {
                 String map = DR.mapsPool.get(mapInput.replace("_", " ").toLowerCase()).getHiveAPIName();
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Kills Record:§b " + api.getKillRecords().get(map));
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Deaths Record:§b " + api.getDeathRecords().get(map));
-            } catch(ClassCastException e) {
-                The5zigAPI.getAPI().messagePlayer(Log.error + "The player has no records!");
+
+            } catch(Exception e) {
+                The5zigAPI.getAPI().messagePlayer(Log.error + "An Error occured.");
+                The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /drbest player map");
             }
         }).start();
 

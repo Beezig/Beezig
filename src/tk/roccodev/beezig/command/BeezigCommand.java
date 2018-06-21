@@ -35,15 +35,15 @@ public class BeezigCommand implements Command {
                             + "\n");
 
         } else if (args[0].equalsIgnoreCase("commands")) {
-            The5zigAPI.getAPI().messagePlayer(
+            The5zigAPI.getAPI().messagePlayer("\n" +
                     "    §7§m                                                                                    "
-                            + "\n");
+                            );
             The5zigAPI.getAPI().messagePlayer(Log.info + "Available commands:");
             for (Command cmd : CommandManager.commandExecutors) {
                 The5zigAPI.getAPI().messagePlayer(Log.info + cmd.getAliases()[0]);
             }
             The5zigAPI.getAPI().messagePlayer(
-                    "\n    §7§m                                                                                    "
+                    "    §7§m                                                                                    "
                             + "\n");
         } else if (args[0].equalsIgnoreCase("reconnect")) {
             Connector.client.reconnect();
