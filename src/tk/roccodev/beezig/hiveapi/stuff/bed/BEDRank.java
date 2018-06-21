@@ -152,7 +152,7 @@ public enum BEDRank {
             }
             String color = withColor ? next.getName().replaceAll(ChatColor.stripColor(next.getName()), "") : "";
 
-            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", color + (next.getStart() - points) + "", BED.NUMBERS[5] + " " + getName());
+            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", color + (next.getStart() - points) + "", BED.NUMBERS[5] + " " + next.getName());
 
 
         } else if (level == 2) {
