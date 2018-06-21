@@ -40,7 +40,7 @@ public class IHive extends ServerInstance {
 
     @Override
     public boolean handleServer(String host, int port) {
-        if (host.toUpperCase().contains("HIVEMC.") || host.toUpperCase().endsWith("HIVE.SEXY")) {
+        if (host.toLowerCase().contains("hivemc.") || host.toLowerCase().endsWith("hive.sexy")) {
             System.out.println("Joined Hive.");
             try {
                 DiscordUtils.init();
