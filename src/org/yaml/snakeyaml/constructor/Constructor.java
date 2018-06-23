@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,41 +15,22 @@
  */
 package org.yaml.snakeyaml.constructor;
 
-import java.beans.IntrospectionException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.UUID;
-
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.Property;
-import org.yaml.snakeyaml.nodes.MappingNode;
-import org.yaml.snakeyaml.nodes.Node;
-import org.yaml.snakeyaml.nodes.NodeId;
-import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.ScalarNode;
-import org.yaml.snakeyaml.nodes.SequenceNode;
-import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.nodes.*;
+
+import java.beans.IntrospectionException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.*;
 
 /**
  * Construct a custom Java instance.
  */
 public class Constructor extends SafeConstructor {
-    private final Map<Tag, Class<? extends Object>> typeTags;
     protected final Map<Class<? extends Object>, TypeDescription> typeDefinitions;
+    private final Map<Tag, Class<? extends Object>> typeTags;
 
     public Constructor() {
         this(Object.class);
@@ -57,22 +38,12 @@ public class Constructor extends SafeConstructor {
 
     /**
      * Create Constructor for the specified class as the root.
-     * 
+     *
      * @param theRoot
      *            - the class (usually JavaBean) to be constructed
      */
     public Constructor(Class<? extends Object> theRoot) {
         this(new TypeDescription(checkRoot(theRoot)));
-    }
-
-    /**
-     * Ugly Java way to check the argument in the constructor
-     */
-    private static Class<? extends Object> checkRoot(Class<? extends Object> theRoot) {
-        if (theRoot == null) {
-            throw new NullPointerException("Root class must be provided.");
-        } else
-            return theRoot;
     }
 
     public Constructor(TypeDescription theRoot) {
@@ -94,7 +65,7 @@ public class Constructor extends SafeConstructor {
     /**
      * Create Constructor for a class which does not have to be in the classpath
      * or for a definition from a Spring ApplicationContext.
-     * 
+     *
      * @param theRoot
      *            fully qualified class name of the root class (usually
      *            JavaBean)
@@ -102,6 +73,16 @@ public class Constructor extends SafeConstructor {
      */
     public Constructor(String theRoot) throws ClassNotFoundException {
         this(Class.forName(check(theRoot)));
+    }
+
+    /**
+     * Ugly Java way to check the argument in the constructor
+     */
+    private static Class<? extends Object> checkRoot(Class<? extends Object> theRoot) {
+        if (theRoot == null) {
+            throw new NullPointerException("Root class must be provided.");
+        } else
+            return theRoot;
     }
 
     private static final String check(String s) {
@@ -118,7 +99,7 @@ public class Constructor extends SafeConstructor {
      * Make YAML aware how to parse a custom Class. If there is no root Class
      * assigned in constructor then the 'root' property of this definition is
      * respected.
-     * 
+     *
      * @param definition
      *            to be added to the Constructor
      * @return the previous value associated with <tt>definition</tt>, or
@@ -133,6 +114,31 @@ public class Constructor extends SafeConstructor {
         return typeDefinitions.put(definition.getType(), definition);
     }
 
+    protected Class<?> getClassForNode(Node node) {
+        Class<? extends Object> classForTag = typeTags.get(node.getTag());
+        if (classForTag == null) {
+            String name = node.getTag().getClassName();
+            Class<?> cl;
+            try {
+                cl = getClassForName(name);
+            } catch (ClassNotFoundException e) {
+                throw new YAMLException("Class not found: " + name);
+            }
+            typeTags.put(node.getTag(), cl);
+            return cl;
+        } else {
+            return classForTag;
+        }
+    }
+
+    protected Class<?> getClassForName(String name) throws ClassNotFoundException {
+        try {
+            return Class.forName(name, true, Thread.currentThread().getContextClassLoader());
+        } catch (ClassNotFoundException e) {
+            return Class.forName(name);
+        }
+    }
+
     /**
      * Construct mapping instance (Map, JavaBean) when the runtime class is
      * known.
@@ -142,7 +148,7 @@ public class Constructor extends SafeConstructor {
         /**
          * Construct JavaBean. If type safe collections are used please look at
          * <code>TypeDescription</code>.
-         * 
+         *
          * @param node
          *            node where the keys are property names (they can only be
          *            <code>String</code>s) and values are objects to be created
@@ -244,27 +250,27 @@ public class Constructor extends SafeConstructor {
                     boolean typeDetected = false;
                     if (memberDescription != null) {
                         switch (valueNode.getNodeId()) {
-                        case sequence:
-                            SequenceNode snode = (SequenceNode) valueNode;
-                            Class<? extends Object> memberType = memberDescription
-                                    .getListPropertyType(key);
-                            if (memberType != null) {
-                                snode.setListType(memberType);
-                                typeDetected = true;
-                            } else if (property.getType().isArray()) {
-                                snode.setListType(property.getType().getComponentType());
-                                typeDetected = true;
-                            }
-                            break;
-                        case mapping:
-                            MappingNode mnode = (MappingNode) valueNode;
-                            Class<? extends Object> keyType = memberDescription.getMapKeyType(key);
-                            if (keyType != null) {
-                                mnode.setTypes(keyType, memberDescription.getMapValueType(key));
-                                typeDetected = true;
-                            }
-                            break;
-                        default: // scalar
+                            case sequence:
+                                SequenceNode snode = (SequenceNode) valueNode;
+                                Class<? extends Object> memberType = memberDescription
+                                        .getListPropertyType(key);
+                                if (memberType != null) {
+                                    snode.setListType(memberType);
+                                    typeDetected = true;
+                                } else if (property.getType().isArray()) {
+                                    snode.setListType(property.getType().getComponentType());
+                                    typeDetected = true;
+                                }
+                                break;
+                            case mapping:
+                                MappingNode mnode = (MappingNode) valueNode;
+                                Class<? extends Object> keyType = memberDescription.getMapKeyType(key);
+                                if (keyType != null) {
+                                    mnode.setTypes(keyType, memberDescription.getMapValueType(key));
+                                    typeDetected = true;
+                                }
+                                break;
+                            default: // scalar
                         }
                     }
                     if (!typeDetected && valueNode.getNodeId() != NodeId.scalar) {
@@ -305,7 +311,7 @@ public class Constructor extends SafeConstructor {
                     }
                     // Correct when the property a String but the value is binary
                     if (property.getType() == String.class && Tag.BINARY.equals(valueNode.getTag()) && value instanceof byte[]) {
-                        value = new String((byte[])value);
+                        value = new String((byte[]) value);
                     }
 
                     property.set(object, value);
@@ -428,7 +434,7 @@ public class Constructor extends SafeConstructor {
 
         @SuppressWarnings("unchecked")
         private Object constructStandardJavaInstance(@SuppressWarnings("rawtypes")
-        Class type, ScalarNode node) {
+                                                             Class type, ScalarNode node) {
             Object result;
             if (type == String.class) {
                 Construct stringConstructor = yamlConstructors.get(Tag.STR);
@@ -506,7 +512,7 @@ public class Constructor extends SafeConstructor {
                 //since we do not know the exact type we create Float
                 ConstructYamlFloat contr = new ConstructYamlFloat();
                 result = contr.construct(node);
-            }  else if (UUID.class == type) {
+            } else if (UUID.class == type) {
                 result = UUID.fromString(node.getValue());
             } else {
                 if (yamlConstructors.containsKey(node.getTag())) {
@@ -653,31 +659,6 @@ public class Constructor extends SafeConstructor {
             } else {
                 throw new YAMLException("Immutable objects cannot be recursive.");
             }
-        }
-    }
-
-    protected Class<?> getClassForNode(Node node) {
-        Class<? extends Object> classForTag = typeTags.get(node.getTag());
-        if (classForTag == null) {
-            String name = node.getTag().getClassName();
-            Class<?> cl;
-            try {
-                cl = getClassForName(name);
-            } catch (ClassNotFoundException e) {
-                throw new YAMLException("Class not found: " + name);
-            }
-            typeTags.put(node.getTag(), cl);
-            return cl;
-        } else {
-            return classForTag;
-        }
-    }
-
-    protected Class<?> getClassForName(String name) throws ClassNotFoundException {
-        try {
-            return Class.forName(name, true, Thread.currentThread().getContextClassLoader());
-        } catch (ClassNotFoundException e) {
-            return Class.forName(name);
         }
     }
 }

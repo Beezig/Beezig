@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,43 +15,17 @@
  */
 package org.yaml.snakeyaml.scanner;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.reader.StreamReader;
-import org.yaml.snakeyaml.tokens.AliasToken;
-import org.yaml.snakeyaml.tokens.AnchorToken;
-import org.yaml.snakeyaml.tokens.BlockEndToken;
-import org.yaml.snakeyaml.tokens.BlockEntryToken;
-import org.yaml.snakeyaml.tokens.BlockMappingStartToken;
-import org.yaml.snakeyaml.tokens.BlockSequenceStartToken;
-import org.yaml.snakeyaml.tokens.DirectiveToken;
-import org.yaml.snakeyaml.tokens.DocumentEndToken;
-import org.yaml.snakeyaml.tokens.DocumentStartToken;
-import org.yaml.snakeyaml.tokens.FlowEntryToken;
-import org.yaml.snakeyaml.tokens.FlowMappingEndToken;
-import org.yaml.snakeyaml.tokens.FlowMappingStartToken;
-import org.yaml.snakeyaml.tokens.FlowSequenceEndToken;
-import org.yaml.snakeyaml.tokens.FlowSequenceStartToken;
-import org.yaml.snakeyaml.tokens.KeyToken;
-import org.yaml.snakeyaml.tokens.ScalarToken;
-import org.yaml.snakeyaml.tokens.StreamEndToken;
-import org.yaml.snakeyaml.tokens.StreamStartToken;
-import org.yaml.snakeyaml.tokens.TagToken;
-import org.yaml.snakeyaml.tokens.TagTuple;
-import org.yaml.snakeyaml.tokens.Token;
-import org.yaml.snakeyaml.tokens.ValueToken;
+import org.yaml.snakeyaml.tokens.*;
 import org.yaml.snakeyaml.util.ArrayStack;
 import org.yaml.snakeyaml.util.UriEncoder;
+
+import java.nio.ByteBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * <pre>
@@ -81,37 +55,35 @@ import org.yaml.snakeyaml.util.UriEncoder;
  */
 public final class ScannerImpl implements Scanner {
     /**
-     * A regular expression matching characters which are not in the hexadecimal
-     * set (0-9, A-F, a-f).
-     */
-    private final static Pattern NOT_HEXA = Pattern.compile("[^0-9A-Fa-f]");
-
-    /**
      * A mapping from an escaped character in the input stream to the character
      * that they should be replaced with.
-     * 
+     *
      * YAML defines several common and a few uncommon escape sequences.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/current.html#id2517668">4.1.6.
      *      Escape Sequences</a>
      */
     public final static Map<Character, String> ESCAPE_REPLACEMENTS = new HashMap<Character, String>();
-
     /**
      * A mapping from a character to a number of bytes to read-ahead for that
      * escape sequence. These escape sequences are used to handle unicode
      * escaping in the following formats, where H is a hexadecimal character:
-     * 
+     *
      * <pre>
      * &#92;xHH         : escaped 8-bit Unicode character
      * &#92;uHHHH       : escaped 16-bit Unicode character
      * &#92;UHHHHHHHH   : escaped 32-bit Unicode character
      * </pre>
-     * 
+     *
      * @see <a href="http://yaml.org/spec/1.1/current.html#id872840">5.6. Escape
      *      Sequences</a>
      */
     public final static Map<Character, Integer> ESCAPE_CODES = new HashMap<Character, Integer>();
+    /**
+     * A regular expression matching characters which are not in the hexadecimal
+     * set (0-9, A-F, a-f).
+     */
+    private final static Pattern NOT_HEXA = Pattern.compile("[^0-9A-Fa-f]");
 
     static {
         // ASCII null
@@ -154,6 +126,7 @@ public final class ScannerImpl implements Scanner {
         // 32-bit Unicode (Supplementary characters are supported)
         ESCAPE_CODES.put(Character.valueOf('U'), 8);
     }
+
     private final StreamReader reader;
     // Had we reached the end of the stream?
     private boolean done = false;
@@ -187,7 +160,7 @@ public final class ScannerImpl implements Scanner {
      * We emit the KEY token before all keys, so when we find a potential
      * simple key, we try to locate the corresponding ':' indicator.
      * Simple keys should be limited to a single line and 1024 characters.
-     * 
+     *
      * Can a simple key start at the current position? A simple key may
      * start:
      * - at the beginning of the line, not counting indentation spaces
@@ -263,6 +236,7 @@ public final class ScannerImpl implements Scanner {
     }
 
     // Private methods.
+
     /**
      * Returns true if more tokens should be scanned.
      */
@@ -296,105 +270,105 @@ public final class ScannerImpl implements Scanner {
         // will look like.
         int c = reader.peek();
         switch (c) {
-        case '\0':
-            // Is it the end of stream?
-            fetchStreamEnd();
-            return;
-        case '%':
-            // Is it a directive?
-            if (checkDirective()) {
-                fetchDirective();
+            case '\0':
+                // Is it the end of stream?
+                fetchStreamEnd();
                 return;
-            }
-            break;
-        case '-':
-            // Is it the document start?
-            if (checkDocumentStart()) {
-                fetchDocumentStart();
+            case '%':
+                // Is it a directive?
+                if (checkDirective()) {
+                    fetchDirective();
+                    return;
+                }
+                break;
+            case '-':
+                // Is it the document start?
+                if (checkDocumentStart()) {
+                    fetchDocumentStart();
+                    return;
+                    // Is it the block entry indicator?
+                } else if (checkBlockEntry()) {
+                    fetchBlockEntry();
+                    return;
+                }
+                break;
+            case '.':
+                // Is it the document end?
+                if (checkDocumentEnd()) {
+                    fetchDocumentEnd();
+                    return;
+                }
+                break;
+            // TODO support for BOM within a stream. (not implemented in PyYAML)
+            case '[':
+                // Is it the flow sequence start indicator?
+                fetchFlowSequenceStart();
                 return;
-                // Is it the block entry indicator?
-            } else if (checkBlockEntry()) {
-                fetchBlockEntry();
+            case '{':
+                // Is it the flow mapping start indicator?
+                fetchFlowMappingStart();
                 return;
-            }
-            break;
-        case '.':
-            // Is it the document end?
-            if (checkDocumentEnd()) {
-                fetchDocumentEnd();
+            case ']':
+                // Is it the flow sequence end indicator?
+                fetchFlowSequenceEnd();
                 return;
-            }
-            break;
-        // TODO support for BOM within a stream. (not implemented in PyYAML)
-        case '[':
-            // Is it the flow sequence start indicator?
-            fetchFlowSequenceStart();
-            return;
-        case '{':
-            // Is it the flow mapping start indicator?
-            fetchFlowMappingStart();
-            return;
-        case ']':
-            // Is it the flow sequence end indicator?
-            fetchFlowSequenceEnd();
-            return;
-        case '}':
-            // Is it the flow mapping end indicator?
-            fetchFlowMappingEnd();
-            return;
-        case ',':
-            // Is it the flow entry indicator?
-            fetchFlowEntry();
-            return;
+            case '}':
+                // Is it the flow mapping end indicator?
+                fetchFlowMappingEnd();
+                return;
+            case ',':
+                // Is it the flow entry indicator?
+                fetchFlowEntry();
+                return;
             // see block entry indicator above
-        case '?':
-            // Is it the key indicator?
-            if (checkKey()) {
-                fetchKey();
+            case '?':
+                // Is it the key indicator?
+                if (checkKey()) {
+                    fetchKey();
+                    return;
+                }
+                break;
+            case ':':
+                // Is it the value indicator?
+                if (checkValue()) {
+                    fetchValue();
+                    return;
+                }
+                break;
+            case '*':
+                // Is it an alias?
+                fetchAlias();
                 return;
-            }
-            break;
-        case ':':
-            // Is it the value indicator?
-            if (checkValue()) {
-                fetchValue();
+            case '&':
+                // Is it an anchor?
+                fetchAnchor();
                 return;
-            }
-            break;
-        case '*':
-            // Is it an alias?
-            fetchAlias();
-            return;
-        case '&':
-            // Is it an anchor?
-            fetchAnchor();
-            return;
-        case '!':
-            // Is it a tag?
-            fetchTag();
-            return;
-        case '|':
-            // Is it a literal scalar?
-            if (this.flowLevel == 0) {
-                fetchLiteral();
+            case '!':
+                // Is it a tag?
+                fetchTag();
                 return;
-            }
-            break;
-        case '>':
-            // Is it a folded scalar?
-            if (this.flowLevel == 0) {
-                fetchFolded();
+            case '|':
+                // Is it a literal scalar?
+                if (this.flowLevel == 0) {
+                    fetchLiteral();
+                    return;
+                }
+                break;
+            case '>':
+                // Is it a folded scalar?
+                if (this.flowLevel == 0) {
+                    fetchFolded();
+                    return;
+                }
+                break;
+            case '\'':
+                // Is it a single quoted scalar?
+                fetchSingle();
                 return;
-            }
-            break;
-        case '\'':
-            // Is it a single quoted scalar?
-            fetchSingle();
-            return;
-        case '"':
-            // Is it a double quoted scalar?
-            fetchDouble();
-            return;
+            case '"':
+                // Is it a double quoted scalar?
+                fetchDouble();
+                return;
         }
         // It must be a plain scalar then.
         if (checkPlain()) {
@@ -451,7 +425,7 @@ public final class ScannerImpl implements Scanner {
     private void stalePossibleSimpleKeys() {
         if (!this.possibleSimpleKeys.isEmpty()) {
             for (Iterator<SimpleKey> iterator = this.possibleSimpleKeys.values().iterator(); iterator
-                    .hasNext();) {
+                    .hasNext(); ) {
                 SimpleKey key = iterator.next();
                 if ((key.getLine() != reader.getLine())
                         || (reader.getIndex() - key.getIndex() > 1024)) {
@@ -522,7 +496,7 @@ public final class ScannerImpl implements Scanner {
      * * Handle implicitly ending multiple levels of block nodes by decreased
      * indentation. This function becomes important on lines 4 and 7 of this
      * example:
-     * 
+     *
      * <pre>
      * 1) book one:
      * 2)   part one:
@@ -532,7 +506,7 @@ public final class ScannerImpl implements Scanner {
      * 6)     chapter two
      * 7) book two:
      * </pre>
-     * 
+     *
      * In flow context, tokens should respect indentation. Actually the
      * condition should be `self.indent &gt;= column` according to the spec. But
      * this condition will prohibit intuitively correct constructions such as
@@ -604,7 +578,7 @@ public final class ScannerImpl implements Scanner {
      * Fetch a YAML directive. Directives are presentation details that are
      * interpreted as instructions to the processor. YAML defines two kinds of
      * directives, YAML and TAG; all other types are reserved for future use.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id864824"></a>
      */
     private void fetchDirective() {
@@ -671,13 +645,13 @@ public final class ScannerImpl implements Scanner {
     /**
      * Fetch a flow-style collection start, which is either a sequence or a
      * mapping. The type is determined by the given boolean.
-     * 
+     *
      * A flow-style collection is in a format similar to JSON. Sequences are
      * started by '[' and ended by ']'; mappings are started by '{' and ended by
      * '}'.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id863975"></a>
-     * 
+     *
      * @param isMappingStart
      */
     private void fetchFlowCollectionStart(boolean isMappingStart) {
@@ -714,11 +688,11 @@ public final class ScannerImpl implements Scanner {
     /**
      * Fetch a flow-style collection end, which is either a sequence or a
      * mapping. The type is determined by the given boolean.
-     * 
+     *
      * A flow-style collection is in a format similar to JSON. Sequences are
      * started by '[' and ended by ']'; mappings are started by '{' and ended by
      * '}'.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id863975"></a>
      */
     private void fetchFlowCollectionEnd(boolean isMappingEnd) {
@@ -747,7 +721,7 @@ public final class ScannerImpl implements Scanner {
     /**
      * Fetch an entry in the flow style. Flow-style entries occur either
      * immediately after the start of a collection, or else after a comma.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id863975"></a>
      */
     private void fetchFlowEntry() {
@@ -767,7 +741,7 @@ public final class ScannerImpl implements Scanner {
 
     /**
      * Fetch an entry in the block style.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id863975"></a>
      */
     private void fetchBlockEntry() {
@@ -804,7 +778,7 @@ public final class ScannerImpl implements Scanner {
 
     /**
      * Fetch a key in a block-style mapping.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id863975"></a>
      */
     private void fetchKey() {
@@ -837,7 +811,7 @@ public final class ScannerImpl implements Scanner {
 
     /**
      * Fetch a value in a block-style mapping.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id863975"></a>
      */
     private void fetchValue() {
@@ -900,11 +874,11 @@ public final class ScannerImpl implements Scanner {
     /**
      * Fetch an alias, which is a reference to an anchor. Aliases take the
      * format:
-     * 
+     *
      * <pre>
      * *(anchor name)
      * </pre>
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id863390"></a>
      */
     private void fetchAlias() {
@@ -921,11 +895,11 @@ public final class ScannerImpl implements Scanner {
 
     /**
      * Fetch an anchor. Anchors take the form:
-     * 
+     *
      * <pre>
      * &(anchor name)
      * </pre>
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id863390"></a>
      */
     private void fetchAnchor() {
@@ -942,7 +916,7 @@ public final class ScannerImpl implements Scanner {
 
     /**
      * Fetch a tag. Tags take a complex form.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id861700"></a>
      */
     private void fetchTag() {
@@ -961,7 +935,7 @@ public final class ScannerImpl implements Scanner {
      * Fetch a literal scalar, denoted with a vertical-bar. This is the type
      * best used for source code and other content, such as binary data, which
      * must be included verbatim.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id863975"></a>
      */
     private void fetchLiteral() {
@@ -971,7 +945,7 @@ public final class ScannerImpl implements Scanner {
     /**
      * Fetch a folded scalar, denoted with a greater-than sign. This is the type
      * best used for long content, such as the text of a chapter or description.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id863975"></a>
      */
     private void fetchFolded() {
@@ -980,9 +954,9 @@ public final class ScannerImpl implements Scanner {
 
     /**
      * Fetch a block scalar (literal or folded).
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id863975"></a>
-     * 
+     *
      * @param style
      */
     private void fetchBlockScalar(char style) {
@@ -1013,9 +987,9 @@ public final class ScannerImpl implements Scanner {
 
     /**
      * Fetch a flow scalar (single- or double-quoted).
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id863975"></a>
-     * 
+     *
      * @param style
      */
     private void fetchFlowScalar(char style) {
@@ -1048,10 +1022,11 @@ public final class ScannerImpl implements Scanner {
     }
 
     // Checkers.
+
     /**
      * Returns true if the next thing on the reader is a directive, given that
      * the leading '%' has already been checked.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id864824"></a>
      */
     private boolean checkDirective() {
@@ -1132,11 +1107,11 @@ public final class ScannerImpl implements Scanner {
          *   '-', '?', ':', ',', '[', ']', '{', '}',
          *   '#', '&amp;', '*', '!', '|', '&gt;', '\'', '\&quot;',
          *   '%', '@', '`'.
-         * 
+         *
          * It may also start with
          *   '-', '?', ':'
          * if it is followed by a non-space character.
-         * 
+         *
          * Note that we limit the last rule to the block context (except the
          * '-' character) because we want the flow context to be space
          * independent.
@@ -1147,7 +1122,7 @@ public final class ScannerImpl implements Scanner {
         // whitespace, then this is the start of a plain scalar.
         return Constant.NULL_BL_T_LINEBR.hasNo(c, "-?:,[]{}#&*!|>\'\"%@`")
                 || (Constant.NULL_BL_T_LINEBR.hasNo(reader.peek(1)) && (c == '-' || (this.flowLevel == 0 && "?:"
-                        .indexOf(c) != -1)));
+                .indexOf(c) != -1)));
     }
 
     // Scanners.
@@ -1217,7 +1192,7 @@ public final class ScannerImpl implements Scanner {
         }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private Token scanDirective() {
         // See the specification for details.
         Mark startMark = reader.getMark();
@@ -1248,7 +1223,7 @@ public final class ScannerImpl implements Scanner {
     /**
      * Scan a directive name. Directive names are a series of non-space
      * characters.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id895217"></a>
      */
     private String scanDirectiveName(Mark startMark) {
@@ -1311,7 +1286,7 @@ public final class ScannerImpl implements Scanner {
     /**
      * Read a %YAML directive number: this is either the major or the minor
      * part. Stop reading at a non-digit character (usually either '.' or '\n').
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id895631"></a>
      * @see <a href="http://www.yaml.org/spec/1.1/#ns-dec-digit"></a>
      */
@@ -1334,13 +1309,13 @@ public final class ScannerImpl implements Scanner {
     /**
      * <p>
      * Read a %TAG directive value:
-     * 
+     *
      * <pre>
      * s-ignored-space+ c-tag-handle s-ignored-space+ ns-tag-prefix s-l-comments
      * </pre>
-     * 
+     *
      * </p>
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id896044"></a>
      */
     private List<String> scanTagDirectiveValue(Mark startMark) {
@@ -1361,7 +1336,7 @@ public final class ScannerImpl implements Scanner {
 
     /**
      * Scan a %TAG directive's handle. This is YAML's c-tag-handle.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id896876"></a>
      * @param startMark
      * @return
@@ -1380,7 +1355,7 @@ public final class ScannerImpl implements Scanner {
 
     /**
      * Scan a %TAG directive's prefix. This is YAML's ns-tag-prefix.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#ns-tag-prefix"></a>
      */
     private String scanTagDirectivePrefix(Mark startMark) {
@@ -1444,7 +1419,7 @@ public final class ScannerImpl implements Scanner {
             final String s = String.valueOf(Character.toChars(c));
             throw new ScannerException("while scanning an " + name, startMark,
                     "expected alphabetic or numeric character, but found " + s + "("
-                    + c + ")", reader.getMark());
+                            + c + ")", reader.getMark());
         }
         String value = reader.prefixForward(length);
         c = reader.peek();
@@ -1469,13 +1444,13 @@ public final class ScannerImpl implements Scanner {
      * Scan a Tag property. A Tag property may be specified in one of three
      * ways: c-verbatim-tag, c-ns-shorthand-tag, or c-ns-non-specific-tag
      * </p>
-     * 
+     *
      * <p>
      * c-verbatim-tag takes the form !&lt;ns-uri-char+&gt; and must be delivered
      * verbatim (as-is) to the application. In particular, verbatim tags are not
      * subject to tag resolution.
      * </p>
-     * 
+     *
      * <p>
      * c-ns-shorthand-tag is a valid tag handle followed by a non-empty suffix.
      * If the tag handle is a c-primary-tag-handle ('!') then the suffix must
@@ -1483,17 +1458,17 @@ public final class ScannerImpl implements Scanner {
      * string will look like a named tag handle: !foo!bar would be interpreted
      * as (handle="!foo!", suffix="bar").
      * </p>
-     * 
+     *
      * <p>
      * c-ns-non-specific-tag is always a lone '!'; this is only useful for plain
      * scalars, where its specification means that the scalar MUST be resolved
      * to have type tag:yaml.org,2002:str.
      * </p>
-     * 
+     *
      * TODO SnakeYaml incorrectly ignores c-ns-non-specific-tag right now.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id900262"></a>
-     * 
+     *
      *      TODO Note that this method does not enforce rules about local versus
      *      global tags!
      */
@@ -1653,14 +1628,14 @@ public final class ScannerImpl implements Scanner {
     /**
      * Scan a block scalar indicator. The block scalar indicator includes two
      * optional components, which may appear in either order.
-     * 
+     *
      * A block indentation indicator is a non-zero digit describing the
      * indentation level of the block scalar to follow. This indentation is an
      * additional number of spaces relative to the current indentation level.
-     * 
+     *
      * A block chomping indicator is a + or -, selecting the chomping mode away
      * from the default (clip) to either -(strip) or +(keep).
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id868988"></a>
      * @see <a href="http://www.yaml.org/spec/1.1/#id927035"></a>
      * @see <a href="http://www.yaml.org/spec/1.1/#id927557"></a>
@@ -1712,7 +1687,7 @@ public final class ScannerImpl implements Scanner {
             final String s = String.valueOf(Character.toChars(c));
             throw new ScannerException("while scanning a block scalar", startMark,
                     "expected chomping or indentation indicators, but found " + s + "("
-                    + c + ")", reader.getMark());
+                            + c + ")", reader.getMark());
         }
         return new Chomping(chomping, increment);
     }
@@ -1743,7 +1718,7 @@ public final class ScannerImpl implements Scanner {
             final String s = String.valueOf(Character.toChars(c));
             throw new ScannerException("while scanning a block scalar", startMark,
                     "expected a comment or a line break, but found " + s + "("
-                    + c + ")", reader.getMark());
+                            + c + ")", reader.getMark());
         }
         return lineBreak;
     }
@@ -1752,7 +1727,7 @@ public final class ScannerImpl implements Scanner {
      * Scans for the indentation of a block scalar implicitly. This mechanism is
      * used only if the block did not explicitly state an indentation to be
      * used.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#id927035"></a>
      */
     private Object[] scanBlockScalarIndentation() {
@@ -1780,7 +1755,7 @@ public final class ScannerImpl implements Scanner {
             }
         }
         // Pass several results back together.
-        return new Object[] { chunks.toString(), maxIndent, endMark };
+        return new Object[]{chunks.toString(), maxIndent, endMark};
     }
 
     private Object[] scanBlockScalarBreaks(int indent) {
@@ -1810,16 +1785,16 @@ public final class ScannerImpl implements Scanner {
             }
         }
         // Return both the assembled intervening string and the end-mark.
-        return new Object[] { chunks.toString(), endMark };
+        return new Object[]{chunks.toString(), endMark};
     }
 
     /**
      * Scan a flow-style scalar. Flow scalars are presented in one of two forms;
      * first, a flow scalar may be a double-quoted string; second, a flow scalar
      * may be a single-quoted string.
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#flow"></a> style/syntax
-     * 
+     *
      *      <pre>
      * See the specification for details.
      * Note that we loose indentation rules for quoted scalars. Quoted
@@ -1880,22 +1855,22 @@ public final class ScannerImpl implements Scanner {
             } else if (doubleQuoted && c == '\\') {
                 reader.forward();
                 c = reader.peek();
-                if (!Character.isSupplementaryCodePoint(c) && ESCAPE_REPLACEMENTS.containsKey(Character.valueOf((char)c))) {
+                if (!Character.isSupplementaryCodePoint(c) && ESCAPE_REPLACEMENTS.containsKey(Character.valueOf((char) c))) {
                     // The character is one of the single-replacement
                     // types; these are replaced with a literal character
                     // from the mapping.
-                    chunks.append(ESCAPE_REPLACEMENTS.get(Character.valueOf((char)c)));
+                    chunks.append(ESCAPE_REPLACEMENTS.get(Character.valueOf((char) c)));
                     reader.forward();
-                } else if (!Character.isSupplementaryCodePoint(c) && ESCAPE_CODES.containsKey(Character.valueOf((char)c))) {
+                } else if (!Character.isSupplementaryCodePoint(c) && ESCAPE_CODES.containsKey(Character.valueOf((char) c))) {
                     // The character is a multi-digit escape sequence, with
                     // length defined by the value in the ESCAPE_CODES map.
-                    length = ESCAPE_CODES.get(Character.valueOf((char)c)).intValue();
+                    length = ESCAPE_CODES.get(Character.valueOf((char) c)).intValue();
                     reader.forward();
                     String hex = reader.prefix(length);
                     if (NOT_HEXA.matcher(hex).find()) {
                         throw new ScannerException("while scanning a double-quoted scalar",
                                 startMark, "expected escape sequence of " + length
-                                        + " hexadecimal numbers, but found: " + hex,
+                                + " hexadecimal numbers, but found: " + hex,
                                 reader.getMark());
                     }
                     int decimal = Integer.parseInt(hex, 16);
@@ -1977,7 +1952,7 @@ public final class ScannerImpl implements Scanner {
 
     /**
      * Scan a plain scalar.
-     * 
+     *
      * <pre>
      * See the specification for details.
      * We add an additional restriction for the flow context:
@@ -2003,7 +1978,7 @@ public final class ScannerImpl implements Scanner {
                 c = reader.peek(length);
                 if (Constant.NULL_BL_T_LINEBR.has(c)
                         || (this.flowLevel == 0 && c == ':' && Constant.NULL_BL_T_LINEBR
-                                .has(reader.peek(length + 1)))
+                        .has(reader.peek(length + 1)))
                         || (this.flowLevel != 0 && ",:?[]{}".indexOf(c) != -1)) {
                     break;
                 }
@@ -2083,19 +2058,19 @@ public final class ScannerImpl implements Scanner {
     /**
      * <p>
      * Scan a Tag handle. A Tag handle takes one of three forms:
-     * 
+     *
      * <pre>
      * "!" (c-primary-tag-handle)
      * "!!" (ns-secondary-tag-handle)
      * "!(name)!" (c-named-tag-handle)
      * </pre>
-     * 
+     *
      * Where (name) must be formatted as an ns-word-char.
      * </p>
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#c-tag-handle"></a>
      * @see <a href="http://www.yaml.org/spec/1.1/#ns-word-char"></a>
-     * 
+     *
      *      <pre>
      * See the specification for details.
      * For some strange reasons, the specification does not allow '_' in
@@ -2145,12 +2120,12 @@ public final class ScannerImpl implements Scanner {
      * concerned. The difference may be distinguished later, in parsing. This
      * method will scan for ns-uri-char*, which covers both cases.
      * </p>
-     * 
+     *
      * <p>
      * This method performs no verification that the scanned URI conforms to any
      * particular kind of URI specification.
      * </p>
-     * 
+     *
      * @see <a href="http://www.yaml.org/spec/1.1/#ns-uri-char"></a>
      */
     private String scanTagUri(String name, Mark startMark) {
@@ -2192,10 +2167,10 @@ public final class ScannerImpl implements Scanner {
      * Scan a sequence of %-escaped URI escape codes and convert them into a
      * String representing the unescaped values.
      * </p>
-     * 
+     *
      * FIXME This method fails for more than 256 bytes' worth of URI-encoded
      * characters in a row. Is this possible? Is this a use-case?
-     * 
+     *
      * @see <a href="http://www.ietf.org/rfc/rfc2396.txt"></a>, section 2.4, Escaped Encoding.
      */
     private String scanUriEscapes(String name, Mark startMark) {
@@ -2240,7 +2215,7 @@ public final class ScannerImpl implements Scanner {
 
     /**
      * Scan a line break, transforming:
-     * 
+     *
      * <pre>
      * '\r\n' : '\n'
      * '\r' : '\n'

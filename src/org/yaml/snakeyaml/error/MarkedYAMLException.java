@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,12 +25,12 @@ public class MarkedYAMLException extends YAMLException {
     private String note;
 
     protected MarkedYAMLException(String context, Mark contextMark, String problem,
-            Mark problemMark, String note) {
+                                  Mark problemMark, String note) {
         this(context, contextMark, problem, problemMark, note, null);
     }
 
     protected MarkedYAMLException(String context, Mark contextMark, String problem,
-            Mark problemMark, String note, Throwable cause) {
+                                  Mark problemMark, String note, Throwable cause) {
         super(context + "; " + problem + "; " + problemMark, cause);
         this.context = context;
         this.contextMark = contextMark;
@@ -44,7 +44,7 @@ public class MarkedYAMLException extends YAMLException {
     }
 
     protected MarkedYAMLException(String context, Mark contextMark, String problem,
-            Mark problemMark, Throwable cause) {
+                                  Mark problemMark, Throwable cause) {
         this(context, contextMark, problem, problemMark, null, cause);
     }
 
@@ -62,9 +62,9 @@ public class MarkedYAMLException extends YAMLException {
         }
         if (contextMark != null
                 && (problem == null || problemMark == null
-                        || contextMark.getName().equals(problemMark.getName())
-                        || (contextMark.getLine() != problemMark.getLine()) || (contextMark
-                        .getColumn() != problemMark.getColumn()))) {
+                || contextMark.getName().equals(problemMark.getName())
+                || (contextMark.getLine() != problemMark.getLine()) || (contextMark
+                .getColumn() != problemMark.getColumn()))) {
             lines.append(contextMark.toString());
             lines.append("\n");
         }

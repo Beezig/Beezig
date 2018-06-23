@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,9 +15,9 @@
  */
 package org.yaml.snakeyaml.nodes;
 
-import java.util.List;
-
 import org.yaml.snakeyaml.error.Mark;
+
+import java.util.List;
 
 /**
  * Represents a map.
@@ -30,7 +30,7 @@ public class MappingNode extends CollectionNode {
     private boolean merged = false;
 
     public MappingNode(Tag tag, boolean resolved, List<NodeTuple> value, Mark startMark,
-            Mark endMark, Boolean flowStyle) {
+                       Mark endMark, Boolean flowStyle) {
         super(tag, startMark, endMark, flowStyle);
         if (value == null) {
             throw new NullPointerException("value in a Node is required.");
@@ -50,7 +50,7 @@ public class MappingNode extends CollectionNode {
 
     /**
      * Returns the entries of this map.
-     * 
+     *
      * @return List of entries.
      */
     public List<NodeTuple> getValue() {
@@ -95,17 +95,17 @@ public class MappingNode extends CollectionNode {
     }
 
     /**
+     * @return true if map contains merge node
+     */
+    public boolean isMerged() {
+        return merged;
+    }
+
+    /**
      * @param merged
      *            - true if map contains merge node
      */
     public void setMerged(boolean merged) {
         this.merged = merged;
-    }
-
-    /**
-     * @return true if map contains merge node
-     */
-    public boolean isMerged() {
-        return merged;
     }
 }

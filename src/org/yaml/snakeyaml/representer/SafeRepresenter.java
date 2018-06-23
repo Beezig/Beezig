@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,33 +15,23 @@
  */
 package org.yaml.snakeyaml.representer;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.UUID;
-import java.util.regex.Pattern;
-
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.reader.StreamReader;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.util.*;
+import java.util.regex.Pattern;
+
 /**
  * Represent standard Java classes
  */
 class SafeRepresenter extends BaseRepresenter {
 
+    public static Pattern MULTILINE_PATTERN = Pattern.compile("\n|\u0085|\u2028|\u2029");
     protected Map<Class<? extends Object>, Tag> classTags;
     protected TimeZone timeZone = null;
 
@@ -84,7 +74,7 @@ class SafeRepresenter extends BaseRepresenter {
 
     /**
      * Define a tag for the <code>Class</code> to serialize.
-     * 
+     *
      * @param clazz
      *            <code>Class</code> which tag is changed
      * @param tag
@@ -99,13 +89,31 @@ class SafeRepresenter extends BaseRepresenter {
         return classTags.put(clazz, tag);
     }
 
+    public TimeZone getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(TimeZone timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    private static class IteratorWrapper implements Iterable<Object> {
+        private Iterator<Object> iter;
+
+        public IteratorWrapper(Iterator<Object> iter) {
+            this.iter = iter;
+        }
+
+        public Iterator<Object> iterator() {
+            return iter;
+        }
+    }
+
     protected class RepresentNull implements Represent {
         public Node representData(Object data) {
             return representScalar(Tag.NULL, "null");
         }
     }
-
-    public static Pattern MULTILINE_PATTERN = Pattern.compile("\n|\u0085|\u2028|\u2029");
 
     protected class RepresentString implements Represent {
         public Node representData(Object data) {
@@ -190,18 +198,6 @@ class SafeRepresenter extends BaseRepresenter {
             Iterator<Object> iter = (Iterator<Object>) data;
             return representSequence(getTag(data.getClass(), Tag.SEQ), new IteratorWrapper(iter),
                     null);
-        }
-    }
-
-    private static class IteratorWrapper implements Iterable<Object> {
-        private Iterator<Object> iter;
-
-        public IteratorWrapper(Iterator<Object> iter) {
-            this.iter = iter;
-        }
-
-        public Iterator<Object> iterator() {
-            return iter;
         }
     }
 
@@ -432,14 +428,6 @@ class SafeRepresenter extends BaseRepresenter {
             char[] binary = Base64Coder.encode((byte[]) data);
             return representScalar(Tag.BINARY, String.valueOf(binary), '|');
         }
-    }
-
-    public TimeZone getTimeZone() {
-        return timeZone;
-    }
-
-    public void setTimeZone(TimeZone timeZone) {
-        this.timeZone = timeZone;
     }
 
     protected class RepresentUuid implements Represent {

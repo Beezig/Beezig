@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,25 +15,13 @@
  */
 package org.yaml.snakeyaml.representer;
 
-import java.beans.IntrospectionException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.Property;
-import org.yaml.snakeyaml.nodes.MappingNode;
-import org.yaml.snakeyaml.nodes.Node;
-import org.yaml.snakeyaml.nodes.NodeId;
-import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.ScalarNode;
-import org.yaml.snakeyaml.nodes.SequenceNode;
-import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.nodes.*;
+
+import java.beans.IntrospectionException;
+import java.util.*;
 
 /**
  * Represent JavaBeans
@@ -44,16 +32,6 @@ public class Representer extends SafeRepresenter {
         this.representers.put(null, new RepresentJavaBean());
     }
 
-    protected class RepresentJavaBean implements Represent {
-        public Node representData(Object data) {
-            try {
-                return representJavaBean(getProperties(data.getClass()), data);
-            } catch (IntrospectionException e) {
-                throw new YAMLException(e);
-            }
-        }
-    }
-
     /**
      * Tag logic:
      * - explicit root tag is set in serializer
@@ -61,7 +39,7 @@ public class Representer extends SafeRepresenter {
      * - a global tag with class name is always used as tag. The JavaBean parent
      * of the specified JavaBean may set another tag (tag:yaml.org,2002:map)
      * when the property class is the same as runtime class
-     * 
+     *
      * @param properties
      *            JavaBean getters
      * @param javaBean
@@ -105,7 +83,7 @@ public class Representer extends SafeRepresenter {
 
     /**
      * Represent one JavaBean property.
-     * 
+     *
      * @param javaBean
      *            - the instance to be represented
      * @param property
@@ -118,7 +96,7 @@ public class Representer extends SafeRepresenter {
      *         property
      */
     protected NodeTuple representJavaBeanProperty(Object javaBean, Property property,
-            Object propertyValue, Tag customTag) {
+                                                  Object propertyValue, Tag customTag) {
         ScalarNode nodeKey = (ScalarNode) representData(property.getName());
         // the first occurrence of the node must keep the tag
         boolean hasAlias = this.representedObjects.containsKey(propertyValue);
@@ -153,7 +131,7 @@ public class Representer extends SafeRepresenter {
     /**
      * Remove redundant global tag for a type safe (generic) collection if it is
      * the same as defined by the JavaBean property
-     * 
+     *
      * @param property
      *            - JavaBean property
      * @param node
@@ -236,7 +214,7 @@ public class Representer extends SafeRepresenter {
     /**
      * Get JavaBean properties to be serialised. The order is respected. This
      * method may be overridden to provide custom property selection or order.
-     * 
+     *
      * @param type
      *            - JavaBean to inspect the properties
      * @return properties to serialise
@@ -245,5 +223,15 @@ public class Representer extends SafeRepresenter {
     protected Set<Property> getProperties(Class<? extends Object> type)
             throws IntrospectionException {
         return getPropertyUtils().getProperties(type);
+    }
+
+    protected class RepresentJavaBean implements Represent {
+        public Node representData(Object data) {
+            try {
+                return representJavaBean(getProperties(data.getClass()), data);
+            } catch (IntrospectionException e) {
+                throw new YAMLException(e);
+            }
+        }
     }
 }

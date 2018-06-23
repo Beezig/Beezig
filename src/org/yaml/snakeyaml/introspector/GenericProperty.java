@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,15 +23,13 @@ import java.lang.reflect.Type;
 abstract public class GenericProperty extends Property {
 
     private Type genType;
-
+    private boolean actualClassesChecked;
+    private Class<?>[] actualClasses;
     public GenericProperty(String name, Class<?> aClass, Type aType) {
         super(name, aClass);
         genType = aType;
         actualClassesChecked = aType == null;
     }
-
-    private boolean actualClassesChecked;
-    private Class<?>[] actualClasses;
 
     public Class<?>[] getActualTypeArguments() { // should we synchronize here ?
         if (!actualClassesChecked) {
@@ -65,10 +63,10 @@ abstract public class GenericProperty extends Property {
             } else if (genType instanceof GenericArrayType) {
                 Type componentType = ((GenericArrayType) genType).getGenericComponentType();
                 if (componentType instanceof Class<?>) {
-                    actualClasses = new Class<?>[] { (Class<?>) componentType };
+                    actualClasses = new Class<?>[]{(Class<?>) componentType};
                 }
             } else if (genType instanceof Class<?>) {// XXX this check is only
-                                                     // required for IcedTea6
+                // required for IcedTea6
                 Class<?> classType = (Class<?>) genType;
                 if (classType.isArray()) {
                     actualClasses = new Class<?>[1];

@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,11 +37,7 @@ package org.yaml.snakeyaml.reader;
  Unicode format = UTF-16LE
  ***/
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PushbackInputStream;
-import java.io.Reader;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
@@ -54,11 +50,9 @@ public class UnicodeReader extends Reader {
     private static final Charset UTF8 = Charset.forName("UTF-8");
     private static final Charset UTF16BE = Charset.forName("UTF-16BE");
     private static final Charset UTF16LE = Charset.forName("UTF-16LE");
-
+    private static final int BOM_SIZE = 3;
     PushbackInputStream internalIn;
     InputStreamReader internalIn2 = null;
-
-    private static final int BOM_SIZE = 3;
 
     /**
      * @param in
@@ -80,7 +74,7 @@ public class UnicodeReader extends Reader {
     /**
      * Read-ahead four bytes and check for BOM marks. Extra bytes are unread
      * back to the stream, only BOM bytes are skipped.
-     * @throws  IOException if InputStream cannot be created
+     * @throws IOException if InputStream cannot be created
      */
     protected void init() throws IOException {
         if (internalIn2 != null)

@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,29 +15,14 @@
  */
 package org.yaml.snakeyaml.constructor;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.yaml.snakeyaml.composer.Composer;
 import org.yaml.snakeyaml.composer.ComposerException;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
-import org.yaml.snakeyaml.nodes.MappingNode;
-import org.yaml.snakeyaml.nodes.Node;
-import org.yaml.snakeyaml.nodes.NodeId;
-import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.ScalarNode;
-import org.yaml.snakeyaml.nodes.SequenceNode;
-import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.nodes.*;
+
+import java.lang.reflect.Array;
+import java.util.*;
 
 public abstract class BaseConstructor {
     /**
@@ -59,13 +44,11 @@ public abstract class BaseConstructor {
      * It is used when no exact match found.
      */
     protected final Map<String, Construct> yamlMultiConstructors = new HashMap<String, Construct>();
-
-    protected Composer composer;
     private final Map<Node, Object> constructedObjects;
     private final Set<Node> recursiveObjects;
     private final ArrayList<RecursiveTuple<Map<Object, Object>, RecursiveTuple<Object, Object>>> maps2fill;
     private final ArrayList<RecursiveTuple<Set<Object>, Object>> sets2fill;
-
+    protected Composer composer;
     protected Tag rootTag;
     private PropertyUtils propertyUtils;
     private boolean explicitPropertyUtils;
@@ -417,16 +400,28 @@ public abstract class BaseConstructor {
         }
     }
 
-    public void setPropertyUtils(PropertyUtils propertyUtils) {
-        this.propertyUtils = propertyUtils;
-        explicitPropertyUtils = true;
-    }
-
     public final PropertyUtils getPropertyUtils() {
         if (propertyUtils == null) {
             propertyUtils = new PropertyUtils();
         }
         return propertyUtils;
+    }
+
+    public void setPropertyUtils(PropertyUtils propertyUtils) {
+        this.propertyUtils = propertyUtils;
+        explicitPropertyUtils = true;
+    }
+
+    public final boolean isExplicitPropertyUtils() {
+        return explicitPropertyUtils;
+    }
+
+    public boolean isAllowDuplicateKeys() {
+        return allowDuplicateKeys;
+    }
+
+    public void setAllowDuplicateKeys(boolean allowDuplicateKeys) {
+        this.allowDuplicateKeys = allowDuplicateKeys;
     }
 
     private static class RecursiveTuple<T, K> {
@@ -445,17 +440,5 @@ public abstract class BaseConstructor {
         public T _1() {
             return _1;
         }
-    }
-
-    public final boolean isExplicitPropertyUtils() {
-        return explicitPropertyUtils;
-    }
-
-    public boolean isAllowDuplicateKeys() {
-        return allowDuplicateKeys;
-    }
-
-    public void setAllowDuplicateKeys(boolean allowDuplicateKeys) {
-        this.allowDuplicateKeys = allowDuplicateKeys;
     }
 }

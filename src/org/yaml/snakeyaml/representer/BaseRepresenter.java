@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,39 +15,20 @@
  */
 package org.yaml.snakeyaml.representer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.DumperOptions.ScalarStyle;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
-import org.yaml.snakeyaml.nodes.AnchorNode;
-import org.yaml.snakeyaml.nodes.MappingNode;
-import org.yaml.snakeyaml.nodes.Node;
-import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.ScalarNode;
-import org.yaml.snakeyaml.nodes.SequenceNode;
-import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.nodes.*;
+
+import java.util.*;
 
 /**
  * Represent basic YAML structures: scalar, sequence, mapping
  */
 public abstract class BaseRepresenter {
     protected final Map<Class<?>, Represent> representers = new HashMap<Class<?>, Represent>();
-    /**
-     * in Java 'null' is not a type. So we have to keep the null representer
-     * separately otherwise it will coincide with the default representer which
-     * is stored with the key null.
-     */
-    protected Represent nullRepresenter;
     // the order is important (map can be also a sequence of key-values)
     protected final Map<Class<?>, Represent> multiRepresenters = new LinkedHashMap<Class<?>, Represent>();
-    protected Character defaultScalarStyle;
-    protected FlowStyle defaultFlowStyle = FlowStyle.AUTO;
     protected final Map<Object, Node> representedObjects = new IdentityHashMap<Object, Node>() {
         private static final long serialVersionUID = -5576159264232131854L;
 
@@ -55,7 +36,14 @@ public abstract class BaseRepresenter {
             return super.put(key, new AnchorNode(value));
         }
     };
-
+    /**
+     * in Java 'null' is not a type. So we have to keep the null representer
+     * separately otherwise it will coincide with the default representer which
+     * is stored with the key null.
+     */
+    protected Represent nullRepresenter;
+    protected Character defaultScalarStyle;
+    protected FlowStyle defaultFlowStyle = FlowStyle.AUTO;
     protected Object objectToRepresent;
     private PropertyUtils propertyUtils;
     private boolean explicitPropertyUtils = false;
@@ -176,17 +164,12 @@ public abstract class BaseRepresenter {
         this.defaultScalarStyle = defaultStyle.getChar();
     }
 
-    public void setDefaultFlowStyle(FlowStyle defaultFlowStyle) {
-        this.defaultFlowStyle = defaultFlowStyle;
-    }
-
     public FlowStyle getDefaultFlowStyle() {
         return this.defaultFlowStyle;
     }
 
-    public void setPropertyUtils(PropertyUtils propertyUtils) {
-        this.propertyUtils = propertyUtils;
-        this.explicitPropertyUtils = true;
+    public void setDefaultFlowStyle(FlowStyle defaultFlowStyle) {
+        this.defaultFlowStyle = defaultFlowStyle;
     }
 
     public final PropertyUtils getPropertyUtils() {
@@ -194,6 +177,11 @@ public abstract class BaseRepresenter {
             propertyUtils = new PropertyUtils();
         }
         return propertyUtils;
+    }
+
+    public void setPropertyUtils(PropertyUtils propertyUtils) {
+        this.propertyUtils = propertyUtils;
+        this.explicitPropertyUtils = true;
     }
 
     public final boolean isExplicitPropertyUtils() {

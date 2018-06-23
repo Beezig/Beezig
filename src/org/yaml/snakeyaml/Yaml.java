@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,17 +14,6 @@
  * limitations under the License.
  */
 package org.yaml.snakeyaml;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Pattern;
 
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.composer.Composer;
@@ -45,16 +34,22 @@ import org.yaml.snakeyaml.representer.Representer;
 import org.yaml.snakeyaml.resolver.Resolver;
 import org.yaml.snakeyaml.serializer.Serializer;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Pattern;
+
 /**
  * Public YAML interface. Each Thread must have its own instance.
  */
 public class Yaml {
     protected final Resolver resolver;
-    private String name;
     protected BaseConstructor constructor;
     protected Representer representer;
     protected DumperOptions dumperOptions;
     protected LoaderOptions loadingConfig;
+    private String name;
 
     /**
      * Create Yaml instance. It is safe to create a few instances and use them
@@ -162,7 +157,7 @@ public class Yaml {
      *            LoadingConfig to control load behavior
      */
     public Yaml(BaseConstructor constructor, Representer representer, DumperOptions dumperOptions,
-            LoaderOptions loadingConfig) {
+                LoaderOptions loadingConfig) {
         this(constructor, representer, dumperOptions, loadingConfig, new Resolver());
     }
 
@@ -180,7 +175,7 @@ public class Yaml {
      *            Resolver to detect implicit type
      */
     public Yaml(BaseConstructor constructor, Representer representer, DumperOptions dumperOptions,
-            Resolver resolver) {
+                Resolver resolver) {
         this(constructor, representer, dumperOptions, new LoaderOptions(), resolver);
     }
 
@@ -200,7 +195,7 @@ public class Yaml {
      *            Resolver to detect implicit type
      */
     public Yaml(BaseConstructor constructor, Representer representer, DumperOptions dumperOptions,
-            LoaderOptions loadingConfig, Resolver resolver) {
+                LoaderOptions loadingConfig, Resolver resolver) {
         if (!constructor.isExplicitPropertyUtils()) {
             constructor.setPropertyUtils(representer.getPropertyUtils());
         } else if (!representer.isExplicitPropertyUtils()) {
@@ -400,18 +395,6 @@ public class Yaml {
         return emitter.getEvents();
     }
 
-    private static class SilentEmitter implements Emitable {
-        private List<Event> events = new ArrayList<Event>(100);
-
-        public List<Event> getEvents() {
-            return events;
-        }
-
-        public void emit(Event event) throws IOException {
-            events.add(event);
-        }
-    }
-
     /**
      * Parse the only YAML document in a String and produce the corresponding
      * Java object. (Because the encoding in known BOM is not respected.)
@@ -533,18 +516,6 @@ public class Yaml {
         return new YamlIterable(result);
     }
 
-    private static class YamlIterable implements Iterable<Object> {
-        private Iterator<Object> iterator;
-
-        public YamlIterable(Iterator<Object> iterator) {
-            this.iterator = iterator;
-        }
-
-        public Iterator<Object> iterator() {
-            return iterator;
-        }
-    }
-
     /**
      * Parse all YAML documents in a String and produce corresponding Java
      * objects. (Because the encoding in known BOM is not respected.) The
@@ -616,18 +587,6 @@ public class Yaml {
         return new NodeIterable(result);
     }
 
-    private static class NodeIterable implements Iterable<Node> {
-        private Iterator<Node> iterator;
-
-        public NodeIterable(Iterator<Node> iterator) {
-            this.iterator = iterator;
-        }
-
-        public Iterator<Node> iterator() {
-            return iterator;
-        }
-    }
-
     /**
      * Add an implicit scalar detector. If an implicit scalar value matches the
      * given regexp, the corresponding tag is assigned to the scalar.
@@ -696,6 +655,47 @@ public class Yaml {
         return new EventIterable(result);
     }
 
+    public void setBeanAccess(BeanAccess beanAccess) {
+        constructor.getPropertyUtils().setBeanAccess(beanAccess);
+        representer.getPropertyUtils().setBeanAccess(beanAccess);
+    }
+
+    private static class SilentEmitter implements Emitable {
+        private List<Event> events = new ArrayList<Event>(100);
+
+        public List<Event> getEvents() {
+            return events;
+        }
+
+        public void emit(Event event) throws IOException {
+            events.add(event);
+        }
+    }
+
+    private static class YamlIterable implements Iterable<Object> {
+        private Iterator<Object> iterator;
+
+        public YamlIterable(Iterator<Object> iterator) {
+            this.iterator = iterator;
+        }
+
+        public Iterator<Object> iterator() {
+            return iterator;
+        }
+    }
+
+    private static class NodeIterable implements Iterable<Node> {
+        private Iterator<Node> iterator;
+
+        public NodeIterable(Iterator<Node> iterator) {
+            this.iterator = iterator;
+        }
+
+        public Iterator<Node> iterator() {
+            return iterator;
+        }
+    }
+
     private static class EventIterable implements Iterable<Event> {
         private Iterator<Event> iterator;
 
@@ -706,11 +706,6 @@ public class Yaml {
         public Iterator<Event> iterator() {
             return iterator;
         }
-    }
-
-    public void setBeanAccess(BeanAccess beanAccess) {
-        constructor.getPropertyUtils().setBeanAccess(beanAccess);
-        representer.getPropertyUtils().setBeanAccess(beanAccess);
     }
 
 }

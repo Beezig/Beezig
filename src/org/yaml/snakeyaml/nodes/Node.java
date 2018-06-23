@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,18 +31,17 @@ import org.yaml.snakeyaml.error.Mark;
  * </p>
  */
 public abstract class Node {
-    private Tag tag;
-    private Mark startMark;
     protected Mark endMark;
-    private Class<? extends Object> type;
-    private boolean twoStepsConstruction;
-    private String anchor;
-
     /**
      * true when the tag is assigned by the resolver
      */
     protected boolean resolved;
     protected Boolean useClassConstructor;
+    private Tag tag;
+    private Mark startMark;
+    private Class<? extends Object> type;
+    private boolean twoStepsConstruction;
+    private String anchor;
 
     public Node(Tag tag, Mark startMark, Mark endMark) {
         setTag(tag);
@@ -58,11 +57,18 @@ public abstract class Node {
      * Tag of this node.
      * <p>
      * Every node has a tag assigned. The tag is either local or global.
-     * 
+     *
      * @return Tag of this node.
      */
     public Tag getTag() {
         return this.tag;
+    }
+
+    public void setTag(Tag tag) {
+        if (tag == null) {
+            throw new NullPointerException("tag in a Node is required.");
+        }
+        this.tag = tag;
     }
 
     public Mark getEndMark() {
@@ -71,7 +77,7 @@ public abstract class Node {
 
     /**
      * For error reporting.
-     * 
+     *
      * @see "class variable 'id' in PyYAML"
      * @return scalar, sequence, mapping
      */
@@ -79,13 +85,6 @@ public abstract class Node {
 
     public Mark getStartMark() {
         return startMark;
-    }
-
-    public void setTag(Tag tag) {
-        if (tag == null) {
-            throw new NullPointerException("tag in a Node is required.");
-        }
-        this.tag = tag;
     }
 
     /**
@@ -106,10 +105,6 @@ public abstract class Node {
         }
     }
 
-    public void setTwoStepsConstruction(boolean twoStepsConstruction) {
-        this.twoStepsConstruction = twoStepsConstruction;
-    }
-
     /**
      * Indicates if this node must be constructed in two steps.
      * <p>
@@ -124,11 +119,15 @@ public abstract class Node {
      * <p>
      * Only relevant during loading.
      * </p>
-     * 
+     *
      * @return <code>true</code> if the node is self referenced.
      */
     public boolean isTwoStepsConstruction() {
         return twoStepsConstruction;
+    }
+
+    public void setTwoStepsConstruction(boolean twoStepsConstruction) {
+        this.twoStepsConstruction = twoStepsConstruction;
     }
 
     @Override
@@ -159,7 +158,7 @@ public abstract class Node {
     /**
      * Indicates if the tag was added by
      * {@link org.yaml.snakeyaml.resolver.Resolver}.
-     * 
+     *
      * @return <code>true</code> if the tag of this node was resolved
      */
     public boolean isResolved() {

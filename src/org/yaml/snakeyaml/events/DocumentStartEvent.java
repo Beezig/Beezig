@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,10 +15,10 @@
  */
 package org.yaml.snakeyaml.events;
 
-import java.util.Map;
-
 import org.yaml.snakeyaml.DumperOptions.Version;
 import org.yaml.snakeyaml.error.Mark;
+
+import java.util.Map;
 
 /**
  * Marks the beginning of a document.
@@ -32,7 +32,7 @@ public final class DocumentStartEvent extends Event {
     private final Map<String, String> tags;
 
     public DocumentStartEvent(Mark startMark, Mark endMark, boolean explicit, Version version,
-            Map<String, String> tags) {
+                              Map<String, String> tags) {
         super(startMark, endMark);
         this.explicit = explicit;
         this.version = version;
@@ -49,7 +49,7 @@ public final class DocumentStartEvent extends Event {
 
     /**
      * YAML version the document conforms to.
-     * 
+     *
      * @return <code>null</code>if the document has no explicit
      *         <code>%YAML</code> directive. Otherwise an array with two
      *         components, the major and minor part of the version (in this
@@ -61,7 +61,7 @@ public final class DocumentStartEvent extends Event {
 
     /**
      * Tag shorthands as defined by the <code>%TAG</code> directive.
-     * 
+     *
      * @return Mapping of 'handles' to 'prefixes' (the handles include the '!'
      *         characters).
      */

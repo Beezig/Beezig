@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2008, http://www.snakeyaml.org
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,7 @@ public abstract class CollectionStartEvent extends NodeEvent {
     private final Boolean flowStyle;
 
     public CollectionStartEvent(String anchor, String tag, boolean implicit, Mark startMark,
-            Mark endMark, Boolean flowStyle) {
+                                Mark endMark, Boolean flowStyle) {
         super(anchor, startMark, endMark);
         this.tag = tag;
         this.implicit = implicit;
@@ -38,7 +38,7 @@ public abstract class CollectionStartEvent extends NodeEvent {
 
     /**
      * Tag of this collection.
-     * 
+     *
      * @return The tag of this collection, or <code>null</code> if no explicit
      *         tag is available.
      */
@@ -49,7 +49,7 @@ public abstract class CollectionStartEvent extends NodeEvent {
     /**
      * <code>true</code> if the tag can be omitted while this collection is
      * emitted.
-     * 
+     *
      * @return True if the tag can be omitted while this collection is emitted.
      */
     public boolean getImplicit() {
@@ -59,7 +59,7 @@ public abstract class CollectionStartEvent extends NodeEvent {
     /**
      * <code>true</code> if this collection is in flow style, <code>false</code>
      * for block style.
-     * 
+     *
      * @return If this collection is in flow style.
      */
     public Boolean getFlowStyle() {
