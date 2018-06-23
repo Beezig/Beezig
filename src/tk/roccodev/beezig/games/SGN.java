@@ -24,6 +24,7 @@ public class SGN extends GameMode {
     public static String activeMap;
     public static int dailyPoints;
     public static String rank;
+    public static boolean custom;
     public static SGNRank rankObject;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
@@ -83,6 +84,7 @@ public class SGN extends GameMode {
         gamePts = 0;
         activeMap = "";
         votesToParse.clear();
+        custom = false;
         SGN.hasVoted = false;
         ActiveGame.reset("sgn");
         IHive.genericReset();

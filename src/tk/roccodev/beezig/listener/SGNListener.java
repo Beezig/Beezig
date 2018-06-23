@@ -147,13 +147,17 @@ public class SGNListener extends AbstractGameListener<SGN> {
             SGN.votesToParse.add(message);
         } else if (message.startsWith("§8▍ §b§lCombat§8 ▏ §6Global Points Lost: §e")) {
             int pts = Integer.parseInt(message.replace("§8▍ §b§lCombat§8 ▏ §6Global Points Lost: §e", ""));
+            if(!SGN.custom)
             APIValues.SGNpoints -= pts;
             SGN.gamePts -= pts;
+            if(!SGN.custom)
             SGN.dailyPoints -= pts;
         } else if (message.endsWith("§3§lGlobal points gained.")) {
-            int pts = Integer.parseInt(message.replace("§3§lGlobal points gained.", "").replace(" §b§l", ""));
+            int pts = Integer.parseInt(message.replace("§3§lGlobal points gained.", "").replace(" §b§l", "").trim());
+            if(!SGN.custom)
             APIValues.SGNpoints += pts;
             SGN.gamePts += pts;
+            if(!SGN.custom)
             SGN.dailyPoints += pts;
         } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
             SGN.messagesToSend.add(message);
@@ -174,7 +178,11 @@ public class SGNListener extends AbstractGameListener<SGN> {
             APIValues.SGNpoints++;
             SGN.gamePts++;
             SGN.dailyPoints++;
-        } else if ((message.equals("                      §6§m                  §6§m                  ")
+        }
+        else if(message.equals("§8▍ §d§lDeathmatch§8 ▏ §c§lDeathmatch in §e§l1.")) {
+            DiscordUtils.updatePresence("Battling in SG2", "Deathmatch" + (SGN.custom ? " [CS]" : ""), "game_sgn");
+        }
+        else if ((message.equals("                      §6§m                  §6§m                  ")
                 && !message.startsWith("§o "))) {
             The5zigAPI.getLogger().info("found footer");
             SGN.footerToSend.add(message);
@@ -388,6 +396,15 @@ public class SGNListener extends AbstractGameListener<SGN> {
 
         return false;
 
+    }
+
+    @Override
+    public boolean onActionBar(SGN gameMode, String message) {
+        if(message.contains("CS_") && SGN.custom == false) {
+            SGN.custom = true;
+            DiscordUtils.updatePresence("Battling in SG2", "Playing on " + SGN.activeMap + " [CS]", "game_sgn");
+        }
+        return false;
     }
 
     @Override
