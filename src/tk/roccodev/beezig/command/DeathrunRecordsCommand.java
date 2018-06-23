@@ -19,6 +19,11 @@ public class DeathrunRecordsCommand implements Command {
     @Override
     public boolean execute(String[] args) {
 
+        if(args.length == 0){
+            The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /drbest player map");
+            return true;
+        }
+
         new Thread(() -> {
             try {
                 String player = args.length <= 1 ? The5zigAPI.getAPI().getGameProfile().getName() : args[0];
@@ -30,7 +35,6 @@ public class DeathrunRecordsCommand implements Command {
 
             } catch(Exception e) {
                 The5zigAPI.getAPI().messagePlayer(Log.error + "An Error occured.");
-                The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /drbest player map");
             }
         }).start();
 

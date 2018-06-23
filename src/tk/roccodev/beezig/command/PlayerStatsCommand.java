@@ -511,6 +511,7 @@ public class PlayerStatsCommand implements Command {
                         ApiLAB apiLAB = new ApiLAB(npi.getGameProfile().getName(),
                                 npi.getGameProfile().getId().toString());
                         ApiHiveGlobal apiHIVE = apiLAB.getParentMode();
+                        //The5zigAPI.getAPI().messagePlayer(apiLAB.getPoints() + " " + LABRank.getFromDisplay(apiLAB.getTitle()).getTotalDisplay() + " " + apiHIVE.getNetworkRankColor() + npi.getGameProfile().getName());
                         points.add(apiLAB.getPoints());
                         title.add(LABRank.getFromDisplay(apiLAB.getTitle()).getTotalDisplay());
                         name.add(apiHIVE.getNetworkRankColor() + npi.getGameProfile().getName());

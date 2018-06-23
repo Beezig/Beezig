@@ -32,7 +32,7 @@ public enum LABRank {
     TESLA("Tesla", "§7§l", 35000),
     GALILEO("Galileo", "§5§l", 40000),
     HAWKING("Hawking", "§c§l", 50000),
-    EINSTEIN("Einstein", "§f§lEinstein", -1);
+    EINSTEIN("Einstein", "§f§l", -1);
 
     private String display, prefix;
     private int start;

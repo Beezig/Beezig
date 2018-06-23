@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.CommandManager;
 import tk.roccodev.beezig.Log;
@@ -40,7 +41,7 @@ public class BeezigCommand implements Command {
                             );
             The5zigAPI.getAPI().messagePlayer(Log.info + "Available commands:");
             for (Command cmd : CommandManager.commandExecutors) {
-                The5zigAPI.getAPI().messagePlayer(Log.info + cmd.getAliases()[0]);
+                The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + cmd.getAliases()[0]);
             }
             The5zigAPI.getAPI().messagePlayer(
                     "    §7§m                                                                                    "
