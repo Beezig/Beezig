@@ -9,7 +9,7 @@
 A 5zig plugin to add HiveMC functionality.
 By RoccoDev and ItsNiklass.
 
-![supported](https://i.imgur.com/fQ0ze6I.png)
+![supported](https://i.imgur.com/eTUPy2g.png)
 
 
 ### Build Status
