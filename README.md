@@ -29,6 +29,8 @@ By RoccoDev and ItsNiklass.
 
 ## Download
 
+# GET THE INSTALLER HERE: http://l.roccodev.pw/beeziginstaller
+
 * You can download normal stable releases in the Releases tab.
 
 If you want beta features, you can choose one of these downloads:
