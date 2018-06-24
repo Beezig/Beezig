@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public enum LABRank {
 
-    TESTTUBE("First Step", "§7", 0),
+    TESTTUBE("Test Tube", "§7", 0),
     MICROSCOPIC("Microscopic", "§6", 20),
     ION("Ion", "§b", 50),
     PHOTON("Photon", "§d", 100),
