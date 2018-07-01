@@ -16,6 +16,7 @@ import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiCAI;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
@@ -156,16 +157,26 @@ public class CAIListener extends AbstractGameListener<CAI> {
             APIValues.CAIpoints += 10;
             CAI.dailyPoints += 10;
 
-        } else if (message.equals("                             §eIndians have won!") && CAI.team != null && CAI.team.equals("§eIndians")) {
+        } else if (message.endsWith("§eIndians have won!") && CAI.team != null && CAI.team.equals("§eIndians")) {
             CAI.gamePoints += 50;
             APIValues.CAIpoints += 50;
             CAI.dailyPoints += 50;
             CAI.hasWon = true;
-        } else if (message.equals("                             §cCowboys have won!") && CAI.team != null && CAI.team.equals("§cCowboys")) {
+            System.out.println("Won!");
+            CAI.winstreak++;
+            if(CAI.winstreak > CAI.bestStreak)
+                CAI.bestStreak = CAI.winstreak;
+            StreakUtils.incrementWinstreakByOne("cai");
+        } else if (message.endsWith("§cCowboys have won!") && CAI.team != null && CAI.team.equals("§cCowboys")) {
             CAI.gamePoints += 50;
             APIValues.CAIpoints += 50;
             CAI.dailyPoints += 50;
             CAI.hasWon = true;
+            System.out.println("Won!");
+            CAI.winstreak++;
+            if(CAI.winstreak > CAI.bestStreak)
+                CAI.bestStreak = CAI.winstreak;
+            StreakUtils.incrementWinstreakByOne("cai");
         } else if (message.startsWith("§8▍ §bCAI§8 ▏ §7You gained §f5 points §7for killing")) {
 
 

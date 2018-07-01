@@ -89,17 +89,15 @@ public class CAI extends GameMode {
     public static void reset(CAI gameMode) {
 
         gameMode.setState(GameState.FINISHED);
-        if(inGame && hasWon) {
-            CAI.winstreak++;
-            if(CAI.winstreak > CAI.bestStreak)
-                CAI.bestStreak = CAI.winstreak;
-            StreakUtils.incrementWinstreakByOne("cai");
-        }
-        else if(inGame) {
+        if(inGame && !hasWon) {
+            System.out.println("Lost!");
             CAI.winstreak = 0;
             StreakUtils.resetWinstreak("cai");
         }
 
+
+        inGame = false;
+        hasWon = false;
         CAI.messagesToSend.clear();
         CAI.footerToSend.clear();
         CAI.votesToParse.clear();
@@ -107,8 +105,7 @@ public class CAI extends GameMode {
         CAI.hasVoted = false;
         CAI.activeMap = null;
         gamePoints = 0;
-        inGame = false;
-        hasWon = false;
+
         team = "";
         ActiveGame.reset("cai");
         IHive.genericReset();
