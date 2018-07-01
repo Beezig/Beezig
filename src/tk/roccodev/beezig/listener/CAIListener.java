@@ -142,11 +142,12 @@ public class CAIListener extends AbstractGameListener<CAI> {
         } else if (message.endsWith("§cCowboys Leader§7.")) {
 
             CAI.team = "§eIndians";
-
+            CAI.inGame = true;
             DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as I on " + CAI.activeMap, "game_cai");
 
         } else if (message.endsWith("§eIndians Leader§7.")) {
             CAI.team = "§cCowboys";
+            CAI.inGame = true;
             DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as C on " + CAI.activeMap, "game_cai");
         } else if (message.equals("§8▍ §bCAI§8 ▏ §7You received §f10 points §7for your team's capture.")) {
 
@@ -159,10 +160,12 @@ public class CAIListener extends AbstractGameListener<CAI> {
             CAI.gamePoints += 50;
             APIValues.CAIpoints += 50;
             CAI.dailyPoints += 50;
+            CAI.hasWon = true;
         } else if (message.equals("                             §cCowboys have won!") && CAI.team != null && CAI.team.equals("§cCowboys")) {
             CAI.gamePoints += 50;
             APIValues.CAIpoints += 50;
             CAI.dailyPoints += 50;
+            CAI.hasWon = true;
         } else if (message.startsWith("§8▍ §bCAI§8 ▏ §7You gained §f5 points §7for killing")) {
 
 

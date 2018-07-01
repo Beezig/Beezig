@@ -16,12 +16,11 @@ import tk.roccodev.beezig.command.*;
 import tk.roccodev.beezig.games.*;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.StuffFetcher;
-import tk.roccodev.beezig.hiveapi.stuff.bed.StreakUtils;
+import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVListenerv2;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
-import tk.roccodev.beezig.listener.HiveListener;
 import tk.roccodev.beezig.notes.NotesManager;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.settings.SettingsFetcher;
@@ -232,6 +231,8 @@ public class BeezigMain {
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "caidaily", tk.roccodev.beezig.modules.cai.DailyItem.class,
                 "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "caistreak", tk.roccodev.beezig.modules.cai.WinstreakItem.class,
+                "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "skypoints", tk.roccodev.beezig.modules.sky.PointsItem.class,
                 "serverhivemc");
@@ -377,6 +378,7 @@ public class BeezigMain {
         if (!mcFile.exists())
             mcFile.mkdir();
         The5zigAPI.getLogger().info("MC Folder is at: " + mcFile.getAbsolutePath());
+        checkForFileExist(new File(mcFile + "/winstreaks.json"), false);
         checkForFileExist(new File(mcFile + "/timv/"), true);
         checkForFileExist(new File(mcFile + "/timv/dailykarma/"), true);
         checkForFileExist(new File(mcFile + "/timv/testMessages.txt"), false);
@@ -412,7 +414,7 @@ public class BeezigMain {
         checkForFileExist(new File(mcFile + "/lab/"), true);
         checkForFileExist(new File(mcFile + "/lab/dailyPoints/"), true);
 
-        StreakUtils.init();
+        StreakUtils.init(mcFile);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -836,7 +838,7 @@ public class BeezigMain {
             @Override
             public void run() {
                 try {
-                    StreakUtils.saveDailyStreak();
+
 
                     String className = ActiveGame.current().toUpperCase();
                     if (className.startsWith("GNT"))

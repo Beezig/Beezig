@@ -7,6 +7,7 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
+import tk.roccodev.beezig.utils.StreakUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -23,6 +24,11 @@ public class CAI extends GameMode {
 
     public static boolean hasVoted = false;
     public static List<String> votesToParse = new ArrayList<>();
+
+    public static boolean inGame;
+    public static boolean hasWon;
+    public static int winstreak;
+    public static int bestStreak;
 
     public static long gamePoints;
     public static int dailyPoints;
@@ -83,6 +89,16 @@ public class CAI extends GameMode {
     public static void reset(CAI gameMode) {
 
         gameMode.setState(GameState.FINISHED);
+        if(inGame && hasWon) {
+            CAI.winstreak++;
+            if(CAI.winstreak > CAI.bestStreak)
+                CAI.bestStreak = CAI.winstreak;
+            StreakUtils.incrementWinstreakByOne("cai");
+        }
+        else if(inGame) {
+            CAI.winstreak = 0;
+            StreakUtils.resetWinstreak("cai");
+        }
 
         CAI.messagesToSend.clear();
         CAI.footerToSend.clear();
@@ -91,6 +107,8 @@ public class CAI extends GameMode {
         CAI.hasVoted = false;
         CAI.activeMap = null;
         gamePoints = 0;
+        inGame = false;
+        hasWon = false;
         team = "";
         ActiveGame.reset("cai");
         IHive.genericReset();
