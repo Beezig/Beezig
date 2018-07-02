@@ -15,6 +15,7 @@ import tk.roccodev.beezig.hiveapi.stuff.sky.SKYRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiSKY;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
@@ -154,6 +155,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
                 && Setting.AUTOVOTE.getValue()) {
             SKY.votesToParse.add(message);
         } else if (message.contains("§e, noble fighter for the ")) {
+            SKY.inGame = true;
             String team = message.split("the")[1].replace("§eteam!", "").replaceAll("team!", "").trim();
             SKY.team = team;
 
@@ -176,6 +178,11 @@ public class SKYListener extends AbstractGameListener<SKY> {
             APIValues.SKYpoints += 20;
             SKY.dailyPoints += 20;
             SKY.gamePoints += 20;
+            SKY.hasWon = true;
+            SKY.winstreak++;
+            if(SKY.winstreak >= SKY.bestStreak)
+                SKY.bestStreak = SKY.winstreak;
+            StreakUtils.incrementWinstreakByOne("sky");
         } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
             SKY.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");

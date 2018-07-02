@@ -7,6 +7,7 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.hiveapi.stuff.sky.SKYRank;
+import tk.roccodev.beezig.utils.StreakUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -29,6 +30,11 @@ public class SKY extends GameMode {
 
     public static int kills;
     public static int deaths;
+
+    public static boolean inGame;
+    public static boolean hasWon;
+    public static int winstreak;
+    public static int bestStreak;
 
     public static int apiKills, apiDeaths;
 
@@ -97,7 +103,13 @@ public class SKY extends GameMode {
     public static void reset(SKY gameMode) {
 
         gameMode.setState(GameState.FINISHED);
-
+        if(inGame && !hasWon) {
+            System.out.println("Lost!");
+            winstreak = 0;
+            StreakUtils.resetWinstreak("sky");
+        }
+        hasWon = false;
+        inGame = false;
         SKY.messagesToSend.clear();
         SKY.footerToSend.clear();
         SKY.votesToParse.clear();

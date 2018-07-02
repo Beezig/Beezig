@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.games.CAI;
+import tk.roccodev.beezig.games.SKY;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 
 import java.io.*;
@@ -18,6 +19,7 @@ public class StreakUtils {
         winstreakFile = new File(rootDir + "/winstreaks.json");
         initValues(CAI.class, "cai");
         initValues(BED.class, "bed");
+        initValues(SKY.class, "sky");
     }
 
 

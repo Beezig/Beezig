@@ -249,6 +249,8 @@ public class BeezigMain {
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "skymap", tk.roccodev.beezig.modules.sky.MapItem.class,
                 "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "skystreak", tk.roccodev.beezig.modules.sky.WinstreakItem.class,
+                "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "mimvkarma", tk.roccodev.beezig.modules.mimv.KarmaItem.class,
                 "serverhivemc");
