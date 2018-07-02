@@ -169,6 +169,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
         } else if (message.startsWith(getPrefix(ActiveGame.current()) + "§3You are now playing on the ")) {
             Giant.team = message.replaceAll(getPrefix(ActiveGame.current()) + "§3You are now playing on the ", "")
                     .replaceAll("Team!", "");
+            Giant.inGame = true;
             gameMode.setState(GameState.GAME);
             DiscordUtils.updatePresence("Slaying in SkyGiants" + (ActiveGame.is("gntm") ? ":Mini" : ""), "Battling on " + Giant.activeMap, "game_giant");
         } else if (message.startsWith(getPrefix(ActiveGame.current()) + "§3Voting has ended! §bThe map §f")) {

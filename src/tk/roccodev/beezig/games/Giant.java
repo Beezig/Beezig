@@ -7,6 +7,7 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.hiveapi.stuff.gnt.GiantRank;
+import tk.roccodev.beezig.utils.StreakUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -27,6 +28,11 @@ public class Giant extends GameMode {
     public static String rank;
     public static GiantRank rankObject;
 
+
+    public static boolean inGame;
+    public static boolean hasWon;
+    public static int winstreak;
+    public static int bestStreak;
 
     //KDR
 
@@ -98,6 +104,13 @@ public class Giant extends GameMode {
 
     public static void reset(Giant gameMode) {
 
+        if(inGame && !hasWon) {
+            System.out.println("Lost!");
+            winstreak = 0;
+            StreakUtils.resetWinstreak("gnt");
+        }
+        hasWon = false;
+        inGame = false;
         teamsEliminated = 0;
         gold = 0;
         team = "";
