@@ -10,6 +10,7 @@ import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
+import tk.roccodev.beezig.utils.StreakUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -32,6 +33,11 @@ public class BED extends GameMode {
     public static int bedsDestroyed;
     public static int teamsLeft;
 
+    public static boolean inGame;
+    public static boolean hasWon;
+    public static int winstreak;
+    public static int bestStreak;
+
     public static int apiKills;
     public static int apiDeaths;
 
@@ -47,11 +53,9 @@ public class BED extends GameMode {
     public static BEDRank rankObject;
     public static List<String> votesToParse = new ArrayList<>();
     public static boolean hasVoted = false;
-    public static Boolean hasWon = null;
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
     public static boolean isRecordsRunning = false;
-    public static int winstreak;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
 
@@ -108,11 +112,13 @@ public class BED extends GameMode {
     public static void reset(BED gm) {
 
         gm.setState(GameState.FINISHED);
-        if (hasWon != null) {
-            if (!hasWon) {
-                winstreak = 0;
-            }
+        if(inGame && !hasWon) {
+            System.out.println("Lost!");
+            winstreak = 0;
+            StreakUtils.resetWinstreak("bed");
         }
+        hasWon = false;
+        inGame = false;
         BED.team = null;
         BED.mode = "";
         BED.activeMap = null;
@@ -127,7 +133,7 @@ public class BED extends GameMode {
         goldGen = 0;
         diamondGen = 0;
         ActiveGame.reset("bed");
-        hasWon = null;
+
         IHive.genericReset();
         if (The5zigAPI.getAPI().getActiveServer() != null)
             The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");

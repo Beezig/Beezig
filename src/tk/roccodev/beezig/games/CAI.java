@@ -87,7 +87,7 @@ public class CAI extends GameMode {
     }
 
     public static void reset(CAI gameMode) {
-
+        System.out.println("reset");
         gameMode.setState(GameState.FINISHED);
         if(inGame && !hasWon) {
             System.out.println("Lost!");

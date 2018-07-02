@@ -17,6 +17,7 @@ import tk.roccodev.beezig.hiveapi.stuff.bed.MonthlyPlayer;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
@@ -132,6 +133,9 @@ public class BEDListener extends AbstractGameListener<BED> {
             HiveAPI.tokens += 100;
             BED.hasWon = true;
             BED.winstreak++;
+            if(BED.winstreak >= BED.bestStreak)
+                BED.bestStreak = BED.winstreak;
+            StreakUtils.incrementWinstreakByOne("bed");
 
         } else if (message.contains("§c has been ELIMINATED!")) {
             BED.updateTeamsLeft();
@@ -496,7 +500,11 @@ public class BEDListener extends AbstractGameListener<BED> {
         if (subTitle != null && ChatColor.stripColor(subTitle).trim().equals("Respawning in 2 seconds")) {
             BED.deaths++;
             BED.updateKdr();
-        } else if (subTitle != null && subTitle.equals("§r§7Protect your bed, destroy others!§r")) {
+        }
+        else if(title != null && title.equals("§r§fWelcome to...§r")) {
+            BED.inGame = true;
+        }
+        else if (subTitle != null && subTitle.equals("§r§7Protect your bed, destroy others!§r")) {
             gameMode.setState(GameState.GAME);
             BED.ironGen = 1;
             //As Hive sends this subtitle like 13 times, don't do anything here please :) mhm
@@ -513,7 +521,6 @@ public class BEDListener extends AbstractGameListener<BED> {
 
     @Override
     public void onServerConnect(BED gameMode) {
-        if (BED.hasWon == null || !BED.hasWon) BED.hasWon = false;
         BED.reset(gameMode);
     }
 

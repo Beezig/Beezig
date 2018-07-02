@@ -89,6 +89,9 @@
           "type": "beddaily"
         },
         {
+          "type": "bedstreak"
+        },
+        {
           "type": "bedresources"
         }
       ]

@@ -17,6 +17,7 @@ public class StreakUtils {
     public static void init(File rootDir){
         winstreakFile = new File(rootDir + "/winstreaks.json");
         initValues(CAI.class, "cai");
+        initValues(BED.class, "bed");
     }
 
 
@@ -58,8 +59,8 @@ public class StreakUtils {
           if (obj.containsKey(mode)) {
               JSONObject j = (JSONObject) obj.get(mode);
               try {
-                  c.getField("winstreak").set(null, Math.toIntExact((long) j.get("streak")));
-                  c.getField("bestStreak").set(null, Math.toIntExact((long) j.get("bestStreak")));
+                  c.getField("winstreak").set(null, j.containsKey("streak") ? Math.toIntExact((long) j.get("streak")) : 0);
+                  c.getField("bestStreak").set(null, j.containsKey("bestStreak") ? Math.toIntExact((long) j.get("bestStreak")) : c.getField("winstreak").get(null));
               } catch (IllegalAccessException e) {
                   e.printStackTrace();
               } catch (NoSuchFieldException e) {

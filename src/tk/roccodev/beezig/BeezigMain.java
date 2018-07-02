@@ -185,8 +185,7 @@ public class BeezigMain {
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "beddaily", tk.roccodev.beezig.modules.bed.DailyItem.class,
                 "serverhivemc");
-        // The5zigAPI.getAPI().registerModuleItem(this, "bedwinstreak",
-        // tk.roccodev.zta.modules.bed.WinstreakItem.class , "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "bedstreak", tk.roccodev.beezig.modules.bed.WinstreakItem.class , "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "globalmedals", tk.roccodev.beezig.modules.global.MedalsItem.class,
                 "serverhivemc");
