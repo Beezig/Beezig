@@ -1,13 +1,14 @@
 package tk.roccodev.beezig.hiveapi.stuff.hide;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static eu.the5zig.util.minecraft.ChatColor.*;
 
-public enum HIDERank {
+public enum HIDERank implements RankEnum {
 
     BLIND("Blind", GRAY + "", 0),
     SHORT_SIGHTED("Short Sighted", DARK_AQUA + "", 100),
@@ -44,6 +45,11 @@ public enum HIDERank {
             if (rank.getDisplay().equalsIgnoreCase(display)) return rank;
         }
         return null;
+    }
+
+    @Override
+    public String getPrefix() {
+        return prefix;
     }
 
 

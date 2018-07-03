@@ -4,12 +4,13 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
+import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public enum BEDRank {
+public enum BEDRank implements RankEnum {
 
     SLEEPY(ChatColor.GRAY + "Sleepy", 0, 100, 300, 600, 1000),
     SNOOZER(ChatColor.BLUE + "Snoozer", 1500, 2100, 2800, 3600, 4500),
@@ -80,6 +81,26 @@ public enum BEDRank {
         }
         String no1 = HiveAPI.getLeaderboardsPlaceHolder(0, "BED");
         return no1.equalsIgnoreCase(ign);
+    }
+
+    @Override
+    public String getPrefix() {
+        return "";
+    }
+
+    @Override
+    public String getDisplay() {
+        return name;
+    }
+
+
+    public static BEDRank getFromDisplay(String display) {
+        return null;
+    }
+
+    @Override
+    public String getTotalDisplay() {
+        return name;
     }
 
     public String getName() {

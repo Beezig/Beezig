@@ -1,11 +1,12 @@
 package tk.roccodev.beezig.hiveapi.stuff.lab;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public enum LABRank {
+public enum LABRank implements RankEnum {
 
     TESTTUBE("First Step", "§7", 0),
     MICROSCOPIC("Microscopic", "§6", 20),

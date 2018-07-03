@@ -1,13 +1,14 @@
 package tk.roccodev.beezig.hiveapi.stuff.grav;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static eu.the5zig.util.minecraft.ChatColor.*;
 
-public enum GRAVRank {
+public enum GRAVRank implements RankEnum {
 
     TUMBLER("Tumbler", GRAY + "", 0),
     FALLER("Faller", GOLD + "", 250),
@@ -44,6 +45,12 @@ public enum GRAVRank {
         }
         return null;
     }
+
+    @Override
+    public String getPrefix() {
+        return prefix;
+    }
+
 
     public String getDisplay() {
         return display;
