@@ -45,6 +45,7 @@ public enum BEDRank implements RankEnum {
 
 
     private String name;
+    private int cachedPts;
     private int start, lvl4, lvl3, lvl2, lvl1;
 
 
@@ -64,6 +65,7 @@ public enum BEDRank implements RankEnum {
         for (BEDRank rank : ranks) {
             if (rank.getStart() != -1 && rank.getStart() <= points) {
                 //Rank found
+                rank.cachedPts = Math.toIntExact(points);
                 return rank;
 
 
@@ -100,7 +102,7 @@ public enum BEDRank implements RankEnum {
 
     @Override
     public String getTotalDisplay() {
-        return name;
+        return getName().replace(ChatColor.stripColor(getName()), "") + BED.NUMBERS[getLevel(cachedPts)] + " " + ChatColor.stripColor(name);
     }
 
     public String getName() {
