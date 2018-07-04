@@ -99,7 +99,7 @@ public class LeaderboardCommand implements Command {
 
                     points.add(pts);
 
-                    RankEnum rank = game.equalsIgnoreCase("bed") ? BEDRank.getRank(pts) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(pts) : null);
+                    RankEnum rank = game.equalsIgnoreCase("bed") ? (i == 0 ? BEDRank.ZZZZZZ : BEDRank.getRank(pts)) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(pts) : null);
                     if(rank == null) {
                         rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, api.getTitle());
                     }
@@ -119,7 +119,7 @@ public class LeaderboardCommand implements Command {
                         The5zigAPI.getAPI()
                                 .messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
                                         + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
-                                        + points.get(i) + " §7- " + title.get(i) + " §r" + name.get(i));
+                                        + points.get(i) + "§7 - " + title.get(i) + "§r " + name.get(i));
                     }
                 } catch (Exception e) {
                     // e.printStackTrace();

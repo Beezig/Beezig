@@ -529,7 +529,7 @@ public class BeezigMain {
         new GNT();
         new GNTM();
 
-        String dailyName = TIMVDay.fromCalendar(Calendar.getInstance()) + ".txt";
+        String dailyName = TIMVDay.fromCalendar(Calendar.getInstance()) + '-' + The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "") + ".txt";
 
         TIMV.setDailyKarmaFileName(dailyName);
         BP.setDailyPointsFileName(dailyName);

@@ -77,10 +77,16 @@ public enum BEDRank implements RankEnum {
     }
 
     public static boolean isNo1(String ign) {
-        if (BED.lastRecordsPoints < 500000L) {
+        if (BED.lastRecordsPoints < 2000000L) {
             //Saved another API operation
             return false;
         }
+        String no1 = HiveAPI.getLeaderboardsPlaceHolder(0, "BED");
+        return no1.equalsIgnoreCase(ign);
+    }
+
+    public static boolean isNo1(String ign, long validate) {
+        if(validate < 2000000L) return false;
         String no1 = HiveAPI.getLeaderboardsPlaceHolder(0, "BED");
         return no1.equalsIgnoreCase(ign);
     }
@@ -102,7 +108,13 @@ public enum BEDRank implements RankEnum {
 
     @Override
     public String getTotalDisplay() {
-        return getName().replace(ChatColor.stripColor(getName()), "") + BED.NUMBERS[getLevel(cachedPts)] + " " + ChatColor.stripColor(name);
+        if(this == ZZZZZZ) {
+            return getName();
+        }
+        else {
+            return getName().replace(ChatColor.stripColor(getName()), "") + BED.NUMBERS[getLevel(cachedPts)] + " " + ChatColor.stripColor(name);
+        }
+
     }
 
     public String getName() {
