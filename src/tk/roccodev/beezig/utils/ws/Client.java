@@ -1,14 +1,10 @@
 package tk.roccodev.beezig.utils.ws;
 
 import eu.the5zig.mod.The5zigAPI;
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
+import org.java_websocket_remap.client.WebSocketClient;
+import org.java_websocket_remap.handshake.ServerHandshake;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.games.DR;
-import tk.roccodev.beezig.games.GRAV;
-import tk.roccodev.beezig.games.TIMV;
-import tk.roccodev.beezig.hiveapi.StuffFetcher;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.NotificationManager;
 

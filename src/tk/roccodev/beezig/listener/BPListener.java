@@ -5,6 +5,7 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import org.json.simple.JSONObject;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
@@ -15,9 +16,11 @@ import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiBP;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.ws.Connector;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
@@ -63,6 +66,15 @@ public class BPListener extends AbstractGameListener<BP> {
                     BP.rank = BP.rankObject.getTotalDisplay();
 
                 }
+
+                // Custom jukebox
+                JSONObject obj = APIUtils.getObject(APIUtils.readURL(new URL("https://hivemc.com/ajax/getblockpartyserver/" + The5zigAPI.getAPI().getGameProfile().getName())));
+                String server = (String) obj.get("server"); // Either "NONE" or the server the player is in
+                if (server.equals("NONE")) {
+                    System.out.println("No server, skipping.");
+                    return;
+                }
+                Connector.connectBP(server);
 
             } catch (Exception e) {
                 e.printStackTrace();
