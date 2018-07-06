@@ -32,6 +32,7 @@ import tk.roccodev.beezig.utils.TIMVTest;
 import tk.roccodev.beezig.utils.acr.Connector;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 import tk.roccodev.beezig.utils.rpc.NativeUtils;
+import tk.roccodev.beezig.utils.soundcloud.TrackPlayer;
 
 import java.io.*;
 import java.lang.reflect.Method;
@@ -330,6 +331,7 @@ public class BeezigMain {
         CommandManager.registerCommand(new UUIDCommand());
         CommandManager.registerCommand(new BeezigPartyCommand());
         CommandManager.registerCommand(new DeathrunRecordsCommand());
+        CommandManager.registerCommand(new VolumeCommand());
         // CommandManager.registerCommand(new ChatReportCommand());
 
         new Thread(new Runnable() {
@@ -389,6 +391,9 @@ public class BeezigMain {
         checkForFileExist(new File(mcFile + "/bp/"), true);
         checkForFileExist(new File(mcFile + "/bp/dailyPoints/"), true);
 
+        File jukeboxFile = new File(mcFile + "/bp/jukebox");
+        checkForFileExist(jukeboxFile, false);
+
         checkForFileExist(new File(mcFile + "/cai/"), true);
         checkForFileExist(new File(mcFile + "/cai/dailyPoints/"), true);
 
@@ -416,6 +421,8 @@ public class BeezigMain {
         checkForFileExist(new File(mcFile + "/lab/dailyPoints/"), true);
 
         StreakUtils.init(mcFile);
+        TrackPlayer.loadConfigFile(jukeboxFile);
+
         new Thread(new Runnable() {
             @Override
             public void run() {

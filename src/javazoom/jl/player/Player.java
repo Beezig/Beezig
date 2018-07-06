@@ -142,6 +142,7 @@ public class Player
 
     public void setGain(float newGain) {
         if (audio instanceof JavaSoundAudioDevice) {
+        	System.out.println("Setting new gain: " + newGain);
             JavaSoundAudioDevice jsAudio = (JavaSoundAudioDevice) audio;
             jsAudio.setLineGain(newGain);
 
