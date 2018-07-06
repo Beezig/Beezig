@@ -6,6 +6,7 @@ import io.socket.SocketIO;
 import io.socket.SocketIOException;
 import javazoom.jl.decoder.JavaLayerException;
 import org.json.simple.JSONObject;
+import paulscode.sound.SoundSystemException;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.utils.soundcloud.TrackDownloader;
 import tk.roccodev.beezig.utils.soundcloud.TrackPlayer;
@@ -35,7 +36,7 @@ public class Connector {
         if(socket != null) socket.disconnect();
         try {
             socket = new SocketIO(IO_BP_URL);
-            socket.addHeader("User-Agent", "Testing");
+            socket.addHeader("User-Agent", Log.getUserAgent());
             SocketIO.setDefaultSSLSocketFactory(SSLContext.getDefault());
             socket.connect(new IOCallback() {
                 @Override
@@ -69,6 +70,7 @@ public class Connector {
                         new Thread(() -> {
                             try {
                                 TrackPlayer.cachedTrack = TrackDownloader.trackStream(trackId);
+
                                 TrackPlayer.init();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -84,15 +86,15 @@ public class Connector {
                             if(TrackPlayer.playing)  {
                                 System.out.println("Pausing track...");
                                 TrackPlayer.stop();
+                                TrackPlayer.playOgg("vinyl");
                             }
                             else {
-                                try {
+
                                     System.out.println("Resuming track...");
+                                    TrackPlayer.playOgg("cheer");
                                     TrackPlayer.resume();
-                                } catch (JavaLayerException e) {
-                                    e.printStackTrace();
+
                                 }
-                            }
                         }).start();
 
                     }
