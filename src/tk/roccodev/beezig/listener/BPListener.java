@@ -68,13 +68,15 @@ public class BPListener extends AbstractGameListener<BP> {
                 }
 
                 // Custom jukebox
-                JSONObject obj = APIUtils.getObject(APIUtils.readURL(new URL("https://hivemc.com/ajax/getblockpartyserver/" + The5zigAPI.getAPI().getGameProfile().getName())));
-                String server = (String) obj.get("server"); // Either "NONE" or the server the player is in
-                if (server.equals("NONE")) {
-                    System.out.println("No server, skipping.");
-                    return;
+                if(Setting.BP_JUKEBOX.getValue()) {
+                    JSONObject obj = APIUtils.getObject(APIUtils.readURL(new URL("https://hivemc.com/ajax/getblockpartyserver/" + The5zigAPI.getAPI().getGameProfile().getName())));
+                    String server = (String) obj.get("server"); // Either "NONE" or the server the player is in
+                    if (server.equals("NONE")) {
+                        System.out.println("No server, skipping.");
+                        return;
+                    }
+                    Connector.connectBP(server);
                 }
-                Connector.connectBP(server);
 
             } catch (Exception e) {
                 e.printStackTrace();
