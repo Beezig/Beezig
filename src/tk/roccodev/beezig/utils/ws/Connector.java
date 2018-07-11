@@ -6,6 +6,8 @@ import io.socket.SocketIO;
 import io.socket.SocketIOException;
 import javazoom.jl.decoder.JavaLayerException;
 import org.json.simple.JSONObject;
+
+import eu.the5zig.mod.The5zigAPI;
 import paulscode.sound.SoundSystemException;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.utils.soundcloud.TrackDownloader;
@@ -66,12 +68,15 @@ public class Connector {
                     if(event.equals("loadsong")) {
                         JSONObject json = (JSONObject) args[0];
                         JSONObject data = (JSONObject) json.get("data");
+                        String name = (String) data.get("name");
+                        The5zigAPI.getAPI().messagePlayer("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏§3Voting has ended! §bThe song §f" + name + "§b has won!");
                         String trackId = (String) data.get("soundcloud");
                         new Thread(() -> {
                             try {
                                 TrackPlayer.cachedTrack = TrackDownloader.trackStream(trackId);
 
                                 TrackPlayer.init();
+                                The5zigAPI.getAPI().messagePlayer(Log.info + "Loaded the song to your jukebox. To adjust the volume, use /vol [0-100].");
                             } catch (IOException e) {
                                 e.printStackTrace();
                             } catch (JavaLayerException e) {
