@@ -130,8 +130,10 @@ public class Connector {
         new Thread(() -> {
             if(socket != null) {
                 JSONObject servObj = new JSONObject();
+                if(lastBPServer != null) {
                 servObj.put("server", lastBPServer);
                 socket.emit("leaveserver", servObj);
+                }
                 socket.disconnect();
             }
             TrackPlayer.close();
