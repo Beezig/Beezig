@@ -31,6 +31,7 @@ public class Giant extends GameMode {
 
     public static boolean inGame;
     public static boolean hasWon;
+    public static boolean isEnding;
     public static int winstreak;
     public static int bestStreak;
 
@@ -109,6 +110,7 @@ public class Giant extends GameMode {
             winstreak = 0;
             StreakUtils.resetWinstreak("gnt");
         }
+        isEnding = false;
         hasWon = false;
         inGame = false;
         teamsEliminated = 0;

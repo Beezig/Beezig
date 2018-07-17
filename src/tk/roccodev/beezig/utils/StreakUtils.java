@@ -6,6 +6,8 @@ import org.json.simple.JSONObject;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.games.CAI;
+import tk.roccodev.beezig.games.Giant;
+import tk.roccodev.beezig.games.HIDE;
 import tk.roccodev.beezig.games.SKY;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 
@@ -21,6 +23,8 @@ public class StreakUtils {
         initValues(CAI.class, "cai");
         initValues(BED.class, "bed");
         initValues(SKY.class, "sky");
+        initValues(Giant.class, "gnt");
+        initValues(HIDE.class, "hide");
     }
 
 

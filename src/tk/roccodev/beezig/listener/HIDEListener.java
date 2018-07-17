@@ -15,6 +15,7 @@ import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHIDE;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
@@ -92,6 +93,10 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
         //Autovoting
 
+        else if(message.startsWith("                      §b§lYou are a §f§lHIDER!")) {
+        	HIDE.inGame = true;
+        }
+        
         else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §a§lVote received. §3Your map now has ") && Setting.AUTOVOTE.getValue()) {
             HIDE.hasVoted = true;
         } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6§e§e§l6. §f§cRandom map") && !HIDE.hasVoted && Setting.AUTOVOTE.getValue()) {
@@ -159,10 +164,19 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
         } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e200 points§6")) {
             APIValues.HIDEpoints += 200;
             HIDE.dailyPoints += 200;
+            HIDE.hasWon = true;
+            HIDE.winstreak++;
+            if(HIDE.winstreak >= HIDE.bestStreak) HIDE.bestStreak = HIDE.winstreak;
+            StreakUtils.incrementWinstreakByOne("hide");
         } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e50 points§6")) {
             APIValues.HIDEpoints += 50;
             HIDE.dailyPoints += 50;
+            HIDE.hasWon = true;
+            HIDE.winstreak++;
+            if(HIDE.winstreak >= HIDE.bestStreak) HIDE.bestStreak = HIDE.winstreak;
+            StreakUtils.incrementWinstreakByOne("hide");
         } else if (message.equals("                          §6§lYou are a §c§lSEEKER!")) {
+        	HIDE.inGame = true;
             HIDE.seeking = true;
             DiscordUtils.updatePresence("Playing Hide & Seek", "Seeking on " + HIDE.activeMap, "game_hide");
         } else if ((message.equals("                      §6§m                  §6§m                  ") && !message.startsWith("§o "))) {

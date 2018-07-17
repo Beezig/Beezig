@@ -213,12 +213,16 @@ public class BeezigMain {
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "gntdaily", tk.roccodev.beezig.modules.gnt.DailyItem.class,
                 "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "gntstreak", tk.roccodev.beezig.modules.gnt.WinstreakItem.class,
+                "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "hidemap", tk.roccodev.beezig.modules.hide.MapItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "hidepoints", tk.roccodev.beezig.modules.hide.PointsItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "hidedaily", tk.roccodev.beezig.modules.hide.DailyItem.class,
+                "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "hidestreak", tk.roccodev.beezig.modules.hide.WinstreakItem.class,
                 "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "caimap", tk.roccodev.beezig.modules.cai.MapItem.class,
