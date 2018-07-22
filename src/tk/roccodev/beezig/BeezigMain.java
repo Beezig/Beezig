@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 
 @Plugin(name = "Beezig", version = BeezigMain.BEEZIG_VERSION)
 public class BeezigMain {
-    public static final String BEEZIG_VERSION = "4.8.0";
+    public static final String BEEZIG_VERSION = "4.8.1";
     public static String VERSION_HASH = "";
     public static String OS;
     public static boolean newUpdate;
@@ -901,6 +901,13 @@ public class BeezigMain {
             System.out.println("Connected to LAB -Hive");
             DiscordUtils.updatePresence("Experimenting in TheLab", "In Lobby", "game_lab");
             IHive.gameListener.switchLobby("LAB");
+
+        }
+        if(The5zigAPI.getAPI().isInWorld() && The5zigAPI.getAPI().getSideScoreboard() != null && The5zigAPI.getAPI().getSideScoreboard().getTitle().startsWith("   §eYour BED") && !ActiveGame.is("bed")) {
+            ActiveGame.set("BED");
+            System.out.println("Connected to BED -Hive");
+            DiscordUtils.updatePresence("Housekeeping in BedWars", "In Lobby", "game_bedwars");
+            IHive.gameListener.switchLobby("BED");
 
         }
     }
