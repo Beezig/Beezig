@@ -1,8 +1,11 @@
 package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.hiveapi.HiveAPI;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 import java.io.OutputStream;
@@ -17,6 +20,7 @@ public class ReportCommand implements Command {
 
     private long lastOne;
     private boolean shouldConfirm = false;
+    public String Hive = "§8§l| §a§lBeezig§c§lReport §8| §r";
 
     @Override
     public String getName() {
@@ -35,7 +39,7 @@ public class ReportCommand implements Command {
 
         if (!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
         if (args.length < 2) {
-            The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /report [player] [reason]");
+            The5zigAPI.getAPI().messagePlayer(Hive + "Usage: /report [player] [reason]");
             return true;
         }
         if (lastOne != 0 && !shouldConfirm && (System.currentTimeMillis() - lastOne < 30000)) {
@@ -49,22 +53,25 @@ public class ReportCommand implements Command {
         new Thread(() -> {
             String rawArgs = String.join(" ", args);
             String[] rawPlayers = rawArgs.replaceAll(", ", ",").split(" ");
-            String data0 = rawPlayers[0];
+            String players = rawPlayers[0];
             ArrayList<String> argsL = new ArrayList<>(Arrays.asList(rawPlayers));
             argsL.remove(0);
-            String data1 = String.join(" ", argsL);
-            System.out.println(data0 + " / " + data1);
-            String players = data0;
+            String reason = String.join(" ", argsL);
+
+            if(reason.contains("swear") || reason.contains("spam") || reason.contains("racis") || reason.contains("idiot")) {
+                The5zigAPI.getAPI().messagePlayer(Hive + "This is not the proper way to report chat offences. Please use /chatreport instead.");
+                return;
+            }
             for (String s : players.split(",")) {
                 ApiHiveGlobal api = new ApiHiveGlobal(s);
                 // Trigger an error if needed
                 api.getCorrectName();
                 if (api.getError() != null) {
-                    The5zigAPI.getAPI().messagePlayer(Log.error + "Player §4" + s + "§c does not exist.");
+                    The5zigAPI.getAPI().messagePlayer(Hive + "Player §4" + s + "§c does not exist.");
                     return;
                 }
                 if (!api.isOnline() && !shouldConfirm) {
-                    The5zigAPI.getAPI().messagePlayer(Log.info + "Player §b" + s + "§3 is not online. Please run the command again to confirm the report.");
+                    The5zigAPI.getAPI().messagePlayer(Hive + "Player §b" + s + "§3 is not online. Please run the command again to confirm the report.");
                     shouldConfirm = true;
                     return;
                 } else {
@@ -72,8 +79,6 @@ public class ReportCommand implements Command {
                 }
 
             }
-
-            String reason = data1;
 
             try {
                 URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/report");
@@ -101,7 +106,14 @@ public class ReportCommand implements Command {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully submitted report. Please wait for a moderator to take action.");
+            ApiHiveGlobal api = new ApiHiveGlobal(args[0]);
+            String ign = api.getCorrectName();
+            String networkRank = api.getNetworkTitle();
+            ChatColor rankColor = api.getNetworkRankColor();
+
+            The5zigAPI.getAPI().messagePlayer(Hive + ChatColor.YELLOW + "User: " + rankColor + players + ChatColor.YELLOW + " For: " + ChatColor.RED + reason);
+            The5zigAPI.getAPI().messagePlayer(Hive + ChatColor.YELLOW + "Server: " + ChatColor.RED + api.getPlayerLocation());
+
 
         }).start();
 
