@@ -427,6 +427,7 @@ public class BeezigMain {
         StreakUtils.init(mcFile);
         TrackPlayer.loadConfigFile(jukeboxFile);
 
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -509,31 +510,7 @@ public class BeezigMain {
         }
 
         The5zigAPI.getLogger().info("Loaded BeezigConfig.");
-        if (Setting.DISCORD_RPC.getValue()) {
-            try {
-                String OS1 = System.getProperty("os.name").toLowerCase();
-                if (OS1.contains("mac")) {
-                    NativeUtils.loadLibraryFromJar("/libraries/darwin/libdiscord-rpc.dylib");
-                } else if (OS1.contains("nix") || OS1.contains("nux") || OS1.indexOf("aix") > 0) {
-                    NativeUtils.loadLibraryFromJar("/libraries/linux-x86-64/libdiscord-rpc.so");
-                } else if (OS1.contains("win")) {
-                    if (System.getProperty("os.arch").equals("x86")) {
-                        NativeUtils.loadLibraryFromJar("/libraries/win32-x86/discord-rpc.dll");
-                    } else {
-                        NativeUtils.loadLibraryFromJar("/libraries/win32-x86-64/discord-rpc.dll");
-                    }
 
-                } else {
-                    NativeUtils.loadLibraryFromJar("/libraries/linux-x86-64/libdiscord-rpc.so");
-                }
-
-            } catch (IOException e) {
-                System.out.println("Failed to load RPC libraries.");
-                DiscordUtils.shouldOperate = false;
-            }
-        } else {
-            DiscordUtils.shouldOperate = false;
-        }
 
         // Instantiate GNT Classes
         new Giant();
@@ -838,11 +815,9 @@ public class BeezigMain {
         hasServedNews = false;
         System.out.println("Disconnecting...");
         if (DiscordUtils.shouldOperate && Setting.DISCORD_RPC.getValue())
-            club.minnced.discord.rpc.DiscordRPC.INSTANCE.Discord_ClearPresence();
-        if (DiscordUtils.callbacksThread != null)
-            DiscordUtils.callbacksThread.interrupt();
+           DiscordUtils.clearPresence();
         if (DiscordUtils.shouldOperate && Setting.DISCORD_RPC.getValue())
-            club.minnced.discord.rpc.DiscordRPC.INSTANCE.Discord_Shutdown();
+           DiscordUtils.closeClient();
 
         if (ActiveGame.current() == null || ActiveGame.current().isEmpty())
             return;
