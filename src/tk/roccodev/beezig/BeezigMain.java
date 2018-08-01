@@ -16,7 +16,6 @@ import tk.roccodev.beezig.command.*;
 import tk.roccodev.beezig.games.*;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.StuffFetcher;
-import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVListenerv2;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
@@ -25,13 +24,9 @@ import tk.roccodev.beezig.notes.NotesManager;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.settings.SettingsFetcher;
 import tk.roccodev.beezig.updater.Updater;
-import tk.roccodev.beezig.utils.ChatComponentUtils;
-import tk.roccodev.beezig.utils.NotificationManager;
-import tk.roccodev.beezig.utils.TIMVDay;
-import tk.roccodev.beezig.utils.TIMVTest;
+import tk.roccodev.beezig.utils.*;
 import tk.roccodev.beezig.utils.acr.Connector;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
-import tk.roccodev.beezig.utils.rpc.NativeUtils;
 import tk.roccodev.beezig.utils.soundcloud.TrackPlayer;
 
 import java.io.*;
@@ -51,7 +46,7 @@ import java.util.stream.Collectors;
 
 @Plugin(name = "Beezig", version = BeezigMain.BEEZIG_VERSION)
 public class BeezigMain {
-    public static final String BEEZIG_VERSION = "4.8.1";
+    public static final String BEEZIG_VERSION = "4.9.0";
     public static String VERSION_HASH = "";
     public static String OS;
     public static boolean newUpdate;

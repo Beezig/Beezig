@@ -34,7 +34,7 @@ public class DeathrunRecordsCommand implements Command {
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Deaths Record:§b " + api.getDeathRecords().get(map));
 
             } catch(Exception e) {
-                The5zigAPI.getAPI().messagePlayer(Log.error + "An Error occured.");
+                The5zigAPI.getAPI().messagePlayer(Log.error + "An Error occurred.");
             }
         }).start();
 
