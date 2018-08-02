@@ -6,22 +6,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
-import tk.roccodev.beezig.hiveapi.stuff.bp.BPRank;
-import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
-import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
-import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVRank;
-import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
-import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
-import tk.roccodev.beezig.hiveapi.stuff.mimv.MIMVRank;
 import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
-import tk.roccodev.beezig.hiveapi.stuff.sky.SKYRank;
-import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIGameMode;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.*;
+import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +89,7 @@ public class LeaderboardCommand implements Command {
 
                     points.add(pts);
 
-                    RankEnum rank = game.equalsIgnoreCase("bed") ? (i == 0 ? BEDRank.ZZZZZZ : BEDRank.getRank(pts)) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(pts) : null);
+                    RankEnum rank = game.equalsIgnoreCase("bed") ? ((humanStart + i == 1) ? BEDRank.ZZZZZZ : BEDRank.getRank(pts)) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(pts) : null);
                     if(rank == null) {
                         rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, api.getTitle());
                     }
