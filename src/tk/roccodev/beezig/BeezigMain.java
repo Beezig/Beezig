@@ -950,7 +950,7 @@ public class BeezigMain {
 
                 }
             }
-            if (ChatColor.stripColor(evt.getMessage().trim()).equals("▍ Friends ▏ ✚ Toccata")) {
+            if (ChatColor.stripColor(evt.getMessage().trim()).equals("▍ Friends ▏ ✚ Toccata") && Setting.TOCCATA.getValue()) {
                 NotesManager.tramontoccataStelle();
             }
             if (evt.getMessage().startsWith("§3§lPRIVATE§3│")
