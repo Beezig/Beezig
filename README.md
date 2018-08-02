@@ -14,9 +14,9 @@ By RoccoDev and ItsNiklass.
 
 ### Build Status
 
-[![Travis Master](https://travis-ci.org/RoccoDev/5zig-TIMV-Plugin.svg?branch=master)](http://travis-ci.org/RoccoDev/5zig-TIMV-Plugin) (Master)
+[![Travis Master](https://travis-ci.org/RoccoDev/Beezig.svg?branch=master)](http://travis-ci.org/RoccoDev/Beezig) (Master)
 
-[![Travis Exp](https://travis-ci.org/RoccoDev/5zig-TIMV-Plugin.svg?branch=experimental)](http://travis-ci.org/RoccoDev/5zig-TIMV-Plugin) (Experimental)
+[![Travis Exp](https://travis-ci.org/RoccoDev/Beezig.svg?branch=experimental)](http://travis-ci.org/RoccoDev/Beezig) (Experimental)
 
 # Features
 
