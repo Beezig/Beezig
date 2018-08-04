@@ -106,10 +106,22 @@ public class LeaderboardCommand implements Command {
             for (int i = 0; i < name.size(); i++) {
                 try {
                     if (points.get(i) != 0) {
-                        The5zigAPI.getAPI()
-                                .messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
-                                        + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
-                                        + points.get(i) + "§7 - " + title.get(i) + "§r " + name.get(i));
+                        if (points.get(i) != 0) {
+                            if(title.get(i).equals("§a§lMaster §e§lof §b§lDisguise")) {
+                                The5zigAPI.getAPI()
+                                        .messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
+                                                + "§a§l"
+                                                + points.get(i) + "§7 - " + title.get(i) + "§r " + name.get(i));
+                            }
+                            else {
+                                The5zigAPI.getAPI()
+                                        .messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
+                                                + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
+                                                + points.get(i) + "§7 - " + title.get(i) + "§r " + name.get(i));
+                            }
+
+                        }
+
                     }
                 } catch (Exception e) {
                     // e.printStackTrace();

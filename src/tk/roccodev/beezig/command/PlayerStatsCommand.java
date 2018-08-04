@@ -104,9 +104,16 @@ public class PlayerStatsCommand implements Command {
             for (int i = 0; i < name.size(); i++) {
                 try {
                     if (points.get(i) != 0) {
-                        The5zigAPI.getAPI().messagePlayer(
-                                Log.info + title.get(i).replace(ChatColor.stripColor(title.get(i)), "")
-                                        + points.get(i) + "§7 - " + title.get(i) + "§r " + name.get(i));
+                        if(title.get(i).equals("§a§lMaster §e§lof §b§lDisguise")) {
+                            The5zigAPI.getAPI().messagePlayer(
+                                    Log.info + "§a§l" + points.get(i) + "§7 - " + title.get(i) + "§r " + name.get(i));
+                        }
+                        else {
+                            The5zigAPI.getAPI().messagePlayer(
+                                    Log.info + title.get(i).replace(ChatColor.stripColor(title.get(i)), "")
+                                            + points.get(i) + "§7 - " + title.get(i) + "§r " + name.get(i));
+                        }
+
                     }
                 } catch (Exception e) {
                     // e.printStackTrace();

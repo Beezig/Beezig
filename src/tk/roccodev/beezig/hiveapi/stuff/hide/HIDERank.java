@@ -14,10 +14,13 @@ public enum HIDERank implements RankEnum {
     SHORT_SIGHTED("Short Sighted", DARK_AQUA + "", 100),
     SNEAKER("Sneaker", AQUA + "", 1000),
     SNEAKY("Sneaky", LIGHT_PURPLE + "", 2500),
-    MYSTERIOUS("Mysterious", GOLD + "", 10000),
-    CAMOUFLAGED("Camouflaged", YELLOW + "", 20000),
+    DECEPTIVE("Deceptive", "§6", 5000),
+    MYSTERIOUS("Mysterious", YELLOW + "", 10000),
+    DISGUISED("Disguised", "§a", 15000),
+    CAMOUFLAGED("Camouflaged", DARK_GREEN + "", 20000),
     CHAMELEON("Chameleon", RED + "", 30000),
     STEALTHY("Stealthy", AQUA + "", 40000),
+    MASKED("Masked", GOLD + "", 50000),
     HUNTER("Hunter", YELLOW + "", 75000),
     MAGICIAN("Magician", LIGHT_PURPLE + "", 100000),
     ESCAPIST("Escapist", DARK_AQUA + "", 150000),
@@ -25,8 +28,11 @@ public enum HIDERank implements RankEnum {
     SHADOW("Shadow", DARK_PURPLE + "", 500000),
     HOUDINI("Houdini", AQUA + "" + BOLD + "", 1000000),
     NINJA("Ninja", DARK_GRAY + "" + BOLD + "", 1750000),
-    WALLY("Wally", DARK_RED + "" + BOLD + "", 2500000),
+    WALLY("Wally", RED + "" + BOLD + "", 2500000),
     GHOST("Ghost", WHITE + "" + BOLD + "", 4000000),
+    SILHOUETTE("Silhouette", "§3§l", 6000000),
+    PHANTOM("Phantom", "§5§l", 8000000),
+    VANISHED("Vanished", "§1§l", 10000000),
     MASTER_OF_DISGUISE("Master of Disguise", BOLD + "" + MAGIC + "", -1);
 
 
@@ -59,7 +65,7 @@ public enum HIDERank implements RankEnum {
 
     public String getTotalDisplay() {
         if (this == MASTER_OF_DISGUISE) {
-            return "§e§lMaster §a§lof §b§lDisguise";
+            return "§a§lMaster §e§lof §b§lDisguise";
         }
         return prefix + display;
     }
