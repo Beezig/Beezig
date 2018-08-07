@@ -578,8 +578,8 @@ public class BeezigMain {
     @EventHandler(priority = EventHandler.Priority.HIGH)
     public void onChatSend(ChatSendEvent evt) {
 
-        if (evt.getMessage().startsWith("*") && isStaffChat()) {
-            String noStar = evt.getMessage().replaceAll("\\*", "");
+        if (evt.getMessage().startsWith("~") && isStaffChat()) {
+            String noStar = evt.getMessage().replace("~", "");
             if (noStar.length() == 0)
                 return;
             The5zigAPI.getAPI().sendPlayerMessage("/s " + noStar);
