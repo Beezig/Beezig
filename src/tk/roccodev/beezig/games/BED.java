@@ -113,9 +113,10 @@ public class BED extends GameMode {
 
         gm.setState(GameState.FINISHED);
         if(inGame && !hasWon) {
+            boolean wasBest = winstreak >= bestStreak;
             System.out.println("Lost!");
             winstreak = 0;
-            StreakUtils.resetWinstreak("bed");
+            StreakUtils.resetWinstreak("bed", wasBest);
         }
         hasWon = false;
         inGame = false;

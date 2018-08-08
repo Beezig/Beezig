@@ -331,6 +331,7 @@ public class BeezigMain {
         CommandManager.registerCommand(new BeezigPartyCommand());
         CommandManager.registerCommand(new DeathrunRecordsCommand());
         CommandManager.registerCommand(new VolumeCommand());
+        CommandManager.registerCommand(new WinstreakCommand());
         // CommandManager.registerCommand(new ChatReportCommand());
 
         new Thread(new Runnable() {

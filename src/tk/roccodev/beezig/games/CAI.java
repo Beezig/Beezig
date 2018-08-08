@@ -90,9 +90,10 @@ public class CAI extends GameMode {
         System.out.println("reset");
         gameMode.setState(GameState.FINISHED);
         if(inGame && !hasWon) {
+            boolean wasBest = winstreak >= bestStreak;
             System.out.println("Lost!");
             CAI.winstreak = 0;
-            StreakUtils.resetWinstreak("cai");
+            StreakUtils.resetWinstreak("cai", wasBest);
         }
 
 

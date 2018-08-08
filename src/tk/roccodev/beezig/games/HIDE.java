@@ -90,9 +90,10 @@ public class HIDE extends GameMode {
 
         gameMode.setState(GameState.FINISHED);
         if(inGame && !hasWon) {
+            boolean wasBest = winstreak >= bestStreak;
             System.out.println("Lost!");
             winstreak = 0;
-            StreakUtils.resetWinstreak("hide");
+            StreakUtils.resetWinstreak("hide", wasBest);
         }
         inGame = false;
         hasWon = false;

@@ -104,9 +104,10 @@ public class SKY extends GameMode {
 
         gameMode.setState(GameState.FINISHED);
         if(inGame && !hasWon) {
+            boolean wasBest = winstreak >= bestStreak;
             System.out.println("Lost!");
             winstreak = 0;
-            StreakUtils.resetWinstreak("sky");
+            StreakUtils.resetWinstreak("sky", wasBest);
         }
         hasWon = false;
         inGame = false;

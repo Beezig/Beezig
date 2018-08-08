@@ -93,7 +93,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
         //Autovoting
 
-        else if(message.startsWith("                      §b§lYou are a §f§lHIDER!")) {
+        else if(message.startsWith("                     §b§lYou are a §f§lHIDER!")) {
         	HIDE.inGame = true;
         }
         
