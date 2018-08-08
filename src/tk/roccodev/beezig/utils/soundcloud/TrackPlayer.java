@@ -102,9 +102,24 @@ public class TrackPlayer {
     }
 
     public static void resume(){
-        playing = true;
-        player.player.setGain(gainToLoad);
-        player.play();
+        if(!player.firstResume) {
+            player.firstResume = true;
+            new Thread(() -> {
+                try {
+                    Thread.sleep(40);
+                    player.player.setGain(gainToLoad);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }).start();
+        }
+
+            playing = true;
+            player.player.setGain(gainToLoad);
+            player.play();
+
+
 
     }
 

@@ -10,6 +10,8 @@ public class PausablePlayer {
     // the player actually doing all the work
     public final Player player;
 
+    public boolean firstResume;
+
     // locking object used to communicate with player thread
     private final Object playerLock = new Object();
 

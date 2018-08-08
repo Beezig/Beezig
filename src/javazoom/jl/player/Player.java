@@ -40,7 +40,10 @@ import javazoom.jl.decoder.SampleBuffer;
 // REVIEW: the audio device should not be opened until the
 // first MPEG audio frame has been decoded. 
 public class Player
-{	  	
+{
+	private boolean hasSetGain = false;
+	private Float cachedGain = null;
+
 	/**
 	 * The current frame number. 
 	 */
@@ -141,6 +144,7 @@ public class Player
 	}
 
     public void setGain(float newGain) {
+		cachedGain = newGain;
         if (audio instanceof JavaSoundAudioDevice) {
         	System.out.println("Setting new gain: " + newGain);
             JavaSoundAudioDevice jsAudio = (JavaSoundAudioDevice) audio;
@@ -205,7 +209,14 @@ public class Player
 	 * @return true if there are no more frames to decode, false otherwise.
 	 */
 	protected boolean decodeFrame() throws JavaLayerException
-	{		
+	{
+		if(!hasSetGain && cachedGain != null) {
+			hasSetGain = true;
+			System.out.println("Setting new gain: " + cachedGain);
+			JavaSoundAudioDevice jsAudio = (JavaSoundAudioDevice) audio;
+			jsAudio.setLineGain(cachedGain);
+
+		}
 		try
 		{
 			AudioDevice out = audio;
