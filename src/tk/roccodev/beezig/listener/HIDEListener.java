@@ -53,13 +53,18 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                     // TODO Auto-generated catch block
                     e2.printStackTrace();
                 }
+                Thread.sleep(1000);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                The5zigAPI.getLogger().info(sb.getTitle());
 
                 ApiHIDE api = new ApiHIDE(The5zigAPI.getAPI().getGameProfile().getName());
 
-                if (sb != null && sb.getTitle().contains("Your HIDE Stats")) {
-                    int points = sb.getLines().get(ChatColor.AQUA + "Points");
+                if (sb.getTitle().contains("HideAndSeek")) {
+                    int points = 0;
+                    for(Map.Entry<String, Integer> e : sb.getLines().entrySet()) {
+                        if(e.getValue() == 7) {
+                            points = Integer.parseInt(ChatColor.stripColor(e.getKey()).replace("Points: ", ""));
+                        }
+                    }
                     APIValues.HIDEpoints = (long) points;
                 } else {
                     APIValues.HIDEpoints = api.getPoints();
