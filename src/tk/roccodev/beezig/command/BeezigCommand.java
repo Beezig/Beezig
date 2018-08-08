@@ -51,17 +51,14 @@ public class BeezigCommand implements Command {
                     "    §7§m                                                                                    "
                             + "\n");
         } else if (args[0].equalsIgnoreCase("reconnect")) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Connector.client.close();
-                    try {
-                        Connector.client = new Client(new URI(Connector.URL));
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                    }
-                    Connector.client.connect();
+            new Thread(() -> {
+                Connector.client.close();
+                try {
+                    Connector.client = new Client(new URI(Connector.URL));
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
                 }
+                Connector.client.connect();
             }).start();
             The5zigAPI.getAPI().messagePlayer(Log.info + "Reconnected.");
         }

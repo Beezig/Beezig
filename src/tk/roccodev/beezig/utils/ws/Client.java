@@ -9,6 +9,7 @@ import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.NotificationManager;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 public class Client extends WebSocketClient {
 
@@ -76,6 +77,16 @@ public class Client extends WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         System.out.println("Disconnected from WebSocket (" + code + "): " + reason + " [" + remote + "]");
+        System.out.println("Attempting to reconnect...");
+        new Thread(() -> {
+            Connector.client.close();
+            try {
+                Connector.client = new Client(new URI(Connector.URL));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+            Connector.client.connect();
+        }).start();
 
     }
 
