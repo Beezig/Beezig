@@ -14,7 +14,12 @@ public class AutoGGListener {
             new Thread(() -> {
                 try {
                     Thread.sleep(Triggers.delay);
-                    The5zigAPI.getAPI().sendPlayerMessage(Triggers.ggText);
+                    if(Triggers.inParty) {
+                        The5zigAPI.getAPI().sendPlayerMessage("/p");
+                        The5zigAPI.getAPI().sendPlayerMessage(Triggers.ggText);
+                        The5zigAPI.getAPI().sendPlayerMessage("/p");
+                    }
+                    else The5zigAPI.getAPI().sendPlayerMessage(Triggers.ggText);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -26,7 +31,12 @@ public class AutoGGListener {
             new Thread(() -> {
                 try {
                     Thread.sleep(Triggers.delay);
-                    The5zigAPI.getAPI().sendPlayerMessage(Triggers.ggText);
+                    if(Triggers.inParty) {
+                        The5zigAPI.getAPI().sendPlayerMessage("/p");
+                        The5zigAPI.getAPI().sendPlayerMessage(Triggers.ggText);
+                        The5zigAPI.getAPI().sendPlayerMessage("/p");
+                    }
+                    else The5zigAPI.getAPI().sendPlayerMessage(Triggers.ggText);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -38,11 +48,25 @@ public class AutoGGListener {
 
     @EventHandler
     public void onChat(ChatEvent evt) {
+        if(evt.getMessage().equals("§8▍ §b§lParty§8 ▏ §bParticipating in party chat? No.")) {
+            Triggers.inParty = false;
+        }
+        if(evt.getMessage().equals("§8▍ §b§lParty§8 ▏ §bParticipating in party chat? Yes.")) {
+            Triggers.inParty = true;
+        }
+        if(evt.getMessage().equals("§8▍ §e§lHive§6§lMC§8 ▏§a §bDid this Party violate our Party Rules?")) {
+            Triggers.inParty = false;
+        }
         if(Setting.AUTOGG.getValue() && Triggers.enabled && Triggers.shouldGG(evt.getMessage(), 0)){
             new Thread(() -> {
                 try {
                     Thread.sleep(Triggers.delay);
-                    The5zigAPI.getAPI().sendPlayerMessage(Triggers.ggText);
+                    if(Triggers.inParty) {
+                        The5zigAPI.getAPI().sendPlayerMessage("/p");
+                        The5zigAPI.getAPI().sendPlayerMessage(Triggers.ggText);
+                        The5zigAPI.getAPI().sendPlayerMessage("/p");
+                    }
+                    else The5zigAPI.getAPI().sendPlayerMessage(Triggers.ggText);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

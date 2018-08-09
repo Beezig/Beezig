@@ -19,6 +19,7 @@ public class Triggers {
     public static String ggText;
     public static int delay;
     public static boolean enabled;
+    public static boolean inParty;
     static JSONArray disabledModesCache;
 
 
