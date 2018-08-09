@@ -121,7 +121,6 @@ public class StreakUtils {
               String brDate = bestReset == 0 ? "Never" : sdf.format(new Date(bestReset));
 
               String bar = "    §7§m                                                                                    ";
-              String spaces = "           ";
 
               StringBuilder msg = new StringBuilder();
               msg.append(bar).append('\n').append('\n');

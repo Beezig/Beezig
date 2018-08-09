@@ -21,6 +21,7 @@ public enum Setting {
     MOD_REPORT_NOTIFICATION(true, "Receive a notification when a report is made through Beezig. (Only for staff)"),
     RECEIVE_PARTY_INVITES(true, "Receive global party invites through Beezig"),
     TOCCATA(true, "Message Toccata some Latin when he joins"),
+    AUTOGG(false, "Automatically say GG once the game ends. Run /autogg for details."),
 
     TIMV_SHOW_KRR(true, "TIMV Advanced Records - Show Karma/rolepoints"),
     TIMV_SHOW_MOSTPOINTS(true, "TIMV Advanced Records - Show Karma record"),

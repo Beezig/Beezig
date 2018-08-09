@@ -5,6 +5,9 @@ import eu.the5zig.mod.server.GameListenerRegistry;
 import eu.the5zig.mod.server.ServerInstance;
 import tk.roccodev.beezig.listener.*;
 import tk.roccodev.beezig.notes.NotesManager;
+import tk.roccodev.beezig.utils.autogg.Trigger;
+import tk.roccodev.beezig.utils.autogg.Triggers;
+import tk.roccodev.beezig.utils.autogg.TriggersFetcher;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import javax.xml.bind.DatatypeConverter;
@@ -42,6 +45,16 @@ public class IHive extends ServerInstance {
     public boolean handleServer(String host, int port) {
         if (host.toLowerCase().contains("hivemc.") || host.toLowerCase().endsWith("hive.sexy")) {
             System.out.println("Joined Hive.");
+            new Thread(() -> {
+                if(TriggersFetcher.shouldLoad()) {
+                    System.out.println("Loading AutoGG because the AutoGG Mod was not found or is not enabled.");
+                    Triggers.enabled = true;
+                    for (Trigger trigger : Triggers.triggers) {
+                        System.out.println(trigger.getTrigger() + " / " + trigger.isEnabled());
+                    }
+                }
+                else System.out.println("Didn't load AutoGG because the AutoGG Mod was found and is enabled.");
+            }).start();
             try {
                 DiscordUtils.init();
             } catch (Throwable e) {

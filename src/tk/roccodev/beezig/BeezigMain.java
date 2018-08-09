@@ -26,6 +26,9 @@ import tk.roccodev.beezig.settings.SettingsFetcher;
 import tk.roccodev.beezig.updater.Updater;
 import tk.roccodev.beezig.utils.*;
 import tk.roccodev.beezig.utils.acr.Connector;
+import tk.roccodev.beezig.utils.autogg.AutoGGListener;
+import tk.roccodev.beezig.utils.autogg.Triggers;
+import tk.roccodev.beezig.utils.autogg.TriggersFetcher;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 import tk.roccodev.beezig.utils.soundcloud.TrackPlayer;
 
@@ -299,6 +302,7 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 
         The5zigAPI.getAPI().getPluginManager().registerListener(this, new GRAVListenerv2());
+        The5zigAPI.getAPI().getPluginManager().registerListener(this, new AutoGGListener());
 
         CommandManager.registerCommand(new NotesCommand());
         CommandManager.registerCommand(new AddNoteCommand());
@@ -333,6 +337,7 @@ public class BeezigMain {
         CommandManager.registerCommand(new VolumeCommand());
         CommandManager.registerCommand(new WinstreakCommand());
         CommandManager.registerCommand(new DailyCommand());
+        CommandManager.registerCommand(new AutoGGCommand());
         // CommandManager.registerCommand(new ChatReportCommand());
 
         new Thread(new Runnable() {
@@ -382,6 +387,17 @@ public class BeezigMain {
         if (!mcFile.exists())
             mcFile.mkdir();
         The5zigAPI.getLogger().info("MC Folder is at: " + mcFile.getAbsolutePath());
+
+        File autoggConfig = new File(mcFile + "/autogg.json");
+        if(!autoggConfig.exists()) {
+            try {
+                autoggConfig.createNewFile();
+                TriggersFetcher.loadDefaults();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         checkForFileExist(new File(mcFile + "/winstreaks.json"), false);
         checkForFileExist(new File(mcFile + "/timv/"), true);
         checkForFileExist(new File(mcFile + "/timv/dailykarma/"), true);
@@ -458,9 +474,17 @@ public class BeezigMain {
                     e.printStackTrace();
                 }
 
+                try {
+                    TriggersFetcher.fetch();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 Pools.newsPool = NewsFetcher.getApplicableNews(lastLogin);
                 Pools.newMapsPool = NewsFetcher.getApplicableNewMaps(lastLogin);
                 Pools.staffPool = NewsFetcher.getApplicableStaffUpdates(lastLogin);
+
+
 
             }
         }, "News Fetcher").start();
@@ -804,6 +828,12 @@ public class BeezigMain {
         DR.mapsPool = StuffFetcher.getDeathRunMaps();
         TIMV.mapsPool = StuffFetcher.getTroubleInMinevilleMaps();
         GRAV.mapsPool = StuffFetcher.getGravityMaps();
+        Triggers.triggers.clear();
+        try {
+            TriggersFetcher.fetch();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @EventHandler(priority = Priority.HIGHEST)
