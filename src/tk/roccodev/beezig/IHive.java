@@ -16,6 +16,7 @@ import java.util.Calendar;
 public class IHive extends ServerInstance {
 
     static GameListenerRegistry gameListener;
+    public static long joined;
 
 
     public static void genericReset(String... optionalParams) {
@@ -45,6 +46,7 @@ public class IHive extends ServerInstance {
     public boolean handleServer(String host, int port) {
         if (host.toLowerCase().contains("hivemc.") || host.toLowerCase().endsWith("hive.sexy")) {
             System.out.println("Joined Hive.");
+            joined = System.currentTimeMillis();
             new Thread(() -> {
                 if(TriggersFetcher.shouldLoad()) {
                     System.out.println("Loading AutoGG because the AutoGG Mod was not found or is not enabled.");

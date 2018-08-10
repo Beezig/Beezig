@@ -20,6 +20,7 @@ public class Triggers {
     public static int delay;
     public static boolean enabled;
     public static boolean inParty;
+    public static long lastPartyJoined;
     static JSONArray disabledModesCache;
 
 

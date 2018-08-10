@@ -338,6 +338,7 @@ public class BeezigMain {
         CommandManager.registerCommand(new WinstreakCommand());
         CommandManager.registerCommand(new DailyCommand());
         CommandManager.registerCommand(new AutoGGCommand());
+        CommandManager.registerCommand(new UptimeCommand());
         // CommandManager.registerCommand(new ChatReportCommand());
 
         new Thread(new Runnable() {
