@@ -20,6 +20,7 @@ import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVListenerv2;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
+import tk.roccodev.beezig.modules.utils.RenderUtils;
 import tk.roccodev.beezig.notes.NotesManager;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.settings.SettingsFetcher;
@@ -131,6 +132,12 @@ public class BeezigMain {
 
         }
 
+        try {
+            RenderUtils.init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         The5zigAPI.getLogger().info("Loading Beezig");
         The5zigAPI.getLogger().info("Version is " + BEEZIG_VERSION + ". Hash is " + VERSION_HASH);
         The5zigAPI.getLogger().info("Using Java version: " + Runtime.class.getPackage().getImplementationVersion());
@@ -234,6 +241,8 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "caidaily", tk.roccodev.beezig.modules.cai.DailyItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "caistreak", tk.roccodev.beezig.modules.cai.WinstreakItem.class,
+                "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "caicooldowns", tk.roccodev.beezig.modules.cai.CooldownsItem.class,
                 "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "skypoints", tk.roccodev.beezig.modules.sky.PointsItem.class,

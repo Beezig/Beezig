@@ -5,7 +5,10 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import org.lwjgl.Sys;
+import org.lwjgl.input.Mouse;
 import tk.roccodev.beezig.ActiveGame;
+import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
@@ -15,6 +18,7 @@ import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiCAI;
+import tk.roccodev.beezig.modules.utils.RenderUtils;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
@@ -213,7 +217,12 @@ public class CAIListener extends AbstractGameListener<CAI> {
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
-        } else if ((message.equals("                      §6§m                  §6§m                  ")
+        }
+        else if(message.startsWith("§8▍ §bCAI§8 ▏ §cYou have been captured")) {
+            CAI.speedCooldown = 0;
+            CAI.invisCooldown = 0;
+        }
+        else if ((message.equals("                      §6§m                  §6§m                  ")
                 && !message.startsWith("§o "))) {
             The5zigAPI.getLogger().info("found footer");
             CAI.footerToSend.add(message);
@@ -421,6 +430,40 @@ public class CAIListener extends AbstractGameListener<CAI> {
 
         return false;
 
+    }
+
+    @Override
+    public void onTitle(CAI gameMode, String title, String subTitle) {
+        if(subTitle != null && subTitle.equals("§r§fYou died§r")) {
+            CAI.speedCooldown = 0;
+            CAI.invisCooldown = 0;
+        }
+    }
+
+    @Override
+    public void onTick(CAI gameMode) {
+        if(CAI.speedCooldown != 0) CAI.speedCooldown--;
+        if(CAI.invisCooldown != 0) CAI.invisCooldown--;
+        if(Mouse.isButtonDown(1)) {
+          if(The5zigAPI.getAPI().getItemInMainHand() == null) return;
+          if(RenderUtils.getCurrentScreen() != null) return;
+          switch(The5zigAPI.getAPI().getItemInMainHand().getDisplayName()) {
+              case "§eSpeed Dust":
+                  CAI.speedCooldown = 2400;
+                  break;
+              case "§eInvisibility Dust":
+                  CAI.invisCooldown = 2400;
+                  break;
+          }
+        }
+     }
+
+    @Override
+    public boolean onActionBar(CAI gameMode, String message) {
+        if(BeezigMain.isColorDebug) {
+            System.out.println("CAI ActionDebug: (" + message + ")");
+        }
+        return false;
     }
 
     @Override

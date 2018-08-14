@@ -3,6 +3,7 @@ package tk.roccodev.beezig.utils.autogg;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.EventHandler;
+import eu.the5zig.mod.event.PayloadEvent;
 import eu.the5zig.mod.event.TitleEvent;
 import tk.roccodev.beezig.settings.Setting;
 
@@ -45,6 +46,7 @@ public class AutoGGListener {
             }).start();
         }
     }
+
 
     @EventHandler
     public void onChat(ChatEvent evt) {

@@ -180,6 +180,9 @@
         },
         {
           "type": "caistreak"
+        },
+        {
+          "type": "caicooldowns"
         }
       ]
     },

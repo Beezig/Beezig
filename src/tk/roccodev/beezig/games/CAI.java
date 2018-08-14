@@ -30,6 +30,9 @@ public class CAI extends GameMode {
     public static int winstreak;
     public static int bestStreak;
 
+    public static long speedCooldown;
+    public static long invisCooldown;
+
     public static long gamePoints;
     public static int dailyPoints;
     public static String rank;
@@ -99,6 +102,8 @@ public class CAI extends GameMode {
 
         inGame = false;
         hasWon = false;
+        invisCooldown = 0;
+        speedCooldown = 0;
         CAI.messagesToSend.clear();
         CAI.footerToSend.clear();
         CAI.votesToParse.clear();
