@@ -26,6 +26,10 @@ public class BeezigAPI {
         return BeezigMain.isStaffChat();
     }
 
+    public boolean onPacketReceived(int packetId, String data) {
+        return true; // Return false to ignore the packet
+    }
+
 
 
     public BeezigAPI() {
