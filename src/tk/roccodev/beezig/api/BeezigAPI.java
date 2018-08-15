@@ -3,6 +3,10 @@ package tk.roccodev.beezig.api;
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.api.listener.AbstractForgeListener;
+import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.settings.SettingsFetcher;
+
+import java.io.IOException;
 
 public class BeezigAPI {
 
@@ -19,7 +23,9 @@ public class BeezigAPI {
 
 
     public static BeezigAPI get() {
-        return new BeezigAPI();
+
+        if(instance == null) instance = new BeezigAPI();
+        return instance;
     }
 
     public boolean isStaffMember() {
@@ -30,7 +36,28 @@ public class BeezigAPI {
         return true; // Return false to ignore the packet
     }
 
+    public void saveConfigData(Object data) {
+        try {
 
+            Object[] arr = (Object[]) data.getClass().getField("array").get(data);
+
+            for(Object o : arr) {
+                String enumName = (String) o.getClass().getField("enumName").get(o);
+                boolean enabled = (boolean) o.getClass().getField("enabled").get(o);
+                Setting.valueOf(enumName).setValueWithoutSaving(enabled);
+            }
+
+            SettingsFetcher.saveSettings();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public AbstractForgeListener getListener() {
+        return listenerImpl;
+    }
 
     public BeezigAPI() {
         instance = this;

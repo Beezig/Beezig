@@ -21,7 +21,6 @@ public class SettingsFetcher {
 
             if (os instanceof String) {
                 String s = (String) os;
-                The5zigAPI.getLogger().info("Loading " + s + ":" + props.getProperty(s));
                 try {
                     Setting sett = Setting.valueOf(s.toUpperCase());
 
@@ -32,10 +31,10 @@ public class SettingsFetcher {
                 }
             }
         }
+        System.out.println("Succesfully loaded settings.");
     }
 
     public static void saveSetting(Setting sett) throws IOException {
-        The5zigAPI.getLogger().info("Saving...");
         if (props == null) props = new Properties();
         props.setProperty(sett.name().toUpperCase(), sett.getValue() + "");
         FileOutputStream fos = new FileOutputStream(BeezigMain.mcFile.getAbsolutePath() + "/settings.properties");
@@ -47,6 +46,7 @@ public class SettingsFetcher {
         for (Setting s : Setting.values()) {
             saveSetting(s);
         }
+        System.out.println("Succesfully saved settings.");
     }
 
 
