@@ -84,7 +84,6 @@ public class BeezigMain {
             if (Updater.isVersionBlacklisted(getCustomVersioning())
                     && !BeezigMain.class.getAnnotation(Plugin.class).version().contains("experimental")) {
                 new Thread(new Runnable() {
-                    @Override
                     public void run() {
                         try {
                             TimeUnit.SECONDS.sleep(10);
@@ -360,6 +359,7 @@ public class BeezigMain {
                 }
             }
         }).start();
+
 
         if (The5zigAPI.getAPI().getGameProfile().getId().toString().equals("8b687575-2755-4506-9b37-538b4865f92d")
                 || The5zigAPI.getAPI().getGameProfile().getId().toString()

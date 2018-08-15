@@ -51,9 +51,6 @@ public class IHive extends ServerInstance {
                 if(TriggersFetcher.shouldLoad()) {
                     System.out.println("Loading AutoGG because the AutoGG Mod was not found or is not enabled.");
                     Triggers.enabled = true;
-                    for (Trigger trigger : Triggers.triggers) {
-                        System.out.println(trigger.getTrigger() + " / " + trigger.isEnabled());
-                    }
                 }
                 else System.out.println("Didn't load AutoGG because the AutoGG Mod was found and is enabled.");
             }).start();

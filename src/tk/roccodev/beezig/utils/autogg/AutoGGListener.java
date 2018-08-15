@@ -47,7 +47,6 @@ public class AutoGGListener {
         }
     }
 
-
     @EventHandler
     public void onChat(ChatEvent evt) {
         if(evt.getMessage().equals("§8▍ §b§lParty§8 ▏ §bParticipating in party chat? No.")) {
