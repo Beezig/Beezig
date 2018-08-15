@@ -26,6 +26,7 @@ public class SettingsCommand implements Command {
         if (args.length == 0) {
             if(BeezigMain.hasExpansion) {
 
+                The5zigAPI.getAPI().messagePlayer(Log.info + "Opening Settings GUI...");
                 BeezigAPI.get().getListener().onDisplaySettingsGui(Setting.values());
 
                 return true;
@@ -86,8 +87,6 @@ public class SettingsCommand implements Command {
             }
             sett.setValue(b);
             The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully updated setting.");
-        } else {
-
         }
         return true;
     }
