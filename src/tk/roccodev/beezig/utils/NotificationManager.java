@@ -1,5 +1,6 @@
 package tk.roccodev.beezig.utils;
 
+import org.lwjgl.opengl.Display;
 import tk.roccodev.beezig.BeezigMain;
 
 import java.awt.*;
@@ -76,21 +77,7 @@ public class NotificationManager {
     }
 
     public static boolean isInGameFocus() {
-        Class disp = null;
-        try {
-            disp = Class.forName("org.lwjgl.opengl.Display");
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        try {
-            return (boolean) disp.getMethod("isActive").invoke(null);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-                | SecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return true;
+        return Display.isActive();
     }
 
 

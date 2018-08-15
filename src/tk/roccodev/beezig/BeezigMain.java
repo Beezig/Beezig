@@ -8,6 +8,7 @@ import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.util.minecraft.ChatColor;
 import io.netty.util.internal.ThreadLocalRandom;
+import org.lwjgl.opengl.Display;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.briefing.NewsServer;
 import tk.roccodev.beezig.briefing.Pools;
@@ -64,6 +65,7 @@ public class BeezigMain {
 
     public static File mcFile;
     public static boolean isColorDebug = false;
+    public static boolean hasExpansion = false;
     public static NetworkRank playerRank = null;
 
     public static int getCustomVersioning() {
@@ -138,6 +140,9 @@ public class BeezigMain {
         }
 
         The5zigAPI.getLogger().info("Loading Beezig");
+
+        Display.setTitle("Minecraft " + The5zigAPI.getAPI().getMinecraftVersion() + " | Beezig " + BEEZIG_VERSION);
+
         The5zigAPI.getLogger().info("Version is " + BEEZIG_VERSION + ". Hash is " + VERSION_HASH);
         The5zigAPI.getLogger().info("Using Java version: " + Runtime.class.getPackage().getImplementationVersion());
 
