@@ -218,9 +218,13 @@ public class CAIListener extends AbstractGameListener<CAI> {
 
             return true;
         }
+
         else if(message.startsWith("§8▍ §bCAI§8 ▏ §cYou have been captured")) {
             CAI.speedCooldown = 0;
             CAI.invisCooldown = 0;
+            CAI.leaderItem0 = 0;
+            CAI.leaderItem1 = 0;
+            CAI.leaderItem2 = 0;
         }
         else if ((message.equals("                      §6§m                  §6§m                  ")
                 && !message.startsWith("§o "))) {
@@ -438,12 +442,23 @@ public class CAIListener extends AbstractGameListener<CAI> {
             CAI.speedCooldown = 0;
             CAI.invisCooldown = 0;
         }
+        if(title != null && title.endsWith(The5zigAPI.getAPI().getGameProfile().getName() + "' has§r§5 §r§5§lESCAPED!§r")) {
+            CAI.speedCooldown = 0;
+            CAI.invisCooldown = 0;
+            CAI.leaderItem0 = 0;
+            CAI.leaderItem1 = 0;
+            CAI.leaderItem2 = 0;
+
+        }
     }
 
     @Override
     public void onTick(CAI gameMode) {
         if(CAI.speedCooldown != 0) CAI.speedCooldown--;
         if(CAI.invisCooldown != 0) CAI.invisCooldown--;
+        if(CAI.leaderItem0 != 0) CAI.leaderItem0--;
+        if(CAI.leaderItem1 != 0) CAI.leaderItem1--;
+        if(CAI.leaderItem2 != 0) CAI.leaderItem2--;
         if(Mouse.isButtonDown(1)) {
           if(The5zigAPI.getAPI().getItemInMainHand() == null) return;
           if(RenderUtils.getCurrentScreen() != null) return;
@@ -453,6 +468,15 @@ public class CAIListener extends AbstractGameListener<CAI> {
                   break;
               case "§eInvisibility Dust":
                   CAI.invisCooldown = 2400;
+                  break;
+              case "§3Attempt Escape":
+                  CAI.leaderItem2 = 500;
+                  break;
+              case "§6Blind Carrier":
+                  CAI.leaderItem0 = 500;
+                  break;
+              case "§cEmergency Flare":
+                  CAI.leaderItem1 = 500;
                   break;
           }
         }
@@ -465,6 +489,8 @@ public class CAIListener extends AbstractGameListener<CAI> {
         }
         return false;
     }
+
+
 
     @Override
     public void onServerConnect(CAI gameMode) {

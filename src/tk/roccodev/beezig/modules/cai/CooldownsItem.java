@@ -44,6 +44,34 @@ public class CooldownsItem extends GameModeItem<CAI> {
             String display = secs / 60 + ":" + df.format((secs % 60));
             display("Invisibility - " + display, x, y, 8);
         }
+        if(CAI.leaderItem0 != 0) {
+
+            y += 12;
+
+            long secs = CAI.leaderItem0 / 20;
+
+            String display = secs / 60 + ":" + df.format((secs % 60));
+            display("Blind Carrier - " + display, x, y, 13);
+        }
+        if(CAI.leaderItem1 != 0) {
+
+            y += 12;
+
+            long secs = CAI.leaderItem1 / 20;
+
+            String display = secs / 60 + ":" + df.format((secs % 60));
+            display("Emergency Flare - " + display, x, y, 7);
+        }
+        if(CAI.leaderItem2 != 0) {
+
+            y += 12;
+
+            long secs = CAI.leaderItem2 / 20;
+
+            String display = secs / 60 + ":" + df.format((secs % 60));
+            display("Attempt Escape - " + display, x, y, 10);
+        }
+
 
     }
 

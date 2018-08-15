@@ -32,6 +32,9 @@ public class CAI extends GameMode {
 
     public static long speedCooldown;
     public static long invisCooldown;
+    public static long leaderItem0;
+    public static long leaderItem1;
+    public static long leaderItem2;
 
     public static long gamePoints;
     public static int dailyPoints;
@@ -104,6 +107,9 @@ public class CAI extends GameMode {
         hasWon = false;
         invisCooldown = 0;
         speedCooldown = 0;
+        leaderItem0 = 0;
+        leaderItem1 = 0;
+        leaderItem2 = 0;
         CAI.messagesToSend.clear();
         CAI.footerToSend.clear();
         CAI.votesToParse.clear();
