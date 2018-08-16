@@ -10,7 +10,9 @@ public class Log {
     public static String bar = "    §7§m                                                                                    ";
 
     public static String getUserAgent() {
-        return "Beezig/" + BeezigMain.BEEZIG_VERSION + " (5zig/" + The5zigAPI.getAPI().getModVersion() + " on " + The5zigAPI.getAPI().getMinecraftVersion() + "; Forge=" + The5zigAPI.getAPI().isForgeEnvironment() + ")";
+        return "Beezig/" + BeezigMain.BEEZIG_VERSION + " (5zig/" + The5zigAPI.getAPI().getModVersion() + " on "
+                + The5zigAPI.getAPI().getMinecraftVersion() + "; Forge=" + The5zigAPI.getAPI().isForgeEnvironment()
+                + "; BeezigForge=" + BeezigMain.hasExpansion + ")";
     }
 
     public static String t(String key) {

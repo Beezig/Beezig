@@ -5,8 +5,7 @@ import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.api.listener.AbstractForgeListener;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.settings.SettingsFetcher;
-
-import java.io.IOException;
+import tk.roccodev.beezig.utils.ws.Connector;
 
 public class BeezigAPI {
 
@@ -19,6 +18,9 @@ public class BeezigAPI {
         listenerImpl = AbstractForgeListener.fromObject(registeredListener);
         BeezigMain.hasExpansion = true;
         listenerImpl.onLoad(BeezigMain.BEEZIG_VERSION, The5zigAPI.getAPI().getModVersion());
+        new Thread(() -> {
+            Connector.client.send("BeezigForgeLoad");
+        }).start();
     }
 
 

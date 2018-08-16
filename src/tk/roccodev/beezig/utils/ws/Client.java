@@ -22,7 +22,7 @@ public class Client extends WebSocketClient {
     public void onOpen(ServerHandshake handshakedata) {
         // TODO Auto-generated method stub
         System.out.println("Connected!");
-        this.send("I am " + The5zigAPI.getAPI().getGameProfile().getName());
+        this.send("I am " + The5zigAPI.getAPI().getGameProfile().getName() + " UA: " + Log.getUserAgent());
 
     }
 
