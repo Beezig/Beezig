@@ -892,6 +892,10 @@ public class BeezigMain {
                 || evt.getTitle().equals("§aplay§r§8.§r§bHiveMC§r§8.§r§acom§r")) && !hasServedNews) {
             hasServedNews = true;
             NewsServer.serveNews(Pools.newsPool, Pools.newMapsPool, Pools.staffPool);
+            if(!BeezigMain.hasExpansion && The5zigAPI.getAPI().getMinecraftVersion().equals("1.8.9") && The5zigAPI.getAPI().isForgeEnvironment()) {
+                The5zigAPI.getAPI().messagePlayer(Log.info + "We've noticed you're running Forge 1.8.9, but you don't have our Forge Expansion mod. Do you want to install it?");
+                The5zigAPI.getAPI().messagePlayer(Log.info + "If so, download it from §bhttp://l.roccodev.pw/beezigforge");
+            }
         }
         // Map fallback
         if (ActiveGame.is("dr") && DR.activeMap == null) {
