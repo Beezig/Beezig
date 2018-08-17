@@ -1,8 +1,8 @@
 package tk.roccodev.beezig.utils.ws;
 
 import eu.the5zig.mod.The5zigAPI;
-import org.java_websocket_remap.client.WebSocketClient;
-import org.java_websocket_remap.handshake.ServerHandshake;
+import org.java_websocket_beezig.client.WebSocketClient;
+import org.java_websocket_beezig.handshake.ServerHandshake;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.settings.Setting;

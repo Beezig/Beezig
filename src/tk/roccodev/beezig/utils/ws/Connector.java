@@ -1,20 +1,17 @@
 package tk.roccodev.beezig.utils.ws;
 
+import eu.the5zig.mod.The5zigAPI;
 import io.socket.IOAcknowledge;
 import io.socket.IOCallback;
 import io.socket.SocketIO;
 import io.socket.SocketIOException;
 import javazoom.jl.decoder.JavaLayerException;
 import org.json.simple.JSONObject;
-
-import eu.the5zig.mod.The5zigAPI;
-import paulscode.sound.SoundSystemException;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.utils.soundcloud.TrackDownloader;
 import tk.roccodev.beezig.utils.soundcloud.TrackPlayer;
 
 import javax.net.ssl.SSLContext;
-import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.net.MalformedURLException;

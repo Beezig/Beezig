@@ -7,9 +7,9 @@ import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLContext;
 
-import org.java_websocket_remap.client.DefaultSSLWebSocketClientFactory;
-import org.java_websocket_remap.client.WebSocketClient;
-import org.java_websocket_remap.handshake.ServerHandshake;
+import org.java_websocket_jukebox.client.DefaultSSLWebSocketClientFactory;
+import org.java_websocket_jukebox.client.WebSocketClient;
+import org.java_websocket_jukebox.handshake.ServerHandshake;
 
 class WebsocketTransport extends WebSocketClient implements IOTransport {
     private final static Pattern PATTERN_HTTP = Pattern.compile("^http");
