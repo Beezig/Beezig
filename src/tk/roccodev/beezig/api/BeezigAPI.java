@@ -1,8 +1,11 @@
 package tk.roccodev.beezig.api;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.api.listener.AbstractForgeListener;
+import tk.roccodev.beezig.games.CAI;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.settings.SettingsFetcher;
 import tk.roccodev.beezig.utils.ws.Connector;
@@ -32,6 +35,11 @@ public class BeezigAPI {
 
     public boolean isStaffMember() {
         return BeezigMain.isStaffChat();
+    }
+
+    public String getCAITeam() {
+        if(!ActiveGame.is("cai")) return "";
+        return ChatColor.stripColor(CAI.team);
     }
 
     public boolean onPacketReceived(int packetId, String data) {

@@ -226,6 +226,13 @@ public class CAIListener extends AbstractGameListener<CAI> {
             CAI.leaderItem1 = 0;
             CAI.leaderItem2 = 0;
         }
+        else if(message.startsWith("§8▍ §bCAI§8 ▏ §a§lYou Escaped!")) {
+            CAI.speedCooldown = 0;
+            CAI.invisCooldown = 0;
+            CAI.leaderItem0 = 0;
+            CAI.leaderItem1 = 0;
+            CAI.leaderItem2 = 0;
+        }
         else if ((message.equals("                      §6§m                  §6§m                  ")
                 && !message.startsWith("§o "))) {
             The5zigAPI.getLogger().info("found footer");
