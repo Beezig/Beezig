@@ -42,6 +42,15 @@ public class BeezigAPI {
         return ChatColor.stripColor(CAI.team);
     }
 
+    public boolean getSettingValue(String setting) {
+        try {
+            return Setting.valueOf(setting).getValue();
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
     public boolean onPacketReceived(int packetId, String data) {
         return true; // Return false to ignore the packet
     }

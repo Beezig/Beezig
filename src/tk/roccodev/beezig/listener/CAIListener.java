@@ -144,7 +144,11 @@ public class CAIListener extends AbstractGameListener<CAI> {
             CAI.gamePoints += 5;
             APIValues.CAIpoints += 5;
             CAI.dailyPoints += 5;
-        } else if (message.endsWith("§cCowboys Leader§7.")) {
+        }
+        else if(message.equals("§8▍ §bCAI§8 ▏ §cYou can't go invisible whilst capturing the leader!")) {
+            CAI.invisCooldown = 0;
+        }
+        else if (message.endsWith("§cCowboys Leader§7.")) {
 
             CAI.team = "§eIndians";
             CAI.inGame = true;

@@ -61,6 +61,8 @@ public enum Setting {
     CAI_SHOW_POINTS_TO_NEXT_RANK(true, "CAI AdvRec - To next rank", "CAI Advanced Records - Show points to next rank"),
     CAI_SHOW_CATCHES_CAUGHT(true, "CAI AdvRec - Cc/Ct",  "CAI Advanced Records - Show Catches/Caught Ratio"),
     CAI_SHOW_CAPTURES_GAME(true, "CAI AdvRec - CPG", "CAI Advanced Records - Show Captures/Games Ratio"),
+    CAI_TITLE(true, "CAI Better Titles", "Show a better version of the titles"),
+    CAI_TITLE_SHOWNAME(false, "Leader names", "Show the leader names in the titles"),
 
     SKY_SHOW_POINTS_TO_NEXT_RANK(true, "SKY AdvRec - To next rank", "SKY Advanced Records - Show points to next rank"),
     SKY_SHOW_WINRATE(true, "SKY AdvRec - Win%", "SKY Advanced Records - Show Winrate"),
