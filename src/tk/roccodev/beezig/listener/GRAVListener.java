@@ -47,7 +47,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                 Thread.sleep(1000);
                 // Scoreboard doesn't load otherwise ???
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                The5zigAPI.getLogger().info(sb.getTitle());
+                
 
                 if (sb != null && sb.getTitle().contains("Your GRAV")) {
 

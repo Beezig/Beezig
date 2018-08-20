@@ -55,7 +55,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                 }
                 Thread.sleep(500);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                The5zigAPI.getLogger().info(sb.getTitle());
+               
 
                 ApiSGN api = new ApiSGN(The5zigAPI.getAPI().getGameProfile().getName());
 

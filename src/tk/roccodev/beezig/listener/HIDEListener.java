@@ -55,7 +55,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                 }
                 Thread.sleep(1000);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                The5zigAPI.getLogger().info(sb.getTitle());
+                
 
 
                 ApiHIDE api = new ApiHIDE(The5zigAPI.getAPI().getGameProfile().getName());

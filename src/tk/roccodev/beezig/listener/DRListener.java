@@ -56,8 +56,6 @@ public class DRListener extends AbstractGameListener<DR> {
             DR.rankObject = DRRank.getFromDisplay(new ApiDR(The5zigAPI.getAPI().getGameProfile().getName()).getTitle());
             DR.rank = DR.rankObject.getTotalDisplay();
             // Should've read the docs ¯\_(ツ)_/¯
-            if (sb != null)
-                The5zigAPI.getLogger().info(sb.getTitle());
             if (sb != null && sb.getTitle().contains("Your DR Stats")) {
                 int points = sb.getLines().get(ChatColor.AQUA + "Points");
                 APIValues.DRpoints = (long) points;

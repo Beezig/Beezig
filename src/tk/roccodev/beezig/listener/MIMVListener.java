@@ -53,7 +53,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
                     e2.printStackTrace();
                 }
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                The5zigAPI.getLogger().info(sb.getTitle());
+               
 
                 ApiMIMV api = new ApiMIMV(The5zigAPI.getAPI().getGameProfile().getName());
 

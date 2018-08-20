@@ -54,7 +54,7 @@ public class BPListener extends AbstractGameListener<BP> {
                 }
                 Thread.sleep(500);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                The5zigAPI.getLogger().info(sb.getTitle());
+                
 
                 ApiBP api = new ApiBP(The5zigAPI.getAPI().getGameProfile().getName());
 

@@ -54,7 +54,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
                     e2.printStackTrace();
                 }
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                The5zigAPI.getLogger().info(sb.getTitle());
+                
 
                 if (sb != null && sb.getTitle().contains("Your SKY")) {
                     if (sb.getTitle().contains("Your SKYT"))
