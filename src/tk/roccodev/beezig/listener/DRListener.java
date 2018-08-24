@@ -215,24 +215,12 @@ public class DRListener extends AbstractGameListener<DR> {
                         DRRank rank = null;
                         ApiDR api = new ApiDR(DR.lastRecords);
 
-                        Double ppg = Setting.DR_SHOW_POINTSPERGAME.getValue()
-                                ? Math.round(((double) api.getPoints() / (double) api.getGamesPlayed()) * 10d) / 10d
-                                : null;
-                        Integer rwr = Setting.DR_SHOW_RUNNERWINRATE.getValue() ? (int) (Math
-                                .floor(((double) api.getVictoriesAsRunner() / (double) api.getGamesPlayedAsRunner())
-                                        * 1000d)
-                                / 10d) : null;
-                        Double dpg = Setting.DR_SHOW_DEATHSPERGAME.getValue()
-                                ? Math.floor(
-                                ((double) api.getDeaths() / (double) api.getGamesPlayedAsRunner()) * 10d)
-                                / 10d
-                                : null;
-                        Double kpg = Setting.DR_SHOW_KILLSPERGAME.getValue()
-                                ? Math.round(((double) api.getKills() / (double) api.getGamesPlayedAsDeath()) * 10d) / 10d
-                                : null;
-                        String tpb = Setting.DR_SHOW_TOTALPB.getValue()
-                                ? api.getTotalPB()
-                                : null;
+                       
+                    
+                        
+                       
+                       
+                        
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
                                 ? api.getParentMode().getNetworkTitle()
                                 : "";
@@ -240,15 +228,21 @@ public class DRListener extends AbstractGameListener<DR> {
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
                             rankColor = api.getParentMode().getNetworkRankColor();
                         }
-                        long points;
+                        long points = 0;
+                        int kills = 0;
+                        int deaths = 0;
+                        int played = 0;
+                        int victories = 0;
                         Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements()
-                                : null;
+                        
                         String rankTitleDR = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
 
-                        int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()
-                                && api.getLeaderboardsPlacePoints(349) < api.getPoints()) ? api.getMonthlyRank()
-                                : 0;
+                        
+                        int monthlyRank = -1;
+                        if(Setting.SHOW_RECORDS_MONTHLYRANK.getValue())
+                        	monthlyRank = api.getMonthlyRank();
+                        
+                      
                         if (rankTitleDR != null)
                             rank = DRRank.getFromDisplay(rankTitleDR);
                         List<String> messages = new ArrayList<>(DR.messagesToSend);
@@ -314,32 +308,57 @@ public class DRListener extends AbstractGameListener<DR> {
                                 continue;
 
                             }
+                            else if(s.startsWith("§3 Kills: §b")) kills = Math.toIntExact(currentValue);
+                            else if(s.startsWith("§3 Deaths: §b")) deaths = Math.toIntExact(currentValue);
+                            else if(s.startsWith("§3 Wins: §b")) victories = Math.toIntExact(currentValue);
+                            else if(s.startsWith("§3 Games Played: §b")) played = Math.toIntExact(currentValue);
 
                             The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
+                        
+                        System.out.println("a");
+                        double ppg = Setting.DR_SHOW_POINTSPERGAME.getValue() ?  Math.round(((double) points / (double) played) * 10d) / 10d : -1;
+                        System.out.println("a");
+                        int ach = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : -1;
+                        System.out.println("a");
+                        double rwr = Setting.DR_SHOW_RUNNERWINRATE.getValue() ? (Math
+                                .floor(((double) api.getVictoriesAsRunner() / (double) api.getGamesPlayedAsRunner())
+                                        * 1000d)
+                                / 10d) : -1;
+                        System.out.println("a");
+                        double dpg = Setting.DR_SHOW_DEATHSPERGAME.getValue() ?  Math.floor((double) deaths / (double) played * 10d)
+                                / 10d : -1;
+                        System.out.println("a");
+                        double kpg = Setting.DR_SHOW_KILLSPERGAME.getValue() ? Math.round((double) kills / (double) played * 10d) / 10d : -1;
+                       
+                        System.out.println("a");
+                        String tpb = Setting.DR_SHOW_TOTALPB.getValue() ? api.getTotalPB() : null;
+                        System.out.println("a");
+                       
+                        
 
-                        if (ppg != null) {
+                        if (ppg != -1) 
                             The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + ppg);
-                        }
-                        if (achievements != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/68");
-                        }
-                        if (rwr != null) {
+                        
+                        if (ach != -1) 
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + ach + "/68");
+                        
+                        if (rwr != -1) 
                             The5zigAPI.getAPI().messagePlayer("§o§3 Runner-Winrate: §b" + rwr + "%");
-                        }
-                        if (dpg != null) {
+                        
+                        if (dpg != -1) 
                             The5zigAPI.getAPI().messagePlayer("§o§3 Deaths per Game: §b" + dpg);
-                        }
-                        if (kpg != null) {
+                        
+                        if (kpg != -1) 
                             The5zigAPI.getAPI().messagePlayer("§o§3 Kills per Game: §b" + kpg);
-                        }
-                        if (tpb != null) {
+                        
+                        if (tpb != null) 
                             The5zigAPI.getAPI().messagePlayer("§o§3 Total Personal Best: §b" + tpb);
-                        }
-                        if (monthlyRank != 0) {
+                        
+                        if (monthlyRank != -1) 
                             The5zigAPI.getAPI().messagePlayer("§o§3 Monthly Place: §b#" + monthlyRank);
-                        }
+                        
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());

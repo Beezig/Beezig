@@ -106,12 +106,12 @@ public class PlayerStatsCommand implements Command {
                     if (points.get(i) != 0) {
                         if(title.get(i).equals("§a§lMaster §e§lof §b§lDisguise")) {
                             The5zigAPI.getAPI().messagePlayer(
-                                    Log.info + "§a§l" + points.get(i) + "§7 - " + title.get(i) + "§r " + name.get(i));
+                                    Log.info + "§a§l" + Log.df(points.get(i)) + "§7 - " + title.get(i) + "§r " + name.get(i));
                         }
                         else {
                             The5zigAPI.getAPI().messagePlayer(
                                     Log.info + title.get(i).replace(ChatColor.stripColor(title.get(i)), "")
-                                            + points.get(i) + "§7 - " + title.get(i) + "§r " + name.get(i));
+                                            + Log.df(points.get(i)) + "§7 - " + title.get(i) + "§r " + name.get(i));
                         }
 
                     }

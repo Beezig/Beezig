@@ -111,13 +111,13 @@ public class LeaderboardCommand implements Command {
                                 The5zigAPI.getAPI()
                                         .messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
                                                 + "§a§l"
-                                                + points.get(i) + "§7 - " + title.get(i) + "§r " + name.get(i));
+                                                + Log.df(points.get(i)) + "§7 - " + title.get(i) + "§r " + name.get(i));
                             }
                             else {
                                 The5zigAPI.getAPI()
                                         .messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
                                                 + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")
-                                                + points.get(i) + "§7 - " + title.get(i) + "§r " + name.get(i));
+                                                + Log.df(points.get(i)) + "§7 - " + title.get(i) + "§r " + name.get(i));
                             }
 
                         }

@@ -69,8 +69,8 @@ public class ApiDR extends PvPMode {
         try {
             JSONObject mapRecords = (JSONObject) object("maprecords");
             The5zigAPI.getLogger().info("mr-s" + mapRecords.size());
-            The5zigAPI.getLogger().info("sf-s" + StuffFetcher.getDeathRunMaps().size());
-            if (mapRecords.size() != StuffFetcher.getDeathRunMaps().size()) return null;
+            The5zigAPI.getLogger().info("sf-s" + DR.mapsPool.size());
+            if (mapRecords.size() != DR.mapsPool.size()) return null;
             //Doesn't have a time on every map
 
             long time = 0;
