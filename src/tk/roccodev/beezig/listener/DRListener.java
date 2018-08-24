@@ -317,24 +317,24 @@ public class DRListener extends AbstractGameListener<DR> {
 
                         }
                         
-                        System.out.println("a");
+       
                         double ppg = Setting.DR_SHOW_POINTSPERGAME.getValue() ?  Math.round(((double) points / (double) played) * 10d) / 10d : -1;
-                        System.out.println("a");
+                        
                         int ach = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : -1;
-                        System.out.println("a");
+                       
                         double rwr = Setting.DR_SHOW_WINRATE.getValue() ? (Math
                                 .floor(((double) victories / (double)played)
                                         * 1000d)
                                 / 10d) : -1;
-                        System.out.println("a");
+                       
                         double dpg = Setting.DR_SHOW_DEATHSPERGAME.getValue() ?  Math.floor((double) deaths / (double) played * 10d)
                                 / 10d : -1;
-                        System.out.println("a");
+                       
                         double kpg = Setting.DR_SHOW_KILLSPERGAME.getValue() ? Math.round((double) kills / (double) played * 10d) / 10d : -1;
                        
-                        System.out.println("a");
+                        
                         String tpb = Setting.DR_SHOW_TOTALPB.getValue() ? api.getTotalPB() : null;
-                        System.out.println("a");
+   
                        
                         
 
