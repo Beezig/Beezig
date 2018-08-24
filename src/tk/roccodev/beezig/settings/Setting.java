@@ -30,7 +30,7 @@ public enum Setting {
     TIMV_USE_TESTREQUESTS(true, "TIMV AdvRec - Custom Test", "Replace \" test\" with nicer phrases to avoid HAS"),
 
     DR_SHOW_POINTSPERGAME(true, "DR AdvRec - PPG", "DR Advanced Records - Show the avg. points per game"),
-    DR_SHOW_RUNNERWINRATE(true, "DR AdvRec - Win%", "DR Advanced Records - Show the winrate as a runner"),
+    DR_SHOW_WINRATE(true, "DR AdvRec - Win%", "DR Advanced Records - Show Winrate"),
     DR_SHOW_DEATHSPERGAME(true, "DR AdvRec - Avg Deaths", "DR Advanced Records - Show the avg. deaths as runner"),
     DR_SHOW_POINTS_TO_NEXT_RANK(false, "DR AdvRec - To next rank", "DR Advanced Records - Show points to next rank"),
     DR_SHOW_KILLSPERGAME(true, "DR AdvRec - KPG", "DR Advanced Records - Show the avg. kills as death"),

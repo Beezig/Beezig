@@ -322,8 +322,8 @@ public class DRListener extends AbstractGameListener<DR> {
                         System.out.println("a");
                         int ach = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : -1;
                         System.out.println("a");
-                        double rwr = Setting.DR_SHOW_RUNNERWINRATE.getValue() ? (Math
-                                .floor(((double) api.getVictoriesAsRunner() / (double) api.getGamesPlayedAsRunner())
+                        double rwr = Setting.DR_SHOW_WINRATE.getValue() ? (Math
+                                .floor(((double) victories / (double)played)
                                         * 1000d)
                                 / 10d) : -1;
                         System.out.println("a");
@@ -345,7 +345,7 @@ public class DRListener extends AbstractGameListener<DR> {
                             The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + ach + "/68");
                         
                         if (rwr != -1) 
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Runner-Winrate: §b" + rwr + "%");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + rwr + "%");
                         
                         if (dpg != -1) 
                             The5zigAPI.getAPI().messagePlayer("§o§3 Deaths per Game: §b" + dpg);
