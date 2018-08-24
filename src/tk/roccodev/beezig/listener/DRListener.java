@@ -285,57 +285,71 @@ public class DRListener extends AbstractGameListener<DR> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Points: §b")) {
+                            } 
+
+                            
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                            	currentValue = Long.parseLong(newData[1]);
+                            	newData[1] = Log.df(currentValue);
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            catch(NumberFormatException ignored) {
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            
+                            if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
-                                sb.append(points);
+                                points = currentValue;
+                                sb.append(newData[1]);
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
                                 if (Setting.DR_SHOW_POINTS_TO_NEXT_RANK.getValue())
                                     sb.append(" / ").append(rank.getPointsToNextRank((int) points));
                                 if (rank != null)
                                     sb.append("§b)");
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
 
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
                         if (ppg != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + ppg);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + ppg);
                         }
                         if (achievements != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/68");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/68");
                         }
                         if (rwr != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Runner-Winrate: §b" + rwr + "%");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Runner-Winrate: §b" + rwr + "%");
                         }
                         if (dpg != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Deaths per Game: §b" + dpg);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Deaths per Game: §b" + dpg);
                         }
                         if (kpg != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills per Game: §b" + kpg);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Kills per Game: §b" + kpg);
                         }
                         if (tpb != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Total Personal Best: §b" + tpb);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Total Personal Best: §b" + tpb);
                         }
                         if (monthlyRank != 0) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Monthly Place: §b#" + monthlyRank);
                         }
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
 
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : DR.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
                         DR.messagesToSend.clear();

@@ -248,11 +248,25 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Points: §b")) {
+                            } 
+
+                            
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                            	currentValue = Long.parseLong(newData[1]);
+                            	newData[1] = Log.df(currentValue);
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            catch(NumberFormatException ignored) {
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            
+                            if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
-                                sb.append(points);
+                                points = currentValue;
+                                sb.append(newData[1]);
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
                                 if (Setting.GRAV_SHOW_POINTS_TO_NEXT_RANK.getValue())
@@ -262,17 +276,15 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 
                                 // if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
                             } else if (s.startsWith("§3 Victories: §b")) {
-                                victories = Integer.parseInt(
-                                        ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+                                victories = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Games Played: §b")) {
-                                gamesPlayed = Integer.parseInt(
-                                        ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+                                gamesPlayed = Math.toIntExact(currentValue);
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
@@ -283,18 +295,18 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 
                         if (Setting.GRAV_SHOW_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Points Per Game: §b" + df1f.format(ppg));
                         }
                         if (Setting.GRAV_SHOW_FINISHRATE.getValue()) {
                             double fr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Finish-Rate: §b" + df1f.format(fr) + "%");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Finish-Rate: §b" + df1f.format(fr) + "%");
                         }
 
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : GRAV.footerToSend) {

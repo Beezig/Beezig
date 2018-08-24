@@ -315,47 +315,59 @@ public class GiantListener extends AbstractGameListener<Giant> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Total Points: §b")) {
+                            } 
+                            
+                          
+                            
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                            	currentValue = Long.parseLong(newData[1]);
+                            	newData[1] = Log.df(currentValue);
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            catch(NumberFormatException ignored) {
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            
+                            if (s.startsWith("§3 Total Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Total Points: §b", ""));
-                                sb.append(points);
-                                The5zigAPI.getLogger().info(rank);
+                                points = currentValue;
+                                sb.append(newData[1]);
+
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
                                 // if(Setting.Giant_SHOW_POINTS_TO_NEXT_RANK.getValue()) sb.append(" / " +
                                 // rank.getPointsToNextRank((int)points));
                                 if (rank != null)
                                     sb.append("§b)");
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
 
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
                         if (ppg != null)
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + ppg);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + ppg);
                         if (kd != null)
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + kd);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 K/D: §b" + kd);
                         if (wr != null)
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + wr + "%");
-                        /*
-                         * if(monthlyRank != 0){ The5zigAPI.getAPI().messagePlayer("§o " +
-                         * "§3 Monthly Leaderboards: §b#" + monthlyRank); }
-                         */
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + wr + "%");
+                      
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(HiveAPI.lastGame(Giant.lastRecords, lobby).getTime());
 
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : Giant.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
                         Giant.messagesToSend.clear();

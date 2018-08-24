@@ -282,11 +282,24 @@ public class SKYListener extends AbstractGameListener<SKY> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Points: §b")) {
+                            } 
+                            
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                            	currentValue = Long.parseLong(newData[1]);
+                            	newData[1] = Log.df(currentValue);
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            catch(NumberFormatException ignored) {
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            
+                            if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
-                                sb.append(points);
+                                points = currentValue;
+                                sb.append(newData[1]);
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
                                 if (Setting.SKY_SHOW_POINTS_TO_NEXT_RANK.getValue())
@@ -296,56 +309,52 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
                                 // if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
                             } else if (s.startsWith("§3 Victories: §b")) {
-                                victories = Integer.parseInt(
-                                        ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+                                victories = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Games Played: §b")) {
-                                gamesPlayed = Integer.parseInt(
-                                        ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+                                gamesPlayed = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Kills: §b")) {
-                                kills = Integer
-                                        .parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
+                                kills = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Deaths: §b")) {
-                                deaths = Integer
-                                        .parseInt(ChatColor.stripColor(s.replaceAll("§3 Deaths: §b", "").trim()));
+                                deaths = Math.toIntExact(currentValue);
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
                         if (achievements != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "");
                         }
 
                         if (Setting.SKY_SHOW_WINRATE.getValue()) {
                             double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + df1f.format(wr) + "%");
                         }
                         if (Setting.SKY_SHOW_KD.getValue()) {
                             double kd = (double) kills / (double) deaths;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + df.format(kd));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 K/D: §b" + df.format(kd));
                         }
                         if (Setting.SKY_SHOW_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Points Per Game: §b" + df1f.format(ppg));
                         }
                         if (Setting.SKY_SHOW_KPG.getValue()) {
                             double kpg = (double) kills / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills Per Game: §b" + df1f.format(kpg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Kills Per Game: §b" + df1f.format(kpg));
                         }
 
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : SKY.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
                         SKY.messagesToSend.clear();

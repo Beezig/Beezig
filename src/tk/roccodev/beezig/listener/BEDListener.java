@@ -241,12 +241,25 @@ public class BEDListener extends AbstractGameListener<BED> {
                                     The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " (" + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Points: §b")) {
+                            }
+
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                            	currentValue = Long.parseLong(newData[1]);
+                            	newData[1] = Log.df(currentValue);
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            catch(NumberFormatException ignored) {
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            
+                            if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
+                                points = currentValue;
                                 BED.lastRecordsPoints = points;
-                                sb.append(points);
+                                sb.append(newData[1]);
                                 if (Setting.SHOW_RECORDS_RANK.getValue()) {
                                     BEDRank rank = BEDRank.isNo1(BED.lastRecords) ? BEDRank.ZZZZZZ : BEDRank.getRank((int) points);
                                     if (rank != null) {
@@ -265,24 +278,24 @@ public class BEDListener extends AbstractGameListener<BED> {
 
                                 //if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
 
                             } else if (s.startsWith("§3 Kills: §b")) {
-                                kills = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
+                                kills = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Deaths: §b")) {
-                                deaths = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Deaths: §b", "").trim()));
+                                deaths = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Games Played: §b")) {
-                                gamesPlayed = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+                                gamesPlayed = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Victories: §b")) {
-                                victories = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+                                victories = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Beds Destroyed: §b")) {
-                                bedsDestroyed = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Beds Destroyed: §b", "").trim()));
+                                bedsDestroyed = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Team Eliminated: §b")) {
-                                eliminations = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Team Eliminated: §b", "").trim()));
+                                eliminations = Math.toIntExact(currentValue);
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
@@ -294,35 +307,35 @@ public class BEDListener extends AbstractGameListener<BED> {
 
                         if (Setting.BED_SHOW_ELIMINATIONS_PER_GAME.getValue()) {
                             double epg = eliminations / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Eliminations per Game: §b" + df1f.format(epg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Eliminations per Game: §b" + df1f.format(epg));
                         }
                         if (Setting.BED_SHOW_BEDS_PER_GAME.getValue()) {
                             double bpg = bedsDestroyed / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Beds per Game: §b" + df1f.format(bpg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Beds per Game: §b" + df1f.format(bpg));
                         }
                         if (Setting.BED_SHOW_DEATHS_PER_GAME.getValue()) {
                             double dpg = deaths / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Deaths per Game: §b" + df1f.format(dpg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Deaths per Game: §b" + df1f.format(dpg));
                         }
                         if (Setting.BED_SHOW_KILLS_PER_GAME.getValue()) {
                             double kpg = kills / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills per Game: §b" + df1f.format(kpg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Kills per Game: §b" + df1f.format(kpg));
                         }
                         if (Setting.BED_SHOW_POINTS_PER_GAME.getValue()) {
                             double ppg = BED.lastRecordsPoints / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + df1f.format(ppg));
                         }
                         if (Setting.BED_SHOW_KD.getValue()) {
                             double kdr = kills / (double) (deaths == 0 ? 1 : deaths);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + df.format(kdr));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 K/D: §b" + df.format(kdr));
                         }
                         if (Setting.BED_SHOW_WINRATE.getValue()) {
                             double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + df1f.format(wr) + "%");
                         }
                         if (monthlyRank != 0) {
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Place: §b#" + monthlyRank);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Monthly Place: §b#" + monthlyRank);
                         }
 
 
@@ -330,12 +343,12 @@ public class BEDListener extends AbstractGameListener<BED> {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
 
                         for (String s : BED.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
 

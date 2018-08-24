@@ -271,13 +271,27 @@ public class SGNListener extends AbstractGameListener<SGN> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Points: §b")) {
+                            } 
+
+                            
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                            	currentValue = Long.parseLong(newData[1]);
+                            	newData[1] = Log.df(currentValue);
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            catch(NumberFormatException ignored) {
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            
+                            if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
-                                sb.append(points);
+                                points = currentValue;
+                                sb.append(newData[1]);
                                 if (realPoints != 0) {
-                                    sb.append(" [" + realPoints + "]");
+                                    sb.append(" [" + Log.df(realPoints) + "]");
                                 } else {
                                     realPoints = points;
                                 }
@@ -290,19 +304,16 @@ public class SGNListener extends AbstractGameListener<SGN> {
 
                                 // if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
                             } else if (s.startsWith("§3 Victories: §b")) {
-                                victories = Integer
-                                        .parseInt(ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+                                victories = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Games Played: §b")) {
-                                gamesPlayed = Integer
-                                        .parseInt(ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+                                gamesPlayed = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Kills: §b")) {
-                                kills = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
+                                kills = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Deaths: §b")) {
-                                deaths = Integer
-                                        .parseInt(ChatColor.stripColor(s.replaceAll("§3 Deaths: §b", "").trim()));
+                                deaths = Math.toIntExact(currentValue);
                             }
                             if (Setting.SGN_SHOW_KD.getValue()) {
                                 if (SGN.lastRecords.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
@@ -332,33 +343,33 @@ public class SGNListener extends AbstractGameListener<SGN> {
                                 }
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
                         if (Setting.SGN_SHOW_WINRATE.getValue()) {
                             double wr = Math.floor(((double) realVictories / (double) realPlayed) * 1000d) / 10d;
-                            The5zigAPI.getAPI().messagePlayer("§o " + (realVictories == victories ? "§3 Winrate: §b" : "§3 Real Winrate: §b") + df1f.format(wr) + "%");
+                            The5zigAPI.getAPI().messagePlayer("§o" + (realVictories == victories ? "§3 Winrate: §b" : "§3 Real Winrate: §b") + df1f.format(wr) + "%");
                         }
                         if (Setting.SGN_SHOW_KD.getValue()) {
                             double kd = (double) realKills / (double) realDeaths;
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + (realKills == kills ? "§3 K/D: §b" : "§3 Real K/D: §b") + df.format(kd));
+                            The5zigAPI.getAPI().messagePlayer("§o" + (realKills == kills ? "§3 K/D: §b" : "§3 Real K/D: §b") + df.format(kd));
                         }
                         if (Setting.SGN_SHOW_PPG.getValue()) {
                             double ppg = (double) realPoints / (double) realPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o " + (realPoints == points ? "§3 Points Per Game: §b" : "§3 Real Points Per Game: §b") + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§o" + (realPoints == points ? "§3 Points Per Game: §b" : "§3 Real Points Per Game: §b") + df1f.format(ppg));
                         }
 
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : SGN.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
                         SGN.messagesToSend.clear();

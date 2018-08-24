@@ -232,6 +232,8 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                         List<String> messages = new ArrayList<>(TIMV.messagesToSend);
                         Iterator<String> it = messages.iterator();
                         for (String s : messages) {
+                        	
+                        	
 
                             if (s.trim().endsWith("'s Stats §6§m")) {
                                 //"          §6§m                  §f ItsNiklass's Stats §6§m                  "
@@ -261,12 +263,23 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                                 }
                                 continue;
                             }
-
+                          
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                            	currentValue = Long.parseLong(newData[1]);
+                            	newData[1] = Log.df(currentValue);
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            catch(NumberFormatException ignored) {
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            
                             if (s.startsWith("§3 Karma: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Karma: §b");
-                                karma = Long.parseLong(s.replaceAll("§3 Karma: §b", ""));
-                                sb.append(karma);
+                                karma = currentValue;
+                                sb.append(newData[1]);
                                 if (rank != null) sb.append(" (").append(rank.getTotalDisplay());
                                 if (Setting.TIMV_SHOW_KARMA_TO_NEXT_RANK.getValue() && rank != null) {
                                     sb.append(" / ").append(rank.getKarmaToNextRank((int) karma));
@@ -275,18 +288,18 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                                 The5zigAPI.getAPI().messagePlayer(sb.toString().trim() + " ");
                                 continue;
                             } else if (s.startsWith("§3 Traitor Points: §b") && karma > 1000 && Setting.TIMV_SHOW_TRAITORRATIO.getValue()) {
-                                String[] contents = s.split(":");
-                                traitorPoints = Integer.parseInt(s.replaceAll("§3 Traitor Points: §b", "").trim());
+                                traitorPoints = Math.toIntExact(currentValue);
                                 long rp = rolepoints;
                                 double tratio = Math.round(((double) traitorPoints / (double) rp) * 1000d) / 10d;
                                 ChatColor ratioColor = ChatColor.AQUA;
                                 if (tratio >= TIMV.TRATIO_LIMIT) {
                                     ratioColor = ChatColor.RED;
                                 }
-                                The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Traitor Points: " + ChatColor.AQUA + traitorPoints + " (" + ratioColor + tratio + "%" + ChatColor.AQUA + ") ");
+                                The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Traitor Points: " + ChatColor.AQUA + newData[1] + " (" + ratioColor + tratio + "%" + ChatColor.AQUA + ") ");
                                 continue;
                             }
-                            The5zigAPI.getAPI().messagePlayer(s + " ");
+                            
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
@@ -316,7 +329,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
 
                         for (String s : TIMV.footerToSend) {
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
 

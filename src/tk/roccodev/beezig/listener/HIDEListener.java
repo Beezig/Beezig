@@ -259,11 +259,25 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                                     The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " (" + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Points: §b")) {
+                            } 
+                            
+                            
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                            	currentValue = Long.parseLong(newData[1]);
+                            	newData[1] = Log.df(currentValue);
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            catch(NumberFormatException ignored) {
+                            	s = newData[0] + ": §b" + newData[1];
+                            }
+                            
+                            if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
-                                sb.append(points);
+                                points = currentValue;
+                                sb.append(newData[1]);
                                 if (rank != null) sb.append(" (").append(rank.getTotalDisplay());
                                 if (Setting.HIDE_SHOW_POINTS_TO_NEXT_RANK.getValue())
                                     sb.append(" / ").append(rank.getPointsToNextRank((int) points));
@@ -271,72 +285,63 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
                                 //if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
                             } else if (s.startsWith("§3 Victories: §b")) {
-                                victories = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+                                victories = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Games Played: §b")) {
-                                gamesPlayed = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+                                gamesPlayed = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Total Kills: §b")) {
-                                kills = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Total Kills: §b", "").trim()));
+                                kills = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Total Deaths: §b")) {
-                                deaths = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Total Deaths: §b", "").trim()));
+                                deaths = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Kills as Seeker: §b")) {
-                                killsSeeker = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills as Seeker: §b", "").trim()));
+                                killsSeeker = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Kills as Hider: §b")) {
-                                killsHider = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills as Hider: §b", "").trim()));
+                                killsHider = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Time Alive: §b")) {
-                                timeAlive = Long.parseLong(ChatColor.stripColor(s.replaceAll("§3 Time Alive: §b", "").trim()));
+                                timeAlive = currentValue;
                                 s = s.replaceAll(Long.toString(timeAlive), APIUtils.getTimePassed(timeAlive));
                             }
 
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
 
                         if (achievements != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/57");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/57");
                         }
                         if (Setting.HIDE_SHOW_WINRATE.getValue()) {
                             double wr = (double) victories / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr * 100) + "%");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + df1f.format(wr * 100) + "%");
                         }
                         if (Setting.HIDE_SHOW_SEEKER_KPG.getValue()) {
                             double skpg = (double) killsSeeker / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Seeker: Kills per Game: §b" + df.format(skpg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Seeker: Kills per Game: §b" + df.format(skpg));
                         }
                         if (Setting.HIDE_SHOW_HIDER_KPG.getValue()) {
                             double hkpg = (double) killsHider / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Hider: Kills per Game: §b" + df.format(hkpg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Hider: Kills per Game: §b" + df.format(hkpg));
                         }
                         if (Setting.HIDE_SHOW_POINTSPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + df1f.format(ppg));
                         }
 
-				/*	if(Setting.HIDE_SHOW_WINRATE.getValue()){
-						double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
-						The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
-					}
-
-				*	if(monthlyRank != 0){
-				 *		The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Leaderboards: §b#" + monthlyRank);
-				 *	}
-				 */
                         if (playedBlocks != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Played Blocks: §b" + playedBlocks);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Played Blocks: §b" + playedBlocks);
                         }
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
 
                         for (String s : HIDE.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
 
