@@ -1,8 +1,5 @@
 package tk.roccodev.beezig.utils.acr;
 
-import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -10,6 +7,10 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
+
+import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
+import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 public class Connector {
 
@@ -61,7 +62,7 @@ public class Connector {
             String uuid = null;
             if(chatReportId.startsWith("https://") || chatReportId.startsWith("http://")) {
             	link = chatReportId;
-            	uuid = player;
+            	uuid = new ApiHiveGlobal(player).getUUID();
             }
             else {
             	String uuidInfo = "http://api.hivemc.com/v1/chatreport/" + chatReportId;
