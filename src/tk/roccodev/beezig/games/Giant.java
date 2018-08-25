@@ -46,8 +46,6 @@ public class Giant extends GameMode {
     public static int dailyPoints;
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
-    public static String lastRecords = "";
     public static List<String> votesToParse = new ArrayList<>();
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;

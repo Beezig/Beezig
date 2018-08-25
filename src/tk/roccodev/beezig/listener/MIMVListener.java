@@ -1,5 +1,19 @@
 package tk.roccodev.beezig.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -15,15 +29,8 @@ import tk.roccodev.beezig.hiveapi.stuff.mimv.MIMVRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiMIMV;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MIMVListener extends AbstractGameListener<MIMV> {
 
@@ -171,11 +178,11 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    MIMV.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiMIMV api = new ApiMIMV(MIMV.lastRecords);
+                        ApiMIMV api = new ApiMIMV(AdvancedRecords.player);
                         MIMVRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -321,7 +328,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 
                         MIMV.messagesToSend.clear();
                         MIMV.footerToSend.clear();
-                        MIMV.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -329,7 +336,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             MIMV.messagesToSend.clear();
                             MIMV.footerToSend.clear();
-                            MIMV.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -345,7 +352,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         MIMV.messagesToSend.clear();
                         MIMV.footerToSend.clear();
-                        MIMV.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;

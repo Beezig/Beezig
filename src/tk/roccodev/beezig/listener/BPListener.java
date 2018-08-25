@@ -1,11 +1,23 @@
 package tk.roccodev.beezig.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import org.json.simple.JSONObject;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
-import org.json.simple.JSONObject;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
@@ -15,15 +27,9 @@ import tk.roccodev.beezig.hiveapi.stuff.bp.BPRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiBP;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 import tk.roccodev.beezig.utils.ws.Connector;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
 
 public class BPListener extends AbstractGameListener<BP> {
 
@@ -142,11 +148,11 @@ public class BPListener extends AbstractGameListener<BP> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    BP.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiBP api = new ApiBP(BP.lastRecords);
+                        ApiBP api = new ApiBP(AdvancedRecords.player);
                         BPRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -183,7 +189,7 @@ public class BPListener extends AbstractGameListener<BP> {
 
                         // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
                         // HiveAPI.getLeaderboardsPlacePoints(349, "BP") <
-                        // HiveAPI.DRgetPoints(BP.lastRecords)) ?
+                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
                         // HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 
                         List<String> messages = new ArrayList<>(BP.messagesToSend);
@@ -287,7 +293,7 @@ public class BPListener extends AbstractGameListener<BP> {
 
                         BP.messagesToSend.clear();
                         BP.footerToSend.clear();
-                        BP.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -295,7 +301,7 @@ public class BPListener extends AbstractGameListener<BP> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             BP.messagesToSend.clear();
                             BP.footerToSend.clear();
-                            BP.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -311,7 +317,7 @@ public class BPListener extends AbstractGameListener<BP> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         BP.messagesToSend.clear();
                         BP.footerToSend.clear();
-                        BP.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;

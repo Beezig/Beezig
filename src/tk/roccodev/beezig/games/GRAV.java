@@ -17,9 +17,6 @@ public class GRAV extends GameMode {
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
-    public static String lastRecords = "";
-
     public static boolean hasVoted = false;
     public static HashMap<Integer, ArrayList<String>> mapsToParse = new HashMap<>();
 
@@ -48,7 +45,7 @@ public class GRAV extends GameMode {
         GRAV.messagesToSend.clear();
         GRAV.footerToSend.clear();
         GRAV.mapsToParse.clear();
-        GRAV.isRecordsRunning = false;
+
         GRAV.hasVoted = false;
         currentMap = -1;
         gamePoints = 0;

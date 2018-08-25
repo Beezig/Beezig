@@ -17,9 +17,6 @@ public class SKY extends GameMode {
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
-    public static String lastRecords = "";
-
     public static boolean hasVoted = false;
     public static List<String> votesToParse = new ArrayList<>();
 
@@ -114,7 +111,7 @@ public class SKY extends GameMode {
         SKY.messagesToSend.clear();
         SKY.footerToSend.clear();
         SKY.votesToParse.clear();
-        SKY.isRecordsRunning = false;
+
         SKY.hasVoted = false;
         gamePoints = 0;
         team = "";

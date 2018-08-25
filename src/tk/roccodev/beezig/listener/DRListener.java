@@ -1,5 +1,21 @@
 package tk.roccodev.beezig.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -19,13 +35,8 @@ import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DRListener extends AbstractGameListener<DR> {
 
@@ -209,11 +220,11 @@ public class DRListener extends AbstractGameListener<DR> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    DR.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
                         DRRank rank = null;
-                        ApiDR api = new ApiDR(DR.lastRecords);
+                        ApiDR api = new ApiDR(AdvancedRecords.player);
 
                        
                     
@@ -373,7 +384,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
                         DR.messagesToSend.clear();
                         DR.footerToSend.clear();
-                        DR.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -381,7 +392,7 @@ public class DRListener extends AbstractGameListener<DR> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             DR.messagesToSend.clear();
                             DR.footerToSend.clear();
-                            DR.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -397,7 +408,7 @@ public class DRListener extends AbstractGameListener<DR> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         DR.messagesToSend.clear();
                         DR.footerToSend.clear();
-                        DR.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;

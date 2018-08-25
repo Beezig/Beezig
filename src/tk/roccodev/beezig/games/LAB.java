@@ -16,9 +16,6 @@ public class LAB extends GameMode {
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
-    public static String lastRecords = "";
-
     public static int gamePts;
     public static int dailyPoints;
     public static String rank;

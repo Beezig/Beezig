@@ -25,7 +25,7 @@ public class RanksCommand implements Command {
 
     @Override
     public String[] getAliases() {
-        return new String[]{"/ranks", ""};
+        return new String[]{"/ranks"};
     }
 
     @Override

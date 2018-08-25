@@ -1,5 +1,15 @@
 package tk.roccodev.beezig.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -9,7 +19,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.games.LAB;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
@@ -17,13 +26,8 @@ import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiLAB;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
 
 public class LABListener extends AbstractGameListener<LAB> {
     @Override
@@ -141,11 +145,11 @@ public class LABListener extends AbstractGameListener<LAB> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    LAB.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiLAB api = new ApiLAB(LAB.lastRecords);
+                        ApiLAB api = new ApiLAB(AdvancedRecords.player);
                         LABRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -274,7 +278,7 @@ public class LABListener extends AbstractGameListener<LAB> {
 
                         LAB.messagesToSend.clear();
                         LAB.footerToSend.clear();
-                        LAB.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -282,7 +286,7 @@ public class LABListener extends AbstractGameListener<LAB> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             LAB.messagesToSend.clear();
                             LAB.footerToSend.clear();
-                            LAB.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -298,7 +302,7 @@ public class LABListener extends AbstractGameListener<LAB> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         LAB.messagesToSend.clear();
                         LAB.footerToSend.clear();
-                        LAB.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;

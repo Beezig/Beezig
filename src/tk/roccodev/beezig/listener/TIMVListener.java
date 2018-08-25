@@ -1,5 +1,24 @@
 package tk.roccodev.beezig.listener;
 
+import static tk.roccodev.beezig.games.TIMV.traitorTeam;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -16,16 +35,8 @@ import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static tk.roccodev.beezig.games.TIMV.traitorTeam;
 
 public class TIMVListener extends AbstractGameListener<TIMV> {
 
@@ -206,11 +217,11 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             if (TIMV.footerToSend.contains("                      §6§m                  §6§m                  ")) {
                 //Send AdvRec
                 new Thread(() -> {
-                    TIMV.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
-                        The5zigAPI.getLogger().info(TIMV.lastRecords);
-                        ApiTIMV api = new ApiTIMV(TIMV.lastRecords);
+                        The5zigAPI.getLogger().info(AdvancedRecords.player);
+                        ApiTIMV api = new ApiTIMV(AdvancedRecords.player);
                         TIMVRank rank = null;
                         Long rolepoints = Setting.TIMV_SHOW_KRR.getValue() ? api.getRolepoints() : null;
                         if (rolepoints == null && Setting.TIMV_SHOW_TRAITORRATIO.getValue()) {
@@ -335,7 +346,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
 
                         TIMV.messagesToSend.clear();
                         TIMV.footerToSend.clear();
-                        TIMV.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
 
                     } catch (Exception e) {
@@ -344,7 +355,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             TIMV.messagesToSend.clear();
                             TIMV.footerToSend.clear();
-                            TIMV.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
@@ -358,7 +369,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                         The5zigAPI.getAPI().messagePlayer("§o " + "                      §6§m                  §6§m                  ");
                         TIMV.messagesToSend.clear();
                         TIMV.footerToSend.clear();
-                        TIMV.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
 
 

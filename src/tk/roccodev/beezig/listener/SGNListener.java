@@ -1,5 +1,19 @@
 package tk.roccodev.beezig.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -16,15 +30,8 @@ import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiSGN;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SGNListener extends AbstractGameListener<SGN> {
 
@@ -191,11 +198,11 @@ public class SGNListener extends AbstractGameListener<SGN> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    SGN.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiSGN api = new ApiSGN(SGN.lastRecords);
+                        ApiSGN api = new ApiSGN(AdvancedRecords.player);
                         SGNRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -228,7 +235,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                         long realDeaths = 0;
                         long realVictories = 0;
                         long realPlayed = 0;
-                        long realPoints = SGN.lastRecords.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName()) ? api.getPoints() : 0;
+                        long realPoints = AdvancedRecords.player.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName()) ? api.getPoints() : 0;
 
 
                         long timeAlive = 0;
@@ -237,7 +244,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
 
                         // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
                         // HiveAPI.getLeaderboardsPlacePoints(349, "SGN") <
-                        // HiveAPI.DRgetPoints(SGN.lastRecords)) ?
+                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
                         // HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 
                         List<String> messages = new ArrayList<>(SGN.messagesToSend);
@@ -316,7 +323,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                                 deaths = Math.toIntExact(currentValue);
                             }
                             if (Setting.SGN_SHOW_KD.getValue()) {
-                                if (SGN.lastRecords.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
+                                if (AdvancedRecords.player.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
                                     realKills = api.getKills();
                                     realDeaths = api.getDeaths();
                                 } else {
@@ -325,7 +332,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                                 }
                             }
                             if (Setting.SGN_SHOW_PPG.getValue()) {
-                                if (SGN.lastRecords.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
+                                if (AdvancedRecords.player.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
                                     realPoints = realPoints == 0 ? api.getPoints() : realPoints;
                                     realPlayed = api.getGamesPlayed();
                                 } else {
@@ -334,7 +341,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                                 }
                             }
                             if (Setting.SGN_SHOW_WINRATE.getValue()) {
-                                if (SGN.lastRecords.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
+                                if (AdvancedRecords.player.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
                                     realVictories = api.getVictories();
                                     realPlayed = realPlayed == 0 ? api.getGamesPlayed() : realPlayed;
                                 } else {
@@ -374,7 +381,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
 
                         SGN.messagesToSend.clear();
                         SGN.footerToSend.clear();
-                        SGN.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -382,7 +389,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             SGN.messagesToSend.clear();
                             SGN.footerToSend.clear();
-                            SGN.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -398,7 +405,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         SGN.messagesToSend.clear();
                         SGN.footerToSend.clear();
-                        SGN.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;

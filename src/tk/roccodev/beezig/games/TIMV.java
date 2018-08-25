@@ -33,7 +33,6 @@ public class TIMV extends GameMode {
 
     public static int karmaCounter;
     public static TIMVMap activeMap;
-    public static String lastRecords = "";
     public static int traitorsBefore = 0;
     public static int traitorsDiscovered = 0;
     public static int detectivesBefore = 0;
@@ -48,7 +47,6 @@ public class TIMV extends GameMode {
     // Advanced Records
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
     // Autovoting
     public static List<String> votesToParse = new ArrayList<>();
     // Anti HAS 'test'
@@ -276,7 +274,7 @@ public class TIMV extends GameMode {
         TIMV.messagesToSend.clear();
         TIMV.footerToSend.clear();
         TIMV.votesToParse.clear();
-        TIMV.isRecordsRunning = false;
+
         TIMV.hasVoted = false;
         TIMV.actionBarChecked = false;
         lastTestMsg = -1;

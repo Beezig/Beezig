@@ -22,7 +22,6 @@ public class BED extends GameMode {
     public static char[] NUMBERS = {' ', '➊', '➋', '➌', '➍', '➎'};
 
     public static String activeMap;
-    public static String lastRecords = "";
     public static Long lastRecordsPoints = null;
     public static String mode = "";
 
@@ -54,7 +53,6 @@ public class BED extends GameMode {
     public static boolean hasVoted = false;
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
 

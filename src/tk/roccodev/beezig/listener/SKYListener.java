@@ -1,5 +1,19 @@
 package tk.roccodev.beezig.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -15,16 +29,9 @@ import tk.roccodev.beezig.hiveapi.stuff.sky.SKYRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiSKY;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SKYListener extends AbstractGameListener<SKY> {
 
@@ -207,11 +214,11 @@ public class SKYListener extends AbstractGameListener<SKY> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    SKY.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiSKY api = new ApiSKY(SKY.lastRecords);
+                        ApiSKY api = new ApiSKY(AdvancedRecords.player);
                         SKYRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -248,7 +255,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
                         // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
                         // HiveAPI.getLeaderboardsPlacePoints(349, "SKY") <
-                        // HiveAPI.DRgetPoints(SKY.lastRecords)) ?
+                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
                         // HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 
                         List<String> messages = new ArrayList<>(SKY.messagesToSend);
@@ -359,7 +366,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
                         SKY.messagesToSend.clear();
                         SKY.footerToSend.clear();
-                        SKY.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -367,7 +374,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             SKY.messagesToSend.clear();
                             SKY.footerToSend.clear();
-                            SKY.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -383,7 +390,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         SKY.messagesToSend.clear();
                         SKY.footerToSend.clear();
-                        SKY.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;

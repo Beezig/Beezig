@@ -1,5 +1,16 @@
 package tk.roccodev.beezig.listener;
 
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -15,12 +26,8 @@ import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGRAV;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
 
 public class GRAVListener extends AbstractGameListener<GRAV> {
 
@@ -177,11 +184,11 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    GRAV.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiGRAV api = new ApiGRAV(GRAV.lastRecords);
+                        ApiGRAV api = new ApiGRAV(AdvancedRecords.player);
                         GRAVRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -214,7 +221,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 
                         // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
                         // HiveAPI.getLeaderboardsPlacePoints(349, "GRAV") <
-                        // HiveAPI.DRgetPoints(GRAV.lastRecords)) ?
+                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
                         // HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 
                         List<String> messages = new ArrayList<>(GRAV.messagesToSend);
@@ -315,7 +322,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 
                         GRAV.messagesToSend.clear();
                         GRAV.footerToSend.clear();
-                        GRAV.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -323,7 +330,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             GRAV.messagesToSend.clear();
                             GRAV.footerToSend.clear();
-                            GRAV.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -339,7 +346,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         GRAV.messagesToSend.clear();
                         GRAV.footerToSend.clear();
-                        GRAV.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;

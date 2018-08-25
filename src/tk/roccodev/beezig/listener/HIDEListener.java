@@ -1,5 +1,21 @@
 package tk.roccodev.beezig.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -15,16 +31,9 @@ import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHIDE;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class HIDEListener extends AbstractGameListener<HIDE> {
 
@@ -189,11 +198,11 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                 //Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    HIDE.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiHIDE api = new ApiHIDE(HIDE.lastRecords);
+                        ApiHIDE api = new ApiHIDE(AdvancedRecords.player);
                         HIDERank rank = null;
 
 
@@ -229,7 +238,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                         Integer playedBlocks = Setting.HIDE_SHOW_AMOUNT_UNLOCKED.getValue() ? api.getBlockExperience().size() : null;
 
 
-                        //int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "HIDE") < HiveAPI.DRgetPoints(HIDE.lastRecords)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+                        //int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "HIDE") < HiveAPI.DRgetPoints(AdvancedRecords.player)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 
                         List<String> messages = new ArrayList<>(HIDE.messagesToSend);
                         for (String s : messages) {
@@ -347,7 +356,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
                         HIDE.messagesToSend.clear();
                         HIDE.footerToSend.clear();
-                        HIDE.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -355,7 +364,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             HIDE.messagesToSend.clear();
                             HIDE.footerToSend.clear();
-                            HIDE.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
@@ -369,7 +378,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                         The5zigAPI.getAPI().messagePlayer("§o " + "                      §6§m                  §6§m                  ");
                         HIDE.messagesToSend.clear();
                         HIDE.footerToSend.clear();
-                        HIDE.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;

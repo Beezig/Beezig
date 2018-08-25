@@ -19,9 +19,6 @@ public class CAI extends GameMode {
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
-    public static String lastRecords = "";
-
     public static boolean hasVoted = false;
     public static List<String> votesToParse = new ArrayList<>();
 
@@ -113,7 +110,7 @@ public class CAI extends GameMode {
         CAI.messagesToSend.clear();
         CAI.footerToSend.clear();
         CAI.votesToParse.clear();
-        CAI.isRecordsRunning = false;
+
         CAI.hasVoted = false;
         CAI.activeMap = null;
         gamePoints = 0;

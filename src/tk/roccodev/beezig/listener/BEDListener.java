@@ -1,5 +1,20 @@
 package tk.roccodev.beezig.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -17,17 +32,9 @@ import tk.roccodev.beezig.hiveapi.stuff.bed.MonthlyPlayer;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class BEDListener extends AbstractGameListener<BED> {
 
@@ -178,11 +185,11 @@ public class BEDListener extends AbstractGameListener<BED> {
                 //Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    BED.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiBED api = new ApiBED(BED.lastRecords);
+                        ApiBED api = new ApiBED(AdvancedRecords.player);
 
                         int kills = 0;
                         int deaths = 0;
@@ -271,7 +278,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                                 BED.lastRecordsPoints = points;
                                 sb.append(newData[1]);
                                 if (Setting.SHOW_RECORDS_RANK.getValue()) {
-                                    BEDRank rank = BEDRank.isNo1(BED.lastRecords) ? BEDRank.ZZZZZZ : BEDRank.getRank((int) points);
+                                    BEDRank rank = BEDRank.isNo1(AdvancedRecords.player) ? BEDRank.ZZZZZZ : BEDRank.getRank((int) points);
                                     if (rank != null) {
                                         int level = rank.getLevel((int) points);
                                         String BEDrankColor = rank.getName().replaceAll(ChatColor.stripColor(rank.getName()), "");
@@ -364,7 +371,7 @@ public class BEDListener extends AbstractGameListener<BED> {
 
                         BED.messagesToSend.clear();
                         BED.footerToSend.clear();
-                        BED.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -372,7 +379,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             BED.messagesToSend.clear();
                             BED.footerToSend.clear();
-                            BED.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
@@ -386,7 +393,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                         The5zigAPI.getAPI().messagePlayer("§o " + "                      §6§m                  §6§m                  ");
                         BED.messagesToSend.clear();
                         BED.footerToSend.clear();
-                        BED.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;

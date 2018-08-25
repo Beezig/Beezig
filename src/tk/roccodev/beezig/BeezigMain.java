@@ -644,185 +644,13 @@ public class BeezigMain {
         }
         if (evt.getMessage().toUpperCase().startsWith("/RECORDS")
                 || evt.getMessage().toUpperCase().startsWith("/STATS")) {
+        	if(AdvancedRecords.isRunning) {
+        		The5zigAPI.getAPI().messagePlayer(Log.error + "Advanced Records is already running.");
+        		return;
+        	}
             String[] args = evt.getMessage().split(" ");
-            System.out.println(String.join(",", args));
-            if (args.length == 1) {
-                if (ActiveGame.is("timv")) {
-                    if (TIMV.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    TIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-                } else if (ActiveGame.is("dr")) {
-                    if (DR.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    DR.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-                } else if (ActiveGame.is("bed")) {
-                    if (BED.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    BED.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-                } else if (ActiveGame.is("gnt") || ActiveGame.is("gntm")) {
-                    if (Giant.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    Giant.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-                } else if (ActiveGame.is("hide")) {
-                    if (HIDE.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    HIDE.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-                } else if (ActiveGame.is("cai")) {
-                    if (CAI.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    CAI.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-                } else if (ActiveGame.is("sky")) {
-                    if (SKY.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    SKY.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-                } else if (ActiveGame.is("grav")) {
-                    if (GRAV.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    GRAV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-                } else if (ActiveGame.is("mimv")) {
-                    if (MIMV.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    MIMV.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-                } else if (ActiveGame.is("bp")) {
-                    if (BP.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    BP.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-                } else if (ActiveGame.is("sgn")) {
-                    if (SGN.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    SGN.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-                }
-                else if (ActiveGame.is("lab")) {
-                    if (LAB.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    LAB.lastRecords = The5zigAPI.getAPI().getGameProfile().getName();
-                }
+            AdvancedRecords.player = args.length == 1 ? The5zigAPI.getAPI().getGameProfile().getName() : args[1].trim();
 
-            } else {
-                if (ActiveGame.is("timv")) {
-                    if (TIMV.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    TIMV.lastRecords = args[1].trim();
-                } else if (ActiveGame.is("dr")) {
-                    if (DR.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    DR.lastRecords = args[1].trim();
-                } else if (ActiveGame.is("bed")) {
-                    if (BED.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    BED.lastRecords = args[1].trim();
-                } else if (ActiveGame.is("gnt") || ActiveGame.is("gntm")) {
-                    if (Giant.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    Giant.lastRecords = args[1].trim();
-                } else if (ActiveGame.is("hide")) {
-                    if (HIDE.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    HIDE.lastRecords = args[1].trim();
-                } else if (ActiveGame.is("cai")) {
-                    if (CAI.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    CAI.lastRecords = args[1].trim();
-                } else if (ActiveGame.is("sky")) {
-                    if (SKY.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    SKY.lastRecords = args[1].trim();
-                } else if (ActiveGame.is("grav")) {
-                    if (GRAV.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    GRAV.lastRecords = args[1].trim();
-                } else if (ActiveGame.is("mimv")) {
-                    if (MIMV.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    MIMV.lastRecords = args[1].trim();
-                } else if (ActiveGame.is("bp")) {
-                    if (BP.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    BP.lastRecords = args[1].trim();
-                } else if (ActiveGame.is("sgn")) {
-                    if (SGN.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    SGN.lastRecords = args[1].trim();
-                }
-                else if (ActiveGame.is("lab")) {
-                    if (LAB.isRecordsRunning) {
-                        The5zigAPI.getAPI().messagePlayer(Log.error + "Records is already running!");
-                        evt.setCancelled(true);
-                        return;
-                    }
-                    LAB.lastRecords = args[1].trim();
-                }
-
-            }
         }
         if (evt.getMessage().endsWith(" test") && (evt.getMessage().split(" ").length == 2) && ActiveGame.is("TIMV")
                 && Setting.TIMV_USE_TESTREQUESTS.getValue()) {
@@ -1049,6 +877,6 @@ public class BeezigMain {
             // §6❂ §e12§7 ❘ §c§lDestructible Land§7 ❘ §f0§b Kills
             Giant.gold = Integer
                     .parseInt(ChatColor.stripColor(bar.getMessage().split("❘")[0].replaceAll("❂", "")).trim());
-        }
-    }
+		}
+	}
 }

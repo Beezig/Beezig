@@ -1,5 +1,15 @@
 package tk.roccodev.beezig.listener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.TreeMap;
+
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
@@ -15,12 +25,9 @@ import tk.roccodev.beezig.hiveapi.stuff.gnt.GiantRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGiant;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
 
 public class GiantListener extends AbstractGameListener<Giant> {
 
@@ -243,23 +250,23 @@ public class GiantListener extends AbstractGameListener<Giant> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    ApiGiant api = new ApiGiant(Giant.lastRecords);
-                    Giant.isRecordsRunning = true;
+                    ApiGiant api = new ApiGiant(AdvancedRecords.player);
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
                         GiantRank rank = null;
 
                         Integer wr = Setting.Giant_SHOW_WINRATE.getValue() ? (int) (Math
-                                .floor(((double) HiveAPI.GiantgetWins(Giant.lastRecords, lobby)
-                                        / (double) HiveAPI.GiantgetGamesPlayed(Giant.lastRecords, lobby)) * 1000d)
+                                .floor(((double) HiveAPI.GiantgetWins(AdvancedRecords.player, lobby)
+                                        / (double) HiveAPI.GiantgetGamesPlayed(AdvancedRecords.player, lobby)) * 1000d)
                                 / 10d) : null;
                         Double kd = Setting.Giant_SHOW_KD.getValue()
-                                ? Math.floor(((double) HiveAPI.GiantgetKills(Giant.lastRecords, lobby)
-                                / (double) HiveAPI.GiantgetDeaths(Giant.lastRecords, lobby) * 100d)) / 100d
+                                ? Math.floor(((double) HiveAPI.GiantgetKills(AdvancedRecords.player, lobby)
+                                / (double) HiveAPI.GiantgetDeaths(AdvancedRecords.player, lobby) * 100d)) / 100d
                                 : null;
                         Double ppg = Setting.Giant_SHOW_PPG.getValue() ? Math
-                                .round(((double) HiveAPI.GiantgetPoints(Giant.lastRecords, lobby)
-                                        / (double) HiveAPI.GiantgetGamesPlayed(Giant.lastRecords, lobby)) * 10d)
+                                .round(((double) HiveAPI.GiantgetPoints(AdvancedRecords.player, lobby)
+                                        / (double) HiveAPI.GiantgetGamesPlayed(AdvancedRecords.player, lobby)) * 10d)
                                 / 10d : null;
 
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
@@ -271,16 +278,16 @@ public class GiantListener extends AbstractGameListener<Giant> {
                         }
                         long points;
                         Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue()
-                                ? HiveAPI.lastGame(Giant.lastRecords, lobby)
+                                ? HiveAPI.lastGame(AdvancedRecords.player, lobby)
                                 : null;
                         String rankTitleGiant = Setting.SHOW_RECORDS_RANK.getValue()
-                                ? HiveAPI.GiantgetRank(Giant.lastRecords, lobby)
+                                ? HiveAPI.GiantgetRank(AdvancedRecords.player, lobby)
                                 : null;
                         The5zigAPI.getLogger().info(rankTitleGiant);
                         // int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() &&
                         // HiveAPI.getLeaderboardsPlacePoints(349, "DR") <
-                        // HiveAPI.DRgetPoints(Giant.lastRecords)) ?
-                        // HiveAPI.getMonthlyLeaderboardsRank(Giant.lastRecords, "DR") : 0;
+                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
+                        // HiveAPI.getMonthlyLeaderboardsRank(AdvancedRecords.player, "DR") : 0;
                         if (rankTitleGiant != null)
                             rank = GiantRank.getFromDisplay(rankTitleGiant);
                         List<String> messages = new ArrayList<>(Giant.messagesToSend);
@@ -360,7 +367,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
                       
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
-                            lastSeen.setTimeInMillis(HiveAPI.lastGame(Giant.lastRecords, lobby).getTime());
+                            lastSeen.setTimeInMillis(HiveAPI.lastGame(AdvancedRecords.player, lobby).getTime());
 
                             The5zigAPI.getAPI().messagePlayer(
                                     "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
@@ -372,7 +379,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
 
                         Giant.messagesToSend.clear();
                         Giant.footerToSend.clear();
-                        Giant.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -380,7 +387,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             Giant.messagesToSend.clear();
                             Giant.footerToSend.clear();
-                            Giant.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -396,7 +403,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         Giant.messagesToSend.clear();
                         Giant.footerToSend.clear();
-                        Giant.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;
