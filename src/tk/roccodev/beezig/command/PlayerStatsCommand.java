@@ -5,22 +5,12 @@ import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
-import tk.roccodev.beezig.hiveapi.stuff.bp.BPRank;
-import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
-import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
-import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVRank;
-import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
-import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
-import tk.roccodev.beezig.hiveapi.stuff.mimv.MIMVRank;
 import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
-import tk.roccodev.beezig.hiveapi.stuff.sky.SKYRank;
-import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIGameMode;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.*;
+import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +112,7 @@ public class PlayerStatsCommand implements Command {
             The5zigAPI.getAPI()
                     .messagePlayer(Log.info + game.toUpperCase() + " Playerstats: §b" + name.size() + "P / "
                             + ((System.currentTimeMillis() - startT) / 1000) + "s / "
-                            + APIUtils.average(points.toArray()) + " Average");
+                            + Log.df(APIUtils.average(points.toArray())) + " Average");
             The5zigAPI.getAPI().messagePlayer(
                     "    §7§m                                                                                    "
                             + "\n");

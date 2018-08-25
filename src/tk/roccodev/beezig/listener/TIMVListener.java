@@ -1,24 +1,5 @@
 package tk.roccodev.beezig.listener;
 
-import static tk.roccodev.beezig.games.TIMV.traitorTeam;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -37,6 +18,15 @@ import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static tk.roccodev.beezig.games.TIMV.traitorTeam;
 
 public class TIMVListener extends AbstractGameListener<TIMV> {
 
@@ -327,7 +317,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                         if (krr != null) {
                             The5zigAPI.getAPI().messagePlayer("§o§3 Karma/Rolepoints: §b" + krr + " ");
                         }
-                        if (monthlyRank != 0) {
+                        if (monthlyRank > 1) {
                             The5zigAPI.getAPI().messagePlayer("§o§3 Monthly Leaderboards: §b#" + monthlyRank + " ");
                         }
                         if (lastGame != null) {
