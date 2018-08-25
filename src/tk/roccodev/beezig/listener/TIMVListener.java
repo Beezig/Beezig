@@ -317,7 +317,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                         if (krr != null) {
                             The5zigAPI.getAPI().messagePlayer("§o§3 Karma/Rolepoints: §b" + krr + " ");
                         }
-                        if (monthlyRank > 1) {
+                        if (monthlyRank > 0) {
                             The5zigAPI.getAPI().messagePlayer("§o§3 Monthly Leaderboards: §b#" + monthlyRank + " ");
                         }
                         if (lastGame != null) {
