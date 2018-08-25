@@ -28,8 +28,13 @@ public class ChatReportCommand implements Command {
     public boolean execute(String[] args) {
 
         if (!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
+        BeezigMain.crInteractive = false;
+        BeezigMain.lrRS = "";
+        BeezigMain.checkForNewLR = false;
+        BeezigMain.lrID = "";
         if (args.length >= 2) {
-            String pl = args[0];
+            BeezigMain.lrPL = args[0];
+            
             String reason = String.join(" ", Arrays.copyOfRange(args, 1, args.length)).replace(" ", "");
             if (ChatReason.is(reason.toUpperCase())) {
                 BeezigMain.crInteractive = true;

@@ -61,6 +61,7 @@ public class BeezigMain {
     public static boolean crInteractive;
     public static String lrID;
     public static String lrRS;
+    public static String lrPL;
     public static List<Class<?>> services = new ArrayList<Class<?>>();
 
     public static File mcFile;
@@ -936,13 +937,7 @@ public class BeezigMain {
             IHive.gameListener.switchLobby("LAB");
 
         }
-        if(The5zigAPI.getAPI().isInWorld() && The5zigAPI.getAPI().getSideScoreboard() != null && The5zigAPI.getAPI().getSideScoreboard().getTitle().startsWith("   §eYour BED") && !ActiveGame.is("bed")) {
-            ActiveGame.set("BED");
-            System.out.println("Connected to BED -Hive");
-            DiscordUtils.updatePresence("Housekeeping in BedWars", "In Lobby", "game_bedwars");
-            IHive.gameListener.switchLobby("BED");
-
-        }
+        
     }
 
     @EventHandler
@@ -952,7 +947,28 @@ public class BeezigMain {
             if (The5zigAPI.getAPI().getActiveServer() instanceof IHive) {
                 if (BeezigMain.isColorDebug)
                     The5zigAPI.getLogger().info("Global Color Debug: (" + evt.getMessage() + ")");
-                if (BeezigMain.crInteractive && (evt.getMessage().startsWith("§8▏ §aLink§8 ▏ §e"))) {
+                if(evt.getMessage().equals("§8▏ §aChatReport§8 ▏ §cSorry, there are no logs for this user.")) {
+                	crInteractive = false;
+                	lrRS = "";
+                	checkForNewLR = false;
+                }
+                if(BeezigMain.crInteractive && evt.getMessage().contains("http://hivemc.com/chat/log")) {
+                	crInteractive = false;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String chatLog = "http://" + evt.getMessage().split("http\\://")[1];
+                            The5zigAPI.getAPI().messagePlayer(Log.info + "Running chatreport in §binteractive mode§3. Please wait while we fetch the report token. Do NOT click on the link below.");
+                            checkForNewLR = true;
+                            lrID = chatLog;
+                        
+                            The5zigAPI.getAPI().sendPlayerMessage("/login report");
+
+                        }
+                    }).start();
+
+                }
+                else if (BeezigMain.crInteractive && (evt.getMessage().startsWith("§8▏ §aLink§8 ▏ §e")|| evt.getMessage().startsWith("§6Log link generated: §6") )) {
                     crInteractive = false;
                     new Thread(new Runnable() {
                         @Override
@@ -961,22 +977,21 @@ public class BeezigMain {
                             The5zigAPI.getAPI().messagePlayer(Log.info + "Running chatreport in §binteractive mode§3. Please wait while we fetch the report token. Do NOT click on the link below.");
                             checkForNewLR = true;
                             lrID = chatLog;
+                          
                             The5zigAPI.getAPI().sendPlayerMessage("/login report");
 
                         }
                     }).start();
 
                 }
-                else if(evt.getMessage().contains("§6Log link generated: §6")) {
-                    crInteractive = false;
-                    lrRS = "";
-                }
                 if (BeezigMain.checkForNewLR && evt.getMessage().equals("§8▍ §e§lHive§6§lMC§8 ▏§a §b§lPlease click §b§lHERE§a to login to our website.")) {
                     checkForNewLR = false;
                     String id = new String(lrID);
                     String reason = new String(lrRS);
+                    String pl = new String(lrPL == null ? "" : lrPL);
                     lrID = "";
                     lrRS = "";
+                    lrPL = null;
                     String url = ChatComponentUtils.getClickEventValue(evt.getChatComponent().toString());
                     new Thread(new Runnable() {
                         @Override
@@ -985,7 +1000,7 @@ public class BeezigMain {
                                 The5zigAPI.getAPI().messagePlayer(Log.info + "Acquiring the token...");
                                 Connector.acquireReportToken(url);
                                 The5zigAPI.getAPI().messagePlayer(Log.info + "Submitting the report...");
-                                if (Connector.sendReport(id, reason)) {
+                                if (Connector.sendReport(id, reason, pl)) {
                                     The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully submitted chatreport.");
                                 } else {
                                     The5zigAPI.getAPI().messagePlayer(Log.error + "An error occurred while attempting to submit the chatreport.");
