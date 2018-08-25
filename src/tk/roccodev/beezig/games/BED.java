@@ -22,7 +22,6 @@ public class BED extends GameMode {
     public static char[] NUMBERS = {' ', '➊', '➋', '➌', '➍', '➎'};
 
     public static String activeMap;
-    public static String team;
     public static String lastRecords = "";
     public static Long lastRecordsPoints = null;
     public static String mode = "";
@@ -120,7 +119,6 @@ public class BED extends GameMode {
         }
         hasWon = false;
         inGame = false;
-        BED.team = null;
         BED.mode = "";
         BED.activeMap = null;
         BED.hasVoted = false;
@@ -204,6 +202,9 @@ public class BED extends GameMode {
         }
         if (sb != null && sb.getTitle().contains("BEDT ")) {
             BED.mode = "Teams";
+        }
+        if(sb != null && sb.getTitle().contains("BEDDDF ")) {
+        	BED.mode = "Redacted"; // TODO Change this to the real name upon release
         }
     }
 

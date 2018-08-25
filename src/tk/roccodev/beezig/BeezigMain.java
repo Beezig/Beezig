@@ -177,8 +177,6 @@ public class BeezigMain {
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "bedmap", tk.roccodev.beezig.modules.bed.MapItem.class,
                 "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "bedteam", tk.roccodev.beezig.modules.bed.TeamItem.class,
-                "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "bedkills", tk.roccodev.beezig.modules.bed.KillsItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "bedgamecounter",
@@ -352,7 +350,7 @@ public class BeezigMain {
         CommandManager.registerCommand(new DailyCommand());
         CommandManager.registerCommand(new AutoGGCommand());
         CommandManager.registerCommand(new UptimeCommand());
-        // CommandManager.registerCommand(new ChatReportCommand());
+        CommandManager.registerCommand(new ChatReportCommand());
 
         new Thread(new Runnable() {
             @Override

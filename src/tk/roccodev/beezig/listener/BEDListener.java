@@ -105,26 +105,36 @@ public class BEDListener extends AbstractGameListener<BED> {
 
 
             DiscordUtils.updatePresence("Housekeeping in BedWars: " + BED.mode, "Playing on " + BED.activeMap, "game_bedwars");
-        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained") && message.contains("§a points for killing")) {
-
-            int i = Integer.parseInt(ChatColor.stripColor(message.split(" ")[5]));
-
-            BED.kills++;
-            BED.pointsCounter += i;
-            BED.dailyPoints += i;
-            APIValues.BEDpoints += i;
-            BED.updateKdr();
-
-        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained") && message.contains("points for destroying")) {
-
-            int i = Integer.parseInt(ChatColor.stripColor(message.split(" ")[6]));
-
-            BED.pointsCounter += i;
-            BED.bedsDestroyed++;
-            BED.dailyPoints += i;
-            APIValues.BEDpoints += i;
-
-        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §e✯ §6Notable Win! §eGold Medal Awarded!")) {
+        } 
+        else if(message.equals("                           §cLast team alive wins!")){ // Not sure about this one
+        	BED.inGame = true;
+        }
+        else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §2✚")) {
+        	int pts = Integer.parseInt(message.split("§a")[1].split(" Points")[0]);
+        	BED.pointsCounter += pts;
+        	APIValues.BEDpoints += pts;
+        	BED.dailyPoints += pts;
+        	
+        	switch(pts) {
+        	
+        	case 5:
+        	case 10:
+        		BED.kills++;
+        		BED.updateKdr();
+        		break;
+        	case 50:
+        	case 65:
+        	case 80:
+        		BED.bedsDestroyed++;
+        		break;
+        	
+        	}
+        }
+        else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §7Gained no points")) {
+        	BED.kills++;
+        	BED.updateKdr();
+        }
+       else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §e✯ §6Notable Win! §eGold Medal Awarded!")) {
 
             BED.pointsCounter += 100;
             BED.dailyPoints += 100;
@@ -443,7 +453,7 @@ public class BEDListener extends AbstractGameListener<BED> {
             BED.diamondGen++;
         } else if (message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l") && !BED.hasVoted && Setting.AUTOVOTE.getValue()) {
             BED.votesToParse.add(message);
-        } else if (message.startsWith("               §aYou levelled up to")) {
+        } else if (message.contains("§aYou levelled up to")) {
             //Update the rank module when you uprank
             new Thread(() -> {
                 try {
@@ -457,38 +467,8 @@ public class BEDListener extends AbstractGameListener<BED> {
                 }
             }).start();
 
-        } else if (message.contains("§lYou are on ")) {
-            //"                        §6§lYou are on Gold Team!"
-            //§9§lYou are on Blue Team!
-
-            String team = null;
-            Pattern pattern = Pattern.compile(Pattern.quote("the ") + "(.*?)" + Pattern.quote(" Team!"));
-            Matcher matcher = pattern.matcher(message.trim());
-            while (matcher.find()) {
-                team = matcher.group(1);
-            }
-            try {
-                String teamColor = team.replaceAll(" ", "_");
-                switch (teamColor) {
-                    //converting Hive-Team-Color-Names into actual color tag strings
-                    case "Magenta":
-                        teamColor = "light_purple";
-                        break;
-                    case "Purple":
-                        teamColor = "dark_purple";
-                        break;
-                    default:
-                        break;
-                }
-                BED.team = ChatColor.valueOf(teamColor.toUpperCase()) + team.replaceAll("_", " ");
-            } catch (Exception e) {
-                e.printStackTrace();
-                The5zigAPI.getAPI().messagePlayer(Log.error + "Couldn't find your team color <" + team + ">");
-            }
-        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §7You gained no points for killing")) {
-            BED.kills++;
-            BED.updateKdr();
-        } else if (message.trim().equals("§d§lNew Rank!")) {
+        } 
+        else if (message.trim().equals("§d§lNew Rank!")) {
             new Thread(() -> {
 
                 try {
@@ -513,9 +493,6 @@ public class BEDListener extends AbstractGameListener<BED> {
         if (subTitle != null && ChatColor.stripColor(subTitle).trim().equals("Respawning in 2 seconds")) {
             BED.deaths++;
             BED.updateKdr();
-        }
-        else if(title != null && title.equals("§r§fWelcome to...§r")) {
-            BED.inGame = true;
         }
         else if (subTitle != null && subTitle.equals("§r§7Protect your bed, destroy others!§r")) {
             gameMode.setState(GameState.GAME);

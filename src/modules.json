@@ -62,9 +62,6 @@
           "type": "bedmap"
         },
         {
-          "type": "bedteam"
-        },
-        {
           "type": "bedteamsleft"
         },
         {
