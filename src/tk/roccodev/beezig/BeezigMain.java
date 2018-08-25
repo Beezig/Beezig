@@ -646,6 +646,7 @@ public class BeezigMain {
                 || evt.getMessage().toUpperCase().startsWith("/STATS")) {
         	if(AdvancedRecords.isRunning) {
         		The5zigAPI.getAPI().messagePlayer(Log.error + "Advanced Records is already running.");
+        		evt.setCancelled(true);
         		return;
         	}
             String[] args = evt.getMessage().split(" ");
