@@ -46,16 +46,16 @@ public class PointsItem extends GameModeItem<LAB> {
             if ((boolean) getProperties().getSetting("showrank").get()) {
                 StringBuilder sb = new StringBuilder();
                 if ((boolean) getProperties().getSetting("showcolor").get()) {
-                    sb.append(APIValues.LABpoints).append(" (").append(LAB.rank).append(getMainFormatting());
+                    sb.append(Log.df(APIValues.LABpoints)).append(" (").append(LAB.rank).append(getMainFormatting());
 
                 } else {
 
-                    sb.append(APIValues.LABpoints).append(" (").append(ChatColor.stripColor(LAB.rank));
+                    sb.append(Log.df(APIValues.LABpoints)).append(" (").append(ChatColor.stripColor(LAB.rank));
                 }
 
                 if ((boolean) getProperties().getSetting("showpointstonextrank").get()) {
                     if (LAB.rankObject == null)
-                        return APIValues.LABpoints;
+                        return Log.df(APIValues.LABpoints);
                     sb.append((boolean) getProperties().getSetting("showcolor").get()
                             ? " / " + LAB.rankObject.getPointsToNextRank((int) APIValues.LABpoints)
                             : " / " + ChatColor
@@ -69,7 +69,7 @@ public class PointsItem extends GameModeItem<LAB> {
                                 getMainFormatting() + ")" : ")");
                 return sb.toString().trim();
             }
-            return APIValues.LABpoints;
+            return Log.df(APIValues.LABpoints);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

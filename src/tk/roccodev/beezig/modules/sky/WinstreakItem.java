@@ -16,7 +16,7 @@ public class WinstreakItem extends GameModeItem<SKY> {
         try {
             boolean best = (boolean) getProperties().getSetting("showbest").get();
 
-            return SKY.winstreak + (best ? " (" + SKY.bestStreak + ")" : "");
+            return Log.df(SKY.winstreak) + (best ? " (" + Log.df(SKY.bestStreak) + ")" : "");
 
         } catch (Exception e) {
             e.printStackTrace();

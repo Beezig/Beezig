@@ -18,8 +18,8 @@ public class GoldItem extends GameModeItem<Giant> {
     @Override
     protected Object getValue(boolean dummy) {
         try {
-            if ((boolean) getProperties().getSetting("showcolor").get()) return ChatColor.GOLD + "" + Giant.gold;
-            return Giant.gold;
+            if ((boolean) getProperties().getSetting("showcolor").get()) return ChatColor.GOLD + "" + Log.df(Giant.gold);
+            return Log.df(Giant.gold);
 
         } catch (Exception e) {
             e.printStackTrace();

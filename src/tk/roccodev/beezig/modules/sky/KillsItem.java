@@ -19,7 +19,7 @@ public class KillsItem extends GameModeItem<SKY> {
         try {
 
             if ((boolean) getProperties().getSetting("showtotal").get())
-                return SKY.kills + " (" + (SKY.kills + SKY.totalKills) + ")";
+                return SKY.kills + " (" + Log.df(SKY.kills + SKY.totalKills) + ")";
             return SKY.kills;
         } catch (Exception e) {
             e.printStackTrace();

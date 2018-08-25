@@ -36,15 +36,15 @@ public class PointsItem extends GameModeItem<DR> {
             if ((boolean) getProperties().getSetting("showrank").get()) {
                 StringBuilder sb = new StringBuilder();
                 if ((boolean) getProperties().getSetting("showcolor").get()) {
-                    sb.append(APIValues.DRpoints).append(" (").append(DR.rank).append(getMainFormatting());
+                    sb.append(Log.df(APIValues.DRpoints)).append(" (").append(DR.rank).append(getMainFormatting());
 
                 } else {
 
-                    sb.append(APIValues.DRpoints).append(" (").append(ChatColor.stripColor(DR.rank));
+                    sb.append(Log.df(APIValues.DRpoints)).append(" (").append(ChatColor.stripColor(DR.rank));
                 }
 
                 if ((boolean) getProperties().getSetting("showpointstonextrank").get()) {
-                    if (DR.rankObject == null) return APIValues.DRpoints;
+                    if (DR.rankObject == null) return Log.df(APIValues.DRpoints);
                     sb.append((boolean) getProperties().getSetting("showcolor").get() ? " / " + DR.rankObject.getPointsToNextRank((int) APIValues.DRpoints) : " / " + ChatColor.stripColor(DR.rankObject.getPointsToNextRank((int) APIValues.DRpoints)));
 
                 }
@@ -56,7 +56,7 @@ public class PointsItem extends GameModeItem<DR> {
                                 ")");
                 return sb.toString().trim();
             }
-            return APIValues.DRpoints;
+            return Log.df(APIValues.DRpoints);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

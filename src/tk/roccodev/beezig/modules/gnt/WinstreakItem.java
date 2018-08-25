@@ -15,7 +15,7 @@ public class WinstreakItem extends GameModeItem<Giant> {
         try {
             boolean best = (boolean) getProperties().getSetting("showbest").get();
 
-            return Giant.winstreak + (best ? " (" + Giant.bestStreak + ")" : "");
+            return Log.df(Giant.winstreak) + (best ? " (" + Log.df(Giant.bestStreak) + ")" : "");
 
         } catch (Exception e) {
             e.printStackTrace();

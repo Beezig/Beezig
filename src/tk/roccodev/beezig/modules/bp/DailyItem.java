@@ -14,7 +14,7 @@ public class DailyItem extends GameModeItem<BP> {
     protected Object getValue(boolean dummy) {
 
 
-        return BP.dailyPoints + " " + Log.t("beezig.module.points");
+        return Log.df(BP.dailyPoints) + " " + Log.t("beezig.module.points");
 
 
     }

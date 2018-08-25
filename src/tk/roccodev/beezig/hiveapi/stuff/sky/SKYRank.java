@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.hiveapi.stuff.sky;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public enum SKYRank implements RankEnum {
         }
 
 
-        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getStart() - points), next.getTotalDisplay());
+        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + Log.df(next.getStart() - points), next.getTotalDisplay());
     }
 
 }

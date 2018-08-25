@@ -16,7 +16,7 @@ public class WinstreakItem extends GameModeItem<HIDE> {
         try {
             boolean best = (boolean) getProperties().getSetting("showbest").get();
 
-            return HIDE.winstreak + (best ? " (" + HIDE.bestStreak + ")" : "");
+            return Log.df(HIDE.winstreak) + (best ? " (" + Log.df(HIDE.bestStreak) + ")" : "");
 
         } catch (Exception e) {
             e.printStackTrace();

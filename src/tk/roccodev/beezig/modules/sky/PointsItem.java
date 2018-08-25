@@ -36,15 +36,15 @@ public class PointsItem extends GameModeItem<SKY> {
             if ((boolean) getProperties().getSetting("showrank").get()) {
                 StringBuilder sb = new StringBuilder();
                 if ((boolean) getProperties().getSetting("showcolor").get()) {
-                    sb.append(APIValues.SKYpoints).append(" (").append(SKY.rank).append(getMainFormatting());
+                    sb.append(Log.df(APIValues.SKYpoints)).append(" (").append(SKY.rank).append(getMainFormatting());
 
                 } else {
 
-                    sb.append(APIValues.SKYpoints).append(" (").append(ChatColor.stripColor(SKY.rank));
+                    sb.append(Log.df(APIValues.SKYpoints)).append(" (").append(ChatColor.stripColor(SKY.rank));
                 }
 
                 if ((boolean) getProperties().getSetting("showpointstonextrank").get()) {
-                    if (SKY.rankObject == null) return APIValues.SKYpoints;
+                    if (SKY.rankObject == null) return Log.df(APIValues.SKYpoints);
                     sb.append((boolean) getProperties().getSetting("showcolor").get() ? " / " + SKY.rankObject.getPointsToNextRank((int) APIValues.SKYpoints) : " / " + ChatColor.stripColor(SKY.rankObject.getPointsToNextRank((int) APIValues.SKYpoints)));
 
                 }
@@ -56,7 +56,7 @@ public class PointsItem extends GameModeItem<SKY> {
                                 ")");
                 return sb.toString().trim();
             }
-            return APIValues.SKYpoints;
+            return Log.df(APIValues.SKYpoints);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

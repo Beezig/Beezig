@@ -2,6 +2,7 @@ package tk.roccodev.beezig.hiveapi.stuff.bed;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
@@ -197,25 +198,25 @@ public enum BEDRank implements RankEnum {
             }
             String color = withColor ? next.getName().replaceAll(ChatColor.stripColor(next.getName()), "") : "";
             if(next == NIGHTMARE0) {
-            	return The5zigAPI.getAPI().translate("beezig.str.tonextrank", color + (next.getStart() - points) + "", next.getName());
+            	return The5zigAPI.getAPI().translate("beezig.str.tonextrank", color + Log.df((next.getStart() - points)) + "", next.getName());
             }
             
-            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", color + (next.getStart() - points) + "", BED.NUMBERS[5] + " " + next.getName());
+            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", color + Log.df((next.getStart() - points)) + "", BED.NUMBERS[5] + " " + next.getName());
 
 
         } else if (level == 2) {
             String color = withColor ? getName().replaceAll(ChatColor.stripColor(getName()), "") : "";
 
-            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", getLvl1() - points + "", color + BED.NUMBERS[1] + " " + getName());
+            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", Log.df(getLvl1() - points) + "", color + BED.NUMBERS[1] + " " + getName());
         } else if (level == 3) {
             String color = withColor ? getName().replaceAll(ChatColor.stripColor(getName()), "") : "";
-            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", getLvl2() - points + "", color + BED.NUMBERS[2] + " " + getName());
+            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", Log.df(getLvl2() - points) + "", color + BED.NUMBERS[2] + " " + getName());
         } else if (level == 4) {
             String color = withColor ? getName().replaceAll(ChatColor.stripColor(getName()), "") : "";
-            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", getLvl3() - points + "", color + BED.NUMBERS[3] + " " + getName());
+            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", Log.df(getLvl3() - points) + "", color + BED.NUMBERS[3] + " " + getName());
         } else if (level == 5) {
             String color = withColor ? getName().replaceAll(ChatColor.stripColor(getName()), "") : "";
-            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", getLvl4() - points + "", color + BED.NUMBERS[4] + " " + getName());
+            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", Log.df(getLvl4() - points) + "", color + BED.NUMBERS[4] + " " + getName());
         }
         return null;
 

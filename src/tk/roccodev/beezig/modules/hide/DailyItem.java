@@ -13,7 +13,7 @@ public class DailyItem extends GameModeItem<HIDE> {
     @Override
     protected Object getValue(boolean dummy) {
 
-        return HIDE.dailyPoints + " " + Log.t("beezig.module.points");
+        return Log.df(HIDE.dailyPoints) + " " + Log.t("beezig.module.points");
 
     }
 

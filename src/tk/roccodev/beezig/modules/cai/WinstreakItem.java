@@ -15,7 +15,7 @@ public class WinstreakItem extends GameModeItem<CAI> {
         try {
             boolean best = (boolean) getProperties().getSetting("showbest").get();
 
-            return CAI.winstreak + (best ? " (" + CAI.bestStreak + ")" : "");
+            return Log.df(CAI.winstreak) + (best ? " (" + Log.df(CAI.bestStreak) + ")" : "");
 
         } catch (Exception e) {
             e.printStackTrace();

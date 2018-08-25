@@ -19,7 +19,7 @@ public class KillsItem extends GameModeItem<Giant> {
         try {
 
             if ((boolean) getProperties().getSetting("showtotal").get())
-                return Giant.gameKills + " (" + (Giant.gameKills + Giant.totalKills) + ")";
+                return Giant.gameKills + " (" + Log.df(Giant.gameKills + Giant.totalKills) + ")";
             return Giant.gameKills;
         } catch (Exception e) {
             e.printStackTrace();

@@ -2,6 +2,7 @@ package tk.roccodev.beezig.hiveapi.stuff.sgn;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public enum SGNRank implements RankEnum {
         }
 
 
-        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getRequiredPoints() - points), next.getTotalDisplay());
+        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + Log.df(next.getRequiredPoints() - points), next.getTotalDisplay());
     }
 
 

@@ -14,7 +14,7 @@ public class DailyKarmaItem extends GameModeItem<TIMV> {
     protected Object getValue(boolean dummy) {
 
 
-        return TIMV.dailyKarma + " " + Log.t("beezig.module.timv.karma");
+        return Log.df(TIMV.dailyKarma) + " " + Log.t("beezig.module.timv.karma");
 
 
     }

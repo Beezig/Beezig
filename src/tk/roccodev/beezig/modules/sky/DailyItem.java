@@ -13,7 +13,7 @@ public class DailyItem extends GameModeItem<SKY> {
     @Override
     protected Object getValue(boolean dummy) {
 
-        return SKY.dailyPoints + " " + Log.t("beezig.module.points");
+        return Log.df(SKY.dailyPoints) + " " + Log.t("beezig.module.points");
 
     }
 

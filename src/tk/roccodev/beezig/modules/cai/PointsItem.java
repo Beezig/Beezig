@@ -36,15 +36,15 @@ public class PointsItem extends GameModeItem<CAI> {
             if ((boolean) getProperties().getSetting("showrank").get()) {
                 StringBuilder sb = new StringBuilder();
                 if ((boolean) getProperties().getSetting("showcolor").get()) {
-                    sb.append(APIValues.CAIpoints).append(" (").append(CAI.rank).append(getMainFormatting());
+                    sb.append(Log.df(APIValues.CAIpoints)).append(" (").append(CAI.rank).append(getMainFormatting());
 
                 } else {
 
-                    sb.append(APIValues.CAIpoints).append(" (").append(ChatColor.stripColor(CAI.rank));
+                    sb.append(Log.df(APIValues.CAIpoints)).append(" (").append(ChatColor.stripColor(CAI.rank));
                 }
 
                 if ((boolean) getProperties().getSetting("showpointstonextrank").get()) {
-                    if (CAI.rankObject == null) return APIValues.CAIpoints;
+                    if (CAI.rankObject == null) return Log.df(APIValues.CAIpoints);
                     sb.append((boolean) getProperties().getSetting("showcolor").get() ? " / " + CAI.rankObject.getPointsToNextRank((int) APIValues.CAIpoints) : " / " + ChatColor.stripColor(CAI.rankObject.getPointsToNextRank((int) APIValues.CAIpoints)));
 
                 }
@@ -56,7 +56,7 @@ public class PointsItem extends GameModeItem<CAI> {
                                 ")");
                 return sb.toString().trim();
             }
-            return APIValues.CAIpoints;
+            return Log.df(APIValues.CAIpoints);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

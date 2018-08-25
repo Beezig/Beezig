@@ -15,7 +15,7 @@ public class DailyItem extends GameModeItem<LAB> {
     protected Object getValue(boolean dummy) {
 
 
-        return LAB.dailyPoints + " " + Log.t("beezig.module.lab.atoms");
+        return Log.df(LAB.dailyPoints) + " " + Log.t("beezig.module.lab.atoms");
 
 
     }

@@ -16,7 +16,7 @@ public class DailyItem extends GameModeItem<Giant> {
     @Override
     protected Object getValue(boolean dummy) {
 
-        return Giant.dailyPoints + " " + Log.t("beezig.module.points");
+        return Log.df(Giant.dailyPoints) + " " + Log.t("beezig.module.points");
 
     }
 

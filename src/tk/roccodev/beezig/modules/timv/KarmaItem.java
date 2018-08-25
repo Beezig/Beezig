@@ -36,15 +36,15 @@ public class KarmaItem extends GameModeItem<TIMV> {
             if ((boolean) getProperties().getSetting("showrank").get()) {
                 StringBuilder sb = new StringBuilder();
                 if ((boolean) getProperties().getSetting("showcolor").get()) {
-                    sb.append(APIValues.TIMVkarma).append(" (").append(TIMV.rank).append(getMainFormatting());
+                    sb.append(Log.df(APIValues.TIMVkarma)).append(" (").append(TIMV.rank).append(getMainFormatting());
 
                 } else {
 
-                    sb.append(APIValues.TIMVkarma).append(" (").append(ChatColor.stripColor(TIMV.rank));
+                    sb.append(Log.df(APIValues.TIMVkarma)).append(" (").append(ChatColor.stripColor(TIMV.rank));
                 }
 
                 if ((boolean) getProperties().getSetting("showpointstonextrank").get()) {
-                    if (TIMV.rankObject == null) return APIValues.TIMVkarma;
+                    if (TIMV.rankObject == null) return Log.df(APIValues.TIMVkarma);
                     sb.append((boolean) getProperties().getSetting("showcolor").get() ? " / " + TIMV.rankObject.getKarmaToNextRank((int) APIValues.TIMVkarma) : " / " + ChatColor.stripColor(TIMV.rankObject.getKarmaToNextRank((int) APIValues.TIMVkarma)));
 
                 }
@@ -56,7 +56,7 @@ public class KarmaItem extends GameModeItem<TIMV> {
                                 ")");
                 return sb.toString().trim();
             }
-            return APIValues.TIMVkarma;
+            return Log.df(APIValues.TIMVkarma);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

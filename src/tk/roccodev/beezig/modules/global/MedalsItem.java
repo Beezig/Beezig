@@ -18,7 +18,7 @@ public class MedalsItem extends GameModeItem<GameMode> {
     protected Object getValue(boolean dummy) {
         try {
 
-            return HiveAPI.medals;
+            return Log.df(HiveAPI.medals);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

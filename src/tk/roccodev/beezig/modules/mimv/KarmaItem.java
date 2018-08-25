@@ -36,15 +36,15 @@ public class KarmaItem extends GameModeItem<MIMV> {
             if ((boolean) getProperties().getSetting("showrank").get()) {
                 StringBuilder sb = new StringBuilder();
                 if ((boolean) getProperties().getSetting("showcolor").get()) {
-                    sb.append(APIValues.MIMVpoints).append(" (").append(MIMV.rank).append(getMainFormatting());
+                    sb.append(Log.df(APIValues.MIMVpoints)).append(" (").append(MIMV.rank).append(getMainFormatting());
 
                 } else {
 
-                    sb.append(APIValues.MIMVpoints).append(" (").append(ChatColor.stripColor(MIMV.rank));
+                    sb.append(Log.df(APIValues.MIMVpoints)).append(" (").append(ChatColor.stripColor(MIMV.rank));
                 }
 
                 if ((boolean) getProperties().getSetting("showpointstonextrank").get()) {
-                    if (MIMV.rankObject == null) return APIValues.MIMVpoints;
+                    if (MIMV.rankObject == null) return Log.df(APIValues.MIMVpoints);
                     sb.append((boolean) getProperties().getSetting("showcolor").get() ? " / " + MIMV.rankObject.getPointsToNextRank((int) APIValues.MIMVpoints) : " / " + ChatColor.stripColor(MIMV.rankObject.getPointsToNextRank((int) APIValues.MIMVpoints)));
 
                 }
@@ -56,7 +56,7 @@ public class KarmaItem extends GameModeItem<MIMV> {
                                 ")");
                 return sb.toString().trim();
             }
-            return APIValues.MIMVpoints;
+            return Log.df(APIValues.MIMVpoints);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

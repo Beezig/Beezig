@@ -7,6 +7,7 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.Giant;
+import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 
 public class PointsItem extends GameModeItem<Giant> {
@@ -40,15 +41,15 @@ public class PointsItem extends GameModeItem<Giant> {
             if ((boolean) getProperties().getSetting("showrank").get()) {
                 StringBuilder sb = new StringBuilder();
                 if ((boolean) getProperties().getSetting("showcolor").get()) {
-                    sb.append(HiveAPI.GiantPoints).append(" (").append(Giant.rank).append(getMainFormatting());
+                    sb.append(Log.df(HiveAPI.GiantPoints)).append(" (").append(Giant.rank).append(getMainFormatting());
 
                 } else {
 
-                    sb.append(HiveAPI.GiantPoints).append(" (").append(ChatColor.stripColor(Giant.rank));
+                    sb.append(Log.df(HiveAPI.GiantPoints)).append(" (").append(ChatColor.stripColor(Giant.rank));
                 }
 
                 if ((boolean) getProperties().getSetting("showpointstonextrank").get()) {
-                    if (Giant.rankObject == null) return HiveAPI.GiantPoints;
+                    if (Giant.rankObject == null) return Log.df(HiveAPI.GiantPoints);
                     sb.append((boolean) getProperties().getSetting("showcolor").get() ? " / " + Giant.rankObject.getPointsToNextRank((int) HiveAPI.GiantPoints) : " / " + ChatColor.stripColor(Giant.rankObject.getPointsToNextRank((int) HiveAPI.GiantPoints)));
 
                 }
@@ -60,7 +61,7 @@ public class PointsItem extends GameModeItem<Giant> {
                                 ")");
                 return sb.toString().trim();
             }
-            return HiveAPI.GiantPoints;
+            return Log.df(HiveAPI.GiantPoints);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";
