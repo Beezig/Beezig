@@ -36,15 +36,15 @@ public class PointsItem extends GameModeItem<BED> {
             if ((boolean) getProperties().getSetting("showrank").get()) {
                 StringBuilder sb = new StringBuilder();
                 if ((boolean) getProperties().getSetting("showcolor").get()) {
-                    sb.append(APIValues.BEDpoints).append(" (").append(BED.rank).append(getMainFormatting());
+                    sb.append(Log.df(APIValues.BEDpoints)).append(" (").append(BED.rank).append(getMainFormatting());
 
                 } else {
 
-                    sb.append(APIValues.BEDpoints).append(" (").append(ChatColor.stripColor(BED.rank));
+                    sb.append(Log.df(APIValues.BEDpoints)).append(" (").append(ChatColor.stripColor(BED.rank));
                 }
 
                 if ((boolean) getProperties().getSetting("showpointstonextrank").get()) {
-                    if (BED.rankObject == null) return APIValues.BEDpoints;
+                    if (BED.rankObject == null) return Log.df(APIValues.BEDpoints);
                     sb.append((boolean) getProperties().getSetting("showcolor").get() ? " / " + BED.rankObject.getPointsToNextRank((int) APIValues.BEDpoints) : " / " + ChatColor.stripColor(BED.rankObject.getPointsToNextRank((int) APIValues.BEDpoints)));
 
                 }
@@ -56,7 +56,7 @@ public class PointsItem extends GameModeItem<BED> {
                                 ")");
                 return sb.toString().trim();
             }
-            return APIValues.BEDpoints;
+            return Log.df(APIValues.BEDpoints);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

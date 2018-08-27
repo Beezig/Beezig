@@ -15,7 +15,7 @@ public class WinstreakItem extends GameModeItem<BED> {
         try {
             boolean best = (boolean) getProperties().getSetting("showbest").get();
 
-            return BED.winstreak + (best ? " (" + BED.bestStreak + ")" : "");
+            return Log.df(BED.winstreak) + (best ? " (" + Log.df(BED.bestStreak) + ")" : "");
 
         } catch (Exception e) {
             e.printStackTrace();
