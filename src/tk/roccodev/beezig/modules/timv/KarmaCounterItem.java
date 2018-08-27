@@ -15,17 +15,17 @@ public class KarmaCounterItem extends GameModeItem<TIMV> {
 
 
         StringBuilder sb = new StringBuilder();
-        sb.append(TIMV.karmaCounter).append(" " + Log.t("beezig.module.timv.karma"));
+        sb.append(TIMV.karmaCounter).append(" ").append(Log.t("beezig.module.timv.karma"));
         if ((boolean) getProperties().getSetting("showrolepoints").get()) {
 
             if (TIMV.dPoints != 0) {
-                sb.append(" / ").append(TIMV.dPoints).append(" " + Log.t("beezig.str.timv.dpoints"));
+                sb.append(" / ").append(TIMV.dPoints).append(" ").append(Log.t("beezig.str.timv.dpoints"));
             }
             if (TIMV.iPoints != 0) {
-                sb.append(" / ").append(TIMV.iPoints).append(" " + Log.t("beezig.str.timv.ipoints"));
+                sb.append(" / ").append(TIMV.iPoints).append(" ").append(Log.t("beezig.str.timv.ipoints"));
             }
             if (TIMV.tPoints != 0) {
-                sb.append(" / ").append(TIMV.tPoints).append(" " + Log.t("beezig.str.timv.tpoints"));
+                sb.append(" / ").append(TIMV.tPoints).append(" ").append(Log.t("beezig.str.timv.tpoints"));
             }
 
 

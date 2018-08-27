@@ -289,7 +289,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                                 points = currentValue;
                                 sb.append(newData[1]);
                                 if (realPoints != 0) {
-                                    sb.append(" [" + Log.df(realPoints) + "]");
+                                    sb.append(" [").append(Log.df(realPoints)).append("]");
                                 } else {
                                     realPoints = points;
                                 }
@@ -409,7 +409,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
 
     @Override
     public boolean onActionBar(SGN gameMode, String message) {
-        if (message.contains("CS_") && SGN.custom == false) {
+        if (message.contains("CS_") && !SGN.custom) {
             SGN.custom = true;
             DiscordUtils.updatePresence("Battling in SG2", "Playing on " + SGN.activeMap + " [CS]", "game_sgn");
         }

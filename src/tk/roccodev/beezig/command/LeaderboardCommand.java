@@ -47,7 +47,7 @@ public class LeaderboardCommand implements Command {
         String rankNamePkg = game.equalsIgnoreCase("gnt") || game.equals("gntm") ? "gnt" : game;
 
         new Thread(() -> {
-            Class enumToUse = null;
+            Class enumToUse;
             try {
                 enumToUse = Class.forName("tk.roccodev.beezig.hiveapi.stuff." + rankNamePkg.toLowerCase() + "." + rankName + "Rank");
             } catch (ClassNotFoundException ignored) {

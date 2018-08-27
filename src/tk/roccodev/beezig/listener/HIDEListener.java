@@ -289,9 +289,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                             } else if (s.startsWith("§3 Games Played: §b")) {
                                 gamesPlayed = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Total Kills: §b")) {
-                                kills = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Total Deaths: §b")) {
-                                deaths = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Kills as Seeker: §b")) {
                                 killsSeeker = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Kills as Hider: §b")) {

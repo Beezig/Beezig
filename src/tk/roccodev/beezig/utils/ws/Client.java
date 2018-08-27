@@ -38,7 +38,7 @@ public class Client extends WebSocketClient {
             if (Setting.PM_PING.getValue()) {
                 The5zigAPI.getAPI().playSound("note.pling", 1f);
             }
-            if (Setting.PM_NOTIFICATION.getValue() && !NotificationManager.isInGameFocus()) {
+            if (Setting.PM_NOTIFICATION.getValue() && NotificationManager.isInGameFocus()) {
                 NotificationManager.sendNotification("New Report Received", users + " reported for " + reason);
             }
         } else if (data[0].equals("0nline cl1ents")) {

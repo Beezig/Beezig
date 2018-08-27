@@ -252,9 +252,7 @@ public class BPListener extends AbstractGameListener<BP> {
                             } else if (s.startsWith("§3 Games Played: §b")) {
                                 gamesPlayed = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Kills: §b")) {
-                                kills = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Deaths: §b")) {
-                                deaths = Math.toIntExact(currentValue);
                             }
 
                             The5zigAPI.getAPI().messagePlayer("§o" + s);

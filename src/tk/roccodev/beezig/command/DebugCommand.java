@@ -22,11 +22,7 @@ public class DebugCommand implements Command {
     public boolean execute(String[] args) {
         //some debug code here v
 
-        new Thread(() -> {
-
-            Connector.client.send("Hello there pls get online people");
-
-        }).start();
+        new Thread(() -> Connector.client.send("Hello there pls get online people")).start();
 
         The5zigAPI.getAPI().getRenderHelper().drawLargeText("Test");
 

@@ -41,7 +41,7 @@ public class AutoVoteCommand implements Command {
                 StringBuilder sb = new StringBuilder();
                 String mapString;
                 for (String s : mapStr) {
-                    sb.append(s + "_");
+                    sb.append(s).append("_");
                 }
                 mapString = sb.deleteCharAt(sb.length() - 1).toString().trim();
 
@@ -69,7 +69,7 @@ public class AutoVoteCommand implements Command {
                 StringBuilder sb = new StringBuilder();
                 String mapString;
                 for (String s : mapStr) {
-                    sb.append(s + "_");
+                    sb.append(s).append("_");
                 }
                 mapString = sb.deleteCharAt(sb.length() - 1).toString().trim();
 
@@ -91,7 +91,7 @@ public class AutoVoteCommand implements Command {
             StringBuilder sb = new StringBuilder();
             String mapString;
             for (String s : mapStr) {
-                sb.append(s + "_");
+                sb.append(s).append("_");
             }
             mapString = sb.deleteCharAt(sb.length() - 1).toString().trim();
             ArrayList<String> maps = new ArrayList<>(AutovoteUtils.getMapsForMode(gamemode.toLowerCase()));

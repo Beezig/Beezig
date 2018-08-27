@@ -64,9 +64,9 @@ public class NewsServer {
 
             }
             for (Map.Entry<String, ArrayList<NewMap>> e : grouped.entrySet()) {
-                sb.append("§a" + e.getKey() + ":§e ");
+                sb.append("§a").append(e.getKey()).append(":§e ");
                 for (NewMap m : e.getValue()) {
-                    sb.append(m.getName() + ", ");
+                    sb.append(m.getName()).append(", ");
                 }
                 sb.trimToSize();
                 sb.deleteCharAt(sb.length() - 2);
@@ -98,9 +98,9 @@ public class NewsServer {
             }
 
             for (Map.Entry<StaffChangeType, ArrayList<StaffUpdate>> e : grouped.entrySet()) {
-                sb.append(e.getKey().getDisplay() + ":§e ");
+                sb.append(e.getKey().getDisplay()).append(":§e ");
                 for (StaffUpdate s : e.getValue()) {
-                    sb.append(s.getStaffName() + ", ");
+                    sb.append(s.getStaffName()).append(", ");
                 }
                 sb.trimToSize();
                 sb.deleteCharAt(sb.length() - 2);

@@ -20,7 +20,7 @@ public class MapItem extends GameModeItem<DR> {
         tr.append(name);
         if ((boolean) getProperties().getSetting("showcheckpoints").get() && "Runner".equals(DR.role)) {
             int totalc = map.getCheckpoints();
-            tr.append(" (").append(DR.checkpoints).append("/").append(totalc).append(" " + Log.t("beezig.str.dr.checkpoints") + ")");
+            tr.append(" (").append(DR.checkpoints).append("/").append(totalc).append(" ").append(Log.t("beezig.str.dr.checkpoints")).append(")");
         }
         return tr.toString().trim();
     }

@@ -42,7 +42,7 @@ public class PlayerStatsCommand implements Command {
 
 
         new Thread(() -> {
-            Class enumToUse = null;
+            Class enumToUse;
             try {
                 enumToUse = Class.forName("tk.roccodev.beezig.hiveapi.stuff." + rankNamePkg.toLowerCase() + "." + rankName + "Rank");
             } catch (ClassNotFoundException ignored) {

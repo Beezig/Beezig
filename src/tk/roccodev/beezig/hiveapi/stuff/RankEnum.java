@@ -12,6 +12,4 @@ public interface RankEnum {
 
     String getDisplay();
 
-    ;
-
 }

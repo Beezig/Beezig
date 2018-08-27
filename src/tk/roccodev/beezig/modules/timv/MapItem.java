@@ -22,7 +22,7 @@ public class MapItem extends GameModeItem<TIMV> {
 
             int t = map.getEnderchests();
 
-            tr.append(" (" + t + ")");
+            tr.append(" (").append(t).append(")");
 
 
         }

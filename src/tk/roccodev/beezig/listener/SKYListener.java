@@ -157,8 +157,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
             SKY.votesToParse.add(message);
         } else if (message.contains("§e, noble fighter for the ")) {
             SKY.inGame = true;
-            String team = message.split("the")[1].replace("§eteam!", "").replaceAll("team!", "").trim();
-            SKY.team = team;
+            SKY.team = message.split("the")[1].replace("§eteam!", "").replaceAll("team!", "").trim();
 
             String teamSize = SKY.mode == null ? "0"
                     : (SKY.mode.equals("Solo") ? "1" : (SKY.mode.equals("Duos") ? "2" : "4"));

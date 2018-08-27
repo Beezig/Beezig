@@ -37,7 +37,7 @@ public class DailyCommand implements Command {
                 Class clazz = Class.forName("tk.roccodev.beezig.games." + mode.toUpperCase());
                 Field f = clazz.getSimpleName().equals("TIMV") ? clazz.getDeclaredField("dailyKarmaName") : clazz.getDeclaredField("dailyPointsName");
                 f.setAccessible(true);
-                ArrayList<String> lines = new ArrayList<String>(
+                ArrayList<String> lines = new ArrayList<>(
                         new ArrayList<>(Files.readAllLines(Paths.get(new File(BeezigMain.mcFile + "/" + mode.toLowerCase() + "/dailyPoints/" + f.get(null)).getPath()))));
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Daily Points: §b" + lines.get(0));
             } catch (IOException | ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {

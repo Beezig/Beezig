@@ -76,7 +76,7 @@ public class NotificationManager {
     }
 
     public static boolean isInGameFocus() {
-        return Display.isActive();
+        return !Display.isActive();
     }
 
 

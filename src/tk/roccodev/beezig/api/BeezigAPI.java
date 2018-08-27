@@ -13,7 +13,6 @@ import tk.roccodev.beezig.utils.ws.Connector;
 public class BeezigAPI {
 
     private static BeezigAPI instance;
-    private Object registeredListener;
     private AbstractForgeListener listenerImpl;
 
     public BeezigAPI() {
@@ -27,13 +26,11 @@ public class BeezigAPI {
     }
 
     public void registerListener(Object toRegister) {
-        registeredListener = toRegister;
+        Object registeredListener = toRegister;
         listenerImpl = AbstractForgeListener.fromObject(registeredListener);
         BeezigMain.hasExpansion = true;
         listenerImpl.onLoad(BeezigMain.BEEZIG_VERSION, The5zigAPI.getAPI().getModVersion());
-        new Thread(() -> {
-            Connector.client.send("BeezigForgeLoad");
-        }).start();
+        new Thread(() -> Connector.client.send("BeezigForgeLoad")).start();
     }
 
     public boolean isStaffMember() {

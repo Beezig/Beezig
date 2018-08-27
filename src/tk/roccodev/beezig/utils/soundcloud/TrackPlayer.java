@@ -49,9 +49,7 @@ public class TrackPlayer {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(configFile.getAbsolutePath(), "UTF-8");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         writer.println(gain);

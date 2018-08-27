@@ -73,11 +73,7 @@ public class Connector {
 
                                 TrackPlayer.init();
                                 The5zigAPI.getAPI().messagePlayer(Log.info + "Loaded the song to your jukebox. To adjust the volume, use /vol [0-100].");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (JavaLayerException e) {
-                                e.printStackTrace();
-                            } catch (UnsupportedAudioFileException e) {
+                            } catch (IOException | JavaLayerException e) {
                                 e.printStackTrace();
                             }
                         }).start();
@@ -112,9 +108,7 @@ public class Connector {
             socket.emit("joinserver", servObj);
 
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
+        } catch (MalformedURLException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }

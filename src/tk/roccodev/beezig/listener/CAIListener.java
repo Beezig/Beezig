@@ -378,7 +378,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
                         if (Setting.CAI_SHOW_CAPTURES_GAME.getValue()) {
                             if (captures == 0) captures = api.getCaptures();
                             if (gamesPlayed == 0) gamesPlayed = Math.toIntExact(api.getGamesPlayed());
-                            double cpg = (double) ((double) captures / (double) gamesPlayed);
+                            double cpg = (double) captures / (double) gamesPlayed;
                             The5zigAPI.getAPI().messagePlayer("§o§3 Captures per Game: §b" + df1f.format(cpg));
                         }
 

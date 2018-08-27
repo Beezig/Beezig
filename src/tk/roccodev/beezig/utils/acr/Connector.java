@@ -24,7 +24,7 @@ public class Connector {
         conn.connect(); // Returns 302 if success, 200 if error
         StringBuilder cks = new StringBuilder();
         for (String s : conn.getHeaderFields().get("Set-Cookie")) {
-            cks.append(s.split(";")[0] + "; ");
+            cks.append(s.split(";")[0]).append("; ");
         }
 
         URL rep = new URL("https://report.hivemc.com/");
@@ -58,8 +58,8 @@ public class Connector {
             conn3.setRequestMethod("POST");
 
 
-            String link = null;
-            String uuid = null;
+            String link;
+            String uuid;
             if (chatReportId.startsWith("https://") || chatReportId.startsWith("http://")) {
                 link = chatReportId;
                 uuid = new ApiHiveGlobal(player).getUUID();
@@ -82,9 +82,7 @@ public class Connector {
                 os.write(urlParameters.getBytes(StandardCharsets.UTF_8));
             }
 
-            if (conn3.getResponseCode() == 200)
-                return true;
-            return false;
+            return conn3.getResponseCode() == 200;
         } catch (Exception e) {
             e.printStackTrace();
             return false;

@@ -36,31 +36,22 @@ public class BeezigPartyCommand implements Command {
             argsL.remove(0);
             argsL.remove(0);
             String mode = String.join(" ", argsL);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Connector.client.send("Looking for Party: " + The5zigAPI.getAPI().getGameProfile().getName() + "§" + mode + "§" + amount.trim());
-                }
-
-            }).start();
+            new Thread(() -> Connector.client.send("Looking for Party: " + The5zigAPI.getAPI().getGameProfile().getName() + "§" + mode + "§" + amount.trim())).start();
             The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully requested party.");
         } else if (args[0].equalsIgnoreCase("accept")) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    String player = args[1];
-                    try {
-                        URL url = new URL("http://beezignode-beezig-node.a3c1.starter-us-west-1.openshiftapps.com/submitParty?sender=" + The5zigAPI.getAPI().getGameProfile().getName() + "&user=" + player.trim());
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        if (conn.getResponseCode() == 200) {
-                            The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully accepted invite.");
-                        } else {
-                            The5zigAPI.getAPI().messagePlayer(Log.error + "Invite not found.");
-                        }
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+            new Thread(() -> {
+                String player = args[1];
+                try {
+                    URL url = new URL("http://beezignode-beezig-node.a3c1.starter-us-west-1.openshiftapps.com/submitParty?sender=" + The5zigAPI.getAPI().getGameProfile().getName() + "&user=" + player.trim());
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    if (conn.getResponseCode() == 200) {
+                        The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully accepted invite.");
+                    } else {
+                        The5zigAPI.getAPI().messagePlayer(Log.error + "Invite not found.");
                     }
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
             }).start();
 

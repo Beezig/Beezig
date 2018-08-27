@@ -42,10 +42,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -62,7 +59,7 @@ public class BeezigMain {
     public static String lrID;
     public static String lrRS;
     public static String lrPL;
-    public static List<Class<?>> services = new ArrayList<Class<?>>();
+    public static List<Class<?>> services = new ArrayList<>();
 
     public static File mcFile;
     public static boolean isColorDebug = false;
@@ -98,16 +95,14 @@ public class BeezigMain {
         try {
             if (Updater.isVersionBlacklisted(getCustomVersioning())
                     && !BeezigMain.class.getAnnotation(Plugin.class).version().contains("experimental")) {
-                new Thread(new Runnable() {
-                    public void run() {
-                        try {
-                            TimeUnit.SECONDS.sleep(10);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        The5zigAPI.getLogger().error("Beezig: This version is disabled!");
-                        news.displayMessage("Beezig: Version is disabled!", "Please update to the latest version.");
+                new Thread(() -> {
+                    try {
+                        TimeUnit.SECONDS.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
+                    The5zigAPI.getLogger().error("Beezig: This version is disabled!");
+                    news.displayMessage("Beezig: Version is disabled!", "Please update to the latest version.");
                 }).start();
                 return; // < one does not simply update beezig
             }
@@ -136,7 +131,7 @@ public class BeezigMain {
             try {
                 expHash.close();
 
-            } catch (IOException e) {
+            } catch (IOException ignored) {
 
             }
             String[] data = result.split(" ");
@@ -365,14 +360,11 @@ public class BeezigMain {
         CommandManager.registerCommand(new UptimeCommand());
         CommandManager.registerCommand(new ChatReportCommand());
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    tk.roccodev.beezig.utils.ws.Connector.connect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        new Thread(() -> {
+            try {
+                tk.roccodev.beezig.utils.ws.Connector.connect();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
 
@@ -384,12 +376,7 @@ public class BeezigMain {
             CommandManager.registerCommand(new SeenCommand());
         }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                BeezigMain.refetchMaps();
-            }
-        }, "Maps Fetcher").start();
+        new Thread(() -> BeezigMain.refetchMaps(), "Maps Fetcher").start();
 
         The5zigAPI.getLogger().info("Loaded BeezigCore");
 
@@ -467,51 +454,47 @@ public class BeezigMain {
         TrackPlayer.loadConfigFile(jukeboxFile);
 
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                File f = new File(mcFile + "/lastlogin.txt");
-                long lastLogin = 0;
-                if (!f.exists()) {
-                    try {
-                        f.createNewFile();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        ArrayList<String> bloccs = new ArrayList<String>(
-                                Files.readAllLines(Paths.get(f.getPath())).stream().collect(Collectors.toList()));
-                        lastLogin = Long.parseLong(bloccs.get(0));
-
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-
-                }
-
-                List<String> lines = new ArrayList<String>(Arrays.asList(System.currentTimeMillis() + ""));
+        new Thread(() -> {
+            File f = new File(mcFile + "/lastlogin.txt");
+            long lastLogin = 0;
+            if (!f.exists()) {
                 try {
-                    Files.write(Paths.get(f.getPath()), lines, Charset.forName("UTF-8"));
+                    f.createNewFile();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    ArrayList<String> bloccs = Files.readAllLines(Paths.get(f.getPath())).stream().collect(Collectors.toCollection(ArrayList::new));
+                    lastLogin = Long.parseLong(bloccs.get(0));
+
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
 
-                try {
-                    TriggersFetcher.fetch();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                Pools.newsPool = NewsFetcher.getApplicableNews(lastLogin);
-                Pools.newMapsPool = NewsFetcher.getApplicableNewMaps(lastLogin);
-                Pools.staffPool = NewsFetcher.getApplicableStaffUpdates(lastLogin);
-
-
             }
+
+            List<String> lines = new ArrayList<>(Collections.singletonList(System.currentTimeMillis() + ""));
+            try {
+                Files.write(Paths.get(f.getPath()), lines, Charset.forName("UTF-8"));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+                TriggersFetcher.fetch();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Pools.newsPool = NewsFetcher.getApplicableNews(lastLogin);
+            Pools.newMapsPool = NewsFetcher.getApplicableNewMaps(lastLogin);
+            Pools.staffPool = NewsFetcher.getApplicableStaffUpdates(lastLogin);
+
+
         }, "News Fetcher").start();
 
         try {
@@ -603,8 +586,7 @@ public class BeezigMain {
     private void checkOldCsvPath() {
         File oldPath = new File(mcFile + "/games.csv");
         File newPath = new File(mcFile + "/timv/games.csv");
-        if (oldPath.exists() && newPath.exists()) {
-        } else if (oldPath.exists() && !newPath.exists()) {
+       if (oldPath.exists() && !newPath.exists()) {
             The5zigAPI.getLogger().info("games.csv in 5zigtimv/ directory found! Migrating...");
             checkForFileExist(new File(mcFile + "/timv/"), true);
             try {
@@ -690,21 +672,18 @@ public class BeezigMain {
 
         if (ActiveGame.current() == null || ActiveGame.current().isEmpty())
             return;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
+        new Thread(() -> {
+            try {
 
 
-                    String className = ActiveGame.current().toUpperCase();
-                    if (className.startsWith("GNT"))
-                        className = "Giant";
-                    Class gameModeClass = Class.forName("tk.roccodev.beezig.games." + className);
-                    Method resetMethod = gameModeClass.getMethod("reset", gameModeClass);
-                    resetMethod.invoke(null, gameModeClass.newInstance());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                String className = ActiveGame.current().toUpperCase();
+                if (className.startsWith("GNT"))
+                    className = "Giant";
+                Class gameModeClass = Class.forName("tk.roccodev.beezig.games." + className);
+                Method resetMethod = gameModeClass.getMethod("reset", gameModeClass);
+                resetMethod.invoke(null, gameModeClass.newInstance());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
 
@@ -734,22 +713,19 @@ public class BeezigMain {
             The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
             DR.activeMap = DR.mapsPool.get(map.toLowerCase());
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
-                    if (DR.currentMapPB == null) {
-                        The5zigAPI.getLogger().info("Loading PB...");
-                        DR.currentMapPB = api.getPersonalBest(DR.activeMap);
-                    }
-                    if (DR.currentMapWR == null) {
-                        The5zigAPI.getLogger().info("Loading WR...");
-                        DR.currentMapWR = api.getWorldRecord(DR.activeMap);
-                    }
-                    if (DR.currentMapWRHolder == null) {
-                        The5zigAPI.getLogger().info("Loading WRHolder...");
-                        DR.currentMapWRHolder = api.getWorldRecordHolder(DR.activeMap);
-                    }
+            new Thread(() -> {
+                ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
+                if (DR.currentMapPB == null) {
+                    The5zigAPI.getLogger().info("Loading PB...");
+                    DR.currentMapPB = api.getPersonalBest(DR.activeMap);
+                }
+                if (DR.currentMapWR == null) {
+                    The5zigAPI.getLogger().info("Loading WR...");
+                    DR.currentMapWR = api.getWorldRecord(DR.activeMap);
+                }
+                if (DR.currentMapWRHolder == null) {
+                    The5zigAPI.getLogger().info("Loading WRHolder...");
+                    DR.currentMapWRHolder = api.getWorldRecordHolder(DR.activeMap);
                 }
             }).start();
         }
@@ -782,32 +758,26 @@ public class BeezigMain {
                 }
                 if (BeezigMain.crInteractive && evt.getMessage().contains("http://hivemc.com/chat/log")) {
                     crInteractive = false;
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String chatLog = "http://" + evt.getMessage().split("http\\://")[1];
-                            The5zigAPI.getAPI().messagePlayer(Log.info + "Running chatreport in §binteractive mode§3. Please wait while we fetch the report token. Do NOT click on the link below.");
-                            checkForNewLR = true;
-                            lrID = chatLog;
+                    new Thread(() -> {
+                        String chatLog = "http://" + evt.getMessage().split("http\\://")[1];
+                        The5zigAPI.getAPI().messagePlayer(Log.info + "Running chatreport in §binteractive mode§3. Please wait while we fetch the report token. Do NOT click on the link below.");
+                        checkForNewLR = true;
+                        lrID = chatLog;
 
-                            The5zigAPI.getAPI().sendPlayerMessage("/login report");
+                        The5zigAPI.getAPI().sendPlayerMessage("/login report");
 
-                        }
                     }).start();
 
                 } else if (BeezigMain.crInteractive && (evt.getMessage().startsWith("§8▏ §aLink§8 ▏ §e") || evt.getMessage().startsWith("§6Log link generated: §6"))) {
                     crInteractive = false;
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String chatLog = evt.getMessage().contains("§6Log link generated: §6") ? evt.getMessage().split("§6Log link generated\\: §6")[1] : evt.getMessage().replace("§8▏ §aLink§8 ▏ §ehttp://chatlog.hivemc.com/?logId=", "");
-                            The5zigAPI.getAPI().messagePlayer(Log.info + "Running chatreport in §binteractive mode§3. Please wait while we fetch the report token. Do NOT click on the link below.");
-                            checkForNewLR = true;
-                            lrID = chatLog;
+                    new Thread(() -> {
+                        String chatLog = evt.getMessage().contains("§6Log link generated: §6") ? evt.getMessage().split("§6Log link generated\\: §6")[1] : evt.getMessage().replace("§8▏ §aLink§8 ▏ §ehttp://chatlog.hivemc.com/?logId=", "");
+                        The5zigAPI.getAPI().messagePlayer(Log.info + "Running chatreport in §binteractive mode§3. Please wait while we fetch the report token. Do NOT click on the link below.");
+                        checkForNewLR = true;
+                        lrID = chatLog;
 
-                            The5zigAPI.getAPI().sendPlayerMessage("/login report");
+                        The5zigAPI.getAPI().sendPlayerMessage("/login report");
 
-                        }
                     }).start();
 
                 }
@@ -820,22 +790,19 @@ public class BeezigMain {
                     lrRS = "";
                     lrPL = null;
                     String url = ChatComponentUtils.getClickEventValue(evt.getChatComponent().toString());
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                The5zigAPI.getAPI().messagePlayer(Log.info + "Acquiring the token...");
-                                Connector.acquireReportToken(url);
-                                The5zigAPI.getAPI().messagePlayer(Log.info + "Submitting the report...");
-                                if (Connector.sendReport(id, reason, pl)) {
-                                    The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully submitted chatreport.");
-                                } else {
-                                    The5zigAPI.getAPI().messagePlayer(Log.error + "An error occurred while attempting to submit the chatreport.");
-                                }
-                            } catch (IOException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
+                    new Thread(() -> {
+                        try {
+                            The5zigAPI.getAPI().messagePlayer(Log.info + "Acquiring the token...");
+                            Connector.acquireReportToken(url);
+                            The5zigAPI.getAPI().messagePlayer(Log.info + "Submitting the report...");
+                            if (Connector.sendReport(id, reason, pl)) {
+                                The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully submitted chatreport.");
+                            } else {
+                                The5zigAPI.getAPI().messagePlayer(Log.error + "An error occurred while attempting to submit the chatreport.");
                             }
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
                         }
                     }).start();
 
@@ -849,7 +816,7 @@ public class BeezigMain {
                     && Setting.PM_PING.getValue()) {
 
                 try {
-                    if (!NotificationManager.isInGameFocus()) {
+                    if (NotificationManager.isInGameFocus()) {
                         if (Setting.PM_NOTIFICATION.getValue()) {
                             String message = evt.getMessage().split("» §b")[1].trim();
                             String recipient = ChatColor

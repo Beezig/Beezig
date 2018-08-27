@@ -68,9 +68,7 @@ public class StreakUtils {
                 try {
                     c.getField("winstreak").set(null, j.containsKey("streak") ? Math.toIntExact((long) j.get("streak")) : 0);
                     c.getField("bestStreak").set(null, j.containsKey("bestStreak") ? Math.toIntExact((long) j.get("bestStreak")) : c.getField("winstreak").get(null));
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (NoSuchFieldException e) {
+                } catch (IllegalAccessException | NoSuchFieldException e) {
                     e.printStackTrace();
                 }
 
@@ -79,9 +77,7 @@ public class StreakUtils {
                 try {
                     c.getField("winstreak").set(null, 0);
                     c.getField("bestStreak").set(null, 0);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (NoSuchFieldException e) {
+                } catch (IllegalAccessException | NoSuchFieldException e) {
                     e.printStackTrace();
                 }
             }
@@ -114,16 +110,14 @@ public class StreakUtils {
 
                 String bar = "    §7§m                                                                                    ";
 
-                StringBuilder msg = new StringBuilder();
-                msg.append(bar).append('\n').append('\n');
-                msg.append(Log.info + "§3Current Streak: §b" + streak).append('\n');
-                msg.append(Log.info + "§3Best Streak: §b" + best).append('\n');
-                msg.append('\n');
-                msg.append(Log.info + "§3Last Reset: §b" + lrDate).append('\n');
-                msg.append(Log.info + "§3Best Reset: §b" + brDate).append('\n');
-                msg.append('\n').append(bar);
-
-                return msg.toString();
+                String msg = bar + '\n' + '\n' +
+                        Log.info + "§3Current Streak: §b" + streak + '\n' +
+                        Log.info + "§3Best Streak: §b" + best + '\n' +
+                        '\n' +
+                        Log.info + "§3Last Reset: §b" + lrDate + '\n' +
+                        Log.info + "§3Best Reset: §b" + brDate + '\n' +
+                        '\n' + bar;
+                return msg;
 
 
             } else return Log.error + "No winstreak data found for the specified mode.";
