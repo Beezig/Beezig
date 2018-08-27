@@ -314,8 +314,8 @@ public class GiantListener extends AbstractGameListener<Giant> {
 
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
-                                // if(Setting.Giant_SHOW_POINTS_TO_NEXT_RANK.getValue()) sb.append(" / " +
-                                // rank.getPointsToNextRank((int)points));
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue())
+                                    sb.append(" / ").append(rank.getPointsToNextRank((int) points));
                                 if (rank != null)
                                     sb.append("§b)");
                                 The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
@@ -354,7 +354,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
 
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
-                            lastSeen.setTimeInMillis(HiveAPI.lastGame(AdvancedRecords.player, lobby).getTime());
+                            lastSeen.setTimeInMillis(lastGame.getTime());
 
                             The5zigAPI.getAPI().messagePlayer(
                                     "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));

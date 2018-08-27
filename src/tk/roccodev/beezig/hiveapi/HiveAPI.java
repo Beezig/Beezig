@@ -7,9 +7,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.TIMV;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGNT;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGNTM;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGiant;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
