@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public enum Setting {
 
+    THOUSANDS_SEPARATOR(true, "Thousands Separator", "Separate thousands with a comma or a dot, depending on the system language"),
     ADVANCED_RECORDS(true, "Advanced Records", "Display more stats when running /records"),
     SHOW_NETWORK_RANK_TITLE(false, "AdvRec - Network Rank", "Advanced Records - Show the network-rank title behind username"),
     SHOW_NETWORK_RANK_COLOR(true, "AdvRec - Network Rank Color", "Advanced Records - Color the username/network-rank respective to their network-rank"),

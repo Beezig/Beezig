@@ -1,6 +1,7 @@
 package tk.roccodev.beezig;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.beezig.settings.Setting;
 
 import java.text.DecimalFormat;
 
@@ -23,7 +24,7 @@ public class Log {
     }
 
     public static String df(long l) {
-        return bigintFormatter.format(l);
+        return Setting.THOUSANDS_SEPARATOR.getValue() ? bigintFormatter.format(l) : Long.toString(l);
     }
 
 }
