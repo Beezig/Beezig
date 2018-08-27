@@ -1,21 +1,5 @@
 package tk.roccodev.beezig.listener;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -37,6 +21,12 @@ import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DRListener extends AbstractGameListener<DR> {
 
@@ -226,12 +216,7 @@ public class DRListener extends AbstractGameListener<DR> {
                         DRRank rank = null;
                         ApiDR api = new ApiDR(AdvancedRecords.player);
 
-                       
-                    
-                        
-                       
-                       
-                        
+
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
                                 ? api.getParentMode().getNetworkTitle()
                                 : "";
@@ -245,15 +230,15 @@ public class DRListener extends AbstractGameListener<DR> {
                         int played = 0;
                         int victories = 0;
                         Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-                        
+
                         String rankTitleDR = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
 
-                        
+
                         int monthlyRank = -1;
-                        if(Setting.SHOW_RECORDS_MONTHLYRANK.getValue())
-                        	monthlyRank = api.getMonthlyRank();
-                        
-                      
+                        if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue())
+                            monthlyRank = api.getMonthlyRank();
+
+
                         if (rankTitleDR != null)
                             rank = DRRank.getFromDisplay(rankTitleDR);
                         List<String> messages = new ArrayList<>(DR.messagesToSend);
@@ -290,20 +275,19 @@ public class DRListener extends AbstractGameListener<DR> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } 
+                            }
 
-                            
+
                             String[] newData = s.split("\\: §b");
                             long currentValue = 0;
                             try {
-                            	currentValue = Long.parseLong(newData[1]);
-                            	newData[1] = Log.df(currentValue);
-                            	s = newData[0] + ": §b" + newData[1];
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
                             }
-                            catch(NumberFormatException ignored) {
-                            	s = newData[0] + ": §b" + newData[1];
-                            }
-                            
+
                             if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
@@ -318,58 +302,55 @@ public class DRListener extends AbstractGameListener<DR> {
                                 The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
 
-                            }
-                            else if(s.startsWith("§3 Kills: §b")) kills = Math.toIntExact(currentValue);
-                            else if(s.startsWith("§3 Deaths: §b")) deaths = Math.toIntExact(currentValue);
-                            else if(s.startsWith("§3 Wins: §b")) victories = Math.toIntExact(currentValue);
-                            else if(s.startsWith("§3 Games Played: §b")) played = Math.toIntExact(currentValue);
+                            } else if (s.startsWith("§3 Kills: §b")) kills = Math.toIntExact(currentValue);
+                            else if (s.startsWith("§3 Deaths: §b")) deaths = Math.toIntExact(currentValue);
+                            else if (s.startsWith("§3 Wins: §b")) victories = Math.toIntExact(currentValue);
+                            else if (s.startsWith("§3 Games Played: §b")) played = Math.toIntExact(currentValue);
 
                             The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
-                        
-       
-                        double ppg = Setting.DR_SHOW_POINTSPERGAME.getValue() ?  Math.round(((double) points / (double) played) * 10d) / 10d : -1;
-                        
+
+
+                        double ppg = Setting.DR_SHOW_POINTSPERGAME.getValue() ? Math.round(((double) points / (double) played) * 10d) / 10d : -1;
+
                         int ach = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : -1;
-                       
+
                         double rwr = Setting.DR_SHOW_WINRATE.getValue() ? (Math
-                                .floor(((double) victories / (double)played)
+                                .floor(((double) victories / (double) played)
                                         * 1000d)
                                 / 10d) : -1;
-                       
-                        double dpg = Setting.DR_SHOW_DEATHSPERGAME.getValue() ?  Math.floor((double) deaths / (double) played * 10d)
-                                / 10d : -1;
-                       
-                        double kpg = Setting.DR_SHOW_KILLSPERGAME.getValue() ? Math.round((double) kills / (double) played * 10d) / 10d : -1;
-                       
-                        
-                        String tpb = Setting.DR_SHOW_TOTALPB.getValue() ? api.getTotalPB() : null;
-   
-                       
-                        
 
-                        if (ppg != -1) 
+                        double dpg = Setting.DR_SHOW_DEATHSPERGAME.getValue() ? Math.floor((double) deaths / (double) played * 10d)
+                                / 10d : -1;
+
+                        double kpg = Setting.DR_SHOW_KILLSPERGAME.getValue() ? Math.round((double) kills / (double) played * 10d) / 10d : -1;
+
+
+                        String tpb = Setting.DR_SHOW_TOTALPB.getValue() ? api.getTotalPB() : null;
+
+
+                        if (ppg != -1)
                             The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + ppg);
-                        
-                        if (ach != -1) 
+
+                        if (ach != -1)
                             The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + ach + "/68");
-                        
-                        if (rwr != -1) 
+
+                        if (rwr != -1)
                             The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + rwr + "%");
-                        
-                        if (dpg != -1) 
+
+                        if (dpg != -1)
                             The5zigAPI.getAPI().messagePlayer("§o§3 Deaths per Game: §b" + dpg);
-                        
-                        if (kpg != -1) 
+
+                        if (kpg != -1)
                             The5zigAPI.getAPI().messagePlayer("§o§3 Kills per Game: §b" + kpg);
-                        
-                        if (tpb != null) 
+
+                        if (tpb != null)
                             The5zigAPI.getAPI().messagePlayer("§o§3 Total Personal Best: §b" + tpb);
-                        
-                        if (monthlyRank != -1) 
+
+                        if (monthlyRank != -1)
                             The5zigAPI.getAPI().messagePlayer("§o§3 Monthly Place: §b#" + monthlyRank);
-                        
+
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());

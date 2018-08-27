@@ -1,15 +1,5 @@
 package tk.roccodev.beezig.listener;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.TreeMap;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
@@ -28,6 +18,10 @@ import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
 
 public class GiantListener extends AbstractGameListener<Giant> {
 
@@ -189,25 +183,23 @@ public class GiantListener extends AbstractGameListener<Giant> {
             Giant.activeMap = ChatColor.stripColor(mapString.trim());
 
 
-        } 
-        else if(message.startsWith("§8▍ §e§lGiant§8 ▏ §7You killed the")) {
-        	 APIValues.Giantpoints += 50;
-             Giant.dailyPoints += 50;
-        }
-        else if (message.startsWith("§8▍ §6§lGold§8 ▏ §a✚ §3You gained")
+        } else if (message.startsWith("§8▍ §e§lGiant§8 ▏ §7You killed the")) {
+            APIValues.Giantpoints += 50;
+            Giant.dailyPoints += 50;
+        } else if (message.startsWith("§8▍ §6§lGold§8 ▏ §a✚ §3You gained")
                 && message.contains("for killing")) {
             if (message.contains("as a team")) {
-            	if(Giant.isEnding) {
-            		 System.out.println("Won!");
-            		// Won
-            		Giant.isEnding = false;
-            		Giant.hasWon = true;
-            		Giant.winstreak++;
-            		if(Giant.winstreak >= Giant.bestStreak) Giant.bestStreak = Giant.winstreak;
-            		StreakUtils.incrementWinstreakByOne("gnt");
-            	}
+                if (Giant.isEnding) {
+                    System.out.println("Won!");
+                    // Won
+                    Giant.isEnding = false;
+                    Giant.hasWon = true;
+                    Giant.winstreak++;
+                    if (Giant.winstreak >= Giant.bestStreak) Giant.bestStreak = Giant.winstreak;
+                    StreakUtils.incrementWinstreakByOne("gnt");
+                }
                 Giant.giantKills++; // Giant kill
-               
+
             } else {
                 Giant.gameKills++;
                 APIValues.Giantpoints += 10;
@@ -216,9 +208,8 @@ public class GiantListener extends AbstractGameListener<Giant> {
                         / (double) (Giant.gameDeaths + Giant.totalDeaths == 0 ? 1
                         : Giant.gameDeaths + Giant.totalDeaths));
             }
-        }
-        else if(message.contains(" §aWant to see this game's recap")) {
-        	Giant.isEnding = true;
+        } else if (message.contains(" §aWant to see this game's recap")) {
+            Giant.isEnding = true;
         }
 
         // Advanced Records
@@ -322,21 +313,19 @@ public class GiantListener extends AbstractGameListener<Giant> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } 
-                            
-                          
-                            
+                            }
+
+
                             String[] newData = s.split("\\: §b");
                             long currentValue = 0;
                             try {
-                            	currentValue = Long.parseLong(newData[1]);
-                            	newData[1] = Log.df(currentValue);
-                            	s = newData[0] + ": §b" + newData[1];
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
                             }
-                            catch(NumberFormatException ignored) {
-                            	s = newData[0] + ": §b" + newData[1];
-                            }
-                            
+
                             if (s.startsWith("§3 Total Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
@@ -364,7 +353,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
                             The5zigAPI.getAPI().messagePlayer("§o§3 K/D: §b" + kd);
                         if (wr != null)
                             The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + wr + "%");
-                      
+
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(HiveAPI.lastGame(AdvancedRecords.player, lobby).getTime());

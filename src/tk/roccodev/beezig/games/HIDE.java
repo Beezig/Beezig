@@ -21,14 +21,13 @@ public class HIDE extends GameMode {
     public static List<String> footerToSend = new ArrayList<>();
     public static boolean hasVoted = false;
     public static List<String> votesToParse = new ArrayList<>();
-    
-    
+
 
     public static boolean inGame;
     public static boolean hasWon;
     public static int winstreak;
     public static int bestStreak;
-    
+
     public static int dailyPoints;
     public static boolean seeking;
     public static int lastPts;
@@ -86,7 +85,7 @@ public class HIDE extends GameMode {
     public static void reset(HIDE gameMode) {
 
         gameMode.setState(GameState.FINISHED);
-        if(inGame && !hasWon) {
+        if (inGame && !hasWon) {
             boolean wasBest = winstreak >= bestStreak;
             System.out.println("Lost!");
             winstreak = 0;

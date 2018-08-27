@@ -54,10 +54,9 @@ public class LeaderboardItem extends GameModeItem<LAB> {
 
 
         for (Map.Entry<String, Integer> e : LAB.leaderboard.entrySet()) {
-            if(e.getKey().equals(The5zigAPI.getAPI().getGameProfile().getName())) {
+            if (e.getKey().equals(The5zigAPI.getAPI().getGameProfile().getName())) {
                 The5zigAPI.getAPI().getRenderHelper().drawString("§a" + e.getKey() + " | " + e.getValue(), x, y + lineCount * 10);
-            }
-            else {
+            } else {
                 The5zigAPI.getAPI().getRenderHelper().drawString(getMainFormatting() + e.getKey() + " | " + e.getValue(), x, y + lineCount * 10);
             }
             lineCount++;

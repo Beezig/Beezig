@@ -51,15 +51,13 @@ public class Client extends WebSocketClient {
             The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + who.trim() + "§3 is looking for §b" + amount.trim() + "§3 player(s) to play §b" + mode.trim() + "§3.");
         } else if (data[0].equals("partyAccepted")) {
             The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + data[1].trim() + "§3 accepted your party invite!");
-        }
-        else if(data[0].equals("newAnnouncement")) {
+        } else if (data[0].equals("newAnnouncement")) {
             String data2[] = data[1].trim().split("§");
             The5zigAPI.getAPI().messagePlayer(Log.info + "§bNEW ANNOUNCEMENT!");
             The5zigAPI.getAPI().messagePlayer(Log.info + data2[0].trim());
             The5zigAPI.getAPI().messagePlayer(Log.info + data2[1].trim());
             The5zigAPI.getAPI().playSound("note.pling", 1f);
-        }
-        else if(data[0].equals("forceRefetch")) {
+        } else if (data[0].equals("forceRefetch")) {
             new Thread(() -> {
                 BeezigMain.refetchMaps();
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Maps data have been re-fetched due to a remote request.");
@@ -68,7 +66,6 @@ public class Client extends WebSocketClient {
 
 
     }
-
 
 
     @Override

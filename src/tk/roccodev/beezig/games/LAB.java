@@ -6,7 +6,6 @@ import eu.the5zig.mod.server.GameState;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
-import tk.roccodev.beezig.hiveapi.stuff.bp.BPRank;
 import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
 
 import java.io.*;
@@ -101,12 +100,6 @@ public class LAB extends GameMode {
         return state == GameState.STARTING;
     }
 
-    @Override
-    public String getName() {
-        // TODO Auto-generated method stub
-        return "BlockParty";
-    }
-
     public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
         List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
         list.sort(Map.Entry.comparingByValue());
@@ -118,6 +111,12 @@ public class LAB extends GameMode {
         }
 
         return result;
+    }
+
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        return "BlockParty";
     }
 
 }

@@ -17,14 +17,13 @@ import java.util.ArrayList;
 
 public class TrackPlayer {
 
-   public static PausablePlayer player;
-   public static BufferedInputStream cachedTrack;
-   public static boolean playing;
-   private static SoundSystem system;
-   private static File configFile;
-   public static float gainToLoad = 0f;
-   public static float rawGainToLoad = 0.5f;
-
+    public static PausablePlayer player;
+    public static BufferedInputStream cachedTrack;
+    public static boolean playing;
+    public static float gainToLoad = 0f;
+    public static float rawGainToLoad = 0.5f;
+    private static SoundSystem system;
+    private static File configFile;
 
     public static void loadConfigFile(File f) {
 
@@ -32,7 +31,7 @@ public class TrackPlayer {
         ArrayList<String> bloccs;
         try {
             bloccs = new ArrayList<>(Files.readAllLines(Paths.get(f.getPath())));
-            if(bloccs.size() == 0) return;
+            if (bloccs.size() == 0) return;
             String consider = bloccs.get(0);
             int i = Integer.parseInt(consider);
             gainToLoad = i - 50f;
@@ -62,47 +61,45 @@ public class TrackPlayer {
     }
 
 
+    public static void init() throws JavaLayerException {
 
-    public static void init() throws JavaLayerException{
+        if (player != null) player.close();
+        player = new PausablePlayer(cachedTrack);
+        player.player.setGain(gainToLoad);
+        new Thread(() -> {
+            try {
+                SoundSystemConfig.setCodec("ogg", CodecJOrbis.class);
+                SoundSystemConfig.addLibrary(LibraryJavaSound.class);
+                system = new SoundSystem(LibraryJavaSound.class);
 
-        if(player != null) player.close();
-       player = new PausablePlayer(cachedTrack);
-       player.player.setGain(gainToLoad);
-       new Thread(() -> {
-           try {
-               SoundSystemConfig.setCodec( "ogg", CodecJOrbis.class );
-               SoundSystemConfig.addLibrary(LibraryJavaSound.class);
-               system = new SoundSystem(LibraryJavaSound.class);
-
-           try {
-
-
-               system.newSource(true, "vinyl", new URL("http://static.hivemc.com/bp/sfx/vinylstop.ogg"), "vinyl.ogg", false,
-                       0, 0, 0, SoundSystemConfig.ATTENUATION_NONE, 0 );
-               system.newSource(true, "cheer", new URL("http://static.hivemc.com/bp/sfx/cheer.ogg"), "cheer.ogg", false,
-                       0, 0, 0, SoundSystemConfig.ATTENUATION_NONE, 0 );
+                try {
 
 
-               system.setVolume("vinyl", rawGainToLoad);
-               system.setVolume("cheer", rawGainToLoad);
+                    system.newSource(true, "vinyl", new URL("http://static.hivemc.com/bp/sfx/vinylstop.ogg"), "vinyl.ogg", false,
+                            0, 0, 0, SoundSystemConfig.ATTENUATION_NONE, 0);
+                    system.newSource(true, "cheer", new URL("http://static.hivemc.com/bp/sfx/cheer.ogg"), "cheer.ogg", false,
+                            0, 0, 0, SoundSystemConfig.ATTENUATION_NONE, 0);
 
-               system.setTemporary("vinyl", false);
-               system.setTemporary("cheer", false);
 
-           } catch (MalformedURLException e) {
-               e.printStackTrace();
-           }
-        } catch (SoundSystemException e){
-            e.printStackTrace();
-        }
+                    system.setVolume("vinyl", rawGainToLoad);
+                    system.setVolume("cheer", rawGainToLoad);
+
+                    system.setTemporary("vinyl", false);
+                    system.setTemporary("cheer", false);
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            } catch (SoundSystemException e) {
+                e.printStackTrace();
+            }
         }).start();
-
 
 
     }
 
-    public static void resume(){
-        if(!player.firstResume) {
+    public static void resume() {
+        if (!player.firstResume) {
             player.firstResume = true;
             new Thread(() -> {
                 try {
@@ -115,10 +112,9 @@ public class TrackPlayer {
             }).start();
         }
 
-            playing = true;
-            player.player.setGain(gainToLoad);
-            player.play();
-
+        playing = true;
+        player.player.setGain(gainToLoad);
+        player.play();
 
 
     }
@@ -146,10 +142,6 @@ public class TrackPlayer {
 
 
     }
-
-
-
-
 
 
 }

@@ -9,8 +9,6 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URL;
 
-import static java.lang.Class.forName;
-
 public class TriggersFetcher {
 
     private static final String FETCH_URL = "https://roccodev.pw/beezighosting/autogg/triggers.json";
@@ -19,16 +17,16 @@ public class TriggersFetcher {
         URL url = new URL(FETCH_URL);
         JSONArray arr = APIUtils.getArray(APIUtils.readURL(url));
         JSONArray disabled = new JSONArray();
-        try(BufferedReader reader = new BufferedReader(new FileReader(BeezigMain.mcFile + "/autogg.json"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(BeezigMain.mcFile + "/autogg.json"))) {
             JSONObject config = APIUtils.getObject(reader);
             disabled = (JSONArray) config.get("disabled");
-            Triggers.delay = Math.toIntExact((long)config.get("delay"));
+            Triggers.delay = Math.toIntExact((long) config.get("delay"));
             Triggers.ggText = (String) config.get("text");
         }
-        for(Object o : arr) {
+        for (Object o : arr) {
             JSONObject j = (JSONObject) o;
-            Trigger t = new Trigger((String)j.get("desc"), (String)j.get("shortcode"), (String)j.get("trigger"), Math.toIntExact((long)j.get("type")));
-            if(disabled.contains(t.getShortcode())) t.setEnabled(false);
+            Trigger t = new Trigger((String) j.get("desc"), (String) j.get("shortcode"), (String) j.get("trigger"), Math.toIntExact((long) j.get("type")));
+            if (disabled.contains(t.getShortcode())) t.setEnabled(false);
             else t.setEnabled(true);
             Triggers.triggers.add(t);
         }
@@ -41,7 +39,7 @@ public class TriggersFetcher {
         obj.put("text", "gg");
         obj.put("delay", 0);
         obj.put("disabled", new JSONArray());
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(BeezigMain.mcFile + "/autogg.json"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(BeezigMain.mcFile + "/autogg.json"))) {
             writer.write(obj.toJSONString());
         }
     }
@@ -53,12 +51,10 @@ public class TriggersFetcher {
             boolean b = f.getBoolean(null);
             return !b;
 
-        }
-         catch (IllegalAccessException | NoSuchFieldException | ClassNotFoundException ignored) {
+        } catch (IllegalAccessException | NoSuchFieldException | ClassNotFoundException ignored) {
             return true;
         }
     }
-
 
 
 }

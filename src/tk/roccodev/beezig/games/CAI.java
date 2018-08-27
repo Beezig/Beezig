@@ -92,7 +92,7 @@ public class CAI extends GameMode {
     public static void reset(CAI gameMode) {
         System.out.println("reset");
         gameMode.setState(GameState.FINISHED);
-        if(inGame && !hasWon) {
+        if (inGame && !hasWon) {
             boolean wasBest = winstreak >= bestStreak;
             System.out.println("Lost!");
             CAI.winstreak = 0;

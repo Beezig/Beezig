@@ -233,8 +233,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                         List<String> messages = new ArrayList<>(TIMV.messagesToSend);
                         Iterator<String> it = messages.iterator();
                         for (String s : messages) {
-                        	
-                        	
+
 
                             if (s.trim().endsWith("'s Stats §6§m")) {
                                 //"          §6§m                  §f ItsNiklass's Stats §6§m                  "
@@ -264,18 +263,17 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                                 }
                                 continue;
                             }
-                          
+
                             String[] newData = s.split("\\: §b");
                             long currentValue = 0;
                             try {
-                            	currentValue = Long.parseLong(newData[1]);
-                            	newData[1] = Log.df(currentValue);
-                            	s = newData[0] + ": §b" + newData[1];
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
                             }
-                            catch(NumberFormatException ignored) {
-                            	s = newData[0] + ": §b" + newData[1];
-                            }
-                            
+
                             if (s.startsWith("§3 Karma: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Karma: §b");
@@ -299,7 +297,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                                 The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Traitor Points: " + ChatColor.AQUA + newData[1] + " (" + ratioColor + tratio + "%" + ChatColor.AQUA + ") ");
                                 continue;
                             }
-                            
+
                             The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }

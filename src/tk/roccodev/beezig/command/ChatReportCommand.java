@@ -34,7 +34,7 @@ public class ChatReportCommand implements Command {
         BeezigMain.lrID = "";
         if (args.length >= 2) {
             BeezigMain.lrPL = args[0];
-            
+
             String reason = String.join(" ", Arrays.copyOfRange(args, 1, args.length)).replace(" ", "");
             if (ChatReason.is(reason.toUpperCase())) {
                 BeezigMain.crInteractive = true;

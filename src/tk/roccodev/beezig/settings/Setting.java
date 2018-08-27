@@ -7,7 +7,7 @@ import java.io.IOException;
 public enum Setting {
 
     SHOW_NETWORK_RANK_TITLE(false, "AdvRec - Network Rank", "Advanced Records - Show the network-rank title behind username"),
-    SHOW_NETWORK_RANK_COLOR(true,"AdvRec - Network Rank Color", "Advanced Records - Color the username/network-rank respective to their network-rank"),
+    SHOW_NETWORK_RANK_COLOR(true, "AdvRec - Network Rank Color", "Advanced Records - Color the username/network-rank respective to their network-rank"),
     SHOW_RECORDS_LASTGAME(true, "AdvRec - Last Game", "Advanced Records - Show last time the player played that game"),
     SHOW_RECORDS_MONTHLYRANK(true, "AdvRec - Monthly Rank", "Advanced Records - Show players' rank on the Monthly Leaderboards by Maxthat"),
     SHOW_RECORDS_ACHIEVEMENTS(true, "AdvRec - Achievements", "Advanced Records - Show achievements"),
@@ -19,7 +19,7 @@ public enum Setting {
     PM_PING(false, "New PM ping", "Play a ping sound when a PM is received."),
     PM_NOTIFICATION(false, "New PM notification", "Receive a system notification when a PM is received."),
     MOD_REPORT_NOTIFICATION(true, "Report Notification", "Receive a notification when a report is made through Beezig. (Only for staff)"),
-    RECEIVE_PARTY_INVITES(true,"Beezig Party Invites",  "Receive global party invites through Beezig"),
+    RECEIVE_PARTY_INVITES(true, "Beezig Party Invites", "Receive global party invites through Beezig"),
     TOCCATA(true, "Toccata", "Message Toccata some Latin when he joins"),
     AUTOGG(false, "AutoGG", "Automatically say GG once the game ends. Run /autogg for details."),
 
@@ -36,11 +36,11 @@ public enum Setting {
     DR_SHOW_KILLSPERGAME(true, "DR AdvRec - KPG", "DR Advanced Records - Show the avg. kills as death"),
     DR_SHOW_TOTALPB(true, "DR AdvRec - Total PB", "DR Advanced Records - Show the cumulative amount of personal bests"),
 
-    BED_SHOW_POINTS_TO_NEXT_RANK(true,"BED AdvRec - To next rank", "BED Advanced Records - Show points to next rank"),
+    BED_SHOW_POINTS_TO_NEXT_RANK(true, "BED AdvRec - To next rank", "BED Advanced Records - Show points to next rank"),
     BED_SHOW_ELIMINATIONS_PER_GAME(false, "BED AdvRec - TPG", "BED Advanced Records - Show Eliminations per Game"),
-    BED_SHOW_BEDS_PER_GAME(true, "BED AdvRec - BPG",  "BED Advanced Records - Show Beds destroyed per Game"),
+    BED_SHOW_BEDS_PER_GAME(true, "BED AdvRec - BPG", "BED Advanced Records - Show Beds destroyed per Game"),
     BED_SHOW_DEATHS_PER_GAME(false, "BED AdvRec - DPG", "BED Advanced Records - Show Deaths per Game"),
-    BED_SHOW_KILLS_PER_GAME(false, "BED AdvRec - KPG",  "BED Advanced Records - Show Kills per Game"),
+    BED_SHOW_KILLS_PER_GAME(false, "BED AdvRec - KPG", "BED Advanced Records - Show Kills per Game"),
     BED_SHOW_POINTS_PER_GAME(true, "BED AdvRec - PPG", "BED Advanced Records - Show Points gained per Game"),
     BED_SHOW_KD(true, "BED AdvRec - KDR", "BED Advanced Records - Show Kills/Deaths"),
     BED_SHOW_WINRATE(true, "BED AdvRec - Win%", "BED Advanced Records - Show Winrate"),
@@ -57,9 +57,9 @@ public enum Setting {
     HIDE_SHOW_POINTS_TO_NEXT_RANK(true, "HIDE AdvRec - To next rank", "HIDE Advanced Records - Show points to next rank"),
 
     CAI_SHOW_WINRATE(true, "CAI AdvRec - Win%", "CAI Advanced Records - Show Winrate"),
-    CAI_SHOW_POINTSPG(true,"CAI AdvRec - PPG", "CAI Advanced Records - Show Points per Game"),
+    CAI_SHOW_POINTSPG(true, "CAI AdvRec - PPG", "CAI Advanced Records - Show Points per Game"),
     CAI_SHOW_POINTS_TO_NEXT_RANK(true, "CAI AdvRec - To next rank", "CAI Advanced Records - Show points to next rank"),
-    CAI_SHOW_CATCHES_CAUGHT(true, "CAI AdvRec - Cc/Ct",  "CAI Advanced Records - Show Catches/Caught Ratio"),
+    CAI_SHOW_CATCHES_CAUGHT(true, "CAI AdvRec - Cc/Ct", "CAI Advanced Records - Show Catches/Caught Ratio"),
     CAI_SHOW_CAPTURES_GAME(true, "CAI AdvRec - CPG", "CAI Advanced Records - Show Captures/Games Ratio"),
     CAI_TITLE(true, "CAI Better Titles", "Show a better version of the titles"),
     CAI_TITLE_SHOWNAME(false, "Leader names", "Show the leader names in the titles"),
@@ -87,7 +87,7 @@ public enum Setting {
 
     SGN_SHOW_POINTS_TO_NEXT_RANK(true, "SG2 AdvRec - To next rank", "SG2 Advanced Records - Show points to next rank"),
     SGN_SHOW_WINRATE(true, "SG2 AdvRec - Win%", "SG2 Advanced Records - Show Winrate"),
-    SGN_SHOW_PPG(true, "SG2 AdvRec - PPG",  "SG2 Advanced Records - Show Points per game"),
+    SGN_SHOW_PPG(true, "SG2 AdvRec - PPG", "SG2 Advanced Records - Show Points per game"),
     SGN_SHOW_KD(true, "SG2 AdvRec - KDR", "SG2 Advanced Records - Show Kills/Deaths"),
 
     LAB_SHOW_POINTS_TO_NEXT_RANK(true, "LAB AdvRec - To next rank", "LAB Advanced Records - Show points to next rank"),

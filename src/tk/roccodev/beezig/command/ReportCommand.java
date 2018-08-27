@@ -54,7 +54,7 @@ public class ReportCommand implements Command {
             argsL.remove(0);
             String reason = String.join(" ", argsL);
 
-            if(reason.contains("swear") || reason.contains("spam") || reason.contains("racis")) {
+            if (reason.contains("swear") || reason.contains("spam") || reason.contains("racis")) {
                 The5zigAPI.getAPI().messagePlayer(Log.info + "This is not the proper way to report chat offences. Please use /chatreport instead.");
                 return;
             }
@@ -75,7 +75,6 @@ public class ReportCommand implements Command {
                 }
 
             }
-
 
 
             try {

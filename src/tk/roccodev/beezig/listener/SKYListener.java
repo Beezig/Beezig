@@ -1,19 +1,5 @@
 package tk.roccodev.beezig.listener;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -32,6 +18,14 @@ import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SKYListener extends AbstractGameListener<SKY> {
 
@@ -61,7 +55,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
                     e2.printStackTrace();
                 }
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                
+
 
                 if (sb != null && sb.getTitle().contains("Your SKY")) {
                     if (sb.getTitle().contains("Your SKYT"))
@@ -187,7 +181,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
             SKY.gamePoints += 20;
             SKY.hasWon = true;
             SKY.winstreak++;
-            if(SKY.winstreak >= SKY.bestStreak)
+            if (SKY.winstreak >= SKY.bestStreak)
                 SKY.bestStreak = SKY.winstreak;
             StreakUtils.incrementWinstreakByOne("sky");
         } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
@@ -289,19 +283,18 @@ public class SKYListener extends AbstractGameListener<SKY> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } 
-                            
+                            }
+
                             String[] newData = s.split("\\: §b");
                             long currentValue = 0;
                             try {
-                            	currentValue = Long.parseLong(newData[1]);
-                            	newData[1] = Log.df(currentValue);
-                            	s = newData[0] + ": §b" + newData[1];
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
                             }
-                            catch(NumberFormatException ignored) {
-                            	s = newData[0] + ": §b" + newData[1];
-                            }
-                            
+
                             if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");

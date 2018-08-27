@@ -109,7 +109,7 @@ public class BED extends GameMode {
     public static void reset(BED gm) {
 
         gm.setState(GameState.FINISHED);
-        if(inGame && !hasWon) {
+        if (inGame && !hasWon) {
             boolean wasBest = winstreak >= bestStreak;
             System.out.println("Lost!");
             winstreak = 0;
@@ -201,8 +201,8 @@ public class BED extends GameMode {
         if (sb != null && sb.getTitle().contains("BEDT ")) {
             BED.mode = "Teams";
         }
-        if(sb != null && sb.getTitle().contains("BEDDDF ")) {
-        	BED.mode = "Redacted"; // TODO Change this to the real name upon release
+        if (sb != null && sb.getTitle().contains("BEDDDF ")) {
+            BED.mode = "Redacted"; // TODO Change this to the real name upon release
         }
     }
 

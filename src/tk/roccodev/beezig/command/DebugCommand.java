@@ -1,7 +1,6 @@
 package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.beezig.utils.soundcloud.TrackPlayer;
 import tk.roccodev.beezig.utils.ws.Connector;
 
 public class DebugCommand implements Command {

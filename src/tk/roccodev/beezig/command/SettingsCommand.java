@@ -24,7 +24,7 @@ public class SettingsCommand implements Command {
     public boolean execute(String[] args) {
         if (!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
         if (args.length == 0) {
-            if(BeezigMain.hasExpansion) {
+            if (BeezigMain.hasExpansion) {
 
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Opening Settings GUI...");
                 BeezigAPI.get().getListener().onDisplaySettingsGui(Setting.values());

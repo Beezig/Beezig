@@ -17,18 +17,16 @@ import java.time.OffsetDateTime;
 public class DiscordUtils {
 
 
-    private static IPCClient rpcClient;
-
     public static boolean shouldOperate = true;
+    private static IPCClient rpcClient;
 
     public static void init() {
         if (!Setting.DISCORD_RPC.getValue())
             return;
         IPCClient client = new IPCClient(439523115383652372L);
-        client.setListener(new IPCListener(){
+        client.setListener(new IPCListener() {
             @Override
-            public void onReady(IPCClient client, User user)
-            {
+            public void onReady(IPCClient client, User user) {
                 System.out.println("Connected to Discord as " + user.getName() + "#" + user.getDiscriminator() + "! ("
                         + user.getId() + ")");
 
@@ -52,8 +50,6 @@ public class DiscordUtils {
                 rpcClient = client;
 
 
-
-
             }
 
         });
@@ -63,7 +59,6 @@ public class DiscordUtils {
             e.printStackTrace();
         }
     }
-
 
 
     /**
@@ -104,14 +99,14 @@ public class DiscordUtils {
 
     }
 
-    public static void clearPresence(){
-        if(rpcClient != null)
-        rpcClient.sendRichPresence(null);
+    public static void clearPresence() {
+        if (rpcClient != null)
+            rpcClient.sendRichPresence(null);
     }
 
     public static void closeClient() {
-        if(rpcClient != null)
-        rpcClient.close();
+        if (rpcClient != null)
+            rpcClient.close();
     }
 
 }

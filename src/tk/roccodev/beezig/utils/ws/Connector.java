@@ -30,9 +30,8 @@ public class Connector {
     public static String IO_BP_URL = "https://api.hivemc.com:8443";
 
 
-
-    public static void connectBP(String server){
-        if(socket != null) socket.disconnect();
+    public static void connectBP(String server) {
+        if (socket != null) socket.disconnect();
         try {
             socket = new SocketIO(IO_BP_URL);
             socket.addHeader("User-Agent", Log.getUserAgent());
@@ -60,9 +59,9 @@ public class Connector {
 
                 @Override
                 public void on(String event, IOAcknowledge ack, Object... args) {
-                    if(args.length != 0 && args[0] != null)
-                    System.out.println("Event from server: " + event + " with data " + args[0].toString() + " (" + args[0].getClass().getName() + ")");
-                    if(event.equals("loadsong")) {
+                    if (args.length != 0 && args[0] != null)
+                        System.out.println("Event from server: " + event + " with data " + args[0].toString() + " (" + args[0].getClass().getName() + ")");
+                    if (event.equals("loadsong")) {
                         JSONObject json = (JSONObject) args[0];
                         JSONObject data = (JSONObject) json.get("data");
                         String name = (String) data.get("name");
@@ -82,25 +81,22 @@ public class Connector {
                                 e.printStackTrace();
                             }
                         }).start();
-                    }
-                    else if(event.equals("control")) {
+                    } else if (event.equals("control")) {
                         new Thread(() -> {
-                            if(TrackPlayer.playing)  {
+                            if (TrackPlayer.playing) {
                                 System.out.println("Pausing track...");
                                 TrackPlayer.stop();
                                 TrackPlayer.playOgg("vinyl");
+                            } else {
+
+                                System.out.println("Resuming track...");
+                                TrackPlayer.playOgg("cheer");
+                                TrackPlayer.resume();
+
                             }
-                            else {
-
-                                    System.out.println("Resuming track...");
-                                    TrackPlayer.playOgg("cheer");
-                                    TrackPlayer.resume();
-
-                                }
                         }).start();
 
-                    }
-                    else if(event.equals("endgame")) {
+                    } else if (event.equals("endgame")) {
                         new Thread(TrackPlayer::close).start();
                     }
                 }
@@ -125,11 +121,11 @@ public class Connector {
 
     public static void leaveLobbyBP() {
         new Thread(() -> {
-            if(socket != null) {
+            if (socket != null) {
                 JSONObject servObj = new JSONObject();
-                if(lastBPServer != null) {
-                servObj.put("server", lastBPServer);
-                socket.emit("leaveserver", servObj);
+                if (lastBPServer != null) {
+                    servObj.put("server", lastBPServer);
+                    socket.emit("leaveserver", servObj);
                 }
                 socket.disconnect();
             }

@@ -5,10 +5,9 @@ import java.lang.reflect.Method;
 
 public class RenderUtils {
 
+    public static Object INVENTORY_BACKGROUND;
     private static Method color, pushMatrix, popMatrix, translate, renderPotionIcon, scale, enableBlend, bindTexture, getCurrentScreen;
     private static Object vars;
-    public static Object INVENTORY_BACKGROUND;
-
 
     public static void init() throws Exception {
         Class glutil = Class.forName("eu.the5zig.mod.util.GLUtil");

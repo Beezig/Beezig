@@ -103,7 +103,7 @@ public class Giant extends GameMode {
 
     public static void reset(Giant gameMode) {
 
-        if(inGame && !hasWon) {
+        if (inGame && !hasWon) {
             boolean wasBest = winstreak >= bestStreak;
             System.out.println("Lost!");
             winstreak = 0;

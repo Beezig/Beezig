@@ -42,7 +42,7 @@ public class BeezigCommand implements Command {
         } else if (args[0].equalsIgnoreCase("commands")) {
             The5zigAPI.getAPI().messagePlayer("\n" +
                     "    §7§m                                                                                    "
-                            );
+            );
             The5zigAPI.getAPI().messagePlayer(Log.info + "Available commands:");
             for (Command cmd : CommandManager.commandExecutors) {
                 The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + cmd.getAliases()[0]);

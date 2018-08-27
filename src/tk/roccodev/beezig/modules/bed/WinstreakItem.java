@@ -3,7 +3,6 @@ package tk.roccodev.beezig.modules.bed;
 import eu.the5zig.mod.modules.GameModeItem;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
-import tk.roccodev.beezig.games.CAI;
 
 public class WinstreakItem extends GameModeItem<BED> {
 

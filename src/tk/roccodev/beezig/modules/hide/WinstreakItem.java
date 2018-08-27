@@ -2,7 +2,6 @@ package tk.roccodev.beezig.modules.hide;
 
 import eu.the5zig.mod.modules.GameModeItem;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.games.CAI;
 import tk.roccodev.beezig.games.HIDE;
 
 public class WinstreakItem extends GameModeItem<HIDE> {

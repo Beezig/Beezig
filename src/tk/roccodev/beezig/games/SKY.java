@@ -100,7 +100,7 @@ public class SKY extends GameMode {
     public static void reset(SKY gameMode) {
 
         gameMode.setState(GameState.FINISHED);
-        if(inGame && !hasWon) {
+        if (inGame && !hasWon) {
             boolean wasBest = winstreak >= bestStreak;
             System.out.println("Lost!");
             winstreak = 0;

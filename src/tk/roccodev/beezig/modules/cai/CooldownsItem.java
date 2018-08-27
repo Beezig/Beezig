@@ -3,14 +3,14 @@ package tk.roccodev.beezig.modules.cai;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.render.RenderLocation;
-import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.CAI;
 import tk.roccodev.beezig.modules.utils.RenderUtils;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 public class CooldownsItem extends GameModeItem<CAI> {
+
+    private DecimalFormat df = new DecimalFormat("00");
 
     public CooldownsItem() {
         super(CAI.class);
@@ -21,12 +21,10 @@ public class CooldownsItem extends GameModeItem<CAI> {
         return "";
     }
 
-    private DecimalFormat df = new DecimalFormat("00");
-
     @Override
     public void render(int x, int y, RenderLocation renderLocation, boolean dummy) {
         RenderUtils.enableBlend();
-        if(CAI.speedCooldown != 0) {
+        if (CAI.speedCooldown != 0) {
 
             y += 12;
 
@@ -35,7 +33,7 @@ public class CooldownsItem extends GameModeItem<CAI> {
             String display = secs / 60 + ":" + df.format((secs % 60));
             display("Speed - " + display, x, y, 0);
         }
-        if(CAI.invisCooldown != 0) {
+        if (CAI.invisCooldown != 0) {
 
             y += 12;
 
@@ -44,7 +42,7 @@ public class CooldownsItem extends GameModeItem<CAI> {
             String display = secs / 60 + ":" + df.format((secs % 60));
             display("Invisibility - " + display, x, y, 8);
         }
-        if(CAI.leaderItem0 != 0) {
+        if (CAI.leaderItem0 != 0) {
 
             y += 12;
 
@@ -53,7 +51,7 @@ public class CooldownsItem extends GameModeItem<CAI> {
             String display = secs / 60 + ":" + df.format((secs % 60));
             display("Blind Carrier - " + display, x, y, 13);
         }
-        if(CAI.leaderItem1 != 0) {
+        if (CAI.leaderItem1 != 0) {
 
             y += 12;
 
@@ -62,7 +60,7 @@ public class CooldownsItem extends GameModeItem<CAI> {
             String display = secs / 60 + ":" + df.format((secs % 60));
             display("Emergency Flare - " + display, x, y, 7);
         }
-        if(CAI.leaderItem2 != 0) {
+        if (CAI.leaderItem2 != 0) {
 
             y += 12;
 

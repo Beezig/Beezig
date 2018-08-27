@@ -8,7 +8,6 @@ import java.awt.TrayIcon.MessageType;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 public class NotificationManager {
 

@@ -76,14 +76,14 @@ public class PlayerStatsCommand implements Command {
                     points.add(api.getPoints());
 
                     RankEnum rank = game.equalsIgnoreCase("bed") ? (BEDRank.isNo1(api.getParentMode().getCorrectName(), api.getPoints()) ? BEDRank.ZZZZZZ : BEDRank.getRank(api.getPoints())) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(api.getPoints()) : null);
-                    if(rank == null) {
+                    if (rank == null) {
                         rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, api.getTitle());
                     }
 
                     title.add(rank.getTotalDisplay());
                     name.add(apiHIVE.getNetworkRankColor() + npi.getGameProfile().getName());
                 } catch (Exception e) {
-                  //  e.printStackTrace();
+                    //  e.printStackTrace();
                 }
             }
 
@@ -94,11 +94,10 @@ public class PlayerStatsCommand implements Command {
             for (int i = 0; i < name.size(); i++) {
                 try {
                     if (points.get(i) != 0) {
-                        if(title.get(i).equals("§a§lMaster §e§lof §b§lDisguise")) {
+                        if (title.get(i).equals("§a§lMaster §e§lof §b§lDisguise")) {
                             The5zigAPI.getAPI().messagePlayer(
                                     Log.info + "§a§l" + Log.df(points.get(i)) + "§7 - " + title.get(i) + "§r " + name.get(i));
-                        }
-                        else {
+                        } else {
                             The5zigAPI.getAPI().messagePlayer(
                                     Log.info + title.get(i).replace(ChatColor.stripColor(title.get(i)), "")
                                             + Log.df(points.get(i)) + "§7 - " + title.get(i) + "§r " + name.get(i));

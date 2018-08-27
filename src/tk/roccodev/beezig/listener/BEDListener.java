@@ -1,20 +1,5 @@
 package tk.roccodev.beezig.listener;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -35,6 +20,15 @@ import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BEDListener extends AbstractGameListener<BED> {
 
@@ -67,7 +61,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                     e2.printStackTrace();
                 }
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                
+
                 BED.updateMode();
                 if (sb != null && sb.getTitle().contains("BED")) {
                     BED.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
@@ -112,36 +106,32 @@ public class BEDListener extends AbstractGameListener<BED> {
 
 
             DiscordUtils.updatePresence("Housekeeping in BedWars: " + BED.mode, "Playing on " + BED.activeMap, "game_bedwars");
-        } 
-        else if(message.equals("                           §cLast team alive wins!")){ // Not sure about this one
-        	BED.inGame = true;
-        }
-        else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §2✚")) {
-        	int pts = Integer.parseInt(message.split("§a")[1].split(" Points")[0]);
-        	BED.pointsCounter += pts;
-        	APIValues.BEDpoints += pts;
-        	BED.dailyPoints += pts;
-        	
-        	switch(pts) {
-        	
-        	case 5:
-        	case 10:
-        		BED.kills++;
-        		BED.updateKdr();
-        		break;
-        	case 50:
-        	case 65:
-        	case 80:
-        		BED.bedsDestroyed++;
-        		break;
-        	
-        	}
-        }
-        else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §7Gained no points")) {
-        	BED.kills++;
-        	BED.updateKdr();
-        }
-       else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §e✯ §6Notable Win! §eGold Medal Awarded!")) {
+        } else if (message.equals("                           §cLast team alive wins!")) { // Not sure about this one
+            BED.inGame = true;
+        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §2✚")) {
+            int pts = Integer.parseInt(message.split("§a")[1].split(" Points")[0]);
+            BED.pointsCounter += pts;
+            APIValues.BEDpoints += pts;
+            BED.dailyPoints += pts;
+
+            switch (pts) {
+
+                case 5:
+                case 10:
+                    BED.kills++;
+                    BED.updateKdr();
+                    break;
+                case 50:
+                case 65:
+                case 80:
+                    BED.bedsDestroyed++;
+                    break;
+
+            }
+        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §7Gained no points")) {
+            BED.kills++;
+            BED.updateKdr();
+        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §e✯ §6Notable Win! §eGold Medal Awarded!")) {
 
             BED.pointsCounter += 100;
             BED.dailyPoints += 100;
@@ -150,7 +140,7 @@ public class BEDListener extends AbstractGameListener<BED> {
             HiveAPI.tokens += 100;
             BED.hasWon = true;
             BED.winstreak++;
-            if(BED.winstreak >= BED.bestStreak)
+            if (BED.winstreak >= BED.bestStreak)
                 BED.bestStreak = BED.winstreak;
             StreakUtils.incrementWinstreakByOne("bed");
 
@@ -263,14 +253,13 @@ public class BEDListener extends AbstractGameListener<BED> {
                             String[] newData = s.split("\\: §b");
                             long currentValue = 0;
                             try {
-                            	currentValue = Long.parseLong(newData[1]);
-                            	newData[1] = Log.df(currentValue);
-                            	s = newData[0] + ": §b" + newData[1];
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
                             }
-                            catch(NumberFormatException ignored) {
-                            	s = newData[0] + ": §b" + newData[1];
-                            }
-                            
+
                             if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
@@ -474,8 +463,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                 }
             }).start();
 
-        } 
-        else if (message.trim().equals("§d§lNew Rank!")) {
+        } else if (message.trim().equals("§d§lNew Rank!")) {
             new Thread(() -> {
 
                 try {
@@ -500,8 +488,7 @@ public class BEDListener extends AbstractGameListener<BED> {
         if (subTitle != null && ChatColor.stripColor(subTitle).trim().equals("Respawning in 2 seconds")) {
             BED.deaths++;
             BED.updateKdr();
-        }
-        else if (subTitle != null && subTitle.equals("§r§7Protect your bed, destroy others!§r")) {
+        } else if (subTitle != null && subTitle.equals("§r§7Protect your bed, destroy others!§r")) {
             gameMode.setState(GameState.GAME);
             BED.ironGen = 1;
             //As Hive sends this subtitle like 13 times, don't do anything here please :) mhm

@@ -13,13 +13,13 @@ public class DeathrunRecordsCommand implements Command {
 
     @Override
     public String[] getAliases() {
-        return new String[] {"/drbest", "/drrec"};
+        return new String[]{"/drbest", "/drrec"};
     }
 
     @Override
     public boolean execute(String[] args) {
 
-        if(args.length == 0){
+        if (args.length == 0) {
             The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /drbest player map");
             return true;
         }
@@ -33,7 +33,7 @@ public class DeathrunRecordsCommand implements Command {
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Kills Record:§b " + api.getKillRecords().get(map));
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Deaths Record:§b " + api.getDeathRecords().get(map));
 
-            } catch(Exception e) {
+            } catch (Exception e) {
                 The5zigAPI.getAPI().messagePlayer(Log.error + "An Error occurred.");
             }
         }).start();

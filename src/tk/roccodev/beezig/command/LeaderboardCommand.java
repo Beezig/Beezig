@@ -65,7 +65,7 @@ public class LeaderboardCommand implements Command {
             String pointStringToUse = game.equalsIgnoreCase("grav") ||
                     game.equalsIgnoreCase("hide")
                     || game.equalsIgnoreCase("cai") ? "points" : (game.equalsIgnoreCase("timv")
-            ? "karma" :"total_points");
+                    ? "karma" : "total_points");
             for (int i = 0; i < (indexEnd - humanStart + 1L); i++) {
                 try {
                     APIGameMode api = new APIGameMode(((JSONObject) data.get(i)).get("username").toString(),
@@ -90,7 +90,7 @@ public class LeaderboardCommand implements Command {
                     points.add(pts);
 
                     RankEnum rank = game.equalsIgnoreCase("bed") ? ((humanStart + i == 1) ? BEDRank.ZZZZZZ : BEDRank.getRank(pts)) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(pts) : null);
-                    if(rank == null) {
+                    if (rank == null) {
                         rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, api.getTitle());
                     }
 
@@ -107,13 +107,12 @@ public class LeaderboardCommand implements Command {
                 try {
                     if (points.get(i) != 0) {
                         if (points.get(i) != 0) {
-                            if(title.get(i).equals("§a§lMaster §e§lof §b§lDisguise")) {
+                            if (title.get(i).equals("§a§lMaster §e§lof §b§lDisguise")) {
                                 The5zigAPI.getAPI()
                                         .messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
                                                 + "§a§l"
                                                 + Log.df(points.get(i)) + "§7 - " + title.get(i) + "§r " + name.get(i));
-                            }
-                            else {
+                            } else {
                                 The5zigAPI.getAPI()
                                         .messagePlayer(Log.info + "#§b" + (humanStart + i) + "§7 ▏ §3"
                                                 + title.get(i).replaceAll(ChatColor.stripColor(title.get(i)), "")

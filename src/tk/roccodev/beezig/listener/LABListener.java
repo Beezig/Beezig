@@ -1,15 +1,5 @@
 package tk.roccodev.beezig.listener;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -28,6 +18,12 @@ import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiLAB;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
 
 public class LABListener extends AbstractGameListener<LAB> {
     @Override
@@ -76,47 +72,41 @@ public class LABListener extends AbstractGameListener<LAB> {
 
     @Override
     public boolean onServerChat(LAB gameMode, String message) {
-        if(message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l10 atoms and 20 tokens§a for being in the top 3!")) {
+        if (message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l10 atoms and 20 tokens§a for being in the top 3!")) {
             LAB.dailyPoints += 10;
             APIValues.LABpoints += 10;
             HiveAPI.tokens += 20;
-        }
-        else if(message.startsWith("§8▍ §3The§bLab§8 ▏ §a§lExperiment ")) {
+        } else if (message.startsWith("§8▍ §3The§bLab§8 ▏ §a§lExperiment ")) {
             LAB.experiments.add(ChatColor.stripColor(message.split(":")[1].trim()));
-        }
-        else if(message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l2 atoms and 10 tokens§a for participating!")) {
+        } else if (message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l2 atoms and 10 tokens§a for participating!")) {
             LAB.dailyPoints += 2;
             APIValues.LABpoints += 2;
             HiveAPI.tokens += 10;
-        }
-        else if(message.endsWith("[+ 3 Atoms]") && message.startsWith(" §e§lFirst:")) {
+        } else if (message.endsWith("[+ 3 Atoms]") && message.startsWith(" §e§lFirst:")) {
             String name = ChatColor.stripColor(message.split("\\[")[0].trim().replace("§e§lFirst: ", ""));
-            if(name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
+            if (name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
                 LAB.dailyPoints += 3;
                 APIValues.LABpoints += 3;
             }
             LAB.leaderboard.put(name, LAB.leaderboard.get(name) + 3);
             LAB.leaderboard = LAB.sortByValue(LAB.leaderboard);
-        }
-        else if(message.endsWith("[+ 2 Atoms]") && message.startsWith(" §b§lSecond:")) {
+        } else if (message.endsWith("[+ 2 Atoms]") && message.startsWith(" §b§lSecond:")) {
             String name = ChatColor.stripColor(message.split("\\[")[0].trim().replace("§b§lSecond: ", ""));
-            if(name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
+            if (name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
                 LAB.dailyPoints += 2;
                 APIValues.LABpoints += 2;
             }
             LAB.leaderboard.put(name, LAB.leaderboard.get(name) + 2);
             LAB.leaderboard = LAB.sortByValue(LAB.leaderboard);
-        }
-        else if(message.endsWith("[+ 1 Atom]") && message.startsWith(" §6§lThird:")) {
+        } else if (message.endsWith("[+ 1 Atom]") && message.startsWith(" §6§lThird:")) {
             String name = ChatColor.stripColor(message.split("\\[")[0].trim().replace("§6§lThird: ", ""));
-            if(name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
+            if (name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
                 LAB.dailyPoints += 1;
                 APIValues.LABpoints += 1;
             }
             LAB.leaderboard.put(name, LAB.leaderboard.get(name) + 1);
             LAB.leaderboard = LAB.sortByValue(LAB.leaderboard);
-        }
-        else if(message.contains(The5zigAPI.getAPI().getGameProfile().getName() + "§7 [+ ")) {
+        } else if (message.contains(The5zigAPI.getAPI().getGameProfile().getName() + "§7 [+ ")) {
             int atoms = Integer.parseInt(message.split("\\[\\+")[1].replace(" Atom", "").replace("s", "").trim());
             LAB.dailyPoints += atoms;
             APIValues.LABpoints += atoms;
@@ -212,20 +202,19 @@ public class LABListener extends AbstractGameListener<LAB> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } 
-                            
-                            
+                            }
+
+
                             String[] newData = s.split("\\: §b");
                             long currentValue = 0;
                             try {
-                            	currentValue = Long.parseLong(newData[1]);
-                            	newData[1] = Log.df(currentValue);
-                            	s = newData[0] + ": §b" + newData[1];
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
                             }
-                            catch(NumberFormatException ignored) {
-                            	s = newData[0] + ": §b" + newData[1];
-                            }
-                            
+
                             if (s.startsWith("§3 Atoms: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Atoms: §b");
@@ -318,12 +307,12 @@ public class LABListener extends AbstractGameListener<LAB> {
 
     @Override
     public void onTitle(LAB gameMode, String title, String subTitle) {
-        if(subTitle != null && subTitle.equals("§r§3Experiment §r§b§l1§r§3 of §r§a§l3§r")) {
-            for(NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
+        if (subTitle != null && subTitle.equals("§r§3Experiment §r§b§l1§r§3 of §r§a§l3§r")) {
+            for (NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
                 LAB.leaderboard.put(npi.getGameProfile().getName(), 0);
             }
         }
-        if(subTitle != null && subTitle.startsWith("§r§3Experiment §r§b§l") && title != null) {
+        if (subTitle != null && subTitle.startsWith("§r§3Experiment §r§b§l") && title != null) {
             LAB.experiment = ChatColor.stripColor(title.trim());
             DiscordUtils.updatePresence("Experimenting in TheLab", "Playing " + LAB.experiment, "game_lab");
         }

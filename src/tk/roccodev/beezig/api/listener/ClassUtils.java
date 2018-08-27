@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 public class ClassUtils {
 
     public static Object invokeMethod(Object o, Method m, Object... params) {
-        if(m == null) return null;
+        if (m == null) return null;
         try {
             return m.invoke(o, params);
         } catch (IllegalAccessException | InvocationTargetException e) {

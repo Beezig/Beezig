@@ -25,20 +25,20 @@ public class Triggers {
 
 
     public static boolean shouldGG(String msg, int type) {
-        for(Trigger t : triggers) {
-            if(!t.isEnabled()) continue;
-            if(type != t.getType()) continue;
-            if(msg.contains(t.getTrigger())) return true;
+        for (Trigger t : triggers) {
+            if (!t.isEnabled()) continue;
+            if (type != t.getType()) continue;
+            if (msg.contains(t.getTrigger())) return true;
         }
         return false;
     }
 
     public static void changeMode(String mode, boolean enabled) {
-        if(enabled) disabledModesCache.remove(mode);
+        if (enabled) disabledModesCache.remove(mode);
         else disabledModesCache.add(mode);
 
-        for(Trigger t : triggers) {
-            if(t.getShortcode().equals(mode)) t.setEnabled(enabled);
+        for (Trigger t : triggers) {
+            if (t.getShortcode().equals(mode)) t.setEnabled(enabled);
         }
 
     }
@@ -48,7 +48,7 @@ public class Triggers {
         obj.put("text", ggText);
         obj.put("delay", delay);
         obj.put("disabled", disabledModesCache);
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(BeezigMain.mcFile + "/autogg.json"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(BeezigMain.mcFile + "/autogg.json"))) {
             writer.write(obj.toJSONString());
         }
     }

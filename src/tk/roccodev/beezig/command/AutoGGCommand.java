@@ -25,7 +25,7 @@ public class AutoGGCommand implements Command {
     @Override
     public boolean execute(String[] args) {
 
-        if(args.length == 0) {
+        if (args.length == 0) {
             The5zigAPI.getAPI().messagePlayer(Log.bar + "\n");
             The5zigAPI.getAPI().messagePlayer(Log.info + "AutoGG: §b" + (Triggers.enabled ? "Loaded" : "Unloaded"));
             The5zigAPI.getAPI().messagePlayer(Log.info + "GG Text: §b" + Triggers.ggText);
@@ -36,8 +36,7 @@ public class AutoGGCommand implements Command {
             The5zigAPI.getAPI().messagePlayer(Log.info + "To enable/disable modes, use §b/autogg [enable/disable] [shortcode].");
             The5zigAPI.getAPI().messagePlayer("");
             The5zigAPI.getAPI().messagePlayer(Log.bar);
-        }
-        else if(args.length >= 2){
+        } else if (args.length >= 2) {
             String mode = args[0].toLowerCase();
             String value = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
@@ -71,7 +70,6 @@ public class AutoGGCommand implements Command {
                     e.printStackTrace();
                 }
             }).start();
-
 
 
         }

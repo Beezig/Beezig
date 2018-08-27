@@ -156,12 +156,12 @@ public class APIGameMode {
             The5zigAPI.getLogger().info("Failed getMonthlyLBRank (thtmx.rocks)");
             e.printStackTrace();
         }
-        for(Object o : o1) {
-        	if(o instanceof JSONObject) {
-        		JSONObject j = (JSONObject) o;
-        		if(j.get("uuid").toString().equals(uuid)) return o1.indexOf(o) + 1;
-        		
-        	}
+        for (Object o : o1) {
+            if (o instanceof JSONObject) {
+                JSONObject j = (JSONObject) o;
+                if (j.get("uuid").toString().equals(uuid)) return o1.indexOf(o) + 1;
+
+            }
         }
         return -1;
     }

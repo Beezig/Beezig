@@ -12,9 +12,19 @@ import tk.roccodev.beezig.utils.ws.Connector;
 
 public class BeezigAPI {
 
+    private static BeezigAPI instance;
     private Object registeredListener;
     private AbstractForgeListener listenerImpl;
-    private static BeezigAPI instance;
+
+    public BeezigAPI() {
+        instance = this;
+    }
+
+    public static BeezigAPI get() {
+
+        if (instance == null) instance = new BeezigAPI();
+        return instance;
+    }
 
     public void registerListener(Object toRegister) {
         registeredListener = toRegister;
@@ -26,27 +36,19 @@ public class BeezigAPI {
         }).start();
     }
 
-
-    public static BeezigAPI get() {
-
-        if(instance == null) instance = new BeezigAPI();
-        return instance;
-    }
-
     public boolean isStaffMember() {
         return BeezigMain.isStaffChat();
     }
 
     public String getCAITeam() {
-        if(!ActiveGame.is("cai")) return "";
+        if (!ActiveGame.is("cai")) return "";
         return ChatColor.stripColor(CAI.team);
     }
 
     public boolean getSettingValue(String setting) {
         try {
             return Setting.valueOf(setting).getValue();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -60,7 +62,7 @@ public class BeezigAPI {
 
             Object[] arr = (Object[]) data.getClass().getField("array").get(data);
 
-            for(Object o : arr) {
+            for (Object o : arr) {
                 String enumName = (String) o.getClass().getField("enumName").get(o);
                 boolean enabled = (boolean) o.getClass().getField("enabled").get(o);
                 Setting.valueOf(enumName).setValueWithoutSaving(enabled);
@@ -68,7 +70,7 @@ public class BeezigAPI {
 
             SettingsFetcher.saveSettings();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -77,14 +79,6 @@ public class BeezigAPI {
     public AbstractForgeListener getListener() {
         return listenerImpl;
     }
-
-    public BeezigAPI() {
-        instance = this;
-    }
-
-
-
-
 
 
 }

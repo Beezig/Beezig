@@ -1,5 +1,9 @@
 package tk.roccodev.beezig.utils.acr;
 
+import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
+import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -7,10 +11,6 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
-
-import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 public class Connector {
 
@@ -57,19 +57,18 @@ public class Connector {
             conn3.setRequestProperty("X-Requested-With", "XMLHttpRequest");
             conn3.setRequestMethod("POST");
 
-            
+
             String link = null;
             String uuid = null;
-            if(chatReportId.startsWith("https://") || chatReportId.startsWith("http://")) {
-            	link = chatReportId;
-            	uuid = new ApiHiveGlobal(player).getUUID();
-            }
-            else {
-            	String uuidInfo = "http://api.hivemc.com/v1/chatreport/" + chatReportId;
+            if (chatReportId.startsWith("https://") || chatReportId.startsWith("http://")) {
+                link = chatReportId;
+                uuid = new ApiHiveGlobal(player).getUUID();
+            } else {
+                String uuidInfo = "http://api.hivemc.com/v1/chatreport/" + chatReportId;
                 uuid = (String) APIUtils.getObject(APIUtils.readURL(new URL(uuidInfo))).get("UUID");
                 link = "http://hivemc.com/chatlog/" + chatReportId;
             }
-            
+
 
             String urlParameters = "category=chat&reason=" + reason + "&comment=Sent%20through%20Beezig&evidence="
                     + URLEncoder.encode(link) + "&UUIDs%5B%5D=" + uuid
@@ -87,7 +86,7 @@ public class Connector {
                 return true;
             return false;
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
 

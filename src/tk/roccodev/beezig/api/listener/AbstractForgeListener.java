@@ -4,9 +4,6 @@ import tk.roccodev.beezig.api.ArrayContainer;
 
 public interface AbstractForgeListener {
 
-    public void onLoad(String pluginVersion, String zigVersion);
-    public void onDisplaySettingsGui(Object[] settings);
-
     public static AbstractForgeListener fromObject(Object from) {
         return new AbstractForgeListener() {
             @Override
@@ -20,5 +17,9 @@ public interface AbstractForgeListener {
             }
         };
     }
+
+    public void onLoad(String pluginVersion, String zigVersion);
+
+    public void onDisplaySettingsGui(Object[] settings);
 
 }

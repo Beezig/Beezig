@@ -1,23 +1,11 @@
 package tk.roccodev.beezig.listener;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import org.json.simple.JSONObject;
-
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import org.json.simple.JSONObject;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
@@ -30,6 +18,13 @@ import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 import tk.roccodev.beezig.utils.ws.Connector;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
 
 public class BPListener extends AbstractGameListener<BP> {
 
@@ -60,7 +55,7 @@ public class BPListener extends AbstractGameListener<BP> {
                 }
                 Thread.sleep(500);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                
+
 
                 ApiBP api = new ApiBP(The5zigAPI.getAPI().getGameProfile().getName());
 
@@ -74,7 +69,7 @@ public class BPListener extends AbstractGameListener<BP> {
                 }
 
                 // Custom jukebox
-                if(Setting.BP_JUKEBOX.getValue()) {
+                if (Setting.BP_JUKEBOX.getValue()) {
                     JSONObject obj = APIUtils.getObject(APIUtils.readURL(new URL("https://hivemc.com/ajax/getblockpartyserver/" + The5zigAPI.getAPI().getGameProfile().getName())));
                     String server = (String) obj.get("server"); // Either "NONE" or the server the player is in
                     if (server.equals("NONE")) {
@@ -225,18 +220,17 @@ public class BPListener extends AbstractGameListener<BP> {
                                 continue;
                             }
 
-                            
+
                             String[] newData = s.split("\\: §b");
                             long currentValue = 0;
                             try {
-                            	currentValue = Long.parseLong(newData[1]);
-                            	newData[1] = Log.df(currentValue);
-                            	s = newData[0] + ": §b" + newData[1];
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
                             }
-                            catch(NumberFormatException ignored) {
-                            	s = newData[0] + ": §b" + newData[1];
-                            }
-                            
+
                             if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");

@@ -1,6 +1,5 @@
 package tk.roccodev.beezig.settings;
 
-import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.beezig.BeezigMain;
 
 import java.io.FileInputStream;
