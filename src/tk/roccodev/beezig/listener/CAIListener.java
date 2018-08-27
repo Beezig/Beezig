@@ -204,17 +204,17 @@ public class CAIListener extends AbstractGameListener<CAI> {
 
         // Advanced Records
 
-        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             CAI.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ")) {
+        } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
 
             CAI.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             CAI.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
@@ -232,7 +232,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
             CAI.leaderItem1 = 0;
             CAI.leaderItem2 = 0;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o "))) {
+                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             CAI.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -336,7 +336,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
                                 sb.append(newData[1]);
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
-                                if (Setting.CAI_SHOW_POINTS_TO_NEXT_RANK.getValue())
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue())
                                     sb.append(" / ").append(rank.getPointsToNextRank((int) points));
                                 if (rank != null)
                                     sb.append("§b)");
@@ -358,7 +358,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
                         if (achievements != null) {
                             The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/44");
                         }
-                        if (Setting.CAI_SHOW_WINRATE.getValue()) {
+                        if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = (double) victories / (double) gamesPlayed;
                             The5zigAPI.getAPI()
                                     .messagePlayer("§o§3 Winrate: §b" + df1f.format(wr * 100) + "%");
@@ -371,7 +371,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
                             The5zigAPI.getAPI().messagePlayer("§o§3 Cc/Ct: §b"
                                     + df.format((double) catches / (double) caught) + "");
                         }
-                        if (Setting.CAI_SHOW_POINTSPG.getValue()) {
+                        if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
                             The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + df1f.format(ppg));
                         }

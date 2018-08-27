@@ -146,17 +146,17 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
         //Advanced Records
 
-        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             HIDE.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ")) {
+        } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
 
             HIDE.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             HIDE.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
@@ -179,7 +179,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
             HIDE.inGame = true;
             HIDE.seeking = true;
             DiscordUtils.updatePresence("Playing Hide & Seek", "Seeking on " + HIDE.activeMap, "game_hide");
-        } else if ((message.equals("                      §6§m                  §6§m                  ") && !message.startsWith("§o "))) {
+        } else if ((message.equals("                      §6§m                  §6§m                  ") && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             HIDE.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -276,7 +276,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                                 points = currentValue;
                                 sb.append(newData[1]);
                                 if (rank != null) sb.append(" (").append(rank.getTotalDisplay());
-                                if (Setting.HIDE_SHOW_POINTS_TO_NEXT_RANK.getValue())
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue())
                                     sb.append(" / ").append(rank.getPointsToNextRank((int) points));
                                 if (rank != null) sb.append("§b)");
 
@@ -308,7 +308,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                         if (achievements != null) {
                             The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/57");
                         }
-                        if (Setting.HIDE_SHOW_WINRATE.getValue()) {
+                        if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = (double) victories / (double) gamesPlayed;
                             The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + df1f.format(wr * 100) + "%");
                         }
@@ -320,7 +320,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                             double hkpg = (double) killsHider / (double) gamesPlayed;
                             The5zigAPI.getAPI().messagePlayer("§o§3 Hider: Kills per Game: §b" + df.format(hkpg));
                         }
-                        if (Setting.HIDE_SHOW_POINTSPG.getValue()) {
+                        if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
                             The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + df1f.format(ppg));
                         }

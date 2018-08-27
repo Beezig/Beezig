@@ -111,23 +111,23 @@ public class LABListener extends AbstractGameListener<LAB> {
             LAB.dailyPoints += atoms;
             APIValues.LABpoints += atoms;
         }
-        if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             LAB.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ")) {
+        } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
 
             LAB.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             LAB.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o "))) {
+                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             LAB.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -222,7 +222,7 @@ public class LABListener extends AbstractGameListener<LAB> {
                                 sb.append(newData[1]);
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
-                                if (Setting.LAB_SHOW_POINTS_TO_NEXT_RANK.getValue())
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue())
                                     sb.append(" / ").append(rank.getPointsToNextRank((int) points));
                                 if (rank != null)
                                     sb.append("§b)");
@@ -245,11 +245,11 @@ public class LABListener extends AbstractGameListener<LAB> {
                             The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements);
                         }
 
-                        if (Setting.LAB_SHOW_WINRATE.getValue()) {
+                        if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
                             The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + df1f.format(wr) + "%");
                         }
-                        if (Setting.LAB_SHOW_PPG.getValue()) {
+                        if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
                             The5zigAPI.getAPI().messagePlayer("§o§3 Atoms Per Game: §b" + df1f.format(ppg));
                         }

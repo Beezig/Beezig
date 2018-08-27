@@ -182,25 +182,25 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             The5zigAPI.getLogger().info("FALLBACK: " + map);
 
             TIMV.activeMap = TIMV.mapsPool.get(map.toLowerCase());
-        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             //"          §6§m                  §f ItsNiklass's Stats §6§m                  "
             //Advanced Records
             TIMV.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ") && !message.endsWith(" ")) {
+        } else if (message.startsWith("§3 ") && !message.endsWith(" ") && Setting.ADVANCED_RECORDS.getValue()) {
 
             TIMV.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             //TODO Coloring
             TIMV.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
-        } else if ((message.equals("                      §6§m                  §6§m                  ") && !message.startsWith("§o "))) {
+        } else if ((message.equals("                      §6§m                  §6§m                  ") && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             TIMV.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -280,7 +280,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                                 karma = currentValue;
                                 sb.append(newData[1]);
                                 if (rank != null) sb.append(" (").append(rank.getTotalDisplay());
-                                if (Setting.TIMV_SHOW_KARMA_TO_NEXT_RANK.getValue() && rank != null) {
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue() && rank != null) {
                                     sb.append(" / ").append(rank.getKarmaToNextRank((int) karma));
                                 }
                                 sb.append("§b)");

@@ -143,7 +143,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 
             MIMV.map = map;
 
-        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             MIMV.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
@@ -153,18 +153,18 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
             MIMV.dailyPoints += (karma - MIMV.gamePts);
             MIMV.gamePts = karma;
 
-        } else if (message.startsWith("§3 ")) {
+        } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
             MIMV.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             MIMV.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o "))) {
+                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             MIMV.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -263,7 +263,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
                                 sb.append(newData[1]);
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
-                                if (Setting.MIMV_SHOW_POINTS_TO_NEXT_RANK.getValue())
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue())
                                     sb.append(" / ").append(rank.getPointsToNextRank((int) points));
                                 if (rank != null)
                                     sb.append("§b)");
@@ -289,19 +289,19 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
                             The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/37");
                         }
 
-                        if (Setting.MIMV_SHOW_WINRATE.getValue()) {
+                        if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
                             The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + df1f.format(wr) + "%");
                         }
-                        if (Setting.MIMV_SHOW_KD.getValue()) {
+                        if (Setting.SHOW_RECORDS_KDR.getValue()) {
                             double kd = (double) kills / (double) deaths;
                             The5zigAPI.getAPI().messagePlayer("§o§3 K/D: §b" + df.format(kd));
                         }
-                        if (Setting.MIMV_SHOW_PPG.getValue()) {
+                        if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
                             The5zigAPI.getAPI().messagePlayer("§o§3 Karma Per Game: §b" + df1f.format(ppg));
                         }
-                        if (Setting.MIMV_SHOW_KPG.getValue()) {
+                        if (Setting.SHOW_RECORDS_KPG.getValue()) {
                             double kpg = (double) kills / (double) gamesPlayed;
                             The5zigAPI.getAPI().messagePlayer("§o§3 Kills Per Game: §b" + df.format(kpg));
                         }

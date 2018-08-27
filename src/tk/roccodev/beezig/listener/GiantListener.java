@@ -13,6 +13,8 @@ import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.gnt.GiantRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
+import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGNT;
+import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGNTM;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGiant;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.AdvancedRecords;
@@ -72,39 +74,27 @@ public class GiantListener extends AbstractGameListener<Giant> {
                 // TODO Auto-generated catch block
                 e2.printStackTrace();
             }
-            String ign = The5zigAPI.getAPI().getGameProfile().getName();
-            Giant.totalKills = (int) HiveAPI.getKills(ign, ActiveGame.current());
-            Giant.totalDeaths = (int) HiveAPI.getDeaths(ign, ActiveGame.current());
+            String ign = The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "");
+            ApiGiant gnt = ActiveGame.is("GNTM") ? new ApiGNTM(ign) : new ApiGNT(ign);
+
+            Giant.totalKills = (int) gnt.getKills();
+            Giant.totalDeaths = (int) gnt.getDeaths();
 
             Giant.totalKdr = (double) Giant.totalKills / Giant.totalDeaths;
             Giant.gameKdr = Giant.totalKdr;
-            The5zigAPI.getLogger().info(Giant.totalKdr);
+
 
 
             Giant.rankObject = GiantRank
-                    .getFromDisplay(HiveAPI.GiantgetRank(The5zigAPI.getAPI().getGameProfile().getName(), lobby));
+                    .getFromDisplay(gnt.getTitle());
             Giant.rank = Giant.rankObject.getTotalDisplay();
 
-        }).start();
-
-        The5zigAPI.getLogger().info(instance.getName());
-        new Thread(() -> {
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-
-            try {
-
-                HiveAPI.GiantupdatePoints(instance.isMini());
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            APIValues.Giantpoints = gnt.getPoints();
 
         }).start();
+
+
+
     }
 
     @Override
@@ -214,11 +204,11 @@ public class GiantListener extends AbstractGameListener<Giant> {
 
         // Advanced Records
 
-        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             Giant.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ")) {
+        } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
             if (message.contains("User") || message.contains("Skill Rating")) {
                 return true;
             }
@@ -227,13 +217,13 @@ public class GiantListener extends AbstractGameListener<Giant> {
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             Giant.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o "))) {
+                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             Giant.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -241,24 +231,13 @@ public class GiantListener extends AbstractGameListener<Giant> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    ApiGiant api = new ApiGiant(AdvancedRecords.player);
+
                     AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
                         GiantRank rank = null;
 
-                        Integer wr = Setting.Giant_SHOW_WINRATE.getValue() ? (int) (Math
-                                .floor(((double) HiveAPI.GiantgetWins(AdvancedRecords.player, lobby)
-                                        / (double) HiveAPI.GiantgetGamesPlayed(AdvancedRecords.player, lobby)) * 1000d)
-                                / 10d) : null;
-                        Double kd = Setting.Giant_SHOW_KD.getValue()
-                                ? Math.floor(((double) HiveAPI.GiantgetKills(AdvancedRecords.player, lobby)
-                                / (double) HiveAPI.GiantgetDeaths(AdvancedRecords.player, lobby) * 100d)) / 100d
-                                : null;
-                        Double ppg = Setting.Giant_SHOW_PPG.getValue() ? Math
-                                .round(((double) HiveAPI.GiantgetPoints(AdvancedRecords.player, lobby)
-                                        / (double) HiveAPI.GiantgetGamesPlayed(AdvancedRecords.player, lobby)) * 10d)
-                                / 10d : null;
+                        ApiGiant api = ActiveGame.is("GNTM") ? new ApiGNTM(AdvancedRecords.player) : new ApiGNT(AdvancedRecords.player);
 
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
                                 ? api.getParentMode().getNetworkTitle()
@@ -267,12 +246,13 @@ public class GiantListener extends AbstractGameListener<Giant> {
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
                             rankColor = api.getParentMode().getNetworkRankColor();
                         }
-                        long points;
+                        long points = 0;
+                        int vics = 0, played = 0, kills = 0, deaths = 0;
                         Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue()
-                                ? HiveAPI.lastGame(AdvancedRecords.player, lobby)
+                                ? api.lastPlayed()
                                 : null;
                         String rankTitleGiant = Setting.SHOW_RECORDS_RANK.getValue()
-                                ? HiveAPI.GiantgetRank(AdvancedRecords.player, lobby)
+                                ? api.getTitle()
                                 : null;
                         The5zigAPI.getLogger().info(rankTitleGiant);
                         // int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() &&
@@ -339,13 +319,31 @@ public class GiantListener extends AbstractGameListener<Giant> {
                                 if (rank != null)
                                     sb.append("§b)");
                                 The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
-                                continue;
+
 
                             }
+                            else if(s.startsWith("§3 Games Played: §b"))  played = Math.toIntExact(currentValue);
+                            else if(s.startsWith("§3 Victories: §b"))  vics = Math.toIntExact(currentValue);
+                            else if(s.startsWith("§3 Kills: §b"))  kills = Math.toIntExact(currentValue);
+                            else if(s.startsWith("§3 Deaths: §b"))  deaths = Math.toIntExact(currentValue);
 
                             The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
+
+                        Integer wr = Setting.SHOW_RECORDS_WINRATE.getValue() ? (int) (Math
+                                .floor(((double) vics
+                                        / (double) played) * 1000d)
+                                / 10d) : null;
+                        Double kd = Setting.SHOW_RECORDS_KDR.getValue()
+                                ? Math.floor(((double) kills
+                                / (double) deaths * 100d)) / 100d
+                                : null;
+                        Double ppg = Setting.SHOW_RECORDS_PPG.getValue() ? Math
+                                .round(((double) points
+                                        / (double) played) * 10d)
+                                / 10d : null;
+
 
                         if (ppg != null)
                             The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + ppg);

@@ -183,26 +183,26 @@ public class DRListener extends AbstractGameListener<DR> {
             }).start();
         } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l") && !DR.hasVoted && Setting.AUTOVOTE.getValue()) {
             DR.votesToParse.add(message);
-        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             // " §6§m §f ItsNiklass's Stats §6§m "
             // Advanced Records
             DR.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ")) {
+        } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
 
             DR.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             // TODO Coloring
             DR.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o "))) {
+                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             DR.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -295,7 +295,7 @@ public class DRListener extends AbstractGameListener<DR> {
                                 sb.append(newData[1]);
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
-                                if (Setting.DR_SHOW_POINTS_TO_NEXT_RANK.getValue())
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue())
                                     sb.append(" / ").append(rank.getPointsToNextRank((int) points));
                                 if (rank != null)
                                     sb.append("§b)");
@@ -312,19 +312,19 @@ public class DRListener extends AbstractGameListener<DR> {
                         }
 
 
-                        double ppg = Setting.DR_SHOW_POINTSPERGAME.getValue() ? Math.round(((double) points / (double) played) * 10d) / 10d : -1;
+                        double ppg = Setting.SHOW_RECORDS_PPG.getValue() ? Math.round(((double) points / (double) played) * 10d) / 10d : -1;
 
                         int ach = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : -1;
 
-                        double rwr = Setting.DR_SHOW_WINRATE.getValue() ? (Math
+                        double rwr = Setting.SHOW_RECORDS_WINRATE.getValue() ? (Math
                                 .floor(((double) victories / (double) played)
                                         * 1000d)
                                 / 10d) : -1;
 
-                        double dpg = Setting.DR_SHOW_DEATHSPERGAME.getValue() ? Math.floor((double) deaths / (double) played * 10d)
+                        double dpg = Setting.SHOW_RECORDS_DPG.getValue() ? Math.floor((double) deaths / (double) played * 10d)
                                 / 10d : -1;
 
-                        double kpg = Setting.DR_SHOW_KILLSPERGAME.getValue() ? Math.round((double) kills / (double) played * 10d) / 10d : -1;
+                        double kpg = Setting.SHOW_RECORDS_KPG.getValue() ? Math.round((double) kills / (double) played * 10d) / 10d : -1;
 
 
                         String tpb = Setting.DR_SHOW_TOTALPB.getValue() ? api.getTotalPB() : null;
