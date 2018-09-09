@@ -63,8 +63,16 @@ public class LeaderboardItem extends GameModeItem<LAB> {
         }
 
     }
+    
+    
 
     @Override
+	public int getHeight(boolean dummy) {
+		// TODO Auto-generated method stub
+		return 10 + LAB.leaderboard.size() * 10;
+	}
+
+	@Override
     public boolean shouldRender(boolean dummy) {
         try {
             return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("lab")

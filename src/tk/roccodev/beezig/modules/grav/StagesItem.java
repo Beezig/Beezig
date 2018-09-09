@@ -42,7 +42,15 @@ public class StagesItem extends GameModeItem<GRAV> {
 
     }
 
+    
+    
     @Override
+	public int getHeight(boolean dummy) {
+		// TODO Auto-generated method stub
+		return 10 + GRAV.toDisplayWithFails.size() * 10;
+	}
+
+	@Override
     public boolean shouldRender(boolean dummy) {
         try {
             return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("grav")
