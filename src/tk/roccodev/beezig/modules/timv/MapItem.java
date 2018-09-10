@@ -20,9 +20,12 @@ public class MapItem extends GameModeItem<TIMV> {
         tr.append(name);
         if ((boolean) getProperties().getSetting("showenderchests").get()) {
 
+            boolean current = (boolean) getProperties().getSetting("showcurrent").get();
             int t = map.getEnderchests();
 
-            tr.append(" (").append(t).append(")");
+            tr.append(" (").append(t);
+            if(current) tr.append(" | ").append(TIMV.currentEnderchests);
+            tr.append(")");
 
 
         }
@@ -35,6 +38,7 @@ public class MapItem extends GameModeItem<TIMV> {
     public void registerSettings() {
         // TODO Auto-generated method stub
         getProperties().addSetting("showenderchests", true);
+        getProperties().addSetting("showcurrent", true);
     }
 
     @Override

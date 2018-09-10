@@ -38,6 +38,8 @@ public class TIMV extends GameMode {
     public static int detectivesBefore = 0;
     public static int detectivesDiscovered = 0;
 
+    public static long currentEnderchests;
+
     public static ArrayList<String> traitorTeam = new ArrayList<>();
 
     public static String gameID;
@@ -274,7 +276,7 @@ public class TIMV extends GameMode {
         TIMV.messagesToSend.clear();
         TIMV.footerToSend.clear();
         TIMV.votesToParse.clear();
-
+        currentEnderchests = 0;
         TIMV.hasVoted = false;
         TIMV.actionBarChecked = false;
         lastTestMsg = -1;
