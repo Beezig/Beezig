@@ -398,7 +398,7 @@ public class BEDListener extends AbstractGameListener<BED> {
         } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §a§lVote received.") && Setting.AUTOVOTE.getValue()) {
             BED.updateMode();
             BED.hasVoted = true;
-        } else if (message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l6. ") && !BED.hasVoted && Setting.AUTOVOTE.getValue()) {
+        } else if (message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l5. ") && !BED.hasVoted && Setting.AUTOVOTE.getValue()) {
             //Adding the 6th option, the normal method doesn't work
             BED.votesToParse.add(message);
             new Thread(() -> {
@@ -437,6 +437,10 @@ public class BEDListener extends AbstractGameListener<BED> {
                     The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
                     The5zigAPI.getAPI().messagePlayer("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
 
+                }
+                else if(Setting.AUTOVOTE_RANDOM.getValue()) {
+                    The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+                    The5zigAPI.getAPI().messagePlayer("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ " + "§eAutomatically voted for§c Random map§e.");
                 }
                 BED.votesToParse.clear();
                 BED.hasVoted = true;
