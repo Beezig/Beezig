@@ -109,7 +109,7 @@ public class BED extends GameMode {
     public static void reset(BED gm) {
 
         gm.setState(GameState.FINISHED);
-        if (inGame && !hasWon) {
+        if (inGame && !hasWon && !mode.equals("Double Fun")) {
             boolean wasBest = winstreak >= bestStreak;
             System.out.println("Lost!");
             winstreak = 0;
