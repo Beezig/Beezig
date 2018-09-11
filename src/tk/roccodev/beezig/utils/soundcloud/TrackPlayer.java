@@ -21,7 +21,7 @@ public class TrackPlayer {
     public static BufferedInputStream cachedTrack;
     public static boolean playing;
     public static float gainToLoad = 0f;
-    public static float rawGainToLoad = 0.5f;
+    public static float rawGainToLoad = 0f;
     private static SoundSystem system;
     private static File configFile;
 
