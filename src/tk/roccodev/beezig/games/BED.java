@@ -202,7 +202,7 @@ public class BED extends GameMode {
             BED.mode = "Teams";
         }
         if (sb != null && sb.getTitle().contains("BEDX ")) {
-            BED.mode = "Double Fun"; // TODO Change this to the real name upon release
+            BED.mode = "Double Fun";
         }
     }
 
