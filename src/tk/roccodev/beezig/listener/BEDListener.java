@@ -106,7 +106,7 @@ public class BEDListener extends AbstractGameListener<BED> {
 
 
             DiscordUtils.updatePresence("Housekeeping in BedWars: " + BED.mode, "Playing on " + BED.activeMap, "game_bedwars");
-        } else if (message.equals("                           §cLast team alive wins!")) { // Not sure about this one
+        } else if (message.equals("                     §6§lWelcome to Hive BedWars!") || message.equals("                        §6§lBedWars§7 - §a§lDouble Fun")) { // Not sure about this one
             BED.inGame = true;
         } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §2✚")) {
             int pts = Integer.parseInt(message.split("§a")[1].split(" Points")[0]);

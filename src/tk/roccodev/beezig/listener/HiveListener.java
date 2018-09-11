@@ -78,7 +78,7 @@ public class HiveListener extends AbstractGameListener<GameMode> {
 
             The5zigAPI.getLogger().info("Connected to DR! -Hive");
             DiscordUtils.updatePresence("Parkouring in DeathRun", "In Lobby", "game_dr");
-        } else if (key.equals("bed.welcome") || (key.equals("bed.spectator") && gameMode == null)) {
+        } else if (key.equals("bed.welcome") || (key.equals("bed.spectator") || key.equals("bed.fallback") && gameMode == null)) {
             getGameListener().switchLobby("BED");
 
             The5zigAPI.getLogger().info("Connected to BED/BEDT! -Hive");
