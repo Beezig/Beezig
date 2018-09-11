@@ -1,9 +1,9 @@
 
 ![Title](http://i.imgur.com/3rXuQls.png)
 
-# Beezig v4.8 - A Hive 5zig Plugin
+# Beezig v4.9 - A Hive 5zig Plugin
 
-[![Join the chat at https://gitter.im/5zig-TIMV-Plugin/Lobby](https://badges.gitter.im/5zig-TIMV-Plugin/Lobby.svg)](https://gitter.im/5zig-TIMV-Plugin/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Discord](https://img.shields.io/discord/346695724253184014.svg?style=popout)](http://discord.gg/se7zJsU)
 
 
 A 5zig plugin to add HiveMC functionality.
@@ -14,9 +14,9 @@ By RoccoDev and ItsNiklass.
 
 ### Build Status
 
-[![Travis Master](https://travis-ci.org/RoccoDev/5zig-TIMV-Plugin.svg?branch=master)](http://travis-ci.org/RoccoDev/5zig-TIMV-Plugin) (Master)
+[![Travis Master](https://travis-ci.org/RoccoDev/Beezig.svg?branch=master)](http://travis-ci.org/RoccoDev/Beezig) (Master)
 
-[![Travis Exp](https://travis-ci.org/RoccoDev/5zig-TIMV-Plugin.svg?branch=experimental)](http://travis-ci.org/RoccoDev/5zig-TIMV-Plugin) (Experimental)
+[![Travis Exp](https://travis-ci.org/RoccoDev/Beezig.svg?branch=experimental)](http://travis-ci.org/RoccoDev/Beezig) (Experimental)
 
 # Features
 

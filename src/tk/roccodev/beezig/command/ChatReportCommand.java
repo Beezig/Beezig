@@ -6,6 +6,7 @@ import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.utils.acr.ChatReason;
 
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,11 +28,17 @@ public class ChatReportCommand implements Command {
     public boolean execute(String[] args) {
 
         if (!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
-        if (args.length == 2) {
-            String pl = args[0];
-            if (ChatReason.is(args[1].toUpperCase())) {
+        BeezigMain.crInteractive = false;
+        BeezigMain.lrRS = "";
+        BeezigMain.checkForNewLR = false;
+        BeezigMain.lrID = "";
+        if (args.length >= 2) {
+            BeezigMain.lrPL = args[0];
+
+            String reason = String.join(" ", Arrays.copyOfRange(args, 1, args.length)).replace(" ", "");
+            if (ChatReason.is(reason.toUpperCase())) {
                 BeezigMain.crInteractive = true;
-                BeezigMain.lrRS = args[1].toLowerCase();
+                BeezigMain.lrRS = reason;
                 The5zigAPI.getAPI().sendPlayerMessage("/chatreport " + args[0]);
                 return true;
             } else {

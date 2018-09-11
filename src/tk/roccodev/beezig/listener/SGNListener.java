@@ -16,6 +16,7 @@ import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiSGN;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
@@ -55,7 +56,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                 }
                 Thread.sleep(500);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                The5zigAPI.getLogger().info(sb.getTitle());
+
 
                 ApiSGN api = new ApiSGN(The5zigAPI.getAPI().getGameProfile().getName());
 
@@ -147,29 +148,29 @@ public class SGNListener extends AbstractGameListener<SGN> {
             SGN.votesToParse.add(message);
         } else if (message.startsWith("§8▍ §b§lCombat§8 ▏ §6Global Points Lost: §e")) {
             int pts = Integer.parseInt(message.replace("§8▍ §b§lCombat§8 ▏ §6Global Points Lost: §e", ""));
-            if(!SGN.custom)
-            APIValues.SGNpoints -= pts;
+            if (!SGN.custom)
+                APIValues.SGNpoints -= pts;
             SGN.gamePts -= pts;
-            if(!SGN.custom)
-            SGN.dailyPoints -= pts;
+            if (!SGN.custom)
+                SGN.dailyPoints -= pts;
         } else if (message.endsWith("§3§lGlobal points gained.")) {
             int pts = Integer.parseInt(message.replace("§3§lGlobal points gained.", "").replace(" §b§l", "").trim());
-            if(!SGN.custom)
-            APIValues.SGNpoints += pts;
+            if (!SGN.custom)
+                APIValues.SGNpoints += pts;
             SGN.gamePts += pts;
-            if(!SGN.custom)
-            SGN.dailyPoints += pts;
-        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+            if (!SGN.custom)
+                SGN.dailyPoints += pts;
+        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             SGN.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ")) {
+        } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
 
             SGN.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             SGN.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
@@ -178,12 +179,10 @@ public class SGNListener extends AbstractGameListener<SGN> {
             APIValues.SGNpoints++;
             SGN.gamePts++;
             SGN.dailyPoints++;
-        }
-        else if(message.equals("§8▍ §d§lDeathmatch§8 ▏ §c§lDeathmatch in §e§l1.")) {
+        } else if (message.equals("§8▍ §d§lDeathmatch§8 ▏ §c§lDeathmatch in §e§l1.")) {
             DiscordUtils.updatePresence("Battling in SG2", "Deathmatch" + (SGN.custom ? " [CS]" : ""), "game_sgn");
-        }
-        else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o "))) {
+        } else if ((message.equals("                      §6§m                  §6§m                  ")
+                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             SGN.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -191,11 +190,11 @@ public class SGNListener extends AbstractGameListener<SGN> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    SGN.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiSGN api = new ApiSGN(SGN.lastRecords);
+                        ApiSGN api = new ApiSGN(AdvancedRecords.player);
                         SGNRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -228,7 +227,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                         long realDeaths = 0;
                         long realVictories = 0;
                         long realPlayed = 0;
-                        long realPoints = SGN.lastRecords.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName()) ? api.getPoints() : 0;
+                        long realPoints = AdvancedRecords.player.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName()) ? api.getPoints() : 0;
 
 
                         long timeAlive = 0;
@@ -237,7 +236,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
 
                         // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
                         // HiveAPI.getLeaderboardsPlacePoints(349, "SGN") <
-                        // HiveAPI.DRgetPoints(SGN.lastRecords)) ?
+                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
                         // HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 
                         List<String> messages = new ArrayList<>(SGN.messagesToSend);
@@ -271,41 +270,51 @@ public class SGNListener extends AbstractGameListener<SGN> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Points: §b")) {
+                            }
+
+
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
+                            }
+
+                            if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
-                                sb.append(points);
+                                points = currentValue;
+                                sb.append(newData[1]);
                                 if (realPoints != 0) {
-                                    sb.append(" [" + realPoints + "]");
+                                    sb.append(" [").append(Log.df(realPoints)).append("]");
                                 } else {
                                     realPoints = points;
                                 }
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
-                                if (Setting.SGN_SHOW_POINTS_TO_NEXT_RANK.getValue())
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue())
                                     sb.append(" / ").append(rank.getPointsToNextRank((int) realPoints));
                                 if (rank != null)
                                     sb.append("§b)");
 
                                 // if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
                             } else if (s.startsWith("§3 Victories: §b")) {
-                                victories = Integer
-                                        .parseInt(ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+                                victories = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Games Played: §b")) {
-                                gamesPlayed = Integer
-                                        .parseInt(ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+                                gamesPlayed = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Kills: §b")) {
-                                kills = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
+                                kills = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Deaths: §b")) {
-                                deaths = Integer
-                                        .parseInt(ChatColor.stripColor(s.replaceAll("§3 Deaths: §b", "").trim()));
+                                deaths = Math.toIntExact(currentValue);
                             }
-                            if (Setting.SGN_SHOW_KD.getValue()) {
-                                if (SGN.lastRecords.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
+                            if (Setting.SHOW_RECORDS_KDR.getValue()) {
+                                if (AdvancedRecords.player.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
                                     realKills = api.getKills();
                                     realDeaths = api.getDeaths();
                                 } else {
@@ -313,8 +322,8 @@ public class SGNListener extends AbstractGameListener<SGN> {
                                     realDeaths = deaths;
                                 }
                             }
-                            if (Setting.SGN_SHOW_PPG.getValue()) {
-                                if (SGN.lastRecords.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
+                            if (Setting.SHOW_RECORDS_PPG.getValue()) {
+                                if (AdvancedRecords.player.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
                                     realPoints = realPoints == 0 ? api.getPoints() : realPoints;
                                     realPlayed = api.getGamesPlayed();
                                 } else {
@@ -322,8 +331,8 @@ public class SGNListener extends AbstractGameListener<SGN> {
                                     realPlayed = gamesPlayed;
                                 }
                             }
-                            if (Setting.SGN_SHOW_WINRATE.getValue()) {
-                                if (SGN.lastRecords.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
+                            if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
+                                if (AdvancedRecords.player.equalsIgnoreCase(The5zigAPI.getAPI().getGameProfile().getName())) {
                                     realVictories = api.getVictories();
                                     realPlayed = realPlayed == 0 ? api.getGamesPlayed() : realPlayed;
                                 } else {
@@ -332,38 +341,38 @@ public class SGNListener extends AbstractGameListener<SGN> {
                                 }
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
-                        if (Setting.SGN_SHOW_WINRATE.getValue()) {
+                        if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = Math.floor(((double) realVictories / (double) realPlayed) * 1000d) / 10d;
-                            The5zigAPI.getAPI().messagePlayer("§o " + (realVictories == victories ? "§3 Winrate: §b" : "§3 Real Winrate: §b") + df1f.format(wr) + "%");
+                            The5zigAPI.getAPI().messagePlayer("§o" + (realVictories == victories ? "§3 Winrate: §b" : "§3 Real Winrate: §b") + df1f.format(wr) + "%");
                         }
-                        if (Setting.SGN_SHOW_KD.getValue()) {
+                        if (Setting.SHOW_RECORDS_KDR.getValue()) {
                             double kd = (double) realKills / (double) realDeaths;
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + (realKills == kills ? "§3 K/D: §b" : "§3 Real K/D: §b") + df.format(kd));
+                            The5zigAPI.getAPI().messagePlayer("§o" + (realKills == kills ? "§3 K/D: §b" : "§3 Real K/D: §b") + df.format(kd));
                         }
-                        if (Setting.SGN_SHOW_PPG.getValue()) {
+                        if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = (double) realPoints / (double) realPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o " + (realPoints == points ? "§3 Points Per Game: §b" : "§3 Real Points Per Game: §b") + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§o" + (realPoints == points ? "§3 Points Per Game: §b" : "§3 Real Points Per Game: §b") + df1f.format(ppg));
                         }
 
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : SGN.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
                         SGN.messagesToSend.clear();
                         SGN.footerToSend.clear();
-                        SGN.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -371,7 +380,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             SGN.messagesToSend.clear();
                             SGN.footerToSend.clear();
-                            SGN.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -387,7 +396,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         SGN.messagesToSend.clear();
                         SGN.footerToSend.clear();
-                        SGN.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;
@@ -400,7 +409,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
 
     @Override
     public boolean onActionBar(SGN gameMode, String message) {
-        if(message.contains("CS_") && SGN.custom == false) {
+        if (message.contains("CS_") && !SGN.custom) {
             SGN.custom = true;
             DiscordUtils.updatePresence("Battling in SG2", "Playing on " + SGN.activeMap + " [CS]", "game_sgn");
         }

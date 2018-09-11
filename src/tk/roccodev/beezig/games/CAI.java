@@ -7,6 +7,7 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
+import tk.roccodev.beezig.utils.StreakUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,11 +19,19 @@ public class CAI extends GameMode {
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
-    public static String lastRecords = "";
-
     public static boolean hasVoted = false;
     public static List<String> votesToParse = new ArrayList<>();
+
+    public static boolean inGame;
+    public static boolean hasWon;
+    public static int winstreak;
+    public static int bestStreak;
+
+    public static long speedCooldown;
+    public static long invisCooldown;
+    public static long leaderItem0;
+    public static long leaderItem1;
+    public static long leaderItem2;
 
     public static long gamePoints;
     public static int dailyPoints;
@@ -81,16 +90,31 @@ public class CAI extends GameMode {
     }
 
     public static void reset(CAI gameMode) {
-
+        System.out.println("reset");
         gameMode.setState(GameState.FINISHED);
+        if (inGame && !hasWon) {
+            boolean wasBest = winstreak >= bestStreak;
+            System.out.println("Lost!");
+            CAI.winstreak = 0;
+            StreakUtils.resetWinstreak("cai", wasBest);
+        }
 
+
+        inGame = false;
+        hasWon = false;
+        invisCooldown = 0;
+        speedCooldown = 0;
+        leaderItem0 = 0;
+        leaderItem1 = 0;
+        leaderItem2 = 0;
         CAI.messagesToSend.clear();
         CAI.footerToSend.clear();
         CAI.votesToParse.clear();
-        CAI.isRecordsRunning = false;
+
         CAI.hasVoted = false;
         CAI.activeMap = null;
         gamePoints = 0;
+
         team = "";
         ActiveGame.reset("cai");
         IHive.genericReset();

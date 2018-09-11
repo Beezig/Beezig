@@ -2,6 +2,7 @@ package tk.roccodev.beezig.hiveapi.wrapper;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import tk.roccodev.beezig.Log;
@@ -43,6 +44,18 @@ public class APIUtils {
             //e.printStackTrace();
         }
         return o;
+    }
+
+    public static JSONArray getArray(Reader toParse) {
+        JSONParser parser = new JSONParser();
+        JSONArray a = null;
+        try {
+            a = (JSONArray) parser.parse(toParse);
+        } catch (Exception e) {
+            The5zigAPI.getLogger().info("Failed");
+            //e.printStackTrace();
+        }
+        return a;
     }
 
     public static <T extends Comparable<T>> void concurrentSort(final List<T> key, List<?>... lists) {

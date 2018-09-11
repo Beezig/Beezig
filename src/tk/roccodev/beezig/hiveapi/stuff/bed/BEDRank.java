@@ -2,14 +2,16 @@ package tk.roccodev.beezig.hiveapi.stuff.bed;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
+import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public enum BEDRank {
+public enum BEDRank implements RankEnum {
 
     SLEEPY(ChatColor.GRAY + "Sleepy", 0, 100, 300, 600, 1000),
     SNOOZER(ChatColor.BLUE + "Snoozer", 1500, 2100, 2800, 3600, 4500),
@@ -21,29 +23,40 @@ public enum BEDRank {
     SLEEP_WALKER(ChatColor.RED + "Sleep Walker", 63000, 66600, 70300, 74100, 78000),
     HIBERNATOR(ChatColor.DARK_AQUA + "Hibernator", 82000, 86100, 90300, 94600, 99000),
 
-    BED_HEAD(ChatColor.YELLOW + "" + ChatColor.BOLD + "Bed Head", 103500, 108100, 112800, 117600, 122500),
-    PANDA(ChatColor.GOLD + "" + ChatColor.BOLD + "Panda", 127500, 132600, 137800, 143100, 148500),
-    INSOMNIAC(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Insomniac", 154000, 159600, 165300, 171100, 177000),
-    WELL_RESTED(ChatColor.GREEN + "" + ChatColor.BOLD + "Well Rested", 183000, 189100, 195300, 201600, 208000),
-    KOALA(ChatColor.AQUA + "" + ChatColor.BOLD + "Koala", 214500, 221100, 227800, 234600, 241500),
-    DAY_DREAMER(ChatColor.RED + "" + ChatColor.BOLD + "Day Dreamer", 248500, 255600, 262800, 270100, 277500),
+    BED_HEAD(ChatColor.YELLOW + "Bed Head", 103500, 108100, 112800, 117600, 122500),
+    PANDA(ChatColor.DARK_PURPLE + "Panda", 127500, 132600, 137800, 143100, 148500),
+    INSOMNIAC(ChatColor.BLUE + "Insomniac", 154000, 159600, 165300, 171100, 177000),
+    WELL_RESTED(ChatColor.GREEN + "Well Rested", 183000, 189100, 195300, 201600, 208000),
+    KOALA(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Koala", 214500, 221100, 227800, 234600, 241500),
+    DAY_DREAMER(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Day Dreamer", 248500, 255600, 262800, 270100, 277500),
 
-    POWER_NAP(ChatColor.YELLOW + "" + ChatColor.BOLD + "" + ChatColor.ITALIC + "Power Nap", 285000, 292600, 300300, 308100, 316000),
-    BEAR(ChatColor.GREEN + "" + ChatColor.BOLD + "" + ChatColor.ITALIC + "Bear", 324000, 332100, 340300, 348600, 357000),
-    BED_WARRIOR(ChatColor.AQUA + "" + ChatColor.BOLD + "" + ChatColor.ITALIC + "Bed Warrior", 365500, 374100, 382800, 391600, 400500),
-    SNORLAX(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "" + ChatColor.ITALIC + "Snorlax", 409500, 418600, 427800, 437100, 446500),
-    SANDMAN(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.ITALIC + "Sandman", 456000, 465600, 475300, 485100, 495000),
+    POWER_NAP(ChatColor.GOLD + "" + ChatColor.BOLD + "Power Nap", 285000, 292600, 300300, 308100, 316000),
+    BEAR(ChatColor.AQUA + "" + ChatColor.BOLD + "Bear", 324000, 332100, 340300, 348600, 357000),
+    BED_WARRIOR(ChatColor.RED + "" + ChatColor.BOLD + "Bed Warrior", 365500, 374100, 382800, 391600, 400500),
+    SNORLAX(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Snorlax", 409500, 418600, 427800, 437100, 446500),
+    SANDMAN(ChatColor.YELLOW + "" + ChatColor.BOLD + "Sandman", 456000, 465600, 475300, 485100, 495000),
 
-    LULLABY(ChatColor.YELLOW + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Lullaby", 505000, 515100, 525300, 535600, 546000),
-    BED_BUG(ChatColor.GREEN + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Bed Bug", 556500, 567100, 577800, 588800, 600300),
-    SLEEPING_LION(ChatColor.AQUA + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Sleeping Lion", 612500, 625600, 639800, 655300, 672300),
-    TRANQUILISED(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Tranquilised", 691000, 711600, 734300, 759300, 786800),
-    NIGHTMARE(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Nightmare", 817000, 850100, 886300, 925800, 968800),
+    LULLABY(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Lullaby", 505000, 515100, 525300, 535600, 546000),
+    BED_BUG(ChatColor.GREEN + "" + ChatColor.BOLD + "Bed Bug", 556500, 567100, 577800, 588800, 600300),
+    SLEEPING_LION(ChatColor.GOLD + "" + ChatColor.BOLD + "Sleeping Lion", 612500, 625600, 639800, 655300, 672300),
+    TRANQUILISED(ChatColor.AQUA + "" + ChatColor.BOLD + "Tranquilised", 691000, 711600, 734300, 759300, 786800),
+    SLEEPLESS(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Sleepless", 817000, 850100, 886300, 925800, 968800),
+
+    DREAM_CATCHER(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "" + ChatColor.ITALIC + "Dream Catcher", 1015500, 1066100, 1120800, 1179800, 1243300),
+    MORPHEUS(ChatColor.BLUE + "" + ChatColor.BOLD + "" + ChatColor.ITALIC + "Morpheus", 1311500, 1384600, 1462800, 1546300, 1635300),
+    SLEEPING_BEAUTY(ChatColor.GREEN + "" + ChatColor.BOLD + "" + ChatColor.ITALIC + "Sleeping Beauty",
+            1730000, 1830600, 1937300, 2050300, 2169800),
+    ETERNAL_REST(ChatColor.GRAY + "" + ChatColor.BOLD + "" + ChatColor.ITALIC + "Eternal Rest",
+            2296000, 2429100, 2569300, 2716800, 2871800),
+
+    NIGHTMARE(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.ITALIC + "Nightmare", 3034500, 3205100, 3383800, 3570800, 3766300),
+    NIGHTMARE0(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.ITALIC + "" + ChatColor.UNDERLINE + "Nightmare", 4000000, -1, -1, -1, -1),
 
     ZZZZZZ(ChatColor.WHITE + "" + ChatColor.BOLD + "✸ Zzzzzz", -1, -1, -1, -1, -1);
 
 
     private String name;
+    private int cachedPts;
     private int start, lvl4, lvl3, lvl2, lvl1;
 
 
@@ -63,6 +76,7 @@ public enum BEDRank {
         for (BEDRank rank : ranks) {
             if (rank.getStart() != -1 && rank.getStart() <= points) {
                 //Rank found
+                rank.cachedPts = Math.toIntExact(points);
                 return rank;
 
 
@@ -74,12 +88,42 @@ public enum BEDRank {
     }
 
     public static boolean isNo1(String ign) {
-        if (BED.lastRecordsPoints < 500000L) {
+        if (BED.lastRecordsPoints < 2000000L) {
             //Saved another API operation
             return false;
         }
         String no1 = HiveAPI.getLeaderboardsPlaceHolder(0, "BED");
         return no1.equalsIgnoreCase(ign);
+    }
+
+    public static boolean isNo1(String ign, long validate) {
+        if (validate < 2000000L) return false;
+        String no1 = HiveAPI.getLeaderboardsPlaceHolder(0, "BED");
+        return no1.equalsIgnoreCase(ign);
+    }
+
+    public static BEDRank getFromDisplay(String display) {
+        return null;
+    }
+
+    @Override
+    public String getPrefix() {
+        return "";
+    }
+
+    @Override
+    public String getDisplay() {
+        return name;
+    }
+
+    @Override
+    public String getTotalDisplay() {
+        if (this == ZZZZZZ || this == NIGHTMARE0) {
+            return getName();
+        } else {
+            return getName().replace(ChatColor.stripColor(getName()), "") + BED.NUMBERS[getLevel(cachedPts)] + " " + ChatColor.stripColor(name);
+        }
+
     }
 
     public String getName() {
@@ -107,7 +151,7 @@ public enum BEDRank {
     }
 
     public int getLevel(int points) {
-        if (this == ZZZZZZ) {
+        if (this == ZZZZZZ || this == NIGHTMARE0) {
             return 0;
         }
         if (points >= getLvl1()) {
@@ -136,7 +180,7 @@ public enum BEDRank {
         if (this == ZZZZZZ) {
             return "Highest Rank";
         }
-        if (this == NIGHTMARE && this.getLevel(points) == 1) {
+        if (this == NIGHTMARE && this.getLevel(points) == 0) {
             return "Highest obtainable rank";
         }
         int level = getLevel(points);
@@ -151,23 +195,26 @@ public enum BEDRank {
                 return "";
             }
             String color = withColor ? next.getName().replaceAll(ChatColor.stripColor(next.getName()), "") : "";
+            if (next == NIGHTMARE0) {
+                return The5zigAPI.getAPI().translate("beezig.str.tonextrank", color + Log.df((next.getStart() - points)) + "", next.getName());
+            }
 
-            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", color + (next.getStart() - points) + "", BED.NUMBERS[5] + " " + next.getName());
+            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", color + Log.df((next.getStart() - points)) + "", BED.NUMBERS[5] + " " + next.getName());
 
 
         } else if (level == 2) {
             String color = withColor ? getName().replaceAll(ChatColor.stripColor(getName()), "") : "";
 
-            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", getLvl1() - points + "", color + BED.NUMBERS[1] + " " + getName());
+            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", Log.df(getLvl1() - points) + "", color + BED.NUMBERS[1] + " " + getName());
         } else if (level == 3) {
             String color = withColor ? getName().replaceAll(ChatColor.stripColor(getName()), "") : "";
-            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", getLvl2() - points + "", color + BED.NUMBERS[2] + " " + getName());
+            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", Log.df(getLvl2() - points) + "", color + BED.NUMBERS[2] + " " + getName());
         } else if (level == 4) {
             String color = withColor ? getName().replaceAll(ChatColor.stripColor(getName()), "") : "";
-            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", getLvl3() - points + "", color + BED.NUMBERS[3] + " " + getName());
+            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", Log.df(getLvl3() - points) + "", color + BED.NUMBERS[3] + " " + getName());
         } else if (level == 5) {
             String color = withColor ? getName().replaceAll(ChatColor.stripColor(getName()), "") : "";
-            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", getLvl4() - points + "", color + BED.NUMBERS[4] + " " + getName());
+            return The5zigAPI.getAPI().translate("beezig.str.tonextrank", Log.df(getLvl4() - points) + "", color + BED.NUMBERS[4] + " " + getName());
         }
         return null;
 

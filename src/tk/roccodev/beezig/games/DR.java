@@ -20,7 +20,6 @@ public class DR extends GameMode {
     public static String currentMapPB;
     public static String currentMapWR;
     public static String currentMapWRHolder;
-    public static String lastRecords = "";
     public static boolean dead = false;
     public static String role = null;
     public static long lastRecordPoints;
@@ -37,7 +36,6 @@ public class DR extends GameMode {
     public static boolean hasVoted = false;
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
 

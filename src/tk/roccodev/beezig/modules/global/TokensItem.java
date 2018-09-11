@@ -18,7 +18,7 @@ public class TokensItem extends GameModeItem<GameMode> {
     protected Object getValue(boolean dummy) {
         try {
 
-            return HiveAPI.tokens;
+            return Log.df(HiveAPI.tokens);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

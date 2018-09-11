@@ -13,8 +13,12 @@ import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.gnt.GiantRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
+import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGNT;
+import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGNTM;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGiant;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
+import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
@@ -70,39 +74,27 @@ public class GiantListener extends AbstractGameListener<Giant> {
                 // TODO Auto-generated catch block
                 e2.printStackTrace();
             }
-            String ign = The5zigAPI.getAPI().getGameProfile().getName();
-            Giant.totalKills = (int) HiveAPI.getKills(ign, ActiveGame.current());
-            Giant.totalDeaths = (int) HiveAPI.getDeaths(ign, ActiveGame.current());
+            String ign = The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "");
+            ApiGiant gnt = ActiveGame.is("GNTM") ? new ApiGNTM(ign) : new ApiGNT(ign);
+
+            Giant.totalKills = (int) gnt.getKills();
+            Giant.totalDeaths = (int) gnt.getDeaths();
 
             Giant.totalKdr = (double) Giant.totalKills / Giant.totalDeaths;
             Giant.gameKdr = Giant.totalKdr;
-            The5zigAPI.getLogger().info(Giant.totalKdr);
+
 
 
             Giant.rankObject = GiantRank
-                    .getFromDisplay(HiveAPI.GiantgetRank(The5zigAPI.getAPI().getGameProfile().getName(), lobby));
+                    .getFromDisplay(gnt.getTitle());
             Giant.rank = Giant.rankObject.getTotalDisplay();
 
-        }).start();
-
-        The5zigAPI.getLogger().info(instance.getName());
-        new Thread(() -> {
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-
-            try {
-
-                HiveAPI.GiantupdatePoints(instance.isMini());
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            APIValues.Giantpoints = gnt.getPoints();
 
         }).start();
+
+
+
     }
 
     @Override
@@ -169,6 +161,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
         } else if (message.startsWith(getPrefix(ActiveGame.current()) + "§3You are now playing on the ")) {
             Giant.team = message.replaceAll(getPrefix(ActiveGame.current()) + "§3You are now playing on the ", "")
                     .replaceAll("Team!", "");
+            Giant.inGame = true;
             gameMode.setState(GameState.GAME);
             DiscordUtils.updatePresence("Slaying in SkyGiants" + (ActiveGame.is("gntm") ? ":Mini" : ""), "Battling on " + Giant.activeMap, "game_giant");
         } else if (message.startsWith(getPrefix(ActiveGame.current()) + "§3Voting has ended! §bThe map §f")) {
@@ -180,12 +173,23 @@ public class GiantListener extends AbstractGameListener<Giant> {
             Giant.activeMap = ChatColor.stripColor(mapString.trim());
 
 
+        } else if (message.startsWith("§8▍ §e§lGiant§8 ▏ §7You killed the")) {
+            APIValues.Giantpoints += 50;
+            Giant.dailyPoints += 50;
         } else if (message.startsWith("§8▍ §6§lGold§8 ▏ §a✚ §3You gained")
                 && message.contains("for killing")) {
             if (message.contains("as a team")) {
+                if (Giant.isEnding) {
+                    System.out.println("Won!");
+                    // Won
+                    Giant.isEnding = false;
+                    Giant.hasWon = true;
+                    Giant.winstreak++;
+                    if (Giant.winstreak >= Giant.bestStreak) Giant.bestStreak = Giant.winstreak;
+                    StreakUtils.incrementWinstreakByOne("gnt");
+                }
                 Giant.giantKills++; // Giant kill
-                APIValues.Giantpoints += 50;
-                Giant.dailyPoints += 50;
+
             } else {
                 Giant.gameKills++;
                 APIValues.Giantpoints += 10;
@@ -194,15 +198,17 @@ public class GiantListener extends AbstractGameListener<Giant> {
                         / (double) (Giant.gameDeaths + Giant.totalDeaths == 0 ? 1
                         : Giant.gameDeaths + Giant.totalDeaths));
             }
+        } else if (message.contains(" §aWant to see this game's recap")) {
+            Giant.isEnding = true;
         }
 
         // Advanced Records
 
-        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             Giant.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ")) {
+        } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
             if (message.contains("User") || message.contains("Skill Rating")) {
                 return true;
             }
@@ -211,13 +217,13 @@ public class GiantListener extends AbstractGameListener<Giant> {
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             Giant.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o "))) {
+                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             Giant.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -225,24 +231,13 @@ public class GiantListener extends AbstractGameListener<Giant> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    ApiGiant api = new ApiGiant(Giant.lastRecords);
-                    Giant.isRecordsRunning = true;
+
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
                         GiantRank rank = null;
 
-                        Integer wr = Setting.Giant_SHOW_WINRATE.getValue() ? (int) (Math
-                                .floor(((double) HiveAPI.GiantgetWins(Giant.lastRecords, lobby)
-                                        / (double) HiveAPI.GiantgetGamesPlayed(Giant.lastRecords, lobby)) * 1000d)
-                                / 10d) : null;
-                        Double kd = Setting.Giant_SHOW_KD.getValue()
-                                ? Math.floor(((double) HiveAPI.GiantgetKills(Giant.lastRecords, lobby)
-                                / (double) HiveAPI.GiantgetDeaths(Giant.lastRecords, lobby) * 100d)) / 100d
-                                : null;
-                        Double ppg = Setting.Giant_SHOW_PPG.getValue() ? Math
-                                .round(((double) HiveAPI.GiantgetPoints(Giant.lastRecords, lobby)
-                                        / (double) HiveAPI.GiantgetGamesPlayed(Giant.lastRecords, lobby)) * 10d)
-                                / 10d : null;
+                        ApiGiant api = ActiveGame.is("GNTM") ? new ApiGNTM(AdvancedRecords.player) : new ApiGNT(AdvancedRecords.player);
 
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
                                 ? api.getParentMode().getNetworkTitle()
@@ -251,18 +246,19 @@ public class GiantListener extends AbstractGameListener<Giant> {
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
                             rankColor = api.getParentMode().getNetworkRankColor();
                         }
-                        long points;
+                        long points = 0;
+                        int vics = 0, played = 0, kills = 0, deaths = 0;
                         Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue()
-                                ? HiveAPI.lastGame(Giant.lastRecords, lobby)
+                                ? api.lastPlayed()
                                 : null;
                         String rankTitleGiant = Setting.SHOW_RECORDS_RANK.getValue()
-                                ? HiveAPI.GiantgetRank(Giant.lastRecords, lobby)
+                                ? api.getTitle()
                                 : null;
                         The5zigAPI.getLogger().info(rankTitleGiant);
                         // int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() &&
                         // HiveAPI.getLeaderboardsPlacePoints(349, "DR") <
-                        // HiveAPI.DRgetPoints(Giant.lastRecords)) ?
-                        // HiveAPI.getMonthlyLeaderboardsRank(Giant.lastRecords, "DR") : 0;
+                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
+                        // HiveAPI.getMonthlyLeaderboardsRank(AdvancedRecords.player, "DR") : 0;
                         if (rankTitleGiant != null)
                             rank = GiantRank.getFromDisplay(rankTitleGiant);
                         List<String> messages = new ArrayList<>(Giant.messagesToSend);
@@ -297,52 +293,80 @@ public class GiantListener extends AbstractGameListener<Giant> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Total Points: §b")) {
-                                StringBuilder sb = new StringBuilder();
-                                sb.append("§3 Points: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Total Points: §b", ""));
-                                sb.append(points);
-                                The5zigAPI.getLogger().info(rank);
-                                if (rank != null)
-                                    sb.append(" (").append(rank.getTotalDisplay());
-                                // if(Setting.Giant_SHOW_POINTS_TO_NEXT_RANK.getValue()) sb.append(" / " +
-                                // rank.getPointsToNextRank((int)points));
-                                if (rank != null)
-                                    sb.append("§b)");
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
-                                continue;
-
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
+                            }
+
+                            if (s.startsWith("§3 Total Points: §b")) {
+                                StringBuilder sb = new StringBuilder();
+                                sb.append("§3 Points: §b");
+                                points = currentValue;
+                                sb.append(newData[1]);
+
+                                if (rank != null)
+                                    sb.append(" (").append(rank.getTotalDisplay());
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue())
+                                    sb.append(" / ").append(rank.getPointsToNextRank((int) points));
+                                if (rank != null)
+                                    sb.append("§b)");
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
+
+
+                            }
+                            else if(s.startsWith("§3 Games Played: §b"))  played = Math.toIntExact(currentValue);
+                            else if(s.startsWith("§3 Victories: §b"))  vics = Math.toIntExact(currentValue);
+                            else if(s.startsWith("§3 Kills: §b"))  kills = Math.toIntExact(currentValue);
+                            else if(s.startsWith("§3 Deaths: §b"))  deaths = Math.toIntExact(currentValue);
+
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
+                        Integer wr = Setting.SHOW_RECORDS_WINRATE.getValue() ? (int) (Math
+                                .floor(((double) vics
+                                        / (double) played) * 1000d)
+                                / 10d) : null;
+                        Double kd = Setting.SHOW_RECORDS_KDR.getValue()
+                                ? Math.floor(((double) kills
+                                / (double) deaths * 100d)) / 100d
+                                : null;
+                        Double ppg = Setting.SHOW_RECORDS_PPG.getValue() ? Math
+                                .round(((double) points
+                                        / (double) played) * 10d)
+                                / 10d : null;
+
+
                         if (ppg != null)
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + ppg);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + ppg);
                         if (kd != null)
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + kd);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 K/D: §b" + kd);
                         if (wr != null)
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + wr + "%");
-                        /*
-                         * if(monthlyRank != 0){ The5zigAPI.getAPI().messagePlayer("§o " +
-                         * "§3 Monthly Leaderboards: §b#" + monthlyRank); }
-                         */
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + wr + "%");
+
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
-                            lastSeen.setTimeInMillis(HiveAPI.lastGame(Giant.lastRecords, lobby).getTime());
+                            lastSeen.setTimeInMillis(lastGame.getTime());
 
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : Giant.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
                         Giant.messagesToSend.clear();
                         Giant.footerToSend.clear();
-                        Giant.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -350,7 +374,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             Giant.messagesToSend.clear();
                             Giant.footerToSend.clear();
-                            Giant.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -366,7 +390,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         Giant.messagesToSend.clear();
                         Giant.footerToSend.clear();
-                        Giant.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;

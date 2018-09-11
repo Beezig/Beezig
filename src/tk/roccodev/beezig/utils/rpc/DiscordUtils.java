@@ -1,8 +1,10 @@
 package tk.roccodev.beezig.utils.rpc;
 
-import club.minnced.discord.rpc.DiscordEventHandlers;
-import club.minnced.discord.rpc.DiscordRPC;
-import club.minnced.discord.rpc.DiscordRichPresence;
+import com.jagrosh.discordipc.IPCClient;
+import com.jagrosh.discordipc.IPCListener;
+import com.jagrosh.discordipc.entities.RichPresence;
+import com.jagrosh.discordipc.entities.User;
+import com.jagrosh.discordipc.exceptions.NoDiscordClientException;
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.settings.Setting;
@@ -10,57 +12,54 @@ import tk.roccodev.beezig.settings.Setting;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.OffsetDateTime;
 
 public class DiscordUtils {
 
-    public static Thread callbacksThread;
-    public static boolean init;
+
     public static boolean shouldOperate = true;
+    private static IPCClient rpcClient;
 
     public static void init() {
-        if (!shouldOperate)
+        if (!Setting.DISCORD_RPC.getValue())
             return;
-        DiscordRPC lib = DiscordRPC.INSTANCE;
-        String applicationId = "439523115383652372";
+        IPCClient client = new IPCClient(439523115383652372L);
+        client.setListener(new IPCListener() {
+            @Override
+            public void onReady(IPCClient client, User user) {
+                System.out.println("Connected to Discord as " + user.getName() + "#" + user.getDiscriminator() + "! ("
+                        + user.getId() + ")");
 
-        DiscordEventHandlers handlers = new DiscordEventHandlers();
-        handlers.disconnected = (errorCode, message) -> System.out.println("RPC: " + message);
-        handlers.ready = user -> {
+                new Thread(() -> {
+                    try {
+                        URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/check/"
+                                + user.getId());
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.addRequestProperty("User-Agent", Log.getUserAgent());
+                        if (conn.getResponseCode() == 404) {
+                            The5zigAPI.getAPI().messagePlayer(Log.info
+                                    + "You are using Discord, but you're not in our server! Make sure to join.\nInvite: §ehttp://discord.gg/se7zJsU");
+                        }
 
-            System.out.println("Connected to Discord as " + user.username + "#" + user.discriminator + "! ("
-                    + user.userId + ")");
-            new Thread(() -> {
-                try {
-                    URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/check/"
-                            + user.userId);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.addRequestProperty("User-Agent", Log.getUserAgent());
-                    if (conn.getResponseCode() == 404) {
-                        The5zigAPI.getAPI().messagePlayer(Log.info
-                                + "You are using Discord, but you're not in our server! Make sure to join.\nInvite: §ehttp://discord.gg/se7zJsU");
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+
                     }
+                }, "Server Ping").start();
 
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
+                rpcClient = client;
 
-                }
-            }, "Server Ping").start();
 
-        };
-        lib.Discord_Initialize(applicationId, handlers, true, "");
-
-        callbacksThread = new Thread(() -> {
-            while (!Thread.currentThread().isInterrupted()) {
-                lib.Discord_RunCallbacks();
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException ignored) {
-
-                }
             }
-        }, "RPC Callbacks");
-        callbacksThread.start();
+
+        });
+        try {
+            client.connect();
+        } catch (NoDiscordClientException e) {
+            e.printStackTrace();
+        }
     }
+
 
     /**
      * Updates the RPC presence.
@@ -76,22 +75,20 @@ public class DiscordUtils {
             return;
         new Thread(() -> {
             try {
-                DiscordRichPresence presence = new DiscordRichPresence();
-                presence.startTimestamp = System.currentTimeMillis() / 1000; // epoch second
-                presence.details = newPresence;
 
-                presence.largeImageKey = "background";
+                RichPresence.Builder builder = new RichPresence.Builder();
+                builder.setDetails(newPresence)
+                        .setStartTimestamp(OffsetDateTime.now())
+                        .setLargeImage("background");
+
                 if (opts.length >= 1)
-                    presence.state = opts[0];
+                    builder.setState(opts[0]);
                 if (opts.length >= 2)
-                    presence.smallImageKey = opts[1];
-                if (opts.length >= 3) {
-                    presence.partyMax = Integer.parseInt(opts[2]);
-                    presence.partySize = 1;
-                }
-                if (opts.length >= 4)
-                    presence.partyId = opts[3];
-                DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
+                    builder.setSmallImage(opts[1]);
+
+
+                rpcClient.sendRichPresence(builder.build());
+
 
             } catch (Throwable e) {
                 e.printStackTrace();
@@ -100,6 +97,16 @@ public class DiscordUtils {
             }
         }).start();
 
+    }
+
+    public static void clearPresence() {
+        if (rpcClient != null)
+            rpcClient.sendRichPresence(null);
+    }
+
+    public static void closeClient() {
+        if (rpcClient != null)
+            rpcClient.close();
     }
 
 }

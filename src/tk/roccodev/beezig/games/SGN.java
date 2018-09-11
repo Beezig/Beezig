@@ -16,8 +16,6 @@ public class SGN extends GameMode {
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
-    public static String lastRecords = "";
     public static List<String> votesToParse = new ArrayList<>();
     public static boolean hasVoted = false;
     public static int gamePts;

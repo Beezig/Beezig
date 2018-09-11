@@ -1,8 +1,10 @@
 package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.api.BeezigAPI;
 import tk.roccodev.beezig.settings.Setting;
 
 public class SettingsCommand implements Command {
@@ -22,6 +24,13 @@ public class SettingsCommand implements Command {
     public boolean execute(String[] args) {
         if (!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
         if (args.length == 0) {
+            if (BeezigMain.hasExpansion) {
+
+                The5zigAPI.getAPI().messagePlayer(Log.info + "Opening Settings GUI...");
+                BeezigAPI.get().getListener().onDisplaySettingsGui(Setting.values());
+
+                return true;
+            }
             The5zigAPI.getAPI().messagePlayer(Log.info + "Usage:");
             The5zigAPI.getAPI().messagePlayer("§7-§b /settings list §3to list all settings");
             The5zigAPI.getAPI().messagePlayer("§7-§b /settings filter [gamemode] §3to list filtered settings");
@@ -78,8 +87,6 @@ public class SettingsCommand implements Command {
             }
             sett.setValue(b);
             The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully updated setting.");
-        } else {
-
         }
         return true;
     }

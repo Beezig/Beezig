@@ -1,13 +1,15 @@
 package tk.roccodev.beezig.hiveapi.stuff.timv;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static eu.the5zig.util.minecraft.ChatColor.*;
 
-public enum TIMVRank {
+public enum TIMVRank implements RankEnum {
 
     CIVILIAN("Civilian", GRAY + "", 0),
     INSPECTOR("Inspector", DARK_AQUA + "", 105),
@@ -50,6 +52,11 @@ public enum TIMVRank {
     }
 
 
+    @Override
+    public String getPrefix() {
+        return prefix;
+    }
+
     public String getDisplay() {
         return display;
     }
@@ -76,7 +83,7 @@ public enum TIMVRank {
         }
 
 
-        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getStart() - karma), next.getTotalDisplay());
+        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + Log.df(next.getStart() - karma), next.getTotalDisplay());
     }
 
 }

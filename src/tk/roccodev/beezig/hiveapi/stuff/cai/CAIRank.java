@@ -2,13 +2,15 @@ package tk.roccodev.beezig.hiveapi.stuff.cai;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static eu.the5zig.util.minecraft.ChatColor.*;
 
-public enum CAIRank {
+public enum CAIRank implements RankEnum {
 
     CAMPFIRE("Campfire", GOLD + "", 0),
     BLACKSMITH("Blacksmith", LIGHT_PURPLE + "", 100),
@@ -47,6 +49,11 @@ public enum CAIRank {
         return null;
     }
 
+    @Override
+    public String getPrefix() {
+        return prefix;
+    }
+
 
     public String getDisplay() {
         return display;
@@ -75,7 +82,7 @@ public enum CAIRank {
         }
 
 
-        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getStart() - points), next.getTotalDisplay());
+        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + Log.df(next.getStart() - points), next.getTotalDisplay());
     }
 
 }

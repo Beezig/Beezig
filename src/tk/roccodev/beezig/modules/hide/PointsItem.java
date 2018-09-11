@@ -36,15 +36,15 @@ public class PointsItem extends GameModeItem<HIDE> {
             if ((boolean) getProperties().getSetting("showrank").get()) {
                 StringBuilder sb = new StringBuilder();
                 if ((boolean) getProperties().getSetting("showcolor").get()) {
-                    sb.append(APIValues.HIDEpoints).append(" (").append(HIDE.rank).append(getMainFormatting());
+                    sb.append(Log.df(APIValues.HIDEpoints)).append(" (").append(HIDE.rank).append(getMainFormatting());
 
                 } else {
 
-                    sb.append(APIValues.HIDEpoints).append(" (").append(ChatColor.stripColor(HIDE.rank));
+                    sb.append(Log.df(APIValues.HIDEpoints)).append(" (").append(ChatColor.stripColor(HIDE.rank));
                 }
 
                 if ((boolean) getProperties().getSetting("showpointstonextrank").get()) {
-                    if (HIDE.rankObject == null) return APIValues.HIDEpoints;
+                    if (HIDE.rankObject == null) return Log.df(APIValues.HIDEpoints);
                     sb.append((boolean) getProperties().getSetting("showcolor").get() ? " / " + HIDE.rankObject.getPointsToNextRank((int) APIValues.HIDEpoints) : " / " + ChatColor.stripColor(HIDE.rankObject.getPointsToNextRank((int) APIValues.HIDEpoints)));
 
                 }
@@ -56,7 +56,7 @@ public class PointsItem extends GameModeItem<HIDE> {
                                 ")");
                 return sb.toString().trim();
             }
-            return APIValues.HIDEpoints;
+            return Log.df(APIValues.HIDEpoints);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

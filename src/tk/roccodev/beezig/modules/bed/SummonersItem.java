@@ -122,8 +122,27 @@ public class SummonersItem extends GameModeItem<BED> {
 
 
     }
+    
+    
 
     @Override
+	public int getHeight(boolean dummy) {
+    	ResourcesMode mode = (ResourcesMode) getProperties().getSetting("mode").get();
+    	switch(mode) {
+    	
+    	case INLINE:
+    	case INLINE_SHORTENED:
+    		return super.getHeight(dummy);
+    	case EXTENDED:
+    		return 10 + (BED.diamondGen != 0 ? 10 : 0)
+    				+ (BED.ironGen != 0 ? 10 : 0)
+    				+ (BED.goldGen != 0 ? 10 : 0);
+    	}
+    	
+    	return super.getHeight(dummy);
+	}
+
+	@Override
     public String getName() {
         return Log.t("beezig.module.bed.summoners");
     }
@@ -133,7 +152,7 @@ public class SummonersItem extends GameModeItem<BED> {
     public void registerSettings() {
 
 
-        getProperties().addSetting("mode", ResourcesMode.EXTENDED, ResourcesMode.class);
+        getProperties().addSetting("mode", ResourcesMode.INLINE, ResourcesMode.class);
         getProperties().addSetting("showcolors", true);
 
     }

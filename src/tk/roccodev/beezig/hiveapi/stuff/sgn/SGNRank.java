@@ -2,13 +2,15 @@ package tk.roccodev.beezig.hiveapi.stuff.sgn;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
 
-public enum SGNRank {
+public enum SGNRank implements RankEnum {
 
     STRAY("Stray", "§7", 0),
     WANDERER("Wanderer", "§3", 1000),
@@ -76,7 +78,7 @@ public enum SGNRank {
         }
 
 
-        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getRequiredPoints() - points), next.getTotalDisplay());
+        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + Log.df(next.getRequiredPoints() - points), next.getTotalDisplay());
     }
 
 

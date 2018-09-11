@@ -49,12 +49,15 @@ public class ReportCommand implements Command {
         new Thread(() -> {
             String rawArgs = String.join(" ", args);
             String[] rawPlayers = rawArgs.replaceAll(", ", ",").split(" ");
-            String data0 = rawPlayers[0];
+            String players = rawPlayers[0];
             ArrayList<String> argsL = new ArrayList<>(Arrays.asList(rawPlayers));
             argsL.remove(0);
-            String data1 = String.join(" ", argsL);
-            System.out.println(data0 + " / " + data1);
-            String players = data0;
+            String reason = String.join(" ", argsL);
+
+            if (reason.contains("swear") || reason.contains("spam") || reason.contains("racis")) {
+                The5zigAPI.getAPI().messagePlayer(Log.info + "This is not the proper way to report chat offences. Please use /chatreport instead.");
+                return;
+            }
             for (String s : players.split(",")) {
                 ApiHiveGlobal api = new ApiHiveGlobal(s);
                 // Trigger an error if needed
@@ -73,7 +76,6 @@ public class ReportCommand implements Command {
 
             }
 
-            String reason = data1;
 
             try {
                 URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/report");

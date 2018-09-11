@@ -7,6 +7,7 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
+import tk.roccodev.beezig.utils.StreakUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,11 +19,15 @@ public class HIDE extends GameMode {
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
-    public static String lastRecords = "";
-
     public static boolean hasVoted = false;
     public static List<String> votesToParse = new ArrayList<>();
+
+
+    public static boolean inGame;
+    public static boolean hasWon;
+    public static int winstreak;
+    public static int bestStreak;
+
     public static int dailyPoints;
     public static boolean seeking;
     public static int lastPts;
@@ -80,11 +85,18 @@ public class HIDE extends GameMode {
     public static void reset(HIDE gameMode) {
 
         gameMode.setState(GameState.FINISHED);
-
+        if (inGame && !hasWon) {
+            boolean wasBest = winstreak >= bestStreak;
+            System.out.println("Lost!");
+            winstreak = 0;
+            StreakUtils.resetWinstreak("hide", wasBest);
+        }
+        inGame = false;
+        hasWon = false;
         HIDE.messagesToSend.clear();
         HIDE.footerToSend.clear();
         HIDE.votesToParse.clear();
-        HIDE.isRecordsRunning = false;
+
         HIDE.hasVoted = false;
         HIDE.activeMap = null;
         lastPts = 0;

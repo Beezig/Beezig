@@ -5,6 +5,7 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import org.json.simple.JSONObject;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
@@ -14,10 +15,13 @@ import tk.roccodev.beezig.hiveapi.stuff.bp.BPRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiBP;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.ws.Connector;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
@@ -51,7 +55,7 @@ public class BPListener extends AbstractGameListener<BP> {
                 }
                 Thread.sleep(500);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                The5zigAPI.getLogger().info(sb.getTitle());
+
 
                 ApiBP api = new ApiBP(The5zigAPI.getAPI().getGameProfile().getName());
 
@@ -62,6 +66,17 @@ public class BPListener extends AbstractGameListener<BP> {
                     BP.rankObject = BPRank.getFromDisplay(api.getTitle());
                     BP.rank = BP.rankObject.getTotalDisplay();
 
+                }
+
+                // Custom jukebox
+                if (Setting.BP_JUKEBOX.getValue()) {
+                    JSONObject obj = APIUtils.getObject(APIUtils.readURL(new URL("https://hivemc.com/ajax/getblockpartyserver/" + The5zigAPI.getAPI().getGameProfile().getName())));
+                    String server = (String) obj.get("server"); // Either "NONE" or the server the player is in
+                    if (server.equals("NONE")) {
+                        System.out.println("No server, skipping.");
+                        return;
+                    }
+                    Connector.connectBP(server);
                 }
 
             } catch (Exception e) {
@@ -100,17 +115,17 @@ public class BPListener extends AbstractGameListener<BP> {
             APIValues.BPpoints += 5;
             BP.gamePts += 5;
             BP.dailyPoints += 5;
-        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             BP.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ")) {
+        } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
 
             BP.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             BP.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
@@ -120,7 +135,7 @@ public class BPListener extends AbstractGameListener<BP> {
             BP.gamePts++;
             BP.dailyPoints++;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o "))) {
+                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             BP.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -128,11 +143,11 @@ public class BPListener extends AbstractGameListener<BP> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    BP.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiBP api = new ApiBP(BP.lastRecords);
+                        ApiBP api = new ApiBP(AdvancedRecords.player);
                         BPRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -169,7 +184,7 @@ public class BPListener extends AbstractGameListener<BP> {
 
                         // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
                         // HiveAPI.getLeaderboardsPlacePoints(349, "BP") <
-                        // HiveAPI.DRgetPoints(BP.lastRecords)) ?
+                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
                         // HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 
                         List<String> messages = new ArrayList<>(BP.messagesToSend);
@@ -203,67 +218,74 @@ public class BPListener extends AbstractGameListener<BP> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Points: §b")) {
+                            }
+
+
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
+                            }
+
+                            if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
-                                sb.append(points);
+                                points = currentValue;
+                                sb.append(newData[1]);
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
-                                if (Setting.BP_SHOW_POINTS_TO_NEXT_RANK.getValue())
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue())
                                     sb.append(" / ").append(rank.getPointsToNextRank((int) points));
                                 if (rank != null)
                                     sb.append("§b)");
 
                                 // if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
                             } else if (s.startsWith("§3 Victories: §b")) {
-                                victories = Integer.parseInt(
-                                        ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+                                victories = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Games Played: §b")) {
-                                gamesPlayed = Integer.parseInt(
-                                        ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+                                gamesPlayed = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Kills: §b")) {
-                                kills = Integer
-                                        .parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
                             } else if (s.startsWith("§3 Deaths: §b")) {
-                                deaths = Integer
-                                        .parseInt(ChatColor.stripColor(s.replaceAll("§3 Deaths: §b", "").trim()));
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
                         if (achievements != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/27");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/27");
                         }
 
-                        if (Setting.BP_SHOW_WINRATE.getValue()) {
+                        if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + df1f.format(wr) + "%");
                         }
-                        if (Setting.BP_SHOW_PPG.getValue()) {
+                        if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points Per Game: §b" + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Points Per Game: §b" + df1f.format(ppg));
                         }
 
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : BP.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
                         BP.messagesToSend.clear();
                         BP.footerToSend.clear();
-                        BP.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -271,7 +293,7 @@ public class BPListener extends AbstractGameListener<BP> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             BP.messagesToSend.clear();
                             BP.footerToSend.clear();
-                            BP.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -287,7 +309,7 @@ public class BPListener extends AbstractGameListener<BP> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         BP.messagesToSend.clear();
                         BP.footerToSend.clear();
-                        BP.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;

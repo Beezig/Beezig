@@ -1,7 +1,10 @@
 package tk.roccodev.beezig.listener;
 
 import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.server.*;
+import eu.the5zig.mod.server.AbstractGameListener;
+import eu.the5zig.mod.server.GameMode;
+import eu.the5zig.mod.server.GameState;
+import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.games.GNT;
 import tk.roccodev.beezig.games.GNTM;
@@ -35,15 +38,14 @@ public class HiveListener extends AbstractGameListener<GameMode> {
     public boolean onServerChat(GameMode gameMode, String message) {
         if (message.contains("§eGold Medal Awarded!")) {
             HiveAPI.medals++;
-        } else if (message != null && ChatColor.stripColor(message).contains("▍ Tokens ▏ You earned")) {
+        } else if (ChatColor.stripColor(message).contains("▍ Tokens ▏ You earned")) {
 
             String[] data = ChatColor.stripColor(message).replaceAll("▍ Tokens ▏ You earned", "").split("tokens");
-
             int tokens = Integer.parseInt(data[0].trim());
 
             HiveAPI.tokens += tokens;
 
-        } else if (message != null && message.contains("§b EXTRA tokens this round!")) {
+        } else if (message.contains("§b EXTRA tokens this round!")) {
             //§8▍ §3§lBed§b§lWars§8 ▏ §bThanks to the §dultimate§b member §dGryffin§b you gained §a25§b EXTRA tokens this round!
             //idk if thats how it works
             HiveAPI.tokens += Integer.parseInt(ChatColor.stripColor(message.split("EXTRA")[0].split("you gained ")[1].trim()));
@@ -76,7 +78,7 @@ public class HiveListener extends AbstractGameListener<GameMode> {
 
             The5zigAPI.getLogger().info("Connected to DR! -Hive");
             DiscordUtils.updatePresence("Parkouring in DeathRun", "In Lobby", "game_dr");
-        } else if (key.equals("bed.welcome") || (key.equals("bed.spectator") && gameMode == null)) {
+        } else if (key.equals("bed.welcome") || (key.equals("bed.spectator") || key.equals("bed.fallback") && gameMode == null)) {
             getGameListener().switchLobby("BED");
 
             The5zigAPI.getLogger().info("Connected to BED/BEDT! -Hive");

@@ -16,6 +16,7 @@ import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiTIMV;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
@@ -181,36 +182,36 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             The5zigAPI.getLogger().info("FALLBACK: " + map);
 
             TIMV.activeMap = TIMV.mapsPool.get(map.toLowerCase());
-        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             //"          §6§m                  §f ItsNiklass's Stats §6§m                  "
             //Advanced Records
             TIMV.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ") && !message.endsWith(" ")) {
+        } else if (message.startsWith("§3 ") && !message.endsWith(" ") && Setting.ADVANCED_RECORDS.getValue()) {
 
             TIMV.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             //TODO Coloring
             TIMV.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
-        } else if ((message.equals("                      §6§m                  §6§m                  ") && !message.startsWith("§o "))) {
+        } else if ((message.equals("                      §6§m                  §6§m                  ") && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             TIMV.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
             if (TIMV.footerToSend.contains("                      §6§m                  §6§m                  ")) {
                 //Send AdvRec
                 new Thread(() -> {
-                    TIMV.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
-                        The5zigAPI.getLogger().info(TIMV.lastRecords);
-                        ApiTIMV api = new ApiTIMV(TIMV.lastRecords);
+                        The5zigAPI.getLogger().info(AdvancedRecords.player);
+                        ApiTIMV api = new ApiTIMV(AdvancedRecords.player);
                         TIMVRank rank = null;
                         Long rolepoints = Setting.TIMV_SHOW_KRR.getValue() ? api.getRolepoints() : null;
                         if (rolepoints == null && Setting.TIMV_SHOW_TRAITORRATIO.getValue()) {
@@ -232,6 +233,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                         List<String> messages = new ArrayList<>(TIMV.messagesToSend);
                         Iterator<String> it = messages.iterator();
                         for (String s : messages) {
+
 
                             if (s.trim().endsWith("'s Stats §6§m")) {
                                 //"          §6§m                  §f ItsNiklass's Stats §6§m                  "
@@ -262,31 +264,41 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                                 continue;
                             }
 
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
+                            }
+
                             if (s.startsWith("§3 Karma: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Karma: §b");
-                                karma = Long.parseLong(s.replaceAll("§3 Karma: §b", ""));
-                                sb.append(karma);
+                                karma = currentValue;
+                                sb.append(newData[1]);
                                 if (rank != null) sb.append(" (").append(rank.getTotalDisplay());
-                                if (Setting.TIMV_SHOW_KARMA_TO_NEXT_RANK.getValue() && rank != null) {
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue() && rank != null) {
                                     sb.append(" / ").append(rank.getKarmaToNextRank((int) karma));
                                 }
                                 sb.append("§b)");
                                 The5zigAPI.getAPI().messagePlayer(sb.toString().trim() + " ");
                                 continue;
                             } else if (s.startsWith("§3 Traitor Points: §b") && karma > 1000 && Setting.TIMV_SHOW_TRAITORRATIO.getValue()) {
-                                String[] contents = s.split(":");
-                                traitorPoints = Integer.parseInt(s.replaceAll("§3 Traitor Points: §b", "").trim());
+                                traitorPoints = Math.toIntExact(currentValue);
                                 long rp = rolepoints;
                                 double tratio = Math.round(((double) traitorPoints / (double) rp) * 1000d) / 10d;
                                 ChatColor ratioColor = ChatColor.AQUA;
                                 if (tratio >= TIMV.TRATIO_LIMIT) {
                                     ratioColor = ChatColor.RED;
                                 }
-                                The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Traitor Points: " + ChatColor.AQUA + traitorPoints + " (" + ratioColor + tratio + "%" + ChatColor.AQUA + ") ");
+                                The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Traitor Points: " + ChatColor.AQUA + newData[1] + " (" + ratioColor + tratio + "%" + ChatColor.AQUA + ") ");
                                 continue;
                             }
-                            The5zigAPI.getAPI().messagePlayer(s + " ");
+
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
@@ -303,7 +315,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                         if (krr != null) {
                             The5zigAPI.getAPI().messagePlayer("§o§3 Karma/Rolepoints: §b" + krr + " ");
                         }
-                        if (monthlyRank != 0) {
+                        if (monthlyRank > 0) {
                             The5zigAPI.getAPI().messagePlayer("§o§3 Monthly Leaderboards: §b#" + monthlyRank + " ");
                         }
                         if (lastGame != null) {
@@ -316,13 +328,13 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
 
                         for (String s : TIMV.footerToSend) {
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
 
                         TIMV.messagesToSend.clear();
                         TIMV.footerToSend.clear();
-                        TIMV.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
 
                     } catch (Exception e) {
@@ -331,7 +343,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             TIMV.messagesToSend.clear();
                             TIMV.footerToSend.clear();
-                            TIMV.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
@@ -345,7 +357,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                         The5zigAPI.getAPI().messagePlayer("§o " + "                      §6§m                  §6§m                  ");
                         TIMV.messagesToSend.clear();
                         TIMV.footerToSend.clear();
-                        TIMV.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
 
 

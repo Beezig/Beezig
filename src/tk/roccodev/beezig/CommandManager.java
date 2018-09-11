@@ -37,7 +37,7 @@ public class CommandManager {
 
 
         try {
-            if (!cmdFound.execute(dataList.toArray(new String[dataList.size()]))) {
+            if (!cmdFound.execute(dataList.toArray(new String[0]))) {
                 return false; //Skip the command
             }
 

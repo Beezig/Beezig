@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.modules.bed;
 
 import eu.the5zig.mod.modules.GameModeItem;
+import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 
 public class WinstreakItem extends GameModeItem<BED> {
@@ -12,7 +13,10 @@ public class WinstreakItem extends GameModeItem<BED> {
     @Override
     protected Object getValue(boolean dummy) {
         try {
-            return BED.winstreak;
+            boolean best = (boolean) getProperties().getSetting("showbest").get();
+
+            return Log.df(BED.winstreak) + (best ? " (" + Log.df(BED.bestStreak) + ")" : "");
+
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";
@@ -21,13 +25,19 @@ public class WinstreakItem extends GameModeItem<BED> {
 
     @Override
     public String getName() {
-        return "Winstreak";
+        return Log.t("beezig.module.winstreak");
+    }
+
+    @Override
+    public void registerSettings() {
+        getProperties().addSetting("showbest", true);
     }
 
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof BED)) return false;
+            if (!(getGameMode() instanceof BED))
+                return false;
             return dummy || (BED.shouldRender(getGameMode().getState()));
         } catch (Exception e) {
             return false;

@@ -1,13 +1,15 @@
 package tk.roccodev.beezig.hiveapi.stuff.sky;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static eu.the5zig.util.minecraft.ChatColor.*;
 
-public enum SKYRank {
+public enum SKYRank implements RankEnum {
 
     BRAWLER("Brawler", GRAY + "", 0),
     DEFENDER("Defender", GOLD + "", 250),
@@ -46,6 +48,11 @@ public enum SKYRank {
         return null;
     }
 
+    @Override
+    public String getPrefix() {
+        return prefix;
+    }
+
 
     public String getDisplay() {
         return display;
@@ -74,7 +81,7 @@ public enum SKYRank {
         }
 
 
-        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getStart() - points), next.getTotalDisplay());
+        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + Log.df(next.getStart() - points), next.getTotalDisplay());
     }
 
 }

@@ -5,7 +5,11 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.CommandManager;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.utils.ws.Client;
 import tk.roccodev.beezig.utils.ws.Connector;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class BeezigCommand implements Command {
 
@@ -38,7 +42,7 @@ public class BeezigCommand implements Command {
         } else if (args[0].equalsIgnoreCase("commands")) {
             The5zigAPI.getAPI().messagePlayer("\n" +
                     "    §7§m                                                                                    "
-                            );
+            );
             The5zigAPI.getAPI().messagePlayer(Log.info + "Available commands:");
             for (Command cmd : CommandManager.commandExecutors) {
                 The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + cmd.getAliases()[0]);
@@ -47,7 +51,15 @@ public class BeezigCommand implements Command {
                     "    §7§m                                                                                    "
                             + "\n");
         } else if (args[0].equalsIgnoreCase("reconnect")) {
-            Connector.client.reconnect();
+            new Thread(() -> {
+                Connector.client.close();
+                try {
+                    Connector.client = new Client(new URI(Connector.URL));
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+                Connector.client.connect();
+            }).start();
             The5zigAPI.getAPI().messagePlayer(Log.info + "Reconnected.");
         }
         return true;

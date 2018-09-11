@@ -17,7 +17,6 @@ import java.util.Date;
 
 public class HiveAPI {
 
-    public static long GiantPoints = 0;
 
     public static long medals = 0;
     public static long tokens = 0;
@@ -79,136 +78,7 @@ public class HiveAPI {
         }
     }
 
-    //Giant
-    public static void GiantupdatePoints(boolean mini) throws Exception {
-        String playername = The5zigAPI.getAPI().getGameProfile().getName();
-        JSONParser parser = new JSONParser();
-        JSONObject o;
 
-        o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(playername, mini ? "GNTM" : "GNT")));
-
-        GiantPoints = (long) o.get("total_points");
-    }
-
-    public static String GiantgetRank(String ign, String mode) {
-        boolean mini = mode.equalsIgnoreCase("GNTM");
-        JSONParser parser = new JSONParser();
-        JSONObject o = null;
-
-        try {
-            o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
-        } catch (Exception e) {
-            e.printStackTrace();
-            The5zigAPI.getLogger().info("Failed GiantgetRank");
-        }
-
-        return (String) o.get("title");
-    }
-
-    public static long GiantgetGamesPlayed(String ign, String mode) {
-        boolean mini = mode.equalsIgnoreCase("GNTM");
-        JSONParser parser = new JSONParser();
-        JSONObject o = null;
-
-        try {
-            o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
-        } catch (Exception e) {
-            e.printStackTrace();
-            The5zigAPI.getLogger().info("Failed GiantgetGamesPlayed");
-        }
-
-        return (long) o.get("games_played");
-    }
-
-    public static long GiantgetPoints(String ign, String mode) {
-        boolean mini = mode.equalsIgnoreCase("GNTM");
-        JSONParser parser = new JSONParser();
-        JSONObject o = null;
-
-        try {
-            o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
-        } catch (Exception e) {
-            e.printStackTrace();
-            The5zigAPI.getLogger().info("Failed GiantgetPoints");
-        }
-
-        return (long) o.get("total_points");
-    }
-
-    public static long GiantgetWins(String ign, String mode) {
-        boolean mini = mode.equalsIgnoreCase("GNTM");
-        JSONParser parser = new JSONParser();
-        JSONObject o = null;
-
-        try {
-            o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
-        } catch (Exception e) {
-            e.printStackTrace();
-            The5zigAPI.getLogger().info("Failed GiantgetWins");
-        }
-
-        return (long) o.get("victories");
-    }
-
-    public static long GiantgetKills(String ign, String mode) {
-        boolean mini = mode.equalsIgnoreCase("GNTM");
-        JSONParser parser = new JSONParser();
-        JSONObject o = null;
-
-        try {
-            o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
-        } catch (Exception e) {
-            e.printStackTrace();
-            The5zigAPI.getLogger().info("Failed GiantgetKills");
-        }
-
-        return (long) o.get("kills");
-    }
-
-    public static long GiantgetDeaths(String ign, String mode) {
-        boolean mini = mode.equalsIgnoreCase("GNTM");
-        JSONParser parser = new JSONParser();
-        JSONObject o = null;
-
-        try {
-            o = (JSONObject) parser.parse(readUrl(GameParsePlayerURL(ign, mini ? "GNTM" : "GNT")));
-        } catch (Exception e) {
-            e.printStackTrace();
-            The5zigAPI.getLogger().info("Failed GiantgetDeaths");
-        }
-
-        return (long) o.get("deaths");
-    }
-
-    public static long getKills(String ign, String game) {
-
-        JSONParser parser = new JSONParser();
-        JSONObject o = null;
-
-        try {
-            o = (JSONObject) parser.parse(readUrl(HiveAPI.GameParsePlayerURL(ign, game)));
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return (long) o.get("kills");
-    }
-
-    public static long getDeaths(String ign, String game) {
-
-        JSONParser parser = new JSONParser();
-        JSONObject o = null;
-
-        try {
-            o = (JSONObject) parser.parse(readUrl(HiveAPI.GameParsePlayerURL(ign, game)));
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return (long) o.get("deaths");
-    }
 
     public static void updateMedals() throws Exception {
         String playername = The5zigAPI.getAPI().getGameProfile().getName();

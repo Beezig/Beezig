@@ -7,6 +7,7 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.hiveapi.stuff.bp.BPRank;
+import tk.roccodev.beezig.utils.ws.Connector;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,8 +17,6 @@ public class BP extends GameMode {
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
-    public static String lastRecords = "";
     public static String song;
     public static String artist;
     public static int gamePts;
@@ -90,6 +89,7 @@ public class BP extends GameMode {
         if (The5zigAPI.getAPI().getActiveServer() != null)
             The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
         saveDailyPoints();
+        Connector.leaveLobbyBP();
     }
 
     public static boolean shouldRender(GameState state) {

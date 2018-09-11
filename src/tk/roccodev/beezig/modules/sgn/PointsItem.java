@@ -36,15 +36,15 @@ public class PointsItem extends GameModeItem<SGN> {
             if ((boolean) getProperties().getSetting("showrank").get()) {
                 StringBuilder sb = new StringBuilder();
                 if ((boolean) getProperties().getSetting("showcolor").get()) {
-                    sb.append(APIValues.SGNpoints).append(" (").append(SGN.rank).append(getMainFormatting());
+                    sb.append(Log.df(APIValues.SGNpoints)).append(" (").append(SGN.rank).append(getMainFormatting());
 
                 } else {
 
-                    sb.append(APIValues.SGNpoints).append(" (").append(ChatColor.stripColor(SGN.rank));
+                    sb.append(Log.df(APIValues.SGNpoints)).append(" (").append(ChatColor.stripColor(SGN.rank));
                 }
 
                 if ((boolean) getProperties().getSetting("showpointstonextrank").get()) {
-                    if (SGN.rankObject == null) return APIValues.SGNpoints;
+                    if (SGN.rankObject == null) return Log.df(APIValues.SGNpoints);
                     sb.append((boolean) getProperties().getSetting("showcolor").get() ? " / " + SGN.rankObject.getPointsToNextRank((int) APIValues.SGNpoints) : " / " + ChatColor.stripColor(SGN.rankObject.getPointsToNextRank((int) APIValues.SGNpoints)));
 
                 }
@@ -56,7 +56,7 @@ public class PointsItem extends GameModeItem<SGN> {
                                 ")");
                 return sb.toString().trim();
             }
-            return APIValues.SGNpoints;
+            return Log.df(APIValues.SGNpoints);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

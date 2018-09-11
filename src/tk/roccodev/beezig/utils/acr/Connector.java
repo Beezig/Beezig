@@ -2,6 +2,7 @@ package tk.roccodev.beezig.utils.acr;
 
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
+import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -23,7 +24,7 @@ public class Connector {
         conn.connect(); // Returns 302 if success, 200 if error
         StringBuilder cks = new StringBuilder();
         for (String s : conn.getHeaderFields().get("Set-Cookie")) {
-            cks.append(s.split(";")[0] + "; ");
+            cks.append(s.split(";")[0]).append("; ");
         }
 
         URL rep = new URL("https://report.hivemc.com/");
@@ -43,7 +44,7 @@ public class Connector {
 
     }
 
-    public static boolean sendReport(String chatReportId, String reason) {
+    public static boolean sendReport(String chatReportId, String reason, String player) {
         try {
             URL url = new URL("https://report.hivemc.com/ajax/receive");
             HttpURLConnection conn3 = (HttpURLConnection) url.openConnection();
@@ -56,11 +57,21 @@ public class Connector {
             conn3.setRequestProperty("X-Requested-With", "XMLHttpRequest");
             conn3.setRequestMethod("POST");
 
-            String uuidInfo = "http://api.hivemc.com/v1/chatreport/" + chatReportId;
-            String uuid = (String) APIUtils.getObject(APIUtils.readURL(new URL(uuidInfo))).get("UUID");
 
-            String urlParameters = "category=chat&reason=" + reason + "&comment=&evidence="
-                    + URLEncoder.encode("http://hivemc.com/chatlog/" + chatReportId) + "&UUIDs%5B%5D=" + uuid
+            String link;
+            String uuid;
+            if (chatReportId.startsWith("https://") || chatReportId.startsWith("http://")) {
+                link = chatReportId;
+                uuid = new ApiHiveGlobal(player).getUUID();
+            } else {
+                String uuidInfo = "http://api.hivemc.com/v1/chatreport/" + chatReportId;
+                uuid = (String) APIUtils.getObject(APIUtils.readURL(new URL(uuidInfo))).get("UUID");
+                link = "http://hivemc.com/chatlog/" + chatReportId;
+            }
+
+
+            String urlParameters = "category=chat&reason=" + reason + "&comment=Sent%20through%20Beezig&evidence="
+                    + URLEncoder.encode(link) + "&UUIDs%5B%5D=" + uuid
                     + "&notify=false&_token=" + reportToken;
 
             // Send post request
@@ -71,10 +82,9 @@ public class Connector {
                 os.write(urlParameters.getBytes(StandardCharsets.UTF_8));
             }
 
-            if (conn3.getResponseCode() == 200)
-                return true;
-            return false;
+            return conn3.getResponseCode() == 200;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
 

@@ -13,7 +13,7 @@ public class DailyItem extends GameModeItem<MIMV> {
     @Override
     protected Object getValue(boolean dummy) {
 
-        return MIMV.dailyPoints + " " + Log.t("beezig.module.timv.karma");
+        return Log.df(MIMV.dailyPoints) + " " + Log.t("beezig.module.timv.karma");
 
     }
 

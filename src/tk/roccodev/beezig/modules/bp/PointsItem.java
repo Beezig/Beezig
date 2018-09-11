@@ -46,16 +46,16 @@ public class PointsItem extends GameModeItem<BP> {
             if ((boolean) getProperties().getSetting("showrank").get()) {
                 StringBuilder sb = new StringBuilder();
                 if ((boolean) getProperties().getSetting("showcolor").get()) {
-                    sb.append(APIValues.BPpoints).append(" (").append(BP.rank).append(getMainFormatting());
+                    sb.append(Log.df(APIValues.BPpoints)).append(" (").append(BP.rank).append(getMainFormatting());
 
                 } else {
 
-                    sb.append(APIValues.BPpoints).append(" (").append(ChatColor.stripColor(BP.rank));
+                    sb.append(Log.df(APIValues.BPpoints)).append(" (").append(ChatColor.stripColor(BP.rank));
                 }
 
                 if ((boolean) getProperties().getSetting("showpointstonextrank").get()) {
                     if (BP.rankObject == null)
-                        return APIValues.BPpoints;
+                        return Log.df(APIValues.BPpoints);
                     sb.append((boolean) getProperties().getSetting("showcolor").get()
                             ? " / " + BP.rankObject.getPointsToNextRank((int) APIValues.BPpoints)
                             : " / " + ChatColor
@@ -69,7 +69,7 @@ public class PointsItem extends GameModeItem<BP> {
                                 getMainFormatting() + ")" : ")");
                 return sb.toString().trim();
             }
-            return APIValues.BPpoints;
+            return Log.df(APIValues.BPpoints);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

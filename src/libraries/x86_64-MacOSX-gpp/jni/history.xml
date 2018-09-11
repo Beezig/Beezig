@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.2.1 -dynamic -bundle -fexceptions -lstdc++">
+      <target file="libjunixsocket-native-2.0.4.jnilib" lastModified="14a0497e880">
+         <source file="../../../../obj/x86_64-MacOSX-gpp/org_newsclub_net_unix_NativeUnixSocket.o" lastModified="14a0497e498"/>
+      </target>
+   </processor>
+</history>

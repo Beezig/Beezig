@@ -7,6 +7,7 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.hiveapi.stuff.gnt.GiantRank;
+import tk.roccodev.beezig.utils.StreakUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -28,6 +29,12 @@ public class Giant extends GameMode {
     public static GiantRank rankObject;
 
 
+    public static boolean inGame;
+    public static boolean hasWon;
+    public static boolean isEnding;
+    public static int winstreak;
+    public static int bestStreak;
+
     //KDR
 
     public static int totalKills;
@@ -39,8 +46,6 @@ public class Giant extends GameMode {
     public static int dailyPoints;
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
-    public static boolean isRecordsRunning = false;
-    public static String lastRecords = "";
     public static List<String> votesToParse = new ArrayList<>();
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
@@ -98,6 +103,15 @@ public class Giant extends GameMode {
 
     public static void reset(Giant gameMode) {
 
+        if (inGame && !hasWon) {
+            boolean wasBest = winstreak >= bestStreak;
+            System.out.println("Lost!");
+            winstreak = 0;
+            StreakUtils.resetWinstreak("gnt", wasBest);
+        }
+        isEnding = false;
+        hasWon = false;
+        inGame = false;
         teamsEliminated = 0;
         gold = 0;
         team = "";

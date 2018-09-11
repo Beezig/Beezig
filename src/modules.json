@@ -62,9 +62,6 @@
           "type": "bedmap"
         },
         {
-          "type": "bedteam"
-        },
-        {
           "type": "bedteamsleft"
         },
         {
@@ -87,6 +84,9 @@
         },
         {
           "type": "beddaily"
+        },
+        {
+          "type": "bedstreak"
         },
         {
           "type": "bedresources"
@@ -174,6 +174,12 @@
         },
         {
           "type": "caidaily"
+        },
+        {
+          "type": "caistreak"
+        },
+        {
+          "type": "caicooldowns"
         }
       ]
     },
@@ -204,6 +210,9 @@
         },
         {
           "type": "skymap"
+        },
+        {
+          "type": "skystreak"
         }
       ]
     },

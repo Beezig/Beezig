@@ -53,8 +53,7 @@ public class ApiBED extends PvPMode {
 
     public MonthlyPlayer getMonthlyStatus() {
         try {
-            JSONObject o = APIUtils.getObject(APIUtils.readURL(new URL("https://roccodev-misc.firebaseio.com/bed-monthly.json")));
-            JSONObject j = (JSONObject) o.get(this.getUUID());
+            JSONObject j = APIUtils.getObject(APIUtils.readURL(new URL("https://roccodev-misc.firebaseio.com/bed-monthly/" + this.getUUID() + ".json")));
 
             return new MonthlyPlayer(this.getUUID(), (String) j.get("____name"), (int) (long) j.get("_____place"),
                     (long) j.get("__points"), (long) j.get("_kills"), (long) j.get("_kjdeaths"), (long) j.get("_victories"),

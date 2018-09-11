@@ -17,6 +17,8 @@ import tk.roccodev.beezig.hiveapi.stuff.bed.MonthlyPlayer;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
+import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
@@ -59,7 +61,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                     e2.printStackTrace();
                 }
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                The5zigAPI.getLogger().info(sb.getTitle());
+
                 BED.updateMode();
                 if (sb != null && sb.getTitle().contains("BED")) {
                     BED.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
@@ -104,25 +106,36 @@ public class BEDListener extends AbstractGameListener<BED> {
 
 
             DiscordUtils.updatePresence("Housekeeping in BedWars: " + BED.mode, "Playing on " + BED.activeMap, "game_bedwars");
-        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained") && message.contains("§a points for killing")) {
+        } else if (message.equals("                     §6§lWelcome to Hive BedWars!")) { // Not sure about this one
+            BED.inGame = true;
+        }
+        else if(message.equals("                        §6§lBedWars§7 - §a§lDouble Fun")) {
+          BED.inGame = true;
+          BED.mode = "Double Fun";
 
-            int i = Integer.parseInt(ChatColor.stripColor(message.split(" ")[5]));
+        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §2✚")) {
+            int pts = Integer.parseInt(message.split("§a")[1].split(" Points")[0]);
+            BED.pointsCounter += pts;
+            APIValues.BEDpoints += pts;
+            BED.dailyPoints += pts;
 
+            switch (pts) {
+
+                case 5:
+                case 10:
+                    BED.kills++;
+                    BED.updateKdr();
+                    break;
+                case 50:
+                case 65:
+                case 80:
+                    BED.bedsDestroyed++;
+                    break;
+
+            }
+        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §7Gained no points")) {
             BED.kills++;
-            BED.pointsCounter += i;
-            BED.dailyPoints += i;
-            APIValues.BEDpoints += i;
             BED.updateKdr();
-
-        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §aYou have gained") && message.contains("points for destroying")) {
-
-            int i = Integer.parseInt(ChatColor.stripColor(message.split(" ")[6]));
-
-            BED.pointsCounter += i;
-            BED.bedsDestroyed++;
-            BED.dailyPoints += i;
-            APIValues.BEDpoints += i;
-
         } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §e✯ §6Notable Win! §eGold Medal Awarded!")) {
 
             BED.pointsCounter += 100;
@@ -132,6 +145,9 @@ public class BEDListener extends AbstractGameListener<BED> {
             HiveAPI.tokens += 100;
             BED.hasWon = true;
             BED.winstreak++;
+            if (BED.winstreak >= BED.bestStreak)
+                BED.bestStreak = BED.winstreak;
+            StreakUtils.incrementWinstreakByOne("bed");
 
         } else if (message.contains("§c has been ELIMINATED!")) {
             BED.updateTeamsLeft();
@@ -139,24 +155,24 @@ public class BEDListener extends AbstractGameListener<BED> {
             BED.updateTeamsLeft();
         }
 
-        //Advanced Records
+        //Advanced Rec  ords
 
-        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             BED.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ")) {
+        } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
 
             BED.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             BED.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
-        } else if ((message.equals("                      §6§m                  §6§m                  ") && !message.startsWith("§o "))) {
+        } else if ((message.equals("                      §6§m                  §6§m                  ") && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             BED.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -164,11 +180,11 @@ public class BEDListener extends AbstractGameListener<BED> {
                 //Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    BED.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiBED api = new ApiBED(BED.lastRecords);
+                        ApiBED api = new ApiBED(AdvancedRecords.player);
 
                         int kills = 0;
                         int deaths = 0;
@@ -237,20 +253,32 @@ public class BEDListener extends AbstractGameListener<BED> {
                                     The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " (" + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Points: §b")) {
+                            }
+
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
+                            }
+
+                            if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
+                                points = currentValue;
                                 BED.lastRecordsPoints = points;
-                                sb.append(points);
+                                sb.append(newData[1]);
                                 if (Setting.SHOW_RECORDS_RANK.getValue()) {
-                                    BEDRank rank = BEDRank.isNo1(BED.lastRecords) ? BEDRank.ZZZZZZ : BEDRank.getRank((int) points);
+                                    BEDRank rank = BEDRank.isNo1(AdvancedRecords.player) ? BEDRank.ZZZZZZ : BEDRank.getRank((int) points);
                                     if (rank != null) {
                                         int level = rank.getLevel((int) points);
                                         String BEDrankColor = rank.getName().replaceAll(ChatColor.stripColor(rank.getName()), "");
                                         String rankString = BED.NUMBERS[level] + " " + rank.getName();
                                         sb.append(" (").append(BEDrankColor).append(rankString.trim());
-                                        if (Setting.BED_SHOW_POINTS_TO_NEXT_RANK.getValue()) {
+                                        if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue()) {
                                             sb.append(" / ").append(rank.getPointsToNextRank((int) points));
                                         }
                                         sb.append("§b)");
@@ -261,24 +289,24 @@ public class BEDListener extends AbstractGameListener<BED> {
 
                                 //if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
 
                             } else if (s.startsWith("§3 Kills: §b")) {
-                                kills = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Kills: §b", "").trim()));
+                                kills = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Deaths: §b")) {
-                                deaths = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Deaths: §b", "").trim()));
+                                deaths = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Games Played: §b")) {
-                                gamesPlayed = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
+                                gamesPlayed = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Victories: §b")) {
-                                victories = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+                                victories = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Beds Destroyed: §b")) {
-                                bedsDestroyed = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Beds Destroyed: §b", "").trim()));
+                                bedsDestroyed = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Team Eliminated: §b")) {
-                                eliminations = Integer.parseInt(ChatColor.stripColor(s.replaceAll("§3 Team Eliminated: §b", "").trim()));
+                                eliminations = Math.toIntExact(currentValue);
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
@@ -290,35 +318,35 @@ public class BEDListener extends AbstractGameListener<BED> {
 
                         if (Setting.BED_SHOW_ELIMINATIONS_PER_GAME.getValue()) {
                             double epg = eliminations / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Eliminations per Game: §b" + df1f.format(epg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Eliminations per Game: §b" + df1f.format(epg));
                         }
                         if (Setting.BED_SHOW_BEDS_PER_GAME.getValue()) {
                             double bpg = bedsDestroyed / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Beds per Game: §b" + df1f.format(bpg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Beds per Game: §b" + df1f.format(bpg));
                         }
-                        if (Setting.BED_SHOW_DEATHS_PER_GAME.getValue()) {
+                        if (Setting.SHOW_RECORDS_DPG.getValue()) {
                             double dpg = deaths / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Deaths per Game: §b" + df1f.format(dpg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Deaths per Game: §b" + df1f.format(dpg));
                         }
-                        if (Setting.BED_SHOW_KILLS_PER_GAME.getValue()) {
+                        if (Setting.SHOW_RECORDS_KPG.getValue()) {
                             double kpg = kills / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Kills per Game: §b" + df1f.format(kpg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Kills per Game: §b" + df1f.format(kpg));
                         }
-                        if (Setting.BED_SHOW_POINTS_PER_GAME.getValue()) {
+                        if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = BED.lastRecordsPoints / (double) (gamesPlayed == 0 ? 1 : gamesPlayed);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + df1f.format(ppg));
                         }
-                        if (Setting.BED_SHOW_KD.getValue()) {
+                        if (Setting.SHOW_RECORDS_KDR.getValue()) {
                             double kdr = kills / (double) (deaths == 0 ? 1 : deaths);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 K/D: §b" + df.format(kdr));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 K/D: §b" + df.format(kdr));
                         }
-                        if (Setting.BED_SHOW_WINRATE.getValue()) {
+                        if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + df1f.format(wr) + "%");
                         }
                         if (monthlyRank != 0) {
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Monthly Place: §b#" + monthlyRank);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Monthly Place: §b#" + monthlyRank);
                         }
 
 
@@ -326,18 +354,18 @@ public class BEDListener extends AbstractGameListener<BED> {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
 
                         for (String s : BED.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
 
                         BED.messagesToSend.clear();
                         BED.footerToSend.clear();
-                        BED.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -345,7 +373,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             BED.messagesToSend.clear();
                             BED.footerToSend.clear();
-                            BED.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
@@ -359,7 +387,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                         The5zigAPI.getAPI().messagePlayer("§o " + "                      §6§m                  §6§m                  ");
                         BED.messagesToSend.clear();
                         BED.footerToSend.clear();
-                        BED.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;
@@ -370,7 +398,7 @@ public class BEDListener extends AbstractGameListener<BED> {
         } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §a§lVote received.") && Setting.AUTOVOTE.getValue()) {
             BED.updateMode();
             BED.hasVoted = true;
-        } else if (message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l6. ") && !BED.hasVoted && Setting.AUTOVOTE.getValue()) {
+        } else if (message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l5. ") && !BED.hasVoted && Setting.AUTOVOTE.getValue()) {
             //Adding the 6th option, the normal method doesn't work
             BED.votesToParse.add(message);
             new Thread(() -> {
@@ -410,6 +438,10 @@ public class BEDListener extends AbstractGameListener<BED> {
                     The5zigAPI.getAPI().messagePlayer("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
 
                 }
+                else if(Setting.AUTOVOTE_RANDOM.getValue()) {
+                    The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+                    The5zigAPI.getAPI().messagePlayer("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ " + "§eAutomatically voted for§c Random map§e.");
+                }
                 BED.votesToParse.clear();
                 BED.hasVoted = true;
 
@@ -426,7 +458,7 @@ public class BEDListener extends AbstractGameListener<BED> {
             BED.diamondGen++;
         } else if (message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l") && !BED.hasVoted && Setting.AUTOVOTE.getValue()) {
             BED.votesToParse.add(message);
-        } else if (message.startsWith("               §aYou levelled up to")) {
+        } else if (message.contains("§aYou levelled up to")) {
             //Update the rank module when you uprank
             new Thread(() -> {
                 try {
@@ -440,37 +472,6 @@ public class BEDListener extends AbstractGameListener<BED> {
                 }
             }).start();
 
-        } else if (message.contains("§lYou are on ")) {
-            //"                        §6§lYou are on Gold Team!"
-            //§9§lYou are on Blue Team!
-
-            String team = null;
-            Pattern pattern = Pattern.compile(Pattern.quote("the ") + "(.*?)" + Pattern.quote(" Team!"));
-            Matcher matcher = pattern.matcher(message.trim());
-            while (matcher.find()) {
-                team = matcher.group(1);
-            }
-            try {
-                String teamColor = team.replaceAll(" ", "_");
-                switch (teamColor) {
-                    //converting Hive-Team-Color-Names into actual color tag strings
-                    case "Magenta":
-                        teamColor = "light_purple";
-                        break;
-                    case "Purple":
-                        teamColor = "dark_purple";
-                        break;
-                    default:
-                        break;
-                }
-                BED.team = ChatColor.valueOf(teamColor.toUpperCase()) + team.replaceAll("_", " ");
-            } catch (Exception e) {
-                e.printStackTrace();
-                The5zigAPI.getAPI().messagePlayer(Log.error + "Couldn't find your team color <" + team + ">");
-            }
-        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §7You gained no points for killing")) {
-            BED.kills++;
-            BED.updateKdr();
         } else if (message.trim().equals("§d§lNew Rank!")) {
             new Thread(() -> {
 
@@ -513,7 +514,6 @@ public class BEDListener extends AbstractGameListener<BED> {
 
     @Override
     public void onServerConnect(BED gameMode) {
-        if (BED.hasWon == null || !BED.hasWon) BED.hasWon = false;
         BED.reset(gameMode);
     }
 

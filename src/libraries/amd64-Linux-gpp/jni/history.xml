@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.4.7 -shared -fexceptions -lstdc++">
+      <target file="libjunixsocket-native-2.0.4.so" lastModified="14a049688f0">
+         <source file="../../../../obj/amd64-Linux-gpp/org_newsclub_net_unix_NativeUnixSocket.o" lastModified="14a04968120"/>
+      </target>
+   </processor>
+</history>

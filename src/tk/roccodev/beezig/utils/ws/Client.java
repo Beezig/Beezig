@@ -1,18 +1,15 @@
 package tk.roccodev.beezig.utils.ws;
 
 import eu.the5zig.mod.The5zigAPI;
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
+import org.java_websocket_beezig.client.WebSocketClient;
+import org.java_websocket_beezig.handshake.ServerHandshake;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.games.DR;
-import tk.roccodev.beezig.games.GRAV;
-import tk.roccodev.beezig.games.TIMV;
-import tk.roccodev.beezig.hiveapi.StuffFetcher;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.NotificationManager;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 public class Client extends WebSocketClient {
 
@@ -25,7 +22,7 @@ public class Client extends WebSocketClient {
     public void onOpen(ServerHandshake handshakedata) {
         // TODO Auto-generated method stub
         System.out.println("Connected!");
-        this.send("I am " + The5zigAPI.getAPI().getGameProfile().getName());
+        this.send("I am " + The5zigAPI.getAPI().getGameProfile().getName() + " UA: " + Log.getUserAgent());
 
     }
 
@@ -41,7 +38,7 @@ public class Client extends WebSocketClient {
             if (Setting.PM_PING.getValue()) {
                 The5zigAPI.getAPI().playSound("note.pling", 1f);
             }
-            if (Setting.PM_NOTIFICATION.getValue() && !NotificationManager.isInGameFocus()) {
+            if (Setting.PM_NOTIFICATION.getValue() && NotificationManager.isInGameFocus()) {
                 NotificationManager.sendNotification("New Report Received", users + " reported for " + reason);
             }
         } else if (data[0].equals("0nline cl1ents")) {
@@ -54,21 +51,16 @@ public class Client extends WebSocketClient {
             The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + who.trim() + "§3 is looking for §b" + amount.trim() + "§3 player(s) to play §b" + mode.trim() + "§3.");
         } else if (data[0].equals("partyAccepted")) {
             The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + data[1].trim() + "§3 accepted your party invite!");
-        }
-        else if(data[0].equals("newAnnouncement")) {
+        } else if (data[0].equals("newAnnouncement")) {
             String data2[] = data[1].trim().split("§");
             The5zigAPI.getAPI().messagePlayer(Log.info + "§bNEW ANNOUNCEMENT!");
             The5zigAPI.getAPI().messagePlayer(Log.info + data2[0].trim());
             The5zigAPI.getAPI().messagePlayer(Log.info + data2[1].trim());
             The5zigAPI.getAPI().playSound("note.pling", 1f);
-        }
-        else if(data[0].equals("forceRefetch")) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    BeezigMain.refetchMaps();
-                    The5zigAPI.getAPI().messagePlayer(Log.info + "Maps data have been re-fetched due to a remote request.");
-                }
+        } else if (data[0].equals("forceRefetch")) {
+            new Thread(() -> {
+                BeezigMain.refetchMaps();
+                The5zigAPI.getAPI().messagePlayer(Log.info + "Maps data have been re-fetched due to a remote request.");
             }, "Maps Fetcher").start();
         }
 
@@ -76,10 +68,19 @@ public class Client extends WebSocketClient {
     }
 
 
-
     @Override
     public void onClose(int code, String reason, boolean remote) {
         System.out.println("Disconnected from WebSocket (" + code + "): " + reason + " [" + remote + "]");
+        System.out.println("Attempting to reconnect...");
+        new Thread(() -> {
+            Connector.client.close();
+            try {
+                Connector.client = new Client(new URI(Connector.URL));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+            Connector.client.connect();
+        }).start();
 
     }
 

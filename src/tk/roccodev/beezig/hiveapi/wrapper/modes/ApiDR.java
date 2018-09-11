@@ -6,7 +6,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import tk.roccodev.beezig.games.DR;
-import tk.roccodev.beezig.hiveapi.StuffFetcher;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.PvPMode;
@@ -69,8 +68,8 @@ public class ApiDR extends PvPMode {
         try {
             JSONObject mapRecords = (JSONObject) object("maprecords");
             The5zigAPI.getLogger().info("mr-s" + mapRecords.size());
-            The5zigAPI.getLogger().info("sf-s" + StuffFetcher.getDeathRunMaps().size());
-            if (mapRecords.size() != StuffFetcher.getDeathRunMaps().size()) return null;
+            The5zigAPI.getLogger().info("sf-s" + DR.mapsPool.size());
+            if (mapRecords.size() != DR.mapsPool.size()) return null;
             //Doesn't have a time on every map
 
             long time = 0;

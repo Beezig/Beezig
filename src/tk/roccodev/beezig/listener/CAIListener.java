@@ -5,7 +5,9 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import org.lwjgl.input.Mouse;
 import tk.roccodev.beezig.ActiveGame;
+import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
@@ -15,7 +17,10 @@ import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiCAI;
+import tk.roccodev.beezig.modules.utils.RenderUtils;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
+import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
@@ -54,7 +59,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
                     e2.printStackTrace();
                 }
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                The5zigAPI.getLogger().info(sb.getTitle());
+
 
                 if (sb != null && sb.getTitle().contains("Your CAI Stats")) {
                     int points = sb.getLines().get(ChatColor.AQUA + "Points");
@@ -139,14 +144,17 @@ public class CAIListener extends AbstractGameListener<CAI> {
             CAI.gamePoints += 5;
             APIValues.CAIpoints += 5;
             CAI.dailyPoints += 5;
+        } else if (message.equals("§8▍ §bCAI§8 ▏ §cYou can't go invisible whilst capturing the leader!")) {
+            CAI.invisCooldown = 0;
         } else if (message.endsWith("§cCowboys Leader§7.")) {
 
             CAI.team = "§eIndians";
-
+            CAI.inGame = true;
             DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as I on " + CAI.activeMap, "game_cai");
 
         } else if (message.endsWith("§eIndians Leader§7.")) {
             CAI.team = "§cCowboys";
+            CAI.inGame = true;
             DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as C on " + CAI.activeMap, "game_cai");
         } else if (message.equals("§8▍ §bCAI§8 ▏ §7You received §f10 points §7for your team's capture.")) {
 
@@ -155,14 +163,26 @@ public class CAIListener extends AbstractGameListener<CAI> {
             APIValues.CAIpoints += 10;
             CAI.dailyPoints += 10;
 
-        } else if (message.equals("                             §eIndians have won!") && CAI.team != null && CAI.team.equals("§eIndians")) {
+        } else if (message.endsWith("§eIndians have won!") && CAI.team != null && CAI.team.equals("§eIndians")) {
             CAI.gamePoints += 50;
             APIValues.CAIpoints += 50;
             CAI.dailyPoints += 50;
-        } else if (message.equals("                             §cCowboys have won!") && CAI.team != null && CAI.team.equals("§cCowboys")) {
+            CAI.hasWon = true;
+            System.out.println("Won!");
+            CAI.winstreak++;
+            if (CAI.winstreak > CAI.bestStreak)
+                CAI.bestStreak = CAI.winstreak;
+            StreakUtils.incrementWinstreakByOne("cai");
+        } else if (message.endsWith("§cCowboys have won!") && CAI.team != null && CAI.team.equals("§cCowboys")) {
             CAI.gamePoints += 50;
             APIValues.CAIpoints += 50;
             CAI.dailyPoints += 50;
+            CAI.hasWon = true;
+            System.out.println("Won!");
+            CAI.winstreak++;
+            if (CAI.winstreak > CAI.bestStreak)
+                CAI.bestStreak = CAI.winstreak;
+            StreakUtils.incrementWinstreakByOne("cai");
         } else if (message.startsWith("§8▍ §bCAI§8 ▏ §7You gained §f5 points §7for killing")) {
 
 
@@ -184,23 +204,35 @@ public class CAIListener extends AbstractGameListener<CAI> {
 
         // Advanced Records
 
-        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             CAI.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ")) {
+        } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
 
             CAI.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             CAI.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
+        } else if (message.startsWith("§8▍ §bCAI§8 ▏ §cYou have been captured")) {
+            CAI.speedCooldown = 0;
+            CAI.invisCooldown = 0;
+            CAI.leaderItem0 = 0;
+            CAI.leaderItem1 = 0;
+            CAI.leaderItem2 = 0;
+        } else if (message.startsWith("§8▍ §bCAI§8 ▏ §a§lYou Escaped!")) {
+            CAI.speedCooldown = 0;
+            CAI.invisCooldown = 0;
+            CAI.leaderItem0 = 0;
+            CAI.leaderItem1 = 0;
+            CAI.leaderItem2 = 0;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o "))) {
+                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             CAI.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -208,11 +240,11 @@ public class CAIListener extends AbstractGameListener<CAI> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    CAI.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiCAI api = new ApiCAI(CAI.lastRecords);
+                        ApiCAI api = new ApiCAI(AdvancedRecords.player);
                         CAIRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -251,7 +283,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
 
                         // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
                         // HiveAPI.getLeaderboardsPlacePoints(349, "CAI") <
-                        // HiveAPI.DRgetPoints(CAI.lastRecords)) ?
+                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
                         // HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
 
                         List<String> messages = new ArrayList<>(CAI.messagesToSend);
@@ -285,94 +317,86 @@ public class CAIListener extends AbstractGameListener<CAI> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Points: §b")) {
+                            }
+
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
+                            }
+
+                            if (s.startsWith("§3 Points: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Points: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Points: §b", ""));
-                                sb.append(points);
+                                points = currentValue;
+                                sb.append(newData[1]);
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
-                                if (Setting.CAI_SHOW_POINTS_TO_NEXT_RANK.getValue())
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue())
                                     sb.append(" / ").append(rank.getPointsToNextRank((int) points));
                                 if (rank != null)
                                     sb.append("§b)");
 
                                 // if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
                             } else if (s.startsWith("§3 Victories: §b")) {
-                                victories = Integer.parseInt(
-                                        ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+                                victories = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Games Played: §b")) {
-                                gamesPlayed = Integer.parseInt(
-                                        ChatColor.stripColor(s.replaceAll("§3 Games Played: §b", "").trim()));
-                            } else if (s.startsWith("§3 Total Kills: §b")) {
-                                kills = Integer.parseInt(
-                                        ChatColor.stripColor(s.replaceAll("§3 Total Kills: §b", "").trim()));
-                            } else if (s.startsWith("§3 Total Deaths: §b")) {
-                                deaths = Integer.parseInt(
-                                        ChatColor.stripColor(s.replaceAll("§3 Total Deaths: §b", "").trim()));
-                            } else if (s.startsWith("§3 Time Alive: §b")) {
-                                timeAlive = Long.parseLong(
-                                        ChatColor.stripColor(s.replaceAll("§3 Time Alive: §b", "").trim()));
-                                s = s.replaceAll(Long.toString(timeAlive), APIUtils.getTimePassed(timeAlive));
+                                gamesPlayed = Math.toIntExact(currentValue);
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
                         if (achievements != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/44");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/44");
                         }
-                        if (Setting.CAI_SHOW_WINRATE.getValue()) {
+                        if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = (double) victories / (double) gamesPlayed;
                             The5zigAPI.getAPI()
-                                    .messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr * 100) + "%");
+                                    .messagePlayer("§o§3 Winrate: §b" + df1f.format(wr * 100) + "%");
                         }
                         if (Setting.CAI_SHOW_CATCHES_CAUGHT.getValue()) {
                             if (catches == 0)
                                 catches = api.getCatches();
                             if (caught == 0)
                                 caught = api.getCaught();
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Cc/Ct: §b"
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Cc/Ct: §b"
                                     + df.format((double) catches / (double) caught) + "");
                         }
-                        if (Setting.CAI_SHOW_POINTSPG.getValue()) {
+                        if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Points per Game: §b" + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + df1f.format(ppg));
                         }
                         if (Setting.CAI_SHOW_CAPTURES_GAME.getValue()) {
                             if (captures == 0) captures = api.getCaptures();
                             if (gamesPlayed == 0) gamesPlayed = Math.toIntExact(api.getGamesPlayed());
-                            double cpg = (double) ((double) captures / (double) gamesPlayed);
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Captures per Game: §b" + df1f.format(cpg));
+                            double cpg = (double) captures / (double) gamesPlayed;
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Captures per Game: §b" + df1f.format(cpg));
                         }
-                        /*
-                         * if(Setting.CAI_SHOW_WINRATE.getValue()){ double wr = Math.floor(((double)
-                         * victories / (double) gamesPlayed) * 1000d) / 10d;
-                         * The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr)
-                         * + "%"); }
-                         *
-                         * if(monthlyRank != 0){ The5zigAPI.getAPI().messagePlayer("§o " +
-                         * "§3 Monthly Leaderboards: §b#" + monthlyRank); }
-                         */
+
 
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : CAI.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
                         CAI.messagesToSend.clear();
                         CAI.footerToSend.clear();
-                        CAI.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -380,7 +404,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             CAI.messagesToSend.clear();
                             CAI.footerToSend.clear();
-                            CAI.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -396,7 +420,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         CAI.messagesToSend.clear();
                         CAI.footerToSend.clear();
-                        CAI.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;
@@ -408,6 +432,61 @@ public class CAIListener extends AbstractGameListener<CAI> {
         return false;
 
     }
+
+    @Override
+    public void onTitle(CAI gameMode, String title, String subTitle) {
+        if (subTitle != null && subTitle.equals("§r§fYou died§r")) {
+            CAI.speedCooldown = 0;
+            CAI.invisCooldown = 0;
+        }
+        if (title != null && title.endsWith(The5zigAPI.getAPI().getGameProfile().getName() + "' has§r§5 §r§5§lESCAPED!§r")) {
+            CAI.speedCooldown = 0;
+            CAI.invisCooldown = 0;
+            CAI.leaderItem0 = 0;
+            CAI.leaderItem1 = 0;
+            CAI.leaderItem2 = 0;
+
+        }
+    }
+
+    @Override
+    public void onTick(CAI gameMode) {
+        if (CAI.speedCooldown != 0) CAI.speedCooldown--;
+        if (CAI.invisCooldown != 0) CAI.invisCooldown--;
+        if (CAI.leaderItem0 != 0) CAI.leaderItem0--;
+        if (CAI.leaderItem1 != 0) CAI.leaderItem1--;
+        if (CAI.leaderItem2 != 0) CAI.leaderItem2--;
+        if (Mouse.isButtonDown(1)) {
+            if (The5zigAPI.getAPI().getItemInMainHand() == null) return;
+            if (RenderUtils.getCurrentScreen() != null) return;
+            switch (The5zigAPI.getAPI().getItemInMainHand().getDisplayName()) {
+                case "§eSpeed Dust":
+                    CAI.speedCooldown = 2400;
+                    break;
+                case "§eInvisibility Dust":
+                    CAI.invisCooldown = 2400;
+                    break;
+                case "§3Attempt Escape":
+                    CAI.leaderItem2 = 500;
+                    break;
+                case "§6Blind Carrier":
+                    CAI.leaderItem0 = 500;
+                    break;
+                case "§cEmergency Flare":
+                    CAI.leaderItem1 = 500;
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public boolean onActionBar(CAI gameMode, String message) {
+        if (BeezigMain.isColorDebug) {
+            System.out.println("CAI ActionDebug: (" + message + ")");
+        }
+        return false;
+    }
+
 
     @Override
     public void onServerConnect(CAI gameMode) {

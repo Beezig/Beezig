@@ -9,7 +9,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.games.LAB;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
@@ -17,6 +16,7 @@ import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiLAB;
 import tk.roccodev.beezig.settings.Setting;
+import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
@@ -72,68 +72,62 @@ public class LABListener extends AbstractGameListener<LAB> {
 
     @Override
     public boolean onServerChat(LAB gameMode, String message) {
-        if(message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l10 atoms and 20 tokens§a for being in the top 3!")) {
+        if (message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l10 atoms and 20 tokens§a for being in the top 3!")) {
             LAB.dailyPoints += 10;
             APIValues.LABpoints += 10;
             HiveAPI.tokens += 20;
-        }
-        else if(message.startsWith("§8▍ §3The§bLab§8 ▏ §a§lExperiment ")) {
+        } else if (message.startsWith("§8▍ §3The§bLab§8 ▏ §a§lExperiment ")) {
             LAB.experiments.add(ChatColor.stripColor(message.split(":")[1].trim()));
-        }
-        else if(message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l2 atoms and 10 tokens§a for participating!")) {
+        } else if (message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l2 atoms and 10 tokens§a for participating!")) {
             LAB.dailyPoints += 2;
             APIValues.LABpoints += 2;
             HiveAPI.tokens += 10;
-        }
-        else if(message.endsWith("[+ 3 Atoms]") && message.startsWith(" §e§lFirst:")) {
+        } else if (message.endsWith("[+ 3 Atoms]") && message.startsWith(" §e§lFirst:")) {
             String name = ChatColor.stripColor(message.split("\\[")[0].trim().replace("§e§lFirst: ", ""));
-            if(name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
+            if (name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
                 LAB.dailyPoints += 3;
                 APIValues.LABpoints += 3;
             }
             LAB.leaderboard.put(name, LAB.leaderboard.get(name) + 3);
             LAB.leaderboard = LAB.sortByValue(LAB.leaderboard);
-        }
-        else if(message.endsWith("[+ 2 Atoms]") && message.startsWith(" §b§lSecond:")) {
+        } else if (message.endsWith("[+ 2 Atoms]") && message.startsWith(" §b§lSecond:")) {
             String name = ChatColor.stripColor(message.split("\\[")[0].trim().replace("§b§lSecond: ", ""));
-            if(name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
+            if (name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
                 LAB.dailyPoints += 2;
                 APIValues.LABpoints += 2;
             }
             LAB.leaderboard.put(name, LAB.leaderboard.get(name) + 2);
             LAB.leaderboard = LAB.sortByValue(LAB.leaderboard);
-        }
-        else if(message.endsWith("[+ 1 Atom]") && message.startsWith(" §6§lThird:")) {
+        } else if (message.endsWith("[+ 1 Atom]") && message.startsWith(" §6§lThird:")) {
             String name = ChatColor.stripColor(message.split("\\[")[0].trim().replace("§6§lThird: ", ""));
-            if(name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
+            if (name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {
                 LAB.dailyPoints += 1;
                 APIValues.LABpoints += 1;
             }
             LAB.leaderboard.put(name, LAB.leaderboard.get(name) + 1);
             LAB.leaderboard = LAB.sortByValue(LAB.leaderboard);
-        }
-        else if(message.contains(The5zigAPI.getAPI().getGameProfile().getName() + "§7 [+ ")) {
+        } else if (message.contains(The5zigAPI.getAPI().getGameProfile().getName() + "§7 [+ ")) {
             int atoms = Integer.parseInt(message.split("\\[\\+")[1].replace(" Atom", "").replace("s", "").trim());
             LAB.dailyPoints += atoms;
             APIValues.LABpoints += atoms;
         }
-        if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ")) {
+        if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             LAB.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
-        } else if (message.startsWith("§3 ")) {
+        } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
 
             LAB.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ")) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             LAB.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o "))) {
+                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             LAB.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -141,11 +135,11 @@ public class LABListener extends AbstractGameListener<LAB> {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
-                    LAB.isRecordsRunning = true;
+                    AdvancedRecords.isRunning = true;
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiLAB api = new ApiLAB(LAB.lastRecords);
+                        ApiLAB api = new ApiLAB(AdvancedRecords.player);
                         LABRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -208,61 +202,72 @@ public class LABListener extends AbstractGameListener<LAB> {
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
-                            } else if (s.startsWith("§3 Atoms: §b")) {
+                            }
+
+
+                            String[] newData = s.split("\\: §b");
+                            long currentValue = 0;
+                            try {
+                                currentValue = Long.parseLong(newData[1]);
+                                newData[1] = Log.df(currentValue);
+                                s = newData[0] + ": §b" + newData[1];
+                            } catch (NumberFormatException ignored) {
+                                s = newData[0] + ": §b" + newData[1];
+                            }
+
+                            if (s.startsWith("§3 Atoms: §b")) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("§3 Atoms: §b");
-                                points = Long.parseLong(s.replaceAll("§3 Atoms: §b", ""));
-                                sb.append(points);
+                                points = currentValue;
+                                sb.append(newData[1]);
                                 if (rank != null)
                                     sb.append(" (").append(rank.getTotalDisplay());
-                                if (Setting.LAB_SHOW_POINTS_TO_NEXT_RANK.getValue())
+                                if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue())
                                     sb.append(" / ").append(rank.getPointsToNextRank((int) points));
                                 if (rank != null)
                                     sb.append("§b)");
 
                                 // if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
                                 continue;
                             } else if (s.startsWith("§3 Victories: §b")) {
-                                victories = Integer.parseInt(
-                                        ChatColor.stripColor(s.replaceAll("§3 Victories: §b", "").trim()));
+                                victories = Math.toIntExact(currentValue);
                             } else if (s.startsWith("§3 Played: §b")) {
-                                gamesPlayed = Integer.parseInt(
-                                        ChatColor.stripColor(s.replaceAll("§3 Played: §b", "").trim()));
+                                gamesPlayed = Math.toIntExact(currentValue);
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
 
                         }
 
                         if (achievements != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements);
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements);
                         }
 
-                        if (Setting.LAB_SHOW_WINRATE.getValue()) {
+                        if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Winrate: §b" + df1f.format(wr) + "%");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + df1f.format(wr) + "%");
                         }
-                        if (Setting.LAB_SHOW_PPG.getValue()) {
+                        if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Atoms Per Game: §b" + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Atoms Per Game: §b" + df1f.format(ppg));
                         }
 
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o " + "§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : LAB.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§o" + s);
                         }
 
                         LAB.messagesToSend.clear();
                         LAB.footerToSend.clear();
-                        LAB.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -270,7 +275,7 @@ public class LABListener extends AbstractGameListener<LAB> {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
                             LAB.messagesToSend.clear();
                             LAB.footerToSend.clear();
-                            LAB.isRecordsRunning = false;
+                            AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
@@ -286,7 +291,7 @@ public class LABListener extends AbstractGameListener<LAB> {
                                 "§o " + "                      §6§m                  §6§m                  ");
                         LAB.messagesToSend.clear();
                         LAB.footerToSend.clear();
-                        LAB.isRecordsRunning = false;
+                        AdvancedRecords.isRunning = false;
                     }
                 }).start();
                 return true;
@@ -302,12 +307,12 @@ public class LABListener extends AbstractGameListener<LAB> {
 
     @Override
     public void onTitle(LAB gameMode, String title, String subTitle) {
-        if(subTitle != null && subTitle.equals("§r§3Experiment §r§b§l1§r§3 of §r§a§l3§r")) {
-            for(NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
+        if (subTitle != null && subTitle.equals("§r§3Experiment §r§b§l1§r§3 of §r§a§l3§r")) {
+            for (NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
                 LAB.leaderboard.put(npi.getGameProfile().getName(), 0);
             }
         }
-        if(subTitle != null && subTitle.startsWith("§r§3Experiment §r§b§l") && title != null) {
+        if (subTitle != null && subTitle.startsWith("§r§3Experiment §r§b§l") && title != null) {
             LAB.experiment = ChatColor.stripColor(title.trim());
             DiscordUtils.updatePresence("Experimenting in TheLab", "Playing " + LAB.experiment, "game_lab");
         }

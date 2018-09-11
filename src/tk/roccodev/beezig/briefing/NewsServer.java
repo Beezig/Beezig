@@ -25,10 +25,10 @@ public class NewsServer {
 
 
         if (Pools.error && news.size() == 0) {
-            The5zigAPI.getAPI().messagePlayer(Log.error + "An error has occurred while attempting to load your Briefing. This may be caused by Minecraft using the wrong Java installation. Please follow this guide: https://github.com/RoccoDev/5zig-TIMV-Plugin/wiki/Fixing-the-Issue-with-WR-for-Deathrun-&-Briefing");
+            The5zigAPI.getAPI().messagePlayer(Log.error + "An error has occurred while attempting to load your Briefing. This may be caused by Minecraft using the wrong Java installation. Please follow this guide: https://github.com/RoccoDev/Beezig/wiki/Fixing-the-Issue-with-WR-for-Deathrun-&-Briefing");
             return;
         } else if (Pools.error) {
-            The5zigAPI.getAPI().messagePlayer(Log.error + "An error has occurred while attempting to load your Briefing. This may be caused by Minecraft using the wrong Java installation. Please follow this guide: https://github.com/RoccoDev/5zig-TIMV-Plugin/wiki/Fixing-the-Issue-with-WR-for-Deathrun-&-Briefing");
+            The5zigAPI.getAPI().messagePlayer(Log.error + "An error has occurred while attempting to load your Briefing. This may be caused by Minecraft using the wrong Java installation. Please follow this guide: https://github.com/RoccoDev/Beezig/wiki/Fixing-the-Issue-with-WR-for-Deathrun-&-Briefing");
             The5zigAPI.getAPI().messagePlayer(Log.info + "However, we're still able to serve you our latest news!");
 
         }
@@ -64,9 +64,9 @@ public class NewsServer {
 
             }
             for (Map.Entry<String, ArrayList<NewMap>> e : grouped.entrySet()) {
-                sb.append("§a" + e.getKey() + ":§e ");
+                sb.append("§a").append(e.getKey()).append(":§e ");
                 for (NewMap m : e.getValue()) {
-                    sb.append(m.getName() + ", ");
+                    sb.append(m.getName()).append(", ");
                 }
                 sb.trimToSize();
                 sb.deleteCharAt(sb.length() - 2);
@@ -98,9 +98,9 @@ public class NewsServer {
             }
 
             for (Map.Entry<StaffChangeType, ArrayList<StaffUpdate>> e : grouped.entrySet()) {
-                sb.append(e.getKey().getDisplay() + ":§e ");
+                sb.append(e.getKey().getDisplay()).append(":§e ");
                 for (StaffUpdate s : e.getValue()) {
-                    sb.append(s.getStaffName() + ", ");
+                    sb.append(s.getStaffName()).append(", ");
                 }
                 sb.trimToSize();
                 sb.deleteCharAt(sb.length() - 2);

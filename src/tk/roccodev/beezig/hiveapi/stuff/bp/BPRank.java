@@ -1,11 +1,13 @@
 package tk.roccodev.beezig.hiveapi.stuff.bp;
 
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public enum BPRank {
+public enum BPRank implements RankEnum {
 
     FIRST_STEP("First Step", "§7", 0),
     PARTYANIMAL("Party Animal", "§6", 100),
@@ -76,7 +78,7 @@ public enum BPRank {
         }
 
 
-        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + (next.getStart() - points), next.getTotalDisplay());
+        return The5zigAPI.getAPI().translate("beezig.str.tonextrank", next.prefix + Log.df(next.getStart() - points), next.getTotalDisplay());
     }
 
 }

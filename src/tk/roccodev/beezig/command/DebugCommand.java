@@ -1,5 +1,6 @@
 package tk.roccodev.beezig.command;
 
+import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.beezig.utils.ws.Connector;
 
 public class DebugCommand implements Command {
@@ -21,11 +22,9 @@ public class DebugCommand implements Command {
     public boolean execute(String[] args) {
         //some debug code here v
 
-        new Thread(() -> {
+        new Thread(() -> Connector.client.send("Hello there pls get online people")).start();
 
-            Connector.client.send("Hello there pls get online people");
-
-        }).start();
+        The5zigAPI.getAPI().getRenderHelper().drawLargeText("Test");
 
         return true;
 
