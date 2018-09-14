@@ -194,6 +194,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                         int eliminations = 0;
 
 
+
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
                         DecimalFormat df = (DecimalFormat) nf;
                         df.setMaximumFractionDigits(2);
@@ -215,6 +216,8 @@ public class BEDListener extends AbstractGameListener<BED> {
 
                         Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
                         Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
+                        Integer streak = Setting.BED_SHOW_STREAK.getValue() ? api.getStreak() : null;
+
 
                         int monthlyRank = 0;
                         if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
@@ -312,7 +315,10 @@ public class BEDListener extends AbstractGameListener<BED> {
 
 
                         if (achievements != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/67");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/67");
+                        }
+                        if(streak != null) {
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Win Streak: §b" + streak);
                         }
                         // "§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing"
 

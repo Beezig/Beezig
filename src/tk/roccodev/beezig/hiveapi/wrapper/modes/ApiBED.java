@@ -64,6 +64,10 @@ public class ApiBED extends PvPMode {
 
     }
 
+    public int getStreak() {
+        return Math.toIntExact((long)object("win_streak"));
+    }
+
     @Override
     public boolean supportsMonthly() {
         // TODO Auto-generated method stub

@@ -41,6 +41,7 @@ public enum Setting {
 
     BED_SHOW_ELIMINATIONS_PER_GAME(false, "BED AdvRec - TPG", "BED Advanced Records - Show Eliminations per Game"),
     BED_SHOW_BEDS_PER_GAME(true, "BED AdvRec - BPG", "BED Advanced Records - Show Beds destroyed per Game"),
+    BED_SHOW_STREAK(true, "BED AdvRec - Streak", "BED Advanced Records - Show winstreak"),
 
     HIDE_SHOW_SEEKER_KPG(true, "HIDE AdvRec - Seeker KPG", "HIDE Advanced Records - Show Kills per Game as Seeker"),
     HIDE_SHOW_HIDER_KPG(false, "HIDE AdvRec - Hider KPG", "HIDE Advanced Records - Show Kills per Game as Hider"),
