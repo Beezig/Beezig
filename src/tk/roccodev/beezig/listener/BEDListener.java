@@ -119,6 +119,8 @@ public class BEDListener extends AbstractGameListener<BED> {
             APIValues.BEDpoints += pts;
             BED.dailyPoints += pts;
 
+            if(message.endsWith("Generator]")) return false;
+
             switch (pts) {
 
                 case 5:
