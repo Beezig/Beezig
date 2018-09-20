@@ -32,7 +32,7 @@ public class MapItem extends GameModeItem<BED> {
     public boolean shouldRender(boolean dummy) {
 
         try {
-            if (!(getGameMode() instanceof BED)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (BED.shouldRender(getGameMode().getState()) && BED.activeMap != null);
         } catch (Exception e) {
             return false;

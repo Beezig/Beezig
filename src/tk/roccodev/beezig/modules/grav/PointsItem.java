@@ -78,7 +78,7 @@ public class PointsItem extends GameModeItem<GRAV> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof GRAV)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (GRAV.shouldRender(getGameMode().getState()));
         } catch (Exception e) {
             return false;

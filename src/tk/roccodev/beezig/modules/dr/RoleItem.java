@@ -24,7 +24,7 @@ public class RoleItem extends GameModeItem<DR> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof DR)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (DR.shouldRender(getGameMode().getState()) && DR.role != null);
         } catch (Exception e) {
             return false;

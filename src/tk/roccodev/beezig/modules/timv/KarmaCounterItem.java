@@ -52,7 +52,7 @@ public class KarmaCounterItem extends GameModeItem<TIMV> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof TIMV)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (TIMV.shouldRender(getGameMode().getState()) && TIMV.karmaCounter != 0);
         } catch (Exception e) {
             return false;

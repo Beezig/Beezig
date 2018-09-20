@@ -28,7 +28,7 @@ public class PointsCounterItem extends GameModeItem<BED> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof BED)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (BED.shouldRender(getGameMode().getState()) && BED.pointsCounter != 0);
         } catch (Exception e) {
             return false;

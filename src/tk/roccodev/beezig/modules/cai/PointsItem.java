@@ -78,7 +78,7 @@ public class PointsItem extends GameModeItem<CAI> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof CAI)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (CAI.shouldRender(getGameMode().getState()));
         } catch (Exception e) {
             return false;

@@ -91,7 +91,7 @@ public class PointsItem extends GameModeItem<LAB> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof LAB))
+            if (getGameMode() == null)
                 return false;
             return dummy || LAB.shouldRender(getGameMode().getState());
         } catch (Exception e) {

@@ -28,7 +28,7 @@ public class DeathsItem extends GameModeItem<BED> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof BED)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (BED.shouldRender(getGameMode().getState()) && BED.deaths != 0);
         } catch (Exception e) {
             return false;

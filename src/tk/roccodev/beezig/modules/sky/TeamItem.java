@@ -40,7 +40,7 @@ public class TeamItem extends GameModeItem<SKY> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof SKY))
+            if (getGameMode() == null)
                 return false;
             if (SKY.team == null || SKY.team.isEmpty())
                 return false;

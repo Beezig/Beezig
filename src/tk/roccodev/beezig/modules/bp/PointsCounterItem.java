@@ -24,7 +24,7 @@ public class PointsCounterItem extends GameModeItem<BP> {
     public boolean shouldRender(boolean dummy) {
 
         try {
-            if (!(getGameMode() instanceof BP))
+            if (getGameMode() == null)
                 return false;
             return dummy || (BP.shouldRender(getGameMode().getState()) && BP.gamePts != 0);
         } catch (Exception e) {

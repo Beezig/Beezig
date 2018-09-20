@@ -32,7 +32,7 @@ public class SongItem extends GameModeItem<BP> {
     public boolean shouldRender(boolean dummy) {
 
         try {
-            if (!(getGameMode() instanceof BP))
+            if (getGameMode() == null)
                 return false;
             return dummy || (BP.shouldRender(getGameMode().getState()) && BP.song != null && !BP.song.isEmpty());
         } catch (Exception e) {

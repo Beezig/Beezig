@@ -31,7 +31,7 @@ public class ModeItem extends GameModeItem<SKY> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof SKY))
+            if (getGameMode() == null)
                 return false;
             if (SKY.mode == null || SKY.mode.isEmpty())
                 return false;

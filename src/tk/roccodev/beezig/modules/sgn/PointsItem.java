@@ -78,7 +78,7 @@ public class PointsItem extends GameModeItem<SGN> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof SGN)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (SGN.shouldRender(getGameMode().getState()));
         } catch (Exception e) {
             return false;

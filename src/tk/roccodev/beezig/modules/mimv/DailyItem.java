@@ -25,7 +25,7 @@ public class DailyItem extends GameModeItem<MIMV> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof MIMV))
+            if (getGameMode() == null)
                 return false;
             return dummy || (MIMV.shouldRender(getGameMode().getState()));
         } catch (Exception e) {

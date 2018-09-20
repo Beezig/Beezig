@@ -39,7 +39,7 @@ public class MapItem extends GameModeItem<DR> {
     public boolean shouldRender(boolean dummy) {
 
         try {
-            if (!(getGameMode() instanceof DR)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (DR.shouldRender(getGameMode().getState()) && DR.activeMap != null);
         } catch (Exception e) {
             return false;

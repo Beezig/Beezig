@@ -31,7 +31,7 @@ public class PBItem extends GameModeItem<DR> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof DR)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (DR.shouldRender(getGameMode().getState()) && DR.activeMap != null && DR.role.equals("Runner"));
         } catch (Exception e) {
             return false;

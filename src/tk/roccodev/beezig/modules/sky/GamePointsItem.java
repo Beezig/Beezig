@@ -29,7 +29,7 @@ public class GamePointsItem extends GameModeItem<SKY> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof SKY))
+            if (getGameMode() == null)
                 return false;
             if (SKY.gamePoints == 0)
                 return false;

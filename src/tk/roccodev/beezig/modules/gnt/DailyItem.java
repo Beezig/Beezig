@@ -28,7 +28,7 @@ public class DailyItem extends GameModeItem<Giant> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof Giant))
+            if (getGameMode() == null)
                 return false;
             return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && (ActiveGame.is("gnt") || ActiveGame.is("gntm")));
         } catch (Exception e) {

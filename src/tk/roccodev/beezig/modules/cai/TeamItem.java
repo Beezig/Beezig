@@ -40,7 +40,7 @@ public class TeamItem extends GameModeItem<CAI> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof CAI))
+            if (getGameMode() == null)
                 return false;
             if (CAI.team == null || CAI.team.isEmpty())
                 return false;

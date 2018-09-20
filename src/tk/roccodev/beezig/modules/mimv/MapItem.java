@@ -24,7 +24,7 @@ public class MapItem extends GameModeItem<MIMV> {
     public boolean shouldRender(boolean dummy) {
 
         try {
-            if (!(getGameMode() instanceof MIMV))
+            if (getGameMode() == null)
                 return false;
             return dummy || (MIMV.shouldRender(getGameMode().getState()) && MIMV.map != null && !MIMV.map.isEmpty());
         } catch (Exception e) {
