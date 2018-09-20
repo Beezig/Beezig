@@ -317,6 +317,9 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "lablb", tk.roccodev.beezig.modules.lab.LeaderboardItem.class,
                 "serverhivemc");
 
+        The5zigAPI.getAPI().registerModuleItem(this, "arcadegame", tk.roccodev.beezig.modules.arcade.GameItem.class,
+                "hivearcade");
+
 
         The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 

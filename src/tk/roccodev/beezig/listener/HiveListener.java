@@ -55,7 +55,6 @@ public class HiveListener extends AbstractGameListener<GameMode> {
 
     @Override
     public void onMatch(GameMode gameMode, String key, IPatternResult match) {
-        System.out.println(gameMode == null);
         if (gameMode != null && gameMode.getState() != GameState.FINISHED) {
             return;
         }
@@ -66,6 +65,34 @@ public class HiveListener extends AbstractGameListener<GameMode> {
 
             The5zigAPI.getLogger().info("Connected to TIMV! -Hive");
             DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "In Lobby", "game_timv");
+        }
+
+        if(key.equals("somearcades.welcome")) {
+            new Thread(() -> {
+                try {
+                    Thread.sleep(1000L);
+                    if(The5zigAPI.getAPI().getSideScoreboard() == null) return;
+                    if(The5zigAPI.getAPI().getSideScoreboard().getTitle() == null) return;
+                    String title = ChatColor.stripColor(The5zigAPI.getAPI().getSideScoreboard().getTitle()).trim();
+                    if(title.startsWith("Your") && title.endsWith("Stats")) {
+                        String game = title.split(" ")[1];
+                        getGameListener().switchLobby("ARCADE_" + game);
+
+                        DiscordUtils.updatePresence("Playing an Arcade Game", "In Lobby (" + game + ")", "game_arcade");
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+
+        if(key.startsWith("arcade.")) {
+            String[] path = key.split("\\.");
+            String game = path[1].toUpperCase();
+            getGameListener().switchLobby("ARCADE_" + game);
+
+            DiscordUtils.updatePresence("Playing an Arcade Game", "In Lobby (" + game + ")", "game_arcade");
+
         }
 
         if (key.equals("timv.welcome")) {

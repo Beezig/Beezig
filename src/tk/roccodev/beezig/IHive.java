@@ -66,20 +66,21 @@ public class IHive extends ServerInstance {
     @Override
     public void registerListeners() {
         gameListener = getGameListener();
-        // TODO Auto-generated method stub
-        getGameListener().registerListener(new TIMVListener());
-        getGameListener().registerListener(new HiveListener());
-        getGameListener().registerListener(new DRListener());
-        getGameListener().registerListener(new BEDListener());
-        getGameListener().registerListener(new GiantListener());
-        getGameListener().registerListener(new HIDEListener());
-        getGameListener().registerListener(new CAIListener());
-        getGameListener().registerListener(new SKYListener());
-        getGameListener().registerListener(new MIMVListener());
-        getGameListener().registerListener(new GRAVListener());
-        getGameListener().registerListener(new BPListener());
-        getGameListener().registerListener(new SGNListener());
-        getGameListener().registerListener(new LABListener());
+
+        gameListener.registerListener(new TIMVListener());
+        gameListener.registerListener(new HiveListener());
+        gameListener.registerListener(new DRListener());
+        gameListener.registerListener(new BEDListener());
+        gameListener.registerListener(new GiantListener());
+        gameListener.registerListener(new HIDEListener());
+        gameListener.registerListener(new CAIListener());
+        gameListener.registerListener(new SKYListener());
+        gameListener.registerListener(new MIMVListener());
+        gameListener.registerListener(new GRAVListener());
+        gameListener.registerListener(new BPListener());
+        gameListener.registerListener(new SGNListener());
+        gameListener.registerListener(new LABListener());
+        gameListener.registerListener(new ArcadeListener());
 
     }
 

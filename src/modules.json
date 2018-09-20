@@ -292,6 +292,15 @@
           "showPrefix": false
         }
       ]
+    },
+    {
+      "id": "Arcade",
+      "name": "Hive Arcade",
+      "items": [
+        {
+          "type": "arcadegame"
+        }
+      ]
     }
   ]
 }
