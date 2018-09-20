@@ -70,7 +70,7 @@ public class HiveListener extends AbstractGameListener<GameMode> {
         if(key.equals("somearcades.welcome")) {
             new Thread(() -> {
                 try {
-                    Thread.sleep(1000L);
+                    Thread.sleep(500L);
                     if(The5zigAPI.getAPI().getSideScoreboard() == null) return;
                     if(The5zigAPI.getAPI().getSideScoreboard().getTitle() == null) return;
                     String title = ChatColor.stripColor(The5zigAPI.getAPI().getSideScoreboard().getTitle()).trim();

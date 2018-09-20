@@ -8,6 +8,7 @@ public class Arcade extends GameMode {
 
     public String game;
     public String gameDisplay;
+    public String map;
 
     @Override
     public String getName() {
@@ -24,6 +25,7 @@ public class Arcade extends GameMode {
         IHive.genericReset();
         game = "";
         gameDisplay = null;
+        map = null;
     }
 
     private enum Modes {

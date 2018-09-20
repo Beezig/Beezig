@@ -299,6 +299,12 @@
       "items": [
         {
           "type": "arcadegame"
+        },
+        {
+          "type": "arcadepoints"
+        },
+        {
+          "type": "arcademap"
         }
       ]
     }

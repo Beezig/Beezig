@@ -42,7 +42,10 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -318,6 +321,10 @@ public class BeezigMain {
                 "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "arcadegame", tk.roccodev.beezig.modules.arcade.GameItem.class,
+                "hivearcade");
+        The5zigAPI.getAPI().registerModuleItem(this, "arcadepoints", tk.roccodev.beezig.modules.arcade.PointsItem.class,
+                "hivearcade");
+        The5zigAPI.getAPI().registerModuleItem(this, "arcademap", tk.roccodev.beezig.modules.arcade.MapItem.class,
                 "hivearcade");
 
 
