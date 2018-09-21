@@ -9,6 +9,7 @@ import org.json.simple.parser.ParseException;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 import java.util.Date;
+import java.util.Map;
 
 public class APIGameMode {
 
@@ -106,7 +107,11 @@ public class APIGameMode {
 
     public int getAchievements() {
         JSONObject obj = (JSONObject) object("achievements");
-        return obj.size() - 1;
+        return Math.toIntExact(obj.values().stream().filter(o -> {
+            if(!(o instanceof JSONObject)) return false;
+            JSONObject j = (JSONObject) o;
+            return (long)j.get("unlockedAt") != 0;
+        }).count());
     }
 
     public String getTitle() {

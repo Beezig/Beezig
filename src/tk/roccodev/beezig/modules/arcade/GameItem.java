@@ -26,6 +26,7 @@ public class GameItem extends GameModeItem<Arcade>  {
 
     @Override
     public boolean shouldRender(boolean dummy) {
+        if(!super.shouldRender(dummy)) return false;
         if(getGameMode() == null) return false;
         return dummy || getGameMode().getState() != GameState.FINISHED;
     }
