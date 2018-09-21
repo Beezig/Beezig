@@ -126,6 +126,10 @@ public class BED extends GameMode {
         BED.pointsCounter = 0;
         BED.teamsLeft = 0;
         BED.votesToParse.clear();
+        apiKills = 0;
+        apiDeaths = 0;
+        apiKdr = 0;
+        gameKdr = 0;
         ironGen = 0;
         goldGen = 0;
         diamondGen = 0;
