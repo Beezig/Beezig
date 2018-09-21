@@ -66,6 +66,6 @@ public class ArcadeListener extends AbstractGameListener<Arcade> {
 
     @Override
     public void onServerConnect(Arcade gameMode) {
-        gameMode.reset();
+        gameMode.resetInternally();
     }
 }

@@ -58,7 +58,7 @@ public class HiveListener extends AbstractGameListener<GameMode> {
         if (gameMode != null && gameMode.getState() != GameState.FINISHED) {
             return;
         }
-        if (key != null)
+        if (key == null)
             return;
         if (key.equals(TIMV.joinMessage)) {
             getGameListener().switchLobby("TIMV");

@@ -6,9 +6,15 @@ import tk.roccodev.beezig.IHive;
 
 public class Arcade extends GameMode {
 
+    private static Arcade inst;
+
     public String game;
     public String gameDisplay;
     public String map;
+
+    public Arcade() {
+        inst = this;
+    }
 
     @Override
     public String getName() {
@@ -20,12 +26,16 @@ public class Arcade extends GameMode {
         gameDisplay = Modes.valueOf(raw).getDisplay();
     }
 
-    public void reset() {
+    public void resetInternally() {
         this.setState(GameState.FINISHED);
         IHive.genericReset();
         game = "";
         gameDisplay = null;
         map = null;
+    }
+
+    public static void reset() {
+        inst.resetInternally();
     }
 
     private enum Modes {
