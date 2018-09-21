@@ -386,7 +386,7 @@ public class BeezigMain {
             CommandManager.registerCommand(new SeenCommand());
         }
 
-        new Thread(() -> BeezigMain.refetchMaps(), "Maps Fetcher").start();
+        new Thread(BeezigMain::refetchMaps, "Maps Fetcher").start();
 
         The5zigAPI.getLogger().info("Loaded BeezigCore");
 

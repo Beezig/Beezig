@@ -14,7 +14,8 @@ public class Log {
     private static final DecimalFormat bigintFormatter = new DecimalFormat("#,###");
 
     public static String getUserAgent() {
-        return "Beezig/" + BeezigMain.BEEZIG_VERSION + " (5zig/" + The5zigAPI.getAPI().getModVersion() + " on "
+        return "Beezig/" + BeezigMain.BEEZIG_VERSION + (BeezigMain.VERSION_HASH.isEmpty() ? ""
+                : "/" + BeezigMain.VERSION_HASH) + " (5zig/" + The5zigAPI.getAPI().getModVersion() + " on "
                 + The5zigAPI.getAPI().getMinecraftVersion() + "; Forge=" + The5zigAPI.getAPI().isForgeEnvironment()
                 + "; BeezigForge=" + BeezigMain.hasExpansion + ")";
     }
