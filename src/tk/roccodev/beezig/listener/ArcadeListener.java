@@ -8,6 +8,7 @@ import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.games.Arcade;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.listener.arcade.ArcadeSubListener;
+import tk.roccodev.beezig.listener.arcade.subs.ElectricFloorSubListener;
 import tk.roccodev.beezig.listener.arcade.subs.SpleggSubListener;
 
 import java.util.ArrayList;
@@ -19,7 +20,9 @@ public class ArcadeListener extends AbstractGameListener<Arcade> {
     private List<ArcadeSubListener> subs = new ArrayList<>();
 
     public ArcadeListener() {
+
         subs.add(new SpleggSubListener());
+        subs.add(new ElectricFloorSubListener());
     }
 
     @Override
