@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 
 @Plugin(name = "Beezig", version = BeezigMain.BEEZIG_VERSION)
 public class BeezigMain {
-    public static final String BEEZIG_VERSION = "4.9.0";
+    public static final String BEEZIG_VERSION = "5.0.0";
     public static String VERSION_HASH = "";
     public static String OS;
     public static boolean newUpdate;
@@ -143,6 +143,8 @@ public class BeezigMain {
             }
 
         }
+        else
+            VERSION_HASH = "Dev";
 
         try {
             RenderUtils.init();
