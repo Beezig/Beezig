@@ -6,6 +6,7 @@ import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.util.minecraft.ChatColor;
+import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.games.GNT;
 import tk.roccodev.beezig.games.GNTM;
 import tk.roccodev.beezig.games.TIMV;
@@ -55,9 +56,7 @@ public class HiveListener extends AbstractGameListener<GameMode> {
 
     @Override
     public void onMatch(GameMode gameMode, String key, IPatternResult match) {
-        if (gameMode != null && gameMode.getState() != GameState.FINISHED) {
-            return;
-        }
+
         if (key == null)
             return;
         if (key.equals(TIMV.joinMessage)) {
@@ -66,35 +65,6 @@ public class HiveListener extends AbstractGameListener<GameMode> {
             The5zigAPI.getLogger().info("Connected to TIMV! -Hive");
             DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "In Lobby", "game_timv");
         }
-
-        if("somearcades.welcome".equals(key)) {
-            new Thread(() -> {
-                try {
-                    Thread.sleep(500L);
-                    if(The5zigAPI.getAPI().getSideScoreboard() == null) return;
-                    if(The5zigAPI.getAPI().getSideScoreboard().getTitle() == null) return;
-                    String title = ChatColor.stripColor(The5zigAPI.getAPI().getSideScoreboard().getTitle()).trim();
-                    if(title.startsWith("Your") && title.endsWith("Stats")) {
-                        String game = title.split(" ")[1];
-                        getGameListener().switchLobby("ARCADE_" + game);
-
-                        DiscordUtils.updatePresence("Playing an Arcade Game", "In Lobby (" + game + ")", "game_arcade");
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        }
-
-        if(key.startsWith("arcade.")) {
-            String[] path = key.split("\\.");
-            String game = path[1].toUpperCase();
-            getGameListener().switchLobby("ARCADE_" + game);
-
-            DiscordUtils.updatePresence("Playing an Arcade Game", "In Lobby (" + game + ")", "game_arcade");
-
-        }
-
         if ("timv.welcome".equals(key)) {
             getGameListener().switchLobby("TIMV");
 
@@ -163,6 +133,40 @@ public class HiveListener extends AbstractGameListener<GameMode> {
             The5zigAPI.getLogger().info("Connected to SGN! - Hive");
             DiscordUtils.updatePresence("Battling in SG2", "In Lobby", "game_sgn");
         }
+
+
+
+        if("somearcades.welcome".equals(key)) {
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500L);
+                    if (!ActiveGame.current().isEmpty()  || (gameMode != null && gameMode.getState() != GameState.FINISHED)) {
+                        return;
+                    }
+                    if(The5zigAPI.getAPI().getSideScoreboard() == null) return;
+                    if(The5zigAPI.getAPI().getSideScoreboard().getTitle() == null) return;
+                    String title = ChatColor.stripColor(The5zigAPI.getAPI().getSideScoreboard().getTitle()).trim();
+                    if(title.startsWith("Your") && title.endsWith("Stats")) {
+                        String game = title.split(" ")[1];
+                        getGameListener().switchLobby("ARCADE_" + game);
+
+                        DiscordUtils.updatePresence("Playing an Arcade Game", "In Lobby (" + game + ")", "game_arcade");
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+
+        if(key.startsWith("arcade.")) {
+            String[] path = key.split("\\.");
+            String game = path[1].toUpperCase();
+            getGameListener().switchLobby("ARCADE_" + game);
+
+            DiscordUtils.updatePresence("Playing an Arcade Game", "In Lobby (" + game + ")", "game_arcade");
+
+        }
+
 
     }
 
