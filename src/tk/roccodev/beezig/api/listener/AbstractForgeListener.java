@@ -15,11 +15,18 @@ public interface AbstractForgeListener {
             public void onDisplaySettingsGui(Object[] settings) {
                 ClassUtils.invokeMethod(from, ClassUtils.findMethod(from.getClass(), "onDisplaySettingsGui", Object.class), new ArrayContainer(settings));
             }
+
+            @Override
+            public void setActiveGame(String game) {
+                ClassUtils.invokeMethod(from, ClassUtils.findMethod(from.getClass(), "setActiveGame", String.class), game);
+            }
         };
     }
 
     void onLoad(String pluginVersion, String zigVersion);
 
     void onDisplaySettingsGui(Object[] settings);
+
+    void setActiveGame(String game);
 
 }
