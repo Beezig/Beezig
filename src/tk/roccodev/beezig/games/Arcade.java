@@ -2,6 +2,7 @@ package tk.roccodev.beezig.games;
 
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
+import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 
 public class Arcade extends GameMode {
@@ -28,10 +29,12 @@ public class Arcade extends GameMode {
 
     public void resetInternally() {
         this.setState(GameState.FINISHED);
+        ActiveGame.reset("ARCADE_" + game);
         IHive.genericReset();
         game = "";
         gameDisplay = null;
         map = null;
+
     }
 
     public static void reset() {
