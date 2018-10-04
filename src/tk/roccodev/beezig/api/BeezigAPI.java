@@ -6,6 +6,8 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.api.listener.AbstractForgeListener;
 import tk.roccodev.beezig.games.CAI;
+import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
+import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.settings.SettingsFetcher;
 import tk.roccodev.beezig.utils.ws.Connector;
@@ -47,6 +49,24 @@ public class BeezigAPI {
             return Setting.valueOf(setting).getValue();
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public String getRankString(String title, String mode) {
+        String pkg = mode.startsWith("GNT") ? "gnt" : mode.toLowerCase();
+        String name = mode.startsWith("GNT") ? "Giant" : mode.toUpperCase();
+        try {
+            Class clazz = Class.forName("tk.roccodev.beezig.hiveapi.stuff." + pkg + "." + name + "Rank");
+            Object o = clazz.getMethod("getFromDisplay", String.class).invoke(null, title);
+            if(!(o instanceof RankEnum)) return null;
+            RankEnum obj = (RankEnum) o;
+            if(obj instanceof BEDRank) {
+                return ((BEDRank)obj).rankStringForge(title.replaceAll("\\D+", ""));
+            }
+            return obj.getTotalDisplay();
+
+        } catch (Exception e) {
+           return null;
         }
     }
 

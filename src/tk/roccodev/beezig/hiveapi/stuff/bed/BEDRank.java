@@ -103,6 +103,10 @@ public enum BEDRank implements RankEnum {
     }
 
     public static BEDRank getFromDisplay(String display) {
+        for(BEDRank rank : BEDRank.values()) {
+            String group = display.replaceAll("\\d", "").trim();
+            if(ChatColor.stripColor(rank.getDisplay()).equals(group)) return rank;
+        }
         return null;
     }
 
@@ -173,6 +177,12 @@ public enum BEDRank implements RankEnum {
         return getPointsToNextRank(points, true);
 
 
+    }
+
+    public String rankStringForge(String level) {
+        int lvl = Integer.parseInt(level);
+        String color = getName().replaceAll(ChatColor.stripColor(getName()), "");
+        return color + BED.NUMBERS[lvl] + " " + getName();
     }
 
     public String getPointsToNextRank(int points, boolean withColor) {
