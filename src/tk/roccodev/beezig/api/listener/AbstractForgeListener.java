@@ -20,6 +20,11 @@ public interface AbstractForgeListener {
             public void setActiveGame(String game) {
                 ClassUtils.invokeMethod(from, ClassUtils.findMethod(from.getClass(), "setActiveGame", String.class), game);
             }
+
+            @Override
+            public void registerCommand(Object commandExecutor) {
+                ClassUtils.invokeMethod(from, ClassUtils.findMethod(from.getClass(), "registerCommand", Object.class), commandExecutor);
+            }
         };
     }
 
@@ -28,5 +33,7 @@ public interface AbstractForgeListener {
     void onDisplaySettingsGui(Object[] settings);
 
     void setActiveGame(String game);
+
+    void registerCommand(Object commandExecutor);
 
 }

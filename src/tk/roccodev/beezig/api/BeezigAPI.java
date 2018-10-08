@@ -4,6 +4,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
+import tk.roccodev.beezig.CommandManager;
 import tk.roccodev.beezig.api.listener.AbstractForgeListener;
 import tk.roccodev.beezig.games.CAI;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
@@ -32,6 +33,7 @@ public class BeezigAPI {
         listenerImpl = AbstractForgeListener.fromObject(registeredListener);
         BeezigMain.hasExpansion = true;
         listenerImpl.onLoad(BeezigMain.BEEZIG_VERSION, The5zigAPI.getAPI().getModVersion());
+        CommandManager.commandExecutors.forEach(cmd -> listenerImpl.registerCommand(cmd));
         new Thread(() -> Connector.client.send("BeezigForgeLoad")).start();
     }
 
