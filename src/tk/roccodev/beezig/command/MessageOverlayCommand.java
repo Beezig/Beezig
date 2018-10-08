@@ -1,9 +1,13 @@
 package tk.roccodev.beezig.command;
 
+import com.mojang.authlib.GameProfile;
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessageOverlayCommand implements Command {
 
@@ -42,5 +46,8 @@ public class MessageOverlayCommand implements Command {
         return true;
     }
 
-
+    @Override
+    public List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
+        return new ArrayList<>();
+    }
 }

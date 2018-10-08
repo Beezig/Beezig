@@ -1,9 +1,11 @@
 package tk.roccodev.beezig.command;
 
+import com.mojang.authlib.GameProfile;
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.TIMV;
 import tk.roccodev.beezig.utils.TIMVTest;
+import tk.roccodev.beezig.utils.TabCompletionUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,4 +74,10 @@ public class CustomTestCommand implements Command {
         return true;
     }
 
+    @Override
+    public List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
+        if(args.length == 1)
+            return TabCompletionUtils.matching(args, Arrays.asList("add", "remove", "list"));
+        return new ArrayList<>();
+    }
 }
