@@ -1,5 +1,9 @@
 package tk.roccodev.beezig.command;
 
+import com.mojang.authlib.GameProfile;
+
+import java.util.List;
+
 public interface Command {
 
 
@@ -18,6 +22,10 @@ public interface Command {
      *
      */
     boolean execute(String[] args);
+
+    default List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
+        return null;
+    }
 
 
 }
