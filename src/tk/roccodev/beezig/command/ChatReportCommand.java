@@ -1,12 +1,15 @@
 package tk.roccodev.beezig.command;
 
+import com.mojang.authlib.GameProfile;
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.utils.TabCompletionUtils;
 import tk.roccodev.beezig.utils.acr.ChatReason;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,5 +53,10 @@ public class ChatReportCommand implements Command {
 
     }
 
-
+    @Override
+    public List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
+        if(args.length == 2)
+            return TabCompletionUtils.matching(args, Arrays.stream(ChatReason.values()).map(ChatReason::toString).collect(Collectors.toList()));
+        return null;
+    }
 }

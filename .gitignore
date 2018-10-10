@@ -19,6 +19,6 @@ hs_err_pid*
 .idea/libraries/
 .idea/modules.xml
 .idea/workspace.xml
-/.settings/
+.settings/
 
 .github/
