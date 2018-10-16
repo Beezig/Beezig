@@ -521,6 +521,8 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                 String[] data = message.split("▏ §7");
                 TIMV.gameID = data[1];
                 TIMV.actionBarChecked = true;
+                Log.addToSendQueue(Log.info + "Game ID: §b" + TIMV.gameID + " > §a"
+                + "http://hivemc.com/trouble-in-mineville/game/" + TIMV.gameID);
             }
         }
         return false;
