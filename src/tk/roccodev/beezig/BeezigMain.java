@@ -748,8 +748,13 @@ public class BeezigMain {
 
     @EventHandler
     public void onTick(TickEvent evt) {
+        if(!The5zigAPI.getAPI().isInWorld()) return;
+        for(String s : Log.toSendQueue) {
+            The5zigAPI.getAPI().messagePlayer(s);
+        }
+        Log.toSendQueue.clear();
 
-        if (The5zigAPI.getAPI().isInWorld() && The5zigAPI.getAPI().getSideScoreboard() != null && The5zigAPI.getAPI().getSideScoreboard().getTitle().equals("   §eYour LAB Stats   ") && !ActiveGame.is("lab")) {
+        if (The5zigAPI.getAPI().getSideScoreboard() != null && The5zigAPI.getAPI().getSideScoreboard().getTitle().equals("   §eYour LAB Stats   ") && !ActiveGame.is("lab")) {
             ActiveGame.set("LAB");
             System.out.println("Connected to LAB -Hive");
             DiscordUtils.updatePresence("Experimenting in TheLab", "In Lobby", "game_lab");
