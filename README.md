@@ -14,9 +14,9 @@ By RoccoDev and ItsNiklass.
 
 ### Build Status
 
-[![Travis Master](https://travis-ci.org/RoccoDev/Beezig.svg?branch=master)](http://travis-ci.org/RoccoDev/Beezig) (Master)
+[![Travis Master](https://travis-ci.org/Beezig/Beezig.svg?branch=master)](http://travis-ci.org/RoccoDev/Beezig) (Master)
 
-[![Travis Exp](https://travis-ci.org/RoccoDev/Beezig.svg?branch=experimental)](http://travis-ci.org/RoccoDev/Beezig) (Experimental)
+[![Travis Exp](https://travis-ci.org/Beezig/Beezig.svg?branch=experimental)](http://travis-ci.org/RoccoDev/Beezig) (Experimental)
 
 # Features
 
