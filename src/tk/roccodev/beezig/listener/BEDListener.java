@@ -60,9 +60,10 @@ public class BEDListener extends AbstractGameListener<BED> {
                     // TODO Auto-generated catch block
                     e2.printStackTrace();
                 }
+                Thread.sleep(100);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 
-                BED.updateMode();
+
                 if (sb != null && sb.getTitle().contains("BED")) {
                     BED.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
                     BED.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
@@ -72,6 +73,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                     BED.apiDeaths = Math.toIntExact(api.getDeaths());
                     BED.apiKills = Math.toIntExact(api.getKills());
                 }
+                BED.updateMode();
 
                 String ign1 = The5zigAPI.getAPI().getGameProfile().getName();
                 APIValues.BEDpoints = new ApiBED(ign1).getPoints();
@@ -169,7 +171,7 @@ public class BEDListener extends AbstractGameListener<BED> {
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
+        } else if (message.contains(" §ahttps://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             BED.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
