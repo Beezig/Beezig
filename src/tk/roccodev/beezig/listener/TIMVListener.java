@@ -182,7 +182,14 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             The5zigAPI.getLogger().info("FALLBACK: " + map);
 
             TIMV.activeMap = TIMV.mapsPool.get(map.toLowerCase());
-        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
+        }
+        else if(message.startsWith("§8▍ §6TIMV§8 ▏ §1You will be a detective.")) {
+            TIMV.currentPassStatus = 2;
+        }
+        else if(message.startsWith("§8▍ §6TIMV§8 ▏ §4You will be a traitor.")) {
+            TIMV.currentPassStatus = 1;
+        }
+        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             //"          §6§m                  §f ItsNiklass's Stats §6§m                  "
             //Advanced Records
             TIMV.messagesToSend.add(message);
