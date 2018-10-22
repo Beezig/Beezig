@@ -41,6 +41,10 @@ public class Arcade extends GameMode {
         inst.resetInternally();
     }
 
+    public static Modes[] getModes() {
+        return Modes.values();
+    }
+
     private enum Modes {
 
         CR("Cranked"),

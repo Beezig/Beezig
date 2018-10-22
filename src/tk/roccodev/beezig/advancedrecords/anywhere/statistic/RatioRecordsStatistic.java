@@ -2,6 +2,7 @@ package tk.roccodev.beezig.advancedrecords.anywhere.statistic;
 
 import org.json.simple.JSONObject;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.settings.Setting;
 
 public class RatioRecordsStatistic extends RecordsStatistic {
 
@@ -9,6 +10,12 @@ public class RatioRecordsStatistic extends RecordsStatistic {
 
     public RatioRecordsStatistic(String key, String apiKey1, String apiKey2) {
         super(key, apiKey1);
+        ratio1 = apiKey1;
+        ratio2 = apiKey2;
+    }
+
+    public RatioRecordsStatistic(String key, String apiKey1, String apiKey2, Setting setting) {
+        super(key, apiKey1, setting);
         ratio1 = apiKey1;
         ratio2 = apiKey2;
     }
