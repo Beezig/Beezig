@@ -6,6 +6,7 @@ import eu.the5zig.mod.server.GameState;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.games.logging.GameLogger;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRMap;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
 
@@ -15,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DR extends GameMode {
+
+    private static GameLogger logger;
 
     public static DRMap activeMap;
     public static String currentMapPB;
@@ -27,6 +30,8 @@ public class DR extends GameMode {
     public static int deaths;
     public static int kills;
     public static int lastPts;
+
+    public static String gameId = null;
 
     public static HashMap<String, DRMap> mapsPool;
     public static int dailyPoints;
@@ -46,6 +51,17 @@ public class DR extends GameMode {
             initPointsWriterWithZero();
             return;
         }
+
+        logger = new GameLogger(BeezigMain.mcFile + "/dr/games.csv");
+        logger.setHeaders(new String[] {
+                "Role",
+                "Map",
+                "Kills",
+                "Deaths",
+                "GameID"
+        });
+
+
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
@@ -89,9 +105,12 @@ public class DR extends GameMode {
     public static void reset(DR gm) {
 
         gm.setState(GameState.FINISHED);
+        if(role != null && activeMap != null)
+        logger.logGame(role, activeMap.getDisplayName(), kills + "", deaths + "", gameId);
         activeMap = null;
         currentMapPB = null;
         currentMapWR = null;
+        gameId = null;
         currentMapWRHolder = null;
         role = null;
         checkpoints = 0;

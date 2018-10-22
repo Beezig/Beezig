@@ -486,11 +486,15 @@ public class DRListener extends AbstractGameListener<DR> {
         for (Map.Entry<String, Integer> e : lines.entrySet()) {
             if (e.getValue() == i && e.getKey().contains("§7Points: ")) {
                 int pts = Integer.parseInt(e.getKey().replace("§7Points: ", "").replace("§9", "").replaceAll("§f", ""));
-                if (pts != HIDE.lastPts) {
+                if (pts != DR.lastPts) {
                     DR.dailyPoints += (pts - DR.lastPts);
                     APIValues.DRpoints += (pts - DR.lastPts);
                     DR.lastPts = pts;
                 }
+            }
+            if(DR.gameId == null && e.getKey().contains("§7GID: §f")) {
+                DR.gameId = e.getKey().replace("§7GID: §f", "").trim();
+                Log.addToSendQueue(Log.info + "Game ID: §b" + DR.gameId);
             }
         }
     }
