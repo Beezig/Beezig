@@ -9,6 +9,8 @@ import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.util.minecraft.ChatColor;
 import io.netty.util.internal.ThreadLocalRandom;
 import org.lwjgl.opengl.Display;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
+import tk.roccodev.beezig.advancedrecords.anywhere.AdvancedRecordsAnywhere;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.briefing.NewsServer;
 import tk.roccodev.beezig.briefing.Pools;
@@ -335,6 +337,8 @@ public class BeezigMain {
         The5zigAPI.getAPI().getPluginManager().registerListener(this, new GRAVListenerv2());
         The5zigAPI.getAPI().getPluginManager().registerListener(this, new AutoGGListener());
 
+        AdvancedRecordsAnywhere.register();
+
         CommandManager.registerCommand(new NotesCommand());
         CommandManager.registerCommand(new AddNoteCommand());
         CommandManager.registerCommand(new SayCommand());
@@ -655,7 +659,12 @@ public class BeezigMain {
                 return;
             }
             String[] args = evt.getMessage().split(" ");
-            AdvancedRecords.player = args.length == 1 ? The5zigAPI.getAPI().getGameProfile().getName() : args[1].trim();
+            if(args.length == 3) {
+                evt.setCancelled(true);
+                AdvancedRecordsAnywhere.run(args[1].trim(), args[2].trim());
+                return;
+            }
+            else AdvancedRecords.player = args.length == 1 ? The5zigAPI.getAPI().getGameProfile().getName() : args[1].trim();
 
         }
         if (evt.getMessage().endsWith(" test") && (evt.getMessage().split(" ").length == 2) && ActiveGame.is("TIMV")

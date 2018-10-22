@@ -19,7 +19,7 @@ import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.utils.AdvancedRecords;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;

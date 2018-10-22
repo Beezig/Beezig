@@ -1,4 +1,4 @@
-package tk.roccodev.beezig.utils;
+package tk.roccodev.beezig.advancedrecords;
 
 public class AdvancedRecords {
 

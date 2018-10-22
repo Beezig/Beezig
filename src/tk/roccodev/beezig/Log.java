@@ -14,6 +14,7 @@ public class Log {
     public static final String error = "§7▏ §cBeezig§7 ▏ §c";
     public static final String bar = "    §7§m                                                                                    ";
     private static final DecimalFormat bigintFormatter = new DecimalFormat("#,###");
+    private static final DecimalFormat ratioFormatter = new DecimalFormat("#.##");
 
     static List<String> toSendQueue = new ArrayList<>();
 
@@ -31,6 +32,10 @@ public class Log {
 
     public static String df(long l) {
         return Setting.THOUSANDS_SEPARATOR.getValue() ? bigintFormatter.format(l) : Long.toString(l);
+    }
+
+    public static String ratio(double d) {
+        return ratioFormatter.format(d);
     }
 
     public static void addToSendQueue(String message) {
