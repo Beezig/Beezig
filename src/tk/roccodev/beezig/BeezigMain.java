@@ -375,6 +375,7 @@ public class BeezigMain {
         CommandManager.registerCommand(new AutoGGCommand());
         CommandManager.registerCommand(new UptimeCommand());
         CommandManager.registerCommand(new ChatReportCommand());
+        CommandManager.registerCommand(new StatsOverlayCommand());
 
         new Thread(() -> {
             try {
@@ -650,22 +651,6 @@ public class BeezigMain {
         }
         if (evt.getMessage().toUpperCase().trim().equals("/P")) {
             MessageOverlayCommand.toggledName = "";
-        }
-        if (evt.getMessage().toUpperCase().startsWith("/RECORDS")
-                || evt.getMessage().toUpperCase().startsWith("/STATS")) {
-            if (AdvancedRecords.isRunning) {
-                The5zigAPI.getAPI().messagePlayer(Log.error + "Advanced Records is already running.");
-                evt.setCancelled(true);
-                return;
-            }
-            String[] args = evt.getMessage().split(" ");
-            if(args.length == 3) {
-                evt.setCancelled(true);
-                AdvancedRecordsAnywhere.run(args[1].trim(), args[2].trim());
-                return;
-            }
-            else AdvancedRecords.player = args.length == 1 ? The5zigAPI.getAPI().getGameProfile().getName() : args[1].trim();
-
         }
         if (evt.getMessage().endsWith(" test") && (evt.getMessage().split(" ").length == 2) && ActiveGame.is("TIMV")
                 && Setting.TIMV_USE_TESTREQUESTS.getValue()) {
