@@ -762,6 +762,10 @@ public class BeezigMain {
             if (The5zigAPI.getAPI().getActiveServer() instanceof IHive) {
                 if (BeezigMain.isColorDebug)
                     The5zigAPI.getLogger().info("Global Color Debug: (" + evt.getMessage() + ")");
+                String party = ChatComponentUtils.getPartyMembers(evt.getChatComponent().toString());
+                if(party != null) {
+                    The5zigAPI.getAPI().messagePlayer(Log.info + "Party Members: §b" + party);
+                }
                 if (evt.getMessage().equals("§8▏ §aChatReport§8 ▏ §cSorry, there are no logs for this user.")) {
                     crInteractive = false;
                     lrRS = "";

@@ -9,6 +9,7 @@ public enum Setting {
     THOUSANDS_SEPARATOR(true, "Thousands Separator", "Separate thousands with a comma or a dot, depending on the system language"),
     ADVANCED_RECORDS(true, "Advanced Records", "Display more stats when running /records"),
     IGNORE_WARNINGS(false, "Ignore Warnings", "Ignore Briefing/WR and BeezigForge warnings."),
+    PARTY_MEMBERS(true, "Show party members", "Show party members upon receiving an invite."),
     SHOW_NETWORK_RANK_TITLE(false, "AdvRec - Network Rank", "Advanced Records - Show the network-rank title behind username"),
     SHOW_NETWORK_RANK_COLOR(true, "AdvRec - Network Rank Color", "Advanced Records - Color the username/network-rank respective to their network-rank"),
     SHOW_RECORDS_LASTGAME(true, "AdvRec - Last Game", "Advanced Records - Show last time the player played that game"),
