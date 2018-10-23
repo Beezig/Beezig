@@ -6,6 +6,7 @@ import eu.the5zig.mod.server.GameState;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.games.logging.GameLogger;
 import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.beezig.utils.StreakUtils;
 
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HIDE extends GameMode {
+
+    private static GameLogger logger;
 
     public static String activeMap;
 
@@ -29,6 +32,7 @@ public class HIDE extends GameMode {
     public static int bestStreak;
 
     public static int dailyPoints;
+    public static int kills;
     public static boolean seeking;
     public static int lastPts;
     public static String rank;
@@ -43,6 +47,15 @@ public class HIDE extends GameMode {
             initPointsWriterWithZero();
             return;
         }
+
+        logger = new GameLogger(BeezigMain.mcFile + "/hide/games.csv");
+        logger.setHeaders(new String[] {
+                "Map",
+                "Victory?",
+                "Kills"
+        });
+
+
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
@@ -91,6 +104,8 @@ public class HIDE extends GameMode {
             winstreak = 0;
             StreakUtils.resetWinstreak("hide", wasBest);
         }
+        if(inGame && logger != null)
+        logger.logGame(activeMap, hasWon ? "Yes" : "No", kills + "");
         inGame = false;
         hasWon = false;
         HIDE.messagesToSend.clear();
@@ -99,6 +114,7 @@ public class HIDE extends GameMode {
 
         HIDE.hasVoted = false;
         HIDE.activeMap = null;
+        kills = 0;
         lastPts = 0;
         seeking = false;
         ActiveGame.reset("hide");

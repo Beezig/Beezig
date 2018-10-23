@@ -134,7 +134,11 @@ public class BPListener extends AbstractGameListener<BP> {
             APIValues.BPpoints++;
             BP.gamePts++;
             BP.dailyPoints++;
-        } else if ((message.equals("                      §6§m                  §6§m                  ")
+        }
+        else if(message.equals("        §a§m                      §f§l NOW PLAYING §a§m                      ")) {
+            gameMode.setState(GameState.GAME);
+        }
+        else if ((message.equals("                      §6§m                  §6§m                  ")
                 && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             BP.footerToSend.add(message);

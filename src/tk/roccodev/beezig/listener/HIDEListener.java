@@ -161,7 +161,11 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
-        } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e200 points§6")) {
+        }
+        else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e30 points§6")) {
+            HIDE.kills++;
+        }
+        else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e200 points§6")) {
             APIValues.HIDEpoints += 200;
             HIDE.dailyPoints += 200;
             HIDE.hasWon = true;

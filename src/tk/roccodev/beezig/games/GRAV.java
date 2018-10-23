@@ -5,6 +5,7 @@ import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.games.logging.GameLogger;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVRank;
 
 import java.util.ArrayList;

@@ -6,6 +6,7 @@ import eu.the5zig.mod.server.GameState;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.games.logging.GameLogger;
 import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
 
 import java.io.*;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SGN extends GameMode {
+
+    private static GameLogger logger;
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
@@ -34,6 +37,14 @@ public class SGN extends GameMode {
             initPointsWriterWithZero();
             return;
         }
+
+        logger = new GameLogger(BeezigMain.mcFile + "/sgn/games.csv");
+        logger.setHeaders(new String[] {
+                "Points",
+                "Custom?",
+                "Map"
+        });
+
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
@@ -78,6 +89,8 @@ public class SGN extends GameMode {
 
         gameMode.setState(GameState.FINISHED);
 
+        if(activeMap != null && !activeMap.isEmpty() &&  logger != null)
+            logger.logGame(gamePts + "", custom ? "Yes" : "No", activeMap);
 
         gamePts = 0;
         activeMap = "";

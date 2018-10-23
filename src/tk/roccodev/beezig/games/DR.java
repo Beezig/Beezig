@@ -105,7 +105,7 @@ public class DR extends GameMode {
     public static void reset(DR gm) {
 
         gm.setState(GameState.FINISHED);
-        if(role != null && activeMap != null)
+        if(role != null && activeMap != null && logger != null)
         logger.logGame(role, activeMap.getDisplayName(), kills + "", deaths + "", gameId);
         activeMap = null;
         currentMapPB = null;

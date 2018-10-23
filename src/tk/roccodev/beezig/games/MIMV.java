@@ -3,9 +3,11 @@ package tk.roccodev.beezig.games;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
+import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.games.logging.GameLogger;
 import tk.roccodev.beezig.hiveapi.stuff.mimv.MIMVRank;
 
 import java.io.*;
@@ -13,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MIMV extends GameMode {
+
+    private static GameLogger logger;
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
@@ -34,6 +38,14 @@ public class MIMV extends GameMode {
             initPointsWriterWithZero();
             return;
         }
+
+        logger = new GameLogger(BeezigMain.mcFile + "/mimv/games.csv");
+        logger.setHeaders(new String[] {
+                "Karma",
+                "Role",
+                "Map"
+        });
+
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
@@ -77,6 +89,9 @@ public class MIMV extends GameMode {
     public static void reset(MIMV gameMode) {
 
         gameMode.setState(GameState.FINISHED);
+
+        if(role != null && !role.isEmpty() && logger != null)
+            logger.logGame(gamePts + "", ChatColor.stripColor(role), map);
 
         role = "";
         map = "";

@@ -8,6 +8,7 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.games.logging.GameLogger;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.beezig.utils.StreakUtils;
@@ -20,6 +21,8 @@ import java.util.Map;
 public class BED extends GameMode {
 
     public static char[] NUMBERS = {' ', '➊', '➋', '➌', '➍', '➎'};
+
+    private static GameLogger logger;
 
     public static String activeMap;
     public static Long lastRecordsPoints = null;
@@ -63,6 +66,18 @@ public class BED extends GameMode {
             initPointsWriterWithZero();
             return;
         }
+
+        logger = new GameLogger(BeezigMain.mcFile + "/bedwars/games.csv");
+        logger.setHeaders(new String[] {
+                "Points",
+                "Mode",
+                "Map",
+                "Kills",
+                "Deaths",
+                "Beds",
+                "Victory?"
+        });
+
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
@@ -115,6 +130,8 @@ public class BED extends GameMode {
             winstreak = 0;
             StreakUtils.resetWinstreak("bed", wasBest);
         }
+        if(inGame && logger != null)
+        logger.logGame(pointsCounter + "", mode, activeMap, kills + "", deaths + "", bedsDestroyed + "", hasWon ? "Yes" : "No");
         hasWon = false;
         inGame = false;
         BED.mode = "";

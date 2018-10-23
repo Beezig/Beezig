@@ -6,6 +6,7 @@ import eu.the5zig.mod.server.GameState;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.games.logging.GameLogger;
 import tk.roccodev.beezig.hiveapi.stuff.gnt.GiantRank;
 import tk.roccodev.beezig.utils.StreakUtils;
 
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Giant extends GameMode {
+
+    private static GameLogger logger;
 
     public static int points;
     public static int teamsEliminated;
@@ -61,6 +64,17 @@ public class Giant extends GameMode {
             initPointsWriterWithZero();
             return;
         }
+
+        logger = new GameLogger(BeezigMain.mcFile + "/gnt/games.csv");
+        logger.setHeaders(new String[] {
+                "Mode",
+                "Map",
+                "Kills",
+                "Deaths",
+                "Giants",
+                "Victory?"
+        });
+
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
@@ -109,6 +123,11 @@ public class Giant extends GameMode {
             winstreak = 0;
             StreakUtils.resetWinstreak("gnt", wasBest);
         }
+
+        if(inGame && logger != null)
+            logger.logGame(ActiveGame.is("GNTM") ? "Mini" : "Normal",
+                    activeMap, gameKills + "", gameDeaths + "", giantKills + "", hasWon ? "Yes" : "No");
+
         isEnding = false;
         hasWon = false;
         inGame = false;

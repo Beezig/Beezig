@@ -402,7 +402,8 @@ public class DRListener extends AbstractGameListener<DR> {
             Timer timer = new Timer();
             ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
             timer.schedule(sft, 1500);
-        } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in ")) {
+        }
+        else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in ")) {
             // §8▍ §cDeathRun§8 ▏ §bYou finished your run in 03:07.479§b!
             String time = (message.split("in "))[1].replace("§b!", "").trim();
             String[] data = time.split(":");

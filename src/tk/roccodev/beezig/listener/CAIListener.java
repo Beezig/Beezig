@@ -10,6 +10,7 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.CAI;
 import tk.roccodev.beezig.hiveapi.APIValues;
@@ -19,7 +20,6 @@ import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiCAI;
 import tk.roccodev.beezig.modules.utils.RenderUtils;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
@@ -475,6 +475,13 @@ public class CAIListener extends AbstractGameListener<CAI> {
                 case "§cEmergency Flare":
                     CAI.leaderItem1 = 500;
                     break;
+            }
+        }
+        if (CAI.gameId != null || The5zigAPI.getAPI().getSideScoreboard() == null) return;
+        HashMap<String, Integer> lines = The5zigAPI.getAPI().getSideScoreboard().getLines();
+        for (Map.Entry<String, Integer> e : lines.entrySet()) {
+            if (e.getValue() == 4) {
+                CAI.gameId = ChatColor.stripColor(e.getKey()).trim();
             }
         }
     }

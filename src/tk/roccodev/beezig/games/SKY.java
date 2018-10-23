@@ -6,6 +6,7 @@ import eu.the5zig.mod.server.GameState;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.games.logging.GameLogger;
 import tk.roccodev.beezig.hiveapi.stuff.sky.SKYRank;
 import tk.roccodev.beezig.utils.StreakUtils;
 
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SKY extends GameMode {
+
+    private static GameLogger logger;
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
@@ -57,6 +60,16 @@ public class SKY extends GameMode {
             initPointsWriterWithZero();
             return;
         }
+
+        logger = new GameLogger(BeezigMain.mcFile + "/sky/games.csv");
+        logger.setHeaders(new String[] {
+                "Points",
+                "Map",
+                "Kills",
+                "Mode",
+                "Victory?"
+        });
+
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
@@ -106,6 +119,10 @@ public class SKY extends GameMode {
             winstreak = 0;
             StreakUtils.resetWinstreak("sky", wasBest);
         }
+
+        if(inGame && logger != null)
+            logger.logGame(gamePoints + "", map, kills + "", mode,  hasWon ? "Yes" : "No");
+
         hasWon = false;
         inGame = false;
         SKY.messagesToSend.clear();

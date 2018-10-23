@@ -4,7 +4,6 @@ import com.csvreader.CsvWriter;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 
 public class GameLogger {
 
