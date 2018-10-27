@@ -25,7 +25,7 @@
                 <include name="lang/*"/>
                 <include name="version.txt"/>
             	<include name="javazoom/jl/decoder/*.ser"/>
-
+                <exclude name="**/submodules**"/>
             </fileset>
             <zipfileset dir="src/libraries" prefix="libraries"/>
 
