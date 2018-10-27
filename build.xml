@@ -13,7 +13,9 @@
 
     <target name="compile">
         <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath">
+            <exclude name="**/submodules**"/>
+        </javac>
     </target>
     <target name="jar">
         <mkdir dir="build/jar"/>
@@ -25,7 +27,7 @@
                 <include name="lang/*"/>
                 <include name="version.txt"/>
             	<include name="javazoom/jl/decoder/*.ser"/>
-                <exclude name="**/submodules**"/>
+
             </fileset>
             <zipfileset dir="src/libraries" prefix="libraries"/>
 
