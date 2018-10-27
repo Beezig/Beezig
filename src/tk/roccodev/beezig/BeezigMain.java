@@ -9,7 +9,7 @@ import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.util.minecraft.ChatColor;
 import io.netty.util.internal.ThreadLocalRandom;
 import org.lwjgl.opengl.Display;
-import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
+import pw.roccodev.beezig.hiveapi.wrapper.GlobalConfiguration;
 import tk.roccodev.beezig.advancedrecords.anywhere.AdvancedRecordsAnywhere;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.briefing.NewsServer;
@@ -44,7 +44,10 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -335,6 +338,7 @@ public class BeezigMain {
         The5zigAPI.getAPI().getPluginManager().registerListener(this, new AutoGGListener());
 
         AdvancedRecordsAnywhere.register();
+        GlobalConfiguration.setUserAgent(Log.getUserAgent());
 
         CommandManager.registerCommand(new NotesCommand());
         CommandManager.registerCommand(new AddNoteCommand());
