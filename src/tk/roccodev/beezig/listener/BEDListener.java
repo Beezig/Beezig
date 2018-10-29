@@ -5,19 +5,22 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.bed.BedMonthlyProfile;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.BedStats;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
-import tk.roccodev.beezig.hiveapi.stuff.bed.MonthlyPlayer;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
@@ -76,7 +79,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                 BED.updateMode();
 
                 String ign1 = The5zigAPI.getAPI().getGameProfile().getName();
-                APIValues.BEDpoints = new ApiBED(ign1).getPoints();
+                APIValues.BEDpoints = new BedStats(ign1).getPoints();
                 BED.updateRank();
                 BED.updateKdr();
                 The5zigAPI.getLogger().info(BED.apiDeaths + " / " + BED.apiKills + " / " + BED.apiKdr);
@@ -188,7 +191,8 @@ public class BEDListener extends AbstractGameListener<BED> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiBED api = new ApiBED(AdvancedRecords.player);
+                        BedStats api = new BedStats(AdvancedRecords.player, true);
+                        HivePlayer global = api.getPlayer();
 
                         int kills = 0;
                         int deaths = 0;
@@ -209,23 +213,23 @@ public class BEDListener extends AbstractGameListener<BED> {
                         df1f.setMinimumFractionDigits(1);
 
 
-                        String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? api.getParentMode().getNetworkTitle() : "";
+                        String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? global.getRank().getHumanName() : "";
                         ChatColor rankColor = null;
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
 
-                            rankColor = api.getParentMode().getNetworkRankColor();
+                            rankColor = NetworkRank.fromDisplay(global.getRank().getHumanName()).getColor();
 
                         }
                         long points;
 
-                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
-                        Integer streak = Setting.BED_SHOW_STREAK.getValue() ? api.getStreak() : null;
+                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.getLastLogin() : null;
+                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size() : null;
+                        Long streak = Setting.BED_SHOW_STREAK.getValue() ? api.getWinstreak() : null;
 
 
-                        int monthlyRank = 0;
+                        long monthlyRank = 0;
                         if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
-                            MonthlyPlayer monthly = api.getMonthlyStatus();
+                            BedMonthlyProfile monthly = api.getMonthlyProfile();
                             if (monthly != null) {
                                 monthlyRank = monthly.getPlace();
                             }
@@ -238,7 +242,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                             if (s.trim().endsWith("'s Stats §6§m")) {
                                 The5zigAPI.getLogger().info("Editing Header...");
                                 StringBuilder sb = new StringBuilder();
-                                String correctUser = api.getParentMode().getCorrectName();
+                                String correctUser = global.getUsername();
                                 if (correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
                                 sb.append("          §6§m                  §f ");
                                 The5zigAPI.getLogger().info("Added base...");

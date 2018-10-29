@@ -339,6 +339,7 @@ public class BeezigMain {
 
         AdvancedRecordsAnywhere.register();
         GlobalConfiguration.setUserAgent(Log.getUserAgent());
+        GlobalConfiguration.setMaxthatApiKey("ighGH789fdf5kfHUo");
 
         CommandManager.registerCommand(new NotesCommand());
         CommandManager.registerCommand(new AddNoteCommand());
