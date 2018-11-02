@@ -229,10 +229,12 @@ public class BEDListener extends AbstractGameListener<BED> {
 
                         long monthlyRank = 0;
                         if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
-                            BedMonthlyProfile monthly = api.getMonthlyProfile();
-                            if (monthly != null) {
-                                monthlyRank = monthly.getPlace();
-                            }
+                            try {
+                                BedMonthlyProfile monthly = api.getMonthlyProfile();
+                                if (monthly != null) {
+                                    monthlyRank = monthly.getPlace();
+                                }
+                            } catch(Exception ignored) {}
                         }
 
                         List<String> messages = new ArrayList<>(BED.messagesToSend);
