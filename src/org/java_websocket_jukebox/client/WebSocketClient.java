@@ -1,26 +1,7 @@
 package org.java_websocket_jukebox.client;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.nio.ByteBuffer;
-import java.nio.channels.ByteChannel;
-import java.nio.channels.CancelledKeyException;
-import java.nio.channels.ClosedByInterruptException;
-import java.nio.channels.NotYetConnectedException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
-import java.nio.channels.spi.SelectorProvider;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-
-import org.java_websocket_jukebox.SocketChannelIOHelper;
-import org.java_websocket_jukebox.WebSocket;
+import org.java_websocket_jukebox.*;
 import org.java_websocket_jukebox.WebSocket.READYSTATE;
-import org.java_websocket_jukebox.WebSocketAdapter;
-import org.java_websocket_jukebox.WebSocketFactory;
-import org.java_websocket_jukebox.WebSocketImpl;
-import org.java_websocket_jukebox.WrappedByteChannel;
 import org.java_websocket_jukebox.drafts.Draft;
 import org.java_websocket_jukebox.drafts.Draft_10;
 import org.java_websocket_jukebox.exceptions.InvalidHandshakeException;
@@ -28,6 +9,15 @@ import org.java_websocket_jukebox.framing.CloseFrame;
 import org.java_websocket_jukebox.handshake.HandshakeImpl1Client;
 import org.java_websocket_jukebox.handshake.Handshakedata;
 import org.java_websocket_jukebox.handshake.ServerHandshake;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.nio.ByteBuffer;
+import java.nio.channels.*;
+import java.nio.channels.spi.SelectorProvider;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * The <tt>WebSocketClient</tt> is an abstract class that expects a valid

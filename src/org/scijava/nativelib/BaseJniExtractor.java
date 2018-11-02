@@ -1,9 +1,10 @@
 package org.scijava.nativelib;
 
-import java.util.logging.*;
-import java.net.*;
-import java.util.*;
 import java.io.*;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class BaseJniExtractor implements JniExtractor
 {

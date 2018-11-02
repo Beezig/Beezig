@@ -1,6 +1,6 @@
 package org.scijava.nativelib;
 
-import java.io.*;
+import java.io.IOException;
 
 public class NativeLoader
 {

@@ -1,9 +1,9 @@
 package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +38,8 @@ public class TokensCommand implements Command {
         } else if (args.length == 1) {
             new Thread(() -> {
                 try {
-                    ApiHiveGlobal api = new ApiHiveGlobal(args[0]);
-                    args[0] = api.getCorrectName();
+                    HivePlayer api = new HivePlayer(args[0]);
+                    args[0] = api.getUsername();
                     long tokens = HiveAPI.getTokens(args[0]);
                     The5zigAPI.getAPI().messagePlayer(Log.info + (args[0].endsWith("s") ? args[0] + "'" : args[0] + "'s") + " Tokens:§b " + tokens);
                 } catch (Exception e) {

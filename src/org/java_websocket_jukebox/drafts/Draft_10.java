@@ -1,4 +1,16 @@
 package org.java_websocket_jukebox.drafts;
+
+import org.java_websocket_jukebox.WebSocket.Role;
+import org.java_websocket_jukebox.exceptions.*;
+import org.java_websocket_jukebox.framing.CloseFrameBuilder;
+import org.java_websocket_jukebox.framing.FrameBuilder;
+import org.java_websocket_jukebox.framing.Framedata;
+import org.java_websocket_jukebox.framing.Framedata.Opcode;
+import org.java_websocket_jukebox.framing.FramedataImpl1;
+import org.java_websocket_jukebox.handshake.*;
+import org.java_websocket_jukebox.util.Base64;
+import org.java_websocket_jukebox.util.Charsetfunctions;
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
@@ -7,26 +19,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
-import org.java_websocket_jukebox.WebSocket.Role;
-import org.java_websocket_jukebox.exceptions.InvalidDataException;
-import org.java_websocket_jukebox.exceptions.InvalidFrameException;
-import org.java_websocket_jukebox.exceptions.InvalidHandshakeException;
-import org.java_websocket_jukebox.exceptions.LimitExedeedException;
-import org.java_websocket_jukebox.exceptions.NotSendableException;
-import org.java_websocket_jukebox.framing.CloseFrameBuilder;
-import org.java_websocket_jukebox.framing.FrameBuilder;
-import org.java_websocket_jukebox.framing.Framedata;
-import org.java_websocket_jukebox.framing.Framedata.Opcode;
-import org.java_websocket_jukebox.framing.FramedataImpl1;
-import org.java_websocket_jukebox.handshake.ClientHandshake;
-import org.java_websocket_jukebox.handshake.ClientHandshakeBuilder;
-import org.java_websocket_jukebox.handshake.HandshakeBuilder;
-import org.java_websocket_jukebox.handshake.Handshakedata;
-import org.java_websocket_jukebox.handshake.ServerHandshake;
-import org.java_websocket_jukebox.handshake.ServerHandshakeBuilder;
-import org.java_websocket_jukebox.util.Base64;
-import org.java_websocket_jukebox.util.Charsetfunctions;
 
 public class Draft_10 extends Draft {
 

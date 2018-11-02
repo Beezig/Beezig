@@ -12,7 +12,6 @@ import tk.roccodev.beezig.utils.soundcloud.TrackDownloader;
 import tk.roccodev.beezig.utils.soundcloud.TrackPlayer;
 
 import javax.net.ssl.SSLContext;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;

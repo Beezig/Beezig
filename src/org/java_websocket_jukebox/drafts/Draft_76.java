@@ -1,14 +1,5 @@
 package org.java_websocket_jukebox.drafts;
 
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
 import org.java_websocket_jukebox.WebSocket.Role;
 import org.java_websocket_jukebox.exceptions.IncompleteHandshakeException;
 import org.java_websocket_jukebox.exceptions.InvalidDataException;
@@ -18,12 +9,16 @@ import org.java_websocket_jukebox.framing.CloseFrame;
 import org.java_websocket_jukebox.framing.CloseFrameBuilder;
 import org.java_websocket_jukebox.framing.Framedata;
 import org.java_websocket_jukebox.framing.Framedata.Opcode;
-import org.java_websocket_jukebox.handshake.ClientHandshake;
-import org.java_websocket_jukebox.handshake.ClientHandshakeBuilder;
-import org.java_websocket_jukebox.handshake.HandshakeBuilder;
-import org.java_websocket_jukebox.handshake.Handshakedata;
-import org.java_websocket_jukebox.handshake.ServerHandshake;
-import org.java_websocket_jukebox.handshake.ServerHandshakeBuilder;
+import org.java_websocket_jukebox.handshake.*;
+
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 public class Draft_76 extends Draft_75 {
 	private boolean failed = false;

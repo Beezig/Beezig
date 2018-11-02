@@ -1,11 +1,11 @@
 package org.java_websocket_jukebox.framing;
 
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-
 import org.java_websocket_jukebox.exceptions.InvalidDataException;
 import org.java_websocket_jukebox.exceptions.InvalidFrameException;
 import org.java_websocket_jukebox.util.Charsetfunctions;
+
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class FramedataImpl1 implements FrameBuilder {
 	protected static byte[] emptyarray = {};

@@ -2,8 +2,6 @@ package tk.roccodev.beezig.hiveapi.wrapper.modes;
 
 import eu.the5zig.mod.server.GameMode;
 import tk.roccodev.beezig.games.Giant;
-import tk.roccodev.beezig.games.HIDE;
-import tk.roccodev.beezig.hiveapi.wrapper.APIGameMode;
 import tk.roccodev.beezig.hiveapi.wrapper.PvPMode;
 
 import java.util.Date;

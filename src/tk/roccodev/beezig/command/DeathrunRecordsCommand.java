@@ -1,9 +1,9 @@
 package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.DrStats;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.DR;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
 
 public class DeathrunRecordsCommand implements Command {
     @Override
@@ -27,11 +27,11 @@ public class DeathrunRecordsCommand implements Command {
         new Thread(() -> {
             try {
                 String player = args.length <= 1 ? The5zigAPI.getAPI().getGameProfile().getName() : args[0];
-                ApiDR api = new ApiDR(player);
+                DrStats api = new DrStats(player);
                 String mapInput = args.length <= 1 ? args[0] : args[1];
                 String map = DR.mapsPool.get(mapInput.replace("_", " ").toLowerCase()).getHiveAPIName();
-                The5zigAPI.getAPI().messagePlayer(Log.info + "Kills Record:§b " + api.getKillRecords().get(map));
-                The5zigAPI.getAPI().messagePlayer(Log.info + "Deaths Record:§b " + api.getDeathRecords().get(map));
+                The5zigAPI.getAPI().messagePlayer(Log.info + "Kills Record:§b " + api.getMapKills().get(map));
+                The5zigAPI.getAPI().messagePlayer(Log.info + "Deaths Record:§b " + api.getMapDeaths().get(map));
 
             } catch (Exception e) {
                 The5zigAPI.getAPI().messagePlayer(Log.error + "An Error occurred.");

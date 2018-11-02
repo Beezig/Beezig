@@ -5,13 +5,17 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.DrStats;
+import pw.roccodev.beezig.hiveapi.wrapper.speedrun.WorldRecord;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
+import tk.roccodev.beezig.command.PBCommand;
+import tk.roccodev.beezig.command.WRCommand;
 import tk.roccodev.beezig.games.DR;
-import tk.roccodev.beezig.games.HIDE;
 import tk.roccodev.beezig.games.TIMV;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
@@ -19,7 +23,6 @@ import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
@@ -95,14 +98,17 @@ public class DRListener extends AbstractGameListener<DR> {
                         if (DR.activeMap != null) {
                             The5zigAPI.getLogger().info("Loading PB...");
 
-                            ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
+                            DrStats api = new DrStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
 
-                            DR.currentMapPB = api.getPersonalBest(DR.activeMap);
+                            DR.currentMapPB = PBCommand.parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName()));
                             if (DR.currentMapPB == null)
                                 DR.currentMapPB = "No Personal Best";
                             The5zigAPI.getLogger().info("Loading WR...");
-                            DR.currentMapWR = api.getWorldRecord(DR.activeMap);
-                            DR.currentMapWRHolder = api.getWorldRecordHolder(DR.activeMap);
+
+                            WorldRecord wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID());
+
+                            DR.currentMapWR = WRCommand.getWorldRecord(wr.getTime());
+                            DR.currentMapWRHolder = wr.getHolderName();
                             if (DR.currentMapWR == null)
                                 DR.currentMapWR = "No Record";
                             if (DR.currentMapWRHolder == null)

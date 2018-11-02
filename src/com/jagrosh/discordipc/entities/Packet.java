@@ -15,8 +15,9 @@
  */
 package com.jagrosh.discordipc.entities;
 
-import java.nio.ByteBuffer;
 import org.json.simple.JSONObject;
+
+import java.nio.ByteBuffer;
 
 /**
  * A data-packet received from Discord via an {@link com.jagrosh.discordipc.IPCClient IPCClient}.<br>

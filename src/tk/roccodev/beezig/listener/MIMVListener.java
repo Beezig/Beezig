@@ -8,6 +8,7 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.MIMV;
 import tk.roccodev.beezig.hiveapi.APIValues;
@@ -15,7 +16,6 @@ import tk.roccodev.beezig.hiveapi.stuff.mimv.MIMVRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiMIMV;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;

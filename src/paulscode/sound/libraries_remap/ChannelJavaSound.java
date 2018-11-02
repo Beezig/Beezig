@@ -1,19 +1,12 @@
 package paulscode.sound.libraries_remap;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.Mixer;
-import javax.sound.sampled.SourceDataLine;
-
 import paulscode.sound.Channel;
 import paulscode.sound.SoundBuffer;
 import paulscode.sound.SoundSystemConfig;
+
+import javax.sound.sampled.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * The ChannelJavaSound class is used to reserve a sound-card voice using 

@@ -1,11 +1,11 @@
 package org.java_websocket_jukebox.client;
 
+import org.java_websocket_jukebox.AbstractWrappedByteChannel;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
-
-import org.java_websocket_jukebox.AbstractWrappedByteChannel;
 
 public abstract class AbstractClientProxyChannel extends AbstractWrappedByteChannel {
 	protected final ByteBuffer proxyHandshake;

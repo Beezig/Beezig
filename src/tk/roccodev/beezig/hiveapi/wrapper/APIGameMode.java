@@ -9,7 +9,6 @@ import org.json.simple.parser.ParseException;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 import java.util.Date;
-import java.util.Map;
 
 public class APIGameMode {
 

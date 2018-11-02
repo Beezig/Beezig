@@ -1,8 +1,5 @@
 package org.java_websocket_jukebox;
 
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-
 import org.java_websocket_jukebox.drafts.Draft;
 import org.java_websocket_jukebox.exceptions.InvalidDataException;
 import org.java_websocket_jukebox.framing.Framedata;
@@ -10,6 +7,9 @@ import org.java_websocket_jukebox.handshake.ClientHandshake;
 import org.java_websocket_jukebox.handshake.Handshakedata;
 import org.java_websocket_jukebox.handshake.ServerHandshake;
 import org.java_websocket_jukebox.handshake.ServerHandshakeBuilder;
+
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 
 /**
  * Implemented by <tt>WebSocketClient</tt> and <tt>WebSocketServer</tt>.

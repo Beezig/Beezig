@@ -9,7 +9,6 @@ import tk.roccodev.beezig.advancedrecords.anywhere.statistic.RecordsStatistic;
 import tk.roccodev.beezig.advancedrecords.anywhere.statistic.TimeStatistic;
 import tk.roccodev.beezig.advancedrecords.anywhere.util.ArcadeGamemodeBuilder;
 import tk.roccodev.beezig.advancedrecords.anywhere.util.GamemodeBuilder;
-import tk.roccodev.beezig.games.Arcade;
 import tk.roccodev.beezig.hiveapi.wrapper.APIGameMode;
 import tk.roccodev.beezig.settings.Setting;
 

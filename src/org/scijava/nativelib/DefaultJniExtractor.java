@@ -1,6 +1,7 @@
 package org.scijava.nativelib;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 public class DefaultJniExtractor extends BaseJniExtractor
 {

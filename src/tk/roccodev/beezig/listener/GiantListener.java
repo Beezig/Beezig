@@ -7,6 +7,7 @@ import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.Giant;
 import tk.roccodev.beezig.hiveapi.APIValues;
@@ -16,7 +17,6 @@ import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGNT;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGNTM;
 import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGiant;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 

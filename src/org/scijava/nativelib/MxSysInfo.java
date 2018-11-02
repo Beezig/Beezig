@@ -1,7 +1,9 @@
 package org.scijava.nativelib;
 
-import java.io.*;
-import java.util.regex.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MxSysInfo
 {

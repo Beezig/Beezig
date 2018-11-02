@@ -1,5 +1,20 @@
 package org.java_websocket_jukebox;
 
+import org.java_websocket_jukebox.drafts.*;
+import org.java_websocket_jukebox.drafts.Draft.CloseHandshakeType;
+import org.java_websocket_jukebox.drafts.Draft.HandshakeState;
+import org.java_websocket_jukebox.exceptions.IncompleteHandshakeException;
+import org.java_websocket_jukebox.exceptions.InvalidDataException;
+import org.java_websocket_jukebox.exceptions.InvalidHandshakeException;
+import org.java_websocket_jukebox.exceptions.WebsocketNotConnectedException;
+import org.java_websocket_jukebox.framing.CloseFrame;
+import org.java_websocket_jukebox.framing.CloseFrameBuilder;
+import org.java_websocket_jukebox.framing.Framedata;
+import org.java_websocket_jukebox.framing.Framedata.Opcode;
+import org.java_websocket_jukebox.handshake.*;
+import org.java_websocket_jukebox.server.WebSocketServer.WebSocketWorker;
+import org.java_websocket_jukebox.util.Charsetfunctions;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -12,29 +27,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import org.java_websocket_jukebox.drafts.Draft;
-import org.java_websocket_jukebox.drafts.Draft.CloseHandshakeType;
-import org.java_websocket_jukebox.drafts.Draft.HandshakeState;
-import org.java_websocket_jukebox.drafts.Draft_10;
-import org.java_websocket_jukebox.drafts.Draft_17;
-import org.java_websocket_jukebox.drafts.Draft_75;
-import org.java_websocket_jukebox.drafts.Draft_76;
-import org.java_websocket_jukebox.exceptions.IncompleteHandshakeException;
-import org.java_websocket_jukebox.exceptions.InvalidDataException;
-import org.java_websocket_jukebox.exceptions.InvalidHandshakeException;
-import org.java_websocket_jukebox.exceptions.WebsocketNotConnectedException;
-import org.java_websocket_jukebox.framing.CloseFrame;
-import org.java_websocket_jukebox.framing.CloseFrameBuilder;
-import org.java_websocket_jukebox.framing.Framedata;
-import org.java_websocket_jukebox.framing.Framedata.Opcode;
-import org.java_websocket_jukebox.handshake.ClientHandshake;
-import org.java_websocket_jukebox.handshake.ClientHandshakeBuilder;
-import org.java_websocket_jukebox.handshake.Handshakedata;
-import org.java_websocket_jukebox.handshake.ServerHandshake;
-import org.java_websocket_jukebox.handshake.ServerHandshakeBuilder;
-import org.java_websocket_jukebox.server.WebSocketServer.WebSocketWorker;
-import org.java_websocket_jukebox.util.Charsetfunctions;
 
 /**
  * Represents one end (client or server) of a single WebSocketImpl connection.
