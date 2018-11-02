@@ -2,6 +2,7 @@ package tk.roccodev.beezig.hiveapi.stuff.bed;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.game.Game;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
@@ -98,7 +99,7 @@ public enum BEDRank implements RankEnum {
 
     public static boolean isNo1(String ign, long validate) {
         if (validate < 2000000L) return false;
-        String no1 = HiveAPI.getLeaderboardsPlaceHolder(0, "BED");
+        String no1 = (String) new Game("BED").getLeaderboard(0, 1).getPlayers().get(0).get("UUID");
         return no1.equalsIgnoreCase(ign);
     }
 
