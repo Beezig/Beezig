@@ -57,7 +57,7 @@ public class AdvancedRecordsAnywhere {
                 .addStatistic(new RecordsStatistic(K, "kills"))
                 .addStatistic(new RecordsStatistic(D, "deaths"))
                 .addStatistic(new RatioRecordsStatistic(KD, "kills", "deaths", Setting.SHOW_RECORDS_KDR))
-                .addStatistic(new PercentRatioStatistic(WR, "victories", "games_played", Setting.SHOW_RECORDS_WINRATE))
+                .addStatistic(new PercentRatioStatistic(WR, "victories", "gamesplayed", Setting.SHOW_RECORDS_WINRATE))
                 .build());
 
         gamemodes.add(new GamemodeBuilder("TIMV")
