@@ -200,7 +200,7 @@ public class AdvancedRecordsAnywhere {
         The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
         new Thread(() -> {
 
-            GameStats apiObj = new GameStats(player, mode);
+            GameStats apiObj = new GameStats(player, mode.toUpperCase());
             try {
                 apiObj.getSource().fetch();
             } catch(Exception e) {
