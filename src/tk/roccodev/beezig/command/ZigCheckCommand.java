@@ -3,8 +3,8 @@ package tk.roccodev.beezig.command;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -52,12 +52,12 @@ public class ZigCheckCommand implements Command {
 
             } else {
                 new Thread(() -> {
-                    ApiHiveGlobal hv = new ApiHiveGlobal(args[0]);
-                    if (check(hv.getUUID())) {
-                        The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + hv.getCorrectName() + "§3 is a 5zig user.");
+
+                    if (check(UsernameToUuid.getUUID(args[0]))) {
+                        The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + args[0] + "§3 is a 5zig user.");
 
                     } else {
-                        The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + hv.getCorrectName() + "§c is not a 5zig user.");
+                        The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.AQUA + args[0] + "§c is not a 5zig user.");
                     }
                 }).start();
             }
@@ -72,8 +72,8 @@ public class ZigCheckCommand implements Command {
     private boolean check(String user) {
         HttpURLConnection conn = null;
         try {
-            ApiHiveGlobal hv = new ApiHiveGlobal(user);
-            URL url = new URL("http://textures.5zig.net/checkUser/" + hv.getUUID());
+            String uuid = user.length() == 32 ? user : UsernameToUuid.getUUID(user);
+            URL url = new URL("http://textures.5zig.net/checkUser/" + uuid);
             conn = (HttpURLConnection) url.openConnection();
             return conn.getResponseCode() == 200;
 
@@ -81,7 +81,9 @@ public class ZigCheckCommand implements Command {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
         return false;
     }

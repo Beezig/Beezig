@@ -2,6 +2,8 @@ package tk.roccodev.beezig.advancedrecords.anywhere;
 
 import eu.the5zig.mod.The5zigAPI;
 import org.json.simple.JSONObject;
+import pw.roccodev.beezig.hiveapi.wrapper.player.GameStats;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.advancedrecords.anywhere.statistic.PercentRatioStatistic;
 import tk.roccodev.beezig.advancedrecords.anywhere.statistic.RatioRecordsStatistic;
@@ -9,7 +11,6 @@ import tk.roccodev.beezig.advancedrecords.anywhere.statistic.RecordsStatistic;
 import tk.roccodev.beezig.advancedrecords.anywhere.statistic.TimeStatistic;
 import tk.roccodev.beezig.advancedrecords.anywhere.util.ArcadeGamemodeBuilder;
 import tk.roccodev.beezig.advancedrecords.anywhere.util.GamemodeBuilder;
-import tk.roccodev.beezig.hiveapi.wrapper.APIGameMode;
 import tk.roccodev.beezig.settings.Setting;
 
 import java.util.ArrayList;
@@ -199,19 +200,16 @@ public class AdvancedRecordsAnywhere {
         The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
         new Thread(() -> {
 
-            APIGameMode apiObj = new APIGameMode(player) {
-                @Override
-                public String getShortcode() {
-                    return mode.toUpperCase();
-                }
-            };
-
-            JSONObject jObj = apiObj.jsonObject();
-            if(apiObj.getParentMode() == null) {
+            GameStats apiObj = new GameStats(player, mode);
+            try {
+                apiObj.getSource().fetch();
+            } catch(Exception e) {
                 The5zigAPI.getAPI().messagePlayer(Log.error + "Player not found.");
                 return;
             }
-            The5zigAPI.getAPI().messagePlayer("          §6§m                  §f " + apiObj.getParentMode().getCorrectName() + "'s Stats §6§m                  ");
+            JSONObject jObj = apiObj.getSource().getInput();
+            HivePlayer parent = apiObj.getPlayer();
+            The5zigAPI.getAPI().messagePlayer("          §6§m                  §f " + parent.getUsername() + "'s Stats §6§m                  ");
 
             for(RecordsStatistic stat : gm.getStatistics()) {
                 if(stat.getSetting() == null || stat.getSetting().getValue())

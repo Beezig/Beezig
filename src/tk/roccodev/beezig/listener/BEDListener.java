@@ -19,7 +19,6 @@ import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiBED;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
@@ -71,8 +70,8 @@ public class BEDListener extends AbstractGameListener<BED> {
                     BED.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
                     BED.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
                 } else {
-                    String ign2 = The5zigAPI.getAPI().getGameProfile().getName();
-                    ApiBED api = new ApiBED(ign2);
+                    String ign2 = The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "");
+                    BedStats api = new BedStats(ign2);
                     BED.apiDeaths = Math.toIntExact(api.getDeaths());
                     BED.apiKills = Math.toIntExact(api.getKills());
                 }
@@ -478,8 +477,8 @@ public class BEDListener extends AbstractGameListener<BED> {
             //Update the rank module when you uprank
             new Thread(() -> {
                 try {
-                    String ign = The5zigAPI.getAPI().getGameProfile().getName();
-                    APIValues.BEDpoints = new ApiBED(ign).getPoints();
+                    String ign = The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "");
+                    APIValues.BEDpoints = new BedStats(ign).getPoints();
                     Thread.sleep(200);
                     BED.updateRank();
 
@@ -492,8 +491,8 @@ public class BEDListener extends AbstractGameListener<BED> {
             new Thread(() -> {
 
                 try {
-                    String ign = The5zigAPI.getAPI().getGameProfile().getName();
-                    APIValues.BEDpoints = new ApiBED(ign).getPoints();
+                    String ign = The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "");
+                    APIValues.BEDpoints = new BedStats(ign).getPoints();
                     Thread.sleep(200);
                     BED.updateRank();
 

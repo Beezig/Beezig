@@ -1,9 +1,9 @@
 package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -59,14 +59,15 @@ public class ReportCommand implements Command {
                 return;
             }
             for (String s : players.split(",")) {
-                ApiHiveGlobal api = new ApiHiveGlobal(s);
-                // Trigger an error if needed
-                api.getCorrectName();
-                if (api.getError() != null) {
+               HivePlayer api = new HivePlayer(s, true);
+
+                try {
+                    api.getUsername();  // Trigger an error if needed
+                } catch(Exception e) {
                     The5zigAPI.getAPI().messagePlayer(Log.error + "Player §4" + s + "§c does not exist.");
                     return;
                 }
-                if (!api.isOnline() && !shouldConfirm) {
+                if (!api.getStatus().isOnline() && !shouldConfirm) {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Player §b" + s + "§3 is not online. Please run the command again to confirm the report.");
                     shouldConfirm = true;
                     return;

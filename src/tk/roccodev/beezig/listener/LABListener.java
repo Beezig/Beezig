@@ -6,6 +6,8 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.LabStats;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
@@ -15,7 +17,7 @@ import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiLAB;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
@@ -53,7 +55,7 @@ public class LABListener extends AbstractGameListener<LAB> {
                 Thread.sleep(500);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 
-                ApiLAB api = new ApiLAB(The5zigAPI.getAPI().getGameProfile().getName());
+                LabStats api = new LabStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
 
                 if (sb != null && sb.getTitle().contains("Your LAB Stats")) {
                     int points = sb.getLines().get(ChatColor.AQUA + "Total Atoms");
@@ -139,7 +141,8 @@ public class LABListener extends AbstractGameListener<LAB> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiLAB api = new ApiLAB(AdvancedRecords.player);
+                        LabStats api = new LabStats(AdvancedRecords.player);
+                        HivePlayer parent = api.getPlayer();
                         LABRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -152,11 +155,11 @@ public class LABListener extends AbstractGameListener<LAB> {
                         df1f.setMinimumFractionDigits(1);
 
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
-                                ? api.getParentMode().getNetworkTitle()
+                                ? parent.getRank().getHumanName()
                                 : "";
                         ChatColor rankColor = null;
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
-                            rankColor = api.getParentMode().getNetworkRankColor();
+                            rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
                         }
                         String rankTitleLAB = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
                         if (rankTitleLAB != null)
@@ -167,8 +170,8 @@ public class LABListener extends AbstractGameListener<LAB> {
                         int gamesPlayed = 0;
                         int victories = 0;
 
-                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements()
+                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.getLastLogin() : null;
+                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size()
                                 : null;
 
                         List<String> messages = new ArrayList<>(LAB.messagesToSend);
@@ -177,7 +180,7 @@ public class LABListener extends AbstractGameListener<LAB> {
                             if (s.trim().endsWith("'s Stats §6§m")) {
                                 The5zigAPI.getLogger().info("Editing Header...");
                                 StringBuilder sb = new StringBuilder();
-                                String correctUser = api.getParentMode().getCorrectName();
+                                String correctUser = parent.getUsername();
                                 if (correctUser.contains("nicked player"))
                                     correctUser = "Nicked/Not found";
                                 sb.append("          §6§m                  §f ");

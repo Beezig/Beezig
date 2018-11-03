@@ -10,6 +10,9 @@ import eu.the5zig.util.minecraft.ChatColor;
 import io.netty.util.internal.ThreadLocalRandom;
 import org.lwjgl.opengl.Display;
 import pw.roccodev.beezig.hiveapi.wrapper.GlobalConfiguration;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.DrStats;
+import pw.roccodev.beezig.hiveapi.wrapper.speedrun.WorldRecord;
 import tk.roccodev.beezig.advancedrecords.anywhere.AdvancedRecordsAnywhere;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.briefing.NewsServer;
@@ -21,8 +24,6 @@ import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.StuffFetcher;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVListenerv2;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 import tk.roccodev.beezig.modules.utils.RenderUtils;
 import tk.roccodev.beezig.notes.NotesManager;
 import tk.roccodev.beezig.settings.Setting;
@@ -546,8 +547,8 @@ public class BeezigMain {
         AutovoteUtils.load();
         // watisdis.wat = new ApiTIMV("RoccoDev").getTitle();
 
-        ApiHiveGlobal api = new ApiHiveGlobal(The5zigAPI.getAPI().getGameProfile().getName());
-        playerRank = NetworkRank.fromDisplay(api.getNetworkTitle());
+        HivePlayer api = new HivePlayer(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
+        playerRank = NetworkRank.fromDisplay(api.getRank().getHumanName());
 
         try {
             HiveAPI.updateMedals();
@@ -725,18 +726,21 @@ public class BeezigMain {
             DR.activeMap = DR.mapsPool.get(map.toLowerCase());
 
             new Thread(() -> {
-                ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
+                DrStats api = new DrStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
                 if (DR.currentMapPB == null) {
                     The5zigAPI.getLogger().info("Loading PB...");
-                    DR.currentMapPB = api.getPersonalBest(DR.activeMap);
+                    DR.currentMapPB = PBCommand.parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName()));
                 }
+                WorldRecord wr = null;
                 if (DR.currentMapWR == null) {
+                    wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID());
                     The5zigAPI.getLogger().info("Loading WR...");
-                    DR.currentMapWR = api.getWorldRecord(DR.activeMap);
+                    DR.currentMapWR = WRCommand.getWorldRecord(wr.getTime());
                 }
                 if (DR.currentMapWRHolder == null) {
+                    if(wr == null) wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID());
                     The5zigAPI.getLogger().info("Loading WRHolder...");
-                    DR.currentMapWRHolder = api.getWorldRecordHolder(DR.activeMap);
+                    DR.currentMapWRHolder = wr.getHolderName();
                 }
             }).start();
         }

@@ -5,6 +5,7 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.DrStats;
 import pw.roccodev.beezig.hiveapi.wrapper.speedrun.WorldRecord;
 import tk.roccodev.beezig.ActiveGame;
@@ -20,8 +21,9 @@ import tk.roccodev.beezig.games.TIMV;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
+import tk.roccodev.beezig.hiveapi.stuff.dr.TotalPB;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
@@ -57,7 +59,8 @@ public class DRListener extends AbstractGameListener<DR> {
                 e2.printStackTrace();
             }
             Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-            DR.rankObject = DRRank.getFromDisplay(new ApiDR(The5zigAPI.getAPI().getGameProfile().getName()).getTitle());
+            DR.rankObject = DRRank.getFromDisplay(new DrStats(The5zigAPI.getAPI().getGameProfile()
+            .getId().toString().replace("-", "")).getTitle());
             DR.rank = DR.rankObject.getTotalDisplay();
             // Should've read the docs ¯\_(ツ)_/¯
             if (sb != null && sb.getTitle().contains("Your DR Stats")) {
@@ -220,30 +223,32 @@ public class DRListener extends AbstractGameListener<DR> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
                         DRRank rank = null;
-                        ApiDR api = new ApiDR(AdvancedRecords.player);
-
+                        DrStats api = new DrStats(AdvancedRecords.player);
+                        HivePlayer parent = api.getPlayer();
 
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
-                                ? api.getParentMode().getNetworkTitle()
+                                ? parent.getRank().getHumanName()
                                 : "";
                         ChatColor rankColor = null;
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
-                            rankColor = api.getParentMode().getNetworkRankColor();
+                            rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
                         }
                         long points = 0;
                         int kills = 0;
                         int deaths = 0;
                         int played = 0;
                         int victories = 0;
-                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
+                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.getLastLogin() : null;
 
                         String rankTitleDR = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
 
 
                         int monthlyRank = -1;
-                        if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue())
-                            monthlyRank = api.getMonthlyRank();
-
+                        if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
+                            try {
+                                monthlyRank = (int) api.getMonthlyProfile().getPlace();
+                            } catch(Exception ignored) {}
+                        }
 
                         if (rankTitleDR != null)
                             rank = DRRank.getFromDisplay(rankTitleDR);
@@ -256,7 +261,7 @@ public class DRListener extends AbstractGameListener<DR> {
                                 // "§6§m §f ItsNiklass's Stats §6§m"
                                 The5zigAPI.getLogger().info("Editing Header...");
                                 StringBuilder sb = new StringBuilder();
-                                String correctUser = api.getParentMode().getCorrectName();
+                                String correctUser = parent.getUsername();
                                 if (correctUser.contains("nicked player"))
                                     correctUser = "Nicked/Not found";
                                 sb.append("          §6§m                  §f ");
@@ -320,7 +325,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
                         double ppg = Setting.SHOW_RECORDS_PPG.getValue() ? Math.round(((double) points / (double) played) * 10d) / 10d : -1;
 
-                        int ach = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : -1;
+                        int ach = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size() : -1;
 
                         double rwr = Setting.SHOW_RECORDS_WINRATE.getValue() ? (Math
                                 .floor(((double) victories / (double) played)
@@ -333,7 +338,7 @@ public class DRListener extends AbstractGameListener<DR> {
                         double kpg = Setting.SHOW_RECORDS_KPG.getValue() ? Math.round((double) kills / (double) played * 10d) / 10d : -1;
 
 
-                        String tpb = Setting.DR_SHOW_TOTALPB.getValue() ? api.getTotalPB() : null;
+                        String tpb = Setting.DR_SHOW_TOTALPB.getValue() ? TotalPB.getTotalPB(api.getMapRecords()) : null;
 
 
                         if (ppg != -1)
@@ -420,8 +425,8 @@ public class DRListener extends AbstractGameListener<DR> {
             // 111.321
 
             new Thread(() -> {
-                ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
-                double wr = api.getRawWorldRecord(DR.activeMap);
+
+                double wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID()).getTime();
                 double diff = (Math.round((finalTime - wr) * 1000d)) / 1000d;
                 int finalPb;
 

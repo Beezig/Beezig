@@ -5,6 +5,8 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.SkyStats;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
@@ -14,7 +16,7 @@ import tk.roccodev.beezig.games.SKY;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.stuff.sky.SKYRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiSKY;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
@@ -71,7 +73,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
                     APIValues.SKYpoints = (long) points;
                 }
 
-                ApiSKY api = new ApiSKY(The5zigAPI.getAPI().getGameProfile().getName());
+                SkyStats api = new SkyStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
                 SKY.totalKills = Math.toIntExact(api.getKills());
                 SKY.rankObject = SKYRank.getFromDisplay(api.getTitle());
                 SKY.rank = SKY.rankObject.getTotalDisplay();
@@ -211,7 +213,8 @@ public class SKYListener extends AbstractGameListener<SKY> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiSKY api = new ApiSKY(AdvancedRecords.player);
+                        SkyStats api = new SkyStats(AdvancedRecords.player);
+                        HivePlayer parent = api.getPlayer();
                         SKYRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -224,11 +227,11 @@ public class SKYListener extends AbstractGameListener<SKY> {
                         df1f.setMinimumFractionDigits(1);
 
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
-                                ? api.getParentMode().getNetworkTitle()
+                                ? parent.getRank().getHumanName()
                                 : "";
                         ChatColor rankColor = null;
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
-                            rankColor = api.getParentMode().getNetworkRankColor();
+                            rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
                         }
                         String rankTitleSKY = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
                         if (rankTitleSKY != null)
@@ -242,8 +245,8 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
                         long timeAlive = 0;
 
-                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements()
+                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.getLastLogin() : null;
+                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size()
                                 : null;
 
                         // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
@@ -257,7 +260,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
                             if (s.trim().endsWith("'s Stats §6§m")) {
                                 The5zigAPI.getLogger().info("Editing Header...");
                                 StringBuilder sb = new StringBuilder();
-                                String correctUser = api.getParentMode().getCorrectName();
+                                String correctUser = parent.getUsername();
                                 if (correctUser.contains("nicked player"))
                                     correctUser = "Nicked/Not found";
                                 sb.append("          §6§m                  §f ");

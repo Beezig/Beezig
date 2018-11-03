@@ -6,6 +6,8 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import org.json.simple.JSONObject;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.BpStats;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
@@ -14,7 +16,7 @@ import tk.roccodev.beezig.games.BP;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.stuff.bp.BPRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiBP;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 import tk.roccodev.beezig.utils.ws.Connector;
@@ -57,7 +59,7 @@ public class BPListener extends AbstractGameListener<BP> {
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 
 
-                ApiBP api = new ApiBP(The5zigAPI.getAPI().getGameProfile().getName());
+                BpStats api = new BpStats(The5zigAPI.getAPI().getGameProfile().getName());
 
                 if (sb != null && sb.getTitle().contains("Your BP Stats")) {
                     int points = sb.getLines().get(ChatColor.AQUA + "Points");
@@ -151,7 +153,8 @@ public class BPListener extends AbstractGameListener<BP> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiBP api = new ApiBP(AdvancedRecords.player);
+                        BpStats api = new BpStats(AdvancedRecords.player);
+                        HivePlayer parent = api.getPlayer();
                         BPRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -164,11 +167,11 @@ public class BPListener extends AbstractGameListener<BP> {
                         df1f.setMinimumFractionDigits(1);
 
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
-                                ? api.getParentMode().getNetworkTitle()
+                                ? parent.getRank().getHumanName()
                                 : "";
                         ChatColor rankColor = null;
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
-                            rankColor = api.getParentMode().getNetworkRankColor();
+                            rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
                         }
                         String rankTitleBP = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
                         if (rankTitleBP != null)
@@ -182,8 +185,8 @@ public class BPListener extends AbstractGameListener<BP> {
 
                         long timeAlive = 0;
 
-                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements()
+                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.getLastLogin() : null;
+                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size()
                                 : null;
 
                         // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
@@ -197,7 +200,7 @@ public class BPListener extends AbstractGameListener<BP> {
                             if (s.trim().endsWith("'s Stats §6§m")) {
                                 The5zigAPI.getLogger().info("Editing Header...");
                                 StringBuilder sb = new StringBuilder();
-                                String correctUser = api.getParentMode().getCorrectName();
+                                String correctUser = parent.getUsername();
                                 if (correctUser.contains("nicked player"))
                                     correctUser = "Nicked/Not found";
                                 sb.append("          §6§m                  §f ");
