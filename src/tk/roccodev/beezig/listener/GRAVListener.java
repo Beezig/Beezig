@@ -187,7 +187,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        GravStats api = new GravStats(AdvancedRecords.player);
+                        GravStats api = new GravStats(AdvancedRecords.player, true);
                         HivePlayer parent = api.getPlayer();
                         GRAVRank rank = null;
 

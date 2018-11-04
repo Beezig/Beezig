@@ -153,7 +153,7 @@ public class BPListener extends AbstractGameListener<BP> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        BpStats api = new BpStats(AdvancedRecords.player);
+                        BpStats api = new BpStats(AdvancedRecords.player, true);
                         HivePlayer parent = api.getPlayer();
                         BPRank rank = null;
 

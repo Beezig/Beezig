@@ -4,12 +4,14 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.player.GameStats;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +72,8 @@ public class PlayerStatsCommand implements Command {
                             return getSource().getLong(pointStringToUse);
                         }
                     };
+                    HivePlayer parent = api.getPlayer();
+                    ChatColor rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
 
                     points.add(api.getPoints());
 
@@ -79,10 +83,8 @@ public class PlayerStatsCommand implements Command {
                     }
 
                     title.add(rank.getTotalDisplay());
-                    name.add(display);
-                } catch (Exception e) {
-                    //  e.printStackTrace();
-                }
+                    name.add(rankColor + display);
+                } catch (Exception ignored) { }
             }
 
             APIUtils.concurrentSort(points, points, title, name);

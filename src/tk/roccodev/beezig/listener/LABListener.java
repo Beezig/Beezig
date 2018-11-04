@@ -141,7 +141,7 @@ public class LABListener extends AbstractGameListener<LAB> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        LabStats api = new LabStats(AdvancedRecords.player);
+                        LabStats api = new LabStats(AdvancedRecords.player, true);
                         HivePlayer parent = api.getPlayer();
                         LABRank rank = null;
 

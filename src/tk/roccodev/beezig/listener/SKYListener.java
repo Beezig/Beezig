@@ -213,7 +213,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        SkyStats api = new SkyStats(AdvancedRecords.player);
+                        SkyStats api = new SkyStats(AdvancedRecords.player, true);
                         HivePlayer parent = api.getPlayer();
                         SKYRank rank = null;
 

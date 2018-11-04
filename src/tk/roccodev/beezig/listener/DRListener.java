@@ -223,7 +223,7 @@ public class DRListener extends AbstractGameListener<DR> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
                         DRRank rank = null;
-                        DrStats api = new DrStats(AdvancedRecords.player);
+                        DrStats api = new DrStats(AdvancedRecords.player, true);
                         HivePlayer parent = api.getPlayer();
 
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()

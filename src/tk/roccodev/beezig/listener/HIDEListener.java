@@ -200,7 +200,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        HideStats api = new HideStats(AdvancedRecords.player);
+                        HideStats api = new HideStats(AdvancedRecords.player, true);
                         HivePlayer parent = api.getPlayer();
                         HIDERank rank = null;
 

@@ -237,7 +237,9 @@ public class GiantListener extends AbstractGameListener<Giant> {
                     try {
                         GiantRank rank = null;
 
-                        GntStats api = ActiveGame.is("GNTM") ? new GntmStats(AdvancedRecords.player) : new GntStats(AdvancedRecords.player);
+                        GntStats api = ActiveGame.is("GNTM")
+                                ? new GntmStats(AdvancedRecords.player, true)
+                                : new GntStats(AdvancedRecords.player, true);
                         HivePlayer parent = api.getPlayer();
                         
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()

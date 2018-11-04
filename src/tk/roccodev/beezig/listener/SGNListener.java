@@ -196,7 +196,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        SgnStats api = new SgnStats(AdvancedRecords.player);
+                        SgnStats api = new SgnStats(AdvancedRecords.player, true);
                         HivePlayer parent = api.getPlayer();
                         SGNRank rank = null;
 

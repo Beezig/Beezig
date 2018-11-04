@@ -178,7 +178,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        MimvStats api = new MimvStats(AdvancedRecords.player);
+                        MimvStats api = new MimvStats(AdvancedRecords.player, true);
                         HivePlayer parent = api.getPlayer();
                         MIMVRank rank = null;
 
