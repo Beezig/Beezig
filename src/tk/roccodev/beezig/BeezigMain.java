@@ -20,6 +20,7 @@ import tk.roccodev.beezig.briefing.Pools;
 import tk.roccodev.beezig.briefing.fetcher.NewsFetcher;
 import tk.roccodev.beezig.command.*;
 import tk.roccodev.beezig.games.*;
+import tk.roccodev.beezig.games.logging.hide.HideMapRecords;
 import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.StuffFetcher;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVListenerv2;
@@ -454,6 +455,7 @@ public class BeezigMain {
 
         checkForFileExist(new File(mcFile + "/hide/"), true);
         checkForFileExist(new File(mcFile + "/hide/dailyPoints/"), true);
+        HideMapRecords.init();
 
         checkForFileExist(new File(mcFile + "/mimv/"), true);
         checkForFileExist(new File(mcFile + "/mimv/dailyPoints/"), true);

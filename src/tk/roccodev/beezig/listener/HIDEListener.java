@@ -13,6 +13,7 @@ import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.HIDE;
+import tk.roccodev.beezig.games.logging.hide.HideMapRecords;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
@@ -93,6 +94,8 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
             }
             HIDE.activeMap = map;
             DiscordUtils.updatePresence("Playing Hide & Seek", "Hiding on " + HIDE.activeMap, "game_hide");
+            HIDE.mostKills = HideMapRecords.getForMap(map);
+            Log.addToSendQueue(Log.info + "Your current kills record on §b" + map + "§3 is §b" + HIDE.mostKills + "§3.");
         }
 
         //Autovoting

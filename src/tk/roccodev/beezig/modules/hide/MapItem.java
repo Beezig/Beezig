@@ -17,7 +17,11 @@ public class MapItem extends GameModeItem<HIDE> {
     @Override
     protected Object getValue(boolean dummy) {
         try {
-            return HIDE.activeMap;
+
+            boolean mostKills = (boolean) getProperties().getSetting("showrecord").get();
+
+
+            return HIDE.activeMap + (mostKills ? " (" + HIDE.mostKills + ")" : "");
         } catch (Exception e) {
             e.printStackTrace();
             return "No Map";
@@ -29,6 +33,10 @@ public class MapItem extends GameModeItem<HIDE> {
         return Log.t("beezig.module.map");
     }
 
+    @Override
+    public void registerSettings() {
+        getProperties().addSetting("showrecord", true);
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

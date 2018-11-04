@@ -7,6 +7,7 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.games.logging.GameLogger;
+import tk.roccodev.beezig.games.logging.hide.HideMapRecords;
 import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.beezig.utils.StreakUtils;
 
@@ -30,6 +31,8 @@ public class HIDE extends GameMode {
     public static boolean hasWon;
     public static int winstreak;
     public static int bestStreak;
+
+    public static long mostKills;
 
     public static int dailyPoints;
     public static int kills;
@@ -104,6 +107,8 @@ public class HIDE extends GameMode {
             winstreak = 0;
             StreakUtils.resetWinstreak("hide", wasBest);
         }
+        if(inGame)
+            HideMapRecords.endGame(activeMap, kills);
         if(inGame && logger != null)
         logger.logGame(activeMap, hasWon ? "Yes" : "No", kills + "");
         inGame = false;
@@ -116,6 +121,7 @@ public class HIDE extends GameMode {
         HIDE.activeMap = null;
         kills = 0;
         lastPts = 0;
+        mostKills = 0;
         seeking = false;
         ActiveGame.reset("hide");
         IHive.genericReset();
