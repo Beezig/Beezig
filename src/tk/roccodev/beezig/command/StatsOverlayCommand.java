@@ -29,7 +29,9 @@ public class StatsOverlayCommand implements Command {
             AdvancedRecordsAnywhere.run(args[0].trim(), args[1].trim());
             return true;
         }
-        else AdvancedRecords.player = args.length == 0 ? The5zigAPI.getAPI().getGameProfile().getName() : args[0].trim();
+        else AdvancedRecords.player = args.length == 0
+                ? The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "")
+                : args[0].trim();
         return false;
     }
 
