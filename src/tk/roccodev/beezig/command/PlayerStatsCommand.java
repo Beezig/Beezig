@@ -79,7 +79,7 @@ public class PlayerStatsCommand implements Command {
                     points.add(api.getPoints());
 
                     RankEnum rank = game.equalsIgnoreCase("bed")
-                            ? (BEDRank.isNo1(api.getSource().getString("title"), api.getPoints()) ? BEDRank.ZZZZZZ
+                            ? (BEDRank.newIsNo1(api.getSource().getString("title"), api.getPoints()) ? BEDRank.ZZZZZZ
                             : BEDRank.getRank(api.getPoints())) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(api.getPoints()) : null);
                     if (rank == null) {
                         rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, api.getSource().getString("title"));
