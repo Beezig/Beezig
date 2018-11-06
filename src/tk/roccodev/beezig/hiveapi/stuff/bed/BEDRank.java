@@ -93,7 +93,7 @@ public enum BEDRank implements RankEnum {
     }
 
     public static boolean newIsNo1(String title, long points) {
-        return title.startsWith("Sleepy ") && points > 1000L;
+        return title.startsWith("Sleepy ") && points > 1500L;
     }
 
     public static boolean isNo1(String ign) {
