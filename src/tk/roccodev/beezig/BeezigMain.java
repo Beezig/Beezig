@@ -722,6 +722,7 @@ public class BeezigMain {
                 The5zigAPI.getAPI().messagePlayer(Log.info + "To suppress this notification, run §b/settings ignore_warnings true");
             }
             SendTutorial.send("hub");
+            if(BeezigMain.hasExpansion) SendTutorial.send("hub_forge");
         }
         // Map fallback
         if (ActiveGame.is("dr") && DR.activeMap == null) {
