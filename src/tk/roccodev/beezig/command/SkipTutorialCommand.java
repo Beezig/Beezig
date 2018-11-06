@@ -25,6 +25,7 @@ public class SkipTutorialCommand implements Command {
     public boolean execute(String[] args) {
         TutorialManager.progress.put("completed", true);
         new Thread(() -> TutorialManager.save(TutorialManager.progress)).start();
+        TutorialManager.remote = null; // Stop operating
         The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully skipped tutorial.");
         return true;
     }
