@@ -21,6 +21,7 @@ import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -53,6 +54,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("TIMV");
         IHive.genericJoin();
+        SendTutorial.send("timv_join");
 
         //Should've read the docs ¯\_(ツ)_/¯
         new Thread(() -> {

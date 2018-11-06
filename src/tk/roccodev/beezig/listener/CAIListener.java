@@ -23,6 +23,7 @@ import tk.roccodev.beezig.modules.utils.RenderUtils;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -50,6 +51,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("CAI");
         IHive.genericJoin();
+        SendTutorial.send("cai_join");
 
         new Thread(() -> {
             try {

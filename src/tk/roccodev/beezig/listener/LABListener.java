@@ -19,6 +19,7 @@ import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class LABListener extends AbstractGameListener<LAB> {
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("LAB");
         IHive.genericJoin();
+        SendTutorial.send("lab_join");
 
         new Thread(() -> {
             try {

@@ -19,6 +19,7 @@ import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 import tk.roccodev.beezig.utils.ws.Connector;
 
 import java.io.FileNotFoundException;
@@ -46,6 +47,7 @@ public class BPListener extends AbstractGameListener<BP> {
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("BP");
         IHive.genericJoin();
+        SendTutorial.send("bp_join");
 
         new Thread(() -> {
             try {

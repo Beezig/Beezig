@@ -20,6 +20,7 @@ import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -47,6 +48,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("SKY");
         IHive.genericJoin();
+        SendTutorial.send("sky_join");
 
         new Thread(() -> {
             try {

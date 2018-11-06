@@ -19,6 +19,7 @@ import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -46,6 +47,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("MIMV");
         IHive.genericJoin();
+        SendTutorial.send("mimv_join");
 
         new Thread(() -> {
             try {

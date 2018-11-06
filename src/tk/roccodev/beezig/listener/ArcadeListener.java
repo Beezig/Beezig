@@ -10,6 +10,7 @@ import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.listener.arcade.ArcadeSubListener;
 import tk.roccodev.beezig.listener.arcade.subs.ElectricFloorSubListener;
 import tk.roccodev.beezig.listener.arcade.subs.SpleggSubListener;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class ArcadeListener extends AbstractGameListener<Arcade> {
         System.out.println("Joined Arcade game: " + game);
         gameMode.setMode(game);
         ActiveGame.set("ARCADE_" + game);
+        SendTutorial.send("arcade_join", game);
 
         new Thread(() -> {
             try {

@@ -37,6 +37,8 @@ import tk.roccodev.beezig.utils.autogg.Triggers;
 import tk.roccodev.beezig.utils.autogg.TriggersFetcher;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 import tk.roccodev.beezig.utils.soundcloud.TrackPlayer;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
+import tk.roccodev.beezig.utils.tutorial.TutorialManager;
 
 import java.io.*;
 import java.lang.reflect.Method;
@@ -380,6 +382,7 @@ public class BeezigMain {
         CommandManager.registerCommand(new UptimeCommand());
         CommandManager.registerCommand(new ChatReportCommand());
         CommandManager.registerCommand(new StatsOverlayCommand());
+        CommandManager.registerCommand(new SkipTutorialCommand());
 
         new Thread(() -> {
             try {
@@ -432,6 +435,8 @@ public class BeezigMain {
             }
         }
 
+        checkForFileExist(new File(mcFile + "/tutorial.json"), false);
+        TutorialManager.init();
         checkForFileExist(new File(mcFile + "/winstreaks.json"), false);
         checkForFileExist(new File(mcFile + "/timv/"), true);
         checkForFileExist(new File(mcFile + "/timv/dailykarma/"), true);
@@ -716,6 +721,7 @@ public class BeezigMain {
                 The5zigAPI.getAPI().messagePlayer(Log.info + "If so, download it from §bhttp://l.roccodev.pw/beezigforge");
                 The5zigAPI.getAPI().messagePlayer(Log.info + "To suppress this notification, run §b/settings ignore_warnings true");
             }
+            SendTutorial.send("hub");
         }
         // Map fallback
         if (ActiveGame.is("dr") && DR.activeMap == null) {

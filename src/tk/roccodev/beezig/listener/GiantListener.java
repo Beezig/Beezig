@@ -20,6 +20,7 @@ import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -67,6 +68,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
             ActiveGame.set("GNTM");
         gameMode.setState(GameState.STARTING);
         IHive.genericJoin();
+        SendTutorial.send("gnt");
         new Thread(() -> {
             try {
                 Giant.initDailyPointsWriter();

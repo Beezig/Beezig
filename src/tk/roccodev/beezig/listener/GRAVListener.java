@@ -19,6 +19,7 @@ import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
@@ -43,6 +44,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("GRAV");
         IHive.genericJoin();
+        SendTutorial.send("grav_join");
 
         new Thread(() -> {
             try {
