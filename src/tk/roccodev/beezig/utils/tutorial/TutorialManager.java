@@ -18,15 +18,6 @@ public class TutorialManager {
 
     public static void init() {
         progressFile = new File(BeezigMain.mcFile + "/tutorial.json");
-        if(!progressFile.exists()) {
-            try {
-                progressFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-        else {
             try(BufferedReader reader = new BufferedReader(new FileReader(progressFile))) {
                 boolean hasChanged = false;
                 JSONObject json = APIUtils.getObject(reader);
@@ -60,7 +51,7 @@ public class TutorialManager {
                 ex.printStackTrace();
             }
         }
-    }
+
 
     public static boolean shouldOperate() {
         return !completed && remote != null;

@@ -23,7 +23,7 @@ public class SendTutorial {
         JSONArray toComplete = (JSONArray) TutorialManager.remote.get("toComplete");
         boolean completed = true;
         for(Object toCheck : toComplete) {
-            if(!TutorialManager.progress.containsKey(toCheck) && (boolean)TutorialManager.progress.get(toCheck)) {
+            if(TutorialManager.progress.containsKey(toCheck) && (boolean)TutorialManager.progress.get(toCheck)) {
                 completed = false;
                 break;
             }
