@@ -15,7 +15,6 @@ import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.hiveapi.APIValues;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
@@ -147,8 +146,8 @@ public class BEDListener extends AbstractGameListener<BED> {
             BED.pointsCounter += 100;
             BED.dailyPoints += 100;
             APIValues.BEDpoints += 100;
-            HiveAPI.medals++;
-            HiveAPI.tokens += 100;
+            APIValues.medals++;
+            APIValues.tokens += 100;
             BED.hasWon = true;
             BED.winstreak++;
             if (BED.winstreak >= BED.bestStreak)
@@ -284,7 +283,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                                 BED.lastRecordsPoints = points;
                                 sb.append(newData[1]);
                                 if (Setting.SHOW_RECORDS_RANK.getValue()) {
-                                    BEDRank rank = BEDRank.isNo1(AdvancedRecords.player) ? BEDRank.ZZZZZZ : BEDRank.getRank((int) points);
+                                    BEDRank rank = BEDRank.newIsNo1(api) ? BEDRank.ZZZZZZ : BEDRank.getRank((int) points);
                                     if (rank != null) {
                                         int level = rank.getLevel((int) points);
                                         String BEDrankColor = rank.getName().replaceAll(ChatColor.stripColor(rank.getName()), "");

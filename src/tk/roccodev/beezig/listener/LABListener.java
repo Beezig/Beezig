@@ -14,7 +14,6 @@ import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.games.LAB;
 import tk.roccodev.beezig.hiveapi.APIValues;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.lab.LABRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
@@ -77,13 +76,13 @@ public class LABListener extends AbstractGameListener<LAB> {
         if (message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l10 atoms and 20 tokens§a for being in the top 3!")) {
             LAB.dailyPoints += 10;
             APIValues.LABpoints += 10;
-            HiveAPI.tokens += 20;
+            APIValues.tokens += 20;
         } else if (message.startsWith("§8▍ §3The§bLab§8 ▏ §a§lExperiment ")) {
             LAB.experiments.add(ChatColor.stripColor(message.split(":")[1].trim()));
         } else if (message.equals("§8▍ §3The§bLab§8 ▏ §aYou were awarded §b§l2 atoms and 10 tokens§a for participating!")) {
             LAB.dailyPoints += 2;
             APIValues.LABpoints += 2;
-            HiveAPI.tokens += 10;
+            APIValues.tokens += 10;
         } else if (message.endsWith("[+ 3 Atoms]") && message.startsWith(" §e§lFirst:")) {
             String name = ChatColor.stripColor(message.split("\\[")[0].trim().replace("§e§lFirst: ", ""));
             if (name.equals(The5zigAPI.getAPI().getGameProfile().getName())) {

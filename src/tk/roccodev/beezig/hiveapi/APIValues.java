@@ -15,4 +15,9 @@ public class APIValues {
     public static long SGNpoints;
     public static long LABpoints;
     public static long ArcadePoints;
+
+    public static long medals = 0;
+    public static long tokens = 0;
+
+
 }

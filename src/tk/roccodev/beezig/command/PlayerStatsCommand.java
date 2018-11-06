@@ -5,6 +5,7 @@ import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.player.GameStats;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.Titleable;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
@@ -77,7 +78,9 @@ public class PlayerStatsCommand implements Command {
 
                     points.add(api.getPoints());
 
-                    RankEnum rank = game.equalsIgnoreCase("bed") ? (BEDRank.isNo1(uuid, api.getPoints()) ? BEDRank.ZZZZZZ : BEDRank.getRank(api.getPoints())) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(api.getPoints()) : null);
+                    RankEnum rank = game.equalsIgnoreCase("bed")
+                            ? (BEDRank.isNo1(api.getSource().getString("title"), api.getPoints()) ? BEDRank.ZZZZZZ
+                            : BEDRank.getRank(api.getPoints())) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(api.getPoints()) : null);
                     if (rank == null) {
                         rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, api.getSource().getString("title"));
                     }
@@ -105,7 +108,7 @@ public class PlayerStatsCommand implements Command {
 
                     }
                 } catch (Exception e) {
-                    // e.printStackTrace();
+                   // e.printStackTrace();
                 }
             }
             The5zigAPI.getAPI()

@@ -3,9 +3,9 @@ package tk.roccodev.beezig.hiveapi.stuff.bed;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.game.Game;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.BedStats;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
@@ -88,12 +88,20 @@ public enum BEDRank implements RankEnum {
 
     }
 
+    public static boolean newIsNo1(BedStats stats) {
+        return newIsNo1(stats.getTitle(), stats.getPoints());
+    }
+
+    public static boolean newIsNo1(String title, long points) {
+        return title.startsWith("Sleepy ") && points > 1000L;
+    }
+
     public static boolean isNo1(String ign) {
         if (BED.lastRecordsPoints < 2000000L) {
             //Saved another API operation
             return false;
         }
-        String no1 = HiveAPI.getLeaderboardsPlaceHolder(0, "BED");
+        String no1 = (String) new Game("BED").getLeaderboard(0, 1).getPlayers().get(0).get("username");
         return no1.equalsIgnoreCase(ign);
     }
 

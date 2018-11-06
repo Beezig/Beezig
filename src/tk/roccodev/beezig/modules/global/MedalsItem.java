@@ -5,7 +5,7 @@ import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.server.GameMode;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
+import tk.roccodev.beezig.hiveapi.APIValues;
 
 public class MedalsItem extends GameModeItem<GameMode> {
 
@@ -18,7 +18,7 @@ public class MedalsItem extends GameModeItem<GameMode> {
     protected Object getValue(boolean dummy) {
         try {
 
-            return Log.df(HiveAPI.medals);
+            return Log.df(APIValues.medals);
         } catch (Exception e) {
             e.printStackTrace();
             return "Server error";

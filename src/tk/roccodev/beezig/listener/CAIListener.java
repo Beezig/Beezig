@@ -16,7 +16,6 @@ import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.CAI;
 import tk.roccodev.beezig.hiveapi.APIValues;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
@@ -160,7 +159,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
             DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as C on " + CAI.activeMap, "game_cai");
         } else if (message.equals("§8▍ §bCAI§8 ▏ §7You received §f10 points §7for your team's capture.")) {
 
-            HiveAPI.tokens += 5;
+            APIValues.tokens += 5;
             CAI.gamePoints += 10;
             APIValues.CAIpoints += 10;
             CAI.dailyPoints += 10;

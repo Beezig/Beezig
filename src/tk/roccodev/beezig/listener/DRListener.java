@@ -19,7 +19,6 @@ import tk.roccodev.beezig.command.WRCommand;
 import tk.roccodev.beezig.games.DR;
 import tk.roccodev.beezig.games.TIMV;
 import tk.roccodev.beezig.hiveapi.APIValues;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
 import tk.roccodev.beezig.hiveapi.stuff.dr.TotalPB;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
@@ -132,7 +131,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
             String data[] = ChatColor.stripColor(message).trim().split("\\+");
             int tokens = Integer.parseInt(data[1].trim().replaceAll("Tokens", "").trim());
-            HiveAPI.tokens += tokens;
+            APIValues.tokens += tokens;
         } else if (message.equals("§8▍ §cDeathRun§8 ▏ §cYou have been returned to your last checkpoint!")
                 && ActiveGame.is("dr") && DR.role.equals("Runner")) {
             DR.deaths++;

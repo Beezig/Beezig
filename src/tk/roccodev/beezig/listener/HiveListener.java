@@ -10,7 +10,7 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.games.GNT;
 import tk.roccodev.beezig.games.GNTM;
 import tk.roccodev.beezig.games.TIMV;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
+import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
 public class HiveListener extends AbstractGameListener<GameMode> {
@@ -38,18 +38,18 @@ public class HiveListener extends AbstractGameListener<GameMode> {
     @Override
     public boolean onServerChat(GameMode gameMode, String message) {
         if (message.contains("§eGold Medal Awarded!")) {
-            HiveAPI.medals++;
+            APIValues.medals++;
         } else if (ChatColor.stripColor(message).contains("▍ Tokens ▏ You earned")) {
 
             String[] data = ChatColor.stripColor(message).replaceAll("▍ Tokens ▏ You earned", "").split("tokens");
             int tokens = Integer.parseInt(data[0].trim());
 
-            HiveAPI.tokens += tokens;
+            APIValues.tokens += tokens;
 
         } else if (message.contains("§b EXTRA tokens this round!")) {
             //§8▍ §3§lBed§b§lWars§8 ▏ §bThanks to the §dultimate§b member §dGryffin§b you gained §a25§b EXTRA tokens this round!
             //idk if thats how it works
-            HiveAPI.tokens += Integer.parseInt(ChatColor.stripColor(message.split("EXTRA")[0].split("you gained ")[1].trim()));
+            APIValues.tokens += Integer.parseInt(ChatColor.stripColor(message.split("EXTRA")[0].split("you gained ")[1].trim()));
         }
         return false;
     }

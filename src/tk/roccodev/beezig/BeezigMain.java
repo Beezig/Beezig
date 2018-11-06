@@ -21,7 +21,7 @@ import tk.roccodev.beezig.briefing.fetcher.NewsFetcher;
 import tk.roccodev.beezig.command.*;
 import tk.roccodev.beezig.games.*;
 import tk.roccodev.beezig.games.logging.hide.HideMapRecords;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
+import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.StuffFetcher;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVListenerv2;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
@@ -553,8 +553,8 @@ public class BeezigMain {
         playerRank = NetworkRank.fromDisplay(api.getRank().getHumanName());
 
         try {
-            HiveAPI.updateMedals();
-            HiveAPI.updateTokens();
+            APIValues.medals = api.getMedals();
+            APIValues.tokens = api.getTokens();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
