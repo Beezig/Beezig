@@ -19,6 +19,8 @@ public class Client extends WebSocketClient {
         // TODO Auto-generated constructor stub
     }
 
+
+
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         // TODO Auto-generated method stub
