@@ -63,7 +63,7 @@ public class Client extends WebSocketClient {
         } else if (data[0].equals("forceRefetch")) {
             new Thread(() -> {
                 BeezigMain.refetchMaps();
-                The5zigAPI.getAPI().messagePlayer(Log.info + "Maps data have been re-fetched due to a remote request.");
+                The5zigAPI.getAPI().messagePlayer(Log.info + "Map data has been re-fetched by a remote request.");
             }, "Maps Fetcher").start();
         }
 
