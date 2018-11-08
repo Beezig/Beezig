@@ -22,7 +22,7 @@ public class ClosestToWR {
     public static void fetch(String uuidOrPlayer, boolean all) {
         try {
             Reader r = APIUtils.readURL(
-                    new URL("http://beezignode-beezig-node.a3c1.starter-us-west-1.openshiftapps.com/maprecords/"
+                    new URL("https://app-beezigmainserver.wedeploy.io/maprecords/"
                             + uuidOrPlayer));
             JSONParser p = new JSONParser();
             JSONObject j = (JSONObject) p.parse(r);

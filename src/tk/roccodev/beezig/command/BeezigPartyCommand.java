@@ -42,7 +42,7 @@ public class BeezigPartyCommand implements Command {
             new Thread(() -> {
                 String player = args[1];
                 try {
-                    URL url = new URL("http://beezignode-beezig-node.a3c1.starter-us-west-1.openshiftapps.com/submitParty?sender=" + The5zigAPI.getAPI().getGameProfile().getName() + "&user=" + player.trim());
+                    URL url = new URL("https://app-beezigmainserver.wedeploy.io/submitParty?sender=" + The5zigAPI.getAPI().getGameProfile().getName() + "&user=" + player.trim());
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     if (conn.getResponseCode() == 200) {
                         The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully accepted invite.");
