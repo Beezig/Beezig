@@ -43,7 +43,7 @@ public class ReportCommand implements Command {
             The5zigAPI.getAPI().messagePlayer(Log.error + "You must wait 30 seconds between reports!");
             return true;
         }
-        lastOne = System.currentTimeMillis();
+       lastOne = System.currentTimeMillis();
         // RoccoDev, ItsNiklass AntiKnockback, Kill Aura
         The5zigAPI.getAPI().messagePlayer(Log.info + "Checking...");
         new Thread(() -> {
@@ -59,6 +59,7 @@ public class ReportCommand implements Command {
                 return;
             }
             for (String s : players.split(",")) {
+
                HivePlayer api = new HivePlayer(s, true);
 
                 try {
@@ -74,12 +75,11 @@ public class ReportCommand implements Command {
                 } else {
                     shouldConfirm = false;
                 }
-
             }
 
 
             try {
-                URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/report");
+                URL url = new URL("https://app-beezigreportserver.wedeploy.io/report");
                 URLConnection con = url.openConnection();
                 HttpURLConnection http = (HttpURLConnection) con;
                 http.setRequestMethod("POST"); // PUT is another valid option
