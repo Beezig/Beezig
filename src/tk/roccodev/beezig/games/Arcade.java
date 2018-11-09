@@ -47,6 +47,7 @@ public class Arcade extends GameMode {
 
     private enum Modes {
 
+        SHU("Shuffle"),
         CR("Cranked"),
         MM("MusicMasters"),
         OITC("One in the Chamber"),

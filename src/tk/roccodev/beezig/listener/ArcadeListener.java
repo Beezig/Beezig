@@ -51,7 +51,7 @@ public class ArcadeListener extends AbstractGameListener<Arcade> {
                 Thread.sleep(100L);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
                 if(sb != null) {
-                    APIValues.ArcadePoints = sb.getLines().get(game.equals("SLAP") ? "§bSlap Points" : "§bPoints");
+                    APIValues.ArcadePoints = sb.getLines().get(game.equals("SLAP") ? "§bSlap Points" : (game.equals("SHU") ? "§bTotal Points" : "§bPoints"));
                 }
 
 
