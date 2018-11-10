@@ -6,6 +6,7 @@ import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.CommandManager;
 import tk.roccodev.beezig.api.listener.AbstractForgeListener;
+import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.games.CAI;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
@@ -52,6 +53,10 @@ public class BeezigAPI {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public String getBedwarsMode() {
+        return BED.mode;
     }
 
     public String getRankString(String title, String mode) {
