@@ -43,8 +43,10 @@ public class BEDListener extends AbstractGameListener<BED> {
 
     @Override
     public boolean matchLobby(String arg0) {
-        // TODO Auto-generated method stub
-        return arg0.equals("BED");
+        if(arg0.contains("BED_")) {
+            BED.activeMap = arg0.split("_")[1];
+        }
+        return arg0.startsWith("BED");
     }
 
     @Override
