@@ -57,10 +57,11 @@ import java.util.stream.Collectors;
 
 @Plugin(name = "Beezig", version = BeezigMain.BEEZIG_VERSION)
 public class BeezigMain {
-    public static final String BEEZIG_VERSION = "5.0.0";
+    public static final String BEEZIG_VERSION = "4.1.0";
     public static String VERSION_HASH = "";
     public static String OS;
     public static boolean newUpdate;
+    public static boolean disabled;
 
     public static boolean hasServedNews;
     public static boolean checkForNewLR; // Login Report
@@ -113,7 +114,7 @@ public class BeezigMain {
                     The5zigAPI.getLogger().error("Beezig: This version is disabled!");
                     news.displayMessage("Beezig: Version is disabled!", "Please update to the latest version.");
                 }).start();
-                return; // < one does not simply update beezig
+               disabled = true;
             }
         } catch (IOException e) {
             The5zigAPI.getLogger().info("Failed checking for blacklist");
@@ -164,6 +165,10 @@ public class BeezigMain {
 
         The5zigAPI.getLogger().info("Version is " + BEEZIG_VERSION + ". Hash is " + VERSION_HASH);
         The5zigAPI.getLogger().info("Using Java version: " + Runtime.class.getPackage().getImplementationVersion());
+
+        The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
+
+        if(disabled) return;
 
         The5zigAPI.getAPI().registerModuleItem(this, "karma", tk.roccodev.beezig.modules.timv.KarmaItem.class,
                 "serverhivemc");
@@ -335,8 +340,6 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "arcademap", tk.roccodev.beezig.modules.arcade.MapItem.class,
                 "hivearcade");
 
-
-        The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 
         The5zigAPI.getAPI().getPluginManager().registerListener(this, new GRAVListenerv2());
         The5zigAPI.getAPI().getPluginManager().registerListener(this, new AutoGGListener());

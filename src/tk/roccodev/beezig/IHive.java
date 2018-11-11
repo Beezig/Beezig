@@ -45,6 +45,30 @@ public class IHive extends ServerInstance {
         if (host.toLowerCase().contains("hivemc.") || host.toLowerCase().endsWith("hive.sexy")) {
             System.out.println("Joined Hive.");
             joined = System.currentTimeMillis();
+            if(BeezigMain.disabled) {
+                Log.addToSendQueue("                         §4§m                              ");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("                       §4§l!! UPDATE REQUIRED !!");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("       §cA new Beezig update is required and the current");
+                Log.addToSendQueue("                     §cversion has been disabled.");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("                     §7To update, use the installer.");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("                         §4§m                              ");
+            }
+            else if(BeezigMain.newUpdate) {
+                Log.addToSendQueue("                         §b§m                              ");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("                       §b§l!! UPDATE AVAILABLE !!");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("              §bA new Beezig update is available!");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("                     §7To update, use the installer.");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("                         §b§m                              ");
+
+            }
             new Thread(() -> {
                 if (TriggersFetcher.shouldLoad()) {
                     System.out.println("Loading AutoGG because the AutoGG Mod was not found or is not enabled.");

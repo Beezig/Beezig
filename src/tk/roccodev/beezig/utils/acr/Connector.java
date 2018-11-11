@@ -60,6 +60,7 @@ public class Connector {
 
             String link;
             String uuid;
+            System.out.println("Sending for ID: " + chatReportId);
             if (chatReportId.startsWith("https://") || chatReportId.startsWith("http://")) {
                 link = chatReportId;
                 uuid = UsernameToUuid.getUUID(player);
@@ -81,7 +82,7 @@ public class Connector {
             try (java.io.OutputStream os = conn3.getOutputStream()) {
                 os.write(urlParameters.getBytes(StandardCharsets.UTF_8));
             }
-
+            System.out.println(conn3.getResponseCode());
             return conn3.getResponseCode() == 200;
         } catch (Exception e) {
             e.printStackTrace();
