@@ -15,7 +15,7 @@ public class GameItem extends GameModeItem<Arcade>  {
 
     @Override
     protected Object getValue(boolean b) {
-        if(getGameMode().gameDisplay == null) return "Unknown";
+        if(b || getGameMode().gameDisplay == null) return "Unknown";
         return getGameMode().gameDisplay;
     }
 
@@ -26,8 +26,8 @@ public class GameItem extends GameModeItem<Arcade>  {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        if(!super.shouldRender(dummy)) return false;
         if(getGameMode() == null) return false;
+        if(!super.shouldRender(dummy)) return false;
         return dummy || getGameMode().getState() != GameState.FINISHED;
     }
 }

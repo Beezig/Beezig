@@ -5,6 +5,7 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.bed.BedMonthlyProfile;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
@@ -33,6 +34,9 @@ public class BED extends GameMode {
     public static int pointsCounter;
     public static int bedsDestroyed;
     public static int teamsLeft;
+
+    public static BedMonthlyProfile monthly;
+    public static boolean attemptNew = true;
 
     public static boolean inGame;
     public static boolean hasWon;

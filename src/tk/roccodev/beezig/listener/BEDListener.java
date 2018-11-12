@@ -84,7 +84,14 @@ public class BEDListener extends AbstractGameListener<BED> {
                 APIValues.BEDpoints = new BedStats(ign1).getPoints();
                 BED.updateRank();
                 BED.updateKdr();
-                The5zigAPI.getLogger().info(BED.apiDeaths + " / " + BED.apiKills + " / " + BED.apiKdr);
+
+                try {
+
+                }
+                catch(Exception e) {
+
+                }
+
                 //Should've read the docs ¯\_(ツ)_/¯
             } catch (Exception e) {
                 // TODO Auto-generated catch block
