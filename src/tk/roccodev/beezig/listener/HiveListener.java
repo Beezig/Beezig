@@ -56,7 +56,7 @@ public class HiveListener extends AbstractGameListener<GameMode> {
 
     @Override
     public void onMatch(GameMode gameMode, String key, IPatternResult match) {
-
+        if(gameMode != null) return;
         if (key == null)
             return;
         if (key.equals(TIMV.joinMessage)) {

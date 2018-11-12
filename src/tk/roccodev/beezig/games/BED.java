@@ -37,6 +37,7 @@ public class BED extends GameMode {
 
     public static BedMonthlyProfile monthly;
     public static boolean attemptNew = true;
+    public static boolean hasLoaded = false;
 
     public static boolean inGame;
     public static boolean hasWon;
@@ -154,6 +155,7 @@ public class BED extends GameMode {
         ironGen = 0;
         goldGen = 0;
         diamondGen = 0;
+        hasLoaded = false;
         ActiveGame.reset("bed");
 
         IHive.genericReset();

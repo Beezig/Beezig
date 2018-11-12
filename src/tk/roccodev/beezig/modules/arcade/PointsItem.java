@@ -34,9 +34,13 @@ public class PointsItem extends GameModeItem<Arcade> {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        if(getGameMode() == null) return false;
-        if(!super.shouldRender(dummy)) return false;
-        return dummy || getGameMode().getState() != GameState.FINISHED;
+        try {
+            if (getGameMode() == null) return false;
+            if (!super.shouldRender(dummy)) return false;
+            return dummy || getGameMode().getState() != GameState.FINISHED;
+        } catch(Exception e) {
+            return false;
+        }
     }
 
 }

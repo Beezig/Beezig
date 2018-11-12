@@ -51,7 +51,7 @@ public class BEDListener extends AbstractGameListener<BED> {
 
     @Override
     public void onGameModeJoin(BED gameMode) {
-
+        System.out.println("Join");
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("BED");
         IHive.genericJoin();
@@ -68,28 +68,34 @@ public class BEDListener extends AbstractGameListener<BED> {
                 Thread.sleep(100);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 
+                BedStats api = null;
 
                 if (sb != null && sb.getTitle().contains("BED")) {
                     BED.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
                     BED.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
                 } else {
                     String ign2 = The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "");
-                    BedStats api = new BedStats(ign2);
+                    api = new BedStats(ign2);
                     BED.apiDeaths = Math.toIntExact(api.getDeaths());
                     BED.apiKills = Math.toIntExact(api.getKills());
                 }
                 BED.updateMode();
 
                 String ign1 = The5zigAPI.getAPI().getGameProfile().getName();
-                APIValues.BEDpoints = new BedStats(ign1).getPoints();
+                if(api == null) api = new BedStats(ign1);
+                APIValues.BEDpoints = api.getPoints();
                 BED.updateRank();
                 BED.updateKdr();
 
                 try {
-
+                    if(BED.attemptNew) {
+                        BED.monthly = api.getMonthlyProfile();
+                        BED.monthly.getPoints(); // Fetch (LazyObject)
+                        BED.hasLoaded = true;
+                    }
                 }
                 catch(Exception e) {
-
+                    BED.attemptNew = false;
                 }
 
                 //Should've read the docs ¯\_(ツ)_/¯

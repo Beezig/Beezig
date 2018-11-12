@@ -26,8 +26,12 @@ public class MapItem extends GameModeItem<Arcade>  {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        if(getGameMode() == null) return false;
-        if(!super.shouldRender(dummy)) return false;
-        return dummy || (getGameMode().getState() != GameState.FINISHED && getGameMode().map != null);
+        try {
+            if(getGameMode() == null) return false;
+            if(!super.shouldRender(dummy)) return false;
+            return dummy || (getGameMode().getState() != GameState.FINISHED && getGameMode().map != null);
+        } catch(Exception e) {
+            return false;
+        }
     }
 }

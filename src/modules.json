@@ -89,6 +89,9 @@
           "type": "bedstreak"
         },
         {
+          "type": "bedmonthly"
+        },
+        {
           "type": "bedresources"
         }
       ]
