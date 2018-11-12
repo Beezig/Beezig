@@ -1,14 +1,14 @@
 
 ![Title](http://i.imgur.com/3rXuQls.png)
 
-# Beezig v4.9 - A Hive 5zig Plugin
+# Beezig v5.0 - A Hive 5zig Plugin
 
 [![Discord](https://discordapp.com/api/guilds/346695724253184014/embed.png?style=banner2)](http://discord.gg/se7zJsU)  
 ![Github All Releases](https://img.shields.io/github/downloads/Beezig/Beezig/total.svg)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Beezig/Beezig.svg)
 
 
-A 5zig plugin to add HiveMC functionality.
+A 5zig plugin to add functionality for The Hive.
 By RoccoDev and ItsNiklass.
 
 ![supported](https://i.imgur.com/eTUPy2g.png)
@@ -20,6 +20,8 @@ By RoccoDev and ItsNiklass.
 
 [![Travis Exp](https://travis-ci.org/Beezig/Beezig.svg?branch=experimental)](http://travis-ci.org/Beezig/Beezig) (Experimental)
 
+[![Travis Frg](https://travis-ci.org/Beezig/BeezigForge.svg?branch=master)](http://travis-ci.org/Beezig/BeezigForge) (Forge Expansion)
+
 # Features
 
 * Modules that show basic game information on-the-fly
@@ -28,6 +30,8 @@ By RoccoDev and ItsNiklass.
 	Colored ingame-rank in brackets after the points!
 * /settings for toggling almost everything of the plugin on/off!
 * A LOT MORE
+
+More features can be found in the [Forge Expansion](https://github.com/Beezig/BeezigForge).
 
 ## Download
 
@@ -42,10 +46,11 @@ If you want beta features, you can choose one of these downloads:
 
 ## APIs
 This plugin uses:
-* The 5zig Mod API
-* HiveMC's API
+* [5zig's API](https://github.com/5zig/The-5zig-API)
+* The Hive's API (a Java wrapper is available [here](https://github.com/Beezig/hive-api-wrapper))
 * Speedrun.com's API
-* @Lergin_ 's Hive API
-* @Maxthat 's Monthly Leaderboards API
+* [Lergin](https://github.com/Lergin)'s Staff and Map data API
+* [Maxthat](https://github.com/Maxthat)'s Monthlies API
+* [RoccoDev](https://github.com/RoccoDev)'s Bedwars Toolkit API
 
 ## [Image Album](https://imgur.com/a/LIxhh)
