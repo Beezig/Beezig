@@ -1,5 +1,6 @@
 package tk.roccodev.beezig.games;
 
+import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import tk.roccodev.beezig.ActiveGame;
@@ -34,6 +35,8 @@ public class Arcade extends GameMode {
         game = "";
         gameDisplay = null;
         map = null;
+        if (The5zigAPI.getAPI().getActiveServer() != null)
+            The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 
     }
 
