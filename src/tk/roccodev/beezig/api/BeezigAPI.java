@@ -12,6 +12,7 @@ import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.settings.SettingsFetcher;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 import tk.roccodev.beezig.utils.ws.Connector;
 
 public class BeezigAPI {
@@ -53,6 +54,10 @@ public class BeezigAPI {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public void sendTutorial(String key) {
+        SendTutorial.send(key);
     }
 
     public String getBedwarsMode() {

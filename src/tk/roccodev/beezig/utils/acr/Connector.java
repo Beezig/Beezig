@@ -49,12 +49,15 @@ public class Connector {
             URL url = new URL("https://report.hivemc.com/ajax/receive");
             HttpURLConnection conn3 = (HttpURLConnection) url.openConnection();
             conn3.addRequestProperty("User-Agent", Log.getUserAgent());
+            conn3.addRequestProperty("Accept", "*/*");
             conn3.setRequestProperty("Cookie", cookieStr);
             conn3.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
             conn3.setRequestProperty("Host", "report.hivemc.com");
             conn3.setRequestProperty("Referer", "http://report.hivemc.com/");
             conn3.setRequestProperty("Origin", "http://report.hivemc.com");
             conn3.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+            conn3.setRequestProperty("Accept-Encoding", "gzip, deflate");
+            conn3.setRequestProperty("Accept-Language", "it,it-IT;q=0.8,en-US;q=0.5,en;q=0.3");
             conn3.setRequestMethod("POST");
 
 

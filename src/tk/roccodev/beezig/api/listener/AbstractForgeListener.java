@@ -25,6 +25,11 @@ public interface AbstractForgeListener {
             public void registerCommand(Object commandExecutor) {
                 ClassUtils.invokeMethod(from, ClassUtils.findMethod(from.getClass(), "registerCommand", Object.class), commandExecutor);
             }
+
+            @Override
+            public void displayFriendJoin(String player) {
+                ClassUtils.invokeMethod(from, ClassUtils.findMethod(from.getClass(), "displayFriendJoin", String.class), player);
+            }
         };
     }
 
@@ -35,5 +40,7 @@ public interface AbstractForgeListener {
     void setActiveGame(String game);
 
     void registerCommand(Object commandExecutor);
+
+    void displayFriendJoin(String player);
 
 }

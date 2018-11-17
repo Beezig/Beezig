@@ -14,6 +14,7 @@ import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.DrStats;
 import pw.roccodev.beezig.hiveapi.wrapper.speedrun.WorldRecord;
 import tk.roccodev.beezig.advancedrecords.anywhere.AdvancedRecordsAnywhere;
+import tk.roccodev.beezig.api.BeezigAPI;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.briefing.NewsServer;
 import tk.roccodev.beezig.briefing.Pools;
@@ -794,6 +795,11 @@ public class BeezigMain {
                         The5zigAPI.getAPI().messagePlayer("");
                     }
                 }
+                if(hasExpansion && Setting.PARTY_FRIEND.getValue() && evt.getMessage().startsWith("§8▍ §eFriends§8 ▏§a ✚ ")) {
+                    String player = evt.getMessage().replace("§8▍ §eFriends§8 ▏§a ✚ ", "");
+                    evt.setCancelled(true);
+                    BeezigAPI.get().getListener().displayFriendJoin(player);
+                }
                 if (evt.getMessage().equals("§8▏ §aChatReport§8 ▏ §cSorry, there are no logs for this user.")) {
                     crInteractive = false;
                     lrRS = "";
@@ -811,7 +817,7 @@ public class BeezigMain {
 
                     }).start();
 
-                } else if (BeezigMain.crInteractive && (evt.getMessage().startsWith("§8▏ §aLink§8 ▏ §e") || evt.getMessage().startsWith("§6Log link generated: §6"))) {
+                } else if (BeezigMain.crInteractive && (evt.getMessage().startsWith("§8▏ §aLink§8 ▏ §e") || evt.getMessage().contains("§6Log link generated: §6"))) {
                     crInteractive = false;
                     new Thread(() -> {
                         String chatLog = evt.getMessage().contains("§6Log link generated: §6") ? evt.getMessage().split("§6Log link generated\\: §6")[1] : evt.getMessage().replace("§8▏ §aLink§8 ▏ §ehttp://chatlog.hivemc.com/?logId=", "");
