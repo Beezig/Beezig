@@ -1,11 +1,12 @@
 package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.DrStats;
+import pw.roccodev.beezig.hiveapi.wrapper.speedrun.WorldRecord;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.DR;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRMap;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
 
 public class WRCommand implements Command {
 
@@ -25,22 +26,38 @@ public class WRCommand implements Command {
         if (!(ActiveGame.is("dr"))) return false;
         if (args.length == 0 && DR.activeMap != null) {
             new Thread(() -> {
-                ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
-                The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + api.getWorldRecord(DR.activeMap) + "§3 by §b" + DR.currentMapWRHolder);
+                WorldRecord wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID());
+                The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + getWorldRecord(wr.getTime()) + "§3 by §b" + wr.getHolderName());
             }).start();
 
         } else {
             String mapName = String.join(" ", args);
             DRMap map = DR.mapsPool.get(mapName.toLowerCase());
             new Thread(() -> {
-                ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
-                The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §b" + map.getDisplayName() + "§3 is §b" + api.getWorldRecord(map) + "§3 by §b" + api.getWorldRecordHolder(map));
+                WorldRecord wr = DrStats.getWorldRecord(map.getSpeedrunID());
+                The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §b" + map.getDisplayName() + "§3 is §b" + getWorldRecord(wr.getTime()) + "§3 by §b" + wr.getHolderName());
             }).start();
 
 
         }
 
         return true;
+    }
+
+    public static String getWorldRecord(double time) {
+
+
+        if (time >= 60) {
+            int seconds = (int) (Math.floor(time) % 60);
+            double millis = Math.floor(((time - seconds) - 60) * 1000) / 1000;
+            int minutes = Math.floorDiv((int) (time - millis), 60);
+            if (seconds < 10) {
+                return (minutes + ":0" + (seconds + millis));
+            }
+            return (minutes + ":" + (seconds + millis));
+        }
+        return "0:" + time;
+
     }
 
 

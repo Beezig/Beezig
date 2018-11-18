@@ -1,8 +1,8 @@
 package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
+import pw.roccodev.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
@@ -37,7 +37,7 @@ public class UUIDCommand implements Command {
                     copy = modes.contains("c");
                 }
 
-                String uuid = APIUtils.getUUID(pl);
+                String uuid = UsernameToUuid.getUUID(pl).replace("-", "");
                 The5zigAPI.getAPI().messagePlayer(Log.info + pl + "'s UUID is §b" + uuid);
                 if (copy) {
                     StringSelection sel = new StringSelection(uuid);

@@ -1,11 +1,14 @@
 package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.DrStats;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.DR;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRMap;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +35,10 @@ public class PBCommand implements Command {
             String ign = args[0];
 
             new Thread(() -> {
-                ApiDR api = new ApiDR(ign);
-                The5zigAPI.getAPI().messagePlayer(Log.info + api.getParentMode().getNetworkRankColor() + api.getParentMode().getCorrectName() + "§3's Personal Best on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + api.getPersonalBest(DR.activeMap));
+                DrStats api = new DrStats(ign);
+                HivePlayer parent = api.getPlayer();
+                ChatColor color = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
+                The5zigAPI.getAPI().messagePlayer(Log.info + color + parent.getUsername() + "§3's Personal Best on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName())));
             }).start();
 
         } else {
@@ -45,13 +50,27 @@ public class PBCommand implements Command {
 
 
             new Thread(() -> {
-                ApiDR api = new ApiDR(ign);
-                The5zigAPI.getAPI().messagePlayer(Log.info + api.getParentMode().getNetworkRankColor() + api.getParentMode().getCorrectName() + "§3's Personal Best on map §b" + map.getDisplayName() + "§3 is §b" + api.getPersonalBest(map));
+                DrStats api = new DrStats(ign);
+                HivePlayer parent = api.getPlayer();
+                ChatColor color = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
+                The5zigAPI.getAPI().messagePlayer(Log.info + color + parent.getUsername() + "§3's Personal Best on map §b" + map.getDisplayName() + "§3 is §b" + parseTime(api.getMapRecords().get(map.getHiveAPIName())));
             }).start();
 
         }
 
         return true;
+    }
+
+    public static String parseTime(long pb) {
+        if (pb >= 60) {
+            int seconds = Math.toIntExact(pb) % 60;
+            int minutes = Math.floorDiv(Math.toIntExact(pb), 60);
+            if (seconds < 10) {
+                return (minutes + ":0" + seconds);
+            }
+            return (minutes + ":" + seconds);
+        }
+        return "0:" + pb;
     }
 
 

@@ -36,7 +36,7 @@ public class WinstreakItem extends GameModeItem<BED> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof BED))
+            if (getGameMode() == null)
                 return false;
             return dummy || (BED.shouldRender(getGameMode().getState()));
         } catch (Exception e) {

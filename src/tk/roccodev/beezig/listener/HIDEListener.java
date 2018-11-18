@@ -5,19 +5,23 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.HideStats;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.HIDE;
+import tk.roccodev.beezig.games.logging.hide.HideMapRecords;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.stuff.hide.HIDERank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHIDE;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -45,6 +49,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("HIDE");
         IHive.genericJoin();
+        SendTutorial.send("hide_join");
 
         new Thread(() -> {
             try {
@@ -58,7 +63,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 
 
-                ApiHIDE api = new ApiHIDE(The5zigAPI.getAPI().getGameProfile().getName());
+                HideStats api = new HideStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
 
                 if (sb != null && sb.getTitle().contains("Your HIDE Stats")) {
                     int points = sb.getLines().get(ChatColor.AQUA + "Points");
@@ -91,6 +96,8 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
             }
             HIDE.activeMap = map;
             DiscordUtils.updatePresence("Playing Hide & Seek", "Hiding on " + HIDE.activeMap, "game_hide");
+            HIDE.mostKills = HideMapRecords.getForMap(map);
+            Log.addToSendQueue(Log.info + "Your current kills record on §b" + map + "§3 is §b" + HIDE.mostKills + "§3.");
         }
 
         //Autovoting
@@ -161,7 +168,11 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
-        } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e200 points§6")) {
+        }
+        else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e30 points§6")) {
+            HIDE.kills++;
+        }
+        else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e200 points§6")) {
             APIValues.HIDEpoints += 200;
             HIDE.dailyPoints += 200;
             HIDE.hasWon = true;
@@ -191,7 +202,8 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiHIDE api = new ApiHIDE(AdvancedRecords.player);
+                        HideStats api = new HideStats(AdvancedRecords.player, true);
+                        HivePlayer parent = api.getPlayer();
                         HIDERank rank = null;
 
 
@@ -205,10 +217,10 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                         df1f.setMinimumFractionDigits(1);
 
 
-                        String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? api.getParentMode().getNetworkTitle() : "";
+                        String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? parent.getRank().getHumanName() : "";
                         ChatColor rankColor = null;
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
-                            rankColor = api.getParentMode().getNetworkRankColor();
+                            rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
                         }
                         String rankTitleHIDE = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
                         if (rankTitleHIDE != null) rank = HIDERank.getFromDisplay(rankTitleHIDE);
@@ -222,8 +234,8 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                         int killsHider = 0;
                         long timeAlive;
 
-                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
+                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.getLastLogin() : null;
+                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size() : null;
                         Integer playedBlocks = Setting.HIDE_SHOW_AMOUNT_UNLOCKED.getValue() ? api.getBlockExperience().size() : null;
 
 
@@ -235,7 +247,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                             if (s.trim().endsWith("'s Stats §6§m")) {
                                 The5zigAPI.getLogger().info("Editing Header...");
                                 StringBuilder sb = new StringBuilder();
-                                String correctUser = api.getParentMode().getCorrectName();
+                                String correctUser = parent.getUsername();
                                 if (correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
                                 sb.append("          §6§m                  §f ");
                                 The5zigAPI.getLogger().info("Added base...");

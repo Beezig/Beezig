@@ -160,7 +160,7 @@ public class SummonersItem extends GameModeItem<BED> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof BED)) return false;
+            if (getGameMode() == null) return false;
             return dummy || getGameMode().getState() == GameState.GAME;
         } catch (Exception e) {
             return false;

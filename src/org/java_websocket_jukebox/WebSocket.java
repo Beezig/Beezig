@@ -1,11 +1,11 @@
 package org.java_websocket_jukebox;
 
+import org.java_websocket_jukebox.drafts.Draft;
+import org.java_websocket_jukebox.framing.Framedata;
+
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.NotYetConnectedException;
-
-import org.java_websocket_jukebox.drafts.Draft;
-import org.java_websocket_jukebox.framing.Framedata;
 
 public interface WebSocket {
 	public enum Role {

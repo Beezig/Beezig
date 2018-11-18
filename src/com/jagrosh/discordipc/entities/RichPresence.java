@@ -15,9 +15,10 @@
  */
 package com.jagrosh.discordipc.entities;
 
-import java.time.OffsetDateTime;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import java.time.OffsetDateTime;
 
 /**
  * An encapsulation of all data needed to properly construct a JSON RichPresence payload.

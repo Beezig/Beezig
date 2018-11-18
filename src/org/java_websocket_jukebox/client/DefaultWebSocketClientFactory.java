@@ -1,15 +1,15 @@
 package org.java_websocket_jukebox.client;
 
+import org.java_websocket_jukebox.WebSocket;
+import org.java_websocket_jukebox.WebSocketAdapter;
+import org.java_websocket_jukebox.WebSocketImpl;
+import org.java_websocket_jukebox.drafts.Draft;
+
 import java.net.Socket;
 import java.nio.channels.ByteChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.List;
-
-import org.java_websocket_jukebox.WebSocket;
-import org.java_websocket_jukebox.WebSocketAdapter;
-import org.java_websocket_jukebox.WebSocketImpl;
-import org.java_websocket_jukebox.drafts.Draft;
 
 public class DefaultWebSocketClientFactory implements WebSocketClient.WebSocketClientFactory {
 	/**

@@ -2,14 +2,16 @@ package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
-import org.json.simple.JSONObject;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.HideStats;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHIDE;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class BlockstatsCommand implements Command {
 
@@ -34,14 +36,16 @@ public class BlockstatsCommand implements Command {
                 new Thread(() -> {
                     String ign;
                     if (args.length == 1) {
-                        ign = The5zigAPI.getAPI().getGameProfile().getName();
+                        ign = The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "");
                     } else {
                         ign = args[1];
                     }
                     The5zigAPI.getLogger().info("Init API");
-                    ApiHIDE api = new ApiHIDE(ign);
-                    JSONObject blockExp = api.getBlockExperience();
-                    JSONObject rawBlockEx = api.getRawBlockExperience();
+                    HideStats api = new HideStats(ign);
+                    Map<String, Long> blockExp = api.getBlockLevels();
+                    Map<String, Long> rawBlockEx = api.getBlockExperience();
+
+                    HivePlayer parent = api.getPlayer();
 
 
                     List<Object> blocks = new ArrayList<>(Arrays.asList(blockExp.keySet().toArray()));
@@ -55,7 +59,8 @@ public class BlockstatsCommand implements Command {
                     APIUtils.concurrentSort(rawExp, blocks, levels, rawExp);
 
                     The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
-                    The5zigAPI.getAPI().messagePlayer(Log.info + "§bBlockstats of §b" + api.getParentMode().getNetworkRankColor() + api.getParentMode().getCorrectName() + "§3:");
+                    The5zigAPI.getAPI().messagePlayer(Log.info + "§bBlockstats of §b" +
+                            NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor() + parent.getUsername() + "§3:");
 
                     for (int i = blocks.size() - 1; i != 0; i--) {
 

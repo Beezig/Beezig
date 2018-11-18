@@ -5,9 +5,11 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.bed.BedMonthlyProfile;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.games.logging.GameLogger;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.beezig.utils.StreakUtils;
@@ -21,6 +23,8 @@ public class BED extends GameMode {
 
     public static char[] NUMBERS = {' ', '➊', '➋', '➌', '➍', '➎'};
 
+    private static GameLogger logger;
+
     public static String activeMap;
     public static Long lastRecordsPoints = null;
     public static String mode = "";
@@ -30,6 +34,10 @@ public class BED extends GameMode {
     public static int pointsCounter;
     public static int bedsDestroyed;
     public static int teamsLeft;
+
+    public static BedMonthlyProfile monthly;
+    public static boolean attemptNew = true;
+    public static boolean hasLoaded = false;
 
     public static boolean inGame;
     public static boolean hasWon;
@@ -63,6 +71,18 @@ public class BED extends GameMode {
             initPointsWriterWithZero();
             return;
         }
+
+        logger = new GameLogger(BeezigMain.mcFile + "/bedwars/games.csv");
+        logger.setHeaders(new String[] {
+                "Points",
+                "Mode",
+                "Map",
+                "Kills",
+                "Deaths",
+                "Beds",
+                "Victory?"
+        });
+
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
@@ -115,6 +135,8 @@ public class BED extends GameMode {
             winstreak = 0;
             StreakUtils.resetWinstreak("bed", wasBest);
         }
+        if(inGame && logger != null)
+        logger.logGame(pointsCounter + "", mode, activeMap, kills + "", deaths + "", bedsDestroyed + "", hasWon ? "Yes" : "No");
         hasWon = false;
         inGame = false;
         BED.mode = "";
@@ -126,9 +148,14 @@ public class BED extends GameMode {
         BED.pointsCounter = 0;
         BED.teamsLeft = 0;
         BED.votesToParse.clear();
+        apiKills = 0;
+        apiDeaths = 0;
+        apiKdr = 0;
+        gameKdr = 0;
         ironGen = 0;
         goldGen = 0;
         diamondGen = 0;
+        hasLoaded = false;
         ActiveGame.reset("bed");
 
         IHive.genericReset();

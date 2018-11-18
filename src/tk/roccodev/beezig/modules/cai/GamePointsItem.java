@@ -29,7 +29,7 @@ public class GamePointsItem extends GameModeItem<CAI> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof CAI))
+            if (getGameMode() == null)
                 return false;
             if (CAI.gamePoints == 0)
                 return false;

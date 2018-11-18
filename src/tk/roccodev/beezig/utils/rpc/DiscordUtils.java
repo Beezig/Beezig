@@ -32,7 +32,7 @@ public class DiscordUtils {
 
                 new Thread(() -> {
                     try {
-                        URL url = new URL("http://botzig-atactest.7e14.starter-us-west-2.openshiftapps.com/check/"
+                        URL url = new URL("https://app-beezigreportserver.wedeploy.io/check/"
                                 + user.getId());
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                         conn.addRequestProperty("User-Agent", Log.getUserAgent());

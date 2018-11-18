@@ -1,10 +1,9 @@
 package org.java_websocket_jukebox;
 
+import javax.net.ssl.SSLException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
-
-import javax.net.ssl.SSLException;
 
 public interface WrappedByteChannel extends ByteChannel {
 	public boolean isNeedWrite();

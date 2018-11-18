@@ -5,22 +5,27 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.DrStats;
+import pw.roccodev.beezig.hiveapi.wrapper.speedrun.WorldRecord;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
+import tk.roccodev.beezig.command.PBCommand;
+import tk.roccodev.beezig.command.WRCommand;
 import tk.roccodev.beezig.games.DR;
-import tk.roccodev.beezig.games.HIDE;
 import tk.roccodev.beezig.games.TIMV;
 import tk.roccodev.beezig.hiveapi.APIValues;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.dr.DRRank;
+import tk.roccodev.beezig.hiveapi.stuff.dr.TotalPB;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -46,6 +51,7 @@ public class DRListener extends AbstractGameListener<DR> {
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("DR");
         IHive.genericJoin();
+        SendTutorial.send("dr_join");
         new Thread(() -> {
             try {
                 DR.initDailyPointsWriter();
@@ -54,7 +60,8 @@ public class DRListener extends AbstractGameListener<DR> {
                 e2.printStackTrace();
             }
             Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-            DR.rankObject = DRRank.getFromDisplay(new ApiDR(The5zigAPI.getAPI().getGameProfile().getName()).getTitle());
+            DR.rankObject = DRRank.getFromDisplay(new DrStats(The5zigAPI.getAPI().getGameProfile()
+            .getId().toString().replace("-", "")).getTitle());
             DR.rank = DR.rankObject.getTotalDisplay();
             // Should've read the docs ¯\_(ツ)_/¯
             if (sb != null && sb.getTitle().contains("Your DR Stats")) {
@@ -95,14 +102,17 @@ public class DRListener extends AbstractGameListener<DR> {
                         if (DR.activeMap != null) {
                             The5zigAPI.getLogger().info("Loading PB...");
 
-                            ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
+                            DrStats api = new DrStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
 
-                            DR.currentMapPB = api.getPersonalBest(DR.activeMap);
+                            DR.currentMapPB = PBCommand.parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName()));
                             if (DR.currentMapPB == null)
                                 DR.currentMapPB = "No Personal Best";
                             The5zigAPI.getLogger().info("Loading WR...");
-                            DR.currentMapWR = api.getWorldRecord(DR.activeMap);
-                            DR.currentMapWRHolder = api.getWorldRecordHolder(DR.activeMap);
+
+                            WorldRecord wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID());
+
+                            DR.currentMapWR = WRCommand.getWorldRecord(wr.getTime());
+                            DR.currentMapWRHolder = wr.getHolderName();
                             if (DR.currentMapWR == null)
                                 DR.currentMapWR = "No Record";
                             if (DR.currentMapWRHolder == null)
@@ -123,7 +133,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
             String data[] = ChatColor.stripColor(message).trim().split("\\+");
             int tokens = Integer.parseInt(data[1].trim().replaceAll("Tokens", "").trim());
-            HiveAPI.tokens += tokens;
+            APIValues.tokens += tokens;
         } else if (message.equals("§8▍ §cDeathRun§8 ▏ §cYou have been returned to your last checkpoint!")
                 && ActiveGame.is("dr") && DR.role.equals("Runner")) {
             DR.deaths++;
@@ -214,30 +224,32 @@ public class DRListener extends AbstractGameListener<DR> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
                         DRRank rank = null;
-                        ApiDR api = new ApiDR(AdvancedRecords.player);
-
+                        DrStats api = new DrStats(AdvancedRecords.player, true);
+                        HivePlayer parent = api.getPlayer();
 
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
-                                ? api.getParentMode().getNetworkTitle()
+                                ? parent.getRank().getHumanName()
                                 : "";
                         ChatColor rankColor = null;
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
-                            rankColor = api.getParentMode().getNetworkRankColor();
+                            rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
                         }
                         long points = 0;
                         int kills = 0;
                         int deaths = 0;
                         int played = 0;
                         int victories = 0;
-                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
+                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.getLastLogin() : null;
 
                         String rankTitleDR = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
 
 
                         int monthlyRank = -1;
-                        if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue())
-                            monthlyRank = api.getMonthlyRank();
-
+                        if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
+                            try {
+                                monthlyRank = (int) api.getMonthlyProfile().getPlace();
+                            } catch(Exception ignored) {}
+                        }
 
                         if (rankTitleDR != null)
                             rank = DRRank.getFromDisplay(rankTitleDR);
@@ -250,7 +262,7 @@ public class DRListener extends AbstractGameListener<DR> {
                                 // "§6§m §f ItsNiklass's Stats §6§m"
                                 The5zigAPI.getLogger().info("Editing Header...");
                                 StringBuilder sb = new StringBuilder();
-                                String correctUser = api.getParentMode().getCorrectName();
+                                String correctUser = parent.getUsername();
                                 if (correctUser.contains("nicked player"))
                                     correctUser = "Nicked/Not found";
                                 sb.append("          §6§m                  §f ");
@@ -314,7 +326,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
                         double ppg = Setting.SHOW_RECORDS_PPG.getValue() ? Math.round(((double) points / (double) played) * 10d) / 10d : -1;
 
-                        int ach = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : -1;
+                        int ach = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size() : -1;
 
                         double rwr = Setting.SHOW_RECORDS_WINRATE.getValue() ? (Math
                                 .floor(((double) victories / (double) played)
@@ -327,7 +339,7 @@ public class DRListener extends AbstractGameListener<DR> {
                         double kpg = Setting.SHOW_RECORDS_KPG.getValue() ? Math.round((double) kills / (double) played * 10d) / 10d : -1;
 
 
-                        String tpb = Setting.DR_SHOW_TOTALPB.getValue() ? api.getTotalPB() : null;
+                        String tpb = Setting.DR_SHOW_TOTALPB.getValue() ? TotalPB.getTotalPB(api.getMapRecords()) : null;
 
 
                         if (ppg != -1)
@@ -402,7 +414,8 @@ public class DRListener extends AbstractGameListener<DR> {
             Timer timer = new Timer();
             ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
             timer.schedule(sft, 1500);
-        } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in ")) {
+        }
+        else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in ")) {
             // §8▍ §cDeathRun§8 ▏ §bYou finished your run in 03:07.479§b!
             String time = (message.split("in "))[1].replace("§b!", "").trim();
             String[] data = time.split(":");
@@ -413,8 +426,8 @@ public class DRListener extends AbstractGameListener<DR> {
             // 111.321
 
             new Thread(() -> {
-                ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
-                double wr = api.getRawWorldRecord(DR.activeMap);
+
+                double wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID()).getTime();
                 double diff = (Math.round((finalTime - wr) * 1000d)) / 1000d;
                 int finalPb;
 
@@ -486,11 +499,15 @@ public class DRListener extends AbstractGameListener<DR> {
         for (Map.Entry<String, Integer> e : lines.entrySet()) {
             if (e.getValue() == i && e.getKey().contains("§7Points: ")) {
                 int pts = Integer.parseInt(e.getKey().replace("§7Points: ", "").replace("§9", "").replaceAll("§f", ""));
-                if (pts != HIDE.lastPts) {
+                if (pts != DR.lastPts) {
                     DR.dailyPoints += (pts - DR.lastPts);
                     APIValues.DRpoints += (pts - DR.lastPts);
                     DR.lastPts = pts;
                 }
+            }
+            if(DR.gameId == null && e.getKey().contains("§7GID: §f")) {
+                DR.gameId = e.getKey().replace("§7GID: §f", "").trim();
+                Log.addToSendQueue(Log.info + "Game ID: §b" + DR.gameId);
             }
         }
     }

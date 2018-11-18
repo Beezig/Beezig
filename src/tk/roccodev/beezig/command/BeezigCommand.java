@@ -1,15 +1,20 @@
 package tk.roccodev.beezig.command;
 
+import com.mojang.authlib.GameProfile;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.CommandManager;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.utils.TabCompletionUtils;
 import tk.roccodev.beezig.utils.ws.Client;
 import tk.roccodev.beezig.utils.ws.Connector;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class BeezigCommand implements Command {
 
@@ -65,4 +70,10 @@ public class BeezigCommand implements Command {
         return true;
     }
 
+    @Override
+    public List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
+        if(args.length == 1)
+            return TabCompletionUtils.matching(args, Arrays.asList("commands", "reconnect"));
+        return new ArrayList<>();
+    }
 }

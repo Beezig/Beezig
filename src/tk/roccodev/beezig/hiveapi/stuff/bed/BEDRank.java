@@ -2,9 +2,10 @@ package tk.roccodev.beezig.hiveapi.stuff.bed;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.game.Game;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.BedStats;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
@@ -87,22 +88,34 @@ public enum BEDRank implements RankEnum {
 
     }
 
+    public static boolean newIsNo1(BedStats stats) {
+        return newIsNo1(stats.getTitle(), stats.getPoints());
+    }
+
+    public static boolean newIsNo1(String title, long points) {
+        return title.startsWith("Sleepy ") && points > 1500L;
+    }
+
     public static boolean isNo1(String ign) {
         if (BED.lastRecordsPoints < 2000000L) {
             //Saved another API operation
             return false;
         }
-        String no1 = HiveAPI.getLeaderboardsPlaceHolder(0, "BED");
+        String no1 = (String) new Game("BED").getLeaderboard(0, 1).getPlayers().get(0).get("username");
         return no1.equalsIgnoreCase(ign);
     }
 
     public static boolean isNo1(String ign, long validate) {
         if (validate < 2000000L) return false;
-        String no1 = HiveAPI.getLeaderboardsPlaceHolder(0, "BED");
+        String no1 = (String) new Game("BED").getLeaderboard(0, 1).getPlayers().get(0).get("UUID");
         return no1.equalsIgnoreCase(ign);
     }
 
     public static BEDRank getFromDisplay(String display) {
+        for(BEDRank rank : BEDRank.values()) {
+            String group = display.replaceAll("\\d", "").trim();
+            if(ChatColor.stripColor(rank.getDisplay()).equals(group)) return rank;
+        }
         return null;
     }
 
@@ -173,6 +186,12 @@ public enum BEDRank implements RankEnum {
         return getPointsToNextRank(points, true);
 
 
+    }
+
+    public String rankStringForge(String level) {
+        int lvl = Integer.parseInt(level);
+        String color = getName().replaceAll(ChatColor.stripColor(getName()), "");
+        return color + BED.NUMBERS[lvl] + " " + getName();
     }
 
     public String getPointsToNextRank(int points, boolean withColor) {

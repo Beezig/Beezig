@@ -2,16 +2,15 @@ package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import pw.roccodev.beezig.hiveapi.wrapper.game.Game;
+import pw.roccodev.beezig.hiveapi.wrapper.game.leaderboard.LeaderboardPlace;
+import pw.roccodev.beezig.hiveapi.wrapper.player.GameStats;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
-import tk.roccodev.beezig.hiveapi.wrapper.APIGameMode;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,8 @@ public class LeaderboardCommand implements Command {
             long startT = System.currentTimeMillis();
 
             The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
-            JSONArray data = HiveAPI.getLeaderboardData(game, indexStart, indexEnd);
+            List<LeaderboardPlace> data = new Game(game.toUpperCase()).getLeaderboard((int)indexStart, (int)indexEnd).getPlayers();
+
 
             List<Long> points = new ArrayList<>();
             List<String> title = new ArrayList<>();
@@ -66,39 +66,28 @@ public class LeaderboardCommand implements Command {
                     game.equalsIgnoreCase("hide")
                     || game.equalsIgnoreCase("cai") ? "points" : (game.equalsIgnoreCase("timv")
                     ? "karma" : "total_points");
-            for (int i = 0; i < (indexEnd - humanStart + 1L); i++) {
+
+            for(LeaderboardPlace place : data) {
                 try {
-                    APIGameMode api = new APIGameMode(((JSONObject) data.get(i)).get("username").toString(),
-                            ((JSONObject) data.get(i)).get("UUID").toString()) {
-                        @Override
-                        public String getShortcode() {
-                            return game.toUpperCase();
-                        }
+                GameStats stats = new GameStats((String)place.get("UUID"), game.toUpperCase());
+                String ptsToUse = place.containsKey("points") ? "points" : "total_points";
 
-                        @Override
-                        public long getPoints() {
+                long pts = stats.getSource().getLong(ptsToUse);
 
-                            return (long) object(pointStringToUse);
-                        }
+                points.add(pts);
 
-                    };
-                    long pts = (long) ((JSONObject) data.get(i)).get(pointStringToUse);
-
-                    ApiHiveGlobal apiHIVE = new ApiHiveGlobal(((JSONObject) data.get(i)).get("username").toString(),
-                            ((JSONObject) data.get(i)).get("UUID").toString());
-
-                    points.add(pts);
-
-                    RankEnum rank = game.equalsIgnoreCase("bed") ? ((humanStart + i == 1) ? BEDRank.ZZZZZZ : BEDRank.getRank(pts)) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(pts) : null);
-                    if (rank == null) {
-                        rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, api.getTitle());
-                    }
+                RankEnum rank = game.equalsIgnoreCase("bed") ? ((place.getHumanPlace() == 1) ? BEDRank.ZZZZZZ : BEDRank.getRank(pts)) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(pts) : null);
+                if (rank == null) {
+                    rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, stats.getSource().getString("title"));
+                }
 
                     title.add(rank.getTotalDisplay());
-                    name.add(apiHIVE.getNetworkRankColor() + ((JSONObject) data.get(i)).get("username").toString());
-                } catch (Exception e) {
-                    // e.printStackTrace();
-                }
+                    name.add(NetworkRank.fromDisplay(stats.getPlayer().getRank().getHumanName()).getColor() +
+                            place.get("username").toString());
+
+
+                } catch (Exception ignored) { }
+
             }
 
             The5zigAPI.getAPI().messagePlayer("\n"

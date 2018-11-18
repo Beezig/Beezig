@@ -35,7 +35,7 @@ public class KDRChangeItem extends GameModeItem<SKY> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof SKY)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (SKY.shouldRender(getGameMode().getState()) && (SKY.apiKdr - SKY.gameKdr != 0));
         } catch (Exception e) {
             return false;

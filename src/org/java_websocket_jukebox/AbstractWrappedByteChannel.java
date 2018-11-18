@@ -1,11 +1,10 @@
 package org.java_websocket_jukebox;
 
+import javax.net.ssl.SSLException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 import java.nio.channels.SocketChannel;
-
-import javax.net.ssl.SSLException;
 
 
 public class AbstractWrappedByteChannel implements WrappedByteChannel {

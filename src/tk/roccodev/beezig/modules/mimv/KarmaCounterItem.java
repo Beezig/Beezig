@@ -24,7 +24,7 @@ public class KarmaCounterItem extends GameModeItem<MIMV> {
     public boolean shouldRender(boolean dummy) {
 
         try {
-            if (!(getGameMode() instanceof MIMV))
+            if (getGameMode() == null)
                 return false;
             return dummy || (MIMV.shouldRender(getGameMode().getState()) && MIMV.gamePts != 0);
         } catch (Exception e) {

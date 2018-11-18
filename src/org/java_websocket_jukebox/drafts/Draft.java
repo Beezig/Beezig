@@ -1,11 +1,5 @@
 package org.java_websocket_jukebox.drafts;
 
-import java.nio.ByteBuffer;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-
 import org.java_websocket_jukebox.WebSocket.Role;
 import org.java_websocket_jukebox.exceptions.IncompleteHandshakeException;
 import org.java_websocket_jukebox.exceptions.InvalidDataException;
@@ -13,15 +7,14 @@ import org.java_websocket_jukebox.exceptions.InvalidHandshakeException;
 import org.java_websocket_jukebox.exceptions.LimitExedeedException;
 import org.java_websocket_jukebox.framing.CloseFrame;
 import org.java_websocket_jukebox.framing.Framedata;
-import org.java_websocket_jukebox.handshake.ClientHandshake;
-import org.java_websocket_jukebox.handshake.ClientHandshakeBuilder;
-import org.java_websocket_jukebox.handshake.HandshakeBuilder;
-import org.java_websocket_jukebox.handshake.HandshakeImpl1Client;
-import org.java_websocket_jukebox.handshake.HandshakeImpl1Server;
-import org.java_websocket_jukebox.handshake.Handshakedata;
-import org.java_websocket_jukebox.handshake.ServerHandshake;
-import org.java_websocket_jukebox.handshake.ServerHandshakeBuilder;
+import org.java_websocket_jukebox.handshake.*;
 import org.java_websocket_jukebox.util.Charsetfunctions;
+
+import java.nio.ByteBuffer;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Base class for everything of a websocket specification which is not common such as the way the handshake is read or frames are transfered.

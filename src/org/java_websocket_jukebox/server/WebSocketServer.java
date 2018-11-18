@@ -1,42 +1,24 @@
 package org.java_websocket_jukebox.server;
 
+import org.java_websocket_jukebox.*;
+import org.java_websocket_jukebox.drafts.Draft;
+import org.java_websocket_jukebox.framing.CloseFrame;
+import org.java_websocket_jukebox.handshake.ClientHandshake;
+import org.java_websocket_jukebox.handshake.Handshakedata;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
-import java.nio.channels.ByteChannel;
-import java.nio.channels.CancelledKeyException;
-import java.nio.channels.SelectableChannel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.nio.channels.*;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.java_websocket_jukebox.SocketChannelIOHelper;
-import org.java_websocket_jukebox.WebSocket;
-import org.java_websocket_jukebox.WebSocketAdapter;
-import org.java_websocket_jukebox.WebSocketFactory;
-import org.java_websocket_jukebox.WebSocketImpl;
-import org.java_websocket_jukebox.WrappedByteChannel;
-import org.java_websocket_jukebox.drafts.Draft;
-import org.java_websocket_jukebox.framing.CloseFrame;
-import org.java_websocket_jukebox.handshake.ClientHandshake;
-import org.java_websocket_jukebox.handshake.Handshakedata;
 
 /**
  * <tt>WebSocketServer</tt> is an abstract class that only takes care of the

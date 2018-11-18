@@ -9,18 +9,23 @@ import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.util.minecraft.ChatColor;
 import io.netty.util.internal.ThreadLocalRandom;
 import org.lwjgl.opengl.Display;
+import pw.roccodev.beezig.hiveapi.wrapper.GlobalConfiguration;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.DrStats;
+import pw.roccodev.beezig.hiveapi.wrapper.speedrun.WorldRecord;
+import tk.roccodev.beezig.advancedrecords.anywhere.AdvancedRecordsAnywhere;
+import tk.roccodev.beezig.api.BeezigAPI;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.briefing.NewsServer;
 import tk.roccodev.beezig.briefing.Pools;
 import tk.roccodev.beezig.briefing.fetcher.NewsFetcher;
 import tk.roccodev.beezig.command.*;
 import tk.roccodev.beezig.games.*;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
+import tk.roccodev.beezig.games.logging.hide.HideMapRecords;
+import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.StuffFetcher;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVListenerv2;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiDR;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 import tk.roccodev.beezig.modules.utils.RenderUtils;
 import tk.roccodev.beezig.notes.NotesManager;
 import tk.roccodev.beezig.settings.Setting;
@@ -33,6 +38,8 @@ import tk.roccodev.beezig.utils.autogg.Triggers;
 import tk.roccodev.beezig.utils.autogg.TriggersFetcher;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 import tk.roccodev.beezig.utils.soundcloud.TrackPlayer;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
+import tk.roccodev.beezig.utils.tutorial.TutorialManager;
 
 import java.io.*;
 import java.lang.reflect.Method;
@@ -42,16 +49,20 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Plugin(name = "Beezig", version = BeezigMain.BEEZIG_VERSION)
 public class BeezigMain {
-    public static final String BEEZIG_VERSION = "4.9.0";
+    public static final String BEEZIG_VERSION = "5.0.0";
     public static String VERSION_HASH = "";
     public static String OS;
     public static boolean newUpdate;
+    public static boolean disabled;
 
     public static boolean hasServedNews;
     public static boolean checkForNewLR; // Login Report
@@ -104,7 +115,7 @@ public class BeezigMain {
                     The5zigAPI.getLogger().error("Beezig: This version is disabled!");
                     news.displayMessage("Beezig: Version is disabled!", "Please update to the latest version.");
                 }).start();
-                return; // < one does not simply update beezig
+               disabled = true;
             }
         } catch (IOException e) {
             The5zigAPI.getLogger().info("Failed checking for blacklist");
@@ -140,6 +151,8 @@ public class BeezigMain {
             }
 
         }
+        else
+            VERSION_HASH = "Dev";
 
         try {
             RenderUtils.init();
@@ -153,6 +166,10 @@ public class BeezigMain {
 
         The5zigAPI.getLogger().info("Version is " + BEEZIG_VERSION + ". Hash is " + VERSION_HASH);
         The5zigAPI.getLogger().info("Using Java version: " + Runtime.class.getPackage().getImplementationVersion());
+
+        The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
+
+        if(disabled) return;
 
         The5zigAPI.getAPI().registerModuleItem(this, "karma", tk.roccodev.beezig.modules.timv.KarmaItem.class,
                 "serverhivemc");
@@ -202,6 +219,8 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "beddaily", tk.roccodev.beezig.modules.bed.DailyItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "bedstreak", tk.roccodev.beezig.modules.bed.WinstreakItem.class, "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "bedmonthly", tk.roccodev.beezig.modules.bed.MonthlyItem.class, "serverhivemc");
+
 
         The5zigAPI.getAPI().registerModuleItem(this, "globalmedals", tk.roccodev.beezig.modules.global.MedalsItem.class,
                 "serverhivemc");
@@ -317,11 +336,20 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "lablb", tk.roccodev.beezig.modules.lab.LeaderboardItem.class,
                 "serverhivemc");
 
+        The5zigAPI.getAPI().registerModuleItem(this, "arcadegame", tk.roccodev.beezig.modules.arcade.GameItem.class,
+                "hivearcade");
+        The5zigAPI.getAPI().registerModuleItem(this, "arcadepoints", tk.roccodev.beezig.modules.arcade.PointsItem.class,
+                "hivearcade");
+        The5zigAPI.getAPI().registerModuleItem(this, "arcademap", tk.roccodev.beezig.modules.arcade.MapItem.class,
+                "hivearcade");
 
-        The5zigAPI.getAPI().registerServerInstance(this, IHive.class);
 
         The5zigAPI.getAPI().getPluginManager().registerListener(this, new GRAVListenerv2());
         The5zigAPI.getAPI().getPluginManager().registerListener(this, new AutoGGListener());
+
+        AdvancedRecordsAnywhere.register();
+        GlobalConfiguration.setUserAgent(Log.getUserAgent());
+        GlobalConfiguration.setMaxthatApiKey("ighGH789fdf5kfHUo");
 
         CommandManager.registerCommand(new NotesCommand());
         CommandManager.registerCommand(new AddNoteCommand());
@@ -359,6 +387,8 @@ public class BeezigMain {
         CommandManager.registerCommand(new AutoGGCommand());
         CommandManager.registerCommand(new UptimeCommand());
         CommandManager.registerCommand(new ChatReportCommand());
+        CommandManager.registerCommand(new StatsOverlayCommand());
+        CommandManager.registerCommand(new SkipTutorialCommand());
 
         new Thread(() -> {
             try {
@@ -376,7 +406,7 @@ public class BeezigMain {
             CommandManager.registerCommand(new SeenCommand());
         }
 
-        new Thread(() -> BeezigMain.refetchMaps(), "Maps Fetcher").start();
+        new Thread(BeezigMain::refetchMaps, "Maps Fetcher").start();
 
         The5zigAPI.getLogger().info("Loaded BeezigCore");
 
@@ -411,6 +441,8 @@ public class BeezigMain {
             }
         }
 
+        checkForFileExist(new File(mcFile + "/tutorial.json"), false);
+        TutorialManager.init();
         checkForFileExist(new File(mcFile + "/winstreaks.json"), false);
         checkForFileExist(new File(mcFile + "/timv/"), true);
         checkForFileExist(new File(mcFile + "/timv/dailykarma/"), true);
@@ -434,6 +466,7 @@ public class BeezigMain {
 
         checkForFileExist(new File(mcFile + "/hide/"), true);
         checkForFileExist(new File(mcFile + "/hide/dailyPoints/"), true);
+        HideMapRecords.init();
 
         checkForFileExist(new File(mcFile + "/mimv/"), true);
         checkForFileExist(new File(mcFile + "/mimv/dailyPoints/"), true);
@@ -527,12 +560,12 @@ public class BeezigMain {
         AutovoteUtils.load();
         // watisdis.wat = new ApiTIMV("RoccoDev").getTitle();
 
-        ApiHiveGlobal api = new ApiHiveGlobal(The5zigAPI.getAPI().getGameProfile().getName());
-        playerRank = NetworkRank.fromDisplay(api.getNetworkTitle());
+        HivePlayer api = new HivePlayer(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
+        playerRank = NetworkRank.fromDisplay(api.getRank().getHumanName());
 
         try {
-            HiveAPI.updateMedals();
-            HiveAPI.updateTokens();
+            APIValues.medals = api.getMedals();
+            APIValues.tokens = api.getTokens();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -635,17 +668,6 @@ public class BeezigMain {
         if (evt.getMessage().toUpperCase().trim().equals("/P")) {
             MessageOverlayCommand.toggledName = "";
         }
-        if (evt.getMessage().toUpperCase().startsWith("/RECORDS")
-                || evt.getMessage().toUpperCase().startsWith("/STATS")) {
-            if (AdvancedRecords.isRunning) {
-                The5zigAPI.getAPI().messagePlayer(Log.error + "Advanced Records is already running.");
-                evt.setCancelled(true);
-                return;
-            }
-            String[] args = evt.getMessage().split(" ");
-            AdvancedRecords.player = args.length == 1 ? The5zigAPI.getAPI().getGameProfile().getName() : args[1].trim();
-
-        }
         if (evt.getMessage().endsWith(" test") && (evt.getMessage().split(" ").length == 2) && ActiveGame.is("TIMV")
                 && Setting.TIMV_USE_TESTREQUESTS.getValue()) {
 
@@ -679,6 +701,8 @@ public class BeezigMain {
                 String className = ActiveGame.current().toUpperCase();
                 if (className.startsWith("GNT"))
                     className = "Giant";
+                if(className.startsWith("ARCADE_"))
+                    className = "Arcade";
                 Class gameModeClass = Class.forName("tk.roccodev.beezig.games." + className);
                 Method resetMethod = gameModeClass.getMethod("reset", gameModeClass);
                 resetMethod.invoke(null, gameModeClass.newInstance());
@@ -698,10 +722,13 @@ public class BeezigMain {
                 || evt.getTitle().equals("§aplay§r§8.§r§bHiveMC§r§8.§r§acom§r")) && !hasServedNews) {
             hasServedNews = true;
             NewsServer.serveNews(Pools.newsPool, Pools.newMapsPool, Pools.staffPool);
-            if (!BeezigMain.hasExpansion && The5zigAPI.getAPI().getMinecraftVersion().equals("1.8.9") && The5zigAPI.getAPI().isForgeEnvironment()) {
+            if (!BeezigMain.hasExpansion && !Setting.IGNORE_WARNINGS.getValue() && The5zigAPI.getAPI().getMinecraftVersion().equals("1.8.9") && The5zigAPI.getAPI().isForgeEnvironment()) {
                 The5zigAPI.getAPI().messagePlayer(Log.info + "We've noticed you're running Forge 1.8.9, but you don't have our Forge Expansion mod. Do you want to install it?");
                 The5zigAPI.getAPI().messagePlayer(Log.info + "If so, download it from §bhttp://l.roccodev.pw/beezigforge");
+                The5zigAPI.getAPI().messagePlayer(Log.info + "To suppress this notification, run §b/settings ignore_warnings true");
             }
+            SendTutorial.send("hub");
+            if(BeezigMain.hasExpansion) SendTutorial.send("hub_forge");
         }
         // Map fallback
         if (ActiveGame.is("dr") && DR.activeMap == null) {
@@ -714,18 +741,21 @@ public class BeezigMain {
             DR.activeMap = DR.mapsPool.get(map.toLowerCase());
 
             new Thread(() -> {
-                ApiDR api = new ApiDR(The5zigAPI.getAPI().getGameProfile().getName());
+                DrStats api = new DrStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
                 if (DR.currentMapPB == null) {
                     The5zigAPI.getLogger().info("Loading PB...");
-                    DR.currentMapPB = api.getPersonalBest(DR.activeMap);
+                    DR.currentMapPB = PBCommand.parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName()));
                 }
+                WorldRecord wr = null;
                 if (DR.currentMapWR == null) {
+                    wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID());
                     The5zigAPI.getLogger().info("Loading WR...");
-                    DR.currentMapWR = api.getWorldRecord(DR.activeMap);
+                    DR.currentMapWR = WRCommand.getWorldRecord(wr.getTime());
                 }
                 if (DR.currentMapWRHolder == null) {
+                    if(wr == null) wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID());
                     The5zigAPI.getLogger().info("Loading WRHolder...");
-                    DR.currentMapWRHolder = api.getWorldRecordHolder(DR.activeMap);
+                    DR.currentMapWRHolder = wr.getHolderName();
                 }
             }).start();
         }
@@ -733,8 +763,13 @@ public class BeezigMain {
 
     @EventHandler
     public void onTick(TickEvent evt) {
+        if(!The5zigAPI.getAPI().isInWorld()) return;
+        for(String s : Log.toSendQueue) {
+            The5zigAPI.getAPI().messagePlayer(s);
+        }
+        Log.toSendQueue.clear();
 
-        if (The5zigAPI.getAPI().isInWorld() && The5zigAPI.getAPI().getSideScoreboard() != null && The5zigAPI.getAPI().getSideScoreboard().getTitle().equals("   §eYour LAB Stats   ") && !ActiveGame.is("lab")) {
+        if (The5zigAPI.getAPI().getSideScoreboard() != null && The5zigAPI.getAPI().getSideScoreboard().getTitle().equals("   §eYour LAB Stats   ") && !ActiveGame.is("lab")) {
             ActiveGame.set("LAB");
             System.out.println("Connected to LAB -Hive");
             DiscordUtils.updatePresence("Experimenting in TheLab", "In Lobby", "game_lab");
@@ -751,6 +786,20 @@ public class BeezigMain {
             if (The5zigAPI.getAPI().getActiveServer() instanceof IHive) {
                 if (BeezigMain.isColorDebug)
                     The5zigAPI.getLogger().info("Global Color Debug: (" + evt.getMessage() + ")");
+                if(Setting.PARTY_MEMBERS.getValue()) {
+                    String party = ChatComponentUtils.getPartyMembers(evt.getChatComponent().toString());
+                    if (party != null) {
+                        evt.setCancelled(true);
+                        The5zigAPI.getAPI().messagePlayer(evt.getMessage());
+                        The5zigAPI.getAPI().messagePlayer("§8▍ §b§lParty§8 ▏ §eMembers: §a" + party);
+                        The5zigAPI.getAPI().messagePlayer("");
+                    }
+                }
+                if(hasExpansion && Setting.PARTY_FRIEND.getValue() && evt.getMessage().startsWith("§8▍ §eFriends§8 ▏§a ✚ ")) {
+                    String player = evt.getMessage().replace("§8▍ §eFriends§8 ▏§a ✚ ", "");
+                    evt.setCancelled(true);
+                    BeezigAPI.get().getListener().displayFriendJoin(player);
+                }
                 if (evt.getMessage().equals("§8▏ §aChatReport§8 ▏ §cSorry, there are no logs for this user.")) {
                     crInteractive = false;
                     lrRS = "";
@@ -768,7 +817,7 @@ public class BeezigMain {
 
                     }).start();
 
-                } else if (BeezigMain.crInteractive && (evt.getMessage().startsWith("§8▏ §aLink§8 ▏ §e") || evt.getMessage().startsWith("§6Log link generated: §6"))) {
+                } else if (BeezigMain.crInteractive && (evt.getMessage().startsWith("§8▏ §aLink§8 ▏ §e") || evt.getMessage().contains("§6Log link generated: §6"))) {
                     crInteractive = false;
                     new Thread(() -> {
                         String chatLog = evt.getMessage().contains("§6Log link generated: §6") ? evt.getMessage().split("§6Log link generated\\: §6")[1] : evt.getMessage().replace("§8▏ §aLink§8 ▏ §ehttp://chatlog.hivemc.com/?logId=", "");

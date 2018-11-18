@@ -8,13 +8,12 @@
  */
 package io.socket;
 
+import org.json.simple.JSONObject;
+
+import javax.net.ssl.SSLContext;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
-
-import javax.net.ssl.SSLContext;
-
-import org.json.simple.JSONObject;
 
 /**
  * The Class SocketIO.

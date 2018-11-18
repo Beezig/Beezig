@@ -1,10 +1,10 @@
 package org.java_websocket_jukebox.framing;
 
-import java.nio.ByteBuffer;
-
 import org.java_websocket_jukebox.exceptions.InvalidDataException;
 import org.java_websocket_jukebox.exceptions.InvalidFrameException;
 import org.java_websocket_jukebox.util.Charsetfunctions;
+
+import java.nio.ByteBuffer;
 
 public class CloseFrameBuilder extends FramedataImpl1 implements CloseFrame {
 

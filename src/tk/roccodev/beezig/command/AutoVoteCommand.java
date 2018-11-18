@@ -1,9 +1,11 @@
 package tk.roccodev.beezig.command;
 
+import com.mojang.authlib.GameProfile;
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
+import tk.roccodev.beezig.utils.TabCompletionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,4 +125,10 @@ public class AutoVoteCommand implements Command {
         return true;
     }
 
+    @Override
+    public List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
+        if(args.length == 1)
+            return TabCompletionUtils.matching(args, Arrays.asList("add", "list", "remove", "place"));
+        return new ArrayList<>();
+    }
 }

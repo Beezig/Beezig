@@ -11,9 +11,13 @@
     </path>
 
 
+
     <target name="compile">
         <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+        <javac destdir="${classes.dir}" classpathref="classpath">
+            <src path="src"/>
+            <exclude name="**/submodules/**"/>
+        </javac>
     </target>
     <target name="jar">
         <mkdir dir="build/jar"/>

@@ -3,14 +3,16 @@ package tk.roccodev.beezig.command;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.player.GameStats;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.Titleable;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
-import tk.roccodev.beezig.hiveapi.wrapper.APIGameMode;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,33 +60,34 @@ public class PlayerStatsCommand implements Command {
 
             String pointStringToUse = game.equalsIgnoreCase("grav") ? "points" : "total_points";
 
+
             for (NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
                 try {
-                    APIGameMode api = new APIGameMode(npi.getGameProfile().getName(), npi.getGameProfile().getId().toString().replace("-", "")) {
-                        @Override
-                        public String getShortcode() {
-                            return game.toUpperCase();
-                        }
+                    String uuid = npi.getGameProfile().getId().toString().replace("-", "");
+                    String display = npi.getDisplayName() == null ? npi.getGameProfile().getName() : npi.getDisplayName();
+                    GameStats api = new GameStats(uuid, game.toUpperCase()) {
 
                         @Override
                         public long getPoints() {
 
-                            return (long) object(pointStringToUse);
+                            return getSource().getLong(pointStringToUse);
                         }
                     };
-                    ApiHiveGlobal apiHIVE = api.getParentMode();
+                    HivePlayer parent = api.getPlayer();
+                    ChatColor rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
+
                     points.add(api.getPoints());
 
-                    RankEnum rank = game.equalsIgnoreCase("bed") ? (BEDRank.isNo1(api.getParentMode().getCorrectName(), api.getPoints()) ? BEDRank.ZZZZZZ : BEDRank.getRank(api.getPoints())) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(api.getPoints()) : null);
+                    RankEnum rank = game.equalsIgnoreCase("bed")
+                            ? (BEDRank.newIsNo1(api.getSource().getString("title"), api.getPoints()) ? BEDRank.ZZZZZZ
+                            : BEDRank.getRank(api.getPoints())) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(api.getPoints()) : null);
                     if (rank == null) {
-                        rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, api.getTitle());
+                        rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, api.getSource().getString("title"));
                     }
 
                     title.add(rank.getTotalDisplay());
-                    name.add(apiHIVE.getNetworkRankColor() + npi.getGameProfile().getName());
-                } catch (Exception e) {
-                    //  e.printStackTrace();
-                }
+                    name.add(rankColor + display);
+                } catch (Exception ignored) { }
             }
 
             APIUtils.concurrentSort(points, points, title, name);
@@ -105,7 +108,7 @@ public class PlayerStatsCommand implements Command {
 
                     }
                 } catch (Exception e) {
-                    // e.printStackTrace();
+                   // e.printStackTrace();
                 }
             }
             The5zigAPI.getAPI()

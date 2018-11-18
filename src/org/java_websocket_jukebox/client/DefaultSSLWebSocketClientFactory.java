@@ -1,4 +1,13 @@
 package org.java_websocket_jukebox.client;
+
+import org.java_websocket_jukebox.SSLSocketChannel2;
+import org.java_websocket_jukebox.WebSocketAdapter;
+import org.java_websocket_jukebox.WebSocketImpl;
+import org.java_websocket_jukebox.client.WebSocketClient.WebSocketClientFactory;
+import org.java_websocket_jukebox.drafts.Draft;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.channels.ByteChannel;
@@ -7,15 +16,6 @@ import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLEngine;
-
-import org.java_websocket_jukebox.SSLSocketChannel2;
-import org.java_websocket_jukebox.WebSocketAdapter;
-import org.java_websocket_jukebox.WebSocketImpl;
-import org.java_websocket_jukebox.client.WebSocketClient.WebSocketClientFactory;
-import org.java_websocket_jukebox.drafts.Draft;
 
 
 public class DefaultSSLWebSocketClientFactory implements WebSocketClientFactory {

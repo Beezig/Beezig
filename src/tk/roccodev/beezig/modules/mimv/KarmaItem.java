@@ -78,7 +78,7 @@ public class KarmaItem extends GameModeItem<MIMV> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof MIMV)) return false;
+            if (getGameMode() == null) return false;
             return dummy || MIMV.shouldRender(getGameMode().getState());
         } catch (Exception e) {
             return false;

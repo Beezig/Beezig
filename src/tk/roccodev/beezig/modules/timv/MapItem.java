@@ -50,7 +50,7 @@ public class MapItem extends GameModeItem<TIMV> {
     public boolean shouldRender(boolean dummy) {
 
         try {
-            if (!(getGameMode() instanceof TIMV)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (TIMV.shouldRender(getGameMode().getState()) && TIMV.activeMap != null);
         } catch (Exception e) {
             return false;

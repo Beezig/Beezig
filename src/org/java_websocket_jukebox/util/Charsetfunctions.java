@@ -1,14 +1,14 @@
 package org.java_websocket_jukebox.util;
 
+import org.java_websocket_jukebox.exceptions.InvalidDataException;
+import org.java_websocket_jukebox.framing.CloseFrame;
+
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
-
-import org.java_websocket_jukebox.exceptions.InvalidDataException;
-import org.java_websocket_jukebox.framing.CloseFrame;
 
 public class Charsetfunctions {
 

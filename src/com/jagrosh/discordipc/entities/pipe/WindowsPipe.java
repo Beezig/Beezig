@@ -19,11 +19,9 @@ package com.jagrosh.discordipc.entities.pipe;
 import com.jagrosh.discordipc.IPCClient;
 import com.jagrosh.discordipc.entities.Callback;
 import com.jagrosh.discordipc.entities.Packet;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

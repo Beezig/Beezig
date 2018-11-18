@@ -24,8 +24,9 @@ public class NewsServer {
         }
 
 
-        if (Pools.error && news.size() == 0) {
+        if (Pools.error && news.size() == 0 && !Setting.IGNORE_WARNINGS.getValue()) {
             The5zigAPI.getAPI().messagePlayer(Log.error + "An error has occurred while attempting to load your Briefing. This may be caused by Minecraft using the wrong Java installation. Please follow this guide: https://github.com/RoccoDev/Beezig/wiki/Fixing-the-Issue-with-WR-for-Deathrun-&-Briefing");
+            The5zigAPI.getAPI().messagePlayer(Log.info + "To suppress this warning, run §b/settings ignore_warnings true");
             return;
         } else if (Pools.error) {
             The5zigAPI.getAPI().messagePlayer(Log.error + "An error has occurred while attempting to load your Briefing. This may be caused by Minecraft using the wrong Java installation. Please follow this guide: https://github.com/RoccoDev/Beezig/wiki/Fixing-the-Issue-with-WR-for-Deathrun-&-Briefing");

@@ -6,6 +6,7 @@ import eu.the5zig.mod.server.GameState;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
+import tk.roccodev.beezig.games.logging.GameLogger;
 import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.beezig.utils.StreakUtils;
 
@@ -16,6 +17,9 @@ import java.util.List;
 public class CAI extends GameMode {
 
     public static String activeMap;
+
+    private static GameLogger logger;
+    public static String gameId;
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
@@ -48,6 +52,15 @@ public class CAI extends GameMode {
             initPointsWriterWithZero();
             return;
         }
+
+        logger = new GameLogger(BeezigMain.mcFile + "/cai/games.csv");
+        logger.setHeaders(new String[] {
+                "Points",
+                "Map",
+                "Victory?",
+                "GameID"
+        });
+
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
@@ -99,7 +112,10 @@ public class CAI extends GameMode {
             StreakUtils.resetWinstreak("cai", wasBest);
         }
 
+        if(inGame && logger != null)
+        logger.logGame(gamePoints + "", activeMap, hasWon ? "Yes" : "No", gameId);
 
+        gameId = null;
         inGame = false;
         hasWon = false;
         invisCooldown = 0;

@@ -29,7 +29,7 @@ public class GamePointsItem extends GameModeItem<SGN> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof SGN))
+            if (getGameMode() == null)
                 return false;
             if (SGN.gamePts == 0)
                 return false;

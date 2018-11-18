@@ -20,14 +20,9 @@
 
 package javazoom.jl.player;
 
-import java.io.InputStream;
+import javazoom.jl.decoder.*;
 
-import javazoom.jl.decoder.Bitstream;
-import javazoom.jl.decoder.BitstreamException;
-import javazoom.jl.decoder.Decoder;
-import javazoom.jl.decoder.Header;
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.decoder.SampleBuffer;
+import java.io.InputStream;
 	
 /**
  * The <code>Player</code> class implements a simple player for playback

@@ -1,28 +1,13 @@
 package paulscode.sound.libraries_remap;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.Mixer;
-import javax.sound.sampled.SourceDataLine;
+import paulscode.sound.*;
 
+import javax.sound.sampled.*;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Set;
-
-import paulscode.sound.Channel;
-import paulscode.sound.FilenameURL;
-import paulscode.sound.ICodec;
-import paulscode.sound.Library;
-import paulscode.sound.Source;
-import paulscode.sound.SoundBuffer;
-import paulscode.sound.SoundSystem;
-import paulscode.sound.SoundSystemConfig;
-import paulscode.sound.SoundSystemException;
 
 /**
  * The LibraryJavaSound class interfaces the JavaSound library.  

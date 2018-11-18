@@ -89,6 +89,9 @@
           "type": "bedstreak"
         },
         {
+          "type": "bedmonthly"
+        },
+        {
           "type": "bedresources"
         }
       ]
@@ -290,6 +293,21 @@
         {
           "type": "lablb",
           "showPrefix": false
+        }
+      ]
+    },
+    {
+      "id": "Arcade",
+      "name": "Hive Arcade",
+      "items": [
+        {
+          "type": "arcadegame"
+        },
+        {
+          "type": "arcadepoints"
+        },
+        {
+          "type": "arcademap"
         }
       ]
     }

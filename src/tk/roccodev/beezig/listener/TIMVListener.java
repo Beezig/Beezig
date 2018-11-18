@@ -5,19 +5,23 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.maxthat.timv.TimvMonthlyProfile;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.TimvStats;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.TIMV;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiTIMV;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -50,6 +54,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("TIMV");
         IHive.genericJoin();
+        SendTutorial.send("timv_join");
 
         //Should've read the docs ¯\_(ツ)_/¯
         new Thread(() -> {
@@ -79,7 +84,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
 
                 try {
                     String ign = The5zigAPI.getAPI().getGameProfile().getName();
-                    APIValues.TIMVkarma = new ApiTIMV(ign).getKarma();
+                    APIValues.TIMVkarma = new TimvStats(ign).getKarma();
 
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
@@ -89,7 +94,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
 
             }
 
-            ApiTIMV api = new ApiTIMV(The5zigAPI.getAPI().getGameProfile().getName());
+            TimvStats api = new TimvStats(The5zigAPI.getAPI().getGameProfile().getName());
             TIMV.rankObject = TIMVRank.getFromDisplay(api.getTitle());
             TIMV.rank = TIMV.rankObject.getTotalDisplay();
 
@@ -182,7 +187,14 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             The5zigAPI.getLogger().info("FALLBACK: " + map);
 
             TIMV.activeMap = TIMV.mapsPool.get(map.toLowerCase());
-        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
+        }
+        else if(message.startsWith("§8▍ §6TIMV§8 ▏ §1You will be a detective.")) {
+            TIMV.currentPassStatus = 2;
+        }
+        else if(message.startsWith("§8▍ §6TIMV§8 ▏ §4You will be a traitor.")) {
+            TIMV.currentPassStatus = 1;
+        }
+        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             //"          §6§m                  §f ItsNiklass's Stats §6§m                  "
             //Advanced Records
             TIMV.messagesToSend.add(message);
@@ -211,24 +223,27 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
                         The5zigAPI.getLogger().info(AdvancedRecords.player);
-                        ApiTIMV api = new ApiTIMV(AdvancedRecords.player);
+                        TimvStats api = new TimvStats(AdvancedRecords.player, true);
+                        HivePlayer global = api.getPlayer();
                         TIMVRank rank = null;
-                        Long rolepoints = Setting.TIMV_SHOW_KRR.getValue() ? api.getRolepoints() : null;
+                        Long rolepoints = Setting.TIMV_SHOW_KRR.getValue() ? api.getRolePoints() : null;
                         if (rolepoints == null && Setting.TIMV_SHOW_TRAITORRATIO.getValue()) {
-                            rolepoints = api.getRolepoints();
+                            rolepoints = api.getRolePoints();
                         }
-                        Long mostPoints = Setting.TIMV_SHOW_MOSTPOINTS.getValue() ? api.getMostKarma() : null;
-                        String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? api.getParentMode().getNetworkTitle() : "";
+                        Long mostPoints = Setting.TIMV_SHOW_MOSTPOINTS.getValue() ? api.getMostPoints() : null;
+                        String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? global.getRank().getHumanName() : "";
                         ChatColor rankColor = null;
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
-                            rankColor = api.getParentMode().getNetworkRankColor();
+                            rankColor = NetworkRank.fromDisplay(global.getRank().getHumanName()).getColor();
                         }
                         long karma = 0;
                         long traitorPoints;
-                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
+                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.getLastLogin() : null;
+                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size() : null;
                         String rankTitleTIMV = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
-                        int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() && api.getLeaderboardsPlacePoints(349) < api.getKarma()) ? api.getMonthlyRank() : 0;
+                        TimvMonthlyProfile monthlyProfile = api.getMonthlyProfile();
+                        int monthlyRank =
+                                Math.toIntExact((Setting.SHOW_RECORDS_MONTHLYRANK.getValue() && monthlyProfile != null) ? api.getMonthlyProfile().getPlace() : 0);
                         if (rankTitleTIMV != null) rank = TIMVRank.getFromDisplay(rankTitleTIMV);
                         List<String> messages = new ArrayList<>(TIMV.messagesToSend);
                         Iterator<String> it = messages.iterator();
@@ -240,7 +255,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                                 //"§6§m                  §f ItsNiklass's Stats §6§m"
                                 The5zigAPI.getLogger().info("Editing Header...");
                                 StringBuilder sb = new StringBuilder();
-                                String correctUser = api.getParentMode().getCorrectName();
+                                String correctUser = global.getUsername();
                                 if (correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
                                 sb.append("          §6§m                  §f ");
                                 The5zigAPI.getLogger().info("Added base...");
@@ -451,7 +466,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
 
                 ArrayList<Long> TraitorKarma = new ArrayList<>();
                 for (String name : traitorTeam) {
-                    ApiTIMV api = new ApiTIMV(name);
+                    TimvStats api = new TimvStats(name);
                     TraitorKarma.add(api.getKarma());
                 }
                 Long avg = APIUtils.average(TraitorKarma.toArray());
@@ -521,6 +536,8 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                 String[] data = message.split("▏ §7");
                 TIMV.gameID = data[1];
                 TIMV.actionBarChecked = true;
+                Log.addToSendQueue(Log.info + "Game ID: §b" + TIMV.gameID + " > §a"
+                + "http://hivemc.com/trouble-in-mineville/game/" + TIMV.gameID);
             }
         }
         return false;

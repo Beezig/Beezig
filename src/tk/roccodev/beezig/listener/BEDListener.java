@@ -5,21 +5,23 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.bed.BedMonthlyProfile;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.BedStats;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.hiveapi.APIValues;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
-import tk.roccodev.beezig.hiveapi.stuff.bed.MonthlyPlayer;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiBED;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,16 +43,19 @@ public class BEDListener extends AbstractGameListener<BED> {
 
     @Override
     public boolean matchLobby(String arg0) {
-        // TODO Auto-generated method stub
-        return arg0.equals("BED");
+        if(arg0.contains("BED_")) {
+            BED.activeMap = arg0.split("_")[1];
+        }
+        return arg0.startsWith("BED");
     }
 
     @Override
     public void onGameModeJoin(BED gameMode) {
-
+        System.out.println("Join");
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("BED");
         IHive.genericJoin();
+        SendTutorial.send("bed_join");
 
         new Thread(() -> {
             try {
@@ -60,24 +65,39 @@ public class BEDListener extends AbstractGameListener<BED> {
                     // TODO Auto-generated catch block
                     e2.printStackTrace();
                 }
+                Thread.sleep(100);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 
-                BED.updateMode();
+                BedStats api = null;
+
                 if (sb != null && sb.getTitle().contains("BED")) {
                     BED.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
                     BED.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
                 } else {
-                    String ign2 = The5zigAPI.getAPI().getGameProfile().getName();
-                    ApiBED api = new ApiBED(ign2);
+                    String ign2 = The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "");
+                    api = new BedStats(ign2);
                     BED.apiDeaths = Math.toIntExact(api.getDeaths());
                     BED.apiKills = Math.toIntExact(api.getKills());
                 }
+                BED.updateMode();
 
                 String ign1 = The5zigAPI.getAPI().getGameProfile().getName();
-                APIValues.BEDpoints = new ApiBED(ign1).getPoints();
+                if(api == null) api = new BedStats(ign1);
+                APIValues.BEDpoints = api.getPoints();
                 BED.updateRank();
                 BED.updateKdr();
-                The5zigAPI.getLogger().info(BED.apiDeaths + " / " + BED.apiKills + " / " + BED.apiKdr);
+
+                try {
+                    if(BED.attemptNew) {
+                        BED.monthly = api.getMonthlyProfile();
+                        BED.monthly.getPoints(); // Fetch (LazyObject)
+                        BED.hasLoaded = true;
+                    }
+                }
+                catch(Exception e) {
+                    BED.attemptNew = false;
+                }
+
                 //Should've read the docs ¯\_(ツ)_/¯
             } catch (Exception e) {
                 // TODO Auto-generated catch block
@@ -119,6 +139,8 @@ public class BEDListener extends AbstractGameListener<BED> {
             APIValues.BEDpoints += pts;
             BED.dailyPoints += pts;
 
+            if(message.endsWith("Generator]")) return false;
+
             switch (pts) {
 
                 case 5:
@@ -141,8 +163,8 @@ public class BEDListener extends AbstractGameListener<BED> {
             BED.pointsCounter += 100;
             BED.dailyPoints += 100;
             APIValues.BEDpoints += 100;
-            HiveAPI.medals++;
-            HiveAPI.tokens += 100;
+            APIValues.medals++;
+            APIValues.tokens += 100;
             BED.hasWon = true;
             BED.winstreak++;
             if (BED.winstreak >= BED.bestStreak)
@@ -167,7 +189,7 @@ public class BEDListener extends AbstractGameListener<BED> {
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
+        } else if (message.contains(" §ahttps://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
             BED.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
@@ -184,7 +206,8 @@ public class BEDListener extends AbstractGameListener<BED> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiBED api = new ApiBED(AdvancedRecords.player);
+                        BedStats api = new BedStats(AdvancedRecords.player, true);
+                        HivePlayer global = api.getPlayer();
 
                         int kills = 0;
                         int deaths = 0;
@@ -192,6 +215,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                         int victories = 0;
                         int bedsDestroyed = 0;
                         int eliminations = 0;
+
 
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -204,24 +228,28 @@ public class BEDListener extends AbstractGameListener<BED> {
                         df1f.setMinimumFractionDigits(1);
 
 
-                        String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? api.getParentMode().getNetworkTitle() : "";
+                        String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue() ? global.getRank().getHumanName() : "";
                         ChatColor rankColor = null;
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
 
-                            rankColor = api.getParentMode().getNetworkRankColor();
+                            rankColor = NetworkRank.fromDisplay(global.getRank().getHumanName()).getColor();
 
                         }
                         long points;
 
-                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements() : null;
+                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.getLastLogin() : null;
+                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size() : null;
+                        Long streak = Setting.BED_SHOW_STREAK.getValue() ? api.getWinstreak() : null;
 
-                        int monthlyRank = 0;
+
+                        long monthlyRank = 0;
                         if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
-                            MonthlyPlayer monthly = api.getMonthlyStatus();
-                            if (monthly != null) {
-                                monthlyRank = monthly.getPlace();
-                            }
+                            try {
+                                BedMonthlyProfile monthly = api.getMonthlyProfile();
+                                if (monthly != null) {
+                                    monthlyRank = monthly.getPlace();
+                                }
+                            } catch(Exception ignored) {}
                         }
 
                         List<String> messages = new ArrayList<>(BED.messagesToSend);
@@ -231,7 +259,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                             if (s.trim().endsWith("'s Stats §6§m")) {
                                 The5zigAPI.getLogger().info("Editing Header...");
                                 StringBuilder sb = new StringBuilder();
-                                String correctUser = api.getParentMode().getCorrectName();
+                                String correctUser = global.getUsername();
                                 if (correctUser.contains("nicked player")) correctUser = "Nicked/Not found";
                                 sb.append("          §6§m                  §f ");
                                 The5zigAPI.getLogger().info("Added base...");
@@ -272,7 +300,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                                 BED.lastRecordsPoints = points;
                                 sb.append(newData[1]);
                                 if (Setting.SHOW_RECORDS_RANK.getValue()) {
-                                    BEDRank rank = BEDRank.isNo1(AdvancedRecords.player) ? BEDRank.ZZZZZZ : BEDRank.getRank((int) points);
+                                    BEDRank rank = BEDRank.newIsNo1(api) ? BEDRank.ZZZZZZ : BEDRank.getRank((int) points);
                                     if (rank != null) {
                                         int level = rank.getLevel((int) points);
                                         String BEDrankColor = rank.getName().replaceAll(ChatColor.stripColor(rank.getName()), "");
@@ -312,7 +340,10 @@ public class BEDListener extends AbstractGameListener<BED> {
 
 
                         if (achievements != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + "§3 Achievements: §b" + achievements + "/67");
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/67");
+                        }
+                        if(streak != null) {
+                            The5zigAPI.getAPI().messagePlayer("§o§3 Win Streak: §b" + streak);
                         }
                         // "§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing"
 
@@ -462,8 +493,8 @@ public class BEDListener extends AbstractGameListener<BED> {
             //Update the rank module when you uprank
             new Thread(() -> {
                 try {
-                    String ign = The5zigAPI.getAPI().getGameProfile().getName();
-                    APIValues.BEDpoints = new ApiBED(ign).getPoints();
+                    String ign = The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "");
+                    APIValues.BEDpoints = new BedStats(ign).getPoints();
                     Thread.sleep(200);
                     BED.updateRank();
 
@@ -476,8 +507,8 @@ public class BEDListener extends AbstractGameListener<BED> {
             new Thread(() -> {
 
                 try {
-                    String ign = The5zigAPI.getAPI().getGameProfile().getName();
-                    APIValues.BEDpoints = new ApiBED(ign).getPoints();
+                    String ign = The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "");
+                    APIValues.BEDpoints = new BedStats(ign).getPoints();
                     Thread.sleep(200);
                     BED.updateRank();
 

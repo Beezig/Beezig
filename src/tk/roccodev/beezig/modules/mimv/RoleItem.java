@@ -37,7 +37,7 @@ public class RoleItem extends GameModeItem<MIMV> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof MIMV)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (MIMV.shouldRender(getGameMode().getState()) && MIMV.role != null && !MIMV.role.isEmpty());
         } catch (Exception e) {
             return false;

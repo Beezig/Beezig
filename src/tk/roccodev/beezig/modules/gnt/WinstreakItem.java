@@ -36,7 +36,7 @@ public class WinstreakItem extends GameModeItem<Giant> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            return getGameMode() instanceof Giant;
+            return getGameMode() != null;
         } catch (Exception e) {
             return false;
         }

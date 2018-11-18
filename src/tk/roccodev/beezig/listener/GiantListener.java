@@ -4,22 +4,23 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.GntStats;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.GntmStats;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.Giant;
 import tk.roccodev.beezig.hiveapi.APIValues;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.gnt.GiantRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGNT;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGNTM;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGiant;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -67,6 +68,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
             ActiveGame.set("GNTM");
         gameMode.setState(GameState.STARTING);
         IHive.genericJoin();
+        SendTutorial.send("gnt");
         new Thread(() -> {
             try {
                 Giant.initDailyPointsWriter();
@@ -75,7 +77,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
                 e2.printStackTrace();
             }
             String ign = The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "");
-            ApiGiant gnt = ActiveGame.is("GNTM") ? new ApiGNTM(ign) : new ApiGNT(ign);
+            GntStats gnt = ActiveGame.is("GNTM") ? new GntmStats(ign) : new GntStats(ign);
 
             Giant.totalKills = (int) gnt.getKills();
             Giant.totalDeaths = (int) gnt.getDeaths();
@@ -237,19 +239,22 @@ public class GiantListener extends AbstractGameListener<Giant> {
                     try {
                         GiantRank rank = null;
 
-                        ApiGiant api = ActiveGame.is("GNTM") ? new ApiGNTM(AdvancedRecords.player) : new ApiGNT(AdvancedRecords.player);
-
+                        GntStats api = ActiveGame.is("GNTM")
+                                ? new GntmStats(AdvancedRecords.player, true)
+                                : new GntStats(AdvancedRecords.player, true);
+                        HivePlayer parent = api.getPlayer();
+                        
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
-                                ? api.getParentMode().getNetworkTitle()
+                                ? parent.getRank().getHumanName()
                                 : "";
                         ChatColor rankColor = null;
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
-                            rankColor = api.getParentMode().getNetworkRankColor();
+                            rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
                         }
                         long points = 0;
                         int vics = 0, played = 0, kills = 0, deaths = 0;
                         Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue()
-                                ? api.lastPlayed()
+                                ? api.getLastLogin()
                                 : null;
                         String rankTitleGiant = Setting.SHOW_RECORDS_RANK.getValue()
                                 ? api.getTitle()
@@ -268,7 +273,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
                             if (s.trim().endsWith("'s Stats §6§m")) {
                                 The5zigAPI.getLogger().info("Editing Header...");
                                 StringBuilder sb = new StringBuilder();
-                                String correctUser = api.getParentMode().getCorrectName();
+                                String correctUser = parent.getUsername();
                                 if (correctUser.contains("nicked player"))
                                     correctUser = "Nicked/Not found";
                                 sb.append("          §6§m                  §f ");

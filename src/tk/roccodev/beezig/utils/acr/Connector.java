@@ -1,8 +1,8 @@
 package tk.roccodev.beezig.utils.acr;
 
+import pw.roccodev.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiHiveGlobal;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -49,20 +49,24 @@ public class Connector {
             URL url = new URL("https://report.hivemc.com/ajax/receive");
             HttpURLConnection conn3 = (HttpURLConnection) url.openConnection();
             conn3.addRequestProperty("User-Agent", Log.getUserAgent());
+            conn3.addRequestProperty("Accept", "*/*");
             conn3.setRequestProperty("Cookie", cookieStr);
             conn3.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
             conn3.setRequestProperty("Host", "report.hivemc.com");
             conn3.setRequestProperty("Referer", "http://report.hivemc.com/");
             conn3.setRequestProperty("Origin", "http://report.hivemc.com");
             conn3.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+            conn3.setRequestProperty("Accept-Encoding", "gzip, deflate");
+            conn3.setRequestProperty("Accept-Language", "it,it-IT;q=0.8,en-US;q=0.5,en;q=0.3");
             conn3.setRequestMethod("POST");
 
 
             String link;
             String uuid;
+            System.out.println("Sending for ID: " + chatReportId);
             if (chatReportId.startsWith("https://") || chatReportId.startsWith("http://")) {
                 link = chatReportId;
-                uuid = new ApiHiveGlobal(player).getUUID();
+                uuid = UsernameToUuid.getUUID(player);
             } else {
                 String uuidInfo = "http://api.hivemc.com/v1/chatreport/" + chatReportId;
                 uuid = (String) APIUtils.getObject(APIUtils.readURL(new URL(uuidInfo))).get("UUID");
@@ -81,7 +85,7 @@ public class Connector {
             try (java.io.OutputStream os = conn3.getOutputStream()) {
                 os.write(urlParameters.getBytes(StandardCharsets.UTF_8));
             }
-
+            System.out.println(conn3.getResponseCode());
             return conn3.getResponseCode() == 200;
         } catch (Exception e) {
             e.printStackTrace();

@@ -38,6 +38,8 @@ public class TIMV extends GameMode {
     public static int detectivesBefore = 0;
     public static int detectivesDiscovered = 0;
 
+    public static int currentPassStatus = 0;
+
     public static long currentEnderchests;
 
     public static ArrayList<String> traitorTeam = new ArrayList<>();
@@ -157,6 +159,7 @@ public class TIMV extends GameMode {
                 writer.write("d-points");
                 writer.write("t-points");
                 writer.write("gameId");
+                writer.write("pass");
                 writer.endRecord();
             }
 
@@ -168,6 +171,8 @@ public class TIMV extends GameMode {
             writer.write(dPoints + "");
             writer.write(tPoints + "");
             writer.write(gameID);
+            writer.write("Passed: " + (currentPassStatus == 0 ? "No"
+                    : (currentPassStatus == 1 ? "Traitor" : "Detective")));
             writer.endRecord();
             writer.close();
 
@@ -269,6 +274,7 @@ public class TIMV extends GameMode {
         }
         TIMV.traitorsBefore = 0;
         TIMV.traitorsDiscovered = 0;
+        currentPassStatus = 0;
         TIMV.detectivesBefore = 0;
         TIMV.detectivesDiscovered = 0;
         traitorTeam.clear();

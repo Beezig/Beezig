@@ -1,0 +1,3 @@
+[submodule "src/submodules"]
+	path = src/submodules
+	url = https://github.com/Beezig/hive-api-wrapper

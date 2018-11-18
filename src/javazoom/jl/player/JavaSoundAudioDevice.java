@@ -24,10 +24,10 @@
 
 package javazoom.jl.player;
 
-import javax.sound.sampled.*;
-
 import javazoom.jl.decoder.Decoder;
 import javazoom.jl.decoder.JavaLayerException;
+
+import javax.sound.sampled.*;
 
 /**
  * The <code>JavaSoundAudioDevice</code> implements an audio

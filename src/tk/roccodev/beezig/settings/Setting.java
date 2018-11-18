@@ -8,6 +8,9 @@ public enum Setting {
 
     THOUSANDS_SEPARATOR(true, "Thousands Separator", "Separate thousands with a comma or a dot, depending on the system language"),
     ADVANCED_RECORDS(true, "Advanced Records", "Display more stats when running /records"),
+    IGNORE_WARNINGS(false, "Ignore Warnings", "Ignore Briefing/WR and BeezigForge warnings."),
+    PARTY_MEMBERS(true, "Show party members", "Show party members upon receiving an invite."),
+    PARTY_FRIEND(true, "Party joining friends", "Makes the friend join message clickable so you can invite them to your party"),
     SHOW_NETWORK_RANK_TITLE(false, "AdvRec - Network Rank", "Advanced Records - Show the network-rank title behind username"),
     SHOW_NETWORK_RANK_COLOR(true, "AdvRec - Network Rank Color", "Advanced Records - Color the username/network-rank respective to their network-rank"),
     SHOW_RECORDS_LASTGAME(true, "AdvRec - Last Game", "Advanced Records - Show last time the player played that game"),
@@ -41,6 +44,7 @@ public enum Setting {
 
     BED_SHOW_ELIMINATIONS_PER_GAME(false, "BED AdvRec - TPG", "BED Advanced Records - Show Eliminations per Game"),
     BED_SHOW_BEDS_PER_GAME(true, "BED AdvRec - BPG", "BED Advanced Records - Show Beds destroyed per Game"),
+    BED_SHOW_STREAK(true, "BED AdvRec - Streak", "BED Advanced Records - Show winstreak"),
 
     HIDE_SHOW_SEEKER_KPG(true, "HIDE AdvRec - Seeker KPG", "HIDE Advanced Records - Show Kills per Game as Seeker"),
     HIDE_SHOW_HIDER_KPG(false, "HIDE AdvRec - Hider KPG", "HIDE Advanced Records - Show Kills per Game as Hider"),

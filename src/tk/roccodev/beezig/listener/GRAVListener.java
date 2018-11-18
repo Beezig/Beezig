@@ -5,18 +5,21 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.GravStats;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.games.GRAV;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.hiveapi.stuff.grav.GRAVRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiGRAV;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
@@ -41,6 +44,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("GRAV");
         IHive.genericJoin();
+        SendTutorial.send("grav_join");
 
         new Thread(() -> {
             try {
@@ -59,7 +63,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                     APIValues.GRAVpoints = (long) points;
                 }
 
-                ApiGRAV api = new ApiGRAV(The5zigAPI.getAPI().getGameProfile().getName());
+                GravStats api = new GravStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
                 GRAV.rankObject = GRAVRank.getFromDisplay(api.getTitle());
                 GRAV.rank = GRAV.rankObject.getTotalDisplay();
             } catch (Exception e) {
@@ -80,8 +84,8 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                 String[] maps = afterMsg.split(", ");
                 GRAV.maps.addAll(Arrays.asList(maps));
 
-                HashMap<String, Double> pbs = new ApiGRAV(The5zigAPI.getAPI().getGameProfile().getName())
-                        .getMapTimes();
+                Map<String, Long> pbs = new GravStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""))
+                        .getMapRecords();
                 int i = 0;
                 for (String s : maps) {
                     String apiMap = GRAV.mapsPool.get(ChatColor.stripColor(s));
@@ -91,12 +95,15 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
 					/*pbs.entrySet().forEach(e -> {
 						The5zigAPI.getLogger().info(e.getKey() + " / " + e.getValue());
 					});*/
-                    Double pb = pbs.get(apiMap);
-
-                    if (pb == null) {
+                    Long rawPb = pbs.get(apiMap);
+                    Double pb;
+                    if (rawPb == null) {
                         pb = 0D;
                         GRAV.toDisplay.put(++i, s + " §f| §7No PB §f| §c{f}");
-                    } else GRAV.toDisplay.put(++i, s + " §f| " + df.format(pb) + "s §f| §c{f}");
+                    } else {
+                        pb = rawPb / 1000D;
+                        GRAV.toDisplay.put(++i, s + " §f| " + df.format(pb) + "s §f| §c{f}");
+                    }
 
                     GRAV.mapPBs.put(ChatColor.stripColor(s), pb);
                 }
@@ -182,7 +189,8 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiGRAV api = new ApiGRAV(AdvancedRecords.player);
+                        GravStats api = new GravStats(AdvancedRecords.player, true);
+                        HivePlayer parent = api.getPlayer();
                         GRAVRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -195,11 +203,11 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                         df1f.setMinimumFractionDigits(1);
 
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
-                                ? api.getParentMode().getNetworkTitle()
+                                ? parent.getRank().getHumanName()
                                 : "";
                         ChatColor rankColor = null;
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
-                            rankColor = api.getParentMode().getNetworkRankColor();
+                            rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
                         }
                         String rankTitleGRAV = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
                         if (rankTitleGRAV != null)
@@ -209,7 +217,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                         int gamesPlayed = 0;
                         int victories = 0;
 
-                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
+                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.getLastLogin() : null;
                         // Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ?
                         // api.getAchievements() : null;
 
@@ -224,7 +232,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                             if (s.trim().endsWith("'s Stats §6§m")) {
                                 The5zigAPI.getLogger().info("Editing Header...");
                                 StringBuilder sb = new StringBuilder();
-                                String correctUser = api.getParentMode().getCorrectName();
+                                String correctUser = parent.getUsername();
                                 if (correctUser.contains("nicked player"))
                                     correctUser = "Nicked/Not found";
                                 sb.append("          §6§m                  §f ");

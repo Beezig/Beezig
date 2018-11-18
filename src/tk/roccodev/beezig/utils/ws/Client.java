@@ -1,6 +1,7 @@
 package tk.roccodev.beezig.utils.ws;
 
 import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.util.minecraft.ChatColor;
 import org.java_websocket_beezig.client.WebSocketClient;
 import org.java_websocket_beezig.handshake.ServerHandshake;
 import tk.roccodev.beezig.BeezigMain;
@@ -17,6 +18,8 @@ public class Client extends WebSocketClient {
         super(serverUri);
         // TODO Auto-generated constructor stub
     }
+
+
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
@@ -54,13 +57,13 @@ public class Client extends WebSocketClient {
         } else if (data[0].equals("newAnnouncement")) {
             String data2[] = data[1].trim().split("§");
             The5zigAPI.getAPI().messagePlayer(Log.info + "§bNEW ANNOUNCEMENT!");
-            The5zigAPI.getAPI().messagePlayer(Log.info + data2[0].trim());
-            The5zigAPI.getAPI().messagePlayer(Log.info + data2[1].trim());
+            The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.translateAlternateColorCodes('&', data2[0].trim()));
+            The5zigAPI.getAPI().messagePlayer(Log.info + ChatColor.translateAlternateColorCodes('&', data2[1].trim()));
             The5zigAPI.getAPI().playSound("note.pling", 1f);
         } else if (data[0].equals("forceRefetch")) {
             new Thread(() -> {
                 BeezigMain.refetchMaps();
-                The5zigAPI.getAPI().messagePlayer(Log.info + "Maps data have been re-fetched due to a remote request.");
+                The5zigAPI.getAPI().messagePlayer(Log.info + "Map data has been re-fetched by a remote request.");
             }, "Maps Fetcher").start();
         }
 

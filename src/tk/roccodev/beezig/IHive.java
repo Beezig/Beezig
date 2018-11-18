@@ -45,6 +45,30 @@ public class IHive extends ServerInstance {
         if (host.toLowerCase().contains("hivemc.") || host.toLowerCase().endsWith("hive.sexy")) {
             System.out.println("Joined Hive.");
             joined = System.currentTimeMillis();
+            if(BeezigMain.disabled) {
+                Log.addToSendQueue("                         §4§m                              ");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("                       §4§l!! UPDATE REQUIRED !!");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("       §cA new Beezig update is required and the current");
+                Log.addToSendQueue("                     §cversion has been disabled.");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("                     §7To update, use the installer.");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("                         §4§m                              ");
+            }
+            else if(BeezigMain.newUpdate) {
+                Log.addToSendQueue("                         §b§m                              ");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("                       §b§l!! UPDATE AVAILABLE !!");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("              §bA new Beezig update is available!");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("                     §7To update, use the installer.");
+                Log.addToSendQueue("");
+                Log.addToSendQueue("                         §b§m                              ");
+
+            }
             new Thread(() -> {
                 if (TriggersFetcher.shouldLoad()) {
                     System.out.println("Loading AutoGG because the AutoGG Mod was not found or is not enabled.");
@@ -66,20 +90,21 @@ public class IHive extends ServerInstance {
     @Override
     public void registerListeners() {
         gameListener = getGameListener();
-        // TODO Auto-generated method stub
-        getGameListener().registerListener(new TIMVListener());
-        getGameListener().registerListener(new HiveListener());
-        getGameListener().registerListener(new DRListener());
-        getGameListener().registerListener(new BEDListener());
-        getGameListener().registerListener(new GiantListener());
-        getGameListener().registerListener(new HIDEListener());
-        getGameListener().registerListener(new CAIListener());
-        getGameListener().registerListener(new SKYListener());
-        getGameListener().registerListener(new MIMVListener());
-        getGameListener().registerListener(new GRAVListener());
-        getGameListener().registerListener(new BPListener());
-        getGameListener().registerListener(new SGNListener());
-        getGameListener().registerListener(new LABListener());
+
+        gameListener.registerListener(new TIMVListener());
+        gameListener.registerListener(new HiveListener());
+        gameListener.registerListener(new DRListener());
+        gameListener.registerListener(new BEDListener());
+        gameListener.registerListener(new GiantListener());
+        gameListener.registerListener(new HIDEListener());
+        gameListener.registerListener(new CAIListener());
+        gameListener.registerListener(new SKYListener());
+        gameListener.registerListener(new MIMVListener());
+        gameListener.registerListener(new GRAVListener());
+        gameListener.registerListener(new BPListener());
+        gameListener.registerListener(new SGNListener());
+        gameListener.registerListener(new LABListener());
+        gameListener.registerListener(new ArcadeListener());
 
     }
 

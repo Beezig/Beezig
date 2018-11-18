@@ -78,7 +78,7 @@ public class PointsItem extends GameModeItem<HIDE> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof HIDE)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (HIDE.shouldRender(getGameMode().getState()));
         } catch (Exception e) {
             return false;

@@ -25,7 +25,7 @@ public class DailyItem extends GameModeItem<CAI> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof CAI))
+            if (getGameMode() == null)
                 return false;
             return dummy || (CAI.shouldRender(getGameMode().getState()));
         } catch (Exception e) {

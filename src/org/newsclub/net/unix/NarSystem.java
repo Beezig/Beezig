@@ -1,8 +1,10 @@
 package org.newsclub.net.unix;
 
-import java.io.*;
-import org.scijava.nativelib.*;
-import java.net.*;
+import org.scijava.nativelib.DefaultJniExtractor;
+import org.scijava.nativelib.JniExtractor;
+
+import java.io.File;
+import java.net.URL;
 
 public final class NarSystem
 {

@@ -1,15 +1,9 @@
 package paulscode.sound.libraries_remap;
 
-import java.util.LinkedList;
-import javax.sound.sampled.AudioFormat;
+import paulscode.sound.*;
 
-import paulscode.sound.Channel;
-import paulscode.sound.FilenameURL;
-import paulscode.sound.ListenerData;
-import paulscode.sound.SoundBuffer;
-import paulscode.sound.Source;
-import paulscode.sound.SoundSystemConfig;
-import paulscode.sound.Vector3D;
+import javax.sound.sampled.AudioFormat;
+import java.util.LinkedList;
 
 /**
  * The SourceJavaSound class provides an interface to the JavaSound library.  

@@ -21,12 +21,7 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
-import java.net.SocketException;
-import java.net.SocketImpl;
-import java.net.SocketOptions;
+import java.net.*;
 
 /**
  * The Java-part of the {@link AFUNIXSocket} implementation.

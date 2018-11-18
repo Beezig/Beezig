@@ -25,7 +25,7 @@ public class DailyItem extends GameModeItem<DR> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof DR))
+            if (getGameMode() == null)
                 return false;
             return dummy || (DR.shouldRender(getGameMode().getState()));
         } catch (Exception e) {

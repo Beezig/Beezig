@@ -23,7 +23,7 @@ public class DeathsItem extends GameModeItem<DR> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof DR)) return false;
+            if (getGameMode() == null) return false;
             return dummy || (DR.shouldRender(getGameMode().getState()) && DR.role.equals("Runner") && DR.deaths != 0);
         } catch (Exception e) {
             return false;

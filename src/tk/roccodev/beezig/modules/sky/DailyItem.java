@@ -25,7 +25,7 @@ public class DailyItem extends GameModeItem<SKY> {
     @Override
     public boolean shouldRender(boolean dummy) {
         try {
-            if (!(getGameMode() instanceof SKY))
+            if (getGameMode() == null)
                 return false;
             return dummy || (SKY.shouldRender(getGameMode().getState()));
         } catch (Exception e) {

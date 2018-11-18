@@ -1,11 +1,5 @@
 package org.java_websocket_jukebox.drafts;
 
-import java.nio.ByteBuffer;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
 import org.java_websocket_jukebox.exceptions.InvalidDataException;
 import org.java_websocket_jukebox.exceptions.InvalidHandshakeException;
 import org.java_websocket_jukebox.exceptions.NotSendableException;
@@ -14,12 +8,14 @@ import org.java_websocket_jukebox.framing.FrameBuilder;
 import org.java_websocket_jukebox.framing.Framedata;
 import org.java_websocket_jukebox.framing.Framedata.Opcode;
 import org.java_websocket_jukebox.framing.FramedataImpl1;
-import org.java_websocket_jukebox.handshake.ClientHandshake;
-import org.java_websocket_jukebox.handshake.ClientHandshakeBuilder;
-import org.java_websocket_jukebox.handshake.HandshakeBuilder;
-import org.java_websocket_jukebox.handshake.ServerHandshake;
-import org.java_websocket_jukebox.handshake.ServerHandshakeBuilder;
+import org.java_websocket_jukebox.handshake.*;
 import org.java_websocket_jukebox.util.Charsetfunctions;
+
+import java.nio.ByteBuffer;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 public class Draft_75 extends Draft {
 

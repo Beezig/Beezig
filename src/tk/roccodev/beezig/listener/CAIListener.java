@@ -6,22 +6,24 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import org.lwjgl.input.Mouse;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
+import pw.roccodev.beezig.hiveapi.wrapper.player.games.CaiStats;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.games.CAI;
 import tk.roccodev.beezig.hiveapi.APIValues;
-import tk.roccodev.beezig.hiveapi.HiveAPI;
 import tk.roccodev.beezig.hiveapi.stuff.cai.CAIRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.hiveapi.wrapper.modes.ApiCAI;
+import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 import tk.roccodev.beezig.modules.utils.RenderUtils;
 import tk.roccodev.beezig.settings.Setting;
-import tk.roccodev.beezig.utils.AdvancedRecords;
 import tk.roccodev.beezig.utils.StreakUtils;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
+import tk.roccodev.beezig.utils.tutorial.SendTutorial;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,6 +51,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
         gameMode.setState(GameState.STARTING);
         ActiveGame.set("CAI");
         IHive.genericJoin();
+        SendTutorial.send("cai_join");
 
         new Thread(() -> {
             try {
@@ -67,7 +70,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
                 }
 
                 CAI.rankObject = CAIRank
-                        .getFromDisplay(new ApiCAI(The5zigAPI.getAPI().getGameProfile().getName()).getTitle());
+                        .getFromDisplay(new CaiStats(The5zigAPI.getAPI().getGameProfile().getName()).getTitle());
                 CAI.rank = CAI.rankObject.getTotalDisplay();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -158,7 +161,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
             DiscordUtils.updatePresence("Battling in Cowboys and Indians", "Playing as C on " + CAI.activeMap, "game_cai");
         } else if (message.equals("§8▍ §bCAI§8 ▏ §7You received §f10 points §7for your team's capture.")) {
 
-            HiveAPI.tokens += 5;
+            APIValues.tokens += 5;
             CAI.gamePoints += 10;
             APIValues.CAIpoints += 10;
             CAI.dailyPoints += 10;
@@ -244,7 +247,8 @@ public class CAIListener extends AbstractGameListener<CAI> {
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
                     try {
 
-                        ApiCAI api = new ApiCAI(AdvancedRecords.player);
+                        CaiStats api = new CaiStats(AdvancedRecords.player, true);
+                        HivePlayer global = api.getPlayer();
                         CAIRank rank = null;
 
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -257,11 +261,11 @@ public class CAIListener extends AbstractGameListener<CAI> {
                         df1f.setMinimumFractionDigits(1);
 
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
-                                ? api.getParentMode().getNetworkTitle()
+                                ? global.getRank().getHumanName()
                                 : "";
                         ChatColor rankColor = null;
                         if (Setting.SHOW_NETWORK_RANK_COLOR.getValue()) {
-                            rankColor = api.getParentMode().getNetworkRankColor();
+                            rankColor = NetworkRank.fromDisplay(global.getRank().getHumanName()).getColor();
                         }
                         String rankTitleCAI = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
                         if (rankTitleCAI != null)
@@ -277,8 +281,8 @@ public class CAIListener extends AbstractGameListener<CAI> {
 
                         long catches = 0, captured = 0, caught = 0, captures = 0;
 
-                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.lastPlayed() : null;
-                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getAchievements()
+                        Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.getLastLogin() : null;
+                        Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size()
                                 : null;
 
                         // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
@@ -292,7 +296,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
                             if (s.trim().endsWith("'s Stats §6§m")) {
                                 The5zigAPI.getLogger().info("Editing Header...");
                                 StringBuilder sb = new StringBuilder();
-                                String correctUser = api.getParentMode().getCorrectName();
+                                String correctUser = global.getUsername();
                                 if (correctUser.contains("nicked player"))
                                     correctUser = "Nicked/Not found";
                                 sb.append("          §6§m                  §f ");
@@ -475,6 +479,13 @@ public class CAIListener extends AbstractGameListener<CAI> {
                 case "§cEmergency Flare":
                     CAI.leaderItem1 = 500;
                     break;
+            }
+        }
+        if (CAI.gameId != null || The5zigAPI.getAPI().getSideScoreboard() == null) return;
+        HashMap<String, Integer> lines = The5zigAPI.getAPI().getSideScoreboard().getLines();
+        for (Map.Entry<String, Integer> e : lines.entrySet()) {
+            if (e.getValue() == 4) {
+                CAI.gameId = ChatColor.stripColor(e.getKey()).trim();
             }
         }
     }
