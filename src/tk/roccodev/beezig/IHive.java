@@ -3,6 +3,7 @@ package tk.roccodev.beezig;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameListenerRegistry;
 import eu.the5zig.mod.server.ServerInstance;
+import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
 import tk.roccodev.beezig.listener.*;
 import tk.roccodev.beezig.notes.NotesManager;
 import tk.roccodev.beezig.utils.autogg.Triggers;
@@ -19,6 +20,8 @@ public class IHive extends ServerInstance {
 
     public static void genericReset(String... optionalParams) {
         DiscordUtils.updatePresence("Relaxing in the Hub", "In Lobby", "lobby");
+        AdvancedRecords.isRunning = false;
+        AdvancedRecords.player = null;
     }
 
     public static void genericJoin(String... optionalParams) {
