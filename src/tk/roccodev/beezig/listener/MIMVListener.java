@@ -147,7 +147,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
 
             MIMV.map = map;
 
-        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
+        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             MIMV.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
@@ -162,13 +162,13 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             MIMV.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
+                && !message.startsWith("§f ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             MIMV.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -226,7 +226,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
                                 String correctUser = parent.getUsername();
                                 if (correctUser.contains("nicked player"))
                                     correctUser = "Nicked/Not found";
-                                sb.append("          §6§m                  §f ");
+                                sb.append("§f          §6§m                  §f ");
                                 The5zigAPI.getLogger().info("Added base...");
                                 if (rankColor != null) {
                                     sb.append(rankColor).append(correctUser);
@@ -237,14 +237,14 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
                                 }
                                 sb.append("§f's Stats §6§m                  ");
                                 The5zigAPI.getLogger().info("Added end...");
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString());
+                                The5zigAPI.getAPI().messagePlayer("§f " + sb.toString());
 
                                 if (rankTitle != null && rankTitle.contains("nicked player"))
                                     rankTitle = "Nicked/Not found";
                                 if (!rankTitle.equals("Nicked/Not found") && !rankTitle.isEmpty()) {
                                     if (rankColor == null)
                                         rankColor = ChatColor.WHITE;
-                                    The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " ("
+                                    The5zigAPI.getAPI().messagePlayer("§f           " + "§6§m       §6" + " ("
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
@@ -274,7 +274,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
                                     sb.append("§b)");
 
 
-                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§f " + sb.toString().trim());
                                 continue;
                             } else if (s.startsWith("§3 Victories: §b")) {
                                 victories = Math.toIntExact(currentValue);
@@ -286,40 +286,40 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
                                 deaths = Math.toIntExact(currentValue);
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o" + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
 
                         }
 
                         if (achievements != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/37");
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Achievements: §b" + achievements + "/37");
                         }
 
                         if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + df1f.format(wr) + "%");
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Winrate: §b" + df1f.format(wr) + "%");
                         }
                         if (Setting.SHOW_RECORDS_KDR.getValue()) {
                             double kd = (double) kills / (double) deaths;
-                            The5zigAPI.getAPI().messagePlayer("§o§3 K/D: §b" + df.format(kd));
+                            The5zigAPI.getAPI().messagePlayer("§f §3 K/D: §b" + df.format(kd));
                         }
                         if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Karma Per Game: §b" + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Karma Per Game: §b" + df1f.format(ppg));
                         }
                         if (Setting.SHOW_RECORDS_KPG.getValue()) {
                             double kpg = (double) kills / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Kills Per Game: §b" + df.format(kpg));
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Kills Per Game: §b" + df.format(kpg));
                         }
 
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§f §3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : MIMV.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o" + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
 
                         MIMV.messagesToSend.clear();
@@ -339,13 +339,13 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
                                 + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
 
                         for (String s : MIMV.messagesToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
                         for (String s : MIMV.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
                         The5zigAPI.getAPI().messagePlayer(
-                                "§o " + "                      §6§m                  §6§m                  ");
+                                "§f " + "                      §6§m                  §6§m                  ");
                         MIMV.messagesToSend.clear();
                         MIMV.footerToSend.clear();
                         AdvancedRecords.isRunning = false;

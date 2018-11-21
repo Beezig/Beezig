@@ -192,7 +192,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
             if (SKY.winstreak >= SKY.bestStreak)
                 SKY.bestStreak = SKY.winstreak;
             StreakUtils.incrementWinstreakByOne("sky");
-        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
+        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             SKY.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
@@ -202,13 +202,13 @@ public class SKYListener extends AbstractGameListener<SKY> {
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             SKY.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
+                && !message.startsWith("§f ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             SKY.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -270,7 +270,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
                                 String correctUser = parent.getUsername();
                                 if (correctUser.contains("nicked player"))
                                     correctUser = "Nicked/Not found";
-                                sb.append("          §6§m                  §f ");
+                                sb.append("§f          §6§m                  §f ");
                                 The5zigAPI.getLogger().info("Added base...");
                                 if (rankColor != null) {
                                     sb.append(rankColor).append(correctUser);
@@ -281,14 +281,14 @@ public class SKYListener extends AbstractGameListener<SKY> {
                                 }
                                 sb.append("§f's Stats §6§m                  ");
                                 The5zigAPI.getLogger().info("Added end...");
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString());
+                                The5zigAPI.getAPI().messagePlayer("§f " + sb.toString());
 
                                 if (rankTitle != null && rankTitle.contains("nicked player"))
                                     rankTitle = "Nicked/Not found";
                                 if (!rankTitle.equals("Nicked/Not found") && !rankTitle.isEmpty()) {
                                     if (rankColor == null)
                                         rankColor = ChatColor.WHITE;
-                                    The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " ("
+                                    The5zigAPI.getAPI().messagePlayer("§f           " + "§6§m       §6" + " ("
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
@@ -318,7 +318,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
                                 // if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§f " + sb.toString().trim());
                                 continue;
                             } else if (s.startsWith("§3 Victories: §b")) {
                                 victories = Math.toIntExact(currentValue);
@@ -330,40 +330,40 @@ public class SKYListener extends AbstractGameListener<SKY> {
                                 deaths = Math.toIntExact(currentValue);
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o" + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
 
                         }
 
                         if (achievements != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "");
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Achievements: §b" + achievements + "");
                         }
 
                         if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + df1f.format(wr) + "%");
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Winrate: §b" + df1f.format(wr) + "%");
                         }
                         if (Setting.SHOW_RECORDS_KDR.getValue()) {
                             double kd = (double) kills / (double) deaths;
-                            The5zigAPI.getAPI().messagePlayer("§o§3 K/D: §b" + df.format(kd));
+                            The5zigAPI.getAPI().messagePlayer("§f §3 K/D: §b" + df.format(kd));
                         }
                         if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Points Per Game: §b" + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Points Per Game: §b" + df1f.format(ppg));
                         }
                         if (Setting.SHOW_RECORDS_KPG.getValue()) {
                             double kpg = (double) kills / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Kills Per Game: §b" + df1f.format(kpg));
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Kills Per Game: §b" + df1f.format(kpg));
                         }
 
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§f §3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : SKY.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o" + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
 
                         SKY.messagesToSend.clear();
@@ -383,13 +383,13 @@ public class SKYListener extends AbstractGameListener<SKY> {
                                 + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
 
                         for (String s : SKY.messagesToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
                         for (String s : SKY.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
                         The5zigAPI.getAPI().messagePlayer(
-                                "§o " + "                      §6§m                  §6§m                  ");
+                                "§f " + "                      §6§m                  §6§m                  ");
                         SKY.messagesToSend.clear();
                         SKY.footerToSend.clear();
                         AdvancedRecords.isRunning = false;

@@ -207,7 +207,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
 
         // Advanced Records
 
-        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
+        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             CAI.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
@@ -217,7 +217,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             CAI.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
@@ -235,7 +235,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
             CAI.leaderItem1 = 0;
             CAI.leaderItem2 = 0;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
+                && !message.startsWith("§f ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             CAI.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -299,7 +299,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
                                 String correctUser = global.getUsername();
                                 if (correctUser.contains("nicked player"))
                                     correctUser = "Nicked/Not found";
-                                sb.append("          §6§m                  §f ");
+                                sb.append("§f          §6§m                  §f ");
                                 The5zigAPI.getLogger().info("Added base...");
                                 if (rankColor != null) {
                                     sb.append(rankColor).append(correctUser);
@@ -310,14 +310,14 @@ public class CAIListener extends AbstractGameListener<CAI> {
                                 }
                                 sb.append("§f's Stats §6§m                  ");
                                 The5zigAPI.getLogger().info("Added end...");
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString());
+                                The5zigAPI.getAPI().messagePlayer("§f " + sb.toString());
 
                                 if (rankTitle != null && rankTitle.contains("nicked player"))
                                     rankTitle = "Nicked/Not found";
                                 if (!rankTitle.equals("Nicked/Not found") && !rankTitle.isEmpty()) {
                                     if (rankColor == null)
                                         rankColor = ChatColor.WHITE;
-                                    The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " ("
+                                    The5zigAPI.getAPI().messagePlayer("§f           " + "§6§m       §6" + " ("
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
@@ -347,7 +347,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
 
                                 // if(rank != null) sb.append(" (" + rank.getTotalDisplay() + "§b)");
 
-                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§f " + sb.toString().trim());
                                 continue;
                             } else if (s.startsWith("§3 Victories: §b")) {
                                 victories = Math.toIntExact(currentValue);
@@ -355,35 +355,35 @@ public class CAIListener extends AbstractGameListener<CAI> {
                                 gamesPlayed = Math.toIntExact(currentValue);
                             }
 
-                            The5zigAPI.getAPI().messagePlayer("§o" + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
 
                         }
 
                         if (achievements != null) {
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + achievements + "/44");
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Achievements: §b" + achievements + "/44");
                         }
                         if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = (double) victories / (double) gamesPlayed;
                             The5zigAPI.getAPI()
-                                    .messagePlayer("§o§3 Winrate: §b" + df1f.format(wr * 100) + "%");
+                                    .messagePlayer("§f §3 Winrate: §b" + df1f.format(wr * 100) + "%");
                         }
                         if (Setting.CAI_SHOW_CATCHES_CAUGHT.getValue()) {
                             if (catches == 0)
                                 catches = api.getCatches();
                             if (caught == 0)
                                 caught = api.getCaught();
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Cc/Ct: §b"
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Cc/Ct: §b"
                                     + df.format((double) catches / (double) caught) + "");
                         }
                         if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + df1f.format(ppg));
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Points per Game: §b" + df1f.format(ppg));
                         }
                         if (Setting.CAI_SHOW_CAPTURES_GAME.getValue()) {
                             if (captures == 0) captures = api.getCaptures();
                             if (gamesPlayed == 0) gamesPlayed = Math.toIntExact(api.getGamesPlayed());
                             double cpg = (double) captures / (double) gamesPlayed;
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Captures per Game: §b" + df1f.format(cpg));
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Captures per Game: §b" + df1f.format(cpg));
                         }
 
 
@@ -391,11 +391,11 @@ public class CAIListener extends AbstractGameListener<CAI> {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§f §3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : CAI.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o" + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
 
                         CAI.messagesToSend.clear();
@@ -415,13 +415,13 @@ public class CAIListener extends AbstractGameListener<CAI> {
                                 + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
 
                         for (String s : CAI.messagesToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
                         for (String s : CAI.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
                         The5zigAPI.getAPI().messagePlayer(
-                                "§o " + "                      §6§m                  §6§m                  ");
+                                "§f " + "                      §6§m                  §6§m                  ");
                         CAI.messagesToSend.clear();
                         CAI.footerToSend.clear();
                         AdvancedRecords.isRunning = false;

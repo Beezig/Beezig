@@ -193,7 +193,7 @@ public class DRListener extends AbstractGameListener<DR> {
             }).start();
         } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l") && !DR.hasVoted && Setting.AUTOVOTE.getValue()) {
             DR.votesToParse.add(message);
-        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
+        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             // " §6§m §f ItsNiklass's Stats §6§m "
             // Advanced Records
             DR.messagesToSend.add(message);
@@ -205,14 +205,14 @@ public class DRListener extends AbstractGameListener<DR> {
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§o ") && Setting.ADVANCED_RECORDS.getValue()) {
+        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             // TODO Coloring
             DR.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
-                && !message.startsWith("§o ")) && Setting.ADVANCED_RECORDS.getValue()) {
+                && !message.startsWith("§f ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             DR.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
@@ -265,7 +265,7 @@ public class DRListener extends AbstractGameListener<DR> {
                                 String correctUser = parent.getUsername();
                                 if (correctUser.contains("nicked player"))
                                     correctUser = "Nicked/Not found";
-                                sb.append("          §6§m                  §f ");
+                                sb.append("§f          §6§m                  §f ");
                                 The5zigAPI.getLogger().info("Added base...");
                                 if (rankColor != null) {
                                     sb.append(rankColor).append(correctUser);
@@ -276,14 +276,14 @@ public class DRListener extends AbstractGameListener<DR> {
                                 }
                                 sb.append("§f's Stats §6§m                  ");
                                 The5zigAPI.getLogger().info("Added end...");
-                                The5zigAPI.getAPI().messagePlayer("§o " + sb.toString());
+                                The5zigAPI.getAPI().messagePlayer("§f " + sb.toString());
 
                                 if (rankTitle != null && rankTitle.contains("nicked player"))
                                     rankTitle = "Nicked/Not found";
                                 if (!rankTitle.equals("Nicked/Not found") && !rankTitle.isEmpty()) {
                                     if (rankColor == null)
                                         rankColor = ChatColor.WHITE;
-                                    The5zigAPI.getAPI().messagePlayer("§o           " + "§6§m       §6" + " ("
+                                    The5zigAPI.getAPI().messagePlayer("§f           " + "§6§m       §6" + " ("
                                             + rankColor + rankTitle + "§6) " + "§m       ");
                                 }
                                 continue;
@@ -311,7 +311,7 @@ public class DRListener extends AbstractGameListener<DR> {
                                     sb.append(" / ").append(rank.getPointsToNextRank((int) points));
                                 if (rank != null)
                                     sb.append("§b)");
-                                The5zigAPI.getAPI().messagePlayer("§o" + sb.toString().trim());
+                                The5zigAPI.getAPI().messagePlayer("§f " + sb.toString().trim());
                                 continue;
 
                             } else if (s.startsWith("§3 Kills: §b")) kills = Math.toIntExact(currentValue);
@@ -319,7 +319,7 @@ public class DRListener extends AbstractGameListener<DR> {
                             else if (s.startsWith("§3 Wins: §b")) victories = Math.toIntExact(currentValue);
                             else if (s.startsWith("§3 Games Played: §b")) played = Math.toIntExact(currentValue);
 
-                            The5zigAPI.getAPI().messagePlayer("§o" + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
 
                         }
 
@@ -343,36 +343,36 @@ public class DRListener extends AbstractGameListener<DR> {
 
 
                         if (ppg != -1)
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Points per Game: §b" + ppg);
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Points per Game: §b" + ppg);
 
                         if (ach != -1)
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Achievements: §b" + ach + "/68");
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Achievements: §b" + ach + "/68");
 
                         if (rwr != -1)
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Winrate: §b" + rwr + "%");
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Winrate: §b" + rwr + "%");
 
                         if (dpg != -1)
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Deaths per Game: §b" + dpg);
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Deaths per Game: §b" + dpg);
 
                         if (kpg != -1)
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Kills per Game: §b" + kpg);
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Kills per Game: §b" + kpg);
 
                         if (tpb != null)
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Total Personal Best: §b" + tpb);
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Total Personal Best: §b" + tpb);
 
                         if (monthlyRank != -1)
-                            The5zigAPI.getAPI().messagePlayer("§o§3 Monthly Place: §b#" + monthlyRank);
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Monthly Place: §b#" + monthlyRank);
 
                         if (lastGame != null) {
                             Calendar lastSeen = Calendar.getInstance();
                             lastSeen.setTimeInMillis(lastGame.getTime());
 
                             The5zigAPI.getAPI().messagePlayer(
-                                    "§o§3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
+                                    "§f §3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
                         for (String s : DR.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o" + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
 
                         DR.messagesToSend.clear();
@@ -392,13 +392,13 @@ public class DRListener extends AbstractGameListener<DR> {
                                 + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
 
                         for (String s : DR.messagesToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
                         for (String s : DR.footerToSend) {
-                            The5zigAPI.getAPI().messagePlayer("§o " + s);
+                            The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
                         The5zigAPI.getAPI().messagePlayer(
-                                "§o " + "                      §6§m                  §6§m                  ");
+                                "§f " + "                      §6§m                  §6§m                  ");
                         DR.messagesToSend.clear();
                         DR.footerToSend.clear();
                         AdvancedRecords.isRunning = false;
