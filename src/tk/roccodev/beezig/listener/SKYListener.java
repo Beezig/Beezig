@@ -112,7 +112,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
         } else if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §a§lVote received. §3Your map now has")
                 && Setting.AUTOVOTE.getValue()) {
             SKY.hasVoted = true;
-        } else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l6. §f§6") && !SKY.hasVoted
+        } else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l5.") && !SKY.hasVoted
                 && Setting.AUTOVOTE.getValue()) {
             SKY.votesToParse.add(message);
             new Thread(() -> {
@@ -150,6 +150,11 @@ public class SKYListener extends AbstractGameListener<SKY> {
                     The5zigAPI.getAPI().messagePlayer(
                             "§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
 
+                }
+                else if(Setting.AUTOVOTE_RANDOM.getValue()) {
+                    The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+                    The5zigAPI.getAPI().messagePlayer(
+                            "§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §eAutomatically voted for §cRandom map§e.");
                 }
                 SKY.votesToParse.clear();
                 SKY.hasVoted = true;
