@@ -31,7 +31,9 @@ public class Log {
     }
 
     public static String df(long l) {
-        return Setting.THOUSANDS_SEPARATOR.getValue() ? bigintFormatter.format(l) : Long.toString(l);
+        return Setting.THOUSANDS_SEPARATOR.getValue()
+                ? bigintFormatter.format(l).replaceAll("\u00A0", " ")
+                : Long.toString(l);
     }
 
     public static String ratio(double d) {
