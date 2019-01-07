@@ -26,9 +26,7 @@ public class MedalsItem extends GameModeItem<GameMode> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.global.medals");
-    }
+    public String getTranslation() { return "beezig.module.global.medals";}
 
 
     @Override

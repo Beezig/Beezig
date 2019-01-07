@@ -64,8 +64,8 @@ public class KarmaItem extends GameModeItem<TIMV> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.timv.karma");
+    public String getTranslation() {
+        return "beezig.module.timv.karma";
     }
 
     @Override

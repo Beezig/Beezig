@@ -19,9 +19,7 @@ public class DBodiesItem extends GameModeItem<TIMV> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.timv.dbodies");
-    }
+    public String getTranslation() { return "beezig.module.timv.dbodies";}
 
 
     @Override

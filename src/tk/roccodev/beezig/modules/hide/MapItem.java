@@ -29,9 +29,7 @@ public class MapItem extends GameModeItem<HIDE> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.map");
-    }
+    public String getTranslation() { return "beezig.module.map";}
 
     @Override
     public void registerSettings() {

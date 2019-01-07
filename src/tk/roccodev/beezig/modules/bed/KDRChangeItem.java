@@ -28,9 +28,7 @@ public class KDRChangeItem extends GameModeItem<BED> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.bed.kdchange");
-    }
+    public String getTranslation() { return "beezig.module.bed.kdchange";}
 
     @Override
     public boolean shouldRender(boolean dummy) {

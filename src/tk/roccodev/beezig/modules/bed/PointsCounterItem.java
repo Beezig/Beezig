@@ -21,9 +21,7 @@ public class PointsCounterItem extends GameModeItem<BED> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.game");
-    }
+    public String getTranslation() { return "beezig.module.game";}
 
     @Override
     public boolean shouldRender(boolean dummy) {

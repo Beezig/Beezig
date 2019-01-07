@@ -77,9 +77,7 @@ public class PointsItem extends GameModeItem<LAB> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.lab.atoms");
-    }
+    public String getTranslation() { return "beezig.module.lab.atoms";}
 
     @Override
     public void registerSettings() {

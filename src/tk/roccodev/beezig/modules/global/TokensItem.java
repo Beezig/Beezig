@@ -26,9 +26,7 @@ public class TokensItem extends GameModeItem<GameMode> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.global.tokens");
-    }
+    public String getTranslation() { return "beezig.module.global.tokens";}
 
 
     @Override

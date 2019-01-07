@@ -26,9 +26,7 @@ public class TeamItem extends GameModeItem<SKY> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.sky.team");
-    }
+    public String getTranslation() { return "beezig.module.sky.team";}
 
 
     @Override

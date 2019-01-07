@@ -18,9 +18,7 @@ public class DailyItem extends GameModeItem<DR> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.daily");
-    }
+    public String getTranslation() { return "beezig.module.daily";}
 
     @Override
     public boolean shouldRender(boolean dummy) {
