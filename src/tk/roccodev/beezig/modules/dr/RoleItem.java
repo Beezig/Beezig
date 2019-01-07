@@ -17,9 +17,7 @@ public class RoleItem extends GameModeItem<DR> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.role");
-    }
+    public String getTranslation() { return "beezig.module.role";}
 
     @Override
     public boolean shouldRender(boolean dummy) {

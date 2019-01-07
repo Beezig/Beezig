@@ -20,9 +20,7 @@ public class PBItem extends GameModeItem<DR> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.dr.pb");
-    }
+    public String getTranslation() { return "beezig.module.dr.pb";}
 
     @Override
     public void registerSettings() {

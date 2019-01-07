@@ -20,9 +20,7 @@ public class GameItem extends GameModeItem<Arcade>  {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.gnt.mode");
-    }
+    public String getTranslation() { return "beezig.module.gnt.mode"; }
 
     @Override
     public boolean shouldRender(boolean dummy) {

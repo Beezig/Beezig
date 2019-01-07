@@ -26,9 +26,7 @@ public class MapItem extends GameModeItem<SGN> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.map");
-    }
+    public String getTranslation() { return "beezig.module.map";}
 
 
     @Override

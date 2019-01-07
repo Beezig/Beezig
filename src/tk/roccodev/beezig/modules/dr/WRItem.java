@@ -24,9 +24,7 @@ public class WRItem extends GameModeItem<DR> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.dr.wr");
-    }
+    public String getTranslation() { return "beezig.module.dr.wr";}
 
     @Override
     public void registerSettings() {

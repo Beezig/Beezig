@@ -45,9 +45,7 @@ public class KarmaCounterItem extends GameModeItem<TIMV> {
 
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.game");
-    }
+    public String getTranslation() { return "beezig.module.game";}
 
     @Override
     public boolean shouldRender(boolean dummy) {

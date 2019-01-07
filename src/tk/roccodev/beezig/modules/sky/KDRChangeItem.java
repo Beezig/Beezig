@@ -28,9 +28,7 @@ public class KDRChangeItem extends GameModeItem<SKY> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.sky.kdchange");
-    }
+    public String getTranslation() { return "beezig.module.sky.kdchange";}
 
     @Override
     public boolean shouldRender(boolean dummy) {

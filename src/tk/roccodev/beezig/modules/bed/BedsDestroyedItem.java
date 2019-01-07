@@ -21,9 +21,7 @@ public class BedsDestroyedItem extends GameModeItem<BED> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.bed.beds");
-    }
+    public String getTranslation() { return "beezig.module.bed.beds"; }
 
     @Override
     public boolean shouldRender(boolean dummy) {

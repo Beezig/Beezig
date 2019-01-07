@@ -29,9 +29,7 @@ public class GoldItem extends GameModeItem<Giant> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.gnt.gold");
-    }
+    public String getTranslation() { return "beezig.module.gnt.gold";}
 
     @Override
     public void registerSettings() {

@@ -23,9 +23,7 @@ public class ModeItem extends GameModeItem<SKY> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.sky.mode");
-    }
+    public String getTranslation() { return "beezig.module.sky.mode";}
 
 
     @Override

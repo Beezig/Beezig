@@ -65,9 +65,7 @@ public class MonthlyItem extends GameModeItem<BED> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.monthly");
-    }
+    public String getTranslation() { return "beezig.module.monthly";}
 
     @Override
     public boolean shouldRender(boolean dummy) {

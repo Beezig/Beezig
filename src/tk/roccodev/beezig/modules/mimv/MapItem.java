@@ -16,9 +16,7 @@ public class MapItem extends GameModeItem<MIMV> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.map");
-    }
+    public String getTranslation() { return "beezig.module.map";}
 
     @Override
     public boolean shouldRender(boolean dummy) {

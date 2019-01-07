@@ -18,9 +18,7 @@ public class SongItem extends GameModeItem<BP> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.bp.song");
-    }
+    public String getTranslation() { return "beezig.module.bp.song";}
 
     @Override
     public void registerSettings() {

@@ -143,9 +143,7 @@ public class SummonersItem extends GameModeItem<BED> {
 	}
 
 	@Override
-    public String getName() {
-        return Log.t("beezig.module.bed.summoners");
-    }
+    public String getTranslation() { return "beezig.module.bed.summoners";}
 
 
     @Override

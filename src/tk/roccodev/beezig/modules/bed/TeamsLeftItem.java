@@ -18,9 +18,7 @@ public class TeamsLeftItem extends GameModeItem<BED> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.bed.teamsleft");
-    }
+    public String getTranslation() { return "beezig.module.bed.teamsleft";}
 
     @Override
     public boolean shouldRender(boolean dummy) {

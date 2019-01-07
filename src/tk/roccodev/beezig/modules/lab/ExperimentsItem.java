@@ -42,9 +42,7 @@ public class ExperimentsItem extends GameModeItem<LAB> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.lab.experiments");
-    }
+    public String getTranslation() { return "beezig.module.lab.experiments";}
 
     @Override
     public void render(int x, int y, RenderLocation renderLocation, boolean dummy) {

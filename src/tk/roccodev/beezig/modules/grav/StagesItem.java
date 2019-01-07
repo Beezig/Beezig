@@ -25,9 +25,7 @@ public class StagesItem extends GameModeItem<GRAV> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.grav.stages");
-    }
+    public String getTranslation() { return "beezig.module.grav.stages";}
 
     @Override
     public void render(int x, int y, RenderLocation renderLocation, boolean dummy) {

@@ -28,9 +28,7 @@ public class KillsItem extends GameModeItem<SKY> {
     }
 
     @Override
-    public String getName() {
-        return Log.t("beezig.module.kills");
-    }
+    public String getTranslation() { return "beezig.module.kills";}
 
     @Override
     public void registerSettings() {
