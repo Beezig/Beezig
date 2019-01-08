@@ -75,7 +75,16 @@ public class BeezigMain {
     public static File mcFile;
     public static boolean isColorDebug = false;
     public static boolean hasExpansion = false;
+    public static boolean laby = false;
+    private File labyConfig;
     public static NetworkRank playerRank = null;
+
+    public BeezigMain(boolean laby, File config) {
+        BeezigMain.laby = laby;
+        this.labyConfig = config;
+    }
+
+    public BeezigMain() {}
 
     public static int getCustomVersioning() {
         String v = BeezigMain.class.getAnnotation(Plugin.class).version();
@@ -421,7 +430,11 @@ public class BeezigMain {
         }
         // Code source is the path to the jar, parent1 is "plugins", parent2 is "the5zigmod", parent3 is the mc dir.
         try {
-            mcFile = new File(new File(BeezigMain.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getParentFile().getParentFile().getPath() + "/5zigtimv");
+            if(laby) {
+                mcFile = new File(labyConfig + "/Beezig");
+            }
+            else
+                mcFile = new File(new File(BeezigMain.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getParentFile().getParentFile().getPath() + "/5zigtimv");
         } catch (URISyntaxException e3) {
             // TODO Auto-generated catch block
             e3.printStackTrace();
