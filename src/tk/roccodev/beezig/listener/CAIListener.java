@@ -70,7 +70,7 @@ public class CAIListener extends AbstractGameListener<CAI> {
                 }
 
                 CAI.rankObject = CAIRank
-                        .getFromDisplay(new CaiStats(The5zigAPI.getAPI().getGameProfile().getName()).getTitle());
+                        .getFromDisplay(new CaiStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "")).getTitle());
                 CAI.rank = CAI.rankObject.getTotalDisplay();
             } catch (Exception e) {
                 e.printStackTrace();
