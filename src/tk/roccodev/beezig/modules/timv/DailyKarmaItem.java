@@ -23,6 +23,11 @@ public class DailyKarmaItem extends GameModeItem<TIMV> {
     @Override
     public String getTranslation() { return "beezig.module.daily";}
 
+    // LabyMod
+    protected String getCategoryKey() {
+        return "timv";
+    }
+
     @Override
     public boolean shouldRender(boolean dummy) {
         try {

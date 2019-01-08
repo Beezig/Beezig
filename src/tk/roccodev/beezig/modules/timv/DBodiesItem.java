@@ -22,6 +22,11 @@ public class DBodiesItem extends GameModeItem<TIMV> {
     public String getTranslation() { return "beezig.module.timv.dbodies";}
 
 
+    // LabyMod
+    protected String getCategoryKey() {
+        return "timv";
+    }
+
     @Override
     public boolean shouldRender(boolean dummy) {
         try {

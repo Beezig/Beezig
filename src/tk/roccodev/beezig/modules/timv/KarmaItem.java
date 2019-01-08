@@ -63,6 +63,11 @@ public class KarmaItem extends GameModeItem<TIMV> {
         }
     }
 
+    // LabyMod
+    protected String getCategoryKey() {
+        return "timv";
+    }
+
     @Override
     public String getTranslation() {
         return "beezig.module.timv.karma";

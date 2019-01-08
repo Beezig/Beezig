@@ -41,6 +41,11 @@ public class MapItem extends GameModeItem<TIMV> {
         getProperties().addSetting("showcurrent", true);
     }
 
+    // LabyMod
+    protected String getCategoryKey() {
+        return "timv";
+    }
+
     @Override
     public String getTranslation() { return "beezig.module.map";}
 
