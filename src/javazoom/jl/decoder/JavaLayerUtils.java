@@ -20,6 +20,8 @@
 
 package javazoom.jl.decoder;
 
+import tk.roccodev.beezig.BeezigMain;
+
 import java.io.*;
 import java.lang.reflect.Array;
 
@@ -184,6 +186,9 @@ public class JavaLayerUtils
 	 */
 	static synchronized public InputStream getResourceAsStream(String name)
 	{
+		if(BeezigMain.laby)
+			name = "/" + name;
+
 		InputStream is = null;
 		
 		if (hook!=null)
