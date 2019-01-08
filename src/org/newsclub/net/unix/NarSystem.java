@@ -2,6 +2,7 @@ package org.newsclub.net.unix;
 
 import org.scijava.nativelib.DefaultJniExtractor;
 import org.scijava.nativelib.JniExtractor;
+import tk.roccodev.beezig.BeezigMain;
 
 import java.io.File;
 import java.net.URL;
@@ -104,7 +105,8 @@ public final class NarSystem
     
     private static String getLibPath(final ClassLoader loader, final String[] aols, final String mapped) {
         for (final String aol : aols) {
-            final String libPath = "libraries/" + aol + "/jni/";
+            String name = BeezigMain.laby ? "" : "libraries/";
+            final String libPath = name + aol + "/jni/";
             if (loader.getResource(libPath + mapped) != null) {
                 return libPath;
             }

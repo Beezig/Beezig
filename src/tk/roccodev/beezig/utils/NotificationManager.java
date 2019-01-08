@@ -33,7 +33,8 @@ public class NotificationManager {
                 break;
             case "win":
                 SystemTray tray = SystemTray.getSystemTray();
-                TrayIcon icon = new TrayIcon(Toolkit.getDefaultToolkit().createImage(BeezigMain.class.getResource("/libraries/hivelogo.jpg")), "Beezig");
+                String name = BeezigMain.laby ? "hivelogo.jpg" : "/libraries/hivelogo.jpg";
+                TrayIcon icon = new TrayIcon(Toolkit.getDefaultToolkit().createImage(BeezigMain.class.getResource(name)), "Beezig");
                 icon.setImageAutoSize(true);
                 icon.setToolTip("Beezig");
                 icon.addMouseListener(new MouseListener() {
