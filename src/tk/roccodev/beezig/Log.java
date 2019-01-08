@@ -20,8 +20,9 @@ public class Log {
 
 
     public static String getUserAgent() {
+        String framework = BeezigMain.laby ? "LabyMod" : "5zig";
         return "Beezig/" + BeezigMain.BEEZIG_VERSION + (BeezigMain.VERSION_HASH.isEmpty() ? ""
-                : "/" + BeezigMain.VERSION_HASH) + " (5zig/" + The5zigAPI.getAPI().getModVersion() + " on "
+                : "/" + BeezigMain.VERSION_HASH) + " (" + framework + "/" + The5zigAPI.getAPI().getModVersion() + " on "
                 + The5zigAPI.getAPI().getMinecraftVersion() + "; Forge=" + The5zigAPI.getAPI().isForgeEnvironment()
                 + "; BeezigForge=" + BeezigMain.hasExpansion + ")";
     }
