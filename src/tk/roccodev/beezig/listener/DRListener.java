@@ -104,9 +104,11 @@ public class DRListener extends AbstractGameListener<DR> {
 
                             DrStats api = new DrStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
 
-                            DR.currentMapPB = PBCommand.parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName()));
-                            if (DR.currentMapPB == null)
+                            try {
+                                DR.currentMapPB = PBCommand.parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName()));
+                            } catch(Exception e) {
                                 DR.currentMapPB = "No Personal Best";
+                            }
                             The5zigAPI.getLogger().info("Loading WR...");
 
                             WorldRecord wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID());
