@@ -8,6 +8,7 @@ import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.MimvStats;
 import tk.roccodev.beezig.ActiveGame;
+import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
@@ -95,6 +96,10 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
             MIMV.votesToParse.add(message);
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(MIMV.votesToParse);
+
+                // Remove the first message, LabyMod gets the "Vote for a map" message too
+                if(BeezigMain.laby) votesCopy.remove(0);
+
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("mimv"));
 
 

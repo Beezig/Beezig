@@ -8,6 +8,7 @@ import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.GntStats;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.GntmStats;
 import tk.roccodev.beezig.ActiveGame;
+import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
@@ -114,6 +115,10 @@ public class GiantListener extends AbstractGameListener<Giant> {
             Giant.votesToParse.add(message);
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(Giant.votesToParse);
+
+                // Remove the first message, LabyMod gets the "Vote for a map" message too
+                if(BeezigMain.laby) votesCopy.remove(0);
+
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("gnt"));
 
 

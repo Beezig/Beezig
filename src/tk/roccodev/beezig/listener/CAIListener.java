@@ -104,6 +104,10 @@ public class CAIListener extends AbstractGameListener<CAI> {
 
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(CAI.votesToParse);
+
+                // Remove the first message, LabyMod gets the "Vote for a map" message too
+                if(BeezigMain.laby) votesCopy.remove(0);
+
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("cai"));
 
 

@@ -8,6 +8,7 @@ import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.HideStats;
 import tk.roccodev.beezig.ActiveGame;
+import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
@@ -110,6 +111,10 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(HIDE.votesToParse);
+
+                // Remove the first message, LabyMod gets the "Vote for a map" message too
+                if(BeezigMain.laby) votesCopy.remove(0);
+
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("hide"));
 
 

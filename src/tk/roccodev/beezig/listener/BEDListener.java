@@ -9,6 +9,7 @@ import pw.roccodev.beezig.hiveapi.wrapper.monthly.bed.BedMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.BedStats;
 import tk.roccodev.beezig.ActiveGame;
+import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.advancedrecords.AdvancedRecords;
@@ -439,6 +440,10 @@ public class BEDListener extends AbstractGameListener<BED> {
                 }
 
                 List<String> votesCopy = new ArrayList<>(BED.votesToParse);
+
+                // Remove the first message, LabyMod gets the "Vote for a map" message too
+                if(BeezigMain.laby) votesCopy.remove(0);
+
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("bed"));
 
 
