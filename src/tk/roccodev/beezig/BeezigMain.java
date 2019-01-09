@@ -160,7 +160,7 @@ public class BeezigMain {
             }
 
         }
-        else
+        else if(!laby)
             VERSION_HASH = "Dev";
 
         try {
