@@ -193,10 +193,10 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "timvdailykarma",
                 tk.roccodev.beezig.modules.timv.DailyKarmaItem.class, "serverhivemc");
 
+        The5zigAPI.getAPI().registerModuleItem(this, "drpoints", tk.roccodev.beezig.modules.dr.PointsItem.class,
+                "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "drmap", tk.roccodev.beezig.modules.dr.MapItem.class, "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "drrole", tk.roccodev.beezig.modules.dr.RoleItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "drpoints", tk.roccodev.beezig.modules.dr.PointsItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "drdeaths", tk.roccodev.beezig.modules.dr.DeathsItem.class,
                 "serverhivemc");
@@ -236,6 +236,8 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "globaltokens", tk.roccodev.beezig.modules.global.TokensItem.class,
                 "serverhivemc");
 
+        The5zigAPI.getAPI().registerModuleItem(this, "gntpoints", tk.roccodev.beezig.modules.gnt.PointsItem.class,
+                "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "gntmode", tk.roccodev.beezig.modules.gnt.ModeItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "gntteam", tk.roccodev.beezig.modules.gnt.TeamItem.class,
@@ -248,8 +250,6 @@ public class BeezigMain {
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "gntkdrchange", tk.roccodev.beezig.modules.gnt.KDRChangeItem.class,
                 "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "gntpoints", tk.roccodev.beezig.modules.gnt.PointsItem.class,
-                "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "gntgiantkills", tk.roccodev.beezig.modules.gnt.GiantKillsItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "gntgold", tk.roccodev.beezig.modules.gnt.GoldItem.class,
@@ -259,18 +259,18 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "gntstreak", tk.roccodev.beezig.modules.gnt.WinstreakItem.class,
                 "serverhivemc");
 
-        The5zigAPI.getAPI().registerModuleItem(this, "hidemap", tk.roccodev.beezig.modules.hide.MapItem.class,
-                "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "hidepoints", tk.roccodev.beezig.modules.hide.PointsItem.class,
+                "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "hidemap", tk.roccodev.beezig.modules.hide.MapItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "hidedaily", tk.roccodev.beezig.modules.hide.DailyItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "hidestreak", tk.roccodev.beezig.modules.hide.WinstreakItem.class,
                 "serverhivemc");
 
-        The5zigAPI.getAPI().registerModuleItem(this, "caimap", tk.roccodev.beezig.modules.cai.MapItem.class,
-                "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "caipoints", tk.roccodev.beezig.modules.cai.PointsItem.class,
+                "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "caimap", tk.roccodev.beezig.modules.cai.MapItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "caigame", tk.roccodev.beezig.modules.cai.GamePointsItem.class,
                 "serverhivemc");
@@ -345,9 +345,9 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "lablb", tk.roccodev.beezig.modules.lab.LeaderboardItem.class,
                 "serverhivemc");
 
-        The5zigAPI.getAPI().registerModuleItem(this, "arcadegame", tk.roccodev.beezig.modules.arcade.GameItem.class,
-                "hivearcade");
         The5zigAPI.getAPI().registerModuleItem(this, "arcadepoints", tk.roccodev.beezig.modules.arcade.PointsItem.class,
+                "hivearcade");
+        The5zigAPI.getAPI().registerModuleItem(this, "arcadegame", tk.roccodev.beezig.modules.arcade.GameItem.class,
                 "hivearcade");
         The5zigAPI.getAPI().registerModuleItem(this, "arcademap", tk.roccodev.beezig.modules.arcade.MapItem.class,
                 "hivearcade");
