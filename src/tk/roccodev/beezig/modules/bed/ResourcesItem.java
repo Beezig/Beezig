@@ -179,7 +179,6 @@ public class ResourcesItem extends GameModeItem<BED> {
     @Override
     public void registerSettings() {
 
-
         getProperties().addSetting("mode", ResourcesMode.INLINE, ResourcesMode.class);
         getProperties().addSetting("showcolors", true);
 

@@ -42,7 +42,7 @@ public class SettingsCommand implements Command {
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Settings:");
                 for (Setting sett : Setting.values()) {
                     String todisplay = sett.getValue() ? "§aTrue" : "§cFalse";
-                    The5zigAPI.getAPI().messagePlayer("§3 - " + sett.name() + " (" + todisplay + "§3) (§b" + sett.getBriefDescription() + "§3)");
+                    The5zigAPI.getAPI().messagePlayer("§a§3 - " + sett.name() + " (" + todisplay + "§3) (§b" + sett.getBriefDescription() + "§3)");
                 }
                 return true;
             }
@@ -66,12 +66,12 @@ public class SettingsCommand implements Command {
                     value = "show";
                     Setting sett = Setting.AUTOVOTE;
                     String todisplay = sett.getValue() ? "§bTrue" : "§cFalse";
-                    The5zigAPI.getAPI().messagePlayer("§3 - " + sett.name() + " (" + todisplay + "§3) (§b" + sett.getBriefDescription() + "§3)");
+                    The5zigAPI.getAPI().messagePlayer("§a§3 - " + sett.name() + " (" + todisplay + "§3) (§b" + sett.getBriefDescription() + "§3)");
                 }
                 for (Setting sett : Setting.values()) {
                     if (sett.name().toUpperCase().startsWith(value.toUpperCase())) {
                         String todisplay = sett.getValue() ? "§bTrue" : "§cFalse";
-                        The5zigAPI.getAPI().messagePlayer("§3 - " + sett.name() + " (" + todisplay + "§3) (§b" + sett.getBriefDescription() + "§3)");
+                        The5zigAPI.getAPI().messagePlayer("§a§3 - " + sett.name() + " (" + todisplay + "§3) (§b" + sett.getBriefDescription() + "§3)");
                     }
                 }
 
