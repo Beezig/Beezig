@@ -241,9 +241,11 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                         Date lastGame = Setting.SHOW_RECORDS_LASTGAME.getValue() ? api.getLastLogin() : null;
                         Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size() : null;
                         String rankTitleTIMV = Setting.SHOW_RECORDS_RANK.getValue() ? api.getTitle() : null;
-                        TimvMonthlyProfile monthlyProfile = api.getMonthlyProfile();
-                        int monthlyRank =
-                                Math.toIntExact((Setting.SHOW_RECORDS_MONTHLYRANK.getValue() && monthlyProfile != null) ? api.getMonthlyProfile().getPlace() : 0);
+                        int monthlyRank = 0;
+                        try {
+                            TimvMonthlyProfile monthlyProfile = api.getMonthlyProfile();
+                            monthlyRank = Math.toIntExact((Setting.SHOW_RECORDS_MONTHLYRANK.getValue() && monthlyProfile != null) ? api.getMonthlyProfile().getPlace() : 0);
+                        } catch(Exception ignored) {}
                         if (rankTitleTIMV != null) rank = TIMVRank.getFromDisplay(rankTitleTIMV);
                         List<String> messages = new ArrayList<>(TIMV.messagesToSend);
                         Iterator<String> it = messages.iterator();
