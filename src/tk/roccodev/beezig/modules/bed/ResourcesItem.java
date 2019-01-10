@@ -180,7 +180,7 @@ public class ResourcesItem extends GameModeItem<BED> {
     public void registerSettings() {
 
 
-        getProperties().addSetting("mode", ResourcesMode.EXTENDED, ResourcesMode.class);
+        getProperties().addSetting("mode", ResourcesMode.INLINE, ResourcesMode.class);
         getProperties().addSetting("showcolors", true);
 
     }
