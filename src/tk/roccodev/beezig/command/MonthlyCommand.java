@@ -2,8 +2,8 @@ package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
 import pw.roccodev.beezig.hiveapi.wrapper.monthly.bed.BedMonthlyProfile;
-import pw.roccodev.beezig.hiveapi.wrapper.monthly.maxthat.dr.DrMonthlyProfile;
-import pw.roccodev.beezig.hiveapi.wrapper.monthly.maxthat.timv.TimvMonthlyProfile;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.dr.DrMonthlyProfile;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.timv.TimvMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.BedStats;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.DrStats;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.TimvStats;
@@ -93,7 +93,7 @@ public class MonthlyCommand implements Command {
                             double wg = (double) profile.getVictories() / (double) profile.getGamesPlayed() * 100D;
                             double ppg = (double) profile.getPoints() / (double) profile.getGamesPlayed();
                             The5zigAPI.getAPI()
-                                    .messagePlayer(Log.info + "§B#" + profile.getHumanPlace() + "§3 is §B" + profile.getUsername() + "§3 with §B"
+                                    .messagePlayer(Log.info + "§B#" + profile.getPlace() + "§3 is §B" + profile.getUsername() + "§3 with §B"
                                             + profile.getPoints() + " §3" + unit + " (PpG: §B" + df.format(ppg) + " §3| W/L: §B" + df1f.format(wg)
                                             + "%§3)");
                             break;
@@ -103,7 +103,7 @@ public class MonthlyCommand implements Command {
                             double kr = (double) timvProfile.getPoints() / (double) timvProfile.getRolePoints();
                             double tr = (double) timvProfile.getTraitorPoints() / (double) timvProfile.getRolePoints() * 100D;
                             The5zigAPI.getAPI()
-                                    .messagePlayer(Log.info + "§B#" + timvProfile.getHumanPlace() + "§3 is §B" + timvProfile.getUsername() + "§3 with §B"
+                                    .messagePlayer(Log.info + "§B#" + timvProfile.getPlace() + "§3 is §B" + timvProfile.getUsername() + "§3 with §B"
                                             + timvProfile.getPoints() + " §3" + unit + " (K/R: §B" + df.format(kr) + " §3| T/R: " + df1f.format(tr)
                                             + "%§3)");
                             break;

@@ -5,7 +5,7 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
-import pw.roccodev.beezig.hiveapi.wrapper.monthly.maxthat.timv.TimvMonthlyProfile;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.timv.TimvMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.TimvStats;
 import tk.roccodev.beezig.ActiveGame;
