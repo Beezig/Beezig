@@ -40,7 +40,9 @@ public class StagesItem extends GameModeItem<GRAV> {
 
     }
 
-    
+    public String[] getValues() { // LabyMod
+        return new String[] {GRAV.toDisplayWithFails.get(GRAV.currentMap + 1).replace("{f}", "0")};
+    }
     
     @Override
 	public int getHeight(boolean dummy) {
