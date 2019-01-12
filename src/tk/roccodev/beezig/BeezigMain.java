@@ -58,7 +58,7 @@ import java.util.stream.Collectors;
 
 @Plugin(name = "Beezig", version = BeezigMain.BEEZIG_VERSION)
 public class BeezigMain {
-    public static final String BEEZIG_VERSION = "5.0.1";
+    public static final String BEEZIG_VERSION = "5.1.0";
     public static String VERSION_HASH = "";
     public static String OS;
     public static boolean newUpdate;
@@ -87,8 +87,7 @@ public class BeezigMain {
     public BeezigMain() {}
 
     public static int getCustomVersioning() {
-        String v = BeezigMain.class.getAnnotation(Plugin.class).version();
-        String toParse = v.replaceAll("\\.", "");
+        String toParse = BEEZIG_VERSION.replaceAll("\\.", "");
         return Integer.parseInt(toParse);
     }
 
