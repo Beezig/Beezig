@@ -96,7 +96,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
 
             TimvStats api = new TimvStats(The5zigAPI.getAPI().getGameProfile().getName());
             TIMV.rankObject = TIMVRank.getFromDisplay(api.getTitle());
-            TIMV.rank = TIMV.rankObject.getTotalDisplay();
+            TIMV.rank = TIMV.rankObject.getTotalDisplay(api.getPoints());
 
         }).start();
     }
@@ -296,7 +296,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                                 sb.append("§3 Karma: §b");
                                 karma = currentValue;
                                 sb.append(newData[1]);
-                                if (rank != null) sb.append(" (").append(rank.getTotalDisplay());
+                                if (rank != null) sb.append(" (").append(rank.getTotalDisplay(karma));
                                 if (Setting.SHOW_RECORDS_POINTSTONEXTRANK.getValue() && rank != null) {
                                     sb.append(" / ").append(rank.getKarmaToNextRank((int) karma));
                                 }

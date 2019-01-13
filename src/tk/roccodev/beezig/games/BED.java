@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class BED extends GameMode {
 
-    public static char[] NUMBERS = {' ', '➊', '➋', '➌', '➍', '➎'};
+    public static char[] NUMBERS = {' ', '➊', '➋', '➌', '➍', '➎', '➏', '➐', '➑', '➒'};
 
     private static GameLogger logger;
 

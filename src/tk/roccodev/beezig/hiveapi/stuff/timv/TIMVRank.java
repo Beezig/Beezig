@@ -2,6 +2,7 @@ package tk.roccodev.beezig.hiveapi.stuff.timv;
 
 import eu.the5zig.mod.The5zigAPI;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
@@ -51,18 +52,33 @@ public enum TIMVRank implements RankEnum {
         return null;
     }
 
+    @Override
+    public String getTotalDisplay() {
+        return getTotalDisplay(200_000);
+    }
+
 
     @Override
     public String getPrefix() {
         return prefix;
     }
 
+    @Override
     public String getDisplay() {
+        return getDisplay(200_000);
+    }
+
+    public String getDisplay(long pts) {
+        if(this == WATSON) {
+            long consider = pts - 200_000;
+            long level = consider / 100_000 + 1;
+            return BED.NUMBERS[Math.toIntExact(level)] + " " + display;
+        }
         return display;
     }
 
-    public String getTotalDisplay() {
-        return prefix + display;
+    public String getTotalDisplay(long pts) {
+        return prefix + getDisplay(pts);
     }
 
     public int getStart() {
