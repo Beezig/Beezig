@@ -207,7 +207,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
+        } else if (message.contains(" §ahttps://hivemc.com/player/") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             SKY.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 

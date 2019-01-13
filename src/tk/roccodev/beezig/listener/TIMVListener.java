@@ -206,7 +206,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             The5zigAPI.getLogger().info("found entry");
 
             return true;
-        } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
+        } else if (message.contains(" §ahttps://hivemc.com/player/") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             //TODO Coloring
             TIMV.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
