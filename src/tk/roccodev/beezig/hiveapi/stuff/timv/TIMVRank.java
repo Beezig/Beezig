@@ -47,7 +47,7 @@ public enum TIMVRank implements RankEnum {
 
     public static TIMVRank getFromDisplay(String display) {
         for (TIMVRank rank : TIMVRank.values()) {
-            if (rank.getDisplay().equalsIgnoreCase(display)) return rank;
+            if (rank.display.equalsIgnoreCase(display)) return rank;
         }
         return null;
     }

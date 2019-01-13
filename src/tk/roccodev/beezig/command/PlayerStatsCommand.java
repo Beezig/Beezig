@@ -11,6 +11,7 @@ import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
+import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 
@@ -85,7 +86,10 @@ public class PlayerStatsCommand implements Command {
                         rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, api.getSource().getString("title"));
                     }
 
-                    title.add(rank.getTotalDisplay());
+                    if(game.equalsIgnoreCase("timv"))
+                        title.add(((TIMVRank)rank).getTotalDisplay(api.getPoints()));
+                    else
+                        title.add(rank.getTotalDisplay());
                     name.add(rankColor + display);
                 } catch (Exception ignored) { }
             }

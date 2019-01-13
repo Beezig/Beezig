@@ -10,6 +10,7 @@ import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
 import tk.roccodev.beezig.hiveapi.stuff.sgn.SGNRank;
+import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.beezig.hiveapi.wrapper.NetworkRank;
 
 import java.util.ArrayList;
@@ -81,7 +82,10 @@ public class LeaderboardCommand implements Command {
                     rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, stats.getSource().getString("title"));
                 }
 
-                    title.add(rank.getTotalDisplay());
+                    if(game.equalsIgnoreCase("timv"))
+                        title.add(((TIMVRank)rank).getTotalDisplay(pts));
+                    else
+                        title.add(rank.getTotalDisplay());
                     name.add(NetworkRank.fromDisplay(stats.getPlayer().getRank().getHumanName()).getColor() +
                             place.get("username").toString());
 
