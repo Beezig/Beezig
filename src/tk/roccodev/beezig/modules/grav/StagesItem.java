@@ -41,7 +41,11 @@ public class StagesItem extends GameModeItem<GRAV> {
     }
 
     public String[] getValues() { // LabyMod
-        return new String[] {GRAV.toDisplayWithFails.get(GRAV.currentMap + 1).replace("{f}", "0")};
+        try {
+            return new String[]{GRAV.toDisplayWithFails.get(GRAV.currentMap + 1).replace("{f}", "0")};
+        } catch(Exception ignored) {
+            return new String[0];
+        }
     }
     
     @Override
