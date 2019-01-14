@@ -105,8 +105,7 @@ public final class NarSystem
     
     private static String getLibPath(final ClassLoader loader, final String[] aols, final String mapped) {
         for (final String aol : aols) {
-            String name = BeezigMain.laby ? "" : "libraries/";
-            final String libPath = name + aol + "/jni/";
+            final String libPath = BeezigMain.laby ? "" : "libraries/" + aol + "/jni/";
             if (loader.getResource(libPath + mapped) != null) {
                 return libPath;
             }
