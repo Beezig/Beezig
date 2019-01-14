@@ -10,6 +10,7 @@ import tk.roccodev.beezig.games.BED;
 import tk.roccodev.beezig.games.CAI;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;
 import tk.roccodev.beezig.hiveapi.stuff.bed.BEDRank;
+import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVRank;
 import tk.roccodev.beezig.settings.Setting;
 import tk.roccodev.beezig.settings.SettingsFetcher;
 import tk.roccodev.beezig.utils.tutorial.SendTutorial;
@@ -80,6 +81,11 @@ public class BeezigAPI {
         } catch (Exception e) {
            return null;
         }
+    }
+
+    public String getTIMVRank(String title, long points) {
+        if(title == null) return null;
+        return TIMVRank.getFromDisplay(title).getTotalDisplay(points);
     }
 
     public boolean onPacketReceived(int packetId, String data) {
