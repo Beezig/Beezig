@@ -2,7 +2,6 @@ package tk.roccodev.beezig.modules.arcade;
 
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.server.GameState;
-import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.Arcade;
 
 public class GameItem extends GameModeItem<Arcade>  {

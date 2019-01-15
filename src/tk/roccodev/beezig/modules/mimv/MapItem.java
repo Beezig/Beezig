@@ -1,7 +1,6 @@
 package tk.roccodev.beezig.modules.mimv;
 
 import eu.the5zig.mod.modules.GameModeItem;
-import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.MIMV;
 
 public class MapItem extends GameModeItem<MIMV> {

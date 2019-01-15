@@ -3,11 +3,9 @@ package tk.roccodev.beezig.command;
 import eu.the5zig.mod.The5zigAPI;
 import org.json.simple.JSONObject;
 import pw.roccodev.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
-import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.wrapper.APIUtils;
-import tk.roccodev.beezig.notes.NotesManager;
 
 import java.net.MalformedURLException;
 import java.net.URL;

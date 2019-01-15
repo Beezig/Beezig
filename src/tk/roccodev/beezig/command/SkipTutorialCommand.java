@@ -1,10 +1,7 @@
 package tk.roccodev.beezig.command;
 
 import eu.the5zig.mod.The5zigAPI;
-import tk.roccodev.beezig.ActiveGame;
-import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
-import tk.roccodev.beezig.notes.NotesManager;
 import tk.roccodev.beezig.utils.tutorial.TutorialManager;
 
 public class SkipTutorialCommand implements Command {

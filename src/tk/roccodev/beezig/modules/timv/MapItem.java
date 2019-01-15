@@ -1,7 +1,6 @@
 package tk.roccodev.beezig.modules.timv;
 
 import eu.the5zig.mod.modules.GameModeItem;
-import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.TIMV;
 import tk.roccodev.beezig.hiveapi.stuff.timv.TIMVMap;
 

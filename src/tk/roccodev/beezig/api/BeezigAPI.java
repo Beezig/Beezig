@@ -32,8 +32,7 @@ public class BeezigAPI {
     }
 
     public void registerListener(Object toRegister) {
-        Object registeredListener = toRegister;
-        listenerImpl = AbstractForgeListener.fromObject(registeredListener);
+        listenerImpl = AbstractForgeListener.fromObject(toRegister);
         BeezigMain.hasExpansion = true;
         listenerImpl.onLoad(BeezigMain.BEEZIG_VERSION, The5zigAPI.getAPI().getModVersion());
         CommandManager.commandExecutors.forEach(cmd -> listenerImpl.registerCommand(cmd));

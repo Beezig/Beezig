@@ -5,7 +5,6 @@ import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.player.GameStats;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
-import pw.roccodev.beezig.hiveapi.wrapper.player.Titleable;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.hiveapi.stuff.RankEnum;

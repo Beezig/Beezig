@@ -30,7 +30,18 @@ public class PBCommand implements Command {
     @Override
     public boolean execute(String[] args) {
         if (!(ActiveGame.is("dr"))) return false;
-        if (args.length == 1 && DR.activeMap != null) {
+
+        if(args.length == 0 && DR.activeMap != null) {
+
+            String ign = The5zigAPI.getAPI().getGameProfile().getName();
+
+            new Thread(() -> {
+                DrStats api = new DrStats(ign);
+                HivePlayer parent = api.getPlayer();
+                ChatColor color = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
+                The5zigAPI.getAPI().messagePlayer(Log.info + color + "§3Your Personal Best on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName())));
+            }).start();
+        } else if (args.length == 1 && DR.activeMap != null) {
 
             String ign = args[0];
 

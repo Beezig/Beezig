@@ -1,7 +1,6 @@
 package tk.roccodev.beezig.modules.bed;
 
 import eu.the5zig.mod.modules.GameModeItem;
-import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 
 public class DeathsItem extends GameModeItem<BED> {

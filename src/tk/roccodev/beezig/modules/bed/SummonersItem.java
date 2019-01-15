@@ -5,7 +5,6 @@ import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.render.RenderLocation;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
-import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.BED;
 
 public class SummonersItem extends GameModeItem<BED> {

@@ -8,7 +8,6 @@ import java.io.FileWriter;
 public class GameLogger {
 
     private String fileName;
-    private FileWriter writer;
     private CsvWriter csv;
     private String[] headers;
 
@@ -29,7 +28,7 @@ public class GameLogger {
                 writeHeaders = true;
                 toWrite.createNewFile();
             }
-            writer = new FileWriter(toWrite, true);
+            FileWriter writer = new FileWriter(toWrite, true);
             csv = new CsvWriter(writer, ',');
 
             if (writeHeaders) {

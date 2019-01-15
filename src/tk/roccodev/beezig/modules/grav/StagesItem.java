@@ -5,7 +5,6 @@ import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.render.RenderLocation;
 import tk.roccodev.beezig.ActiveGame;
 import tk.roccodev.beezig.IHive;
-import tk.roccodev.beezig.Log;
 import tk.roccodev.beezig.games.GRAV;
 
 public class StagesItem extends GameModeItem<GRAV> {

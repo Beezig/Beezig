@@ -110,14 +110,13 @@ public class StreakUtils {
 
                 String bar = "    §7§m                                                                                    ";
 
-                String msg = bar + '\n' + '\n' +
+                return bar + '\n' + '\n' +
                         Log.info + "§3Current Streak: §b" + streak + '\n' +
                         Log.info + "§3Best Streak: §b" + best + '\n' +
                         '\n' +
                         Log.info + "§3Last Reset: §b" + lrDate + '\n' +
                         Log.info + "§3Best Reset: §b" + brDate + '\n' +
                         '\n' + bar;
-                return msg;
 
 
             } else return Log.error + "No winstreak data found for the specified mode.";
