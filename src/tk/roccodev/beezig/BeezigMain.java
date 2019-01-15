@@ -397,6 +397,7 @@ public class BeezigMain {
         CommandManager.registerCommand(new ChatReportCommand());
         CommandManager.registerCommand(new StatsOverlayCommand());
         CommandManager.registerCommand(new SkipTutorialCommand());
+        CommandManager.registerCommand(new BestGameCommand());
 
         new Thread(() -> {
             try {
