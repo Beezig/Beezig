@@ -311,7 +311,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                                 if (tratio >= TIMV.TRATIO_LIMIT) {
                                     ratioColor = ChatColor.RED;
                                 }
-                                The5zigAPI.getAPI().messagePlayer(ChatColor.DARK_AQUA + " Traitor Points: " + ChatColor.AQUA + newData[1] + " (" + ratioColor + tratio + "%" + ChatColor.AQUA + ") ");
+                                The5zigAPI.getAPI().messagePlayer("§f §3 Traitor Points: §b" + ChatColor.AQUA + newData[1] + " (" + ratioColor + tratio + "%" + ChatColor.AQUA + ") ");
                                 continue;
                             }
 
@@ -392,9 +392,6 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
 
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(TIMV.votesToParse);
-
-                // Remove the first message, LabyMod gets the "Vote for a map" message too
-                if(BeezigMain.laby) votesCopy.remove(0);
 
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("timv"));
 
