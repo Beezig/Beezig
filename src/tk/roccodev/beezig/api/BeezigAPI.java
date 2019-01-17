@@ -110,6 +110,10 @@ public class BeezigAPI {
 
     }
 
+    public Class<AutovoteAPI> getAutovoter() {
+        return AutovoteAPI.class;
+    }
+
     public AbstractForgeListener getListener() {
         return listenerImpl;
     }

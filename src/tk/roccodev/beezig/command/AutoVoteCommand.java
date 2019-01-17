@@ -2,8 +2,10 @@ package tk.roccodev.beezig.command;
 
 import com.mojang.authlib.GameProfile;
 import eu.the5zig.mod.The5zigAPI;
+import tk.roccodev.beezig.BeezigMain;
 import tk.roccodev.beezig.IHive;
 import tk.roccodev.beezig.Log;
+import tk.roccodev.beezig.api.BeezigAPI;
 import tk.roccodev.beezig.autovote.AutovoteUtils;
 import tk.roccodev.beezig.utils.TabCompletionUtils;
 
@@ -29,6 +31,11 @@ public class AutoVoteCommand implements Command {
 
         if (!(The5zigAPI.getAPI().getActiveServer() instanceof IHive))
             return false;
+
+        if(BeezigMain.hasExpansion && args.length == 0) {
+            BeezigAPI.get().getListener().displayAutovoteGui();
+            return true;
+        }
 
         // Format would be /autovote add dr_throwback
         if (args.length == 2) {

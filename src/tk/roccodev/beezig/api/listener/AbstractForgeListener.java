@@ -30,6 +30,11 @@ public interface AbstractForgeListener {
             public void displayFriendJoin(String player) {
                 ClassUtils.invokeMethod(from, ClassUtils.findMethod(from.getClass(), "displayFriendJoin", String.class), player);
             }
+
+            @Override
+            public void displayAutovoteGui() {
+                ClassUtils.invokeMethod(from, ClassUtils.findMethod(from.getClass(), "displayAutovoteGui"));
+            }
         };
     }
 
@@ -42,5 +47,7 @@ public interface AbstractForgeListener {
     void registerCommand(Object commandExecutor);
 
     void displayFriendJoin(String player);
+
+    void displayAutovoteGui();
 
 }
