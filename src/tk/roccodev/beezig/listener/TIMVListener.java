@@ -395,7 +395,6 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
 
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("timv"));
 
-
                 TreeMap<String, Integer> votesindex = new TreeMap<>();
                 LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();
 

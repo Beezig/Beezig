@@ -114,9 +114,6 @@ public class SGNListener extends AbstractGameListener<SGN> {
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(SGN.votesToParse);
 
-                // Remove the first message, LabyMod gets the "Vote for a map" message too
-                if(BeezigMain.laby) votesCopy.remove(0);
-
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("sgn"));
 
                 TreeMap<String, Integer> votesindex = new TreeMap<>();

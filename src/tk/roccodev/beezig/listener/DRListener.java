@@ -157,11 +157,7 @@ public class DRListener extends AbstractGameListener<DR> {
                 List<String> votesCopy = new ArrayList<>(DR.votesToParse);
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("dr"));
 
-
                 TreeMap<String, Integer> votesindex = new TreeMap<>();
-
-                // Remove the first message, LabyMod gets the "Vote for a map" message too
-                if(BeezigMain.laby) votesCopy.remove(0);
 
                 LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();
 

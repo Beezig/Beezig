@@ -441,11 +441,7 @@ public class BEDListener extends AbstractGameListener<BED> {
 
                 List<String> votesCopy = new ArrayList<>(BED.votesToParse);
 
-                // Remove the first message, LabyMod gets the "Vote for a map" message too
-                if(BeezigMain.laby) votesCopy.remove(0);
-
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("bed"));
-
 
                 TreeMap<String, Integer> votesindex = new TreeMap<>();
                 LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();

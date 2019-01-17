@@ -97,11 +97,7 @@ public class MIMVListener extends AbstractGameListener<MIMV> {
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(MIMV.votesToParse);
 
-                // Remove the first message, LabyMod gets the "Vote for a map" message too
-                if(BeezigMain.laby) votesCopy.remove(0);
-
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("mimv"));
-
 
                 TreeMap<String, Integer> votesindex = new TreeMap<>();
                 LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();

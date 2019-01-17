@@ -119,11 +119,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(SKY.votesToParse);
 
-                // Remove the first message, LabyMod gets the "Vote for a map" message too
-                if(BeezigMain.laby) votesCopy.remove(0);
-
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("sky"));
-
 
                 TreeMap<String, Integer> votesindex = new TreeMap<>();
                 LinkedHashMap<String, Integer> finalvoting = new LinkedHashMap<>();
