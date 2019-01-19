@@ -12,6 +12,7 @@ public class MapItem extends GameModeItem<TIMV> {
 
     @Override
     protected Object getValue(boolean dummy) {
+
         TIMVMap map = TIMV.activeMap;
         if (map == null) return "Unknown map";
         String name = map.getName();
@@ -23,12 +24,15 @@ public class MapItem extends GameModeItem<TIMV> {
             int t = map.getEnderchests();
 
             tr.append(" (").append(t);
-            if(current) tr.append(" | ").append(TIMV.currentEnderchests);
+            if(current){
+
+                if ((TIMV.activeMap.getName().equalsIgnoreCase("Precinct") || TIMV.activeMap.getName().equalsIgnoreCase("Azure Island")) && TIMV.currentEnderchests != 0) {
+                    //remove unaccessible echest from tracker
+                    tr.append(" | ").append(TIMV.currentEnderchests - 1);
+                } else tr.append(" | ").append(TIMV.currentEnderchests);
+            }
             tr.append(")");
-
-
         }
-
 
         return tr.toString().trim();
     }
