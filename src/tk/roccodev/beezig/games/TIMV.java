@@ -160,6 +160,7 @@ public class TIMV extends GameMode {
                 writer.write("t-points");
                 writer.write("gameId");
                 writer.write("pass");
+                writer.write("timestamp");
                 writer.endRecord();
             }
 
@@ -173,6 +174,7 @@ public class TIMV extends GameMode {
             writer.write(gameID);
             writer.write("Passed: " + (currentPassStatus == 0 ? "No"
                     : (currentPassStatus == 1 ? "Traitor" : "Detective")));
+            writer.write(System.currentTimeMillis() + "");
             writer.endRecord();
             writer.close();
 

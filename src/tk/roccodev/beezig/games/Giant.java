@@ -72,7 +72,8 @@ public class Giant extends GameMode {
                 "Kills",
                 "Deaths",
                 "Giants",
-                "Victory?"
+                "Victory?",
+                "Timestamp"
         });
 
         FileInputStream stream = new FileInputStream(f);
@@ -123,10 +124,10 @@ public class Giant extends GameMode {
             winstreak = 0;
             StreakUtils.resetWinstreak("gnt", wasBest);
         }
-
+        System.out.println(inGame + " " + logger);
         if(inGame && logger != null)
             logger.logGame(ActiveGame.is("GNTM") ? "Mini" : "Normal",
-                    activeMap, gameKills + "", gameDeaths + "", giantKills + "", hasWon ? "Yes" : "No");
+                    activeMap, gameKills + "", gameDeaths + "", giantKills + "", hasWon ? "Yes" : "No", System.currentTimeMillis() + "");
 
         isEnding = false;
         hasWon = false;

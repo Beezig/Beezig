@@ -56,6 +56,10 @@ public class BeezigAPI {
         }
     }
 
+    public String getConfigPath() {
+        return BeezigMain.mcFile.getAbsolutePath();
+    }
+
     public void sendTutorial(String key) {
         SendTutorial.send(key);
     }

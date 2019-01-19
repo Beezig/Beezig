@@ -58,7 +58,8 @@ public class CAI extends GameMode {
                 "Points",
                 "Map",
                 "Victory?",
-                "GameID"
+                "GameID",
+                "Timestamp"
         });
 
         FileInputStream stream = new FileInputStream(f);
@@ -113,7 +114,7 @@ public class CAI extends GameMode {
         }
 
         if(inGame && logger != null)
-        logger.logGame(gamePoints + "", activeMap, hasWon ? "Yes" : "No", gameId);
+        logger.logGame(gamePoints + "", activeMap, hasWon ? "Yes" : "No", gameId, System.currentTimeMillis() + "");
 
         gameId = null;
         inGame = false;

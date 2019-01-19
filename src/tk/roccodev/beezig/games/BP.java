@@ -41,7 +41,8 @@ public class BP extends GameMode {
         logger = new GameLogger(BeezigMain.mcFile + "/bp/games.csv");
         logger.setHeaders(new String[] {
                 "Points",
-                "Song"
+                "Song",
+                "Timestamp"
         });
 
         FileInputStream stream = new FileInputStream(f);
@@ -88,7 +89,7 @@ public class BP extends GameMode {
     public static void reset(BP gameMode) {
 
         if(gameMode.getState() == GameState.GAME && logger != null)
-            logger.logGame(gamePts + "", song);
+            logger.logGame(gamePts + "", song, System.currentTimeMillis() + "");
         gameMode.setState(GameState.FINISHED);
         song = null;
         artist = null;

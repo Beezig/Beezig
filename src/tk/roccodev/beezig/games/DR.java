@@ -58,7 +58,8 @@ public class DR extends GameMode {
                 "Map",
                 "Kills",
                 "Deaths",
-                "GameID"
+                "GameID",
+                "Timestamp"
         });
 
 
@@ -106,7 +107,7 @@ public class DR extends GameMode {
 
         gm.setState(GameState.FINISHED);
         if(role != null && activeMap != null && logger != null)
-        logger.logGame(role, activeMap.getDisplayName(), kills + "", deaths + "", gameId);
+        logger.logGame(role, activeMap.getDisplayName(), kills + "", deaths + "", gameId, System.currentTimeMillis() + "");
         activeMap = null;
         currentMapPB = null;
         currentMapWR = null;

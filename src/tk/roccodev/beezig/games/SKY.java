@@ -67,7 +67,8 @@ public class SKY extends GameMode {
                 "Map",
                 "Kills",
                 "Mode",
-                "Victory?"
+                "Victory?",
+                "Timestamp"
         });
 
         FileInputStream stream = new FileInputStream(f);
@@ -121,7 +122,7 @@ public class SKY extends GameMode {
         }
 
         if(inGame && logger != null)
-            logger.logGame(gamePoints + "", map, kills + "", mode,  hasWon ? "Yes" : "No");
+            logger.logGame(gamePoints + "", map, kills + "", mode,  hasWon ? "Yes" : "No", System.currentTimeMillis() + "");
 
         hasWon = false;
         inGame = false;

@@ -55,7 +55,8 @@ public class HIDE extends GameMode {
         logger.setHeaders(new String[] {
                 "Map",
                 "Victory?",
-                "Kills"
+                "Kills",
+                "Timestamp"
         });
 
 
@@ -110,7 +111,7 @@ public class HIDE extends GameMode {
         if(inGame)
             HideMapRecords.endGame(activeMap, kills);
         if(inGame && logger != null)
-        logger.logGame(activeMap, hasWon ? "Yes" : "No", kills + "");
+        logger.logGame(activeMap, hasWon ? "Yes" : "No", kills + "", System.currentTimeMillis() + "");
         inGame = false;
         hasWon = false;
         HIDE.messagesToSend.clear();

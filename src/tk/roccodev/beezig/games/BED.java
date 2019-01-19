@@ -80,7 +80,8 @@ public class BED extends GameMode {
                 "Kills",
                 "Deaths",
                 "Beds",
-                "Victory?"
+                "Victory?",
+                "Timestamp"
         });
 
         FileInputStream stream = new FileInputStream(f);
@@ -136,7 +137,8 @@ public class BED extends GameMode {
             StreakUtils.resetWinstreak("bed", wasBest);
         }
         if(inGame && logger != null)
-        logger.logGame(pointsCounter + "", mode, activeMap, kills + "", deaths + "", bedsDestroyed + "", hasWon ? "Yes" : "No");
+        logger.logGame(pointsCounter + "", mode, activeMap, kills + "", deaths + "", bedsDestroyed + "", hasWon ? "Yes" : "No",
+                System.currentTimeMillis() + "");
         hasWon = false;
         inGame = false;
         BED.mode = "";
