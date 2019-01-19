@@ -13,6 +13,9 @@ import tk.roccodev.beezig.games.TIMV;
 import tk.roccodev.beezig.hiveapi.APIValues;
 import tk.roccodev.beezig.utils.rpc.DiscordUtils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class HiveListener extends AbstractGameListener<GameMode> {
 
 
@@ -65,75 +68,116 @@ public class HiveListener extends AbstractGameListener<GameMode> {
             The5zigAPI.getLogger().info("Connected to TIMV! -Hive");
             DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "In Lobby", "game_timv");
         }
-        if ("timv.welcome".equals(key)) {
-            getGameListener().switchLobby("TIMV");
+        switch (key) {
+//            TODO ActiveMap for fallback strings all gamemodes
+            case "timv.welcome":
+            case "timv.fallback":
+                getGameListener().switchLobby("TIMV");
 
-            The5zigAPI.getLogger().info("Connected to TIMV! -Hive");
-            DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "In Lobby", "game_timv");
-        } else if ("dr.welcome".equals(key)) {
-            getGameListener().switchLobby("DR");
+                The5zigAPI.getLogger().info("Connected to TIMV! -Hive");
+                DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "In Lobby", "game_timv");
+                if(key.equals("timv.fallback")){
 
-            The5zigAPI.getLogger().info("Connected to DR! -Hive");
-            DiscordUtils.updatePresence("Parkouring in DeathRun", "In Lobby", "game_dr");
-        } else if ("bed.welcome".equals(key) || ("bed.spectator".equals(key) || "bed.fallback".equals(key) && gameMode == null)) {
-            getGameListener().switchLobby("bed.fallback".equals(key)
-                    ? "BED_"  + ChatColor.stripColor(match.get(0)).replace("The winning map is ", "").replace(".", "")
-                    : "BED");
+                    //The winning map is Nightclub.
+                    String afterMsg = match.get(0).split("The winning map is")[1];
+                    The5zigAPI.getLogger().info(afterMsg);
+                    String map = "";
+                    Pattern pattern = Pattern.compile(Pattern.quote(" ") + "(.*?)" + Pattern.quote("."));
+                    Matcher matcher = pattern.matcher(afterMsg);
+                    while (matcher.find()) {
+                        map = matcher.group(1);
+                    }
+                    The5zigAPI.getLogger().info(map);
+                    TIMV.mapStr = map;
+                    DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "Playing on " + map, "game_timv");
 
-            The5zigAPI.getLogger().info("Connected to BED/BEDT! -Hive");
-            DiscordUtils.updatePresence("Housekeeping in BedWars", "In Lobby", "game_bedwars");
-        } else if ("gntm.welcome".equals(key)) {
+                    TIMV.activeMap = TIMV.mapsPool.get(map.toLowerCase());
+                }
+                break;
+            case "dr.welcome":
+            case "dr.fallback":
+                getGameListener().switchLobby("DR");
+
+                The5zigAPI.getLogger().info("Connected to DR! -Hive");
+                DiscordUtils.updatePresence("Parkouring in DeathRun", "In Lobby", "game_dr");
+                break;
+            case "bed.welcome":
+            case "bed.spectator":
+            case "bed.fallback":
+                getGameListener().switchLobby(
+                        "bed.fallback".equals(key)
+                        ? "BED_" + ChatColor.stripColor(match.get(0)).replace("The winning map is ", "").replace(".", "")
+                        : "BED");
+
+                The5zigAPI.getLogger().info("Connected to BED/BEDT! -Hive");
+                DiscordUtils.updatePresence("Housekeeping in BedWars", "In Lobby", "game_bedwars");
+                break;
+            case "gntm.welcome":
+            case "gntm.fallback":
+
+                The5zigAPI.getLogger().info("Connected to GNTM! -Hive");
+                DiscordUtils.updatePresence("Slaying SkyGiants:Mini", "In Lobby", "game_giant");
 
 
-            The5zigAPI.getLogger().info("Connected to GNTM! -Hive");
-            DiscordUtils.updatePresence("Slaying SkyGiants:Mini", "In Lobby", "game_giant");
+                GiantListener.listener.setGameMode(GNTM.class, GNTM.instance);
+                The5zigAPI.getLogger().info(GNTM.instance.getClass());
+                getGameListener().switchLobby("GNTM");
+                break;
+            case "gnt.welcome":
+            case "gnt.fallback":
 
+                The5zigAPI.getLogger().info("Connected to GNT! -Hive");
+                DiscordUtils.updatePresence("Slaying SkyGiants", "In Lobby", "game_giant");
+                The5zigAPI.getLogger().info(GNT.instance.getClass());
 
-            GiantListener.listener.setGameMode(GNTM.class, GNTM.instance);
-            The5zigAPI.getLogger().info(GNTM.instance.getClass());
-            getGameListener().switchLobby("GNTM");
-        } else if ("gnt.welcome".equals(key)) {
+                GiantListener.listener.setGameMode(GNT.class, GNT.instance);
 
+                getGameListener().switchLobby("GNT");
+                break;
+            case "hide.welcome":
+            case "hide.fallback":
+                getGameListener().switchLobby("HIDE");
+                The5zigAPI.getLogger().info("Connected to HIDE! -Hive");
+                DiscordUtils.updatePresence("Playing Hide & Seek", "In Lobby", "game_hide");
+                break;
+            case "cai.welcome":
+            case "cai.fallback":
+                getGameListener().switchLobby("CAI");
+                The5zigAPI.getLogger().info("Connected to CAI! -Hive");
+                DiscordUtils.updatePresence("Battling in Cowboys and Indians", "In Lobby", "game_cai");
+                break;
+            case "sky.welcome":
+            case "sky.fallback":
+                getGameListener().switchLobby("SKY");
+                The5zigAPI.getLogger().info("Connected to SKY! - Hive");
+                DiscordUtils.updatePresence("Fighting in SkyWars", "In Lobby", "game_skywars");
 
-            The5zigAPI.getLogger().info("Connected to GNT! -Hive");
-            DiscordUtils.updatePresence("Slaying SkyGiants", "In Lobby", "game_giant");
-            The5zigAPI.getLogger().info(GNT.instance.getClass());
+                break;
+            case "mimv.welcome":
+            case "mimv.fallback":
+                getGameListener().switchLobby("MIMV");
+                The5zigAPI.getLogger().info("Connected to MIMV! - Hive");
+                DiscordUtils.updatePresence("Investigating in Murder in Mineville", "In Lobby", "game_mimv");
 
-            GiantListener.listener.setGameMode(GNT.class, GNT.instance);
+                break;
+            case "grav.welcome":
+                getGameListener().switchLobby("GRAV");
+                The5zigAPI.getLogger().info("Connected to GRAV! - Hive");
+                DiscordUtils.updatePresence("Freefalling in Gravity", "In Lobby", "game_grav");
 
-            getGameListener().switchLobby("GNT");
-        } else if ("hide.welcome".equals(key)) {
-            getGameListener().switchLobby("HIDE");
-            The5zigAPI.getLogger().info("Connected to HIDE! -Hive");
-            DiscordUtils.updatePresence("Playing Hide & Seek", "In Lobby", "game_hide");
-        } else if ("cai.welcome".equals(key)) {
-            getGameListener().switchLobby("CAI");
-            The5zigAPI.getLogger().info("Connected to CAI! -Hive");
-            DiscordUtils.updatePresence("Battling in Cowboys and Indians", "In Lobby", "game_cai");
-        } else if ("sky.welcome".equals(key)) {
-            getGameListener().switchLobby("SKY");
-            The5zigAPI.getLogger().info("Connected to SKY! - Hive");
-            DiscordUtils.updatePresence("Fighting in SkyWars", "In Lobby", "game_skywars");
+                break;
+            case "bp.welcome":
+                getGameListener().switchLobby("BP");
+                The5zigAPI.getLogger().info("Connected to BP! - Hive");
+                DiscordUtils.updatePresence("Dancing in BlockParty", "Startup", "game_bp");
 
-        } else if ("mimv.welcome".equals(key)) {
-            getGameListener().switchLobby("MIMV");
-            The5zigAPI.getLogger().info("Connected to MIMV! - Hive");
-            DiscordUtils.updatePresence("Investigating in Murder in Mineville", "In Lobby", "game_mimv");
-
-        } else if ("grav.welcome".equals(key)) {
-            getGameListener().switchLobby("GRAV");
-            The5zigAPI.getLogger().info("Connected to GRAV! - Hive");
-            DiscordUtils.updatePresence("Freefalling in Gravity", "In Lobby", "game_grav");
-
-        } else if ("bp.welcome".equals(key)) {
-            getGameListener().switchLobby("BP");
-            The5zigAPI.getLogger().info("Connected to BP! - Hive");
-            DiscordUtils.updatePresence("Dancing in BlockParty", "Startup", "game_bp");
-
-        } else if ("sgn.welcome".equals(key)) {
-            getGameListener().switchLobby("SGN");
-            The5zigAPI.getLogger().info("Connected to SGN! - Hive");
-            DiscordUtils.updatePresence("Battling in SG2", "In Lobby", "game_sgn");
+                break;
+            case "sgn.welcome":
+            case "sgn.fallback":
+                getGameListener().switchLobby("SGN");
+                The5zigAPI.getLogger().info("Connected to SGN! - Hive");
+                DiscordUtils.updatePresence("Battling in SG2", "In Lobby", "game_sgn");
+                break;
         }
 
 

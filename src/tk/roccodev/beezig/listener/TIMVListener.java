@@ -141,7 +141,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             TIMV.plus25();
             TIMV.applyPoints(2); //+1 Det point
 
-        } else if (message.equals("               §a§m                §f§l Game Over! §a§m                ") && gameMode != null) {
+        } else if (message.startsWith("                       §c§lGame. OVER! ") && gameMode != null) {
             if (!TIMV.dead) {
                 TIMV.applyPoints(20);
             }
@@ -433,7 +433,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             TIMV.traitorsDiscovered++;
         } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §1")) {
             TIMV.detectivesDiscovered++;
-        } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §6You are now in the spectator lobby")) {
+        } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §c§lMatch Recap")) {
             TIMV.dead = true;
 
         } else if (message.contains("§f§lYOU ARE ")) {
@@ -473,7 +473,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                 }
                 Long avg = APIUtils.average(TraitorKarma.toArray());
                 The5zigAPI.getAPI().messagePlayer("                        §c§m                                ");
-                The5zigAPI.getAPI().messagePlayer("                           §4Traitor Karma: " + avg);
+                The5zigAPI.getAPI().messagePlayer("                       §4Traitor Karma: " + avg);
                 The5zigAPI.getAPI().messagePlayer("                        §c§m                                ");
 
             }).start();
