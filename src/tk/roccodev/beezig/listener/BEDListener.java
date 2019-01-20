@@ -129,6 +129,7 @@ public class BEDListener extends AbstractGameListener<BED> {
             DiscordUtils.updatePresence("Housekeeping in BedWars: " + BED.mode, "Playing on " + BED.activeMap, "game_bedwars");
         } else if (message.equals("                     §6§lWelcome to Hive BedWars!")) { // Not sure about this one
             BED.inGame = true;
+            The5zigAPI.getAPI().sendPlayerMessage("/gameid");
         }
         else if(message.equals("                        §6§lBedWars§7 - §a§lDouble Fun")) {
           BED.inGame = true;
@@ -518,6 +519,9 @@ public class BEDListener extends AbstractGameListener<BED> {
                 }
 
             }).start();
+        }
+        else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §bYou can find all §emessages and game events §bat §a")) {
+            BED.gameId = message.replace("§8▍ §3§lBed§b§lWars§8 ▏ §bYou can find all §emessages and game events §bat §ahttps://hivemc.com/bedwars/game/", "");
         }
         return false;
 

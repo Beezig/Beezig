@@ -52,6 +52,7 @@ public class Giant extends GameMode {
     public static List<String> votesToParse = new ArrayList<>();
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
+    public static String gameId;
 
     public Giant() {
         instance = this;
@@ -66,7 +67,8 @@ public class Giant extends GameMode {
                 "Deaths",
                 "Giants",
                 "Victory?",
-                "Timestamp"
+                "Timestamp",
+                "GameID"
         });
 
 
@@ -127,9 +129,10 @@ public class Giant extends GameMode {
         System.out.println(inGame + " " + logger);
         if(inGame && logger != null)
             logger.logGame(ActiveGame.is("GNTM") ? "Mini" : "Normal",
-                    activeMap, gameKills + "", gameDeaths + "", giantKills + "", hasWon ? "Yes" : "No", System.currentTimeMillis() + "");
+                    activeMap, gameKills + "", gameDeaths + "", giantKills + "", hasWon ? "Yes" : "No", System.currentTimeMillis() + "", gameId);
 
         isEnding = false;
+        gameId = null;
         hasWon = false;
         inGame = false;
         teamsEliminated = 0;

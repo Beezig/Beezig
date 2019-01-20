@@ -47,6 +47,7 @@ public class SKY extends GameMode {
     public static String map;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
+    public static String gameId;
 
     public static void updateKdr() {
         apiKdr = (double) apiKills / (apiDeaths == 0 ? 1 : apiDeaths);
@@ -62,7 +63,8 @@ public class SKY extends GameMode {
                 "Kills",
                 "Mode",
                 "Victory?",
-                "Timestamp"
+                "Timestamp",
+                "GameID"
         });
 
         File f = new File(BeezigMain.mcFile + "/sky/dailyPoints/" + dailyPointsName);
@@ -123,8 +125,9 @@ public class SKY extends GameMode {
         }
 
         if(inGame && logger != null)
-            logger.logGame(gamePoints + "", map, kills + "", mode,  hasWon ? "Yes" : "No", System.currentTimeMillis() + "");
+            logger.logGame(gamePoints + "", map, kills + "", mode,  hasWon ? "Yes" : "No", System.currentTimeMillis() + "", gameId);
 
+        gameId = null;
         hasWon = false;
         inGame = false;
         SKY.messagesToSend.clear();

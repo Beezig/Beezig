@@ -165,8 +165,9 @@ public class SKYListener extends AbstractGameListener<SKY> {
         } else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l") && !SKY.hasVoted
                 && Setting.AUTOVOTE.getValue()) {
             SKY.votesToParse.add(message);
-        } else if (message.contains("§e, noble fighter for the ")) {
+        } else if (message.contains("§e§lWelcome to SkyWars")) {
             SKY.inGame = true;
+            The5zigAPI.getAPI().sendPlayerMessage("/gameid");
             SKY.team = message.split("the")[1].replace("§eteam!", "").replaceAll("team!", "").trim();
 
             String teamSize = SKY.mode == null ? "0"
@@ -400,6 +401,9 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
             }
 
+        }
+        else if(message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §bYou can find all §emessages and game events §bat §a")) {
+            SKY.gameId = message.replace("§8▍ §b§lSky§e§lWars§8 ▏ §bYou can find all §emessages and game events §bat §ahttp://hivemc.com/skywars/game/", "");
         }
 
         return false;

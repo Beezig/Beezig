@@ -42,6 +42,7 @@ public class HIDE extends GameMode {
     public static HIDERank rankObject;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
+    public static String gameId;
 
     public static void initDailyPointsWriter() throws IOException {
 
@@ -50,7 +51,8 @@ public class HIDE extends GameMode {
                 "Map",
                 "Victory?",
                 "Kills",
-                "Timestamp"
+                "Timestamp",
+                "GameID"
         });
 
 
@@ -112,7 +114,8 @@ public class HIDE extends GameMode {
         if(inGame)
             HideMapRecords.endGame(activeMap, kills);
         if(inGame && logger != null)
-        logger.logGame(activeMap, hasWon ? "Yes" : "No", kills + "", System.currentTimeMillis() + "");
+        logger.logGame(activeMap, hasWon ? "Yes" : "No", kills + "", System.currentTimeMillis() + "", gameId);
+        gameId = null;
         inGame = false;
         hasWon = false;
         HIDE.messagesToSend.clear();

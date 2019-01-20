@@ -103,8 +103,9 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
         //Autovoting
 
-        else if (message.startsWith("                     §b§lYou are a §f§lHIDER!")) {
+        else if (message.contains("§b§lYou are a §f§lHIDER!")) {
             HIDE.inGame = true;
+            The5zigAPI.getAPI().sendPlayerMessage("/gameid");
         } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §a§lVote received. §3Your map now has ") && Setting.AUTOVOTE.getValue()) {
             HIDE.hasVoted = true;
         } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6§e§e§l6. §f§cRandom map") && !HIDE.hasVoted && Setting.AUTOVOTE.getValue()) {
@@ -190,6 +191,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
         } else if (message.equals("                          §6§lYou are a §c§lSEEKER!")) {
             HIDE.inGame = true;
             HIDE.seeking = true;
+            The5zigAPI.getAPI().sendPlayerMessage("/gameid");
             DiscordUtils.updatePresence("Playing Hide & Seek", "Seeking on " + HIDE.activeMap, "game_hide");
         } else if ((message.equals("                      §6§m                  §6§m                  ") && !message.startsWith("§f ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
@@ -385,6 +387,9 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
             }
 
+        }
+        else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §bYou can find all §emessages and game events §bat §a")) {
+            HIDE.gameId = message.replace("§8▍ §bHide§aAnd§eSeek§8 ▏ §bYou can find all §emessages and game events §bat §ahttps://hivemc.com/hide-and-seek/game/", "");
         }
 
 

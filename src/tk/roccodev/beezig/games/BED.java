@@ -63,6 +63,7 @@ public class BED extends GameMode {
     public static List<String> footerToSend = new ArrayList<>();
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
+    public static String gameId;
 
     public static void initDailyPointsWriter() throws IOException {
         logger = new GameLogger(BeezigMain.mcFile + "/bedwars/games.csv");
@@ -74,7 +75,8 @@ public class BED extends GameMode {
                 "Deaths",
                 "Beds",
                 "Victory?",
-                "Timestamp"
+                "Timestamp",
+                "GameID"
         });
 
         File f = new File(BeezigMain.mcFile + "/bedwars/dailyPoints/" + dailyPointsName);
@@ -138,7 +140,8 @@ public class BED extends GameMode {
         }
         if(inGame && logger != null)
         logger.logGame(pointsCounter + "", mode, activeMap, kills + "", deaths + "", bedsDestroyed + "", hasWon ? "Yes" : "No",
-                System.currentTimeMillis() + "");
+                System.currentTimeMillis() + "", gameId);
+        gameId = null;
         hasWon = false;
         inGame = false;
         BED.mode = "";
