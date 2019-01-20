@@ -74,7 +74,7 @@ public class BestGameCommand implements Command {
                             String display = parseValue(entry.getValue());
                             if (display == null) continue;
 
-                            The5zigAPI.getAPI().messagePlayer("§a§3" + entry.getKey() + ": §b" + display);
+                            The5zigAPI.getAPI().messagePlayer(Log.info + "§a§3" + entry.getKey() + ": §b" + display);
                         }
                     }
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Most played: §b" + best.getKey() + ": §b" + parseValue(best.getValue()));
@@ -94,16 +94,16 @@ public class BestGameCommand implements Command {
     private String parseValue(Object in) {
         if(in == null) return null;
         double d = (double) in;
-        if(d == 0) return "§cNever Played";
-        return df.format(d);
+        if(d == 0) return "§eNever Played";
+        if(d < 100) return "§c" + df.format(100 - d) + "% worse";
+        else return "§a" + df.format(d - 100) + "% better";
+
     }
 
     private Map.Entry<String, Double> parseEntry(Map.Entry<String, Object> in) {
         if(in == null) return null;
         if(in.getValue() == null) return null;
-        double value = in.getValue() instanceof Double
-                ? (double) in.getValue()
-                : ((Long)in.getValue()).doubleValue();
+        double value = ((Number)in.getValue()).doubleValue() * 100;
         return new AbstractMap.SimpleEntry<>(in.getKey(), value);
     }
 }
