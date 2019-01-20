@@ -46,13 +46,6 @@ public class CAI extends GameMode {
     private static String dailyPointsName;
 
     public static void initDailyPointsWriter() throws IOException {
-        File f = new File(BeezigMain.mcFile + "/cai/dailyPoints/" + dailyPointsName);
-        if (!f.exists()) {
-            f.createNewFile();
-            initPointsWriterWithZero();
-            return;
-        }
-
         logger = new GameLogger(BeezigMain.mcFile + "/cai/games.csv");
         logger.setHeaders(new String[] {
                 "Points",
@@ -61,6 +54,13 @@ public class CAI extends GameMode {
                 "GameID",
                 "Timestamp"
         });
+
+        File f = new File(BeezigMain.mcFile + "/cai/dailyPoints/" + dailyPointsName);
+        if (!f.exists()) {
+            f.createNewFile();
+            initPointsWriterWithZero();
+            return;
+        }
 
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
@@ -112,7 +112,7 @@ public class CAI extends GameMode {
             CAI.winstreak = 0;
             StreakUtils.resetWinstreak("cai", wasBest);
         }
-
+        System.out.println(inGame + " " + logger);
         if(inGame && logger != null)
         logger.logGame(gamePoints + "", activeMap, hasWon ? "Yes" : "No", gameId, System.currentTimeMillis() + "");
 

@@ -54,12 +54,6 @@ public class SKY extends GameMode {
     }
 
     public static void initDailyPointsWriter() throws IOException {
-        File f = new File(BeezigMain.mcFile + "/sky/dailyPoints/" + dailyPointsName);
-        if (!f.exists()) {
-            f.createNewFile();
-            initPointsWriterWithZero();
-            return;
-        }
 
         logger = new GameLogger(BeezigMain.mcFile + "/sky/games.csv");
         logger.setHeaders(new String[] {
@@ -70,6 +64,13 @@ public class SKY extends GameMode {
                 "Victory?",
                 "Timestamp"
         });
+
+        File f = new File(BeezigMain.mcFile + "/sky/dailyPoints/" + dailyPointsName);
+        if (!f.exists()) {
+            f.createNewFile();
+            initPointsWriterWithZero();
+            return;
+        }
 
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));

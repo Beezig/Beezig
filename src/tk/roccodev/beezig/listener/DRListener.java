@@ -417,9 +417,15 @@ public class DRListener extends AbstractGameListener<DR> {
             ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
             timer.schedule(sft, 1500);
         }
+        else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §3NEW PERSONAL BEST!§b") && message.contains("it took you")) {
+            DR.mapTime = message.split("it took you §e")[1].replace("§b!", "");
+        }
         else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in ")) {
             // §8▍ §cDeathRun§8 ▏ §bYou finished your run in 03:07.479§b!
             String time = (message.split("in "))[1].replace("§b!", "").trim();
+
+            DR.mapTime = time;
+
             String[] data = time.split(":");
             int minutes = Integer.parseInt(data[0]);
             // data[1 ] is seconds.milliseconds

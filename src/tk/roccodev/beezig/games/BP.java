@@ -31,12 +31,6 @@ public class BP extends GameMode {
     private static String dailyPointsName;
 
     public static void initDailyPointsWriter() throws IOException {
-        File f = new File(BeezigMain.mcFile + "/bp/dailyPoints/" + dailyPointsName);
-        if (!f.exists()) {
-            f.createNewFile();
-            initPointsWriterWithZero();
-            return;
-        }
 
         logger = new GameLogger(BeezigMain.mcFile + "/bp/games.csv");
         logger.setHeaders(new String[] {
@@ -44,6 +38,13 @@ public class BP extends GameMode {
                 "Song",
                 "Timestamp"
         });
+
+        File f = new File(BeezigMain.mcFile + "/bp/dailyPoints/" + dailyPointsName);
+        if (!f.exists()) {
+            f.createNewFile();
+            initPointsWriterWithZero();
+            return;
+        }
 
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));

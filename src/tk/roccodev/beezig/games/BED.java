@@ -65,13 +65,6 @@ public class BED extends GameMode {
     private static String dailyPointsName;
 
     public static void initDailyPointsWriter() throws IOException {
-        File f = new File(BeezigMain.mcFile + "/bedwars/dailyPoints/" + dailyPointsName);
-        if (!f.exists()) {
-            f.createNewFile();
-            initPointsWriterWithZero();
-            return;
-        }
-
         logger = new GameLogger(BeezigMain.mcFile + "/bedwars/games.csv");
         logger.setHeaders(new String[] {
                 "Points",
@@ -83,6 +76,13 @@ public class BED extends GameMode {
                 "Victory?",
                 "Timestamp"
         });
+
+        File f = new File(BeezigMain.mcFile + "/bedwars/dailyPoints/" + dailyPointsName);
+        if (!f.exists()) {
+            f.createNewFile();
+            initPointsWriterWithZero();
+            return;
+        }
 
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));

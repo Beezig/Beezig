@@ -25,7 +25,7 @@ public class DR extends GameMode {
     public static String currentMapWRHolder;
     public static boolean dead = false;
     public static String role = null;
-    public static long lastRecordPoints;
+    public static String mapTime;
     public static int checkpoints;
     public static int deaths;
     public static int kills;
@@ -45,12 +45,6 @@ public class DR extends GameMode {
     private static String dailyPointsName;
 
     public static void initDailyPointsWriter() throws IOException {
-        File f = new File(BeezigMain.mcFile + "/dr/dailyPoints/" + dailyPointsName);
-        if (!f.exists()) {
-            f.createNewFile();
-            initPointsWriterWithZero();
-            return;
-        }
 
         logger = new GameLogger(BeezigMain.mcFile + "/dr/games.csv");
         logger.setHeaders(new String[] {
@@ -59,8 +53,16 @@ public class DR extends GameMode {
                 "Kills",
                 "Deaths",
                 "GameID",
-                "Timestamp"
+                "Timestamp",
+                "Time"
         });
+
+        File f = new File(BeezigMain.mcFile + "/dr/dailyPoints/" + dailyPointsName);
+        if (!f.exists()) {
+            f.createNewFile();
+            initPointsWriterWithZero();
+            return;
+        }
 
 
         FileInputStream stream = new FileInputStream(f);
@@ -107,7 +109,7 @@ public class DR extends GameMode {
 
         gm.setState(GameState.FINISHED);
         if(role != null && activeMap != null && logger != null)
-        logger.logGame(role, activeMap.getDisplayName(), kills + "", deaths + "", gameId, System.currentTimeMillis() + "");
+        logger.logGame(role, activeMap.getDisplayName(), kills + "", deaths + "", gameId, System.currentTimeMillis() + "", mapTime);
         activeMap = null;
         currentMapPB = null;
         currentMapWR = null;
@@ -118,6 +120,7 @@ public class DR extends GameMode {
         deaths = 0;
         kills = 0;
         lastPts = 0;
+        mapTime = null;
         DR.hasVoted = false;
         ActiveGame.reset("dr");
         IHive.genericReset();

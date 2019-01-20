@@ -58,13 +58,6 @@ public class Giant extends GameMode {
     }
 
     public static void initDailyPointsWriter() throws IOException {
-        File f = new File(BeezigMain.mcFile + "/gnt/dailyPoints/" + dailyPointsName);
-        if (!f.exists()) {
-            f.createNewFile();
-            initPointsWriterWithZero();
-            return;
-        }
-
         logger = new GameLogger(BeezigMain.mcFile + "/gnt/games.csv");
         logger.setHeaders(new String[] {
                 "Mode",
@@ -76,6 +69,13 @@ public class Giant extends GameMode {
                 "Timestamp"
         });
 
+
+        File f = new File(BeezigMain.mcFile + "/gnt/dailyPoints/" + dailyPointsName);
+        if (!f.exists()) {
+            f.createNewFile();
+            initPointsWriterWithZero();
+            return;
+        }
         FileInputStream stream = new FileInputStream(f);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String line = reader.readLine();
