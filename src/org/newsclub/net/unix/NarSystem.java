@@ -2,7 +2,7 @@ package org.newsclub.net.unix;
 
 import org.scijava.nativelib.DefaultJniExtractor;
 import org.scijava.nativelib.JniExtractor;
-import tk.roccodev.beezig.BeezigMain;
+import eu.beezig.core.BeezigMain;
 
 import java.io.File;
 import java.net.URL;

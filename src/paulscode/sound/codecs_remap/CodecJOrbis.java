@@ -12,7 +12,7 @@ import paulscode.sound.ICodec;
 import paulscode.sound.SoundBuffer;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.SoundSystemLogger;
-import tk.roccodev.beezig.Log;
+import eu.beezig.core.Log;
 
 import javax.sound.sampled.AudioFormat;
 import java.io.IOException;
