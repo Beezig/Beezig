@@ -56,3 +56,6 @@ This plugin uses:
 * [RoccoDev](https://github.com/RoccoDev)'s Bedwars Toolkit API
 
 ## [Image Album](https://imgur.com/a/LIxhh)
+
+# Supporters
+[JetBrains](https://www.jetbrains.com/?from=Beezig) for providing access to development tools for free via their [open-source license](https://www.jetbrains.com/buy/opensource/).
