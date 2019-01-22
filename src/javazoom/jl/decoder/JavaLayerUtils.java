@@ -20,7 +20,7 @@
 
 package javazoom.jl.decoder;
 
-import tk.roccodev.beezig.BeezigMain;
+import eu.beezig.core.BeezigMain;
 
 import java.io.*;
 import java.lang.reflect.Array;
