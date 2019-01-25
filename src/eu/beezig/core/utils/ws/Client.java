@@ -2,6 +2,7 @@ package eu.beezig.core.utils.ws;
 
 import eu.beezig.core.Log;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 import org.java_websocket_beezig.client.WebSocketClient;
@@ -44,6 +45,7 @@ public class Client extends WebSocketClient {
             if (Setting.PM_NOTIFICATION.getValue() && NotificationManager.isInGameFocus()) {
                 NotificationManager.sendNotification("New Report Received", users + " reported for " + reason);
             }
+            SendTutorial.send("new_report");
         } else if (data[0].equals("0nline cl1ents")) {
             The5zigAPI.getAPI().messagePlayer(Log.info + "There are §b" + data[1] + "§3 connected clients.");
         } else if (data[0].equals("lookingForParty") && Setting.RECEIVE_PARTY_INVITES.getValue()) {
