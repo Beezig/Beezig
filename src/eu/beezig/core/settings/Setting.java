@@ -24,6 +24,7 @@ public enum Setting {
     SHOW_RECORDS_KPG(true, "AdvRec - KPG", "Advanced Records - Show Kills per Game", "SIGN"),
     SHOW_RECORDS_DPG(true, "AdvRec - DPG", "Advanced Records - Show Deaths per Game", "SIGN"),
 
+    STAFF_CHAT(true, "Quick staff chat", "Talk in staff chat by putting ~ before your message.", "PAPER"),
     DISCORD_RPC(true, "Discord Rich Presence", "Use Discord Rich Presence", "PAPER"),
     AUTOVOTE(true, "Autovote", "Turn the autovote feature on or off", "MAP"),
     AUTOVOTE_RANDOM(true, "Autovote for Random map", "Autovote for random map if no favorites are found", "MAP"),

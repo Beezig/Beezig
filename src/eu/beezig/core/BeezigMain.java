@@ -681,7 +681,7 @@ public class BeezigMain {
     @EventHandler(priority = EventHandler.Priority.HIGH)
     public void onChatSend(ChatSendEvent evt) {
 
-        if (evt.getMessage().startsWith("~") && isStaffChat()) {
+        if (evt.getMessage().startsWith("~") && isStaffChat() && Setting.STAFF_CHAT.getValue()) {
             String noStar = evt.getMessage().replace("~", "");
             if (noStar.length() == 0)
                 return;
