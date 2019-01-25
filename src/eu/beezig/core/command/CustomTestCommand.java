@@ -1,7 +1,9 @@
 package eu.beezig.core.command;
 
 import com.mojang.authlib.GameProfile;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.Log;
+import eu.beezig.core.api.BeezigAPI;
 import eu.beezig.core.games.TIMV;
 import eu.beezig.core.utils.TIMVTest;
 import eu.beezig.core.utils.TabCompletionUtils;
@@ -27,7 +29,10 @@ public class CustomTestCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-
+        if(BeezigMain.hasExpansion && args.length == 0) {
+            BeezigAPI.get().getListener().displayTIMVTestGui();
+            return true;
+        }
 
         String mode = args[0];
         StringBuilder msg = new StringBuilder();
