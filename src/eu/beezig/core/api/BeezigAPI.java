@@ -109,6 +109,10 @@ public class BeezigAPI {
         }
     }
 
+    public void setSetting(String setting, boolean value) {
+        Setting.valueOf(setting).setValue(value);
+    }
+
     public boolean onPacketReceived(int packetId, String data) {
         return true; // Return false to ignore the packet
     }
