@@ -31,11 +31,8 @@ public class TIMVTest {
                     "{p} pls test", "{p}, would you mind testing?", "{p}, could you test please?",
                     "{p}, please go into the tester", "{p}, I'd appreciate it if you would test",
                     "{p}, how about testing?", "{p}, would you test for me?"));
-            PrintWriter wr = new PrintWriter(new FileWriter(file, false));
-            TIMV.testRequests.forEach(wr::println);
 
-            wr.flush();
-            wr.close();
+            save();
         }
 
     }
@@ -44,12 +41,8 @@ public class TIMVTest {
         if (TIMV.testRequests.contains(s))
             return;
         TIMV.testRequests.add(s);
-        PrintWriter wr = new PrintWriter(new FileWriter(file, true));
 
-        wr.println(s);
-
-        wr.flush();
-        wr.close();
+        save();
 
     }
 
@@ -58,6 +51,10 @@ public class TIMVTest {
             return;
         TIMV.testRequests.remove(s);
 
+        save();
+    }
+
+    public static void save() throws IOException {
         PrintWriter wr = new PrintWriter(new FileWriter(file, false));
 
         TIMV.testRequests.forEach(wr::println);

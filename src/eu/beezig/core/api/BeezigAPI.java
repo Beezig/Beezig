@@ -1,5 +1,7 @@
 package eu.beezig.core.api;
 
+import eu.beezig.core.games.TIMV;
+import eu.beezig.core.utils.TIMVTest;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 import eu.beezig.core.ActiveGame;
@@ -15,6 +17,9 @@ import eu.beezig.core.settings.Setting;
 import eu.beezig.core.settings.SettingsFetcher;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.beezig.core.utils.ws.Connector;
+
+import java.io.IOException;
+import java.util.List;
 
 public class BeezigAPI {
 
@@ -89,6 +94,19 @@ public class BeezigAPI {
     public String getTIMVRank(String title, long points) {
         if(title == null) return null;
         return TIMVRank.getFromDisplay(title).getTotalDisplay(points);
+    }
+
+    public List<String> getTIMVMessages() {
+        return TIMV.testRequests;
+    }
+
+    public void setTIMVMessages(List<String> in) {
+        TIMV.testRequests = in;
+        try {
+            TIMVTest.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean onPacketReceived(int packetId, String data) {
