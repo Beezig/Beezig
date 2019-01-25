@@ -210,14 +210,14 @@ public class AdvancedRecordsAnywhere {
             }
             JSONObject jObj = apiObj.getSource().getInput();
             HivePlayer parent = apiObj.getPlayer();
-            The5zigAPI.getAPI().messagePlayer("          §6§m                  §f " + parent.getUsername() + "'s Stats §6§m                  ");
+            The5zigAPI.getAPI().messagePlayer("§f          §6§m                  §f " + parent.getUsername() + "'s Stats §6§m                  ");
 
             for(RecordsStatistic stat : gm.getStatistics()) {
                 if(stat.getSetting() == null || stat.getSetting().getValue())
-                The5zigAPI.getAPI().messagePlayer(" §3" + stat.getKey() + ":§b " + stat.getValue(jObj));
+                The5zigAPI.getAPI().messagePlayer(" §a§3" + stat.getKey() + ":§b " + stat.getValue(jObj));
             }
 
-            The5zigAPI.getAPI().messagePlayer("                      §6§m                  §6§m                  ");
+            The5zigAPI.getAPI().messagePlayer("§f                      §6§m                  §6§m                  ");
 
 
         }).start();
