@@ -21,7 +21,7 @@ public class RatioRecordsStatistic extends RecordsStatistic {
     }
 
     @Override
-    double getValueRaw(JSONObject o) {
+    public double getValueRaw(JSONObject o) {
         long val1 = (long) o.get(ratio1);
         long val2 = (long) o.get(ratio2);
 

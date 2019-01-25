@@ -226,12 +226,12 @@ public class APIUtils {
     }
 
 
-    public static Long average(Object[] arr) {
+    public static double average(Object[] arr) {
 
-        Long sum = 0L;
+        double sum = 0L;
 
         for (Object anArr : arr) {
-            sum += Long.valueOf(String.valueOf(anArr));
+            sum += Double.valueOf(String.valueOf(anArr));
         }
 
         return sum / arr.length;

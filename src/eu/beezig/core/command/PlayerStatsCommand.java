@@ -2,12 +2,15 @@ package eu.beezig.core.command;
 
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.Log;
+import eu.beezig.core.advancedrecords.anywhere.AdvancedRecordsAnywhere;
+import eu.beezig.core.advancedrecords.anywhere.statistic.RecordsStatistic;
 import eu.beezig.core.hiveapi.stuff.RankEnum;
 import eu.beezig.core.hiveapi.stuff.bed.BEDRank;
 import eu.beezig.core.hiveapi.stuff.sgn.SGNRank;
 import eu.beezig.core.hiveapi.stuff.timv.TIMVRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
+import eu.beezig.core.utils.mps.MultiPsStats;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
@@ -54,29 +57,28 @@ public class PlayerStatsCommand implements Command {
 
 
             The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
-            List<Long> points = new ArrayList<>();
+            List<Double> points = new ArrayList<>();
             List<String> title = new ArrayList<>();
             List<String> name = new ArrayList<>();
 
-            String pointStringToUse = game.equalsIgnoreCase("grav") ? "points" : "total_points";
+            String pointsStr = game.equalsIgnoreCase("timv") || game.equalsIgnoreCase("mimv")
+                    ? "karma" : "points";
+
+            RecordsStatistic pointStringToUse =
+                    MultiPsStats.getRecordsStatistic(game, args.length < 2 ? pointsStr : args[1]);
+
 
 
             for (NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
                 try {
                     String uuid = npi.getGameProfile().getId().toString().replace("-", "");
                     String display = npi.getDisplayName() == null ? npi.getGameProfile().getName() : npi.getDisplayName();
-                    GameStats api = new GameStats(uuid, game.toUpperCase()) {
-
-                        @Override
-                        public long getPoints() {
-
-                            return getSource().getLong(pointStringToUse);
-                        }
-                    };
+                    GameStats api = new GameStats(uuid, game.toUpperCase());
+                    api.getSource().fetch();
                     HivePlayer parent = api.getPlayer();
                     ChatColor rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
 
-                    points.add(api.getPoints());
+                    points.add(((Number)pointStringToUse.getValueRaw(api.getSource().getInput())).doubleValue());
 
                     RankEnum rank = game.equalsIgnoreCase("bed")
                             ? (BEDRank.newIsNo1(api.getSource().getString("title"), api.getPoints()) ? BEDRank.ZZZZZZ
@@ -90,7 +92,7 @@ public class PlayerStatsCommand implements Command {
                     else
                         title.add(rank.getTotalDisplay());
                     name.add(rankColor + display);
-                } catch (Exception ignored) { }
+                } catch (Exception ignored) {}
             }
 
             APIUtils.concurrentSort(points, points, title, name);
@@ -99,14 +101,14 @@ public class PlayerStatsCommand implements Command {
                     + "    §7§m                                                                                    ");
             for (int i = 0; i < name.size(); i++) {
                 try {
-                    if (points.get(i) != 0) {
+                    if (points.get(i) != 0D) {
                         if (title.get(i).equals("§a§lMaster §e§lof §b§lDisguise")) {
                             The5zigAPI.getAPI().messagePlayer(
-                                    Log.info + "§a§l" + Log.df(points.get(i)) + "§7 - " + title.get(i) + "§r " + name.get(i));
+                                    Log.info + "§a§l" + Log.ratio(points.get(i)) + "§7 - " + title.get(i) + "§r " + name.get(i));
                         } else {
                             The5zigAPI.getAPI().messagePlayer(
                                     Log.info + title.get(i).replace(ChatColor.stripColor(title.get(i)), "")
-                                            + Log.df(points.get(i)) + "§7 - " + title.get(i) + "§r " + name.get(i));
+                                            + Log.ratio(points.get(i)) + "§7 - " + title.get(i) + "§r " + name.get(i));
                         }
 
                     }
@@ -117,7 +119,7 @@ public class PlayerStatsCommand implements Command {
             The5zigAPI.getAPI()
                     .messagePlayer(Log.info + game.toUpperCase() + " Playerstats: §b" + name.size() + "P / "
                             + ((System.currentTimeMillis() - startT) / 1000) + "s / "
-                            + Log.df(APIUtils.average(points.toArray())) + " Average");
+                            + Log.ratio(APIUtils.average(points.toArray())) + " Average");
             The5zigAPI.getAPI().messagePlayer(
                     "    §7§m                                                                                    "
                             + "\n");
