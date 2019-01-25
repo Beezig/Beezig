@@ -20,6 +20,7 @@ import pw.roccodev.beezig.hiveapi.wrapper.player.GameStats;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PlayerStatsCommand implements Command {
@@ -68,6 +69,8 @@ public class PlayerStatsCommand implements Command {
 
             RecordsStatistic pointStringToUse =
                     MultiPsStats.getRecordsStatistic(game, args.length < 2 ? pointsStr : args[1]);
+
+            if(pointStringToUse == null) return;
 
 
 
@@ -135,6 +138,8 @@ public class PlayerStatsCommand implements Command {
         if(args.length == 2) {
             return TabCompletionUtils.matching(args, MultiPsStats.getAllPossibleValues(args[0]));
         }
-        return null;
+        return TabCompletionUtils.matching(args,
+                Arrays.asList("bed", "sky", "timv", "dr", "bp", "cai", "dr", "grav",
+                        "gnt", "gntm", "hide", "lab", "mimv", "sgn"));
     }
 }

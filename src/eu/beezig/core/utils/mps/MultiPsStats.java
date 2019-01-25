@@ -1,9 +1,11 @@
 package eu.beezig.core.utils.mps;
 
+import eu.beezig.core.Log;
 import eu.beezig.core.advancedrecords.AdvancedRecords;
 import eu.beezig.core.advancedrecords.anywhere.AdvancedRecordsAnywhere;
 import eu.beezig.core.advancedrecords.anywhere.GamemodeStatistics;
 import eu.beezig.core.advancedrecords.anywhere.statistic.RecordsStatistic;
+import eu.the5zig.mod.The5zigAPI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +37,10 @@ public class MultiPsStats {
 
     public static RecordsStatistic getRecordsStatistic(String mode, String value) {
         return AdvancedRecordsAnywhere.getGamemode(mode).getStatistics().stream()
-                .filter(s -> value.equals(getValue(s.getKey()))).findAny().orElse(null);
+                .filter(s -> value.equals(getValue(s.getKey()))).findAny().orElseGet(() -> {
+                    The5zigAPI.getAPI().messagePlayer(Log.error + "Statistic not found.");
+                    return null;
+                });
     }
 
     private static String getValue(String s) {
