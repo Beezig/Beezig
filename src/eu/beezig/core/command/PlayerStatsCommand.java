@@ -1,5 +1,6 @@
 package eu.beezig.core.command;
 
+import com.mojang.authlib.GameProfile;
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.Log;
 import eu.beezig.core.advancedrecords.anywhere.AdvancedRecordsAnywhere;
@@ -10,6 +11,7 @@ import eu.beezig.core.hiveapi.stuff.sgn.SGNRank;
 import eu.beezig.core.hiveapi.stuff.timv.TIMVRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
+import eu.beezig.core.utils.TabCompletionUtils;
 import eu.beezig.core.utils.mps.MultiPsStats;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
@@ -126,5 +128,13 @@ public class PlayerStatsCommand implements Command {
         }).start();
 
         return true;
+    }
+
+    @Override
+    public List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
+        if(args.length == 2) {
+            return TabCompletionUtils.matching(args, MultiPsStats.getAllPossibleValues(args[0]));
+        }
+        return null;
     }
 }
