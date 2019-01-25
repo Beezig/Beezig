@@ -94,9 +94,21 @@ public class BestGameCommand implements Command {
     private String parseValue(Object in) {
         if(in == null) return null;
         double d = (double) in;
-        if(d == 0) return "§eNever Played";
-        if(d < 100) return "§c" + df.format(100 - d) + "% worse";
-        else return "§a" + df.format(d - 100) + "% better";
+        if(d == 0) return "§8Never Played";
+        if(d < 100)  {
+            double consider = 100 - d;
+            String color = null;
+
+            if(consider > 90) color = "§7";
+            else if(consider > 80) color = "§4";
+            else if(consider > 70) color = "§c";
+            else if(consider > 60) color = "§6";
+            else if(consider > 30) color = "§e";
+            else color = "§a";
+
+            return color + df.format(100 - d) + "% worse";
+        }
+        else return "§2" + df.format(d - 100) + "% better";
 
     }
 
