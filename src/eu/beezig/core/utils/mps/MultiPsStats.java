@@ -1,9 +1,14 @@
 package eu.beezig.core.utils.mps;
 
+import eu.beezig.core.advancedrecords.AdvancedRecords;
 import eu.beezig.core.advancedrecords.anywhere.AdvancedRecordsAnywhere;
+import eu.beezig.core.advancedrecords.anywhere.GamemodeStatistics;
 import eu.beezig.core.advancedrecords.anywhere.statistic.RecordsStatistic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MultiPsStats {
 
@@ -36,6 +41,18 @@ public class MultiPsStats {
     private static String getValue(String s) {
         if(stats.containsKey(s)) return stats.get(s);
         else return s.toLowerCase().replace(" ", "");
+    }
+
+    public static List<String> getAllPossibleValues(String mode) {
+        List<String> result = new ArrayList<>();
+        GamemodeStatistics gm = AdvancedRecordsAnywhere.getGamemode(mode);
+        if(gm == null) return result;
+
+        return gm.getStatistics().stream().map(stat -> {
+            String value = getValue(stat.getKey());
+            if(value == null) return stat.getKey().toLowerCase().replace(" ", "");
+            else return value;
+        }).collect(Collectors.toList());
     }
 
 }
