@@ -42,6 +42,7 @@ import eu.beezig.core.utils.acr.Connector;
 import eu.beezig.core.utils.autogg.AutoGGListener;
 import eu.beezig.core.utils.autogg.Triggers;
 import eu.beezig.core.utils.autogg.TriggersFetcher;
+import eu.beezig.core.utils.mps.MultiPsStats;
 import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.soundcloud.TrackPlayer;
 import eu.beezig.core.utils.tutorial.SendTutorial;
@@ -378,6 +379,7 @@ public class BeezigMain {
         The5zigAPI.getAPI().getPluginManager().registerListener(this, new AutoGGListener());
 
         AdvancedRecordsAnywhere.register();
+        MultiPsStats.init();
         GlobalConfiguration.setUserAgent(Log.getUserAgent());
         GlobalConfiguration.setMaxthatApiKey("ighGH789fdf5kfHUo");
 

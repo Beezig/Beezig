@@ -32,7 +32,7 @@ public class RecordsStatistic {
         return Setting.THOUSANDS_SEPARATOR.getValue() ? Log.df((long) getValueRaw(o)) : (int)getValueRaw(o);
     }
 
-    double getValueRaw(JSONObject o) {
+    public double getValueRaw(JSONObject o) {
         return (long) o.get(apiKey);
     }
 

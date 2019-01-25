@@ -14,7 +14,7 @@ public class Log {
     public static final String error = "§7▏ §cBeezig§7 ▏ §c";
     public static final String bar = "    §7§m                                                                                    ";
     private static final DecimalFormat bigintFormatter = new DecimalFormat("#,###");
-    private static final DecimalFormat ratioFormatter = new DecimalFormat("#.##");
+    private static final DecimalFormat ratioFormatter = new DecimalFormat("#,###.##");
 
     static List<String> toSendQueue = new ArrayList<>();
 
