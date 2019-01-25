@@ -61,6 +61,11 @@ public class SKYListener extends AbstractGameListener<SKY> {
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 
 
+
+
+                SkyStats api = new SkyStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
+
+
                 if (sb != null && sb.getTitle().contains("Your SKY")) {
                     if (sb.getTitle().contains("Your SKYT"))
                         SKY.mode = "Teams";
@@ -74,8 +79,12 @@ public class SKYListener extends AbstractGameListener<SKY> {
                     SKY.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
                     APIValues.SKYpoints = (long) points;
                 }
+                else {
+                    SKY.apiKills = Math.toIntExact(api.getKills());
+                    SKY.apiDeaths = Math.toIntExact(api.getDeaths());
+                    APIValues.SKYpoints = api.getPoints();
+                }
 
-                SkyStats api = new SkyStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
                 SKY.totalKills = Math.toIntExact(api.getKills());
                 SKY.rankObject = SKYRank.getFromDisplay(api.getTitle());
                 SKY.rank = SKY.rankObject.getTotalDisplay();
