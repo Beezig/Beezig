@@ -11,6 +11,8 @@ import eu.beezig.core.hiveapi.stuff.sky.SKYRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.StreakUtils;
+import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
@@ -19,8 +21,6 @@ import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.SkyStats;
-import eu.beezig.core.utils.StreakUtils;
-import eu.beezig.core.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -61,8 +61,6 @@ public class SKYListener extends AbstractGameListener<SKY> {
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 
 
-
-
                 SkyStats api = new SkyStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
 
 
@@ -78,8 +76,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
                     SKY.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
                     SKY.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
                     APIValues.SKYpoints = (long) points;
-                }
-                else {
+                } else {
                     SKY.apiKills = Math.toIntExact(api.getKills());
                     SKY.apiDeaths = Math.toIntExact(api.getDeaths());
                     APIValues.SKYpoints = api.getPoints();
@@ -159,8 +156,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
                     The5zigAPI.getAPI().messagePlayer(
                             "§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
 
-                }
-                else if(Setting.AUTOVOTE_RANDOM.getValue()) {
+                } else if (Setting.AUTOVOTE_RANDOM.getValue()) {
                     The5zigAPI.getAPI().sendPlayerMessage("/v 6");
                     The5zigAPI.getAPI().messagePlayer(
                             "§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §eAutomatically voted for §cRandom map§e.");
@@ -409,8 +405,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
             }
 
-        }
-        else if(message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §bYou can find all §emessages and game events §bat §a")) {
+        } else if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §bYou can find all §emessages and game events §bat §a")) {
             SKY.gameId = message.replace("§8▍ §b§lSky§e§lWars§8 ▏ §bYou can find all §emessages and game events §bat §ahttp://hivemc.com/skywars/game/", "");
         }
 

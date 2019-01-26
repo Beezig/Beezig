@@ -12,6 +12,8 @@ import eu.beezig.core.hiveapi.stuff.hide.HIDERank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.StreakUtils;
+import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
@@ -20,8 +22,6 @@ import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.HideStats;
-import eu.beezig.core.utils.StreakUtils;
-import eu.beezig.core.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -98,8 +98,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
             DiscordUtils.updatePresence("Playing Hide & Seek", "Hiding on " + HIDE.activeMap, "game_hide");
             HIDE.mostKills = HideMapRecords.getForMap(map);
             Log.addToSendQueue(Log.info + "Your current kills record on §b" + map + "§3 is §b" + HIDE.mostKills + "§3.");
-        }
-        else if(message.contains("for surviving §e")) {
+        } else if (message.contains("for surviving §e")) {
             HIDE.timeAlive = message.split("for surviving §e")[1];
         }
 
@@ -172,11 +171,9 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
-        }
-        else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e30 points§6")) {
+        } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e30 points§6")) {
             HIDE.kills++;
-        }
-        else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e200 points§6")) {
+        } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6You have gained §e200 points§6")) {
             APIValues.HIDEpoints += 200;
             HIDE.dailyPoints += 200;
             HIDE.hasWon = true;
@@ -389,8 +386,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
             }
 
-        }
-        else if(message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §bYou can find all §emessages and game events §bat §a")) {
+        } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §bYou can find all §emessages and game events §bat §a")) {
             HIDE.gameId = message.replace("§8▍ §bHide§aAnd§eSeek§8 ▏ §bYou can find all §emessages and game events §bat §ahttps://hivemc.com/hide-and-seek/game/", "");
         }
 

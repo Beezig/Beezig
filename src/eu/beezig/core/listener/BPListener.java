@@ -10,7 +10,9 @@ import eu.beezig.core.hiveapi.stuff.bp.BPRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
+import eu.beezig.core.utils.ws.Connector;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -19,8 +21,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import org.json.simple.JSONObject;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.BpStats;
-import eu.beezig.core.utils.rpc.DiscordUtils;
-import eu.beezig.core.utils.ws.Connector;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -138,11 +138,9 @@ public class BPListener extends AbstractGameListener<BP> {
             APIValues.BPpoints++;
             BP.gamePts++;
             BP.dailyPoints++;
-        }
-        else if(message.equals("        §a§m                      §f§l NOW PLAYING §a§m                      ")) {
+        } else if (message.equals("        §a§m                      §f§l NOW PLAYING §a§m                      ")) {
             gameMode.setState(GameState.GAME);
-        }
-        else if ((message.equals("                      §6§m                  §6§m                  ")
+        } else if ((message.equals("                      §6§m                  §6§m                  ")
                 && !message.startsWith("§f ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
             BP.footerToSend.add(message);

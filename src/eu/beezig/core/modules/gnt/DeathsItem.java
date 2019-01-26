@@ -28,7 +28,9 @@ public class DeathsItem extends GameModeItem<Giant> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.deaths";}
+    public String getTranslation() {
+        return "beezig.module.deaths";
+    }
 
     @Override
     public void registerSettings() {

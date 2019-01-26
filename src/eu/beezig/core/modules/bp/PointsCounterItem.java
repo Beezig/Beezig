@@ -1,8 +1,8 @@
 package eu.beezig.core.modules.bp;
 
 import eu.beezig.core.Log;
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.BP;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class PointsCounterItem extends GameModeItem<BP> {
 
@@ -16,7 +16,9 @@ public class PointsCounterItem extends GameModeItem<BP> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.game";}
+    public String getTranslation() {
+        return "beezig.module.game";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

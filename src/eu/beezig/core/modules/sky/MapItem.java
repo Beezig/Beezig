@@ -2,9 +2,9 @@ package eu.beezig.core.modules.sky;
 
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.IHive;
+import eu.beezig.core.games.SKY;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
-import eu.beezig.core.games.SKY;
 
 public class MapItem extends GameModeItem<SKY> {
 
@@ -25,7 +25,9 @@ public class MapItem extends GameModeItem<SKY> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.map";}
+    public String getTranslation() {
+        return "beezig.module.map";
+    }
 
 
     @Override

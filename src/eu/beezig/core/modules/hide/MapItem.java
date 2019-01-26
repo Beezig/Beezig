@@ -1,10 +1,10 @@
 package eu.beezig.core.modules.hide;
 
 import eu.beezig.core.ActiveGame;
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.IHive;
 import eu.beezig.core.games.HIDE;
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class MapItem extends GameModeItem<HIDE> {
 
@@ -28,7 +28,9 @@ public class MapItem extends GameModeItem<HIDE> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.map";}
+    public String getTranslation() {
+        return "beezig.module.map";
+    }
 
     @Override
     public void registerSettings() {

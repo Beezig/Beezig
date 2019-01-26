@@ -1,8 +1,8 @@
 package eu.beezig.core.modules.sky;
 
+import eu.beezig.core.games.SKY;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.games.SKY;
 
 public class TeamItem extends GameModeItem<SKY> {
 
@@ -25,7 +25,9 @@ public class TeamItem extends GameModeItem<SKY> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.sky.team";}
+    public String getTranslation() {
+        return "beezig.module.sky.team";
+    }
 
 
     @Override

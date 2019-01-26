@@ -20,7 +20,7 @@ public class GameLogger {
     }
 
 
-    public void logGame(String... toLog){
+    public void logGame(String... toLog) {
         try {
             File toWrite = new File(fileName);
             boolean writeHeaders = false;
@@ -41,10 +41,9 @@ public class GameLogger {
                 else csv.write("Null string?");
             }
             csv.endRecord();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             csv.close();
         }
     }

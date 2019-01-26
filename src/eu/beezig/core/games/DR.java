@@ -1,14 +1,14 @@
 package eu.beezig.core.games;
 
 import eu.beezig.core.ActiveGame;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.games.logging.GameLogger;
+import eu.beezig.core.hiveapi.stuff.dr.DRMap;
+import eu.beezig.core.hiveapi.stuff.dr.DRRank;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.hiveapi.stuff.dr.DRMap;
-import eu.beezig.core.hiveapi.stuff.dr.DRRank;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DR extends GameMode {
-
-    private static GameLogger logger;
 
     public static DRMap activeMap;
     public static String currentMapPB;
@@ -30,9 +28,7 @@ public class DR extends GameMode {
     public static int deaths;
     public static int kills;
     public static int lastPts;
-
     public static String gameId = null;
-
     public static HashMap<String, DRMap> mapsPool;
     public static int dailyPoints;
     public static String rank;
@@ -41,13 +37,14 @@ public class DR extends GameMode {
     public static boolean hasVoted = false;
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
+    private static GameLogger logger;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
 
     public static void initDailyPointsWriter() throws IOException {
 
         logger = new GameLogger(BeezigMain.mcFile + "/dr/games.csv");
-        logger.setHeaders(new String[] {
+        logger.setHeaders(new String[]{
                 "Role",
                 "Map",
                 "Kills",
@@ -108,8 +105,8 @@ public class DR extends GameMode {
     public static void reset(DR gm) {
 
         gm.setState(GameState.FINISHED);
-        if(role != null && activeMap != null && logger != null)
-        logger.logGame(role, activeMap.getDisplayName(), kills + "", deaths + "", gameId, System.currentTimeMillis() + "", mapTime);
+        if (role != null && activeMap != null && logger != null)
+            logger.logGame(role, activeMap.getDisplayName(), kills + "", deaths + "", gameId, System.currentTimeMillis() + "", mapTime);
         activeMap = null;
         currentMapPB = null;
         currentMapWR = null;

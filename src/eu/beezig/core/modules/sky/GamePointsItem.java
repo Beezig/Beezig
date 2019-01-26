@@ -1,7 +1,7 @@
 package eu.beezig.core.modules.sky;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.SKY;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class GamePointsItem extends GameModeItem<SKY> {
 
@@ -21,7 +21,9 @@ public class GamePointsItem extends GameModeItem<SKY> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.game";}
+    public String getTranslation() {
+        return "beezig.module.game";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

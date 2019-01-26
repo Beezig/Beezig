@@ -4,6 +4,7 @@ import eu.beezig.core.games.Arcade;
 
 public class ArcadeSubListener {
 
-    public void onServerChat(Arcade gameMode, String message) {}
+    public void onServerChat(Arcade gameMode, String message) {
+    }
 
 }

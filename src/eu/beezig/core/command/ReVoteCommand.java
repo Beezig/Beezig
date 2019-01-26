@@ -2,7 +2,6 @@ package eu.beezig.core.command;
 
 import eu.beezig.core.games.*;
 import eu.the5zig.mod.The5zigAPI;
-import eu.beezig.core.games.*;
 
 public class ReVoteCommand implements Command {
     @Override

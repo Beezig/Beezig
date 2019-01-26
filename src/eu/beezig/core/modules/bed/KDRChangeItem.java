@@ -1,7 +1,7 @@
 package eu.beezig.core.modules.bed;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.BED;
+import eu.the5zig.mod.modules.GameModeItem;
 
 import java.text.DecimalFormat;
 
@@ -27,7 +27,9 @@ public class KDRChangeItem extends GameModeItem<BED> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.bed.kdchange";}
+    public String getTranslation() {
+        return "beezig.module.bed.kdchange";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

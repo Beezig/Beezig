@@ -24,7 +24,7 @@ public class MapItem extends GameModeItem<TIMV> {
             int t = map.getEnderchests();
 
             tr.append(" (").append(t);
-            if(current){
+            if (current) {
 
                 if ((TIMV.activeMap.getName().equalsIgnoreCase("Precinct") || TIMV.activeMap.getName().equalsIgnoreCase("Azure Island")) && TIMV.currentEnderchests != 0) {
                     //remove unaccessible echest from tracker
@@ -50,7 +50,9 @@ public class MapItem extends GameModeItem<TIMV> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.map";}
+    public String getTranslation() {
+        return "beezig.module.map";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

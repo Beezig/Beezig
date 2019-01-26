@@ -1,7 +1,7 @@
 package eu.beezig.core.autovote;
 
-import org.yaml.snakeyaml.Yaml;
 import eu.beezig.core.BeezigMain;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.util.ArrayList;

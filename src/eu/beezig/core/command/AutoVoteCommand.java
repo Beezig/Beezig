@@ -1,13 +1,13 @@
 package eu.beezig.core.command;
 
 import com.mojang.authlib.GameProfile;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
+import eu.beezig.core.api.BeezigAPI;
 import eu.beezig.core.autovote.AutovoteUtils;
 import eu.beezig.core.utils.TabCompletionUtils;
 import eu.the5zig.mod.The5zigAPI;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.api.BeezigAPI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +32,7 @@ public class AutoVoteCommand implements Command {
         if (!(The5zigAPI.getAPI().getActiveServer() instanceof IHive))
             return false;
 
-        if(BeezigMain.hasExpansion && args.length == 0) {
+        if (BeezigMain.hasExpansion && args.length == 0) {
             BeezigAPI.get().getListener().displayAutovoteGui();
             return true;
         }
@@ -134,7 +134,7 @@ public class AutoVoteCommand implements Command {
 
     @Override
     public List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
-        if(args.length == 1)
+        if (args.length == 1)
             return TabCompletionUtils.matching(args, Arrays.asList("add", "list", "remove", "place"));
         return new ArrayList<>();
     }

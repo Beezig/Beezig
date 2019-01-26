@@ -1,14 +1,14 @@
 package eu.beezig.core.games;
 
 import eu.beezig.core.ActiveGame;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.games.logging.GameLogger;
+import eu.beezig.core.hiveapi.stuff.cai.CAIRank;
+import eu.beezig.core.utils.StreakUtils;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.hiveapi.stuff.cai.CAIRank;
-import eu.beezig.core.utils.StreakUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,37 +17,32 @@ import java.util.List;
 public class CAI extends GameMode {
 
     public static String activeMap;
-
-    private static GameLogger logger;
     public static String gameId;
-
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
     public static boolean hasVoted = false;
     public static List<String> votesToParse = new ArrayList<>();
-
     public static boolean inGame;
     public static boolean hasWon;
     public static int winstreak;
     public static int bestStreak;
-
     public static long speedCooldown;
     public static long invisCooldown;
     public static long leaderItem0;
     public static long leaderItem1;
     public static long leaderItem2;
-
     public static long gamePoints;
     public static int dailyPoints;
     public static String rank;
     public static String team;
     public static CAIRank rankObject;
+    private static GameLogger logger;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
 
     public static void initDailyPointsWriter() throws IOException {
         logger = new GameLogger(BeezigMain.mcFile + "/cai/games.csv");
-        logger.setHeaders(new String[] {
+        logger.setHeaders(new String[]{
                 "Points",
                 "Map",
                 "Victory?",
@@ -113,8 +108,8 @@ public class CAI extends GameMode {
             StreakUtils.resetWinstreak("cai", wasBest);
         }
         System.out.println(inGame + " " + logger);
-        if(inGame && logger != null)
-        logger.logGame(gamePoints + "", activeMap, hasWon ? "Yes" : "No", gameId, System.currentTimeMillis() + "");
+        if (inGame && logger != null)
+            logger.logGame(gamePoints + "", activeMap, hasWon ? "Yes" : "No", gameId, System.currentTimeMillis() + "");
 
         gameId = null;
         inGame = false;

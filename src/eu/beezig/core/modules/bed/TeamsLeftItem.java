@@ -1,7 +1,7 @@
 package eu.beezig.core.modules.bed;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.BED;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class TeamsLeftItem extends GameModeItem<BED> {
 
@@ -17,7 +17,9 @@ public class TeamsLeftItem extends GameModeItem<BED> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.bed.teamsleft";}
+    public String getTranslation() {
+        return "beezig.module.bed.teamsleft";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

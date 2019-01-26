@@ -61,7 +61,6 @@ public enum Setting {
     BP_JUKEBOX(true, "BP Jukebox", "BP - Listen to music while playing", "RECORD_3");
 
 
-
     private boolean value;
     private String briefDesc, brieferDesc, labyIcon;
 

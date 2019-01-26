@@ -1,8 +1,8 @@
 package eu.beezig.core.modules.cai;
 
+import eu.beezig.core.games.CAI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.games.CAI;
 
 public class TeamItem extends GameModeItem<CAI> {
 
@@ -25,7 +25,9 @@ public class TeamItem extends GameModeItem<CAI> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.cai.team";}
+    public String getTranslation() {
+        return "beezig.module.cai.team";
+    }
 
 
     @Override

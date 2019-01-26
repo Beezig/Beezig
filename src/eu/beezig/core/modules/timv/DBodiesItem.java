@@ -1,9 +1,9 @@
 package eu.beezig.core.modules.timv;
 
-import eu.the5zig.mod.modules.GameModeItem;
-import eu.the5zig.mod.server.GameState;
 import eu.beezig.core.Log;
 import eu.beezig.core.games.TIMV;
+import eu.the5zig.mod.modules.GameModeItem;
+import eu.the5zig.mod.server.GameState;
 
 public class DBodiesItem extends GameModeItem<TIMV> {
 
@@ -19,7 +19,9 @@ public class DBodiesItem extends GameModeItem<TIMV> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.timv.dbodies";}
+    public String getTranslation() {
+        return "beezig.module.timv.dbodies";
+    }
 
 
     // LabyMod

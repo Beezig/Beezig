@@ -1,8 +1,8 @@
 package eu.beezig.core.modules.dr;
 
 import eu.beezig.core.Log;
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.DR;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class DailyItem extends GameModeItem<DR> {
 
@@ -18,7 +18,9 @@ public class DailyItem extends GameModeItem<DR> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.daily";}
+    public String getTranslation() {
+        return "beezig.module.daily";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

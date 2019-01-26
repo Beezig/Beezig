@@ -1,22 +1,20 @@
 package eu.beezig.core.games;
 
 import eu.beezig.core.ActiveGame;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.games.logging.GameLogger;
+import eu.beezig.core.hiveapi.stuff.gnt.GiantRank;
+import eu.beezig.core.utils.StreakUtils;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.hiveapi.stuff.gnt.GiantRank;
-import eu.beezig.core.utils.StreakUtils;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Giant extends GameMode {
-
-    private static GameLogger logger;
 
     public static int points;
     public static int teamsEliminated;
@@ -25,22 +23,17 @@ public class Giant extends GameMode {
     public static String team = "";
     public static String activeMap;
     public static int giantKills;
-
     public static boolean hasVoted;
-
     public static String rank;
     public static GiantRank rankObject;
-
-
     public static boolean inGame;
     public static boolean hasWon;
     public static boolean isEnding;
     public static int winstreak;
     public static int bestStreak;
+    public static int totalKills;
 
     //KDR
-
-    public static int totalKills;
     public static int totalDeaths;
     public static int gameDeaths;
     public static int gameKills;
@@ -50,9 +43,10 @@ public class Giant extends GameMode {
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
     public static List<String> votesToParse = new ArrayList<>();
+    public static String gameId;
+    private static GameLogger logger;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
-    public static String gameId;
 
     public Giant() {
         instance = this;
@@ -60,7 +54,7 @@ public class Giant extends GameMode {
 
     public static void initDailyPointsWriter() throws IOException {
         logger = new GameLogger(BeezigMain.mcFile + "/gnt/games.csv");
-        logger.setHeaders(new String[] {
+        logger.setHeaders(new String[]{
                 "Mode",
                 "Map",
                 "Kills",
@@ -127,7 +121,7 @@ public class Giant extends GameMode {
             StreakUtils.resetWinstreak("gnt", wasBest);
         }
         System.out.println(inGame + " " + logger);
-        if(inGame && logger != null)
+        if (inGame && logger != null)
             logger.logGame(ActiveGame.is("GNTM") ? "Mini" : "Normal",
                     activeMap, gameKills + "", gameDeaths + "", giantKills + "", hasWon ? "Yes" : "No", System.currentTimeMillis() + "", gameId);
 

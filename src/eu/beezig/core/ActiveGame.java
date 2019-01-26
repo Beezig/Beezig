@@ -12,7 +12,7 @@ public class ActiveGame {
 
     public static void set(String s) {
         current = s;
-        if(BeezigMain.hasExpansion) BeezigAPI.get().getListener().setActiveGame(s);
+        if (BeezigMain.hasExpansion) BeezigAPI.get().getListener().setActiveGame(s);
     }
 
     public static boolean is(String game) {

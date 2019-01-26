@@ -3,7 +3,6 @@ package eu.beezig.core.command;
 import com.mojang.authlib.GameProfile;
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.Log;
-import eu.beezig.core.advancedrecords.anywhere.AdvancedRecordsAnywhere;
 import eu.beezig.core.advancedrecords.anywhere.statistic.RecordsStatistic;
 import eu.beezig.core.hiveapi.stuff.RankEnum;
 import eu.beezig.core.hiveapi.stuff.bed.BEDRank;
@@ -70,8 +69,7 @@ public class PlayerStatsCommand implements Command {
             RecordsStatistic pointStringToUse =
                     MultiPsStats.getRecordsStatistic(game, args.length < 2 ? pointsStr : args[1]);
 
-            if(pointStringToUse == null) return;
-
+            if (pointStringToUse == null) return;
 
 
             for (NetworkPlayerInfo npi : The5zigAPI.getAPI().getServerPlayers()) {
@@ -83,7 +81,7 @@ public class PlayerStatsCommand implements Command {
                     HivePlayer parent = api.getPlayer();
                     ChatColor rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
 
-                    points.add(((Number)pointStringToUse.getValueRaw(api.getSource().getInput())).doubleValue());
+                    points.add(((Number) pointStringToUse.getValueRaw(api.getSource().getInput())).doubleValue());
 
                     RankEnum rank = game.equalsIgnoreCase("bed")
                             ? (BEDRank.newIsNo1(api.getSource().getString("title"), api.getPoints()) ? BEDRank.ZZZZZZ
@@ -92,12 +90,13 @@ public class PlayerStatsCommand implements Command {
                         rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, api.getSource().getString("title"));
                     }
 
-                    if(game.equalsIgnoreCase("timv"))
-                        title.add(((TIMVRank)rank).getTotalDisplay(api.getPoints()));
+                    if (game.equalsIgnoreCase("timv"))
+                        title.add(((TIMVRank) rank).getTotalDisplay(api.getPoints()));
                     else
                         title.add(rank.getTotalDisplay());
                     name.add(rankColor + display);
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
 
             APIUtils.concurrentSort(points, points, title, name);
@@ -118,7 +117,7 @@ public class PlayerStatsCommand implements Command {
 
                     }
                 } catch (Exception e) {
-                   // e.printStackTrace();
+                    // e.printStackTrace();
                 }
             }
             The5zigAPI.getAPI()
@@ -135,7 +134,7 @@ public class PlayerStatsCommand implements Command {
 
     @Override
     public List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
-        if(args.length == 2) {
+        if (args.length == 2) {
             return TabCompletionUtils.matching(args, MultiPsStats.getAllPossibleValues(args[0]));
         }
         return TabCompletionUtils.matching(args,

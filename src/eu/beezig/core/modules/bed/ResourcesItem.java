@@ -1,16 +1,16 @@
 package eu.beezig.core.modules.bed;
 
+import eu.beezig.core.games.BED;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.render.RenderLocation;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.games.BED;
 
 public class ResourcesItem extends GameModeItem<BED> {
 
-	private int size = 0;
-	
+    private int size = 0;
+
     public ResourcesItem() {
         super(BED.class);
     }
@@ -44,9 +44,8 @@ public class ResourcesItem extends GameModeItem<BED> {
                 int goldIngots = The5zigAPI.getAPI().getItemCount("minecraft:gold_ingot");
                 int diamonds = The5zigAPI.getAPI().getItemCount("minecraft:diamond");
                 int emeralds = The5zigAPI.getAPI().getItemCount("minecraft:emerald");
-                
-            
-                
+
+
                 if (ironIngots != 0)
                     sb.append(colors ? "§7" + ironIngots : ironIngots).append(colors ? " §7Iron " + getMainFormatting() + "/ " : " Iron / ");
                 if (goldIngots != 0)
@@ -72,9 +71,8 @@ public class ResourcesItem extends GameModeItem<BED> {
                 int goldIngots = The5zigAPI.getAPI().getItemCount("minecraft:gold_ingot");
                 int diamonds = The5zigAPI.getAPI().getItemCount("minecraft:diamond");
                 int emeralds = The5zigAPI.getAPI().getItemCount("minecraft:emerald");
-                
-                
-                
+
+
                 if (ironIngots != 0)
                     sb.append(colors ? "§7" + ironIngots : ironIngots).append(colors ? " §7I " + getMainFormatting() + "/ " : " I / ");
                 if (goldIngots != 0)
@@ -99,21 +97,21 @@ public class ResourcesItem extends GameModeItem<BED> {
     }
 
     @Override
-	public int getHeight(boolean dummy) {
-    	ResourcesMode mode = (ResourcesMode) getProperties().getSetting("mode").get();
-    	switch(mode) {
-    	
-    	case INLINE:
-    	case INLINE_SHORTENED:
-    		return super.getHeight(dummy);
-    	case EXTENDED:
-    		return size + 10;
-    	}
-    	
-    	return super.getHeight(dummy);
-	}
+    public int getHeight(boolean dummy) {
+        ResourcesMode mode = (ResourcesMode) getProperties().getSetting("mode").get();
+        switch (mode) {
 
-    
+            case INLINE:
+            case INLINE_SHORTENED:
+                return super.getHeight(dummy);
+            case EXTENDED:
+                return size + 10;
+        }
+
+        return super.getHeight(dummy);
+    }
+
+
     @Override
     public void render(int x, int y, RenderLocation renderLocation, boolean dummy) {
         if (getProperties().getSetting("mode").get() != ResourcesMode.EXTENDED) {
@@ -131,10 +129,10 @@ public class ResourcesItem extends GameModeItem<BED> {
         int goldIngots = The5zigAPI.getAPI().getItemCount("minecraft:gold_ingot");
         int diamonds = The5zigAPI.getAPI().getItemCount("minecraft:diamond");
         int emeralds = The5zigAPI.getAPI().getItemCount("minecraft:emerald");
-        
+
         int calcSize = (ironIngots != 0 ? 10 : 0) + (goldIngots != 0 ? 10 : 0) + (diamonds != 0 ? 10 : 0) + (emeralds != 0 ? 10 : 0);
-        if(size != calcSize) size = calcSize;
-        
+        if (size != calcSize) size = calcSize;
+
         if (ironIngots != 0) {
             if (colors) {
                 The5zigAPI.getAPI().getRenderHelper().drawString(ironIngots + " Iron", x, y + lineCount * 10, ChatColor.GRAY.getColor(), true);
@@ -172,7 +170,9 @@ public class ResourcesItem extends GameModeItem<BED> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.bed.resources";}
+    public String getTranslation() {
+        return "beezig.module.bed.resources";
+    }
 
 
     @Override

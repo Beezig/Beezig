@@ -2,10 +2,10 @@ package eu.beezig.core.games;
 
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.IHive;
+import eu.beezig.core.hiveapi.stuff.grav.GRAVRank;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
-import eu.beezig.core.hiveapi.stuff.grav.GRAVRank;
 
 import java.util.ArrayList;
 import java.util.HashMap;

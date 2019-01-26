@@ -1,8 +1,8 @@
 package eu.beezig.core.utils.autogg;
 
+import eu.beezig.core.BeezigMain;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import eu.beezig.core.BeezigMain;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

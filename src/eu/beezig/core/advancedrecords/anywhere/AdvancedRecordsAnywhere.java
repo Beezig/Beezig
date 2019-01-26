@@ -1,9 +1,5 @@
 package eu.beezig.core.advancedrecords.anywhere;
 
-import eu.the5zig.mod.The5zigAPI;
-import org.json.simple.JSONObject;
-import pw.roccodev.beezig.hiveapi.wrapper.player.GameStats;
-import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import eu.beezig.core.Log;
 import eu.beezig.core.advancedrecords.anywhere.statistic.PercentRatioStatistic;
 import eu.beezig.core.advancedrecords.anywhere.statistic.RatioRecordsStatistic;
@@ -12,13 +8,15 @@ import eu.beezig.core.advancedrecords.anywhere.statistic.TimeStatistic;
 import eu.beezig.core.advancedrecords.anywhere.util.ArcadeGamemodeBuilder;
 import eu.beezig.core.advancedrecords.anywhere.util.GamemodeBuilder;
 import eu.beezig.core.settings.Setting;
+import eu.the5zig.mod.The5zigAPI;
+import org.json.simple.JSONObject;
+import pw.roccodev.beezig.hiveapi.wrapper.player.GameStats;
+import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdvancedRecordsAnywhere {
-
-    private static List<GamemodeStatistics> gamemodes = new ArrayList<>();
 
     // A bunch of string constants
     private static final String PTS = "Points";
@@ -28,10 +26,11 @@ public class AdvancedRecordsAnywhere {
     private static final String D = "Deaths";
     private static final String KD = "K/D";
     private static final String WR = "Win Rate";
+    private static List<GamemodeStatistics> gamemodes = new ArrayList<>();
 
     public static GamemodeStatistics getGamemode(String query) {
-        for(GamemodeStatistics gamemode : gamemodes) {
-            if(query.matches("(?i:" + gamemode.getGamemode() + ")")) return gamemode;
+        for (GamemodeStatistics gamemode : gamemodes) {
+            if (query.matches("(?i:" + gamemode.getGamemode() + ")")) return gamemode;
         }
         return null;
     }
@@ -187,15 +186,12 @@ public class AdvancedRecordsAnywhere {
                 .build());
 
 
-
-
-
     }
 
     public static void run(String player, String mode) {
         GamemodeStatistics gm = getGamemode(mode);
-        if(gm == null) {
-           The5zigAPI.getAPI().messagePlayer(Log.error + "Game mode not found or not supported.");
+        if (gm == null) {
+            The5zigAPI.getAPI().messagePlayer(Log.error + "Game mode not found or not supported.");
             return;
         }
         The5zigAPI.getAPI().messagePlayer(Log.info + "Running Advanced Records...");
@@ -204,7 +200,7 @@ public class AdvancedRecordsAnywhere {
             GameStats apiObj = new GameStats(player, mode.toUpperCase());
             try {
                 apiObj.getSource().fetch();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 The5zigAPI.getAPI().messagePlayer(Log.error + "Player not found.");
                 return;
             }
@@ -212,9 +208,9 @@ public class AdvancedRecordsAnywhere {
             HivePlayer parent = apiObj.getPlayer();
             The5zigAPI.getAPI().messagePlayer("§f          §6§m                  §f " + parent.getUsername() + "'s Stats §6§m                  ");
 
-            for(RecordsStatistic stat : gm.getStatistics()) {
-                if(stat.getSetting() == null || stat.getSetting().getValue())
-                The5zigAPI.getAPI().messagePlayer(" §a§3" + stat.getKey() + ":§b " + stat.getValue(jObj));
+            for (RecordsStatistic stat : gm.getStatistics()) {
+                if (stat.getSetting() == null || stat.getSetting().getValue())
+                    The5zigAPI.getAPI().messagePlayer(" §a§3" + stat.getKey() + ":§b " + stat.getValue(jObj));
             }
 
             The5zigAPI.getAPI().messagePlayer("§f                      §6§m                  §6§m                  ");
@@ -223,7 +219,6 @@ public class AdvancedRecordsAnywhere {
         }).start();
 
     }
-
 
 
 }

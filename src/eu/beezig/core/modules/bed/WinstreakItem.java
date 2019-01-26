@@ -1,8 +1,8 @@
 package eu.beezig.core.modules.bed;
 
 import eu.beezig.core.Log;
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.BED;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class WinstreakItem extends GameModeItem<BED> {
 
@@ -24,7 +24,9 @@ public class WinstreakItem extends GameModeItem<BED> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.winstreak";}
+    public String getTranslation() {
+        return "beezig.module.winstreak";
+    }
 
     @Override
     public void registerSettings() {

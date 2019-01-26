@@ -1,8 +1,8 @@
 package eu.beezig.core.hiveapi.stuff.dr;
 
 import eu.beezig.core.Log;
-import eu.the5zig.mod.The5zigAPI;
 import eu.beezig.core.hiveapi.stuff.RankEnum;
+import eu.the5zig.mod.The5zigAPI;
 
 import java.util.ArrayList;
 import java.util.Arrays;

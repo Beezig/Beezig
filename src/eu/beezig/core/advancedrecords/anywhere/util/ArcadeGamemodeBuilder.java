@@ -9,11 +9,11 @@ public class ArcadeGamemodeBuilder extends GamemodeBuilder {
         super(gamemode);
 
         addStatistic(new RecordsStatistic("Points", pointsApiKey));
-        if(victoriesApiKey != null)
+        if (victoriesApiKey != null)
             addStatistic(new RecordsStatistic("Victories", victoriesApiKey));
-        if(playedApiKey != null)
-        addStatistic(new RecordsStatistic("Games Played", playedApiKey));
-        if(victoriesApiKey != null)
+        if (playedApiKey != null)
+            addStatistic(new RecordsStatistic("Games Played", playedApiKey));
+        if (victoriesApiKey != null)
             addStatistic(new PercentRatioStatistic("Win Rate", victoriesApiKey, playedApiKey));
 
     }

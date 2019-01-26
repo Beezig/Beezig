@@ -2,14 +2,13 @@ package eu.beezig.core;
 
 import eu.beezig.core.advancedrecords.AdvancedRecords;
 import eu.beezig.core.listener.*;
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.server.GameListenerRegistry;
-import eu.the5zig.mod.server.ServerInstance;
-import eu.beezig.core.listener.*;
 import eu.beezig.core.notes.NotesManager;
 import eu.beezig.core.utils.autogg.Triggers;
 import eu.beezig.core.utils.autogg.TriggersFetcher;
 import eu.beezig.core.utils.rpc.DiscordUtils;
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.server.GameListenerRegistry;
+import eu.the5zig.mod.server.ServerInstance;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.Calendar;
@@ -49,7 +48,7 @@ public class IHive extends ServerInstance {
         if (host.toLowerCase().contains("hivemc.") || host.toLowerCase().endsWith("hive.sexy")) {
             System.out.println("Joined Hive.");
             joined = System.currentTimeMillis();
-            if(BeezigMain.disabled) {
+            if (BeezigMain.disabled) {
                 Log.addToSendQueue("                         §4§m                              ");
                 Log.addToSendQueue("");
                 Log.addToSendQueue("                       §4§l!! UPDATE REQUIRED !!");
@@ -60,8 +59,7 @@ public class IHive extends ServerInstance {
                 Log.addToSendQueue("                     §7To update, use the installer.");
                 Log.addToSendQueue("");
                 Log.addToSendQueue("                         §4§m                              ");
-            }
-            else if(BeezigMain.newUpdate) {
+            } else if (BeezigMain.newUpdate) {
                 Log.addToSendQueue("                         §b§m                              ");
                 Log.addToSendQueue("");
                 Log.addToSendQueue("                       §b§l!! UPDATE AVAILABLE !!");

@@ -68,7 +68,9 @@ public class PointsItem extends GameModeItem<Giant> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.points";}
+    public String getTranslation() {
+        return "beezig.module.points";
+    }
 
 
     @Override

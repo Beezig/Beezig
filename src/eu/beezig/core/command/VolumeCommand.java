@@ -1,10 +1,10 @@
 package eu.beezig.core.command;
 
-import eu.the5zig.mod.The5zigAPI;
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
 import eu.beezig.core.utils.soundcloud.TrackPlayer;
+import eu.the5zig.mod.The5zigAPI;
 
 public class VolumeCommand implements Command {
 

@@ -1,9 +1,9 @@
 package eu.beezig.core.command;
 
-import eu.the5zig.mod.The5zigAPI;
 import eu.beezig.core.Log;
 import eu.beezig.core.settings.Setting;
 import eu.beezig.core.utils.autogg.Triggers;
+import eu.the5zig.mod.The5zigAPI;
 
 import java.io.IOException;
 import java.util.Arrays;

@@ -77,21 +77,20 @@ public class CooldownsItem extends GameModeItem<CAI> {
     public String getName() {
         return ""; // Ignored
     }
-    
-    
+
 
     @Override
-	public int getHeight(boolean dummy) {
-		
-    	return (CAI.speedCooldown != 0 ? 12 : 0)
-    			+ (CAI.invisCooldown != 0 ? 12 : 0)
-    			+ (CAI.leaderItem0 != 0 ? 12 : 0)
-    			+ (CAI.leaderItem1 != 0 ? 12 : 0)
-    			+ (CAI.leaderItem2 != 0 ? 12 : 0);
-    	
-	}
+    public int getHeight(boolean dummy) {
 
-	@Override
+        return (CAI.speedCooldown != 0 ? 12 : 0)
+                + (CAI.invisCooldown != 0 ? 12 : 0)
+                + (CAI.leaderItem0 != 0 ? 12 : 0)
+                + (CAI.leaderItem1 != 0 ? 12 : 0)
+                + (CAI.leaderItem2 != 0 ? 12 : 0);
+
+    }
+
+    @Override
     public boolean shouldRender(boolean dummy) {
         try {
             return dummy || (CAI.shouldRender(getGameMode().getState()));

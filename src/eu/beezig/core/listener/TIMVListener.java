@@ -1,6 +1,7 @@
 package eu.beezig.core.listener;
 
 import eu.beezig.core.ActiveGame;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
 import eu.beezig.core.advancedrecords.AdvancedRecords;
@@ -11,6 +12,7 @@ import eu.beezig.core.hiveapi.stuff.timv.TIMVRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
@@ -20,8 +22,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.monthly.timv.TimvMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.TimvStats;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -185,14 +185,11 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             The5zigAPI.getLogger().info("FALLBACK: " + map);
 
             TIMV.activeMap = TIMV.mapsPool.get(map.toLowerCase());
-        }
-        else if(message.startsWith("§8▍ §6TIMV§8 ▏ §1You will be a detective.")) {
+        } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §1You will be a detective.")) {
             TIMV.currentPassStatus = 2;
-        }
-        else if(message.startsWith("§8▍ §6TIMV§8 ▏ §4You will be a traitor.")) {
+        } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §4You will be a traitor.")) {
             TIMV.currentPassStatus = 1;
-        }
-        else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
+        } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             //"          §6§m                  §f ItsNiklass's Stats §6§m                  "
             //Advanced Records
             TIMV.messagesToSend.add(message);
@@ -243,7 +240,8 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                         try {
                             TimvMonthlyProfile monthlyProfile = api.getMonthlyProfile();
                             monthlyRank = Math.toIntExact((Setting.SHOW_RECORDS_MONTHLYRANK.getValue() && monthlyProfile != null) ? api.getMonthlyProfile().getPlace() : 0);
-                        } catch(Exception ignored) {}
+                        } catch (Exception ignored) {
+                        }
                         if (rankTitleTIMV != null) rank = TIMVRank.getFromDisplay(rankTitleTIMV);
                         List<String> messages = new ArrayList<>(TIMV.messagesToSend);
                         Iterator<String> it = messages.iterator();
@@ -537,7 +535,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                 TIMV.gameID = data[1];
                 TIMV.actionBarChecked = true;
                 Log.addToSendQueue(Log.info + "Game ID: §b" + TIMV.gameID + " > §a"
-                + "http://hivemc.com/trouble-in-mineville/game/" + TIMV.gameID);
+                        + "http://hivemc.com/trouble-in-mineville/game/" + TIMV.gameID);
             }
         }
         return false;

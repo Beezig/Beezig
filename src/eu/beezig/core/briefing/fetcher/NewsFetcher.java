@@ -1,9 +1,5 @@
 package eu.beezig.core.briefing.fetcher;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import eu.beezig.core.BeezigMain;
 import eu.beezig.core.briefing.News;
 import eu.beezig.core.briefing.Pools;
@@ -11,6 +7,10 @@ import eu.beezig.core.briefing.lergin.NewMap;
 import eu.beezig.core.briefing.lergin.StaffChangeType;
 import eu.beezig.core.briefing.lergin.StaffUpdate;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.net.URL;

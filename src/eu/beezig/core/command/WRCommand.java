@@ -10,6 +10,22 @@ import pw.roccodev.beezig.hiveapi.wrapper.speedrun.WorldRecord;
 
 public class WRCommand implements Command {
 
+    public static String getWorldRecord(double time) {
+
+
+        if (time >= 60) {
+            int seconds = (int) (Math.floor(time) % 60);
+            double millis = Math.floor(((time - seconds) - 60) * 1000) / 1000;
+            int minutes = Math.floorDiv((int) (time - millis), 60);
+            if (seconds < 10) {
+                return (minutes + ":0" + (seconds + millis));
+            }
+            return (minutes + ":" + (seconds + millis));
+        }
+        return "0:" + time;
+
+    }
+
     @Override
     public String getName() {
         // TODO Auto-generated method stub
@@ -42,22 +58,6 @@ public class WRCommand implements Command {
         }
 
         return true;
-    }
-
-    public static String getWorldRecord(double time) {
-
-
-        if (time >= 60) {
-            int seconds = (int) (Math.floor(time) % 60);
-            double millis = Math.floor(((time - seconds) - 60) * 1000) / 1000;
-            int minutes = Math.floorDiv((int) (time - millis), 60);
-            if (seconds < 10) {
-                return (minutes + ":0" + (seconds + millis));
-            }
-            return (minutes + ":" + (seconds + millis));
-        }
-        return "0:" + time;
-
     }
 
 

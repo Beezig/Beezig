@@ -25,7 +25,9 @@ public class MapItem extends GameModeItem<Giant> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.map";}
+    public String getTranslation() {
+        return "beezig.module.map";
+    }
 
 
     @Override

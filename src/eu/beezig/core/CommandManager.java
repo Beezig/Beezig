@@ -1,7 +1,7 @@
 package eu.beezig.core;
 
-import eu.the5zig.mod.The5zigAPI;
 import eu.beezig.core.command.Command;
+import eu.the5zig.mod.The5zigAPI;
 
 import java.util.*;
 

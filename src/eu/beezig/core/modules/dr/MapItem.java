@@ -1,9 +1,9 @@
 package eu.beezig.core.modules.dr;
 
 import eu.beezig.core.Log;
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.DR;
 import eu.beezig.core.hiveapi.stuff.dr.DRMap;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class MapItem extends GameModeItem<DR> {
 
@@ -26,7 +26,9 @@ public class MapItem extends GameModeItem<DR> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.map";}
+    public String getTranslation() {
+        return "beezig.module.map";
+    }
 
     @Override
     public void registerSettings() {

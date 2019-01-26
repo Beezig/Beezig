@@ -4,9 +4,9 @@ import eu.beezig.core.Log;
 import eu.beezig.core.briefing.lergin.NewMap;
 import eu.beezig.core.briefing.lergin.StaffChangeType;
 import eu.beezig.core.briefing.lergin.StaffUpdate;
+import eu.beezig.core.settings.Setting;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.settings.Setting;
 
 import java.util.ArrayList;
 import java.util.Collections;

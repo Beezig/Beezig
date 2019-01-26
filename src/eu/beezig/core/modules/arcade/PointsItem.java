@@ -1,10 +1,10 @@
 package eu.beezig.core.modules.arcade;
 
-import eu.the5zig.mod.modules.GameModeItem;
-import eu.the5zig.mod.server.GameState;
 import eu.beezig.core.Log;
 import eu.beezig.core.games.Arcade;
 import eu.beezig.core.hiveapi.APIValues;
+import eu.the5zig.mod.modules.GameModeItem;
+import eu.the5zig.mod.server.GameState;
 
 public class PointsItem extends GameModeItem<Arcade> {
 
@@ -13,12 +13,11 @@ public class PointsItem extends GameModeItem<Arcade> {
     }
 
 
-
     @Override
     protected Object getValue(boolean dummy) {
         try {
 
-               return Log.df(APIValues.ArcadePoints);
+            return Log.df(APIValues.ArcadePoints);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,7 +26,9 @@ public class PointsItem extends GameModeItem<Arcade> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.points";}
+    public String getTranslation() {
+        return "beezig.module.points";
+    }
 
 
     @Override
@@ -36,7 +37,7 @@ public class PointsItem extends GameModeItem<Arcade> {
             if (getGameMode() == null) return false;
             if (!super.shouldRender(dummy)) return false;
             return dummy || getGameMode().getState() != GameState.FINISHED;
-        } catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }

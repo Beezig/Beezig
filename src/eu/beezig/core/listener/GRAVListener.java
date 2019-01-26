@@ -1,6 +1,7 @@
 package eu.beezig.core.listener;
 
 import eu.beezig.core.ActiveGame;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
 import eu.beezig.core.advancedrecords.AdvancedRecords;
@@ -10,6 +11,7 @@ import eu.beezig.core.hiveapi.stuff.grav.GRAVRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
@@ -18,8 +20,6 @@ import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.GravStats;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
 import java.text.DecimalFormat;

@@ -1,7 +1,7 @@
 package eu.beezig.core.advancedrecords.anywhere.statistic;
 
-import org.json.simple.JSONObject;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
+import org.json.simple.JSONObject;
 
 public class TimeStatistic extends RecordsStatistic {
 
@@ -11,6 +11,6 @@ public class TimeStatistic extends RecordsStatistic {
 
     @Override
     public Object getValue(JSONObject o) {
-        return APIUtils.getTimePassed((long)getValueRaw(o));
+        return APIUtils.getTimePassed((long) getValueRaw(o));
     }
 }

@@ -57,7 +57,7 @@ public class LeaderboardCommand implements Command {
             long startT = System.currentTimeMillis();
 
             The5zigAPI.getAPI().messagePlayer(Log.info + "Gathering data...");
-            List<LeaderboardPlace> data = new Game(game.toUpperCase()).getLeaderboard((int)indexStart, (int)indexEnd).getPlayers();
+            List<LeaderboardPlace> data = new Game(game.toUpperCase()).getLeaderboard((int) indexStart, (int) indexEnd).getPlayers();
 
 
             List<Long> points = new ArrayList<>();
@@ -68,29 +68,30 @@ public class LeaderboardCommand implements Command {
                     || game.equalsIgnoreCase("cai") ? "points" : (game.equalsIgnoreCase("timv")
                     ? "karma" : "total_points");
 
-            for(LeaderboardPlace place : data) {
+            for (LeaderboardPlace place : data) {
                 try {
-                GameStats stats = new GameStats((String)place.get("UUID"), game.toUpperCase());
-                String ptsToUse = place.containsKey("points") ? "points" : "total_points";
+                    GameStats stats = new GameStats((String) place.get("UUID"), game.toUpperCase());
+                    String ptsToUse = place.containsKey("points") ? "points" : "total_points";
 
-                long pts = stats.getSource().getLong(ptsToUse);
+                    long pts = stats.getSource().getLong(ptsToUse);
 
-                points.add(pts);
+                    points.add(pts);
 
-                RankEnum rank = game.equalsIgnoreCase("bed") ? ((place.getHumanPlace() == 1) ? BEDRank.ZZZZZZ : BEDRank.getRank(pts)) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(pts) : null);
-                if (rank == null) {
-                    rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, stats.getSource().getString("title"));
-                }
+                    RankEnum rank = game.equalsIgnoreCase("bed") ? ((place.getHumanPlace() == 1) ? BEDRank.ZZZZZZ : BEDRank.getRank(pts)) : (game.equalsIgnoreCase("sgn") ? SGNRank.getRank(pts) : null);
+                    if (rank == null) {
+                        rank = (RankEnum) enumToUse.getMethod("getFromDisplay", String.class).invoke(null, stats.getSource().getString("title"));
+                    }
 
-                    if(game.equalsIgnoreCase("timv"))
-                        title.add(((TIMVRank)rank).getTotalDisplay(pts));
+                    if (game.equalsIgnoreCase("timv"))
+                        title.add(((TIMVRank) rank).getTotalDisplay(pts));
                     else
                         title.add(rank.getTotalDisplay());
                     name.add(NetworkRank.fromDisplay(stats.getPlayer().getRank().getHumanName()).getColor() +
                             place.get("username").toString());
 
 
-                } catch (Exception ignored) { }
+                } catch (Exception ignored) {
+                }
 
             }
 

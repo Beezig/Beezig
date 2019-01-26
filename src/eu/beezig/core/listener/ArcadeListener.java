@@ -33,7 +33,7 @@ public class ArcadeListener extends AbstractGameListener<Arcade> {
 
     @Override
     public boolean matchLobby(String s) {
-        if(!s.startsWith("ARCADE_")) return false;
+        if (!s.startsWith("ARCADE_")) return false;
         game = s.split("_")[1];
         return true;
     }
@@ -50,7 +50,7 @@ public class ArcadeListener extends AbstractGameListener<Arcade> {
             try {
                 Thread.sleep(100L);
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-                if(sb != null) {
+                if (sb != null) {
                     APIValues.ArcadePoints = sb.getLines().get(game.equals("SLAP") ? "§bSlap Points" : (game.equals("SHU") ? "§bTotal Points" : "§bPoints"));
                 }
 

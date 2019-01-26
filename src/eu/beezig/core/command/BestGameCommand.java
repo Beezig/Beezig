@@ -17,6 +17,8 @@ import java.util.Map;
 
 public class BestGameCommand implements Command {
 
+    private DecimalFormat df = new DecimalFormat();
+
     @Override
     public String getName() {
         // TODO Auto-generated method stub
@@ -27,8 +29,6 @@ public class BestGameCommand implements Command {
     public String[] getAliases() {
         return new String[]{"/bestgame", "/bg", "/maingame"};
     }
-
-    private DecimalFormat df = new DecimalFormat();
 
     @Override
     public boolean execute(String[] args) {
@@ -45,7 +45,7 @@ public class BestGameCommand implements Command {
                     ? The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "")
                     : UsernameToUuid.getUUID(args[0]);
 
-            if(player == null) {
+            if (player == null) {
                 The5zigAPI.getAPI().messagePlayer(Log.error + "Player not found.");
                 return;
             }
@@ -55,28 +55,28 @@ public class BestGameCommand implements Command {
             try {
                 JSONObject data = APIUtils.getObject(APIUtils.readURL(new URL("https://app-beezigmainserver.wedeploy.io/bestgame/" + player)));
                 JSONObject modes = (JSONObject) data.get("data");
-                Date nextReset = new Date((long)data.get("cache"));
+                Date nextReset = new Date((long) data.get("cache"));
 
                 Map.Entry<String, Double> best = null;
                 Map.Entry<String, Double> worst = null;
 
-                    for(Object o : modes.entrySet())  {
-                        Map.Entry<String, Double> entry = parseEntry((Map.Entry<String, Object>)o);
-                        if(entry == null) continue;
-                        if(entry.getValue() == null) continue;
-                        if(best == null || entry.getValue() > best.getValue())
-                            best = entry;
+                for (Object o : modes.entrySet()) {
+                    Map.Entry<String, Double> entry = parseEntry((Map.Entry<String, Object>) o);
+                    if (entry == null) continue;
+                    if (entry.getValue() == null) continue;
+                    if (best == null || entry.getValue() > best.getValue())
+                        best = entry;
 
-                        if(worst == null || entry.getValue() < worst.getValue())
-                            worst = entry;
+                    if (worst == null || entry.getValue() < worst.getValue())
+                        worst = entry;
 
-                        if(displayAll) {
-                            String display = parseValue(entry.getValue());
-                            if (display == null) continue;
+                    if (displayAll) {
+                        String display = parseValue(entry.getValue());
+                        if (display == null) continue;
 
-                            The5zigAPI.getAPI().messagePlayer(Log.info + "§a§3" + entry.getKey() + ": §b" + display);
-                        }
+                        The5zigAPI.getAPI().messagePlayer(Log.info + "§a§3" + entry.getKey() + ": §b" + display);
                     }
+                }
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Most played: §b" + best.getKey() + ": §b" + parseValue(best.getValue()));
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Least played: §b" + worst.getKey() + ": §b" + parseValue(worst.getValue()));
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Next refresh:§b " + new SimpleDateFormat("MMM d, hh:mm a").format(nextReset));
@@ -92,30 +92,29 @@ public class BestGameCommand implements Command {
     }
 
     private String parseValue(Object in) {
-        if(in == null) return null;
+        if (in == null) return null;
         double d = (double) in;
-        if(d == 0) return "§8Never Played";
-        if(d < 100)  {
+        if (d == 0) return "§8Never Played";
+        if (d < 100) {
             double consider = 100 - d;
             String color = null;
 
-            if(consider > 90) color = "§7";
-            else if(consider > 80) color = "§4";
-            else if(consider > 70) color = "§c";
-            else if(consider > 60) color = "§6";
-            else if(consider > 30) color = "§e";
+            if (consider > 90) color = "§7";
+            else if (consider > 80) color = "§4";
+            else if (consider > 70) color = "§c";
+            else if (consider > 60) color = "§6";
+            else if (consider > 30) color = "§e";
             else color = "§a";
 
             return color + df.format(100 - d) + "% worse";
-        }
-        else return "§2" + df.format(d - 100) + "% better";
+        } else return "§2" + df.format(d - 100) + "% better";
 
     }
 
     private Map.Entry<String, Double> parseEntry(Map.Entry<String, Object> in) {
-        if(in == null) return null;
-        if(in.getValue() == null) return null;
-        double value = ((Number)in.getValue()).doubleValue() * 100;
+        if (in == null) return null;
+        if (in.getValue() == null) return null;
+        double value = ((Number) in.getValue()).doubleValue() * 100;
         return new AbstractMap.SimpleEntry<>(in.getKey(), value);
     }
 }

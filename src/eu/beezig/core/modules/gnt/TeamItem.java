@@ -26,7 +26,9 @@ public class TeamItem extends GameModeItem<Giant> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.gnt.team";}
+    public String getTranslation() {
+        return "beezig.module.gnt.team";
+    }
 
 
     @Override

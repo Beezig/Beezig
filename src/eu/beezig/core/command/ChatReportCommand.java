@@ -1,12 +1,12 @@
 package eu.beezig.core.command;
 
 import com.mojang.authlib.GameProfile;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
 import eu.beezig.core.utils.TabCompletionUtils;
 import eu.beezig.core.utils.acr.ChatReason;
 import eu.the5zig.mod.The5zigAPI;
-import eu.beezig.core.BeezigMain;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,7 +55,7 @@ public class ChatReportCommand implements Command {
 
     @Override
     public List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
-        if(args.length == 2)
+        if (args.length == 2)
             return TabCompletionUtils.matching(args, Arrays.stream(ChatReason.values()).map(ChatReason::toString).collect(Collectors.toList()));
         return null;
     }

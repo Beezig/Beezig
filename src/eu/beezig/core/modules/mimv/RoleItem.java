@@ -1,8 +1,8 @@
 package eu.beezig.core.modules.mimv;
 
+import eu.beezig.core.games.MIMV;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.games.MIMV;
 
 public class RoleItem extends GameModeItem<MIMV> {
 
@@ -29,7 +29,9 @@ public class RoleItem extends GameModeItem<MIMV> {
 
 
     @Override
-    public String getTranslation() { return "beezig.module.role";}
+    public String getTranslation() {
+        return "beezig.module.role";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

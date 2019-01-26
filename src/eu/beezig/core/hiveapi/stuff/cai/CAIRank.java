@@ -1,9 +1,9 @@
 package eu.beezig.core.hiveapi.stuff.cai;
 
 import eu.beezig.core.Log;
+import eu.beezig.core.hiveapi.stuff.RankEnum;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;

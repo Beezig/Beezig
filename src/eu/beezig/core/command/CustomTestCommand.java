@@ -29,7 +29,7 @@ public class CustomTestCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if(BeezigMain.hasExpansion && args.length == 0) {
+        if (BeezigMain.hasExpansion && args.length == 0) {
             BeezigAPI.get().getListener().displayTIMVTestGui();
             return true;
         }
@@ -81,7 +81,7 @@ public class CustomTestCommand implements Command {
 
     @Override
     public List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
-        if(args.length == 1)
+        if (args.length == 1)
             return TabCompletionUtils.matching(args, Arrays.asList("add", "remove", "list"));
         return new ArrayList<>();
     }

@@ -1,7 +1,7 @@
 package eu.beezig.core;
 
-import eu.the5zig.mod.The5zigAPI;
 import eu.beezig.core.settings.Setting;
+import eu.the5zig.mod.The5zigAPI;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

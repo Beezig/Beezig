@@ -18,6 +18,14 @@ public class Arcade extends GameMode {
         inst = this;
     }
 
+    public static void reset() {
+        inst.resetInternally();
+    }
+
+    public static Modes[] getModes() {
+        return Modes.values();
+    }
+
     @Override
     public String getName() {
         return "Arcade/" + game;
@@ -38,14 +46,6 @@ public class Arcade extends GameMode {
         if (The5zigAPI.getAPI().getActiveServer() != null)
             The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
 
-    }
-
-    public static void reset() {
-        inst.resetInternally();
-    }
-
-    public static Modes[] getModes() {
-        return Modes.values();
     }
 
     private enum Modes {

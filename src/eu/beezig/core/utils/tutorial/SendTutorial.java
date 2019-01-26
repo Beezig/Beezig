@@ -6,10 +6,10 @@ import org.json.simple.JSONArray;
 public class SendTutorial {
 
     public static void send(String key, Object... args) {
-        if(!TutorialManager.shouldOperate()) return;
-        if(TutorialManager.progress.containsKey(key) && (boolean)TutorialManager.progress.get(key)) return;
+        if (!TutorialManager.shouldOperate()) return;
+        if (TutorialManager.progress.containsKey(key) && (boolean) TutorialManager.progress.get(key)) return;
         String toFormat = (String) TutorialManager.remote.get(key);
-        if(toFormat == null) return;
+        if (toFormat == null) return;
         String formatted = String.format(toFormat, args);
         Log.addToSendQueue(formatted.replace("{info}", Log.info).replace("{error}", Log.error));
         Log.addToSendQueue("");
@@ -22,9 +22,9 @@ public class SendTutorial {
 
         JSONArray toComplete = (JSONArray) TutorialManager.remote.get("toComplete");
         boolean completed = true;
-        for(Object toCheck : toComplete) {
+        for (Object toCheck : toComplete) {
 
-            if(!TutorialManager.progress.containsKey(toCheck) || !(boolean)TutorialManager.progress.get(toCheck)) {
+            if (!TutorialManager.progress.containsKey(toCheck) || !(boolean) TutorialManager.progress.get(toCheck)) {
                 completed = false;
                 break;
             }

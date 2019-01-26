@@ -30,7 +30,9 @@ public class KDRChangeItem extends GameModeItem<Giant> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.gnt.kdchange";}
+    public String getTranslation() {
+        return "beezig.module.gnt.kdchange";
+    }
 
 
     @Override

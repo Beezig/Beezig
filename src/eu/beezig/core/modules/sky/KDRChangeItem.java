@@ -1,7 +1,7 @@
 package eu.beezig.core.modules.sky;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.SKY;
+import eu.the5zig.mod.modules.GameModeItem;
 
 import java.text.DecimalFormat;
 
@@ -27,7 +27,9 @@ public class KDRChangeItem extends GameModeItem<SKY> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.sky.kdchange";}
+    public String getTranslation() {
+        return "beezig.module.sky.kdchange";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

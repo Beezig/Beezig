@@ -2,8 +2,8 @@ package eu.beezig.core.hiveapi.stuff.timv;
 
 import eu.beezig.core.Log;
 import eu.beezig.core.games.BED;
-import eu.the5zig.mod.The5zigAPI;
 import eu.beezig.core.hiveapi.stuff.RankEnum;
+import eu.the5zig.mod.The5zigAPI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,7 +69,7 @@ public enum TIMVRank implements RankEnum {
     }
 
     public String getDisplay(long pts) {
-        if(this == WATSON) {
+        if (this == WATSON) {
             long consider = pts - 200_000;
             long level = consider / 100_000 + 1;
             return BED.NUMBERS[Math.toIntExact(level)] + " " + display;

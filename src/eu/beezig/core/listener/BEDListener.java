@@ -11,6 +11,8 @@ import eu.beezig.core.hiveapi.stuff.bed.BEDRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.StreakUtils;
+import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
@@ -20,8 +22,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.monthly.bed.BedMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.BedStats;
-import eu.beezig.core.utils.StreakUtils;
-import eu.beezig.core.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class BEDListener extends AbstractGameListener<BED> {
 
     @Override
     public boolean matchLobby(String arg0) {
-        if(arg0.contains("BED_")) {
+        if (arg0.contains("BED_")) {
             BED.activeMap = arg0.split("_")[1];
         }
         return arg0.startsWith("BED");
@@ -82,19 +82,18 @@ public class BEDListener extends AbstractGameListener<BED> {
                 BED.updateMode();
 
                 String ign1 = The5zigAPI.getAPI().getGameProfile().getName();
-                if(api == null) api = new BedStats(ign1);
+                if (api == null) api = new BedStats(ign1);
                 APIValues.BEDpoints = api.getPoints();
                 BED.updateRank();
                 BED.updateKdr();
 
                 try {
-                    if(BED.attemptNew) {
+                    if (BED.attemptNew) {
                         BED.monthly = api.getMonthlyProfile();
                         BED.monthly.getPoints(); // Fetch (LazyObject)
                         BED.hasLoaded = true;
                     }
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     BED.attemptNew = false;
                 }
 
@@ -129,10 +128,9 @@ public class BEDListener extends AbstractGameListener<BED> {
         } else if (message.equals("                     §6§lWelcome to Hive BedWars!")) { // Not sure about this one
             BED.inGame = true;
             The5zigAPI.getAPI().sendPlayerMessage("/gameid");
-        }
-        else if(message.equals("                        §6§lBedWars§7 - §a§lDouble Fun")) {
-          BED.inGame = true;
-          BED.mode = "Double Fun";
+        } else if (message.equals("                        §6§lBedWars§7 - §a§lDouble Fun")) {
+            BED.inGame = true;
+            BED.mode = "Double Fun";
 
         } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §2✚")) {
             int pts = Integer.parseInt(message.split("§a")[1].split(" Points")[0]);
@@ -140,7 +138,7 @@ public class BEDListener extends AbstractGameListener<BED> {
             APIValues.BEDpoints += pts;
             BED.dailyPoints += pts;
 
-            if(message.endsWith("Generator]")) return false;
+            if (message.endsWith("Generator]")) return false;
 
             switch (pts) {
 
@@ -218,7 +216,6 @@ public class BEDListener extends AbstractGameListener<BED> {
                         int eliminations = 0;
 
 
-
                         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
                         DecimalFormat df = (DecimalFormat) nf;
                         df.setMaximumFractionDigits(2);
@@ -250,7 +247,8 @@ public class BEDListener extends AbstractGameListener<BED> {
                                 if (monthly != null) {
                                     monthlyRank = monthly.getPlace();
                                 }
-                            } catch(Exception ignored) {}
+                            } catch (Exception ignored) {
+                            }
                         }
 
                         List<String> messages = new ArrayList<>(BED.messagesToSend);
@@ -343,7 +341,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                         if (achievements != null) {
                             The5zigAPI.getAPI().messagePlayer("§f §3 Achievements: §b" + achievements + "/67");
                         }
-                        if(streak != null) {
+                        if (streak != null) {
                             The5zigAPI.getAPI().messagePlayer("§f §3 Win Streak: §b" + streak);
                         }
                         // "§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing"
@@ -469,8 +467,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                     The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
                     The5zigAPI.getAPI().messagePlayer("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
 
-                }
-                else if(Setting.AUTOVOTE_RANDOM.getValue()) {
+                } else if (Setting.AUTOVOTE_RANDOM.getValue()) {
                     The5zigAPI.getAPI().sendPlayerMessage("/v 6");
                     The5zigAPI.getAPI().messagePlayer("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ " + "§eAutomatically voted for§c Random map§e.");
                 }
@@ -518,8 +515,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                 }
 
             }).start();
-        }
-        else if(message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §bYou can find all §emessages and game events §bat §a")) {
+        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §bYou can find all §emessages and game events §bat §a")) {
             BED.gameId = message.replace("§8▍ §3§lBed§b§lWars§8 ▏ §bYou can find all §emessages and game events §bat §ahttps://hivemc.com/bedwars/game/", "");
         }
         return false;

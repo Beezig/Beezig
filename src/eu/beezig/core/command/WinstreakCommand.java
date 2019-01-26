@@ -1,8 +1,8 @@
 package eu.beezig.core.command;
 
-import eu.the5zig.mod.The5zigAPI;
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.utils.StreakUtils;
+import eu.the5zig.mod.The5zigAPI;
 
 public class WinstreakCommand implements Command {
 

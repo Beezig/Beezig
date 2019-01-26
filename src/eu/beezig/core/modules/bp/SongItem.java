@@ -1,7 +1,7 @@
 package eu.beezig.core.modules.bp;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.BP;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class SongItem extends GameModeItem<BP> {
 
@@ -17,7 +17,9 @@ public class SongItem extends GameModeItem<BP> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.bp.song";}
+    public String getTranslation() {
+        return "beezig.module.bp.song";
+    }
 
     @Override
     public void registerSettings() {

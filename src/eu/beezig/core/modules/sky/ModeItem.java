@@ -1,7 +1,7 @@
 package eu.beezig.core.modules.sky;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.SKY;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class ModeItem extends GameModeItem<SKY> {
 
@@ -22,7 +22,9 @@ public class ModeItem extends GameModeItem<SKY> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.sky.mode";}
+    public String getTranslation() {
+        return "beezig.module.sky.mode";
+    }
 
 
     @Override

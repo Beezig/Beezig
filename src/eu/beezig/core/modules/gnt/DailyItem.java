@@ -21,7 +21,9 @@ public class DailyItem extends GameModeItem<Giant> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.daily";}
+    public String getTranslation() {
+        return "beezig.module.daily";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

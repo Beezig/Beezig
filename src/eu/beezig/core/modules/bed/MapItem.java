@@ -1,7 +1,7 @@
 package eu.beezig.core.modules.bed;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.BED;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class MapItem extends GameModeItem<BED> {
 
@@ -17,7 +17,9 @@ public class MapItem extends GameModeItem<BED> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.map";}
+    public String getTranslation() {
+        return "beezig.module.map";
+    }
 
     @Override
     public void registerSettings() {

@@ -24,7 +24,9 @@ public class WinstreakItem extends GameModeItem<HIDE> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.winstreak";}
+    public String getTranslation() {
+        return "beezig.module.winstreak";
+    }
 
     @Override
     public void registerSettings() {

@@ -1,9 +1,9 @@
 package eu.beezig.core.command;
 
-import eu.the5zig.mod.The5zigAPI;
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.BeezigMain;
 import eu.beezig.core.Log;
+import eu.the5zig.mod.The5zigAPI;
 
 import java.io.File;
 import java.io.IOException;

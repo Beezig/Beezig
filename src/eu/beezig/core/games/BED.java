@@ -1,18 +1,18 @@
 package eu.beezig.core.games;
 
 import eu.beezig.core.ActiveGame;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.games.logging.GameLogger;
+import eu.beezig.core.hiveapi.APIValues;
+import eu.beezig.core.hiveapi.stuff.bed.BEDRank;
+import eu.beezig.core.utils.StreakUtils;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.monthly.bed.BedMonthlyProfile;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.hiveapi.APIValues;
-import eu.beezig.core.hiveapi.stuff.bed.BEDRank;
-import eu.beezig.core.utils.StreakUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -22,34 +22,26 @@ import java.util.Map;
 public class BED extends GameMode {
 
     public static char[] NUMBERS = {' ', '➊', '➋', '➌', '➍', '➎', '➏', '➐', '➑', '➒'};
-
-    private static GameLogger logger;
-
     public static String activeMap;
     public static Long lastRecordsPoints = null;
     public static String mode = "";
-
     public static int kills;
     public static int deaths;
     public static int pointsCounter;
     public static int bedsDestroyed;
     public static int teamsLeft;
-
     public static BedMonthlyProfile monthly;
     public static boolean attemptNew = true;
     public static boolean hasLoaded = false;
-
     public static boolean inGame;
     public static boolean hasWon;
     public static int winstreak;
     public static int bestStreak;
-
     public static int apiKills;
     public static int apiDeaths;
+    public static int ironGen;
 
     // Generators (0: None, 1: Level 1, 2: Level 2, 3: Level 3)
-
-    public static int ironGen;
     public static int goldGen;
     public static int diamondGen;
     public static int dailyPoints;
@@ -61,13 +53,14 @@ public class BED extends GameMode {
     public static boolean hasVoted = false;
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
+    public static String gameId;
+    private static GameLogger logger;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
-    public static String gameId;
 
     public static void initDailyPointsWriter() throws IOException {
         logger = new GameLogger(BeezigMain.mcFile + "/bedwars/games.csv");
-        logger.setHeaders(new String[] {
+        logger.setHeaders(new String[]{
                 "Points",
                 "Mode",
                 "Map",
@@ -138,9 +131,9 @@ public class BED extends GameMode {
             winstreak = 0;
             StreakUtils.resetWinstreak("bed", wasBest);
         }
-        if(inGame && logger != null)
-        logger.logGame(pointsCounter + "", mode, activeMap, kills + "", deaths + "", bedsDestroyed + "", hasWon ? "Yes" : "No",
-                System.currentTimeMillis() + "", gameId);
+        if (inGame && logger != null)
+            logger.logGame(pointsCounter + "", mode, activeMap, kills + "", deaths + "", bedsDestroyed + "", hasWon ? "Yes" : "No",
+                    System.currentTimeMillis() + "", gameId);
         gameId = null;
         hasWon = false;
         inGame = false;

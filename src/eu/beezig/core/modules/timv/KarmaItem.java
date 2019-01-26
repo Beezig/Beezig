@@ -1,11 +1,11 @@
 package eu.beezig.core.modules.timv;
 
 import eu.beezig.core.Log;
+import eu.beezig.core.games.TIMV;
+import eu.beezig.core.hiveapi.APIValues;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.games.TIMV;
-import eu.beezig.core.hiveapi.APIValues;
 
 public class KarmaItem extends GameModeItem<TIMV> {
 

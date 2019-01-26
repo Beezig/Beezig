@@ -1,7 +1,7 @@
 package eu.beezig.core.utils;
 
-import eu.beezig.core.games.TIMV;
 import eu.beezig.core.BeezigMain;
+import eu.beezig.core.games.TIMV;
 
 import java.io.File;
 import java.io.FileWriter;

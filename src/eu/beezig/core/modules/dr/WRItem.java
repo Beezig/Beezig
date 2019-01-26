@@ -1,7 +1,7 @@
 package eu.beezig.core.modules.dr;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.DR;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class WRItem extends GameModeItem<DR> {
 
@@ -23,7 +23,9 @@ public class WRItem extends GameModeItem<DR> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.dr.wr";}
+    public String getTranslation() {
+        return "beezig.module.dr.wr";
+    }
 
     @Override
     public void registerSettings() {

@@ -1,22 +1,20 @@
 package eu.beezig.core.games;
 
 import eu.beezig.core.ActiveGame;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.games.logging.GameLogger;
+import eu.beezig.core.hiveapi.stuff.bp.BPRank;
+import eu.beezig.core.utils.ws.Connector;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.hiveapi.stuff.bp.BPRank;
-import eu.beezig.core.utils.ws.Connector;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BP extends GameMode {
-
-    private static GameLogger logger;
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
@@ -27,13 +25,14 @@ public class BP extends GameMode {
     public static String rank;
     public static BPRank rankObject;
     public static List<String> votesToParse = new ArrayList<>();
+    private static GameLogger logger;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
 
     public static void initDailyPointsWriter() throws IOException {
 
         logger = new GameLogger(BeezigMain.mcFile + "/bp/games.csv");
-        logger.setHeaders(new String[] {
+        logger.setHeaders(new String[]{
                 "Points",
                 "Song",
                 "Timestamp"
@@ -89,7 +88,7 @@ public class BP extends GameMode {
 
     public static void reset(BP gameMode) {
 
-        if(gameMode.getState() == GameState.GAME && logger != null)
+        if (gameMode.getState() == GameState.GAME && logger != null)
             logger.logGame(gamePts + "", song, System.currentTimeMillis() + "");
         gameMode.setState(GameState.FINISHED);
         song = null;

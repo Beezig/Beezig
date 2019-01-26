@@ -1,11 +1,11 @@
 package eu.beezig.core.modules.global;
 
-import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.mod.modules.GameModeItem;
-import eu.the5zig.mod.server.GameMode;
 import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
 import eu.beezig.core.hiveapi.APIValues;
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.modules.GameModeItem;
+import eu.the5zig.mod.server.GameMode;
 
 public class TokensItem extends GameModeItem<GameMode> {
 
@@ -26,7 +26,9 @@ public class TokensItem extends GameModeItem<GameMode> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.global.tokens";}
+    public String getTranslation() {
+        return "beezig.module.global.tokens";
+    }
 
 
     @Override

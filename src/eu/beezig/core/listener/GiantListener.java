@@ -11,6 +11,8 @@ import eu.beezig.core.hiveapi.stuff.gnt.GiantRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.StreakUtils;
+import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -19,8 +21,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.GntStats;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.GntmStats;
-import eu.beezig.core.utils.StreakUtils;
-import eu.beezig.core.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -86,7 +86,6 @@ public class GiantListener extends AbstractGameListener<Giant> {
             Giant.gameKdr = Giant.totalKdr;
 
 
-
             Giant.rankObject = GiantRank
                     .getFromDisplay(gnt.getTitle());
             Giant.rank = Giant.rankObject.getTotalDisplay();
@@ -94,7 +93,6 @@ public class GiantListener extends AbstractGameListener<Giant> {
             APIValues.Giantpoints = gnt.getPoints();
 
         }).start();
-
 
 
     }
@@ -244,7 +242,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
                                 ? new GntmStats(AdvancedRecords.player, true)
                                 : new GntStats(AdvancedRecords.player, true);
                         HivePlayer parent = api.getPlayer();
-                        
+
                         String rankTitle = Setting.SHOW_NETWORK_RANK_TITLE.getValue()
                                 ? parent.getRank().getHumanName()
                                 : "";
@@ -327,11 +325,10 @@ public class GiantListener extends AbstractGameListener<Giant> {
                                 The5zigAPI.getAPI().messagePlayer("§f " + sb.toString().trim());
 
 
-                            }
-                            else if(s.startsWith("§3 Games Played: §b"))  played = Math.toIntExact(currentValue);
-                            else if(s.startsWith("§3 Victories: §b"))  vics = Math.toIntExact(currentValue);
-                            else if(s.startsWith("§3 Kills: §b"))  kills = Math.toIntExact(currentValue);
-                            else if(s.startsWith("§3 Deaths: §b"))  deaths = Math.toIntExact(currentValue);
+                            } else if (s.startsWith("§3 Games Played: §b")) played = Math.toIntExact(currentValue);
+                            else if (s.startsWith("§3 Victories: §b")) vics = Math.toIntExact(currentValue);
+                            else if (s.startsWith("§3 Kills: §b")) kills = Math.toIntExact(currentValue);
+                            else if (s.startsWith("§3 Deaths: §b")) deaths = Math.toIntExact(currentValue);
 
                             The5zigAPI.getAPI().messagePlayer("§f " + s);
 
@@ -403,8 +400,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
 
             }
 
-        }
-        else if(message.contains("§bYou can find all §emessages and game events §bat")) {
+        } else if (message.contains("§bYou can find all §emessages and game events §bat")) {
             Giant.gameId = message.split("skygiants/game/")[1];
         }
 

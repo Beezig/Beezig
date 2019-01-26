@@ -43,7 +43,9 @@ public class LeaderboardItem extends GameModeItem<LAB> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.lab.leaderboard";}
+    public String getTranslation() {
+        return "beezig.module.lab.leaderboard";
+    }
 
     @Override
     public void render(int x, int y, RenderLocation renderLocation, boolean dummy) {
@@ -60,16 +62,15 @@ public class LeaderboardItem extends GameModeItem<LAB> {
         }
 
     }
-    
-    
+
 
     @Override
-	public int getHeight(boolean dummy) {
-		// TODO Auto-generated method stub
-		return 10 + LAB.leaderboard.size() * 10;
-	}
+    public int getHeight(boolean dummy) {
+        // TODO Auto-generated method stub
+        return 10 + LAB.leaderboard.size() * 10;
+    }
 
-	@Override
+    @Override
     public boolean shouldRender(boolean dummy) {
         try {
             return dummy || (The5zigAPI.getAPI().getActiveServer() instanceof IHive && ActiveGame.is("lab")

@@ -4,11 +4,11 @@ import eu.beezig.core.ActiveGame;
 import eu.beezig.core.autovote.AutovoteUtils;
 import eu.beezig.core.games.GRAV;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.ChatComponentUtils;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.utils.ChatComponentUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

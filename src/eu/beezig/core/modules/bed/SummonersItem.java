@@ -1,11 +1,11 @@
 package eu.beezig.core.modules.bed;
 
+import eu.beezig.core.games.BED;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.render.RenderLocation;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.games.BED;
 
 public class SummonersItem extends GameModeItem<BED> {
 
@@ -65,7 +65,6 @@ public class SummonersItem extends GameModeItem<BED> {
                 if (BED.diamondGen != 0)
                     sb.append(colors ? "§b" : "").append(BED.NUMBERS[BED.diamondGen]).append(" D ").append(getMainFormatting()).append("/ ");
                 if (sb.length() > 2) sb.deleteCharAt(sb.length() - 2);
-                if (sb.length() > 2) sb.deleteCharAt(sb.length() - 2);
 
 
                 return sb.toString().trim();
@@ -121,28 +120,29 @@ public class SummonersItem extends GameModeItem<BED> {
 
 
     }
-    
-    
+
 
     @Override
-	public int getHeight(boolean dummy) {
-    	ResourcesMode mode = (ResourcesMode) getProperties().getSetting("mode").get();
-    	switch(mode) {
-    	
-    	case INLINE:
-    	case INLINE_SHORTENED:
-    		return super.getHeight(dummy);
-    	case EXTENDED:
-    		return 10 + (BED.diamondGen != 0 ? 10 : 0)
-    				+ (BED.ironGen != 0 ? 10 : 0)
-    				+ (BED.goldGen != 0 ? 10 : 0);
-    	}
-    	
-    	return super.getHeight(dummy);
-	}
+    public int getHeight(boolean dummy) {
+        ResourcesMode mode = (ResourcesMode) getProperties().getSetting("mode").get();
+        switch (mode) {
 
-	@Override
-    public String getTranslation() { return "beezig.module.bed.summoners";}
+            case INLINE:
+            case INLINE_SHORTENED:
+                return super.getHeight(dummy);
+            case EXTENDED:
+                return 10 + (BED.diamondGen != 0 ? 10 : 0)
+                        + (BED.ironGen != 0 ? 10 : 0)
+                        + (BED.goldGen != 0 ? 10 : 0);
+        }
+
+        return super.getHeight(dummy);
+    }
+
+    @Override
+    public String getTranslation() {
+        return "beezig.module.bed.summoners";
+    }
 
 
     @Override

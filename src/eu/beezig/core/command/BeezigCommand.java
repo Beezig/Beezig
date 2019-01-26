@@ -1,6 +1,7 @@
 package eu.beezig.core.command;
 
 import com.mojang.authlib.GameProfile;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.CommandManager;
 import eu.beezig.core.Log;
 import eu.beezig.core.utils.TabCompletionUtils;
@@ -8,7 +9,6 @@ import eu.beezig.core.utils.ws.Client;
 import eu.beezig.core.utils.ws.Connector;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.BeezigMain;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -73,7 +73,7 @@ public class BeezigCommand implements Command {
 
     @Override
     public List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
-        if(args.length == 1)
+        if (args.length == 1)
             return TabCompletionUtils.matching(args, Arrays.asList("commands", "reconnect"));
         return new ArrayList<>();
     }

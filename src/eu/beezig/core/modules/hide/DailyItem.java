@@ -1,8 +1,8 @@
 package eu.beezig.core.modules.hide;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.Log;
 import eu.beezig.core.games.HIDE;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class DailyItem extends GameModeItem<HIDE> {
 
@@ -18,7 +18,9 @@ public class DailyItem extends GameModeItem<HIDE> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.daily";}
+    public String getTranslation() {
+        return "beezig.module.daily";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

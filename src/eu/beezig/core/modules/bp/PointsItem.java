@@ -1,11 +1,11 @@
 package eu.beezig.core.modules.bp;
 
 import eu.beezig.core.Log;
+import eu.beezig.core.games.BP;
+import eu.beezig.core.hiveapi.APIValues;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.games.BP;
-import eu.beezig.core.hiveapi.APIValues;
 
 public class PointsItem extends GameModeItem<BP> {
 
@@ -77,7 +77,9 @@ public class PointsItem extends GameModeItem<BP> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.points";}
+    public String getTranslation() {
+        return "beezig.module.points";
+    }
 
     @Override
     public void registerSettings() {

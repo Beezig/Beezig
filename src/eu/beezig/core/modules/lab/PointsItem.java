@@ -2,10 +2,10 @@ package eu.beezig.core.modules.lab;
 
 import eu.beezig.core.Log;
 import eu.beezig.core.games.LAB;
+import eu.beezig.core.hiveapi.APIValues;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.hiveapi.APIValues;
 
 public class PointsItem extends GameModeItem<LAB> {
 
@@ -77,7 +77,9 @@ public class PointsItem extends GameModeItem<LAB> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.lab.atoms";}
+    public String getTranslation() {
+        return "beezig.module.lab.atoms";
+    }
 
     @Override
     public void registerSettings() {

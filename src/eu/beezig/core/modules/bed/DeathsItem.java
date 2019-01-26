@@ -1,7 +1,7 @@
 package eu.beezig.core.modules.bed;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.BED;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class DeathsItem extends GameModeItem<BED> {
 
@@ -20,7 +20,9 @@ public class DeathsItem extends GameModeItem<BED> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.deaths";}
+    public String getTranslation() {
+        return "beezig.module.deaths";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

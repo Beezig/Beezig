@@ -1,9 +1,9 @@
 package eu.beezig.core.command;
 
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.Log;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.BeezigMain;
 
 public class ColorDebugCommand implements Command {
 

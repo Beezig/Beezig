@@ -1,8 +1,8 @@
 package eu.beezig.core.advancedrecords.anywhere.statistic;
 
-import org.json.simple.JSONObject;
 import eu.beezig.core.Log;
 import eu.beezig.core.settings.Setting;
+import org.json.simple.JSONObject;
 
 public class RatioRecordsStatistic extends RecordsStatistic {
 

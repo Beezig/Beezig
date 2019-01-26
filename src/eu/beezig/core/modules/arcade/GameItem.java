@@ -1,10 +1,10 @@
 package eu.beezig.core.modules.arcade;
 
+import eu.beezig.core.games.Arcade;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.server.GameState;
-import eu.beezig.core.games.Arcade;
 
-public class GameItem extends GameModeItem<Arcade>  {
+public class GameItem extends GameModeItem<Arcade> {
 
 
     public GameItem() {
@@ -14,12 +14,14 @@ public class GameItem extends GameModeItem<Arcade>  {
 
     @Override
     protected Object getValue(boolean b) {
-        if(b || getGameMode().gameDisplay == null) return "Unknown";
+        if (b || getGameMode().gameDisplay == null) return "Unknown";
         return getGameMode().gameDisplay;
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.gnt.mode"; }
+    public String getTranslation() {
+        return "beezig.module.gnt.mode";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {
@@ -27,7 +29,7 @@ public class GameItem extends GameModeItem<Arcade>  {
             if (getGameMode() == null) return false;
             if (!super.shouldRender(dummy)) return false;
             return dummy || getGameMode().getState() != GameState.FINISHED;
-        } catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }

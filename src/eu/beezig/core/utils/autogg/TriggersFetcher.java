@@ -1,9 +1,9 @@
 package eu.beezig.core.utils.autogg;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import eu.beezig.core.BeezigMain;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.*;
 import java.lang.reflect.Field;

@@ -2,11 +2,11 @@ package eu.beezig.core.hiveapi.stuff.bed;
 
 import eu.beezig.core.Log;
 import eu.beezig.core.games.BED;
+import eu.beezig.core.hiveapi.stuff.RankEnum;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.game.Game;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.BedStats;
-import eu.beezig.core.hiveapi.stuff.RankEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -112,9 +112,9 @@ public enum BEDRank implements RankEnum {
     }
 
     public static BEDRank getFromDisplay(String display) {
-        for(BEDRank rank : BEDRank.values()) {
+        for (BEDRank rank : BEDRank.values()) {
             String group = display.replaceAll("\\d", "").trim();
-            if(ChatColor.stripColor(rank.getDisplay()).equals(group)) return rank;
+            if (ChatColor.stripColor(rank.getDisplay()).equals(group)) return rank;
         }
         return null;
     }

@@ -1,15 +1,15 @@
 package eu.beezig.core.games;
 
 import eu.beezig.core.ActiveGame;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.games.logging.GameLogger;
 import eu.beezig.core.games.logging.hide.HideMapRecords;
+import eu.beezig.core.hiveapi.stuff.hide.HIDERank;
+import eu.beezig.core.utils.StreakUtils;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.hiveapi.stuff.hide.HIDERank;
-import eu.beezig.core.utils.StreakUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,37 +17,31 @@ import java.util.List;
 
 public class HIDE extends GameMode {
 
-    private static GameLogger logger;
-
     public static String activeMap;
-
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
     public static boolean hasVoted = false;
     public static List<String> votesToParse = new ArrayList<>();
-
-
     public static boolean inGame;
     public static boolean hasWon;
     public static int winstreak;
     public static int bestStreak;
-
     public static long mostKills;
-
     public static int dailyPoints;
     public static int kills;
     public static boolean seeking;
     public static int lastPts;
     public static String rank;
     public static HIDERank rankObject;
+    public static String gameId, timeAlive;
+    private static GameLogger logger;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
-    public static String gameId, timeAlive;
 
     public static void initDailyPointsWriter() throws IOException {
 
         logger = new GameLogger(BeezigMain.mcFile + "/hide/games.csv");
-        logger.setHeaders(new String[] {
+        logger.setHeaders(new String[]{
                 "Map",
                 "Victory?",
                 "Kills",
@@ -112,10 +106,10 @@ public class HIDE extends GameMode {
             winstreak = 0;
             StreakUtils.resetWinstreak("hide", wasBest);
         }
-        if(inGame)
+        if (inGame)
             HideMapRecords.endGame(activeMap, kills);
-        if(inGame && logger != null)
-        logger.logGame(activeMap, hasWon ? "Yes" : "No", kills + "", System.currentTimeMillis() + "", gameId, timeAlive);
+        if (inGame && logger != null)
+            logger.logGame(activeMap, hasWon ? "Yes" : "No", kills + "", System.currentTimeMillis() + "", gameId, timeAlive);
         gameId = null;
         timeAlive = null;
         inGame = false;

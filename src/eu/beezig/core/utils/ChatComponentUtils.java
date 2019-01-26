@@ -32,19 +32,19 @@ public class ChatComponentUtils {
     }
 
     public static String getPartyMembers(String component) {
-        if(component == null) return null;
+        if (component == null) return null;
         String regex = "Current members: ', siblings=\\[(.*), TextComponent\\{text='.'";
         Pattern regexPattern = Pattern.compile(regex);
 
         Matcher matcher = regexPattern.matcher(component);
-        if(!matcher.find()) return null;
+        if (!matcher.find()) return null;
         String group = matcher.group(1);
 
         Pattern newRegex = Pattern.compile("'(.*?)'");
         StringBuilder members = new StringBuilder();
 
         Matcher newMatcher = newRegex.matcher(group);
-        while(newMatcher.find()) {
+        while (newMatcher.find()) {
             members.append(newMatcher.group(1));
         }
 

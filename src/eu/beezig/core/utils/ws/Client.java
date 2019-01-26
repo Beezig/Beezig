@@ -1,14 +1,14 @@
 package eu.beezig.core.utils.ws;
 
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.Log;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.NotificationManager;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
 import org.java_websocket_beezig.client.WebSocketClient;
 import org.java_websocket_beezig.handshake.ServerHandshake;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.utils.NotificationManager;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,7 +19,6 @@ public class Client extends WebSocketClient {
         super(serverUri);
         // TODO Auto-generated constructor stub
     }
-
 
 
     @Override

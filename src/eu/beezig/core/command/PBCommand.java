@@ -16,6 +16,18 @@ import java.util.List;
 
 public class PBCommand implements Command {
 
+    public static String parseTime(long pb) {
+        if (pb >= 60) {
+            int seconds = Math.toIntExact(pb) % 60;
+            int minutes = Math.floorDiv(Math.toIntExact(pb), 60);
+            if (seconds < 10) {
+                return (minutes + ":0" + seconds);
+            }
+            return (minutes + ":" + seconds);
+        }
+        return "0:" + pb;
+    }
+
     @Override
     public String getName() {
         // TODO Auto-generated method stub
@@ -31,7 +43,7 @@ public class PBCommand implements Command {
     public boolean execute(String[] args) {
         if (!(ActiveGame.is("dr"))) return false;
 
-        if(args.length == 0 && DR.activeMap != null) {
+        if (args.length == 0 && DR.activeMap != null) {
 
             String ign = The5zigAPI.getAPI().getGameProfile().getName();
 
@@ -70,18 +82,6 @@ public class PBCommand implements Command {
         }
 
         return true;
-    }
-
-    public static String parseTime(long pb) {
-        if (pb >= 60) {
-            int seconds = Math.toIntExact(pb) % 60;
-            int minutes = Math.floorDiv(Math.toIntExact(pb), 60);
-            if (seconds < 10) {
-                return (minutes + ":0" + seconds);
-            }
-            return (minutes + ":" + seconds);
-        }
-        return "0:" + pb;
     }
 
 

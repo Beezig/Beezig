@@ -1,7 +1,7 @@
 package eu.beezig.core.utils;
 
-import org.lwjgl.opengl.Display;
 import eu.beezig.core.BeezigMain;
+import org.lwjgl.opengl.Display;
 
 import java.awt.*;
 import java.awt.TrayIcon.MessageType;

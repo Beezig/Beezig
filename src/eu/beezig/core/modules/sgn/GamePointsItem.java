@@ -1,7 +1,7 @@
 package eu.beezig.core.modules.sgn;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.SGN;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class GamePointsItem extends GameModeItem<SGN> {
 
@@ -21,7 +21,9 @@ public class GamePointsItem extends GameModeItem<SGN> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.game";}
+    public String getTranslation() {
+        return "beezig.module.game";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

@@ -43,7 +43,7 @@ public class ReportCommand implements Command {
             The5zigAPI.getAPI().messagePlayer(Log.error + "You must wait 30 seconds between reports!");
             return true;
         }
-       lastOne = System.currentTimeMillis();
+        lastOne = System.currentTimeMillis();
         // RoccoDev, ItsNiklass AntiKnockback, Kill Aura
         The5zigAPI.getAPI().messagePlayer(Log.info + "Checking...");
         new Thread(() -> {
@@ -60,11 +60,11 @@ public class ReportCommand implements Command {
             }
             for (String s : players.split(",")) {
 
-               HivePlayer api = new HivePlayer(s, true);
+                HivePlayer api = new HivePlayer(s, true);
 
                 try {
                     api.getUsername();  // Trigger an error if needed
-                } catch(Exception e) {
+                } catch (Exception e) {
                     The5zigAPI.getAPI().messagePlayer(Log.error + "Player §4" + s + "§c does not exist.");
                     return;
                 }

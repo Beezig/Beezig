@@ -1,14 +1,14 @@
 package eu.beezig.core.games;
 
 import eu.beezig.core.ActiveGame;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.games.logging.GameLogger;
+import eu.beezig.core.hiveapi.stuff.sky.SKYRank;
+import eu.beezig.core.utils.StreakUtils;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.hiveapi.stuff.sky.SKYRank;
-import eu.beezig.core.utils.StreakUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,28 +16,20 @@ import java.util.List;
 
 public class SKY extends GameMode {
 
-    private static GameLogger logger;
-
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
     public static boolean hasVoted = false;
     public static List<String> votesToParse = new ArrayList<>();
-
     public static String mode;
-
     public static long gamePoints;
     public static int totalKills;
-
     public static int kills;
     public static int deaths;
-
     public static boolean inGame;
     public static boolean hasWon;
     public static int winstreak;
     public static int bestStreak;
-
     public static int apiKills, apiDeaths;
-
     public static double apiKdr;
     public static double gameKdr;
     public static int dailyPoints;
@@ -45,9 +37,10 @@ public class SKY extends GameMode {
     public static String team;
     public static SKYRank rankObject;
     public static String map;
+    public static String gameId;
+    private static GameLogger logger;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
-    public static String gameId;
 
     public static void updateKdr() {
         apiKdr = (double) apiKills / (apiDeaths == 0 ? 1 : apiDeaths);
@@ -57,7 +50,7 @@ public class SKY extends GameMode {
     public static void initDailyPointsWriter() throws IOException {
 
         logger = new GameLogger(BeezigMain.mcFile + "/sky/games.csv");
-        logger.setHeaders(new String[] {
+        logger.setHeaders(new String[]{
                 "Points",
                 "Map",
                 "Kills",
@@ -124,8 +117,8 @@ public class SKY extends GameMode {
             StreakUtils.resetWinstreak("sky", wasBest);
         }
 
-        if(inGame && logger != null)
-            logger.logGame(gamePoints + "", map, kills + "", mode,  hasWon ? "Yes" : "No", System.currentTimeMillis() + "", gameId);
+        if (inGame && logger != null)
+            logger.logGame(gamePoints + "", map, kills + "", mode, hasWon ? "Yes" : "No", System.currentTimeMillis() + "", gameId);
 
         gameId = null;
         hasWon = false;

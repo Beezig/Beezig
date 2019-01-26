@@ -1,17 +1,22 @@
 package eu.beezig.core.listener;
 
 import eu.beezig.core.ActiveGame;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
 import eu.beezig.core.advancedrecords.AdvancedRecords;
 import eu.beezig.core.autovote.AutovoteUtils;
+import eu.beezig.core.command.PBCommand;
+import eu.beezig.core.command.WRCommand;
 import eu.beezig.core.games.DR;
 import eu.beezig.core.games.TIMV;
 import eu.beezig.core.hiveapi.APIValues;
 import eu.beezig.core.hiveapi.stuff.dr.DRRank;
+import eu.beezig.core.hiveapi.stuff.dr.TotalPB;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
@@ -21,11 +26,6 @@ import eu.the5zig.util.minecraft.ChatColor;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.DrStats;
 import pw.roccodev.beezig.hiveapi.wrapper.speedrun.WorldRecord;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.command.PBCommand;
-import eu.beezig.core.command.WRCommand;
-import eu.beezig.core.hiveapi.stuff.dr.TotalPB;
-import eu.beezig.core.utils.rpc.DiscordUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -61,7 +61,7 @@ public class DRListener extends AbstractGameListener<DR> {
             }
             Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
             DR.rankObject = DRRank.getFromDisplay(new DrStats(The5zigAPI.getAPI().getGameProfile()
-            .getId().toString().replace("-", "")).getTitle());
+                    .getId().toString().replace("-", "")).getTitle());
             DR.rank = DR.rankObject.getTotalDisplay();
             // Should've read the docs ¯\_(ツ)_/¯
             if (sb != null && sb.getTitle().contains("Your DR Stats")) {
@@ -106,7 +106,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
                             try {
                                 DR.currentMapPB = PBCommand.parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName()));
-                            } catch(Exception e) {
+                            } catch (Exception e) {
                                 DR.currentMapPB = "No Personal Best";
                             }
                             The5zigAPI.getLogger().info("Loading WR...");
@@ -250,7 +250,8 @@ public class DRListener extends AbstractGameListener<DR> {
                         if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
                             try {
                                 monthlyRank = (int) api.getMonthlyProfile().getPlace();
-                            } catch(Exception ignored) {}
+                            } catch (Exception ignored) {
+                            }
                         }
 
                         if (rankTitleDR != null)
@@ -416,11 +417,9 @@ public class DRListener extends AbstractGameListener<DR> {
             Timer timer = new Timer();
             ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
             timer.schedule(sft, 1500);
-        }
-        else if(message.startsWith("§8▍ §cDeathRun§8 ▏ §3NEW PERSONAL BEST!§b") && message.contains("it took you")) {
+        } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §3NEW PERSONAL BEST!§b") && message.contains("it took you")) {
             DR.mapTime = message.split("it took you §e")[1].replace("§b!", "");
-        }
-        else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in ")) {
+        } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in ")) {
             // §8▍ §cDeathRun§8 ▏ §bYou finished your run in 03:07.479§b!
             String time = (message.split("in "))[1].replace("§b!", "").trim();
 
@@ -512,11 +511,10 @@ public class DRListener extends AbstractGameListener<DR> {
                     APIValues.DRpoints += (pts - DR.lastPts);
                     DR.lastPts = pts;
                 }
+            } else if (e.getKey().contains("N/A / §7Kills: ")) {
+                DR.mapTime = e.getKey();
             }
-            else if(e.getKey().contains("N/A / §7Kills: ")) {
-               DR.mapTime = e.getKey();
-            }
-            if(DR.gameId == null && e.getKey().contains("§7GID: §f")) {
+            if (DR.gameId == null && e.getKey().contains("§7GID: §f")) {
                 DR.gameId = e.getKey().replace("§7GID: §f", "").trim();
                 Log.addToSendQueue(Log.info + "Game ID: §b" + DR.gameId);
             }

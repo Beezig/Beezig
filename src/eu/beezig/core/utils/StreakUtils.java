@@ -5,7 +5,6 @@ import eu.beezig.core.games.*;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.the5zig.mod.The5zigAPI;
 import org.json.simple.JSONObject;
-import eu.beezig.core.games.*;
 
 import java.io.*;
 import java.text.SimpleDateFormat;

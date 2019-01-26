@@ -15,8 +15,8 @@ public class MonthlyItem extends GameModeItem<BED> {
 
     @Override
     protected Object getValue(boolean dummy) {
-        if(dummy) return "No Profile";
-        if(!BED.hasLoaded) return "Loading...";
+        if (dummy) return "No Profile";
+        if (!BED.hasLoaded) return "Loading...";
 
         StringBuilder sb = new StringBuilder();
         sb.append("#").append(BED.monthly.getPlace()).append(" ▏ ");
@@ -55,7 +55,7 @@ public class MonthlyItem extends GameModeItem<BED> {
                 sb.append("K/D: ").append(df.format(kd));
                 break;
             case WL:
-                double wl = profile.getVictories() / ((double)profile.getGamesPlayed() - (double)profile.getVictories());
+                double wl = profile.getVictories() / ((double) profile.getGamesPlayed() - (double) profile.getVictories());
                 sb.append("W/L: ").append(df.format(wl));
                 break;
         }
@@ -65,15 +65,17 @@ public class MonthlyItem extends GameModeItem<BED> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.monthly";}
+    public String getTranslation() {
+        return "beezig.module.monthly";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        if(dummy) return false;
+        if (dummy) return false;
         try {
             if (getGameMode() == null)
                 return false;
-            if(BED.monthly == null || !BED.hasLoaded) return false;
+            if (BED.monthly == null || !BED.hasLoaded) return false;
             return BED.shouldRender(getGameMode().getState());
         } catch (Exception e) {
             return false;

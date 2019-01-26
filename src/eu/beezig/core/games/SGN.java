@@ -1,21 +1,19 @@
 package eu.beezig.core.games;
 
 import eu.beezig.core.ActiveGame;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.games.logging.GameLogger;
+import eu.beezig.core.hiveapi.stuff.sgn.SGNRank;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
-import eu.beezig.core.BeezigMain;
-import eu.beezig.core.hiveapi.stuff.sgn.SGNRank;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SGN extends GameMode {
-
-    private static GameLogger logger;
 
     public static List<String> messagesToSend = new ArrayList<>();
     public static List<String> footerToSend = new ArrayList<>();
@@ -27,6 +25,7 @@ public class SGN extends GameMode {
     public static String rank;
     public static boolean custom;
     public static SGNRank rankObject;
+    private static GameLogger logger;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
 
@@ -39,7 +38,7 @@ public class SGN extends GameMode {
         }
 
         logger = new GameLogger(BeezigMain.mcFile + "/sgn/games.csv");
-        logger.setHeaders(new String[] {
+        logger.setHeaders(new String[]{
                 "Points",
                 "Custom?",
                 "Map"
@@ -89,7 +88,7 @@ public class SGN extends GameMode {
 
         gameMode.setState(GameState.FINISHED);
 
-        if(activeMap != null && !activeMap.isEmpty() &&  logger != null)
+        if (activeMap != null && !activeMap.isEmpty() && logger != null)
             logger.logGame(gamePts + "", custom ? "Yes" : "No", activeMap);
 
         gamePts = 0;

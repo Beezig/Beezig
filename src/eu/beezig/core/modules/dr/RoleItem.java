@@ -1,7 +1,7 @@
 package eu.beezig.core.modules.dr;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.DR;
+import eu.the5zig.mod.modules.GameModeItem;
 
 
 public class RoleItem extends GameModeItem<DR> {
@@ -16,7 +16,9 @@ public class RoleItem extends GameModeItem<DR> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.role";}
+    public String getTranslation() {
+        return "beezig.module.role";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

@@ -1,7 +1,7 @@
 package eu.beezig.core.modules.mimv;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.games.MIMV;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class MapItem extends GameModeItem<MIMV> {
 
@@ -15,7 +15,9 @@ public class MapItem extends GameModeItem<MIMV> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.map";}
+    public String getTranslation() {
+        return "beezig.module.map";
+    }
 
     @Override
     public boolean shouldRender(boolean dummy) {

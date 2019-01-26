@@ -27,7 +27,9 @@ public class ModeItem extends GameModeItem<Giant> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.gnt.mode";}
+    public String getTranslation() {
+        return "beezig.module.gnt.mode";
+    }
 
 
     @Override

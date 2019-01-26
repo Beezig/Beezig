@@ -1,8 +1,8 @@
 package eu.beezig.core.modules.timv;
 
-import eu.the5zig.mod.modules.GameModeItem;
 import eu.beezig.core.Log;
 import eu.beezig.core.games.TIMV;
+import eu.the5zig.mod.modules.GameModeItem;
 
 public class DailyKarmaItem extends GameModeItem<TIMV> {
 
@@ -21,7 +21,9 @@ public class DailyKarmaItem extends GameModeItem<TIMV> {
 
 
     @Override
-    public String getTranslation() { return "beezig.module.daily";}
+    public String getTranslation() {
+        return "beezig.module.daily";
+    }
 
     // LabyMod
     protected String getCategoryKey() {

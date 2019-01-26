@@ -5,13 +5,13 @@ import eu.beezig.core.games.GNT;
 import eu.beezig.core.games.GNTM;
 import eu.beezig.core.games.TIMV;
 import eu.beezig.core.hiveapi.APIValues;
+import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.util.minecraft.ChatColor;
-import eu.beezig.core.utils.rpc.DiscordUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,7 +59,7 @@ public class HiveListener extends AbstractGameListener<GameMode> {
 
     @Override
     public void onMatch(GameMode gameMode, String key, IPatternResult match) {
-        if(gameMode != null) return;
+        if (gameMode != null) return;
         if (key == null)
             return;
         if (key.equals(TIMV.joinMessage)) {
@@ -76,7 +76,7 @@ public class HiveListener extends AbstractGameListener<GameMode> {
 
                 The5zigAPI.getLogger().info("Connected to TIMV! -Hive");
                 DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "In Lobby", "game_timv");
-                if(key.equals("timv.fallback")){
+                if (key.equals("timv.fallback")) {
 
                     //The winning map is Nightclub.
                     String afterMsg = match.get(0).split("The winning map is")[1];
@@ -106,8 +106,8 @@ public class HiveListener extends AbstractGameListener<GameMode> {
             case "bed.fallback":
                 getGameListener().switchLobby(
                         "bed.fallback".equals(key)
-                        ? "BED_" + ChatColor.stripColor(match.get(0)).replace("The winning map is ", "").replace(".", "")
-                        : "BED");
+                                ? "BED_" + ChatColor.stripColor(match.get(0)).replace("The winning map is ", "").replace(".", "")
+                                : "BED");
 
                 The5zigAPI.getLogger().info("Connected to BED/BEDT! -Hive");
                 DiscordUtils.updatePresence("Housekeeping in BedWars", "In Lobby", "game_bedwars");
@@ -181,18 +181,17 @@ public class HiveListener extends AbstractGameListener<GameMode> {
         }
 
 
-
-        if("somearcades.welcome".equals(key)) {
+        if ("somearcades.welcome".equals(key)) {
             new Thread(() -> {
                 try {
                     Thread.sleep(500L);
-                    if (!ActiveGame.current().isEmpty()  || (gameMode != null && gameMode.getState() != GameState.FINISHED)) {
+                    if (!ActiveGame.current().isEmpty() || (gameMode != null && gameMode.getState() != GameState.FINISHED)) {
                         return;
                     }
-                    if(The5zigAPI.getAPI().getSideScoreboard() == null) return;
-                    if(The5zigAPI.getAPI().getSideScoreboard().getTitle() == null) return;
+                    if (The5zigAPI.getAPI().getSideScoreboard() == null) return;
+                    if (The5zigAPI.getAPI().getSideScoreboard().getTitle() == null) return;
                     String title = ChatColor.stripColor(The5zigAPI.getAPI().getSideScoreboard().getTitle()).trim();
-                    if(title.startsWith("Your") && title.endsWith("Stats")) {
+                    if (title.startsWith("Your") && title.endsWith("Stats")) {
                         String game = title.split(" ")[1];
                         getGameListener().switchLobby("ARCADE_" + game);
 
@@ -204,7 +203,7 @@ public class HiveListener extends AbstractGameListener<GameMode> {
             }).start();
         }
 
-        if(key.startsWith("arcade.")) {
+        if (key.startsWith("arcade.")) {
             String[] path = key.split("\\.");
             String game = path[1].toUpperCase();
             getGameListener().switchLobby("ARCADE_" + game);

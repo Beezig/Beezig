@@ -1,10 +1,10 @@
 package eu.beezig.core.utils.autogg;
 
+import eu.beezig.core.settings.Setting;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.TitleEvent;
-import eu.beezig.core.settings.Setting;
 
 public class AutoGGListener {
 

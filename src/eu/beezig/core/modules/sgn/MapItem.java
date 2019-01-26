@@ -2,9 +2,9 @@ package eu.beezig.core.modules.sgn;
 
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.IHive;
+import eu.beezig.core.games.SGN;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
-import eu.beezig.core.games.SGN;
 
 public class MapItem extends GameModeItem<SGN> {
 
@@ -25,7 +25,9 @@ public class MapItem extends GameModeItem<SGN> {
     }
 
     @Override
-    public String getTranslation() { return "beezig.module.map";}
+    public String getTranslation() {
+        return "beezig.module.map";
+    }
 
 
     @Override
