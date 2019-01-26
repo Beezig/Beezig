@@ -99,6 +99,9 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
             HIDE.mostKills = HideMapRecords.getForMap(map);
             Log.addToSendQueue(Log.info + "Your current kills record on §b" + map + "§3 is §b" + HIDE.mostKills + "§3.");
         }
+        else if(message.contains("for surviving §e")) {
+            HIDE.timeAlive = message.split("for surviving §e")[1];
+        }
 
         //Autovoting
 
