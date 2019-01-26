@@ -513,6 +513,9 @@ public class DRListener extends AbstractGameListener<DR> {
                     DR.lastPts = pts;
                 }
             }
+            else if(e.getKey().contains("N/A / §7Kills: ")) {
+               DR.mapTime = e.getKey();
+            }
             if(DR.gameId == null && e.getKey().contains("§7GID: §f")) {
                 DR.gameId = e.getKey().replace("§7GID: §f", "").trim();
                 Log.addToSendQueue(Log.info + "Game ID: §b" + DR.gameId);
