@@ -23,6 +23,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PlayerStatsCommand implements Command {
+
+    private List<String> modes = Arrays.asList("bed", "sky", "timv", "dr", "bp", "cai", "dr", "grav",
+            "gnt", "gntm", "hide", "lab", "mimv", "sgn");
+
     @Override
     public String getName() {
         return "playerstats";
@@ -36,19 +40,28 @@ public class PlayerStatsCommand implements Command {
     @Override
     public boolean execute(String[] args) {
 
-        String game;
-        if (args.length == 0)
-            game = ActiveGame.current();
-        else
-            game = args[0];
-
-        String rankName = game.equalsIgnoreCase("gnt") || game.equals("gntm") ? "Giant" : game.toUpperCase();
-        String rankNamePkg = game.equalsIgnoreCase("gnt") || game.equals("gntm") ? "gnt" : game;
-
-        long startT = System.currentTimeMillis();
-
-
         new Thread(() -> {
+            String game;
+            String earlyStat = null;
+            if (args.length == 0)
+                game = ActiveGame.current();
+            else if(args.length == 1) {
+                if(modes.contains(args[0])) {
+                    game = args[0];
+                }
+                else {
+                    game = ActiveGame.current();
+                    earlyStat = args[0];
+                }
+            }
+            else game = args[0];
+
+            String rankName = game.equalsIgnoreCase("gnt") || game.equals("gntm") ? "Giant" : game.toUpperCase();
+            String rankNamePkg = game.equalsIgnoreCase("gnt") || game.equals("gntm") ? "gnt" : game;
+
+            long startT = System.currentTimeMillis();
+
+
             Class enumToUse;
             try {
                 enumToUse = Class.forName("eu.beezig.core.hiveapi.stuff." + rankNamePkg.toLowerCase() + "." + rankName + "Rank");
@@ -67,7 +80,8 @@ public class PlayerStatsCommand implements Command {
                     ? "karma" : "points";
 
             RecordsStatistic pointStringToUse =
-                    MultiPsStats.getRecordsStatistic(game, args.length < 2 ? pointsStr : args[1]);
+                    MultiPsStats.getRecordsStatistic(game, earlyStat != null ? earlyStat
+                            : (args.length < 2 ? pointsStr : args[1]));
 
             if (pointStringToUse == null) return;
 
@@ -137,8 +151,12 @@ public class PlayerStatsCommand implements Command {
         if (args.length == 2) {
             return TabCompletionUtils.matching(args, MultiPsStats.getAllPossibleValues(args[0]));
         }
-        return TabCompletionUtils.matching(args,
-                Arrays.asList("bed", "sky", "timv", "dr", "bp", "cai", "dr", "grav",
-                        "gnt", "gntm", "hide", "lab", "mimv", "sgn"));
+        else if(args.length == 1 && modes.contains(ActiveGame.current().toLowerCase())) {
+            List<String> everything = new ArrayList<>();
+            everything.addAll(modes);
+            everything.addAll(MultiPsStats.getAllPossibleValues(ActiveGame.current().toLowerCase()));
+            return TabCompletionUtils.matching(args, everything);
+        }
+        return TabCompletionUtils.matching(args, modes);
     }
 }
