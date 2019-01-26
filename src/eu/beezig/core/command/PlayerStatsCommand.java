@@ -95,6 +95,10 @@ public class PlayerStatsCommand implements Command {
                     HivePlayer parent = api.getPlayer();
                     ChatColor rankColor = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
 
+                    if(("Karma/Role Points".equalsIgnoreCase(pointStringToUse.getKey())
+                    || "Traitor Share".equalsIgnoreCase(pointStringToUse.getKey()))
+                            && api.getPoints() < 1000) continue;
+
                     points.add(((Number) pointStringToUse.getValueRaw(api.getSource().getInput())).doubleValue());
 
                     RankEnum rank = game.equalsIgnoreCase("bed")
