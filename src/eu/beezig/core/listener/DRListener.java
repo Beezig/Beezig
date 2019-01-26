@@ -485,6 +485,9 @@ public class DRListener extends AbstractGameListener<DR> {
                     The5zigAPI.getAPI().messagePlayer(message + " §3The World Record is §b" + diff
                             + "§3 seconds away! You beat your Personal Best by §b" + -pbDiff + " §3seconds!");
                 }
+
+                DR.mapTime = time + " (WR: " + (diff >= 0 ? "+" + diff : diff) + " PB: " + (pbDiff >= 0 ? "+" + pbDiff
+                        : pbDiff) + ")";
             }).start();
 
             return true;
