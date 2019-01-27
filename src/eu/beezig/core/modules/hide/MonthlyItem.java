@@ -2,9 +2,7 @@ package eu.beezig.core.modules.hide;
 
 import eu.beezig.core.Log;
 import eu.beezig.core.games.HIDE;
-import eu.beezig.core.games.HIDE;
 import eu.the5zig.mod.modules.GameModeItem;
-import pw.roccodev.beezig.hiveapi.wrapper.monthly.dr.DrMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.monthly.hide.HideMonthlyProfile;
 
 import java.text.DecimalFormat;

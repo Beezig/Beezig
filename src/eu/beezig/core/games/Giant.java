@@ -9,7 +9,6 @@ import eu.beezig.core.utils.StreakUtils;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
-import pw.roccodev.beezig.hiveapi.wrapper.monthly.bed.BedMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.monthly.gnt.GntMonthlyProfile;
 
 import java.io.*;

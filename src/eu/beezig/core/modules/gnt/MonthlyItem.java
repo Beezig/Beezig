@@ -3,9 +3,7 @@ package eu.beezig.core.modules.gnt;
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.Log;
 import eu.beezig.core.games.Giant;
-import eu.beezig.core.games.Giant;
 import eu.the5zig.mod.modules.GameModeItem;
-import pw.roccodev.beezig.hiveapi.wrapper.monthly.dr.DrMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.monthly.gnt.GntMonthlyProfile;
 
 import java.text.DecimalFormat;

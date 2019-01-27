@@ -4,7 +4,6 @@ import eu.beezig.core.ActiveGame;
 import eu.beezig.core.Log;
 import eu.beezig.core.games.SKY;
 import eu.the5zig.mod.modules.GameModeItem;
-import pw.roccodev.beezig.hiveapi.wrapper.monthly.gnt.GntMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.monthly.sky.SkyMonthlyProfile;
 
 import java.text.DecimalFormat;

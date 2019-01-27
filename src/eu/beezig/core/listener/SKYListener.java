@@ -5,7 +5,6 @@ import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
 import eu.beezig.core.advancedrecords.AdvancedRecords;
 import eu.beezig.core.autovote.AutovoteUtils;
-import eu.beezig.core.games.DR;
 import eu.beezig.core.games.SKY;
 import eu.beezig.core.hiveapi.APIValues;
 import eu.beezig.core.hiveapi.stuff.sky.SKYRank;

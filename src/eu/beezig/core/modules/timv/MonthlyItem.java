@@ -4,7 +4,6 @@ import eu.beezig.core.ActiveGame;
 import eu.beezig.core.Log;
 import eu.beezig.core.games.TIMV;
 import eu.the5zig.mod.modules.GameModeItem;
-import pw.roccodev.beezig.hiveapi.wrapper.monthly.gnt.GntMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.monthly.timv.TimvMonthlyProfile;
 
 import java.text.DecimalFormat;
