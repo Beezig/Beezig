@@ -18,6 +18,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.gnt.GntMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.GntStats;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.GntmStats;
@@ -259,10 +260,16 @@ public class GiantListener extends AbstractGameListener<Giant> {
                                 ? api.getTitle()
                                 : null;
                         The5zigAPI.getLogger().info(rankTitleGiant);
-                        // int monthlyRank = (Setting.SHOW_RECORDS_MONTHLYRANK.getValue() &&
-                        // HiveAPI.getLeaderboardsPlacePoints(349, "DR") <
-                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
-                        // HiveAPI.getMonthlyLeaderboardsRank(AdvancedRecords.player, "DR") : 0;
+                        long monthlyRank = 0;
+                        if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
+                            try {
+                                GntMonthlyProfile monthly = api.getMonthlyProfile();
+                                if (monthly != null) {
+                                    monthlyRank = monthly.getPlace();
+                                }
+                            } catch (Exception ignored) {
+                            }
+                        }
                         if (rankTitleGiant != null)
                             rank = GiantRank.getFromDisplay(rankTitleGiant);
                         List<String> messages = new ArrayList<>(Giant.messagesToSend);
@@ -338,6 +345,9 @@ public class GiantListener extends AbstractGameListener<Giant> {
                                 .floor(((double) vics
                                         / (double) played) * 1000d)
                                 / 10d) : null;
+                        if (monthlyRank != 0) {
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Monthly Place: §b#" + monthlyRank);
+                        }
                         Double kd = Setting.SHOW_RECORDS_KDR.getValue()
                                 ? Math.floor(((double) kills
                                 / (double) deaths * 100d)) / 100d

@@ -19,6 +19,7 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.sky.SkyMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.SkyStats;
 
@@ -262,10 +263,16 @@ public class SKYListener extends AbstractGameListener<SKY> {
                         Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size()
                                 : null;
 
-                        // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
-                        // HiveAPI.getLeaderboardsPlacePoints(349, "SKY") <
-                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
-                        // HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+                        long monthlyRank = 0;
+                        if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
+                            try {
+                                SkyMonthlyProfile monthly = api.getMonthlyProfile();
+                                if (monthly != null) {
+                                    monthlyRank = monthly.getPlace();
+                                }
+                            } catch (Exception ignored) {
+                            }
+                        }
 
                         List<String> messages = new ArrayList<>(SKY.messagesToSend);
                         for (String s : messages) {
@@ -347,6 +354,9 @@ public class SKYListener extends AbstractGameListener<SKY> {
                         if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
                             The5zigAPI.getAPI().messagePlayer("§f §3 Winrate: §b" + df1f.format(wr) + "%");
+                        }
+                        if (monthlyRank != 0) {
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Monthly Place: §b#" + monthlyRank);
                         }
                         if (Setting.SHOW_RECORDS_KDR.getValue()) {
                             double kd = (double) kills / (double) deaths;

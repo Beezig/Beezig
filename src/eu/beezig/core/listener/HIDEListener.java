@@ -20,6 +20,7 @@ import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.hide.HideMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.HideStats;
 
@@ -241,7 +242,16 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                         Integer playedBlocks = Setting.HIDE_SHOW_AMOUNT_UNLOCKED.getValue() ? api.getBlockExperience().size() : null;
 
 
-                        //int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() && HiveAPI.getLeaderboardsPlacePoints(349, "HIDE") < HiveAPI.DRgetPoints(AdvancedRecords.player)) ? HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+                        long monthlyRank = 0;
+                        if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
+                            try {
+                                HideMonthlyProfile monthly = api.getMonthlyProfile();
+                                if (monthly != null) {
+                                    monthlyRank = monthly.getPlace();
+                                }
+                            } catch (Exception ignored) {
+                            }
+                        }
 
                         List<String> messages = new ArrayList<>(HIDE.messagesToSend);
                         for (String s : messages) {
@@ -325,6 +335,9 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                         if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = (double) victories / (double) gamesPlayed;
                             The5zigAPI.getAPI().messagePlayer("§f §3 Winrate: §b" + df1f.format(wr * 100) + "%");
+                        }
+                        if (monthlyRank != 0) {
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Monthly Place: §b#" + monthlyRank);
                         }
                         if (Setting.HIDE_SHOW_SEEKER_KPG.getValue()) {
                             double skpg = (double) killsSeeker / (double) gamesPlayed;

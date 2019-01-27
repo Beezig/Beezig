@@ -19,6 +19,7 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import org.json.simple.JSONObject;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.bp.BpMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.BpStats;
 
@@ -189,10 +190,16 @@ public class BPListener extends AbstractGameListener<BP> {
                         Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size()
                                 : null;
 
-                        // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
-                        // HiveAPI.getLeaderboardsPlacePoints(349, "BP") <
-                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
-                        // HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+                        long monthlyRank = 0;
+                        if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
+                            try {
+                                BpMonthlyProfile monthly = api.getMonthlyProfile();
+                                if (monthly != null) {
+                                    monthlyRank = monthly.getPlace();
+                                }
+                            } catch (Exception ignored) {
+                            }
+                        }
 
                         List<String> messages = new ArrayList<>(BP.messagesToSend);
                         for (String s : messages) {
@@ -271,6 +278,9 @@ public class BPListener extends AbstractGameListener<BP> {
                         if (Setting.SHOW_RECORDS_WINRATE.getValue()) {
                             double wr = Math.floor(((double) victories / (double) gamesPlayed) * 1000d) / 10d;
                             The5zigAPI.getAPI().messagePlayer("§f §3 Winrate: §b" + df1f.format(wr) + "%");
+                        }
+                        if (monthlyRank != 0) {
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Monthly Place: §b#" + monthlyRank);
                         }
                         if (Setting.SHOW_RECORDS_PPG.getValue()) {
                             double ppg = (double) points / (double) gamesPlayed;

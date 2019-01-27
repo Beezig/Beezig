@@ -22,6 +22,7 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
 import org.lwjgl.input.Mouse;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.cai.CaiMonthlyProfile;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.CaiStats;
 
@@ -285,10 +286,16 @@ public class CAIListener extends AbstractGameListener<CAI> {
                         Integer achievements = Setting.SHOW_RECORDS_ACHIEVEMENTS.getValue() ? api.getUnlockedAchievements().size()
                                 : null;
 
-                        // int monthlyRank = (Setting.DR_SHOW_MONTHLYRANK.getValue() &&
-                        // HiveAPI.getLeaderboardsPlacePoints(349, "CAI") <
-                        // HiveAPI.DRgetPoints(AdvancedRecords.player)) ?
-                        // HiveAPI.getMonthlyLeaderboardsRank(DR.lastRecords, "DR") : 0;
+                        long monthlyRank = 0;
+                        if (Setting.SHOW_RECORDS_MONTHLYRANK.getValue()) {
+                            try {
+                                CaiMonthlyProfile monthly = api.getMonthlyProfile();
+                                if (monthly != null) {
+                                    monthlyRank = monthly.getPlace();
+                                }
+                            } catch (Exception ignored) {
+                            }
+                        }
 
                         List<String> messages = new ArrayList<>(CAI.messagesToSend);
                         for (String s : messages) {
@@ -366,6 +373,9 @@ public class CAIListener extends AbstractGameListener<CAI> {
                             double wr = (double) victories / (double) gamesPlayed;
                             The5zigAPI.getAPI()
                                     .messagePlayer("§f §3 Winrate: §b" + df1f.format(wr * 100) + "%");
+                        }
+                        if (monthlyRank != 0) {
+                            The5zigAPI.getAPI().messagePlayer("§f §3 Monthly Place: §b#" + monthlyRank);
                         }
                         if (Setting.CAI_SHOW_CATCHES_CAUGHT.getValue()) {
                             if (catches == 0)
