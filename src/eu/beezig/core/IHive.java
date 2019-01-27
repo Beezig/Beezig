@@ -56,7 +56,9 @@ public class IHive extends ServerInstance {
                 Log.addToSendQueue("       §cA new Beezig update is required and the current");
                 Log.addToSendQueue("                     §cversion has been disabled.");
                 Log.addToSendQueue("");
-                Log.addToSendQueue("                     §7To update, use the installer.");
+                if(BeezigMain.laby)
+                    Log.addToSendQueue("                     §7To update, restart your game.");
+                else Log.addToSendQueue("                     §7To update, use the installer.");
                 Log.addToSendQueue("");
                 Log.addToSendQueue("                         §4§m                              ");
             } else if (BeezigMain.newUpdate) {
@@ -66,7 +68,9 @@ public class IHive extends ServerInstance {
                 Log.addToSendQueue("");
                 Log.addToSendQueue("              §bA new Beezig update is available!");
                 Log.addToSendQueue("");
-                Log.addToSendQueue("                     §7To update, use the installer.");
+                if(BeezigMain.laby)
+                    Log.addToSendQueue("                     §7To update, restart your game.");
+                else Log.addToSendQueue("                     §7To update, use the installer.");
                 Log.addToSendQueue("");
                 Log.addToSendQueue("                         §b§m                              ");
 
