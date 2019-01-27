@@ -9,6 +9,7 @@ import eu.beezig.core.hiveapi.stuff.dr.DRRank;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.dr.DrMonthlyProfile;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -40,6 +41,10 @@ public class DR extends GameMode {
     private static GameLogger logger;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
+
+    public static DrMonthlyProfile monthly;
+    public static boolean attemptNew = true;
+    public static boolean hasLoaded = false;
 
     public static void initDailyPointsWriter() throws IOException {
 
@@ -117,6 +122,7 @@ public class DR extends GameMode {
         deaths = 0;
         kills = 0;
         lastPts = 0;
+        hasLoaded = false;
         mapTime = null;
         DR.hasVoted = false;
         ActiveGame.reset("dr");

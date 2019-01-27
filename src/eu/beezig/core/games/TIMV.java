@@ -13,6 +13,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.util.minecraft.ChatColor;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.timv.TimvMonthlyProfile;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -71,6 +72,10 @@ public class TIMV extends GameMode {
     public static boolean actionBarChecked = false;
     private static PrintWriter dailyKarmaWriter;
     private static String dailyKarmaName;
+
+    public static TimvMonthlyProfile monthly;
+    public static boolean attemptNew = true;
+    public static boolean hasLoaded = false;
 
     public static void setDailyKarmaFileName(String newName) {
         dailyKarmaName = newName;
@@ -288,6 +293,7 @@ public class TIMV extends GameMode {
         TIMV.hasVoted = false;
         TIMV.actionBarChecked = false;
         lastTestMsg = -1;
+        hasLoaded = false;
         gm.setState(GameState.FINISHED);
         ActiveGame.reset("timv");
         IHive.genericReset();

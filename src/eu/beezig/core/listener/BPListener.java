@@ -84,6 +84,16 @@ public class BPListener extends AbstractGameListener<BP> {
                     Connector.connectBP(server);
                 }
 
+                try {
+                    if (BP.attemptNew) {
+                        BP.monthly = api.getMonthlyProfile();
+                        BP.monthly.getPoints(); // Fetch (LazyObject)
+                        BP.hasLoaded = true;
+                    }
+                } catch (Exception e) {
+                    BP.attemptNew = false;
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

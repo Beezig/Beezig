@@ -10,6 +10,8 @@ import eu.beezig.core.utils.StreakUtils;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.bed.BedMonthlyProfile;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.hide.HideMonthlyProfile;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -37,6 +39,10 @@ public class HIDE extends GameMode {
     private static GameLogger logger;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
+
+    public static HideMonthlyProfile monthly;
+    public static boolean attemptNew = true;
+    public static boolean hasLoaded = false;
 
     public static void initDailyPointsWriter() throws IOException {
 
@@ -124,6 +130,7 @@ public class HIDE extends GameMode {
         lastPts = 0;
         mostKills = 0;
         seeking = false;
+        hasLoaded = false;
         ActiveGame.reset("hide");
         IHive.genericReset();
         if (The5zigAPI.getAPI().getActiveServer() != null)

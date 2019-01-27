@@ -6,6 +6,7 @@ import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
 import eu.beezig.core.advancedrecords.AdvancedRecords;
 import eu.beezig.core.autovote.AutovoteUtils;
+import eu.beezig.core.games.DR;
 import eu.beezig.core.games.TIMV;
 import eu.beezig.core.hiveapi.APIValues;
 import eu.beezig.core.hiveapi.stuff.timv.TIMVRank;
@@ -95,6 +96,16 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             TimvStats api = new TimvStats(The5zigAPI.getAPI().getGameProfile().getName());
             TIMV.rankObject = TIMVRank.getFromDisplay(api.getTitle());
             TIMV.rank = TIMV.rankObject.getTotalDisplay(api.getPoints());
+
+            try {
+                if (TIMV.attemptNew) {
+                    TIMV.monthly = api.getMonthlyProfile();
+                    TIMV.monthly.getPoints(); // Fetch (LazyObject)
+                    TIMV.hasLoaded = true;
+                }
+            } catch (Exception e) {
+                TIMV.attemptNew = false;
+            }
 
         }).start();
     }

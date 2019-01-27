@@ -60,14 +60,25 @@ public class DRListener extends AbstractGameListener<DR> {
                 e2.printStackTrace();
             }
             Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
-            DR.rankObject = DRRank.getFromDisplay(new DrStats(The5zigAPI.getAPI().getGameProfile()
-                    .getId().toString().replace("-", "")).getTitle());
+            DrStats api = new DrStats(The5zigAPI.getAPI().getGameProfile()
+                    .getId().toString().replace("-", ""));
+            DR.rankObject = DRRank.getFromDisplay(api.getTitle());
             DR.rank = DR.rankObject.getTotalDisplay();
             // Should've read the docs ¯\_(ツ)_/¯
             if (sb != null && sb.getTitle().contains("Your DR Stats")) {
                 int points = sb.getLines().get(ChatColor.AQUA + "Points");
                 APIValues.DRpoints = (long) points;
 
+            }
+
+            try {
+                if (DR.attemptNew) {
+                    DR.monthly = api.getMonthlyProfile();
+                    DR.monthly.getPoints(); // Fetch (LazyObject)
+                    DR.hasLoaded = true;
+                }
+            } catch (Exception e) {
+                DR.attemptNew = false;
             }
         }).start();
 

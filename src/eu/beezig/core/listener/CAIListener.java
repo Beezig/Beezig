@@ -6,6 +6,7 @@ import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
 import eu.beezig.core.advancedrecords.AdvancedRecords;
 import eu.beezig.core.autovote.AutovoteUtils;
+import eu.beezig.core.games.BP;
 import eu.beezig.core.games.CAI;
 import eu.beezig.core.hiveapi.APIValues;
 import eu.beezig.core.hiveapi.stuff.cai.CAIRank;
@@ -70,9 +71,21 @@ public class CAIListener extends AbstractGameListener<CAI> {
                     APIValues.CAIpoints = (long) points;
                 }
 
+                CaiStats api = new CaiStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
+
                 CAI.rankObject = CAIRank
-                        .getFromDisplay(new CaiStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "")).getTitle());
+                        .getFromDisplay(api.getTitle());
                 CAI.rank = CAI.rankObject.getTotalDisplay();
+
+                try {
+                    if (CAI.attemptNew) {
+                        CAI.monthly = api.getMonthlyProfile();
+                        CAI.monthly.getPoints(); // Fetch (LazyObject)
+                        CAI.hasLoaded = true;
+                    }
+                } catch (Exception e) {
+                    CAI.attemptNew = false;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

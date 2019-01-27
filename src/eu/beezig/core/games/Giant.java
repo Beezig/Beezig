@@ -9,6 +9,8 @@ import eu.beezig.core.utils.StreakUtils;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.bed.BedMonthlyProfile;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.gnt.GntMonthlyProfile;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -32,6 +34,10 @@ public class Giant extends GameMode {
     public static int winstreak;
     public static int bestStreak;
     public static int totalKills;
+
+    public static GntMonthlyProfile monthly;
+    public static boolean attemptNew = true;
+    public static boolean hasLoaded = false;
 
     //KDR
     public static int totalDeaths;
@@ -134,6 +140,7 @@ public class Giant extends GameMode {
         team = "";
         activeMap = null;
         gameKills = 0;
+        hasLoaded = false;
         gameDeaths = 0;
         gameKdr = 0D;
         giantKills = 0;

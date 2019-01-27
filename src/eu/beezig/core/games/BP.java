@@ -9,6 +9,8 @@ import eu.beezig.core.utils.ws.Connector;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.bed.BedMonthlyProfile;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.bp.BpMonthlyProfile;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -28,6 +30,10 @@ public class BP extends GameMode {
     private static GameLogger logger;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
+
+    public static BpMonthlyProfile monthly;
+    public static boolean attemptNew = true;
+    public static boolean hasLoaded = false;
 
     public static void initDailyPointsWriter() throws IOException {
 
@@ -95,6 +101,7 @@ public class BP extends GameMode {
         artist = null;
 
         gamePts = 0;
+        hasLoaded = false;
         votesToParse.clear();
         ActiveGame.reset("bp");
         IHive.genericReset();

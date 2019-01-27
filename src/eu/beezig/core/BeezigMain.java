@@ -16,6 +16,7 @@ import eu.beezig.core.hiveapi.stuff.grav.GRAVListenerv2;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.modules.arcade.GameItem;
 import eu.beezig.core.modules.bed.*;
+import eu.beezig.core.modules.bed.MonthlyItem;
 import eu.beezig.core.modules.bp.SongItem;
 import eu.beezig.core.modules.cai.CooldownsItem;
 import eu.beezig.core.modules.cai.GamePointsItem;
@@ -211,6 +212,8 @@ public class BeezigMain {
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "timvdailykarma",
                 DailyKarmaItem.class, "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "timvmonthly", eu.beezig.core.modules.timv.MonthlyItem.class,
+                "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "drpoints", PointsItem.class,
                 "serverhivemc");
@@ -222,6 +225,8 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "drpb", PBItem.class, "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "drwr", WRItem.class, "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "drdaily", DailyItem.class,
+                "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "drmonthly", eu.beezig.core.modules.dr.MonthlyItem.class,
                 "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "bedpoints", eu.beezig.core.modules.bed.PointsItem.class,
@@ -277,6 +282,8 @@ public class BeezigMain {
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "gntstreak", eu.beezig.core.modules.gnt.WinstreakItem.class,
                 "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "gntmonthly", eu.beezig.core.modules.gnt.MonthlyItem.class,
+                "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "hidepoints", eu.beezig.core.modules.hide.PointsItem.class,
                 "serverhivemc");
@@ -285,6 +292,8 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "hidedaily", eu.beezig.core.modules.hide.DailyItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "hidestreak", eu.beezig.core.modules.hide.WinstreakItem.class,
+                "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "hidemonthly", eu.beezig.core.modules.hide.MonthlyItem.class,
                 "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "caipoints", eu.beezig.core.modules.cai.PointsItem.class,
@@ -300,6 +309,8 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "caistreak", eu.beezig.core.modules.cai.WinstreakItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "caicooldowns", CooldownsItem.class,
+                "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "caimonthly", eu.beezig.core.modules.cai.MonthlyItem.class,
                 "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "skypoints", eu.beezig.core.modules.sky.PointsItem.class,
@@ -319,6 +330,8 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "skymap", eu.beezig.core.modules.sky.MapItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "skystreak", eu.beezig.core.modules.sky.WinstreakItem.class,
+                "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "skymonthly", eu.beezig.core.modules.sky.MonthlyItem.class,
                 "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "mimvkarma", eu.beezig.core.modules.mimv.KarmaItem.class,
@@ -344,6 +357,8 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "bpdaily", eu.beezig.core.modules.bp.DailyItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "bpsong", SongItem.class,
+                "serverhivemc");
+        The5zigAPI.getAPI().registerModuleItem(this, "bpmonthly", eu.beezig.core.modules.bp.MonthlyItem.class,
                 "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "sgnpoints", eu.beezig.core.modules.sgn.PointsItem.class,

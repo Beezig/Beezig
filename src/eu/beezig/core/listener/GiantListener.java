@@ -5,6 +5,7 @@ import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
 import eu.beezig.core.advancedrecords.AdvancedRecords;
 import eu.beezig.core.autovote.AutovoteUtils;
+import eu.beezig.core.games.DR;
 import eu.beezig.core.games.Giant;
 import eu.beezig.core.hiveapi.APIValues;
 import eu.beezig.core.hiveapi.stuff.gnt.GiantRank;
@@ -92,6 +93,16 @@ public class GiantListener extends AbstractGameListener<Giant> {
             Giant.rank = Giant.rankObject.getTotalDisplay();
 
             APIValues.Giantpoints = gnt.getPoints();
+
+            try {
+                if (Giant.attemptNew) {
+                    Giant.monthly = gnt.getMonthlyProfile();
+                    Giant.monthly.getPoints(); // Fetch (LazyObject)
+                    Giant.hasLoaded = true;
+                }
+            } catch (Exception e) {
+                Giant.attemptNew = false;
+            }
 
         }).start();
 

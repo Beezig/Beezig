@@ -9,6 +9,7 @@ import eu.beezig.core.utils.StreakUtils;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
+import pw.roccodev.beezig.hiveapi.wrapper.monthly.sky.SkyMonthlyProfile;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -41,6 +42,10 @@ public class SKY extends GameMode {
     private static GameLogger logger;
     private static PrintWriter dailyPointsWriter;
     private static String dailyPointsName;
+
+    public static SkyMonthlyProfile monthly;
+    public static boolean attemptNew = true;
+    public static boolean hasLoaded = false;
 
     public static void updateKdr() {
         apiKdr = (double) apiKills / (apiDeaths == 0 ? 1 : apiDeaths);
@@ -130,6 +135,7 @@ public class SKY extends GameMode {
         SKY.hasVoted = false;
         gamePoints = 0;
         team = "";
+        hasLoaded = false;
         mode = "";
         kills = 0;
         deaths = 0;

@@ -76,6 +76,16 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                 HIDE.rankObject = HIDERank.getFromDisplay(api.getTitle());
                 HIDE.rank = HIDE.rankObject.getTotalDisplay();
 
+                try {
+                    if (HIDE.attemptNew) {
+                        HIDE.monthly = api.getMonthlyProfile();
+                        HIDE.monthly.getPoints(); // Fetch (LazyObject)
+                        HIDE.hasLoaded = true;
+                    }
+                } catch (Exception e) {
+                    HIDE.attemptNew = false;
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
