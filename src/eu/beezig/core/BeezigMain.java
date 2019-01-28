@@ -719,14 +719,18 @@ public class BeezigMain {
         if (ActiveGame.is("TIMV")
                 && (evt.getMessage().endsWith(" test") || (evt.getMessage().endsWith(" tset")))
                 && (evt.getMessage().split(" ").length == 2)
-                && (!evt.getMessage().contains("please") || !evt.getMessage().contains("pls"))
                 && Setting.TIMV_USE_TESTREQUESTS.getValue()) {
 
             int random = ThreadLocalRandom.current().ints(0, TIMV.testRequests.size()).distinct()
                     .filter(i -> i != TIMV.lastTestMsg).findFirst().getAsInt();
             TIMV.lastTestMsg = random;
-            String player = evt.getMessage().replaceAll(" test", "").trim();
-            if (player.equalsIgnoreCase("i'll") || player.equalsIgnoreCase("ill") || player.equalsIgnoreCase("i") || player.equalsIgnoreCase("go"))
+            String player = evt.getMessage().replaceAll(" test", "").replaceAll(" tset", "").trim();
+            if (player.equalsIgnoreCase("i'll")
+                    || player.equalsIgnoreCase("ill")
+                    || player.equalsIgnoreCase("i")
+                    || player.equalsIgnoreCase("go")
+                    || player.equalsIgnoreCase("pls")
+                    || player.equalsIgnoreCase("please"))
                 return;
             evt.setCancelled(true);
             The5zigAPI.getAPI().sendPlayerMessage(TIMV.testRequests.get(random).replaceAll("\\{p\\}", player));
