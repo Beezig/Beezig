@@ -716,7 +716,10 @@ public class BeezigMain {
         if (evt.getMessage().toUpperCase().trim().equals("/P")) {
             MessageOverlayCommand.toggledName = "";
         }
-        if (evt.getMessage().endsWith(" test") && (evt.getMessage().split(" ").length == 2) && ActiveGame.is("TIMV")
+        if (ActiveGame.is("TIMV")
+                && (evt.getMessage().endsWith(" test") || (evt.getMessage().endsWith(" tset")))
+                && (evt.getMessage().split(" ").length == 2)
+                && (!evt.getMessage().contains("please") || !evt.getMessage().contains("pls"))
                 && Setting.TIMV_USE_TESTREQUESTS.getValue()) {
 
             int random = ThreadLocalRandom.current().ints(0, TIMV.testRequests.size()).distinct()

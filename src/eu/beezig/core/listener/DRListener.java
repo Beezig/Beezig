@@ -530,7 +530,8 @@ public class DRListener extends AbstractGameListener<DR> {
             }
             if (DR.gameId == null && e.getKey().contains("§7GID: §f")) {
                 DR.gameId = e.getKey().replace("§7GID: §f", "").trim();
-                Log.addToSendQueue(Log.info + "Game ID: §b" + DR.gameId);
+                Log.addToSendQueue(Log.info + "Game ID: §b" + DR.gameId + " > §a" + "http://hivemc.com/deathrun/game/" + DR.gameId);
+
             }
         }
     }

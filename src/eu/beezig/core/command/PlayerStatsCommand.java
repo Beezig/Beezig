@@ -139,7 +139,7 @@ public class PlayerStatsCommand implements Command {
                 }
             }
             The5zigAPI.getAPI()
-                    .messagePlayer(Log.info + game.toUpperCase() + " Playerstats: §b" + name.size() + "P / "
+                    .messagePlayer(Log.info + game.toUpperCase() + " " + pointStringToUse.getKey() + " Playerstats: §b" + name.size() + "P / "
                             + ((System.currentTimeMillis() - startT) / 1000) + "s / "
                             + Log.ratio(APIUtils.average(points.toArray())) + " Average");
             The5zigAPI.getAPI().messagePlayer(
