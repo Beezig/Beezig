@@ -71,7 +71,7 @@ public class MonthlyItem extends GameModeItem<TIMV> {
             if (getGameMode() == null)
                 return false;
             if (TIMV.monthly == null || !TIMV.hasLoaded) return false;
-            return ActiveGame.is("gnt") || ActiveGame.is("gntm");
+            return TIMV.shouldRender(getGameMode().getState());
         } catch (Exception e) {
             return false;
         }

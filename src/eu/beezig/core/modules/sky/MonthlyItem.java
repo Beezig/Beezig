@@ -71,7 +71,7 @@ public class MonthlyItem extends GameModeItem<SKY> {
             if (getGameMode() == null)
                 return false;
             if (SKY.monthly == null || !SKY.hasLoaded) return false;
-            return ActiveGame.is("gnt") || ActiveGame.is("gntm");
+            return SKY.shouldRender(getGameMode().getState());
         } catch (Exception e) {
             return false;
         }
