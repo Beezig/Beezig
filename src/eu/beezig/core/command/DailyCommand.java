@@ -38,7 +38,9 @@ public class DailyCommand implements Command {
                 Field f = clazz.getSimpleName().equals("TIMV") ? clazz.getDeclaredField("dailyKarmaName") : clazz.getDeclaredField("dailyPointsName");
                 f.setAccessible(true);
                 ArrayList<String> lines = new ArrayList<>(
-                        new ArrayList<>(Files.readAllLines(Paths.get(new File(BeezigMain.mcFile + "/" + mode.toLowerCase() + "/dailyPoints/" + f.get(null)).getPath()))));
+                        new ArrayList<>(Files.readAllLines(Paths.get(new File(BeezigMain.mcFile + "/" + mode.toLowerCase() + "/" +
+                                (mode.equalsIgnoreCase("timv") ? "dailykarma" : "dailypoints") +
+                                "/" + f.get(null)).getPath()))));
                 The5zigAPI.getAPI().messagePlayer(Log.info + "Daily Points: §b" + lines.get(0));
             } catch (IOException | ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
                 The5zigAPI.getAPI().messagePlayer(Log.error + "No daily data found.");
