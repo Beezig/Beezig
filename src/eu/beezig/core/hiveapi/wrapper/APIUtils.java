@@ -244,7 +244,12 @@ public class APIUtils {
         if (level < 20) return ChatColor.YELLOW;
         if (level < 25) return ChatColor.GOLD;
         if (level < 30) return ChatColor.RED;
-        if (level == 30) return ChatColor.LIGHT_PURPLE;
+        if (level < 35) return ChatColor.LIGHT_PURPLE;
+        if (level < 40) return ChatColor.AQUA;
+        if (level < 45) return ChatColor.DARK_GREEN;
+        if (level < 50) return ChatColor.DARK_PURPLE;
+
+        if (level == 50) return ChatColor.DARK_BLUE;
 
         return ChatColor.WHITE;
     }
