@@ -55,7 +55,8 @@ public class SKYListener extends AbstractGameListener<SKY> {
             try {
                 try {
                     SKY.initDailyPointsWriter();
-                } catch (IOException e2) {
+                    Thread.sleep(500L);
+                } catch (Exception e2) {
                     // TODO Auto-generated catch block
                     e2.printStackTrace();
                 }
