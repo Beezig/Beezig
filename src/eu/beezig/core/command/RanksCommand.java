@@ -2,6 +2,7 @@ package eu.beezig.core.command;
 
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.Log;
+import eu.beezig.core.games.BED;
 import eu.beezig.core.hiveapi.stuff.bed.BEDRank;
 import eu.beezig.core.hiveapi.stuff.bp.BPRank;
 import eu.beezig.core.hiveapi.stuff.cai.CAIRank;
@@ -41,7 +42,7 @@ public class RanksCommand implements Command {
                 The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
 
                 for (TIMVRank timvRank : TIMVRank.values()) {
-                    The5zigAPI.getAPI().messagePlayer(Log.info + timvRank.getTotalDisplay() + " §7- " + timvRank.getTotalDisplay().replaceAll(timvRank.getDisplay(), "") + Log.df(timvRank.getStart()));
+                    The5zigAPI.getAPI().messagePlayer(Log.info + timvRank.getTotalDisplay().replaceAll("➊ ","") + " §7- " + timvRank.getTotalDisplay().replaceAll(timvRank.getDisplay(), "") + Log.df(timvRank.getStart()));
                 }
 
                 The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");

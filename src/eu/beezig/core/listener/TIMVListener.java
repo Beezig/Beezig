@@ -96,6 +96,10 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             TIMV.rankObject = TIMVRank.getFromDisplay(api.getTitle());
             TIMV.rank = TIMV.rankObject.getTotalDisplay(api.getPoints());
 
+            TIMV.calculatedBeforeRoles = false;
+            //safety
+
+
             try {
                 if (TIMV.attemptNew) {
                     TIMV.monthly = api.getMonthlyProfile();
@@ -447,6 +451,8 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             TIMV.calculateTraitors(The5zigAPI.getAPI().getServerPlayers().size());
             TIMV.calculateDetectives(The5zigAPI.getAPI().getServerPlayers().size());
             The5zigAPI.getLogger().info("(" + message + ")");
+
+            TIMV.calculatedBeforeRoles = true;
 
             String role = "";
             if (message.contains("§a§lINNOCENT§f§l")) {

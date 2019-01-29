@@ -34,10 +34,12 @@ public class TIMV extends GameMode {
 
     public static int karmaCounter;
     public static TIMVMap activeMap;
+
     public static int traitorsBefore = 0;
     public static int traitorsDiscovered = 0;
     public static int detectivesBefore = 0;
     public static int detectivesDiscovered = 0;
+    public static boolean calculatedBeforeRoles = false;
 
     public static int currentPassStatus = 0;
 
@@ -262,12 +264,14 @@ public class TIMV extends GameMode {
     }
 
     public static void calculateTraitors(int playersOnline) {
+        if(calculatedBeforeRoles) return;
         TIMV.traitorsBefore = (int) Math.floor(playersOnline / 4.0);
         if (TIMV.traitorsBefore == 0) TIMV.traitorsBefore = 1;
     }
 
     public static void calculateDetectives(int playersOnline) {
-        TIMV.detectivesBefore = (int) Math.floor(playersOnline / 8);
+        if(calculatedBeforeRoles) return;
+        TIMV.detectivesBefore = (int) Math.floor(playersOnline / 8.0);
         if (TIMV.detectivesBefore == 0) TIMV.detectivesBefore = 1;
     }
 
@@ -284,6 +288,7 @@ public class TIMV extends GameMode {
         currentPassStatus = 0;
         TIMV.detectivesBefore = 0;
         TIMV.detectivesDiscovered = 0;
+        TIMV.calculatedBeforeRoles = false;
         traitorTeam.clear();
         NotesManager.notes.clear();
         TIMV.messagesToSend.clear();
