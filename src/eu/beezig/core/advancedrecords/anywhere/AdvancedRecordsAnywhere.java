@@ -154,7 +154,7 @@ public class AdvancedRecordsAnywhere {
         gamemodes.add(new GamemodeBuilder("BP")
                 .addStatistic(new RecordsStatistic(PTS, "total_points"))
                 .addStatistic(new RecordsStatistic(V, "victories"))
-                .addStatistic(new RecordsStatistic("Placings", "total_placings"))
+                .addStatistic(new RecordsStatistic("Placings", "total_placing"))
                 .addStatistic(new RecordsStatistic(GM, "games_played"))
                 .addStatistic(new PercentRatioStatistic(WR, "victories", "games_played", Setting.SHOW_RECORDS_WINRATE))
                 .build());
