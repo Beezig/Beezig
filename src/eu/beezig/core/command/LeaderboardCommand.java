@@ -91,9 +91,7 @@ public class LeaderboardCommand implements Command {
                             place.get("username").toString());
 
 
-                } catch (Exception ignored) {
-                    ignored.printStackTrace();
-                }
+                } catch (Exception ignored) {}
 
             }
 
