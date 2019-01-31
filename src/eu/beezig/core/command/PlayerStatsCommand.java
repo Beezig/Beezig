@@ -56,8 +56,8 @@ public class PlayerStatsCommand implements Command {
             }
             else game = args[0];
 
-            String rankName = game.equalsIgnoreCase("gnt") || game.equals("gntm") ? "Giant" : game.toUpperCase();
-            String rankNamePkg = game.equalsIgnoreCase("gnt") || game.equals("gntm") ? "gnt" : game;
+            String rankName = game.equalsIgnoreCase("gnt") || game.equalsIgnoreCase("gntm") ? "Giant" : game.toUpperCase();
+            String rankNamePkg = game.equalsIgnoreCase("gnt") || game.equalsIgnoreCase("gntm") ? "gnt" : game;
 
             long startT = System.currentTimeMillis();
 
