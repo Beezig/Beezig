@@ -71,9 +71,10 @@ public class LeaderboardCommand implements Command {
             for (LeaderboardPlace place : data) {
                 try {
                     GameStats stats = new GameStats((String) place.get("UUID"), game.toUpperCase());
-                    String ptsToUse = place.containsKey("points") ? "points" : "total_points";
+                    String ptsToUse = place.containsKey("points") ? "points" :
+                            (place.containsKey("total_points") ? "total_points" : "karma");
 
-                    long pts = stats.getSource().getLong(ptsToUse);
+                    long pts = (long) place.get(ptsToUse);
 
                     points.add(pts);
 
@@ -91,6 +92,7 @@ public class LeaderboardCommand implements Command {
 
 
                 } catch (Exception ignored) {
+                    ignored.printStackTrace();
                 }
 
             }
