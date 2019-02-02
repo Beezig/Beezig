@@ -28,7 +28,7 @@ public enum GRAVRank implements RankEnum {
     ORBITAL_FORCE("Orbital Force", LIGHT_PURPLE + "" + BOLD, 1000000),
     CHRONOLOCK("Chronolock", AQUA + "" + BOLD, 1500000),
     GRAVITY_DEFIANCE("Gravity Defiance", YELLOW + "" + BOLD, 2500000),
-    FELIX_BAUMGARTNER("Felix Baumgartner", LIGHT_PURPLE + "" + BOLD, -1);
+    FELIX_BAUMGARTNER("✹ Felix Baumgartner", LIGHT_PURPLE + "" + BOLD, -1);
 
     private String display;
     private String prefix;

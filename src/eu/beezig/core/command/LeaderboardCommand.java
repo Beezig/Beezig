@@ -63,10 +63,6 @@ public class LeaderboardCommand implements Command {
             List<Long> points = new ArrayList<>();
             List<String> title = new ArrayList<>();
             List<String> name = new ArrayList<>();
-            String pointStringToUse = game.equalsIgnoreCase("grav") ||
-                    game.equalsIgnoreCase("hide")
-                    || game.equalsIgnoreCase("cai") ? "points" : (game.equalsIgnoreCase("timv")
-                    ? "karma" : "total_points");
 
             for (LeaderboardPlace place : data) {
                 try {
