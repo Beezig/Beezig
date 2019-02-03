@@ -3,6 +3,7 @@ package eu.beezig.core.api;
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.BeezigMain;
 import eu.beezig.core.CommandManager;
+import eu.beezig.core.IHive;
 import eu.beezig.core.api.listener.AbstractForgeListener;
 import eu.beezig.core.games.BED;
 import eu.beezig.core.games.CAI;
@@ -94,6 +95,10 @@ public class BeezigAPI {
     public String getTIMVRank(String title, long points) {
         if (title == null) return null;
         return TIMVRank.getFromDisplay(title).getTotalDisplay(points);
+    }
+
+    public boolean isHive() {
+        return The5zigAPI.getAPI().getActiveServer() instanceof IHive;
     }
 
     public List<String> getTIMVMessages() {
