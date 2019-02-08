@@ -7,6 +7,7 @@ import eu.beezig.core.hiveapi.stuff.bed.BEDRank;
 import eu.beezig.core.hiveapi.stuff.bp.BPRank;
 import eu.beezig.core.hiveapi.stuff.cai.CAIRank;
 import eu.beezig.core.hiveapi.stuff.dr.DRRank;
+import eu.beezig.core.hiveapi.stuff.gnt.GiantRank;
 import eu.beezig.core.hiveapi.stuff.grav.GRAVRank;
 import eu.beezig.core.hiveapi.stuff.hide.HIDERank;
 import eu.beezig.core.hiveapi.stuff.lab.LABRank;
@@ -75,6 +76,17 @@ public class RanksCommand implements Command {
 
                 for (CAIRank caiRank : CAIRank.values()) {
                     The5zigAPI.getAPI().messagePlayer(Log.info + caiRank.getTotalDisplay() + " §7- " + caiRank.getTotalDisplay().replaceAll(caiRank.getDisplay(), "") + Log.df(caiRank.getStart()));
+                }
+
+                The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
+            }).start();
+        }
+        if (game.toLowerCase().startsWith("gnt")) {
+            new Thread(() -> {
+                The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
+
+                for (GiantRank gntRank : GiantRank.values()) {
+                    The5zigAPI.getAPI().messagePlayer(Log.info + gntRank.getTotalDisplay() + " §7- " + gntRank.getTotalDisplay().replaceAll(gntRank.getDisplay(), "") + Log.df(gntRank.getStart()));
                 }
 
                 The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
