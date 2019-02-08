@@ -43,8 +43,8 @@ public class LeaderboardCommand implements Command {
         long indexStart = humanStart - 1L;
 
 
-        String rankName = game.equalsIgnoreCase("gnt") || game.equals("gntm") ? "Giant" : game.toUpperCase();
-        String rankNamePkg = game.equalsIgnoreCase("gnt") || game.equals("gntm") ? "gnt" : game;
+        String rankName = game.equalsIgnoreCase("gnt") || game.equalsIgnoreCase("gntm") ? "Giant" : game.toUpperCase();
+        String rankNamePkg = game.equalsIgnoreCase("gnt") || game.equalsIgnoreCase("gntm") ? "gnt" : game;
 
         new Thread(() -> {
             Class enumToUse;
