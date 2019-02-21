@@ -7,7 +7,7 @@
 ![Github All Releases](https://img.shields.io/github/downloads/Beezig/Beezig/total.svg)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Beezig/Beezig.svg)
 ![Unique users](https://l.beezig.eu/badgeunique)
-
+![LOC](https://badgen.net/codeclimate/loc/Beezig/Beezig)
 
 A 5zig plugin to add functionality for The Hive.
 By RoccoDev and ItsNiklass.
