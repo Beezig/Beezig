@@ -185,8 +185,7 @@ public class BeezigMain {
 
         try {
             RenderUtils.init();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
 
         The5zigAPI.getLogger().info("Loading Beezig");
