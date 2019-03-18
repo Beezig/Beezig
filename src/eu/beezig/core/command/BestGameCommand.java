@@ -3,6 +3,7 @@ package eu.beezig.core.command;
 import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
+import eu.beezig.core.utils.URLs;
 import eu.the5zig.mod.The5zigAPI;
 import org.json.simple.JSONObject;
 import pw.roccodev.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
@@ -53,7 +54,7 @@ public class BestGameCommand implements Command {
             boolean displayAll = args.length > 1;
             The5zigAPI.getAPI().messagePlayer(Log.info + "Calculating, this will take a long time...");
             try {
-                JSONObject data = APIUtils.getObject(APIUtils.readURL(new URL("https://app-beezigmainserver.wedeploy.io/bestgame/" + player)));
+                JSONObject data = APIUtils.getObject(APIUtils.readURL(new URL(URLs.MAIN_URL + "/bestgame/" + player)));
                 JSONObject modes = (JSONObject) data.get("data");
                 Date nextReset = new Date((long) data.get("cache"));
 

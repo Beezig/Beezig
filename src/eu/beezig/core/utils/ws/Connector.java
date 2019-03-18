@@ -25,7 +25,7 @@ public class Connector {
 
     public static String lastBPServer = null;
 
-    public static String URL = "wss://app-beezigmainserver.wedeploy.io";
+    public static String URL = "wss://api.beezig.eu";
     public static String IO_BP_URL = "https://api.hivemc.com:8443";
 
 

@@ -1,7 +1,7 @@
 
 ![Title](http://i.imgur.com/3rXuQls.png)
 
-# Beezig v5.1 - A Hive 5zig Plugin
+# Beezig v6.0 - A Hive 5zig Plugin
 
 [![Discord](https://discordapp.com/api/guilds/346695724253184014/embed.png?style=banner2)](http://discord.gg/se7zJsU)  
 ![Github All Releases](https://img.shields.io/github/downloads/Beezig/Beezig/total.svg)

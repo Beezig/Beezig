@@ -3,6 +3,7 @@ package eu.beezig.core.hiveapi.stuff.dr;
 import eu.beezig.core.Log;
 import eu.beezig.core.games.DR;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
+import eu.beezig.core.utils.URLs;
 import eu.the5zig.mod.The5zigAPI;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,7 +23,7 @@ public class ClosestToWR {
     public static void fetch(String uuidOrPlayer, boolean all) {
         try {
             Reader r = APIUtils.readURL(
-                    new URL("https://app-beezigmainserver.wedeploy.io/maprecords/"
+                    new URL(URLs.MAIN_URL + "/maprecords/"
                             + uuidOrPlayer));
             JSONParser p = new JSONParser();
             JSONObject j = (JSONObject) p.parse(r);

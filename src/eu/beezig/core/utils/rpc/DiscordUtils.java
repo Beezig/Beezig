@@ -7,6 +7,7 @@ import com.jagrosh.discordipc.entities.User;
 import com.jagrosh.discordipc.exceptions.NoDiscordClientException;
 import eu.beezig.core.Log;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.URLs;
 import eu.the5zig.mod.The5zigAPI;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class DiscordUtils {
 
                 new Thread(() -> {
                     try {
-                        URL url = new URL("https://app-beezigreportserver.wedeploy.io/check/"
+                        URL url = new URL(URLs.REPORTS_URL + "/check/"
                                 + user.getId());
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                         conn.addRequestProperty("User-Agent", Log.getUserAgent());

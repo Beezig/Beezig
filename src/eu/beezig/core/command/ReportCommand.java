@@ -2,6 +2,7 @@ package eu.beezig.core.command;
 
 import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
+import eu.beezig.core.utils.URLs;
 import eu.the5zig.mod.The5zigAPI;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 
@@ -79,7 +80,7 @@ public class ReportCommand implements Command {
 
 
             try {
-                URL url = new URL("https://app-beezigreportserver.wedeploy.io/report");
+                URL url = new URL(URLs.REPORTS_URL + "/report");
                 URLConnection con = url.openConnection();
                 HttpURLConnection http = (HttpURLConnection) con;
                 http.setRequestMethod("POST"); // PUT is another valid option

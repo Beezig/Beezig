@@ -2,6 +2,7 @@ package eu.beezig.core.command;
 
 import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
+import eu.beezig.core.utils.URLs;
 import eu.beezig.core.utils.ws.Connector;
 import eu.the5zig.mod.The5zigAPI;
 
@@ -42,7 +43,7 @@ public class BeezigPartyCommand implements Command {
             new Thread(() -> {
                 String player = args[1];
                 try {
-                    URL url = new URL("https://app-beezigmainserver.wedeploy.io/submitParty?sender=" + The5zigAPI.getAPI().getGameProfile().getName() + "&user=" + player.trim());
+                    URL url = new URL(URLs.MAIN_URL + "/submitParty?sender=" + The5zigAPI.getAPI().getGameProfile().getName() + "&user=" + player.trim());
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     if (conn.getResponseCode() == 200) {
                         The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully accepted invite.");
