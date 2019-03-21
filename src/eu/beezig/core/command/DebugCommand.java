@@ -1,7 +1,9 @@
 package eu.beezig.core.command;
 
 import eu.beezig.core.utils.ws.Connector;
+import eu.beezig.core.utils.ws.api.PacketOpcodes;
 import eu.the5zig.mod.The5zigAPI;
+import org.json.simple.JSONObject;
 
 public class DebugCommand implements Command {
     public static boolean go = false;
@@ -22,7 +24,10 @@ public class DebugCommand implements Command {
     public boolean execute(String[] args) {
         //some debug code here v
 
-        new Thread(() -> Connector.client.send("Hello there pls get online people")).start();
+        JSONObject packet = new JSONObject();
+        packet.put("opcode", PacketOpcodes.S_REQUEST_ONLINE_USERS);
+
+        new Thread(() -> Connector.client.sendJson(packet)).start();
 
         The5zigAPI.getAPI().getRenderHelper().drawLargeText("Test");
 

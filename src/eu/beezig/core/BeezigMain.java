@@ -49,6 +49,7 @@ import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.soundcloud.TrackPlayer;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.beezig.core.utils.tutorial.TutorialManager;
+import eu.beezig.core.utils.ws.api.PacketHandler;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.*;
 import eu.the5zig.mod.event.EventHandler.Priority;
@@ -436,6 +437,7 @@ public class BeezigMain {
 
         new Thread(() -> {
             try {
+                PacketHandler.registerHandlers();
                 eu.beezig.core.utils.ws.Connector.connect();
             } catch (Exception e) {
                 e.printStackTrace();

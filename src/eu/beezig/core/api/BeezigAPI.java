@@ -16,8 +16,10 @@ import eu.beezig.core.settings.SettingsFetcher;
 import eu.beezig.core.utils.TIMVTest;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.beezig.core.utils.ws.Connector;
+import eu.beezig.core.utils.ws.api.PacketOpcodes;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.util.minecraft.ChatColor;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,7 +44,10 @@ public class BeezigAPI {
         BeezigMain.hasExpansion = true;
         listenerImpl.onLoad(BeezigMain.BEEZIG_VERSION, The5zigAPI.getAPI().getModVersion());
         CommandManager.commandExecutors.forEach(cmd -> listenerImpl.registerCommand(cmd));
-        new Thread(() -> Connector.client.send("BeezigForgeLoad")).start();
+
+        JSONObject packet = new JSONObject();
+        packet.put("opcode", PacketOpcodes.S_BEEZIGFORGE_LOADED);
+        new Thread(() -> Connector.client.sendJson(packet)).start();
     }
 
     public boolean isStaffMember() {

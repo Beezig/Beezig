@@ -33,7 +33,7 @@ public class DiscordUtils {
 
                 new Thread(() -> {
                     try {
-                        URL url = new URL(URLs.REPORTS_URL + "/check/"
+                        URL url = new URL(URLs.REPORTS_URL + "/discord/check/"
                                 + user.getId());
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                         conn.addRequestProperty("User-Agent", Log.getUserAgent());
