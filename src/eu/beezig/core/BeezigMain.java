@@ -80,7 +80,7 @@ import java.util.stream.Collectors;
 
 @Plugin(name = "Beezig", version = BeezigMain.BEEZIG_VERSION)
 public class BeezigMain {
-    public static final String BEEZIG_VERSION = "6.0.0";
+    public static final String BEEZIG_VERSION = "6.0.1";
     public static String VERSION_HASH = "";
     public static String OS;
     public static boolean newUpdate;
@@ -423,7 +423,6 @@ public class BeezigMain {
         CommandManager.registerCommand(new LeaderboardCommand());
         CommandManager.registerCommand(new RigCommand());
         CommandManager.registerCommand(new UUIDCommand());
-        CommandManager.registerCommand(new BeezigPartyCommand());
         CommandManager.registerCommand(new DeathrunRecordsCommand());
         CommandManager.registerCommand(new VolumeCommand());
         CommandManager.registerCommand(new WinstreakCommand());
@@ -451,6 +450,9 @@ public class BeezigMain {
             CommandManager.registerCommand(new RealRankCommand());
             CommandManager.registerCommand(new SeenCommand());
         }
+
+        /* Removed in 6.0.1 */
+        // CommandManager.registerCommand(new BeezigPartyCommand());
 
         new Thread(BeezigMain::refetchMaps, "Maps Fetcher").start();
 
