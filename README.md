@@ -38,7 +38,7 @@ More features can be found in the [Forge Expansion](https://github.com/Beezig/Be
 
 ## Download
 
-# GET THE INSTALLER HERE: http://l.roccodev.pw/beeziginstaller
+# GET THE INSTALLER HERE: http://l.rocco.dev/beeziginstaller
 
 * You can download normal stable releases in the Releases tab.
 

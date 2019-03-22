@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class StuffFetcher {
 
-    private static final String BASE_URL = "https://roccodev.pw/beezighosting/files/";
+    private static final String BASE_URL = "https://rocco.dev/beezighosting/files/";
 
     public static HashMap<String, DRMap> getDeathRunMaps() {
         try {

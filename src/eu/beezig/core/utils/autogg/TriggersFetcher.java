@@ -11,7 +11,7 @@ import java.net.URL;
 
 public class TriggersFetcher {
 
-    private static final String FETCH_URL = "https://roccodev.pw/beezighosting/autogg/triggers.json";
+    private static final String FETCH_URL = "https://rocco.dev/beezighosting/autogg/triggers.json";
 
     public static void fetch() throws IOException {
         URL url = new URL(FETCH_URL);

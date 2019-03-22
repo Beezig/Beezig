@@ -37,7 +37,7 @@ public class TutorialManager {
             }
 
             if (!completed) {
-                LazyObject obj = new LazyObject(null, new URL("https://roccodev.pw/beezighosting/tutorial.json"));
+                LazyObject obj = new LazyObject(null, new URL("https://rocco.dev/beezighosting/tutorial.json"));
                 obj.fetch();
                 remote = obj.getInput();
             }
