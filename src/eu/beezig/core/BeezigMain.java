@@ -416,7 +416,6 @@ public class BeezigMain {
         CommandManager.registerCommand(new PlayerStatsCommand());
         CommandManager.registerCommand(new CustomTestCommand());
         CommandManager.registerCommand(new ZigCheckCommand());
-        CommandManager.registerCommand(new RanksCommand());
         CommandManager.registerCommand(new ClosestToWRCommand());
         CommandManager.registerCommand(new BeezigCommand());
         CommandManager.registerCommand(new ReportCommand());
