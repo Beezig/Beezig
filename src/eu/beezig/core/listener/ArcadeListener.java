@@ -7,6 +7,7 @@ import eu.beezig.core.hiveapi.APIValues;
 import eu.beezig.core.listener.arcade.ArcadeSubListener;
 import eu.beezig.core.listener.arcade.subs.ElectricFloorSubListener;
 import eu.beezig.core.listener.arcade.subs.SpleggSubListener;
+import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
@@ -40,6 +41,12 @@ public class ArcadeListener extends AbstractGameListener<Arcade> {
 
     @Override
     public void onGameModeJoin(Arcade gameMode) {
+        if(game.equals("BP")) {
+            getGameListener().switchLobby("BP");
+            The5zigAPI.getLogger().info("Connected to BP! - Hive");
+            DiscordUtils.updatePresence("Dancing in BlockParty", "Startup", "game_bp");
+            return;
+        }
         IHive.genericJoin();
         System.out.println("Joined Arcade game: " + game);
         gameMode.setMode(game);

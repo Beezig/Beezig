@@ -64,7 +64,7 @@ public class Connector {
                         JSONObject json = (JSONObject) args[0];
                         JSONObject data = (JSONObject) json.get("data");
                         String name = (String) data.get("name");
-                        The5zigAPI.getAPI().messagePlayer("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏§3Voting has ended! §bThe song §f" + name + "§b has won!");
+                        The5zigAPI.getAPI().messagePlayer("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏§3 Voting has ended! §bThe song §f" + name + "§b has won!");
                         String trackId = (String) data.get("soundcloud");
                         new Thread(() -> {
                             try {

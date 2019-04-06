@@ -80,7 +80,7 @@ import java.util.stream.Collectors;
 
 @Plugin(name = "Beezig", version = BeezigMain.BEEZIG_VERSION)
 public class BeezigMain {
-    public static final String BEEZIG_VERSION = "6.0.1";
+    public static final String BEEZIG_VERSION = "6.1.0";
     public static String VERSION_HASH = "";
     public static String OS;
     public static boolean newUpdate;
