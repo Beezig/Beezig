@@ -33,22 +33,42 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.OffsetDateTime;
+import java.util.Base64;
 
 public class DiscordUtils {
 
 
     public static boolean shouldOperate = true;
     private static IPCClient rpcClient;
+    private static String joinSecret;
 
     public static void init() {
         if (!Setting.DISCORD_RPC.getValue())
             return;
         IPCClient client = new IPCClient(439523115383652372L);
+
+        String uuid = The5zigAPI.getAPI().getGameProfile().getId().toString();
+        joinSecret = Base64.getEncoder().encodeToString(uuid.getBytes());
+
         client.setListener(new IPCListener() {
+
+            @Override
+            public void onActivityJoinRequest(IPCClient client, String secret, User user) {
+                System.out.println("Received request from user " + user.getId());
+            }
+
+            @Override
+            public void onActivityJoin(IPCClient client, String secret) {
+                System.out.println("Secret: " + secret);
+            }
+
             @Override
             public void onReady(IPCClient client, User user) {
                 System.out.println("Connected to Discord as " + user.getName() + "#" + user.getDiscriminator() + "! ("
                         + user.getId() + ")");
+
+                client.subscribe(IPCClient.Event.ACTIVITY_JOIN_REQUEST);
+                client.subscribe(IPCClient.Event.ACTIVITY_JOIN);
 
                 new Thread(() -> {
                     try {
@@ -98,6 +118,8 @@ public class DiscordUtils {
 
                 RichPresence.Builder builder = new RichPresence.Builder();
                 builder.setDetails(newPresence)
+                        .setParty("TestID", 1, 4)
+                        .setJoinSecret(joinSecret)
                         .setStartTimestamp(OffsetDateTime.now())
                         .setLargeImage("background");
 

@@ -359,6 +359,7 @@ public final class IPCClient implements Closeable
                     JSONObject json = p.getJson();
                     Event event = Event.of((String)json.getOrDefault("evt", null));
                     String nonce = (String) json.getOrDefault("nonce", null);
+
                     switch(event)
                     {
                         case NULL:
@@ -427,7 +428,7 @@ public final class IPCClient implements Closeable
                     listener.onClose(this, p.getJson());
             }
             catch(IOException | ParseException ex) {
-
+                ex.printStackTrace();
 
                 pipe.setStatus(PipeStatus.DISCONNECTED);
                 if (listener != null)
