@@ -19,8 +19,10 @@
 
 package eu.beezig.core.command;
 
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
+import eu.beezig.core.api.BeezigAPI;
 import eu.beezig.core.utils.URLs;
 import eu.the5zig.mod.The5zigAPI;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
@@ -54,7 +56,7 @@ public class ReportCommand implements Command {
     public boolean execute(String[] args) {
 
         if (!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
-        if (args.length < 2) {
+        if ((!BeezigMain.hasExpansion && args.length < 2) || args.length < 1) {
             The5zigAPI.getAPI().messagePlayer(Log.info + "Usage: /report [player] [reason]");
             return true;
         }
@@ -70,6 +72,12 @@ public class ReportCommand implements Command {
             String rawArgs = String.join(" ", args);
             String[] rawPlayers = rawArgs.replaceAll(", ", ",").split(" ");
             String players = rawPlayers[0];
+
+            if(BeezigMain.hasExpansion && args.length == 1) {
+                BeezigAPI.get().getListener().displayReportGui(players);
+                return;
+            }
+
             ArrayList<String> argsL = new ArrayList<>(Arrays.asList(rawPlayers));
             argsL.remove(0);
             String reason = String.join(" ", argsL);

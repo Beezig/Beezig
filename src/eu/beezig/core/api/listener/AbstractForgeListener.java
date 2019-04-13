@@ -59,6 +59,11 @@ public interface AbstractForgeListener {
             public void displayTIMVTestGui() {
                 ClassUtils.invokeMethod(from, ClassUtils.findMethod(from.getClass(), "displayTIMVTestGui"));
             }
+
+            @Override
+            public void displayReportGui(String player) {
+                ClassUtils.invokeMethod(from, ClassUtils.findMethod(from.getClass(), "displayReportGui", String.class), player);
+            }
         };
     }
 
@@ -75,5 +80,7 @@ public interface AbstractForgeListener {
     void displayAutovoteGui();
 
     void displayTIMVTestGui();
+
+    void displayReportGui(String player);
 
 }
