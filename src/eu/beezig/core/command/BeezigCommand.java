@@ -24,6 +24,7 @@ import eu.beezig.core.BeezigMain;
 import eu.beezig.core.CommandManager;
 import eu.beezig.core.Log;
 import eu.beezig.core.utils.TabCompletionUtils;
+import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.ws.Client;
 import eu.beezig.core.utils.ws.Connector;
 import eu.the5zig.mod.The5zigAPI;
@@ -86,6 +87,10 @@ public class BeezigCommand implements Command {
                 Connector.client.connect();
             }).start();
             The5zigAPI.getAPI().messagePlayer(Log.info + "Reconnected.");
+        }
+        else if(args[0].equalsIgnoreCase("discord")) {
+            DiscordUtils.accept();
+            The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully accepted invite.");
         }
         return true;
     }

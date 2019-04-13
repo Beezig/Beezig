@@ -120,6 +120,8 @@ public class BeezigMain {
     public static NetworkRank playerRank = null;
     private File labyConfig;
 
+    public static BeezigMain instance;
+
     public BeezigMain(boolean laby, File config) {
         BeezigMain.laby = laby;
         this.labyConfig = config;
@@ -151,7 +153,7 @@ public class BeezigMain {
 
     @EventHandler(priority = EventHandler.Priority.LOW)
     public void onLoad(LoadEvent event) {
-
+        instance = this;
         IOverlay news = The5zigAPI.getAPI().createOverlay();
         try {
             if (Updater.isVersionBlacklisted(getCustomVersioning())
@@ -451,6 +453,7 @@ public class BeezigMain {
         CommandManager.registerCommand(new StatsOverlayCommand());
         CommandManager.registerCommand(new SkipTutorialCommand());
         CommandManager.registerCommand(new BestGameCommand());
+        CommandManager.registerCommand(new BeezigPartyCommand());
 
         new Thread(() -> {
             try {
@@ -468,9 +471,6 @@ public class BeezigMain {
             CommandManager.registerCommand(new RealRankCommand());
             CommandManager.registerCommand(new SeenCommand());
         }
-
-        /* Removed in 6.0.1 */
-        // CommandManager.registerCommand(new BeezigPartyCommand());
 
         new Thread(BeezigMain::refetchMaps, "Maps Fetcher").start();
 

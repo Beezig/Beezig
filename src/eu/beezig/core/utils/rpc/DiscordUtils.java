@@ -28,12 +28,17 @@ import eu.beezig.core.Log;
 import eu.beezig.core.settings.Setting;
 import eu.beezig.core.utils.URLs;
 import eu.the5zig.mod.The5zigAPI;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.time.OffsetDateTime;
 import java.util.Base64;
+import java.util.Random;
 
 public class DiscordUtils {
 
@@ -41,25 +46,40 @@ public class DiscordUtils {
     public static boolean shouldOperate = true;
     private static IPCClient rpcClient;
     private static String joinSecret;
+    private static String lastPresence;
+    private static String[] lastPresenceOpts;
+    private static DiscordParty party;
+    public static String lastInviteId;
 
     public static void init() {
         if (!Setting.DISCORD_RPC.getValue())
             return;
         IPCClient client = new IPCClient(439523115383652372L);
 
-        String uuid = The5zigAPI.getAPI().getGameProfile().getId().toString();
-        joinSecret = Base64.getEncoder().encodeToString(uuid.getBytes());
-
         client.setListener(new IPCListener() {
 
             @Override
             public void onActivityJoinRequest(IPCClient client, String secret, User user) {
                 System.out.println("Received request from user " + user.getId());
+                The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + user.getName() + "#" + user.getDiscriminator()
+                    + "§3 would like to play with you. Run §b/beezig discord§3 or check Discord to accept.");
             }
 
             @Override
             public void onActivityJoin(IPCClient client, String secret) {
                 System.out.println("Secret: " + secret);
+                String json = new String(Base64.getDecoder().decode(secret), Charset.forName("UTF-8"));
+                try {
+                    JSONObject obj = (JSONObject) new JSONParser().parse(json);
+                    String ign = obj.get("u").toString();
+                    String password = obj.get("p").toString();
+
+                    The5zigAPI.getAPI().sendPlayerMessage("/party join " + ign + " " + password);
+                    The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully accepted invite. You are now in the user's party.");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
             }
 
             @Override
@@ -100,6 +120,39 @@ public class DiscordUtils {
         }
     }
 
+    public static void reloadPresence() {
+        updatePresence(lastPresence, lastPresenceOpts);
+    }
+
+    public static void accept() {
+        rpcClient.sendResult(0, lastInviteId);
+    }
+
+    public static void noParty() {
+        joinSecret = null;
+        party.unregister();
+        party = null;
+        reloadPresence();
+    }
+
+    public static void setSecret(String password) {
+        String ign = The5zigAPI.getAPI().getGameProfile().getName();
+        String partyPassword = password == null ? "beezig-" + Integer.toString(new Random().nextInt()) : password;
+
+        JSONObject obj = new JSONObject();
+        obj.put("u", ign);
+        obj.put("p", partyPassword);
+
+        if(password == null)
+            The5zigAPI.getAPI().sendPlayerMessage("/party password " + partyPassword);
+        The5zigAPI.getAPI().sendPlayerMessage("/party");
+
+        joinSecret = Base64.getEncoder().encodeToString(obj.toJSONString().getBytes(Charset.forName("UTF-8")));
+        party = new DiscordParty(24, "beezig-" + ign + "-" + Integer.toString(new Random().nextInt()));
+
+        reloadPresence();
+    }
+
 
     /**
      * Updates the RPC presence.
@@ -115,11 +168,12 @@ public class DiscordUtils {
             return;
         new Thread(() -> {
             try {
+                lastPresence = newPresence;
+                lastPresenceOpts = opts;
+
 
                 RichPresence.Builder builder = new RichPresence.Builder();
                 builder.setDetails(newPresence)
-                        .setParty("TestID", 1, 4)
-                        .setJoinSecret(joinSecret)
                         .setStartTimestamp(OffsetDateTime.now())
                         .setLargeImage("background");
 
@@ -127,6 +181,11 @@ public class DiscordUtils {
                     builder.setState(opts[0]);
                 if (opts.length >= 2)
                     builder.setSmallImage(opts[1]);
+
+                if(joinSecret != null)
+                    builder.setJoinSecret(joinSecret);
+                if(party != null)
+                    builder.setParty(party.getId(), party.getMembers(), party.getMaxMembers());
 
 
                 rpcClient.sendRichPresence(builder.build());

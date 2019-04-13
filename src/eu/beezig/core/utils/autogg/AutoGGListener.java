@@ -20,6 +20,7 @@
 package eu.beezig.core.utils.autogg;
 
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.EventHandler;
@@ -77,6 +78,8 @@ public class AutoGGListener {
         if (evt.getMessage().startsWith("§8▍ §e§lHive§6§lMC§8 ▏§a §bDid this Party violate our Party Rules?")) {
             Triggers.lastPartyJoined = 0;
             Triggers.inParty = false;
+
+            DiscordUtils.noParty();
         }
         if (evt.getMessage().startsWith("§8▍ §b§lParty§8 ▏ §aJoined")) {
             Triggers.lastPartyJoined = System.currentTimeMillis();

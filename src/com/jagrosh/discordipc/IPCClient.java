@@ -178,6 +178,22 @@ public final class IPCClient implements Closeable
         pipe.send(OpCode.FRAME, j , callback);
     }
 
+    public void sendResult(int result, String userId) {
+        checkConnected(true);
+
+        JSONObject outer = new JSONObject();
+
+        // https://github.com/discordapp/discord-rpc/blob/master/src/serialization.cpp#L230
+        outer.put("cmd", result == 0 ? "SEND_ACTIVITY_JOIN_INVITE" : "CLOSE_ACTIVITY_JOIN_REQUEST");
+
+        JSONObject args = new JSONObject();
+        args.put("user_id", userId);
+
+        outer.put("args", args);
+
+        pipe.send(OpCode.FRAME, outer, null);
+    }
+
     /**
      * Adds an event {@link Event} to this IPCClient.<br>
      * If the provided {@link Event} is added more than once,
