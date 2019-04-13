@@ -101,7 +101,10 @@ public class DiscordUtils {
                         conn.addRequestProperty("User-Agent", Log.getUserAgent());
                         if (conn.getResponseCode() == 404 && !Setting.IGNORE_WARNINGS.getValue()) {
                             The5zigAPI.getAPI().messagePlayer(Log.info
-                                    + "You are using Discord, but you're not in our server! Make sure to join.\nInvite: §ehttp://discord.gg/se7zJsU");
+                                    + "You are using Discord, but you're not in our server! Make sure to join.");
+                            The5zigAPI.getAPI().messagePlayer(Log.info + "Invite: §ehttp://discord.gg/se7zJsU");
+                            The5zigAPI.getAPI().messagePlayer(Log.info +
+                                    "Alternatively, you can ignore this with /settings ignore_warnings true");
                         }
 
                     } catch (IOException e) {
