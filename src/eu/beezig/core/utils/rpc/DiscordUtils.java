@@ -99,7 +99,7 @@ public class DiscordUtils {
                                 + user.getId());
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                         conn.addRequestProperty("User-Agent", Log.getUserAgent());
-                        if (conn.getResponseCode() == 404) {
+                        if (conn.getResponseCode() == 404 && !Setting.IGNORE_WARNINGS.getValue()) {
                             The5zigAPI.getAPI().messagePlayer(Log.info
                                     + "You are using Discord, but you're not in our server! Make sure to join.\nInvite: §ehttp://discord.gg/se7zJsU");
                         }
