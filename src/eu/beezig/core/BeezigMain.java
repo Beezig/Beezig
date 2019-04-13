@@ -936,6 +936,12 @@ public class BeezigMain {
             if (ChatColor.stripColor(evt.getMessage().trim()).equals("▍ Friends ▏ ✚ Toccata") && Setting.TOCCATA.getValue()) {
                 NotesManager.tramontoccataStelle();
             }
+            if(DiscordUtils.shouldOperate &&
+                    evt.getMessage().startsWith("§f                       §a§lWelcome to your Party!")) {
+
+                The5zigAPI.getAPI().messagePlayer(Log.info + "Would you like to make your friends join this party through §bDiscord§3? " +
+                        "Run §b/bparty§3 to get started.");
+            }
             if (evt.getMessage().startsWith("§3§lPRIVATE§3│")
                     && evt.getMessage().contains(The5zigAPI.getAPI().getGameProfile().getName() + "§8 » §b")
                     && Setting.PM_PING.getValue()) {

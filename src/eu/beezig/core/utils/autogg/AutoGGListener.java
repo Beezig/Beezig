@@ -69,7 +69,7 @@ public class AutoGGListener {
         if (evt.getMessage().equals("§8▍ §b§lParty§8 ▏ §bParticipating in party chat? No.")) {
             Triggers.inParty = false;
         }
-        if (evt.getMessage().equals("§8▍ §b§lParty§8 ▏ §aCreated your party.")) {
+        if (evt.getMessage().equals("§f                       §a§lWelcome to your Party!")) {
             Triggers.lastPartyJoined = System.currentTimeMillis();
         }
         if (evt.getMessage().equals("§8▍ §b§lParty§8 ▏ §bParticipating in party chat? Yes.")) {
