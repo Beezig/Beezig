@@ -23,6 +23,7 @@ import eu.beezig.core.BeezigMain;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.EventHandler;
+import org.json.simple.JSONObject;
 
 public class DiscordParty {
     private int members = 1, maxMembers;
@@ -44,6 +45,14 @@ public class DiscordParty {
 
     public String getId() {
         return id;
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("m", maxMembers);
+        json.put("c", members);
+        json.put("i", id);
+        return json;
     }
 
     @EventHandler

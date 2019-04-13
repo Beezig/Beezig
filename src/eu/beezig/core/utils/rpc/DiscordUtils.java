@@ -75,6 +75,9 @@ public class DiscordUtils {
                     String password = obj.get("p").toString();
 
                     The5zigAPI.getAPI().sendPlayerMessage("/party join " + ign + " " + password);
+                    JSONObject team = (JSONObject) obj.get("t");
+                    party = new DiscordParty((int)team.get("m"), team.get("i").toString());
+
                     The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully accepted invite. You are now in the user's party.");
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -147,8 +150,9 @@ public class DiscordUtils {
             The5zigAPI.getAPI().sendPlayerMessage("/party password " + partyPassword);
         The5zigAPI.getAPI().sendPlayerMessage("/party");
 
-        joinSecret = Base64.getEncoder().encodeToString(obj.toJSONString().getBytes(Charset.forName("UTF-8")));
         party = new DiscordParty(24, "beezig-" + ign + "-" + Integer.toString(new Random().nextInt()));
+        obj.put("t", party.toJson());
+        joinSecret = Base64.getEncoder().encodeToString(obj.toJSONString().getBytes(Charset.forName("UTF-8")));
 
         reloadPresence();
     }
