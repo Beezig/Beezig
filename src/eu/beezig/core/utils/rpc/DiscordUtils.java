@@ -60,14 +60,13 @@ public class DiscordUtils {
 
             @Override
             public void onActivityJoinRequest(IPCClient client, String secret, User user) {
-                System.out.println("Received request from user " + user.getId());
+                lastInviteId = user.getId();
                 The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + user.getName() + "#" + user.getDiscriminator()
                     + "§3 would like to play with you. Run §b/beezig discord§3 or check Discord to accept.");
             }
 
             @Override
             public void onActivityJoin(IPCClient client, String secret) {
-                System.out.println("Secret: " + secret);
                 String json = new String(Base64.getDecoder().decode(secret), Charset.forName("UTF-8"));
                 try {
                     JSONObject obj = (JSONObject) new JSONParser().parse(json);

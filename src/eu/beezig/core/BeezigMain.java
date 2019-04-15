@@ -939,8 +939,7 @@ public class BeezigMain {
             if(DiscordUtils.shouldOperate &&
                     evt.getMessage().startsWith("§f                       §a§lWelcome to your Party!")) {
 
-                The5zigAPI.getAPI().messagePlayer(Log.info + "Would you like to make your friends join this party through §bDiscord§3? " +
-                        "Run §b/bparty§3 to get started.");
+                The5zigAPI.getAPI().messagePlayer("                            §3§lDiscord: §b§l/bparty");
             }
             if (evt.getMessage().startsWith("§3§lPRIVATE§3│")
                     && evt.getMessage().contains(The5zigAPI.getAPI().getGameProfile().getName() + "§8 » §b")

@@ -62,16 +62,15 @@ public class DiscordParty {
             String num = msg.replace("§8▍ §b§lParty§8 ▏ §f§lMembers §7", "")
                     .substring(1).replace(")", "");
             members = Integer.parseInt(num);
-            DiscordUtils.reloadPresence();
         }
         else if(msg.contains("§c was kicked from your party.") || msg.contains("§c left your party.")) {
             members--;
-            DiscordUtils.reloadPresence();
         }
         else if(msg.contains("§a joined your party.")) {
             members++;
-            DiscordUtils.reloadPresence();
         }
+        else return;
+        DiscordUtils.reloadPresence();
     }
 
     public void unregister() {
