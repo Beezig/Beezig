@@ -155,8 +155,8 @@ public class DiscordUtils {
         party = new DiscordParty(24, "beezig-" + ign + "-" + Integer.toString(new Random().nextInt()));
         obj.put("t", party.toJson());
         joinSecret = Base64.getEncoder().encodeToString(obj.toJSONString().getBytes(Charset.forName("UTF-8")));
-        The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully set up your party. Now you can invite friends through Discord.");
-        The5zigAPI.getAPI().messagePlayer(Log.info + "For more info:§b https://beezig.eu/wiki/discord-party");
+        The5zigAPI.getAPI().messagePlayer(Log.info + "Succesfully set up your party. You can now invite friends through Discord.");
+        The5zigAPI.getAPI().messagePlayer(Log.info + "For more info:§b https://beezig.eu/wiki/discord-party\n");
 
         reloadPresence();
     }
