@@ -57,15 +57,24 @@ public class DiscordParty {
 
     @EventHandler
     public void onMessage(ChatEvent evt) {
-        if(evt.getMessage().startsWith("§8▍ §b§lParty§8 ▏ §f§lMembers §7")) {
-            String num = evt.getMessage().replace("§8▍ §b§lParty§8 ▏ §f§lMembers §7", "")
+        String msg = evt.getMessage();
+        if(msg.startsWith("§8▍ §b§lParty§8 ▏ §f§lMembers §7")) {
+            String num = msg.replace("§8▍ §b§lParty§8 ▏ §f§lMembers §7", "")
                     .substring(1).replace(")", "");
             members = Integer.parseInt(num);
+            DiscordUtils.reloadPresence();
         }
-        DiscordUtils.reloadPresence();
+        else if(msg.contains("§c was kicked from your party.") || msg.contains("§c left your party.")) {
+            members--;
+            DiscordUtils.reloadPresence();
+        }
+        else if(msg.contains("§a joined your party.")) {
+            members++;
+            DiscordUtils.reloadPresence();
+        }
     }
 
     public void unregister() {
-        The5zigAPI.getAPI().getPluginManager().unregisterListener(this);
+        The5zigAPI.getAPI().getPluginManager().unregisterListener(BeezigMain.instance, this);
     }
 }
