@@ -111,7 +111,6 @@ public class BeezigMain {
     public static String lrID;
     public static String lrRS;
     public static String lrPL;
-    public static List<Class<?>> services = new ArrayList<>();
 
     public static File mcFile;
     public static boolean isColorDebug = false;
@@ -154,6 +153,7 @@ public class BeezigMain {
     @EventHandler(priority = EventHandler.Priority.LOW)
     public void onLoad(LoadEvent event) {
         instance = this;
+        Updater.setUrl();
         IOverlay news = The5zigAPI.getAPI().createOverlay();
         try {
             if (Updater.isVersionBlacklisted(getCustomVersioning())
@@ -967,7 +967,6 @@ public class BeezigMain {
 
     @EventHandler
     public void onActionBar(ActionBarEvent bar) {
-        // The5zigAPI.getLogger().info(bar.getMessage());
         if ((ActiveGame.is("gnt") || ActiveGame.is("gntm")) && bar.getMessage().contains("❂")) {
             // §6❂ §e12§7 ❘ §c§lDestructible Land§7 ❘ §f0§b Kills
             Giant.gold = Integer

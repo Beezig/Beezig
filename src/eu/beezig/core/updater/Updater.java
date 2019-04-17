@@ -32,8 +32,11 @@ import java.util.Scanner;
 public class Updater {
 
 
-    private static String FETCH_URL = "https://rocco.dev/blog/versioning/5zig-timv/";
+    private static String FETCH_URL;
 
+    public static void setUrl() {
+        FETCH_URL = "https://v.beezig.eu/" + (BeezigMain.laby ? "laby" : "beezig") + "/";
+    }
 
     public static boolean checkForUpdates() throws Exception {
         URL url = new URL(FETCH_URL + "latest.txt");
