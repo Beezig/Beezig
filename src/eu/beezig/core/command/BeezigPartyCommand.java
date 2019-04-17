@@ -20,6 +20,7 @@
 package eu.beezig.core.command;
 
 import eu.beezig.core.IHive;
+import eu.beezig.core.Log;
 import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.the5zig.mod.The5zigAPI;
 
@@ -41,6 +42,10 @@ public class BeezigPartyCommand implements Command {
     public boolean execute(String[] args) {
 
         if (!(The5zigAPI.getAPI().getActiveServer() instanceof IHive)) return false;
+        if(!DiscordUtils.shouldOperate) {
+            The5zigAPI.getAPI().messagePlayer(Log.error + "Discord could not be found.");
+            return true;
+        }
         DiscordUtils.setSecret(args.length == 0 ? null : String.join(" ", args));
         return true;
     }
