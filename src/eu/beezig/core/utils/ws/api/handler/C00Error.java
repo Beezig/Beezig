@@ -19,8 +19,10 @@
 
 package eu.beezig.core.utils.ws.api.handler;
 
+import eu.beezig.core.Log;
 import eu.beezig.core.utils.ws.api.PacketHandler;
 import eu.beezig.core.utils.ws.api.PacketOpcodes;
+import eu.the5zig.mod.The5zigAPI;
 import org.json.simple.JSONObject;
 
 public class C00Error extends PacketHandler {
@@ -32,6 +34,8 @@ public class C00Error extends PacketHandler {
 
     @Override
     public void handlePacket(JSONObject packetIn) {
-
+        if(The5zigAPI.getAPI().isInWorld()) {
+            The5zigAPI.getAPI().messagePlayer(Log.error + packetIn.get("message").toString());
+        }
     }
 }
