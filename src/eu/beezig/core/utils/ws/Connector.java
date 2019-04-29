@@ -79,39 +79,43 @@ public class Connector {
                 public void on(String event, IOAcknowledge ack, Object... args) {
                     if (args.length != 0 && args[0] != null)
                         System.out.println("Event from server: " + event + " with data " + args[0].toString() + " (" + args[0].getClass().getName() + ")");
-                    if (event.equals("loadsong")) {
-                        JSONObject json = (JSONObject) args[0];
-                        JSONObject data = (JSONObject) json.get("data");
-                        String name = (String) data.get("name");
-                        The5zigAPI.getAPI().messagePlayer("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏§3 Voting has ended! §bThe song §f" + name + "§b has won!");
-                        String trackId = (String) data.get("soundcloud");
-                        new Thread(() -> {
-                            try {
-                                TrackPlayer.cachedTrack = TrackDownloader.trackStream(trackId);
+                    switch (event) {
+                        case "loadsong":
+                            JSONObject json = (JSONObject) args[0];
+                            JSONObject data = (JSONObject) json.get("data");
+                            String name = (String) data.get("name");
+                            The5zigAPI.getAPI().messagePlayer("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏§3 Voting has ended! §bThe song §f" + name + "§b has won!");
+                            String trackId = (String) data.get("soundcloud");
+                            new Thread(() -> {
+                                try {
+                                    TrackPlayer.cachedTrack = TrackDownloader.trackStream(trackId);
 
-                                TrackPlayer.init();
-                                The5zigAPI.getAPI().messagePlayer(Log.info + "Loaded the song to your jukebox. To adjust the volume, use /vol [0-100].");
-                            } catch (IOException | JavaLayerException e) {
-                                e.printStackTrace();
-                            }
-                        }).start();
-                    } else if (event.equals("control")) {
-                        new Thread(() -> {
-                            if (TrackPlayer.playing) {
-                                System.out.println("Pausing track...");
-                                TrackPlayer.stop();
-                                TrackPlayer.playOgg("vinyl");
-                            } else {
+                                    TrackPlayer.init();
+                                    The5zigAPI.getAPI().messagePlayer(Log.info + "Loaded the song to your jukebox. To adjust the volume, use /vol [0-100].");
+                                } catch (IOException | JavaLayerException e) {
+                                    e.printStackTrace();
+                                }
+                            }).start();
+                            break;
+                        case "control":
+                            new Thread(() -> {
+                                if (TrackPlayer.playing) {
+                                    System.out.println("Pausing track...");
+                                    TrackPlayer.stop();
+                                    TrackPlayer.playOgg("vinyl");
+                                } else {
 
-                                System.out.println("Resuming track...");
-                                TrackPlayer.playOgg("cheer");
-                                TrackPlayer.resume();
+                                    System.out.println("Resuming track...");
+                                    TrackPlayer.playOgg("cheer");
+                                    TrackPlayer.resume();
 
-                            }
-                        }).start();
+                                }
+                            }).start();
 
-                    } else if (event.equals("endgame")) {
-                        new Thread(TrackPlayer::close).start();
+                            break;
+                        case "endgame":
+                            new Thread(TrackPlayer::close).start();
+                            break;
                     }
                 }
 

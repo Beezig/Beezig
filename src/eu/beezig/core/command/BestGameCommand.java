@@ -117,7 +117,7 @@ public class BestGameCommand implements Command {
         if (d == 0) return "§8Never Played";
         if (d < 100) {
             double consider = 100 - d;
-            String color = null;
+            String color;
 
             if (consider > 90) color = "§7";
             else if (consider > 80) color = "§4";

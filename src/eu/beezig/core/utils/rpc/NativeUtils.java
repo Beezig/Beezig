@@ -27,16 +27,6 @@ import java.io.InputStream;
 import java.nio.file.*;
 
 public class NativeUtils {
-    /**
-     * A simple library class which helps with loading dynamic libraries stored in the
-     * JAR archive. These libraries usualy contain implementation of some methods in
-     * native code (using JNI - Java Native Interface).
-     *
-     * @see http://adamheinrich.com/blog/2012/how-to-load-native-jni-library-from-jar
-     * @see https://github.com/adamheinrich/native-utils
-     *
-     */
-
 
     /**
      * The minimum length a prefix for a file has to have according to {@link File#createTempFile(String, String)}}.

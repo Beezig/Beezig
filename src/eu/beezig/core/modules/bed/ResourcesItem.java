@@ -182,8 +182,6 @@ public class ResourcesItem extends GameModeItem<BED> {
             } else {
                 The5zigAPI.getAPI().getRenderHelper().drawString(emeralds + " Emeralds", x, y + lineCount * 10, true);
             }
-
-            lineCount++;
         }
 
     }

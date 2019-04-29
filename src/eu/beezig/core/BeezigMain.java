@@ -908,9 +908,9 @@ public class BeezigMain {
                 }
                 if (BeezigMain.checkForNewLR && evt.getMessage().equals("§8▍ §e§lHive§6§lMC§8 ▏§a §b§lPlease click §b§lHERE§a to login to our website.")) {
                     checkForNewLR = false;
-                    String id = new String(lrID);
-                    String reason = new String(lrRS);
-                    String pl = new String(lrPL == null ? "" : lrPL);
+                    String id = lrID;
+                    String reason = lrRS;
+                    String pl = lrPL == null ? "" : lrPL;
                     lrID = "";
                     lrRS = "";
                     lrPL = null;

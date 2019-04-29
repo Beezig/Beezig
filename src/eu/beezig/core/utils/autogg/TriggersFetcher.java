@@ -35,7 +35,7 @@ public class TriggersFetcher {
     public static void fetch() throws IOException {
         URL url = new URL(FETCH_URL);
         JSONArray arr = APIUtils.getArray(APIUtils.readURL(url));
-        JSONArray disabled = new JSONArray();
+        JSONArray disabled;
         try (BufferedReader reader = new BufferedReader(new FileReader(BeezigMain.mcFile + "/autogg.json"))) {
             JSONObject config = APIUtils.getObject(reader);
             disabled = (JSONArray) config.get("disabled");

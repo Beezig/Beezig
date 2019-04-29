@@ -55,7 +55,7 @@ public class NewsFetcher {
                     JSONArray versions = (JSONArray) j.get("versionExclusive");
                     boolean cont = true;
                     for (Object o1 : versions) {
-                        Long l = (long) o1;
+                        long l = (long) o1;
                         if (l < 0) { //e.g, -460 is exclusive to all versions below 4.6.0
                             if (BeezigMain.getCustomVersioning() >= Math.abs(l)) {
                                 break;

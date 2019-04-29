@@ -502,47 +502,13 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                     TimvStats api = new TimvStats(name);
                     TraitorKarma.add(api.getKarma());
                 }
-                Long avg = (long) APIUtils.average(TraitorKarma.toArray());
+                long avg = (long) APIUtils.average(TraitorKarma.toArray());
                 The5zigAPI.getAPI().messagePlayer("                        §c§m                                ");
                 The5zigAPI.getAPI().messagePlayer("                       §4Traitor Karma: " + avg);
                 The5zigAPI.getAPI().messagePlayer("                        §c§m                                ");
 
             }).start();
         }
-        //glorious
-		/*else if(ActiveGame.is("timv") && message.contains("ItsNiklass§8 » ") && !message.contains("§b§lParty§8")){
-			if(message.contains("▍ ")){
-				//In Lobby
-				String[] msg = message.split("▍ ");
-				msg[0] = "§eDev§8 ▍ ";
-				msg[1] = msg[1].replaceAll("Watson", "Watson ⚝").replaceAll("§a", "§b");
-				The5zigAPI.getAPI().messagePlayer(msg[0] + msg[1]);
-				return true;
-			}
-			else {
-			//Ingame
-			The5zigAPI.getAPI().messagePlayer(message.replaceAll("Watson", "Watson ⚝").replaceAll("§a", "§b"));
-			return true;
-			}
-		}
-		else if(ActiveGame.is("timv") && message.contains("RoccoDev§8 » ") && !message.contains("§b§lParty§8")){
-			//y tho
-			if(message.contains("▍ ")){
-				//dank memez o/
-			
-				String[] msg = message.split("▍ ");
-				msg[0] = "§e1337§8 ▍ ";
-				msg[1] = msg[1].replaceAll(watisdis.wat, "Dev").replaceAll("§a", "§7");
-				The5zigAPI.getAPI().messagePlayer(msg[0] + msg[1]);
-				return true;
-			}
-			else {
-			// gimme moar memes plz
-			The5zigAPI.getAPI().messagePlayer(message.replaceAll(watisdis.wat, "Dev").replaceAll("§a", "§7"));
-			return true;
-			}
-		}*/
-
 
         return false;
     }
@@ -550,7 +516,6 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
     @Override
     public void onServerConnect(TIMV gameMode) {
         TIMV.reset(gameMode);
-
 
     }
 

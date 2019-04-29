@@ -134,7 +134,6 @@ public class SummonersItem extends GameModeItem<BED> {
             } else {
                 The5zigAPI.getAPI().getRenderHelper().drawString(BED.NUMBERS[BED.diamondGen] + " Diamonds", x, y + lineCount * 10, true);
             }
-            lineCount++;
         }
 
 
