@@ -207,6 +207,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
         } else if (message.startsWith("§8▍ §e§lGiant§8 ▏ §7You killed the")) {
             APIValues.Giantpoints += 50;
             Giant.dailyPoints += 50;
+            Giant.gamePoints += 50;
         } else if (message.startsWith("§8▍ §6§lGold§8 ▏ §a✚ §3You gained")
                 && message.contains("for killing")) {
             if (message.contains("as a team")) {
@@ -216,21 +217,40 @@ public class GiantListener extends AbstractGameListener<Giant> {
                     Giant.isEnding = false;
                     Giant.hasWon = true;
                     Giant.winstreak++;
+
+                    Giant.gamePoints += 300;
+                    APIValues.Giantpoints += 300;
+                    Giant.dailyPoints += 300;
+
                     if (Giant.winstreak >= Giant.bestStreak) Giant.bestStreak = Giant.winstreak;
                     StreakUtils.incrementWinstreakByOne("gnt");
                 }
                 Giant.giantKills++; // Giant kill
+                Giant.gamePoints += 100;
+                Giant.dailyPoints += 100;
+                APIValues.Giantpoints += 100;
 
             } else {
                 Giant.gameKills++;
                 APIValues.Giantpoints += 10;
                 Giant.dailyPoints += 10;
+                Giant.gamePoints += 10;
                 Giant.gameKdr = ((double) (Giant.totalKills + Giant.gameKills)
                         / (double) (Giant.gameDeaths + Giant.totalDeaths == 0 ? 1
                         : Giant.gameDeaths + Giant.totalDeaths));
             }
         } else if (message.contains(" §aWant to see this game's recap")) {
             Giant.isEnding = true;
+        }
+        else if(message.endsWith("§6§lYou're now on a... §c§lRAMPAGE!")) {
+            Giant.dailyPoints += 25;
+            Giant.gamePoints += 25;
+            APIValues.Giantpoints += 25;
+        }
+        else if(message.endsWith("§c§lYou killed a wanted player!")) {
+            Giant.dailyPoints += 20;
+            Giant.gamePoints += 20;
+            APIValues.Giantpoints += 20;
         }
 
         // Advanced Records

@@ -52,6 +52,7 @@ public class Giant extends GameMode {
     public static int winstreak;
     public static int bestStreak;
     public static int totalKills;
+    public static int gamePoints;
 
     public static GntMonthlyProfile monthly;
     public static boolean attemptNew = true;
@@ -86,7 +87,8 @@ public class Giant extends GameMode {
                 "Giants",
                 "Victory?",
                 "Timestamp",
-                "GameID"
+                "GameID",
+                "Points"
         });
 
 
@@ -147,13 +149,15 @@ public class Giant extends GameMode {
         System.out.println(inGame + " " + logger);
         if (inGame && logger != null)
             logger.logGame(ActiveGame.is("GNTM") ? "Mini" : "Normal",
-                    activeMap, gameKills + "", gameDeaths + "", giantKills + "", hasWon ? "Yes" : "No", System.currentTimeMillis() + "", gameId);
+                    activeMap, gameKills + "", gameDeaths + "", giantKills + "", hasWon ? "Yes" : "No",
+                    System.currentTimeMillis() + "", gameId, gamePoints + "");
 
         isEnding = false;
         gameId = null;
         hasWon = false;
         inGame = false;
         teamsEliminated = 0;
+        gamePoints = 0;
         gold = 0;
         team = "";
         activeMap = null;
