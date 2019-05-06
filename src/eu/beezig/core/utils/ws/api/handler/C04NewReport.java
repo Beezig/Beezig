@@ -49,7 +49,7 @@ public class C04NewReport extends PacketHandler {
 
             String reason = data.get("reason").toString();
             The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + users + "§3 " + (parsedUsers.length == 1 ? "is" : "are")
-                    + " being reported for §b" + reason + "§3.");
+                    + " being reported for §b" + reason + "§3. Run §b/claim§3 to claim and teleport.");
             if (Setting.PM_PING.getValue()) {
                 The5zigAPI.getAPI().playSound("note.pling", 1f);
             }
