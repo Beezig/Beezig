@@ -25,8 +25,10 @@ public class PacketOpcodes {
     public static final int C_REFETCH = 0xC02;
     public static final int C_NEW_ANNOUNCEMENT = 0xC03;
     public static final int C_NEW_REPORT = 0xC04;
+    public static final int C_REPORT_CLAIMED = 0xC05;
 
     public static final int S_IDENTIFICATION = 0x001;
     public static final int S_REQUEST_ONLINE_USERS = 0x002;
     public static final int S_BEEZIGFORGE_LOADED = 0x003;
+    public static final int S_CLAIM_REPORT = 0x004;
 }

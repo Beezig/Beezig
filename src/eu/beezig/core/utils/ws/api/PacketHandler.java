@@ -43,6 +43,7 @@ public abstract class PacketHandler {
         handlers.add(new C02Refetch());
         handlers.add(new C03NewAnnouncement());
         handlers.add(new C04NewReport());
+        handlers.add(new C05ReportClaimed());
     }
 
     public static void parseIncomingPacket(String stringIn) {

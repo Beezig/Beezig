@@ -23,6 +23,7 @@ import com.mojang.authlib.GameProfile;
 import eu.beezig.core.BeezigMain;
 import eu.beezig.core.Log;
 import eu.beezig.core.utils.ws.api.PacketHandler;
+import eu.beezig.core.utils.ws.api.PacketOpcodes;
 import eu.the5zig.mod.The5zigAPI;
 import org.java_websocket_beezig.client.WebSocketClient;
 import org.java_websocket_beezig.handshake.ServerHandshake;
@@ -45,7 +46,7 @@ public class Client extends WebSocketClient {
         System.out.println("Connected!");
 
         JSONObject message = new JSONObject();
-        message.put("opcode", 0x01);
+        message.put("opcode", PacketOpcodes.S_IDENTIFICATION);
         message.put("ua", Log.getUserAgent());
 
         GameProfile profile = The5zigAPI.getAPI().getGameProfile();

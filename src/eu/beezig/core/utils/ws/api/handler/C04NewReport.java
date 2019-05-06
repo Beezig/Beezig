@@ -29,7 +29,11 @@ import eu.beezig.core.utils.ws.api.PacketOpcodes;
 import eu.the5zig.mod.The5zigAPI;
 import org.json.simple.JSONObject;
 
+import java.util.HashMap;
+
 public class C04NewReport extends PacketHandler {
+    public static HashMap<String, String> newReports = new HashMap<>();
+
     @Override
     public int getOpcode() {
         return PacketOpcodes.C_NEW_REPORT;
@@ -38,12 +42,14 @@ public class C04NewReport extends PacketHandler {
     @Override
     public void handlePacket(JSONObject packetIn) {
         if (Setting.MOD_REPORT_NOTIFICATION.getValue() && BeezigMain.isStaffChat()) {
-            System.out.println(packetIn.toJSONString());
             JSONObject data = (JSONObject) packetIn.get("data");
 
             String users = data.get("target").toString();
+            String[] parsedUsers = users.split(",");
+
             String reason = data.get("reason").toString();
-            The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + users + "§3 " + (users.split(",").length == 1 ? "is" : "are") + " being reported for §b" + reason + "§3.");
+            The5zigAPI.getAPI().messagePlayer(Log.info + "§b" + users + "§3 " + (parsedUsers.length == 1 ? "is" : "are")
+                    + " being reported for §b" + reason + "§3.");
             if (Setting.PM_PING.getValue()) {
                 The5zigAPI.getAPI().playSound("note.pling", 1f);
             }
@@ -51,6 +57,18 @@ public class C04NewReport extends PacketHandler {
                 NotificationManager.sendNotification("New Report Received", users + " reported for " + reason);
             }
             SendTutorial.send("new_report");
+
+            String sender = data.get("sender").toString();
+            for(String user : parsedUsers) {
+                user = user.trim();
+
+                putReport(user, sender);
+            }
         }
+    }
+
+    private void putReport(String user, String sender) {
+        if(newReports.size() > 200) newReports.clear();
+        newReports.put(user, sender);
     }
 }
