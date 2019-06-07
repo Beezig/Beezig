@@ -40,7 +40,7 @@ public class GRAVListenerv2 {
 
     @EventHandler
     public void onServerChat(ChatEvent evt) {
-        if (evt.getMessage().startsWith("§8▍ §bGra§avi§ety§8 ▏ §6§e§e§l") && ActiveGame.is("grav") && !GRAV.hasVoted && Setting.AUTOVOTE.getValue()) {
+        if (evt.getMessage().startsWith("§8▍ §bGra§avi§ety§8 ▏ §6§e§e§la") && ActiveGame.is("grav") && !GRAV.hasVoted && Setting.AUTOVOTE.getValue()) {
             Pattern p = Pattern.compile(Pattern.quote("§6§e§e§l") + "(.*?)" + Pattern.quote(".§f§6"));
             Matcher matcher = p.matcher(evt.getMessage());
             String index = "";
