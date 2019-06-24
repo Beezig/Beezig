@@ -34,6 +34,8 @@ import java.net.URISyntaxException;
 
 public class Client extends WebSocketClient {
 
+    private static int reconnAttempts = 0;
+
     public Client(URI serverUri) {
         super(serverUri);
         // TODO Auto-generated constructor stub
@@ -66,6 +68,10 @@ public class Client extends WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
+
+        if(++reconnAttempts >= 50)
+            return;
+
         System.out.println("Disconnected from WebSocket (" + code + "): " + reason + " [" + remote + "]");
         System.out.println("Attempting to reconnect...");
         new Thread(() -> {
