@@ -138,8 +138,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
         // §8▍ §aSky§b§b§lGiants§a§l§a§l:Mini§8§l ▏ §6§l§e§l§e§l1. §f§6Blossom §a[§f0§a
         // Votes]
         else if (message.startsWith(getPrefixWithBoldDivider(ActiveGame.current()) + "§6§l§e§l§e§l6. ")
-                && !Giant.hasVoted && Setting.AUTOVOTE.getValue()) {
-            Giant.votesToParse.add(message);
+                && message.endsWith("]") && !Giant.hasVoted && Setting.AUTOVOTE.getValue()) {
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(Giant.votesToParse);
 
@@ -155,6 +154,7 @@ public class GiantListener extends AbstractGameListener<Giant> {
                             .replaceAll(getPrefixWithBoldDivider(ActiveGame.current()) + "§6§l§e§l§e§l", "")
                             .replaceAll(ChatColor.stripColor(getPrefixWithBoldDivider(ActiveGame.current())), "")
                             .trim();
+                    System.out.println(String.join(", ", data));
                     String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
                     String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
 
@@ -177,7 +177,11 @@ public class GiantListener extends AbstractGameListener<Giant> {
                     The5zigAPI.getAPI()
                             .messagePlayer(getPrefix(ActiveGame.current()) + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
 
+                } else if (Setting.AUTOVOTE_RANDOM.getValue()) {
+                    The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+                    The5zigAPI.getAPI().messagePlayer(getPrefix(ActiveGame.current()) + "§eAutomatically voted for§c Random map§e.");
                 }
+
                 Giant.votesToParse.clear();
                 Giant.hasVoted = true;
 
