@@ -76,7 +76,6 @@ import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
 import eu.the5zig.util.minecraft.ChatColor;
 import io.netty.util.internal.ThreadLocalRandom;
-import org.lwjgl.opengl.Display;
 import pw.roccodev.beezig.hiveapi.wrapper.GlobalConfiguration;
 import pw.roccodev.beezig.hiveapi.wrapper.player.HivePlayer;
 import pw.roccodev.beezig.hiveapi.wrapper.player.games.DrStats;
@@ -212,7 +211,7 @@ public class BeezigMain {
 
         The5zigAPI.getLogger().info("Loading Beezig");
 
-        Display.setTitle("Minecraft " + The5zigAPI.getAPI().getMinecraftVersion() + " | Beezig " + BEEZIG_VERSION);
+        //Display.setTitle("Minecraft " + The5zigAPI.getAPI().getMinecraftVersion() + " | Beezig " + BEEZIG_VERSION);
 
         The5zigAPI.getLogger().info("Version is " + BEEZIG_VERSION + ". Hash is " + VERSION_HASH);
         The5zigAPI.getLogger().info("Using Java version: " + Runtime.class.getPackage().getImplementationVersion());

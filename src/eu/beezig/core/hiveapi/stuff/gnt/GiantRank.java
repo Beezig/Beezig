@@ -39,13 +39,19 @@ public enum GiantRank implements RankEnum {
     GRAWP("Grawp", RED + "", 25000),
     ANDRE("Andre", "§9", 50000),
     CYCLOPS("Cyclops", "§5", 100000),
+    HERCULES("Hercules", "§2§l", 175000),
     BIGFRIENDLYGIANT("Big Friendly Giant", "§6§l", 250000),
+    GARGANTUA("Gargantua", "§d§l", 375000),
     GULLIVER("Gulliver", "§b§l", 500000),
-    BIGFOOT("Bigfoot", "§e§l", 750000),
-    TITAN("Titan", "§a§l", 1000000),
-    HAGRID("Hagrid", "§c§l", 1500000),
+    THOR("Thor", "§e§l", 675000),
+    BIGFOOT("Bigfoot", "§a§l", 750000),
+    YETI("Yeti", "§5§l", 875000),
+    TITAN("Titan", "§c§l", 1000000),
+    HADES("Hades", "§9§l", 1250000),
+    HAGRID("Hagrid", "§3§l", 1500000),
+    ANAKIM("Anakim", "§6§l", 1750000),
     GOLIATH("Goliath", "§c§l", 2000000),
-    SKYGIANT("✹ Sky Giant", "§d§l", -1);
+    SKYGIANT("✹ Giant Slayer", "§4§l", -1);
 
     private String display, prefix;
     private int start;
