@@ -24,6 +24,7 @@ import com.jagrosh.discordipc.IPCListener;
 import com.jagrosh.discordipc.entities.RichPresence;
 import com.jagrosh.discordipc.entities.User;
 import com.jagrosh.discordipc.exceptions.NoDiscordClientException;
+import eu.beezig.core.BeezigMain;
 import eu.beezig.core.Log;
 import eu.beezig.core.settings.Setting;
 import eu.beezig.core.utils.URLs;
@@ -52,8 +53,10 @@ public class DiscordUtils {
     public static String lastInviteId;
 
     public static void init() {
-        if (!Setting.DISCORD_RPC.getValue())
+        if (!Setting.DISCORD_RPC.getValue() || BeezigMain.laby) {
+            shouldOperate = false;
             return;
+        }
         IPCClient client = new IPCClient(439523115383652372L);
 
         client.setListener(new IPCListener() {
@@ -113,8 +116,6 @@ public class DiscordUtils {
                 }, "Server Ping").start();
 
                 rpcClient = client;
-
-
             }
 
         });
@@ -178,7 +179,6 @@ public class DiscordUtils {
             try {
                 lastPresence = newPresence;
                 lastPresenceOpts = opts;
-
 
                 RichPresence.Builder builder = new RichPresence.Builder();
                 builder.setDetails(newPresence)
