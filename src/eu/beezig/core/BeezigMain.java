@@ -34,15 +34,15 @@ import eu.beezig.core.hiveapi.StuffFetcher;
 import eu.beezig.core.hiveapi.stuff.grav.GRAVListenerv2;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.modules.arcade.GameItem;
-import eu.beezig.core.modules.bed.*;
 import eu.beezig.core.modules.bed.MonthlyItem;
+import eu.beezig.core.modules.bed.*;
 import eu.beezig.core.modules.bp.SongItem;
 import eu.beezig.core.modules.cai.CooldownsItem;
 import eu.beezig.core.modules.cai.GamePointsItem;
 import eu.beezig.core.modules.dr.DailyItem;
 import eu.beezig.core.modules.dr.DeathsItem;
-import eu.beezig.core.modules.dr.*;
 import eu.beezig.core.modules.dr.PointsItem;
+import eu.beezig.core.modules.dr.*;
 import eu.beezig.core.modules.global.MedalsItem;
 import eu.beezig.core.modules.global.TokensItem;
 import eu.beezig.core.modules.gnt.GiantKillsItem;
@@ -98,7 +98,7 @@ import java.util.stream.Collectors;
 
 @Plugin(name = "Beezig", version = BeezigMain.BEEZIG_VERSION)
 public class BeezigMain {
-    public static final String BEEZIG_VERSION = "6.1.0";
+    public static final String BEEZIG_VERSION = "6.2.0";
     public static String VERSION_HASH = "";
     public static String OS;
     public static boolean newUpdate;
