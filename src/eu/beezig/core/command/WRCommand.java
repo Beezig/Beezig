@@ -59,10 +59,11 @@ public class WRCommand implements Command {
     @Override
     public boolean execute(String[] args) {
         if (!(ActiveGame.is("dr"))) return false;
-        if (args.length == 0 && DR.activeMap != null) {
+        DR dr = (DR) The5zigAPI.getAPI().getActiveServer().getGameListener().getCurrentGameMode();
+        if (args.length == 0 && dr.activeMap != null) {
             new Thread(() -> {
-                WorldRecord wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID());
-                The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + getWorldRecord(wr.getTime()) + "§3 by §b" + wr.getHolderName());
+                WorldRecord wr = DrStats.getWorldRecord(dr.activeMap.getSpeedrunID());
+                The5zigAPI.getAPI().messagePlayer(Log.info + "The World Record on map §b" + dr.activeMap.getDisplayName() + "§3 is §b" + getWorldRecord(wr.getTime()) + "§3 by §b" + wr.getHolderName());
             }).start();
 
         } else {

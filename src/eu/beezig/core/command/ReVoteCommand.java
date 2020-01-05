@@ -39,7 +39,7 @@ public class ReVoteCommand implements Command {
 
         //better way?
         TIMV.hasVoted = false;
-        DR.hasVoted = false;
+        //DR.hasVoted = false;
         BED.hasVoted = false;
         Giant.hasVoted = false;
         CAI.hasVoted = false;

@@ -30,11 +30,12 @@ public class WRItem extends GameModeItem<DR> {
 
     @Override
     protected Object getValue(boolean dummy) {
-        if (DR.activeMap != null) {
+        DR dr = getGameMode();
+        if (dr.activeMap != null) {
             if ((boolean) getProperties().getSetting("showusername").get()) {
-                return DR.currentMapWR + " (" + DR.currentMapWRHolder + ")";
+                return dr.currentMapWR + " (" + dr.currentMapWRHolder + ")";
             }
-            return DR.currentMapWR;
+            return dr.currentMapWR;
         } else {
             return "No Record";
         }
@@ -55,7 +56,8 @@ public class WRItem extends GameModeItem<DR> {
     public boolean shouldRender(boolean dummy) {
         try {
             if (getGameMode() == null) return false;
-            return dummy || (DR.shouldRender(getGameMode().getState()) && DR.activeMap != null && DR.role.equals("Runner"));
+            return dummy || (DR.shouldRender(getGameMode().getState()) && getGameMode().activeMap != null
+                    && getGameMode().role.equals("Runner"));
         } catch (Exception e) {
             return false;
         }

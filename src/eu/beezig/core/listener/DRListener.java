@@ -73,7 +73,7 @@ public class DRListener extends AbstractGameListener<DR> {
         SendTutorial.send("dr_join");
         new Thread(() -> {
             try {
-                DR.initDailyPointsWriter();
+                gameMode.initWriter();
             } catch (IOException e2) {
                 // TODO Auto-generated catch block
                 e2.printStackTrace();
@@ -81,23 +81,23 @@ public class DRListener extends AbstractGameListener<DR> {
             Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
             DrStats api = new DrStats(The5zigAPI.getAPI().getGameProfile()
                     .getId().toString().replace("-", ""));
-            DR.rankObject = DRRank.getFromDisplay(api.getTitle());
-            DR.rank = DR.rankObject.getTotalDisplay();
+            gameMode.rankObject = DRRank.getFromDisplay(api.getTitle());
+            gameMode.rank = gameMode.rankObject.getTotalDisplay();
             // Should've read the docs ¯\_(ツ)_/¯
             if (sb != null && sb.getTitle().contains("Your DR Stats")) {
                 int points = sb.getLines().get(ChatColor.AQUA + "Points");
-                APIValues.DRpoints = (long) points;
+                APIValues.DRpoints = points;
 
             }
 
             try {
-                if (DR.attemptNew) {
-                    DR.monthly = api.getMonthlyProfile();
-                    DR.monthly.getPoints(); // Fetch (LazyObject)
-                    DR.hasLoaded = true;
+                if (gameMode.attemptNew) {
+                    gameMode.monthly = api.getMonthlyProfile();
+                    gameMode.monthly.getPoints(); // Fetch (LazyObject)
+                    gameMode.hasLoaded = true;
                 }
             } catch (Exception e) {
-                DR.attemptNew = false;
+                gameMode.attemptNew = false;
             }
         }).start();
 
@@ -118,48 +118,48 @@ public class DRListener extends AbstractGameListener<DR> {
             while (matcher.find()) {
                 map = matcher.group(1);
             }
-            DR.activeMap = DR.mapsPool.get(map.toLowerCase());
+            gameMode.activeMap = DR.mapsPool.get(map.toLowerCase());
 
         } else if (message.contains("§lYou are a ") && gameMode != null) {
             String afterMsg = message.split(ChatColor.stripColor("You are a "))[1];
             switch (afterMsg) {
                 case "DEATH!":
-                    DR.role = "Death";
+                    gameMode.role = "Death";
                     break;
                 case "RUNNER!":
-                    DR.role = "Runner";
+                    gameMode.role = "Runner";
                     new Thread(() -> {
-                        if (DR.activeMap != null) {
+                        if (gameMode.activeMap != null) {
                             The5zigAPI.getLogger().info("Loading PB...");
 
                             DrStats api = new DrStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
 
                             try {
-                                DR.currentMapPB = PBCommand.parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName()));
+                                gameMode.currentMapPB = PBCommand.parseTime(api.getMapRecords().get(gameMode.activeMap.getHiveAPIName()));
                             } catch (Exception e) {
-                                DR.currentMapPB = "No Personal Best";
+                                gameMode.currentMapPB = "No Personal Best";
                             }
                             The5zigAPI.getLogger().info("Loading WR...");
 
-                            WorldRecord wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID());
+                            WorldRecord wr = DrStats.getWorldRecord(gameMode.activeMap.getSpeedrunID());
 
-                            DR.currentMapWR = WRCommand.getWorldRecord(wr.getTime());
-                            DR.currentMapWRHolder = wr.getHolderName();
-                            if (DR.currentMapWR == null)
-                                DR.currentMapWR = "No Record";
-                            if (DR.currentMapWRHolder == null)
-                                DR.currentMapWRHolder = "Unknown";
+                            gameMode.currentMapWR = WRCommand.getWorldRecord(wr.getTime());
+                            gameMode.currentMapWRHolder = wr.getHolderName();
+                            if (gameMode.currentMapWR == null)
+                                gameMode.currentMapWR = "No Record";
+                            if (gameMode.currentMapWRHolder == null)
+                                gameMode.currentMapWRHolder = "Unknown";
                         }
                     }).start();
 
                     break;
             }
-            DiscordUtils.updatePresence("Parkouring in DeathRun", (DR.role.equals("Runner") ? "Running" : "Killing") + " on " + DR.activeMap.getDisplayName(), "game_dr");
+            DiscordUtils.updatePresence("Parkouring in DeathRun", (gameMode.role.equals("Runner") ? "Running" : "Killing") + " on " + gameMode.activeMap.getDisplayName(), "game_dr");
         } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §aCheckpoint Reached! §7") && ActiveGame.is("dr")
-                && DR.role.equals("Runner")) {
+                && gameMode.role.equals("Runner")) {
             // No more double tokens weekends Niklas :>)
-            if (!(DR.checkpoints == DR.activeMap.getCheckpoints())) {
-                DR.checkpoints++;
+            if (!(gameMode.checkpoints == gameMode.activeMap.getCheckpoints())) {
+                gameMode.checkpoints++;
 
             }
 
@@ -167,24 +167,18 @@ public class DRListener extends AbstractGameListener<DR> {
             int tokens = Integer.parseInt(data[1].trim().replaceAll("Tokens", "").trim());
             APIValues.tokens += tokens;
         } else if (message.equals("§8▍ §cDeathRun§8 ▏ §cYou have been returned to your last checkpoint!")
-                && ActiveGame.is("dr") && DR.role.equals("Runner")) {
-            DR.deaths++;
+                && ActiveGame.is("dr") && gameMode.role.equals("Runner")) {
+            gameMode.deaths++;
         } else if (message.contains("§6 (") && message.contains("§6)")
                 && message.contains(The5zigAPI.getAPI().getGameProfile().getName()) && ActiveGame.is("dr")
-                && DR.role.equals("Death")) {
-            DR.kills++;
+                && gameMode.role.equals("Death")) {
+            gameMode.kills++;
         } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §a§lVote received.") && Setting.AUTOVOTE.getValue()) {
-            DR.hasVoted = true;
-        } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l6. §f§cRandom map ") && !DR.hasVoted
+            gameMode.hasVoted = true;
+        } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l6. §f§cRandom map ") && !gameMode.hasVoted
                 && Setting.AUTOVOTE.getValue()) {
-            /*
-             *
-             * Multi-threading to avoid lag on older machines
-             *
-             */
-
             new Thread(() -> {
-                List<String> votesCopy = new ArrayList<>(DR.votesToParse);
+                List<String> votesCopy = new ArrayList<>(gameMode.votesToParse);
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("dr"));
 
                 TreeMap<String, Integer> votesindex = new TreeMap<>();
@@ -218,37 +212,37 @@ public class DRListener extends AbstractGameListener<DR> {
                     The5zigAPI.getAPI().sendPlayerMessage("/v " + votesindex.firstEntry().getValue());
                     The5zigAPI.getAPI().messagePlayer("§8▍ §cDeathRun§8 ▏ " + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
                 }
-                DR.votesToParse.clear();
-                DR.hasVoted = true;
+                gameMode.votesToParse.clear();
+                gameMode.hasVoted = true;
 
 
             }).start();
-        } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l") && !DR.hasVoted && Setting.AUTOVOTE.getValue()) {
-            DR.votesToParse.add(message);
+        } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l") && !gameMode.hasVoted && Setting.AUTOVOTE.getValue()) {
+            gameMode.votesToParse.add(message);
         } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             // " §6§m §f ItsNiklass's Stats §6§m "
             // Advanced Records
-            DR.messagesToSend.add(message);
+            gameMode.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found header");
             return true;
         } else if (message.startsWith("§3 ") && Setting.ADVANCED_RECORDS.getValue()) {
 
-            DR.messagesToSend.add(message);
+            gameMode.messagesToSend.add(message);
             The5zigAPI.getLogger().info("found entry");
 
             return true;
         } else if (message.contains(" §ahttp://hivemc.com/player/") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             // TODO Coloring
-            DR.footerToSend.add(message);
+            gameMode.footerToSend.add(message);
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
         } else if ((message.equals("                      §6§m                  §6§m                  ")
                 && !message.startsWith("§f ")) && Setting.ADVANCED_RECORDS.getValue()) {
             The5zigAPI.getLogger().info("found footer");
-            DR.footerToSend.add(message);
+            gameMode.footerToSend.add(message);
             The5zigAPI.getLogger().info("executed /records");
-            if (DR.footerToSend.contains("                      §6§m                  §6§m                  ")) {
+            if (gameMode.footerToSend.contains("                      §6§m                  §6§m                  ")) {
                 // Advanced Records - send
                 The5zigAPI.getLogger().info("Sending adv rec");
                 new Thread(() -> {
@@ -286,7 +280,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
                         if (rankTitleDR != null)
                             rank = DRRank.getFromDisplay(rankTitleDR);
-                        List<String> messages = new ArrayList<>(DR.messagesToSend);
+                        List<String> messages = new ArrayList<>(gameMode.messagesToSend);
                         Iterator<String> it = messages.iterator();
                         for (String s : messages) {
 
@@ -404,36 +398,36 @@ public class DRListener extends AbstractGameListener<DR> {
                                     "§f §3 Last Game: §b" + APIUtils.getTimeAgo(lastSeen.getTimeInMillis()));
                         }
 
-                        for (String s : DR.footerToSend) {
+                        for (String s : gameMode.footerToSend) {
                             The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
 
-                        DR.messagesToSend.clear();
-                        DR.footerToSend.clear();
+                        gameMode.messagesToSend.clear();
+                        gameMode.footerToSend.clear();
                         AdvancedRecords.isRunning = false;
 
                     } catch (Exception e) {
                         e.printStackTrace();
                         if (e.getCause() instanceof FileNotFoundException) {
                             The5zigAPI.getAPI().messagePlayer(Log.error + "Player nicked or not found.");
-                            DR.messagesToSend.clear();
-                            DR.footerToSend.clear();
+                            gameMode.messagesToSend.clear();
+                            gameMode.footerToSend.clear();
                             AdvancedRecords.isRunning = false;
                             return;
                         }
                         The5zigAPI.getAPI().messagePlayer(Log.error
                                 + "Oops, looks like something went wrong while fetching the records, so you will receive the normal one!");
 
-                        for (String s : DR.messagesToSend) {
+                        for (String s : gameMode.messagesToSend) {
                             The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
-                        for (String s : DR.footerToSend) {
+                        for (String s : gameMode.footerToSend) {
                             The5zigAPI.getAPI().messagePlayer("§f " + s);
                         }
                         The5zigAPI.getAPI().messagePlayer(
                                 "§f " + "                      §6§m                  §6§m                  ");
-                        DR.messagesToSend.clear();
-                        DR.footerToSend.clear();
+                        gameMode.messagesToSend.clear();
+                        gameMode.footerToSend.clear();
                         AdvancedRecords.isRunning = false;
                     }
                 }).start();
@@ -448,12 +442,12 @@ public class DRListener extends AbstractGameListener<DR> {
             ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
             timer.schedule(sft, 1500);
         } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §3NEW PERSONAL BEST!§b") && message.contains("it took you")) {
-            DR.mapTime = message.split("it took you §e")[1].replace("§b!", "");
+            gameMode.mapTime = message.split("it took you §e")[1].replace("§b!", "");
         } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §bYou finished your run in ")) {
             // §8▍ §cDeathRun§8 ▏ §bYou finished your run in 03:07.479§b!
             String time = (message.split("in "))[1].replace("§b!", "").trim();
 
-            DR.mapTime = time;
+            gameMode.mapTime = time;
 
             String[] data = time.split(":");
             int minutes = Integer.parseInt(data[0]);
@@ -464,11 +458,11 @@ public class DRListener extends AbstractGameListener<DR> {
 
             new Thread(() -> {
 
-                double wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID()).getTime();
+                double wr = DrStats.getWorldRecord(gameMode.activeMap.getSpeedrunID()).getTime();
                 double diff = (Math.round((finalTime - wr) * 1000d)) / 1000d;
                 int finalPb;
 
-                String pb = DR.currentMapPB;
+                String pb = gameMode.currentMapPB;
                 String[] pbData = pb.split(":");
                 try {
                     finalPb = Integer.parseInt(pbData[0]) * 60 + Integer.parseInt(pbData[1]);
@@ -516,7 +510,7 @@ public class DRListener extends AbstractGameListener<DR> {
                             + "§3 seconds away! You beat your Personal Best by §b" + -pbDiff + " §3seconds!");
                 }
 
-                DR.mapTime = time + " (WR: " + (diff >= 0 ? "+" + diff : diff) + " PB: " + (pbDiff >= 0 ? "+" + pbDiff
+                gameMode.mapTime = time + " (WR: " + (diff >= 0 ? "+" + diff : diff) + " PB: " + (pbDiff >= 0 ? "+" + pbDiff
                         : pbDiff) + ")";
             }).start();
 
@@ -528,7 +522,7 @@ public class DRListener extends AbstractGameListener<DR> {
     @Override
     public void onServerConnect(DR gameMode) {
         The5zigAPI.getLogger().info("Resetting! (DR)");
-        DR.reset(gameMode);
+        gameMode.reset();
     }
 
     @Override
@@ -539,17 +533,17 @@ public class DRListener extends AbstractGameListener<DR> {
         for (Map.Entry<String, Integer> e : lines.entrySet()) {
             if (e.getValue() == i && e.getKey().contains("§7Points: ")) {
                 int pts = Integer.parseInt(e.getKey().replace("§7Points: ", "").replace("§9", "").replaceAll("§f", ""));
-                if (pts != DR.lastPts) {
-                    DR.dailyPoints += (pts - DR.lastPts);
-                    APIValues.DRpoints += (pts - DR.lastPts);
-                    DR.lastPts = pts;
+                if (pts != gameMode.lastPts) {
+                    gameMode.dailyPoints += (pts - gameMode.lastPts);
+                    APIValues.DRpoints += (pts - gameMode.lastPts);
+                    gameMode.lastPts = pts;
                 }
             } else if (e.getKey().contains("N/A / §7Kills: ")) {
-                DR.mapTime = e.getKey();
+                gameMode.mapTime = e.getKey();
             }
-            if (DR.gameId == null && e.getKey().contains("§7GID: §f")) {
-                DR.gameId = e.getKey().replace("§7GID: §f", "").trim();
-                Log.addToSendQueue(Log.info + "Game ID: §b" + DR.gameId + " > §a" + "http://hivemc.com/deathrun/game/" + DR.gameId);
+            if (gameMode.gameId == null && e.getKey().contains("§7GID: §f")) {
+                gameMode.gameId = e.getKey().replace("§7GID: §f", "").trim();
+                Log.addToSendQueue(Log.info + "Game ID: §b" + gameMode.gameId + " > §a" + "http://hivemc.com/deathrun/game/" + gameMode.gameId);
 
             }
         }

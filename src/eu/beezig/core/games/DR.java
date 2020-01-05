@@ -23,6 +23,7 @@ import eu.beezig.core.ActiveGame;
 import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.games.logging.GameLogger;
+import eu.beezig.core.games.logging.IDailyPoints;
 import eu.beezig.core.hiveapi.stuff.dr.DRMap;
 import eu.beezig.core.hiveapi.stuff.dr.DRRank;
 import eu.the5zig.mod.The5zigAPI;
@@ -35,121 +36,47 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DR extends GameMode {
+public class DR extends GameMode implements IDailyPoints {
 
-    public static DRMap activeMap;
-    public static String currentMapPB;
-    public static String currentMapWR;
-    public static String currentMapWRHolder;
-    public static boolean dead = false;
-    public static String role = null;
-    public static String mapTime;
-    public static int checkpoints;
-    public static int deaths;
-    public static int kills;
-    public static int lastPts;
-    public static String gameId = null;
     public static HashMap<String, DRMap> mapsPool;
-    public static int dailyPoints;
-    public static String rank;
-    public static DRRank rankObject;
-    public static List<String> votesToParse = new ArrayList<>();
-    public static boolean hasVoted = false;
-    public static List<String> messagesToSend = new ArrayList<>();
-    public static List<String> footerToSend = new ArrayList<>();
-    private static GameLogger logger;
-    private static PrintWriter dailyPointsWriter;
-    private static String dailyPointsName;
 
-    public static DrMonthlyProfile monthly;
-    public static boolean attemptNew = true;
-    public static boolean hasLoaded = false;
+    public DRMap activeMap;
+    public String currentMapPB;
+    public String currentMapWR;
+    public String currentMapWRHolder;
+    public String role;
+    public String mapTime;
+    public int checkpoints;
+    public int deaths;
+    public int kills;
+    public int lastPts;
+    public String gameId;
+    public int dailyPoints;
+    public String rank;
+    public DRRank rankObject;
+    public List<String> votesToParse = new ArrayList<>();
+    public boolean hasVoted;
+    public List<String> messagesToSend = new ArrayList<>();
+    public List<String> footerToSend = new ArrayList<>();
+    private GameLogger logger;
 
-    public static void initDailyPointsWriter() throws IOException {
+    public DrMonthlyProfile monthly;
+    public boolean attemptNew = true;
+    public boolean hasLoaded;
 
-        logger = new GameLogger(BeezigMain.mcFile + "/dr/games.csv");
-        logger.setHeaders(new String[]{
-                "Role",
-                "Map",
-                "Kills",
-                "Deaths",
-                "GameID",
-                "Timestamp",
-                "Time"
-        });
-
-        File f = new File(BeezigMain.mcFile + "/dr/dailyPoints/" + dailyPointsName);
-        if (!f.exists()) {
-            f.createNewFile();
-            initPointsWriterWithZero();
-            return;
-        }
-
-
-        FileInputStream stream = new FileInputStream(f);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        String line = reader.readLine();
-        if (line == null) {
-            initPointsWriterWithZero();
-            stream.close();
-            return;
-        } else {
-            DR.dailyPoints = Integer.parseInt(line);
-        }
-        stream.close();
-        reader.close();
-
-    }
-
-    private static void initPointsWriterWithZero() throws FileNotFoundException, UnsupportedEncodingException {
-        dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/dr/dailyPoints/" + dailyPointsName, "UTF-8");
-        dailyPointsWriter.println(0);
-
-        dailyPointsWriter.close();
-
-
-    }
-
-    public static void setDailyPointsFileName(String newName) {
-        dailyPointsName = newName;
-    }
-
-    private static void saveDailyPoints() {
-        try {
-            dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/dr/dailyPoints/" + dailyPointsName, "UTF-8");
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        dailyPointsWriter.println(dailyPoints);
-        dailyPointsWriter.flush();
-        dailyPointsWriter.close();
-    }
-
-    public static void reset(DR gm) {
-
-        gm.setState(GameState.FINISHED);
-        if (role != null && activeMap != null && logger != null)
-            logger.logGame(role, activeMap.getDisplayName(), kills + "", deaths + "", gameId, System.currentTimeMillis() + "", mapTime);
-        activeMap = null;
-        currentMapPB = null;
-        currentMapWR = null;
-        gameId = null;
-        currentMapWRHolder = null;
-        role = null;
-        checkpoints = 0;
-        deaths = 0;
-        kills = 0;
-        lastPts = 0;
-        hasLoaded = false;
-        mapTime = null;
-        DR.hasVoted = false;
+    public void reset() {
+        this.setState(GameState.FINISHED);
         ActiveGame.reset("dr");
+        if (role != null && activeMap != null && logger != null)
+            logger.logGame(role, activeMap.getDisplayName(), kills, deaths, gameId, System.currentTimeMillis(), mapTime);
         IHive.genericReset();
         if (The5zigAPI.getAPI().getActiveServer() != null)
             The5zigAPI.getAPI().getActiveServer().getGameListener().switchLobby("");
-        saveDailyPoints();
-
+        try {
+            this.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean shouldRender(GameState state) {
@@ -163,7 +90,52 @@ public class DR extends GameMode {
 
     @Override
     public String getName() {
-        return "Deathrun";
+        return "DeathRun";
     }
 
+    @Override
+    public void initWriter() throws IOException {
+        logger = new GameLogger(BeezigMain.mcFile + "/dr/games.csv");
+        logger.setHeaders(new String[]{
+                "Role",
+                "Map",
+                "Kills",
+                "Deaths",
+                "GameID",
+                "Timestamp",
+                "Time"
+        });
+        File f = new File(BeezigMain.mcFile + "/dr/dailyPoints/" + BeezigMain.dailyFileName);
+        if (!f.exists()) {
+            f.createNewFile();
+            zeroed();
+            return;
+        }
+        try(FileInputStream stream = new FileInputStream(f)) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
+                String line = reader.readLine();
+                if (line == null) {
+                    zeroed();
+                } else {
+                    this.dailyPoints = Integer.parseInt(line);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void zeroed() throws IOException {
+        try (PrintWriter dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/dr/dailyPoints/" + BeezigMain.dailyFileName,
+                "UTF-8")) {
+            dailyPointsWriter.println(0);
+        }
+    }
+
+    @Override
+    public void save() throws IOException {
+        try (PrintWriter dailyPointsWriter = new PrintWriter(BeezigMain.mcFile + "/dr/dailyPoints/" + BeezigMain.dailyFileName,
+                "UTF-8")) {
+            dailyPointsWriter.println(dailyPoints);
+        }
+    }
 }

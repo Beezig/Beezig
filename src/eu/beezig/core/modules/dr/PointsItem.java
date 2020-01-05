@@ -52,19 +52,22 @@ public class PointsItem extends GameModeItem<DR> {
     @Override
     protected Object getValue(boolean dummy) {
         try {
+            DR dr = getGameMode();
             if ((boolean) getProperties().getSetting("showrank").get()) {
                 StringBuilder sb = new StringBuilder();
                 if ((boolean) getProperties().getSetting("showcolor").get()) {
-                    sb.append(Log.df(APIValues.DRpoints)).append(" (").append(DR.rank).append(getMainFormatting());
+                    sb.append(Log.df(APIValues.DRpoints)).append(" (").append(dr.rank).append(getMainFormatting());
 
                 } else {
 
-                    sb.append(Log.df(APIValues.DRpoints)).append(" (").append(ChatColor.stripColor(DR.rank));
+                    sb.append(Log.df(APIValues.DRpoints)).append(" (").append(ChatColor.stripColor(dr.rank));
                 }
 
                 if ((boolean) getProperties().getSetting("showpointstonextrank").get()) {
-                    if (DR.rankObject == null) return Log.df(APIValues.DRpoints);
-                    sb.append((boolean) getProperties().getSetting("showcolor").get() ? " / " + DR.rankObject.getPointsToNextRank((int) APIValues.DRpoints) : " / " + ChatColor.stripColor(DR.rankObject.getPointsToNextRank((int) APIValues.DRpoints)));
+                    if (dr.rankObject == null) return Log.df(APIValues.DRpoints);
+                    sb.append((boolean) getProperties().getSetting("showcolor").get() ? " / " +
+                            dr.rankObject.getPointsToNextRank((int) APIValues.DRpoints) : " / " +
+                            ChatColor.stripColor(dr.rankObject.getPointsToNextRank((int) APIValues.DRpoints)));
 
                 }
                 sb.append(

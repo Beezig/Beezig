@@ -112,10 +112,11 @@ public class BeezigMain {
     public static String lrPL;
 
     public static File mcFile;
-    public static boolean isColorDebug = false;
-    public static boolean hasExpansion = false;
-    public static boolean laby = false;
-    public static NetworkRank playerRank = null;
+    public static boolean isColorDebug;
+    public static boolean hasExpansion;
+    public static boolean laby;
+    public static NetworkRank playerRank;
+    public static String dailyFileName;
     private File labyConfig;
 
     public static BeezigMain instance;
@@ -649,7 +650,7 @@ public class BeezigMain {
         new GNTM();
 
         String dailyName = TIMVDay.fromCalendar(Calendar.getInstance()) + '-' + The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "") + ".txt";
-
+        dailyFileName = dailyName;
         TIMV.setDailyKarmaFileName(dailyName);
         BP.setDailyPointsFileName(dailyName);
         CAI.setDailyPointsFileName(dailyName);
@@ -657,7 +658,6 @@ public class BeezigMain {
         SKY.setDailyPointsFileName(dailyName);
         HIDE.setDailyPointsFileName(dailyName);
         MIMV.setDailyPointsFileName(dailyName);
-        DR.setDailyPointsFileName(dailyName);
         Giant.setDailyPointsFileName(dailyName);
         SGN.setDailyPointsFileName(dailyName);
         LAB.setDailyPointsFileName(dailyName);
@@ -807,31 +807,33 @@ public class BeezigMain {
             if (BeezigMain.hasExpansion) SendTutorial.send("hub_forge");
         }
         // Map fallback
-        if (ActiveGame.is("dr") && DR.activeMap == null) {
+        if (ActiveGame.is("dr")) {
+            DR dr = (DR) The5zigAPI.getAPI().getActiveServer().getGameListener().getCurrentGameMode();
+            if (dr.activeMap != null) return;
             String map = ChatColor.stripColor(evt.getTitle());
             if (map.equals("HiveMC.EU"))
                 return;
             if (map.equals("play.HiveMC.com"))
                 return;
             The5zigAPI.getLogger().info("FALLBACK MAP=" + map);
-            DR.activeMap = DR.mapsPool.get(map.toLowerCase());
+            dr.activeMap = DR.mapsPool.get(map.toLowerCase());
 
             new Thread(() -> {
                 DrStats api = new DrStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
-                if (DR.currentMapPB == null) {
+                if (dr.currentMapPB == null) {
                     The5zigAPI.getLogger().info("Loading PB...");
-                    DR.currentMapPB = PBCommand.parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName()));
+                    dr.currentMapPB = PBCommand.parseTime(api.getMapRecords().get(dr.activeMap.getHiveAPIName()));
                 }
                 WorldRecord wr = null;
-                if (DR.currentMapWR == null) {
-                    wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID());
+                if (dr.currentMapWR == null) {
+                    wr = DrStats.getWorldRecord(dr.activeMap.getSpeedrunID());
                     The5zigAPI.getLogger().info("Loading WR...");
-                    DR.currentMapWR = WRCommand.getWorldRecord(wr.getTime());
+                    dr.currentMapWR = WRCommand.getWorldRecord(wr.getTime());
                 }
-                if (DR.currentMapWRHolder == null) {
-                    if (wr == null) wr = DrStats.getWorldRecord(DR.activeMap.getSpeedrunID());
+                if (dr.currentMapWRHolder == null) {
+                    if (wr == null) wr = DrStats.getWorldRecord(dr.activeMap.getSpeedrunID());
                     The5zigAPI.getLogger().info("Loading WRHolder...");
-                    DR.currentMapWRHolder = wr.getHolderName();
+                    dr.currentMapWRHolder = wr.getHolderName();
                 }
             }).start();
         }

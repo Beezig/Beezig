@@ -30,8 +30,8 @@ public class PBItem extends GameModeItem<DR> {
 
     @Override
     protected Object getValue(boolean dummy) {
-        if (DR.activeMap != null) {
-            return DR.currentMapPB;
+        if (getGameMode().activeMap != null) {
+            return getGameMode().currentMapPB;
         } else {
             return "No Personal Best";
         }
@@ -50,7 +50,7 @@ public class PBItem extends GameModeItem<DR> {
     public boolean shouldRender(boolean dummy) {
         try {
             if (getGameMode() == null) return false;
-            return dummy || (DR.shouldRender(getGameMode().getState()) && DR.activeMap != null && DR.role.equals("Runner"));
+            return dummy || (DR.shouldRender(getGameMode().getState()) && getGameMode().activeMap != null && getGameMode().role.equals("Runner"));
         } catch (Exception e) {
             return false;
         }

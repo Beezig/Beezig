@@ -35,13 +35,14 @@ public class MonthlyItem extends GameModeItem<DR> {
     @Override
     protected Object getValue(boolean dummy) {
         if (dummy) return "No Profile";
-        if (!DR.hasLoaded) return "Loading...";
+        DR dr = getGameMode();
+        if (!dr.hasLoaded) return "Loading...";
 
         StringBuilder sb = new StringBuilder();
-        sb.append("#").append(DR.monthly.getPlace()).append(" ▏ ");
+        sb.append("#").append(dr.monthly.getPlace()).append(" ▏ ");
 
         MonthlyField selected = (MonthlyField) getProperties().getSetting("field").get();
-        DrMonthlyProfile profile = DR.monthly;
+        DrMonthlyProfile profile = dr.monthly;
 
         DecimalFormat df = new DecimalFormat();
         df.setMinimumFractionDigits(2);
@@ -84,7 +85,7 @@ public class MonthlyItem extends GameModeItem<DR> {
         try {
             if (getGameMode() == null)
                 return false;
-            if (DR.monthly == null || !DR.hasLoaded) return false;
+            if (getGameMode().monthly == null || !getGameMode().hasLoaded) return false;
             return DR.shouldRender(getGameMode().getState());
         } catch (Exception e) {
             return false;

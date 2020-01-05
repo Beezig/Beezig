@@ -39,7 +39,7 @@ public class GameLogger {
     }
 
 
-    public void logGame(String... toLog) {
+    public void logGame(Object... toLog) {
         try {
             File toWrite = new File(fileName);
             boolean writeHeaders = false;
@@ -55,8 +55,8 @@ public class GameLogger {
                 csv.endRecord();
             }
 
-            for (String s : toLog) {
-                if (s != null) csv.write(s);
+            for (Object s : toLog) {
+                if (s != null) csv.write(s.toString());
                 else csv.write("Null string?");
             }
             csv.endRecord();

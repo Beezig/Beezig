@@ -61,8 +61,8 @@ public class PBCommand implements Command {
     @Override
     public boolean execute(String[] args) {
         if (!(ActiveGame.is("dr"))) return false;
-
-        if (args.length == 0 && DR.activeMap != null) {
+        DR dr = (DR) The5zigAPI.getAPI().getActiveServer().getGameListener().getCurrentGameMode();
+        if (args.length == 0 && dr.activeMap != null) {
 
             String ign = The5zigAPI.getAPI().getGameProfile().getName();
 
@@ -70,9 +70,9 @@ public class PBCommand implements Command {
                 DrStats api = new DrStats(ign);
                 HivePlayer parent = api.getPlayer();
                 ChatColor color = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
-                The5zigAPI.getAPI().messagePlayer(Log.info + color + "§3Your Personal Best on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName())));
+                The5zigAPI.getAPI().messagePlayer(Log.info + color + "§3Your Personal Best on map §b" + dr.activeMap.getDisplayName() + "§3 is §b" + parseTime(api.getMapRecords().get(dr.activeMap.getHiveAPIName())));
             }).start();
-        } else if (args.length == 1 && DR.activeMap != null) {
+        } else if (args.length == 1 && dr.activeMap != null) {
 
             String ign = args[0];
 
@@ -80,7 +80,7 @@ public class PBCommand implements Command {
                 DrStats api = new DrStats(ign);
                 HivePlayer parent = api.getPlayer();
                 ChatColor color = NetworkRank.fromDisplay(parent.getRank().getHumanName()).getColor();
-                The5zigAPI.getAPI().messagePlayer(Log.info + color + parent.getUsername() + "§3's Personal Best on map §b" + DR.activeMap.getDisplayName() + "§3 is §b" + parseTime(api.getMapRecords().get(DR.activeMap.getHiveAPIName())));
+                The5zigAPI.getAPI().messagePlayer(Log.info + color + parent.getUsername() + "§3's Personal Best on map §b" + dr.activeMap.getDisplayName() + "§3 is §b" + parseTime(api.getMapRecords().get(dr.activeMap.getHiveAPIName())));
             }).start();
 
         } else {

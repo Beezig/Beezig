@@ -30,7 +30,7 @@ public class DeathsItem extends GameModeItem<DR> {
 
     @Override
     protected Object getValue(boolean dummy) {
-        return DR.deaths;
+        return getGameMode().deaths;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class DeathsItem extends GameModeItem<DR> {
     public boolean shouldRender(boolean dummy) {
         try {
             if (getGameMode() == null) return false;
-            return dummy || (DR.shouldRender(getGameMode().getState()) && DR.role.equals("Runner") && DR.deaths != 0);
+            return dummy || (DR.shouldRender(getGameMode().getState()) && getGameMode().role.equals("Runner") && getGameMode().deaths != 0);
         } catch (Exception e) {
             return false;
         }

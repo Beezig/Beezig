@@ -17,36 +17,12 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.modules.dr;
+package eu.beezig.core.games.logging;
 
-import eu.beezig.core.games.DR;
-import eu.the5zig.mod.modules.GameModeItem;
+import java.io.IOException;
 
-
-public class RoleItem extends GameModeItem<DR> {
-
-    public RoleItem() {
-        super(DR.class);
-    }
-
-    @Override
-    protected Object getValue(boolean dummy) {
-        return getGameMode().role;
-    }
-
-    @Override
-    public String getTranslation() {
-        return "beezig.module.role";
-    }
-
-    @Override
-    public boolean shouldRender(boolean dummy) {
-        try {
-            if (getGameMode() == null) return false;
-            return dummy || (DR.shouldRender(getGameMode().getState()) && getGameMode().role != null);
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
+public interface IDailyPoints {
+    void initWriter() throws IOException;
+    void zeroed() throws IOException;
+    void save() throws IOException;
 }

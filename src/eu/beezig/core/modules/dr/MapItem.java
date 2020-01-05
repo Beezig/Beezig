@@ -32,14 +32,15 @@ public class MapItem extends GameModeItem<DR> {
 
     @Override
     protected Object getValue(boolean dummy) {
-        DRMap map = DR.activeMap;
+        DR dr = getGameMode();
+        DRMap map = dr.activeMap;
         if (map == null) return "Unknown map";
         String name = map.getDisplayName();
         StringBuilder tr = new StringBuilder();
         tr.append(name);
-        if ((boolean) getProperties().getSetting("showcheckpoints").get() && "Runner".equals(DR.role)) {
+        if ((boolean) getProperties().getSetting("showcheckpoints").get() && "Runner".equals(dr.role)) {
             int totalc = map.getCheckpoints();
-            tr.append(" (").append(DR.checkpoints).append("/").append(totalc).append(" ").append(Log.t("beezig.str.dr.checkpoints")).append(")");
+            tr.append(" (").append(dr.checkpoints).append("/").append(totalc).append(" ").append(Log.t("beezig.str.dr.checkpoints")).append(")");
         }
         return tr.toString().trim();
     }
@@ -59,7 +60,7 @@ public class MapItem extends GameModeItem<DR> {
 
         try {
             if (getGameMode() == null) return false;
-            return dummy || (DR.shouldRender(getGameMode().getState()) && DR.activeMap != null);
+            return dummy || (DR.shouldRender(getGameMode().getState()) && getGameMode().activeMap != null);
         } catch (Exception e) {
             return false;
         }
