@@ -31,6 +31,7 @@ import eu.the5zig.mod.server.ServerInstance;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class IHive extends ServerInstance {
 
@@ -64,7 +65,8 @@ public class IHive extends ServerInstance {
 
     @Override
     public boolean handleServer(String host, int port) {
-        if (host.toLowerCase().contains("hivemc.") || host.toLowerCase().endsWith("hive.sexy")) {
+        if (host.toLowerCase(Locale.ROOT).contains("hivemc.") || host.toLowerCase(Locale.ROOT).endsWith("hive.sexy")
+                || host.toLowerCase(Locale.ROOT).contains(".j2o")) {
             System.out.println("Joined Hive.");
             joined = System.currentTimeMillis();
             if (BeezigMain.disabled) {
