@@ -19,12 +19,18 @@
 
 package eu.beezig.core.server;
 
-import eu.the5zig.mod.server.ServerInstance;
+import eu.beezig.core.Beezig;
+import eu.beezig.core.server.listeners.TIMVListener;
+import eu.the5zig.mod.server.*;
+
+import java.util.Locale;
 
 public class ServerHive extends ServerInstance {
     @Override
     public void registerListeners() {
-
+        GameListenerRegistry registry = getGameListener();
+        registry.registerListener(new ListenerHive());
+        registry.registerListener(new TIMVListener());
     }
 
     @Override
@@ -34,11 +40,34 @@ public class ServerHive extends ServerInstance {
 
     @Override
     public String getConfigName() {
-        return "hivemc";
+        return "hive";
     }
 
     @Override
     public boolean handleServer(String host, int port) {
-        return false;
+        return host.toLowerCase(Locale.ROOT).contains("hivemc.") || host.toLowerCase(Locale.ROOT).endsWith("hive.sexy")
+                || host.toLowerCase(Locale.ROOT).contains(".j2o");
+    }
+
+    public static boolean isCurrent() {
+        return Beezig.api().getActiveServer() instanceof ServerHive;
+    }
+
+    private static class ListenerHive extends AbstractGameListener<GameMode> {
+        @Override
+        public Class<GameMode> getGameMode() {
+            return null;
+        }
+
+        @Override
+        public boolean matchLobby(String s) {
+            return false;
+        }
+
+        @Override
+        public void onMatch(GameMode gameMode, String key, IPatternResult match) {
+            if(gameMode != null || key == null) return;
+            if(key.startsWith("join.")) getGameListener().switchLobby(key.replace("join.", ""));
+        }
     }
 }

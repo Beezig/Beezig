@@ -17,28 +17,13 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.config;
+package eu.beezig.core.server.modes;
 
-public class Setting {
-    private Object value;
+import eu.the5zig.mod.server.GameMode;
 
-    Setting(Object value) {
-        this.value = value;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public boolean getBoolean() {
-        return (boolean) value;
-    }
-
-    public int getInt() {
-        return (int) value;
-    }
-
-    public String getString() {
-        return (String) value;
+public class TIMV extends GameMode {
+    @Override
+    public String getName() {
+        return "Trouble in Mineville";
     }
 }

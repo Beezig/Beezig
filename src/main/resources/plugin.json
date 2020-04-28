@@ -1,0 +1,9 @@
+{
+  "main": "eu.beezig.core.Beezig",
+  "name": "Beezig",
+  "version": "7.0.0",
+  "author": "Beezig Team",
+  "desc": "The Hive support for 5zig.",
+  "license": "GPLv3",
+  "icon": "https://rocco.dev/beezighosting/laby/icon/logo.png"
+}

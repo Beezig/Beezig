@@ -20,13 +20,16 @@
 package eu.beezig.core;
 
 import eu.beezig.core.config.BeezigConfiguration;
+import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.ServerHive;
+import eu.beezig.core.util.DirectoryMigration;
 import eu.the5zig.mod.ModAPI;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.plugin.Plugin;
 
+import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -38,6 +41,7 @@ public class Beezig {
     private ModAPI api;
     private ExecutorService asyncExecutor;
     private BeezigConfiguration config;
+    private File beezigDir;
 
     @EventHandler
     public void load(LoadEvent event) {
@@ -49,8 +53,24 @@ public class Beezig {
         api = The5zigAPI.getAPI();
         asyncExecutor = Executors.newFixedThreadPool(5);
 
+        // Init configuration
+        try {
+            File minecraftDir = new File(Beezig.class.getProtectionDomain().getCodeSource().getLocation().toURI())
+                    .getParentFile().getParentFile().getParentFile();
+            beezigDir = new File(minecraftDir, "Beezig");
+            DirectoryMigration.migrateIfNeeded(new File(minecraftDir, "5zigtimv"), beezigDir);
+            if(!beezigDir.exists() && !beezigDir.mkdir()) throw new RuntimeException("Could not create config dir.");
+            config = new BeezigConfiguration();
+            config.load(new File(beezigDir, "config.json"));
+        } catch(Exception e) {
+            logger.severe("Could not create config directory! Aborting load.");
+            e.printStackTrace();
+            return;
+        }
+
         // Register Hive stuff
         api.registerServerInstance(this, ServerHive.class);
+        Modules.register(this, api);
 
         logger.info("Load ended in " + (System.currentTimeMillis() - timeStart) + " ms.");
     }

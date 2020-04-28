@@ -17,28 +17,13 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.config;
+package eu.beezig.core.util;
 
-public class Setting {
-    private Object value;
+import java.io.File;
 
-    Setting(Object value) {
-        this.value = value;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public boolean getBoolean() {
-        return (boolean) value;
-    }
-
-    public int getInt() {
-        return (int) value;
-    }
-
-    public String getString() {
-        return (String) value;
+public class DirectoryMigration {
+    public static void migrateIfNeeded(File from, File to) throws RuntimeException {
+        if(!from.exists() || to.exists()) return;
+        if(!from.renameTo(to)) throw new RuntimeException("Couldn't migrate configuration directory.");
     }
 }

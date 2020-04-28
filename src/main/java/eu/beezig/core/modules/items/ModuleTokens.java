@@ -17,28 +17,25 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.config;
+package eu.beezig.core.modules.items;
 
-public class Setting {
-    private Object value;
+import eu.beezig.core.server.ServerHive;
+import eu.beezig.core.util.Message;
+import eu.the5zig.mod.modules.StringItem;
 
-    Setting(Object value) {
-        this.value = value;
+public class ModuleTokens extends StringItem {
+    @Override
+    protected Object getValue(boolean dummy) {
+        return Message.formatNumber(dummy ? 123456 : 0);
     }
 
-    public Object getValue() {
-        return value;
+    @Override
+    public String getTranslation() {
+        return "modules.tokens";
     }
 
-    public boolean getBoolean() {
-        return (boolean) value;
-    }
-
-    public int getInt() {
-        return (int) value;
-    }
-
-    public String getString() {
-        return (String) value;
+    @Override
+    public boolean shouldRender(boolean dummy) {
+        return dummy || ServerHive.isCurrent();
     }
 }

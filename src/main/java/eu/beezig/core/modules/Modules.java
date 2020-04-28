@@ -17,28 +17,17 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.config;
+package eu.beezig.core.modules;
 
-public class Setting {
-    private Object value;
+import eu.beezig.core.Beezig;
+import eu.beezig.core.modules.items.ModuleTokens;
+import eu.the5zig.mod.ModAPI;
 
-    Setting(Object value) {
-        this.value = value;
-    }
+public class Modules {
 
-    public Object getValue() {
-        return value;
-    }
+    private static final String HIVE = "serverhivemc";
 
-    public boolean getBoolean() {
-        return (boolean) value;
-    }
-
-    public int getInt() {
-        return (int) value;
-    }
-
-    public String getString() {
-        return (String) value;
+    public static void register(Beezig plugin, ModAPI api) {
+        api.registerModuleItem(plugin, "tokens", ModuleTokens.class, HIVE);
     }
 }

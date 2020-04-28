@@ -19,5 +19,45 @@
 
 package eu.beezig.core.config;
 
+import eu.beezig.core.Beezig;
+import eu.beezig.core.util.Message;
+
+import java.util.Locale;
+
 public enum Settings {
+    THOUSANDS_SEPARATOR(true, "LEVER");
+
+    private final Object defaultValue;
+    private final Class settingType;
+    private final String labyIcon;
+
+    Settings(Object defaultValue, String labyIcon) {
+        this.defaultValue = defaultValue;
+        this.settingType = defaultValue.getClass();
+        this.labyIcon = labyIcon;
+    }
+
+    public Object getDefaultValue() {
+        return defaultValue;
+    }
+
+    public Class getSettingType() {
+        return settingType;
+    }
+
+    public String getLabyIcon() {
+        return labyIcon;
+    }
+
+    public String getName() {
+        return Message.translate("setting." + name().toLowerCase(Locale.ROOT) + ".name");
+    }
+
+    public String getDescription() {
+        return Message.translate("setting." + name().toLowerCase(Locale.ROOT) + ".desc");
+    }
+
+    public Setting get() {
+        return Beezig.cfg().get(this);
+    }
 }

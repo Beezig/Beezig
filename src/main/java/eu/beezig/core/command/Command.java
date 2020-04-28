@@ -17,28 +17,30 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.config;
+package eu.beezig.core.command;
 
-public class Setting {
-    private Object value;
+import com.mojang.authlib.GameProfile;
 
-    Setting(Object value) {
-        this.value = value;
+import java.util.List;
+
+public interface Command {
+
+    String getName();
+
+    String[] getAliases();
+
+    /**
+     * Executes the command
+     *
+     * @return !whether the command should be skipped and the server command should be run.
+     *
+     * Example:
+     * "seen" command can only be run in Hive. If the server is not Hive, return false, server-side "seen" will be run.
+     */
+    boolean execute(String[] args);
+
+    default List<String> addTabCompletionOptions(GameProfile sender, String[] args) {
+        return null;
     }
 
-    public Object getValue() {
-        return value;
-    }
-
-    public boolean getBoolean() {
-        return (boolean) value;
-    }
-
-    public int getInt() {
-        return (int) value;
-    }
-
-    public String getString() {
-        return (String) value;
-    }
 }
