@@ -1,0 +1,20 @@
+plugins {
+    id "java"
+    id "net.ltgt.errorprone" version "1.1.1"
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url  "https://dl.bintray.com/5zig-reborn/maven"
+    }
+}
+
+dependencies {
+    errorprone("com.google.errorprone:error_prone_core:latest.release")
+    errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
+
+    compile project(':hive-api-wrapper')
+    compile group: 'eu.5zigreborn', name: 'plugin-api', version: '3.13.0'
+}

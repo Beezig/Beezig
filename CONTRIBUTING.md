@@ -10,3 +10,20 @@ In that server you can also ask questions regarding the project.
 
 Thanks again,  
 the Beezig team.
+
+## Information about the rewrite (code style)
+
+#### Class names
+PascalCase, when the name is part of a category, put the category before the name.  
+Example: `ServerHive` instead of `HiveServer`.  
+**EXCEPTION**: If the name is uppercase, use the normal format.  
+Example: `TIMVListener` instead of `ListenerTIMV`.
+
+#### Java 8 features
+Always, good readability
+
+#### Minecraft functions
+Never, breaks version compatibility
+
+#### 5zig API
+Only use `ModAPI` (`Beezig.api()`), as BeezigLaby only supports that subset of it.
