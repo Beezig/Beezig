@@ -19,6 +19,7 @@
 
 package eu.beezig.core;
 
+import com.mojang.authlib.GameProfile;
 import eu.beezig.core.config.BeezigConfiguration;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.ServerHive;
@@ -29,15 +30,16 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.plugin.Plugin;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Logger;
 
 @Plugin(name = "Beezig", version = "7.0.0")
 public class Beezig {
-    public static Logger logger = Logger.getLogger("Beezig");
+    public static Logger logger = LogManager.getLogger("Beezig");
     private static Beezig instance;
     private ModAPI api;
     private ExecutorService asyncExecutor;
@@ -66,7 +68,7 @@ public class Beezig {
             config = new BeezigConfiguration();
             config.load(new File(beezigDir, "config.json"));
         } catch(Exception e) {
-            logger.severe("Could not create config directory! Aborting load.");
+            logger.error("Could not create config directory! Aborting load.");
             e.printStackTrace();
             return;
         }
@@ -75,7 +77,7 @@ public class Beezig {
         api.registerServerInstance(this, ServerHive.class);
         Modules.register(this, api);
 
-        logger.info("Load ended in " + (System.currentTimeMillis() - timeStart) + " ms.");
+        logger.info(String.format("Load complete in %d ms.", System.currentTimeMillis() - timeStart));
     }
 
     public ExecutorService getAsyncExecutor() {
@@ -96,5 +98,9 @@ public class Beezig {
 
     public static ModAPI api() {
         return instance.api;
+    }
+
+    public static GameProfile user() {
+        return instance.api.getGameProfile();
     }
 }

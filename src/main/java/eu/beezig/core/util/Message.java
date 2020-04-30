@@ -23,7 +23,9 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Message {
@@ -32,6 +34,7 @@ public class Message {
     private static final String bar = "    §7§m                                                                                    ";
     private static final DecimalFormat bigintFormatter = new DecimalFormat("#,###");
     private static final DecimalFormat ratioFormatter = new DecimalFormat("#,###.##");
+    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     static List<String> toSendQueue = new ArrayList<>();
 
@@ -51,6 +54,10 @@ public class Message {
         return Settings.THOUSANDS_SEPARATOR.get().getBoolean()
                 ? bigintFormatter.format(l).replaceAll("\u00A0", " ")
                 : Long.toString(l);
+    }
+
+    public static String date(Date date) {
+        return dateFormatter.format(date);
     }
 
     public static String ratio(double d) {

@@ -22,6 +22,10 @@ package eu.beezig.core.server;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.server.listeners.BEDListener;
 import eu.beezig.core.server.listeners.TIMVListener;
+import eu.beezig.core.util.Message;
+import eu.beezig.core.util.UUIDUtils;
+import eu.beezig.hiveapi.wrapper.player.HivePlayer;
+import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.the5zig.mod.server.*;
 
 import java.util.Locale;
@@ -29,9 +33,14 @@ import java.util.Locale;
 public class ServerHive extends ServerInstance {
 
     private long tokens;
+    private HivePlayer profile;
 
     public long getTokens() {
         return tokens;
+    }
+
+    public HivePlayer getProfile() {
+        return profile;
     }
 
     @Override
@@ -52,10 +61,22 @@ public class ServerHive extends ServerInstance {
         return "hive";
     }
 
+    private void onServerJoin() {
+        Profiles.global(UUIDUtils.strip(Beezig.user().getId())).thenAcceptAsync(profile -> {
+            this.profile = profile;
+            this.tokens = profile.getTokens();
+            Beezig.logger.info(String.format("Loaded profile for current user. Data as of %s", Message.date(profile.getCachedAt())));
+        });
+    }
+
     @Override
     public boolean handleServer(String host, int port) {
-        return host.toLowerCase(Locale.ROOT).contains("hivemc.") || host.toLowerCase(Locale.ROOT).endsWith("hive.sexy")
-                || host.toLowerCase(Locale.ROOT).contains(".j2o");
+        if(host.toLowerCase(Locale.ROOT).contains("hivemc.") || host.toLowerCase(Locale.ROOT).endsWith("hive.sexy")
+                || host.toLowerCase(Locale.ROOT).contains(".j2o")) {
+            onServerJoin();
+            return true;
+        }
+        return false;
     }
 
     public static boolean isCurrent() {
@@ -76,10 +97,11 @@ public class ServerHive extends ServerInstance {
         @Override
         public void onMatch(GameMode gameMode, String key, IPatternResult match) {
             if(key == null) return;
+            Beezig.logger.debug(String.format("[ServerHive] Matched key %s, %d groups", key, match.size()));
+
             if(key.startsWith("join.")) getGameListener().switchLobby(key.replace("join.", ""));
-            else if("tokens".equals(key)) {
-                ServerHive.this.tokens = Integer.parseInt(match.get(1), 10);
-            }
+            else if("tokens".equals(key)) ServerHive.this.tokens = Integer.parseInt(match.get(1), 10);
+            else if("tokens.boost".equals(key)) ServerHive.this.tokens += Integer.parseInt(match.get(1), 10);
             else if("map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).setMap(match.get(0));
         }
 
