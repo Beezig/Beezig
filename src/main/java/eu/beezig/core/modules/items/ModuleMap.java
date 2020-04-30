@@ -19,25 +19,28 @@
 
 package eu.beezig.core.modules.items;
 
-import eu.beezig.core.Beezig;
 import eu.beezig.core.modules.Modules;
-import eu.beezig.core.server.ServerHive;
-import eu.beezig.core.util.Message;
-import eu.the5zig.mod.modules.StringItem;
+import eu.beezig.core.server.HiveMode;
+import eu.the5zig.mod.modules.GameModeItem;
 
-public class ModuleTokens extends StringItem {
-    @Override
-    protected Object getValue(boolean dummy) {
-        return Message.formatNumber(dummy ? 123456 : ((ServerHive)Beezig.api().getActiveServer()).getTokens());
+public class ModuleMap extends GameModeItem<HiveMode> {
+
+    public ModuleMap() {
+        super(HiveMode.class);
     }
 
     @Override
-    public String getTranslation() {
-        return "modules.item.hive_tokens";
+    protected Object getValue(boolean b) {
+        return b ? "Kazamuzo Temple" : getGameMode().getMap();
     }
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render();
+        return dummy || Modules.render() && (getGameMode() != null && getGameMode().getMap() != null);
+    }
+
+    @Override
+    public String getTranslation() {
+        return "modules.item.hive_map";
     }
 }

@@ -19,11 +19,16 @@
 
 package eu.beezig.core.server.modes;
 
-import eu.the5zig.mod.server.GameMode;
+import eu.beezig.core.server.HiveMode;
 
-public class TIMV extends GameMode {
+public class TIMV extends HiveMode {
     @Override
     public String getName() {
         return "Trouble in Mineville";
+    }
+
+    @Override
+    public void end() {
+
     }
 }

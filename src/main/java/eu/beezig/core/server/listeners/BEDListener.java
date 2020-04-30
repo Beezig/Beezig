@@ -17,27 +17,28 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.modules.items;
+package eu.beezig.core.server.listeners;
 
-import eu.beezig.core.Beezig;
-import eu.beezig.core.modules.Modules;
-import eu.beezig.core.server.ServerHive;
-import eu.beezig.core.util.Message;
-import eu.the5zig.mod.modules.StringItem;
+import eu.beezig.core.server.modes.BED;
+import eu.the5zig.mod.server.AbstractGameListener;
+import eu.the5zig.mod.server.IPatternResult;
 
-public class ModuleTokens extends StringItem {
+public class BEDListener extends AbstractGameListener<BED> {
     @Override
-    protected Object getValue(boolean dummy) {
-        return Message.formatNumber(dummy ? 123456 : ((ServerHive)Beezig.api().getActiveServer()).getTokens());
+    public Class<BED> getGameMode() {
+        return BED.class;
     }
 
     @Override
-    public String getTranslation() {
-        return "modules.item.hive_tokens";
+    public boolean matchLobby(String s) {
+        return "bed".equals(s);
     }
 
     @Override
-    public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render();
+    public void onMatch(BED gameMode, String key, IPatternResult match) {
+        if("bed.points".equals(key)) {
+            int points = Integer.parseInt(match.get(0), 10);
+            gameMode.addPoints(points);
+        }
     }
 }

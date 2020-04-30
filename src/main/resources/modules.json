@@ -1,0 +1,31 @@
+{
+  "modules": [
+    {
+      "id": "The Hive",
+      "name": "The Hive - Global",
+      "items": [
+        {
+          "type": "hive_tokens"
+        }
+      ]
+    },
+    {
+      "id": "The Hive Games",
+      "name": "The Hive - Games",
+      "items": [
+        {
+          "type": "hive_points"
+        },
+        {
+          "type": "hive_map"
+        },
+        {
+          "type": "hive_kills"
+        },
+        {
+          "type": "hive_deaths"
+        }
+      ]
+    }
+  ]
+}

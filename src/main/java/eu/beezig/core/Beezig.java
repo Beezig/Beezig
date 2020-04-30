@@ -23,6 +23,7 @@ import eu.beezig.core.config.BeezigConfiguration;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.DirectoryMigration;
+import eu.beezig.hiveapi.wrapper.HiveWrapper;
 import eu.the5zig.mod.ModAPI;
 import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.EventHandler;
@@ -52,6 +53,8 @@ public class Beezig {
         instance = this;
         api = The5zigAPI.getAPI();
         asyncExecutor = Executors.newFixedThreadPool(5);
+        HiveWrapper.setAsyncExecutor(asyncExecutor);
+        HiveWrapper.setUserAgent("Beezig/7.0.0");
 
         // Init configuration
         try {

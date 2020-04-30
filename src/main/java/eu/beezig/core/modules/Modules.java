@@ -20,7 +20,8 @@
 package eu.beezig.core.modules;
 
 import eu.beezig.core.Beezig;
-import eu.beezig.core.modules.items.ModuleTokens;
+import eu.beezig.core.modules.items.*;
+import eu.beezig.core.server.ServerHive;
 import eu.the5zig.mod.ModAPI;
 
 public class Modules {
@@ -28,6 +29,14 @@ public class Modules {
     private static final String HIVE = "serverhivemc";
 
     public static void register(Beezig plugin, ModAPI api) {
-        api.registerModuleItem(plugin, "tokens", ModuleTokens.class, HIVE);
+        api.registerModuleItem(plugin, "hive_tokens", ModuleTokens.class, HIVE);
+        api.registerModuleItem(plugin, "hive_points", ModulePoints.class, HIVE);
+        api.registerModuleItem(plugin, "hive_kills", ModuleKills.class, HIVE);
+        api.registerModuleItem(plugin, "hive_deaths", ModuleDeaths.class, HIVE);
+        api.registerModuleItem(plugin, "hive_map", ModuleMap.class, HIVE);
+    }
+
+    public static boolean render() {
+        return ServerHive.isCurrent();
     }
 }

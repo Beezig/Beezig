@@ -19,25 +19,29 @@
 
 package eu.beezig.core.modules.items;
 
-import eu.beezig.core.Beezig;
 import eu.beezig.core.modules.Modules;
-import eu.beezig.core.server.ServerHive;
+import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.server.modes.TIMV;
 import eu.beezig.core.util.Message;
-import eu.the5zig.mod.modules.StringItem;
+import eu.the5zig.mod.modules.GameModeItem;
 
-public class ModuleTokens extends StringItem {
-    @Override
-    protected Object getValue(boolean dummy) {
-        return Message.formatNumber(dummy ? 123456 : ((ServerHive)Beezig.api().getActiveServer()).getTokens());
+public class ModulePoints extends GameModeItem<HiveMode> {
+    public ModulePoints() {
+        super(HiveMode.class);
     }
 
     @Override
-    public String getTranslation() {
-        return "modules.item.hive_tokens";
+    protected Object getValue(boolean b) {
+        return Message.formatNumber(b ? 123456 : getGameMode().getGlobal().getPoints());
     }
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render();
+        return dummy || Modules.render() && (getGameMode() != null && getGameMode().getGlobal().getPoints() != null);
+    }
+
+    @Override
+    public String getTranslation() {
+        return Modules.render() && getGameMode() instanceof TIMV ? "beezig.module.timv.karma" : "modules.item.hive_points";
     }
 }

@@ -17,27 +17,18 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.modules.items;
+package eu.beezig.core.server.modes;
 
-import eu.beezig.core.Beezig;
-import eu.beezig.core.modules.Modules;
-import eu.beezig.core.server.ServerHive;
-import eu.beezig.core.util.Message;
-import eu.the5zig.mod.modules.StringItem;
+import eu.beezig.core.server.HiveMode;
 
-public class ModuleTokens extends StringItem {
+public class BED extends HiveMode {
     @Override
-    protected Object getValue(boolean dummy) {
-        return Message.formatNumber(dummy ? 123456 : ((ServerHive)Beezig.api().getActiveServer()).getTokens());
+    public String getName() {
+        return "BedWars";
     }
 
     @Override
-    public String getTranslation() {
-        return "modules.item.hive_tokens";
-    }
+    public void end() {
 
-    @Override
-    public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render();
     }
 }

@@ -20,17 +20,26 @@
 package eu.beezig.core.server;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.server.listeners.BEDListener;
 import eu.beezig.core.server.listeners.TIMVListener;
 import eu.the5zig.mod.server.*;
 
 import java.util.Locale;
 
 public class ServerHive extends ServerInstance {
+
+    private long tokens;
+
+    public long getTokens() {
+        return tokens;
+    }
+
     @Override
     public void registerListeners() {
         GameListenerRegistry registry = getGameListener();
         registry.registerListener(new ListenerHive());
         registry.registerListener(new TIMVListener());
+        registry.registerListener(new BEDListener());
     }
 
     @Override
@@ -53,7 +62,7 @@ public class ServerHive extends ServerInstance {
         return Beezig.api().getActiveServer() instanceof ServerHive;
     }
 
-    private static class ListenerHive extends AbstractGameListener<GameMode> {
+    private class ListenerHive extends AbstractGameListener<GameMode> {
         @Override
         public Class<GameMode> getGameMode() {
             return null;
@@ -66,8 +75,20 @@ public class ServerHive extends ServerInstance {
 
         @Override
         public void onMatch(GameMode gameMode, String key, IPatternResult match) {
-            if(gameMode != null || key == null) return;
+            if(key == null) return;
             if(key.startsWith("join.")) getGameListener().switchLobby(key.replace("join.", ""));
+            else if("tokens".equals(key)) {
+                ServerHive.this.tokens = Integer.parseInt(match.get(1), 10);
+            }
+            else if("map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).setMap(match.get(0));
+        }
+
+        @Override
+        public void onServerConnect(GameMode gameMode) {
+            if(gameMode instanceof HiveMode) {
+                ((HiveMode)gameMode).end();
+            }
+            getGameListener().switchLobby(null);
         }
     }
 }
