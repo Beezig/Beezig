@@ -20,8 +20,27 @@
 package eu.beezig.core.server.modes;
 
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.hiveapi.wrapper.player.Profiles;
+import eu.beezig.hiveapi.wrapper.player.games.TimvStats;
 
 public class TIMV extends HiveMode {
+
+    public TIMV() {
+        statsFetcher.setScoreboardTitle("Your TIMV Stats");
+        statsFetcher.setTimeout(2000L);
+        statsFetcher.setApiComputer(name -> {
+            TimvStats api = Profiles.timv(name).join();
+            GlobalStats stats = new GlobalStats();
+            stats.setPoints((int) api.getPoints());
+            return stats;
+        });
+        statsFetcher.setScoreboardComputer(lines -> {
+            GlobalStats stats = new GlobalStats();
+            stats.setPoints(lines.get("Karma"));
+            return stats;
+        });
+    }
+
     @Override
     public String getName() {
         return "Trouble in Mineville";

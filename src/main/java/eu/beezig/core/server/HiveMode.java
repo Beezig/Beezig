@@ -19,17 +19,33 @@
 
 package eu.beezig.core.server;
 
+import eu.beezig.core.Beezig;
+import eu.beezig.core.util.Message;
 import eu.the5zig.mod.server.GameMode;
 
 public abstract class HiveMode extends GameMode {
     private int points;
     private String map;
     private GlobalStats global;
+    protected StatsFetcher statsFetcher;
 
     public HiveMode() {
         global = new GlobalStats();
+        statsFetcher = new StatsFetcher();
+        statsFetcher.getJob().thenAcceptAsync(stats -> this.global = stats).exceptionally(e -> {
+            Message.error(Message.translate("error.stats_fetch"));
+            Beezig.logger.error(e);
+            return null;
+        });
     }
 
+    public StatsFetcher getStatsFetcher() {
+        return statsFetcher;
+    }
+
+    /**
+     * Called when the user returns to the lobby.
+     */
     public abstract void end();
 
     public int getPoints() {
@@ -88,6 +104,26 @@ public abstract class HiveMode extends GameMode {
 
         public Integer getVictories() {
             return victories;
+        }
+
+        public void setPoints(Integer points) {
+            this.points = points;
+        }
+
+        public void setKills(Integer kills) {
+            this.kills = kills;
+        }
+
+        public void setDeaths(Integer deaths) {
+            this.deaths = deaths;
+        }
+
+        public void setVictories(Integer victories) {
+            this.victories = victories;
+        }
+
+        public void setPlayed(Integer played) {
+            this.played = played;
         }
     }
 }

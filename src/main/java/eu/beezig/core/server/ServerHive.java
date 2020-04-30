@@ -66,6 +66,10 @@ public class ServerHive extends ServerInstance {
             this.profile = profile;
             this.tokens = profile.getTokens();
             Beezig.logger.info(String.format("Loaded profile for current user. Data as of %s", Message.date(profile.getCachedAt())));
+        }).exceptionally(e -> {
+            Message.error(Message.translate("error.token_fetch"));
+            Beezig.logger.error(e);
+            return null;
         });
     }
 
@@ -111,6 +115,14 @@ public class ServerHive extends ServerInstance {
                 ((HiveMode)gameMode).end();
             }
             getGameListener().switchLobby(null);
+        }
+
+        @Override
+        public void onTick(GameMode gameMode) {
+            if(gameMode instanceof HiveMode) {
+                HiveMode mode = (HiveMode) gameMode;
+                mode.getStatsFetcher().attemptCompute(Beezig.api().getSideScoreboard());
+            }
         }
     }
 }

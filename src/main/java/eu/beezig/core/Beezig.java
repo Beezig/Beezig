@@ -30,8 +30,11 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.plugin.Plugin;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
@@ -39,7 +42,7 @@ import java.util.concurrent.Executors;
 
 @Plugin(name = "Beezig", version = "7.0.0")
 public class Beezig {
-    public static Logger logger = LogManager.getLogger("Beezig");
+    public static Logger logger;
     private static Beezig instance;
     private ModAPI api;
     private ExecutorService asyncExecutor;
@@ -48,6 +51,7 @@ public class Beezig {
 
     @EventHandler
     public void load(LoadEvent event) {
+        setupLogger();
         logger.info("Load started");
         long timeStart = System.currentTimeMillis();
 
@@ -78,6 +82,16 @@ public class Beezig {
         Modules.register(this, api);
 
         logger.info(String.format("Load complete in %d ms.", System.currentTimeMillis() - timeStart));
+    }
+
+    private void setupLogger() {
+        logger = LogManager.getLogger("Beezig");
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        LoggerConfig cfg = ctx.getConfiguration().getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
+        if("true".equals(System.getProperty("beezig.debug")))
+            cfg.setLevel(Level.DEBUG);
+        ctx.updateLoggers();
+        logger.debug("Debug is active.");
     }
 
     public ExecutorService getAsyncExecutor() {

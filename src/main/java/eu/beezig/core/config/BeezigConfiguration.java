@@ -21,10 +21,9 @@ package eu.beezig.core.config;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,11 +31,14 @@ import java.util.stream.Stream;
 
 public class BeezigConfiguration {
     private HashMap<Settings, Setting> config;
+    private File file;
 
-    public void load(File file) {
+    public void load(File file) throws IOException, ParseException {
+        this.file = file;
         if(!file.exists()) {
             config = Stream.of(Settings.values()).map(key -> new HashMap.SimpleEntry<>(key, new Setting(key.getDefaultValue())))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, HashMap::new));
+            save();
             return;
         }
         try(FileReader reader = new FileReader(file)) {
@@ -50,12 +52,22 @@ public class BeezigConfiguration {
                     return new HashMap.SimpleEntry<>(key, value);
                 }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, HashMap::new));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     Setting get(Settings key) {
         return config.get(key);
+    }
+
+    public void save() throws IOException {
+        JSONObject configJson = new JSONObject();
+        for(Map.Entry<Settings, Setting> e : config.entrySet()) {
+            configJson.put(e.getKey().name(), e.getValue().getValue());
+        }
+        try(FileWriter writer = new FileWriter(file)) {
+            try(BufferedWriter buffer = new BufferedWriter(writer)) {
+                buffer.write(configJson.toJSONString());
+            }
+        }
     }
 }
