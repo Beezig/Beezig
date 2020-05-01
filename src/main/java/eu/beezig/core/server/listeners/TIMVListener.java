@@ -21,6 +21,7 @@ package eu.beezig.core.server.listeners;
 
 import eu.beezig.core.server.modes.TIMV;
 import eu.the5zig.mod.server.AbstractGameListener;
+import eu.the5zig.mod.server.IPatternResult;
 
 public class TIMVListener extends AbstractGameListener<TIMV> {
     @Override
@@ -31,5 +32,11 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
     @Override
     public boolean matchLobby(String s) {
         return "timv".equals(s);
+    }
+
+    @Override
+    public void onMatch(TIMV gameMode, String key, IPatternResult match) {
+        if("timv.points_gain".equals(key)) gameMode.addPoints(Integer.parseInt(match.get(0), 10));
+        else if("timv.points_loss".equals(key)) gameMode.addPoints(-Integer.parseInt(match.get(0), 10));
     }
 }

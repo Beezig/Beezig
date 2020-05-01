@@ -105,7 +105,7 @@ public class ServerHive extends ServerInstance {
 
             if(key.startsWith("join.")) getGameListener().switchLobby(key.replace("join.", ""));
             else if("tokens".equals(key)) ServerHive.this.tokens = Integer.parseInt(match.get(1), 10);
-            else if("tokens.boost".equals(key)) ServerHive.this.tokens += Integer.parseInt(match.get(1), 10);
+            else if("tokens.boost".equals(key)) ServerHive.this.tokens += Integer.parseInt(match.get(0), 10);
             else if("map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).setMap(match.get(0));
         }
 

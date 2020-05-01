@@ -35,6 +35,7 @@ public class Modules {
         api.registerModuleItem(plugin, "hive_deaths", ModuleDeaths.class, HIVE);
         api.registerModuleItem(plugin, "hive_map", ModuleMap.class, HIVE);
         api.registerModuleItem(plugin, "hive_kdr", ModuleKDRChange.class, HIVE);
+        api.registerModuleItem(plugin, "hive_game", ModuleGameProgress.class, HIVE);
     }
 
     public static boolean render() {

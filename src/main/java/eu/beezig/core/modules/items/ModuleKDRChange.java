@@ -33,8 +33,9 @@ public class ModuleKDRChange extends GameModeItem<HiveMode> {
 
     @Override
     protected Object getValue(boolean b) {
+        if(b) return "3.14 (+0.01)";
         char prefix = currentData.kdrChange > 0 ? '+' : '-';
-        return b ? "3.14 (+0.01)" : String.format("%s (%s)", Message.ratio(currentData.newKdr), prefix + Message.ratio(Math.abs(currentData.kdrChange)));
+        return String.format("%s (%s)", Message.ratio(currentData.newKdr), prefix + Message.ratio(Math.abs(currentData.kdrChange)));
     }
 
     @Override

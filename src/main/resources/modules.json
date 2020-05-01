@@ -27,6 +27,9 @@
         },
         {
           "type": "hive_kdr"
+        },
+        {
+          "type": "hive_game"
         }
       ]
     }
