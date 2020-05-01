@@ -27,7 +27,6 @@ public class TIMV extends HiveMode {
 
     public TIMV() {
         statsFetcher.setScoreboardTitle("Your TIMV Stats");
-        statsFetcher.setTimeout(2000L);
         statsFetcher.setApiComputer(name -> {
             TimvStats api = Profiles.timv(name).join();
             GlobalStats stats = new GlobalStats();

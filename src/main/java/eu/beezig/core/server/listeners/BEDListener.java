@@ -22,6 +22,7 @@ package eu.beezig.core.server.listeners;
 import eu.beezig.core.server.modes.BED;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.IPatternResult;
+import eu.the5zig.util.minecraft.ChatColor;
 
 public class BEDListener extends AbstractGameListener<BED> {
     @Override
@@ -39,6 +40,23 @@ public class BEDListener extends AbstractGameListener<BED> {
         if("bed.points".equals(key)) {
             int points = Integer.parseInt(match.get(0), 10);
             gameMode.addPoints(points);
+            if(match.size() > 1) {
+                String action = match.get(1);
+                if(action.startsWith("Killing")) {
+                    gameMode.addKills(1);
+                }
+            }
         }
+        else if("bed.kill.farm".equals(key)) gameMode.addKills(1);
+        else if("bed.win".equals(key)) gameMode.addPoints(100);
+    }
+
+    @Override
+    public void onTitle(BED gameMode, String rawTitle, String rawSubTitle) {
+        if(rawTitle == null) return;
+        if(rawSubTitle == null) return;
+        String title = ChatColor.stripColor(rawTitle);
+        String sub = ChatColor.stripColor(rawSubTitle);
+        if("➋".equals(title) && "Respawning in 2 seconds".equals(sub)) gameMode.addDeaths(1);
     }
 }

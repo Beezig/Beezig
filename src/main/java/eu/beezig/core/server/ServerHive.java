@@ -121,7 +121,7 @@ public class ServerHive extends ServerInstance {
         public void onTick(GameMode gameMode) {
             if(gameMode instanceof HiveMode) {
                 HiveMode mode = (HiveMode) gameMode;
-                mode.getStatsFetcher().attemptCompute(Beezig.api().getSideScoreboard());
+                mode.getStatsFetcher().attemptCompute(mode, Beezig.api().getSideScoreboard());
             }
         }
     }

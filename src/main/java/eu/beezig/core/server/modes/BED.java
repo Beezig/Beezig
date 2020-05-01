@@ -20,8 +20,34 @@
 package eu.beezig.core.server.modes;
 
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.hiveapi.wrapper.player.Profiles;
+import eu.beezig.hiveapi.wrapper.player.games.BedStats;
 
 public class BED extends HiveMode {
+
+    public BED() {
+        statsFetcher.setScoreboardTitle("Your BED[DTX]? Stats");
+        statsFetcher.setApiComputer(name -> {
+            BedStats api = Profiles.bed(name).join();
+            GlobalStats stats = new GlobalStats();
+            stats.setPoints((int) api.getPoints());
+            stats.setKills((int) api.getKills());
+            stats.setDeaths((int) api.getDeaths());
+            stats.setVictories((int) api.getVictories());
+            stats.setPlayed((int) api.getGamesPlayed());
+            return stats;
+        });
+        statsFetcher.setScoreboardComputer(lines -> {
+            GlobalStats stats = new GlobalStats();
+            stats.setPoints(lines.get("Points"));
+            stats.setKills(lines.get("Kills"));
+            stats.setDeaths(lines.get("Deaths"));
+            stats.setVictories(lines.get("Victories"));
+            stats.setPlayed(lines.get("Games Played"));
+            return stats;
+        });
+    }
+
     @Override
     public String getName() {
         return "BedWars";

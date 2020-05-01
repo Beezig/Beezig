@@ -37,18 +37,18 @@ public class ModuleKills extends GameModeItem<HiveMode> {
     @Override
     protected Object getValue(boolean b) {
         StringBuilder builder = new StringBuilder();
-        builder.append(Message.formatNumber(b ? 1234 : getGameMode().getDeaths()));
+        builder.append(Message.formatNumber(b ? 1234 : getGameMode().getKills()));
         boolean showGlobal = (boolean) getProperties().getSetting("show_global").get();
         if(showGlobal) {
             if(b) builder.append(" (").append(Message.formatNumber(12345)).append(")");
-            else if(getGameMode().getGlobal().getDeaths() != null) builder.append(" (").append(Message.formatNumber(getGameMode().getGlobal().getDeaths())).append(")");
+            else if(getGameMode().getGlobal().getKills() != null) builder.append(" (").append(Message.formatNumber(getGameMode().getGlobal().getKills())).append(")");
         }
         return builder.toString();
     }
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render() && (getGameMode() != null && getGameMode().getDeaths() != 0);
+        return dummy || Modules.render() && (getGameMode() != null && getGameMode().getKills() != 0);
     }
 
     @Override

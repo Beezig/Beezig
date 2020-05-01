@@ -24,6 +24,9 @@
         },
         {
           "type": "hive_deaths"
+        },
+        {
+          "type": "hive_kdr"
         }
       ]
     }

@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -37,13 +38,15 @@ import java.util.stream.Collectors;
  * this interface, or set up the producers accordingly.
  */
 public class StatsFetcher {
+    private Class<? extends HiveMode> gamemode;
     private CompletableFuture<HiveMode.GlobalStats> job;
-    private String scoreboardTitle;
+    private Pattern scoreboardTitle;
     private Function<String, HiveMode.GlobalStats> apiComputer;
     private Function<HashMap<String, Integer>, HiveMode.GlobalStats> scoreboardComputer;
-    private long firstCheck = -1, timeout;
+    private long firstCheck = -1, timeout = 2000L;
 
-    StatsFetcher() {
+    StatsFetcher(Class<? extends HiveMode> mode) {
+        gamemode = mode;
         job = new CompletableFuture<>();
     }
 
@@ -56,7 +59,7 @@ public class StatsFetcher {
     }
 
     public void setScoreboardTitle(String scoreboardTitle) {
-        this.scoreboardTitle = scoreboardTitle;
+        this.scoreboardTitle = Pattern.compile(scoreboardTitle);
     }
 
     public void setTimeout(long timeout) {
@@ -67,10 +70,11 @@ public class StatsFetcher {
         return job;
     }
 
-    void attemptCompute(Scoreboard board) {
+    void attemptCompute(HiveMode mode, Scoreboard board) {
         if(job.isDone()) return;
-        if(board != null && scoreboardTitle.equals(ChatColor.stripColor(board.getTitle()).trim())) {
-            Beezig.logger.debug(String.format("Found matching scoreboard with title %s", scoreboardTitle));
+        if(!gamemode.isAssignableFrom(mode.getClass())) return;
+        if(board != null && scoreboardTitle.matcher(ChatColor.stripColor(board.getTitle()).trim()).matches()) {
+            Beezig.logger.debug("Found matching scoreboard using title backend");
             HashMap<String, Integer> normalized = board.getLines().entrySet().stream()
                     .map(e -> new HashMap.SimpleEntry<>(ChatColor.stripColor(e.getKey()), e.getValue()))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, HashMap::new));

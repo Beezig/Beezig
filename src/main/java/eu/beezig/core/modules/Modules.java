@@ -34,6 +34,7 @@ public class Modules {
         api.registerModuleItem(plugin, "hive_kills", ModuleKills.class, HIVE);
         api.registerModuleItem(plugin, "hive_deaths", ModuleDeaths.class, HIVE);
         api.registerModuleItem(plugin, "hive_map", ModuleMap.class, HIVE);
+        api.registerModuleItem(plugin, "hive_kdr", ModuleKDRChange.class, HIVE);
     }
 
     public static boolean render() {

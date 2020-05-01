@@ -26,13 +26,21 @@ import eu.the5zig.mod.server.GameMode;
 public abstract class HiveMode extends GameMode {
     private int points;
     private String map;
+    /**
+     * The player's stats, but updated with the game's stats
+     */
     private GlobalStats global;
     protected StatsFetcher statsFetcher;
+    /**
+     * The player's stats at the start of the game
+     */
+    private GlobalStats cachedGlobal;
 
     public HiveMode() {
         global = new GlobalStats();
-        statsFetcher = new StatsFetcher();
-        statsFetcher.getJob().thenAcceptAsync(stats -> this.global = stats).exceptionally(e -> {
+        cachedGlobal = new GlobalStats();
+        statsFetcher = new StatsFetcher(getClass());
+        statsFetcher.getJob().thenAcceptAsync(this::setGlobal).exceptionally(e -> {
             Message.error(Message.translate("error.stats_fetch"));
             Beezig.logger.error(e);
             return null;
@@ -41,6 +49,10 @@ public abstract class HiveMode extends GameMode {
 
     public StatsFetcher getStatsFetcher() {
         return statsFetcher;
+    }
+
+    public GlobalStats getCachedGlobal() {
+        return cachedGlobal;
     }
 
     /**
@@ -79,7 +91,17 @@ public abstract class HiveMode extends GameMode {
         return global;
     }
 
-    public static class GlobalStats {
+    public void setGlobal(GlobalStats global) {
+        this.global = global;
+        try {
+            this.cachedGlobal = global.clone();
+        } catch (CloneNotSupportedException e) {
+            Beezig.logger.error("Couldn't save global stats");
+            Beezig.logger.error(e);
+        }
+    }
+
+    public static class GlobalStats implements Cloneable {
         private Integer points;
         private Integer kills;
         private Integer deaths;
@@ -124,6 +146,11 @@ public abstract class HiveMode extends GameMode {
 
         public void setPlayed(Integer played) {
             this.played = played;
+        }
+
+        @Override
+        protected GlobalStats clone() throws CloneNotSupportedException {
+            return (GlobalStats) super.clone();
         }
     }
 }
