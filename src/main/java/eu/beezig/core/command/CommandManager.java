@@ -18,7 +18,11 @@
  */
 package eu.beezig.core.command;
 
+import eu.beezig.core.Beezig;
+import eu.beezig.core.command.commands.BeezigCommand;
 import eu.beezig.core.util.Message;
+import eu.the5zig.mod.event.ChatSendEvent;
+import eu.the5zig.mod.event.EventHandler;
 
 import java.util.*;
 
@@ -26,12 +30,28 @@ public class CommandManager {
 
     private static Set<Command> commandExecutors = new HashSet<>();
 
+    private static void registerCommands() {
+        commandExecutors.add(new BeezigCommand());
+    }
+
+    @EventHandler
+    public void onClientChat(ChatSendEvent event) {
+        String message = event.getMessage();
+        if(!message.startsWith("/")) return;
+        event.setCancelled(dispatchCommand(message));
+    }
+
+    public static void init(Beezig plugin) {
+        registerCommands();
+        Beezig.api().getPluginManager().registerListener(plugin, new CommandManager());
+    }
+
     /**
      * Dispatches a command.
      *
      * @return whether the command was found
      */
-    public static boolean dispatchCommand(String str) {
+    private static boolean dispatchCommand(String str) {
         String[] data = str.split(" ");
         String alias = data[0];
         Command cmdFound = null;
@@ -57,9 +77,5 @@ public class CommandManager {
             Message.error("An error occurred while attempting to perform this command.");
         }
         return true;
-    }
-
-    public static void registerCommands() {
-        //commandExecutors.add();
     }
 }

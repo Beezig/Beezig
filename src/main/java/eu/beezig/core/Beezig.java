@@ -21,11 +21,13 @@ package eu.beezig.core;
 
 import com.google.gson.Gson;
 import com.mojang.authlib.GameProfile;
+import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.config.BeezigConfiguration;
 import eu.beezig.core.data.BeezigData;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.DirectoryMigration;
+import eu.beezig.core.util.Message;
 import eu.beezig.hiveapi.wrapper.HiveWrapper;
 import eu.the5zig.mod.ModAPI;
 import eu.the5zig.mod.The5zigAPI;
@@ -42,10 +44,11 @@ import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Plugin(name = "Beezig", version = "7.0.0")
+@Plugin(name = "Beezig", version = Constants.VERSION)
 public class Beezig {
     public static Logger logger;
     public static Gson gson = new Gson();
+    public static boolean DEBUG = false;
     private static Beezig instance;
 
     private ModAPI api;
@@ -65,7 +68,7 @@ public class Beezig {
         api = The5zigAPI.getAPI();
         asyncExecutor = Executors.newFixedThreadPool(5);
         HiveWrapper.setAsyncExecutor(asyncExecutor);
-        HiveWrapper.setUserAgent("Beezig/7.0.0");
+        HiveWrapper.setUserAgent(Message.getUserAgent());
 
         // Init configuration
         try {
@@ -93,6 +96,7 @@ public class Beezig {
         // Register Hive stuff
         api.registerServerInstance(this, ServerHive.class);
         Modules.register(this, api);
+        CommandManager.init(this);
 
         logger.info(String.format("Load complete in %d ms.", System.currentTimeMillis() - timeStart));
     }
@@ -101,8 +105,10 @@ public class Beezig {
         logger = LogManager.getLogger("Beezig");
         LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
         LoggerConfig cfg = ctx.getConfiguration().getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
-        if("true".equals(System.getProperty("beezig.debug")))
+        if("true".equals(System.getProperty("beezig.debug"))) {
+            DEBUG = true;
             cfg.setLevel(Level.DEBUG);
+        }
         ctx.updateLoggers();
         logger.debug("Debug is active.");
     }

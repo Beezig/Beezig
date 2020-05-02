@@ -20,6 +20,7 @@
 package eu.beezig.core.util;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.Constants;
 import eu.beezig.core.config.Settings;
 
 import java.text.DecimalFormat;
@@ -38,13 +39,14 @@ public class Message {
 
     static List<String> toSendQueue = new ArrayList<>();
 
-    /*public static String getUserAgent() {
-        String framework = BeezigMain.laby ? "LabyMod" : "5zig";
-        return "Beezig/" + BeezigMain.BEEZIG_VERSION + (BeezigMain.VERSION_HASH.isEmpty() ? ""
+    public static String getUserAgent() {
+        /*String framework = BeezigMain.laby ? "LabyMod" : "5zig";
+        /return "Beezig/" + BeezigMain.BEEZIG_VERSION + (BeezigMain.VERSION_HASH.isEmpty() ? ""
                 : "/" + BeezigMain.VERSION_HASH) + " (" + framework + "/" + The5zigAPI.getAPI().getModVersion() + " on "
                 + The5zigAPI.getAPI().getMinecraftVersion() + "; Forge=" + The5zigAPI.getAPI().isForgeEnvironment()
-                + "; BeezigForge=" + BeezigMain.hasExpansion + ")";
-    }*/
+                + "; BeezigForge=" + BeezigMain.hasExpansion + ")";*/
+        return String.format("Beezig/%s", Constants.VERSION);
+    }
 
     public static String translate(String key) {
         return Beezig.api().translate(key);
@@ -74,5 +76,9 @@ public class Message {
 
     public static void error(String text) {
         Beezig.api().messagePlayer(error + text);
+    }
+
+    public static void bar() {
+        Beezig.api().messagePlayer(bar);
     }
 }

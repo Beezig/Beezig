@@ -21,6 +21,7 @@ package eu.beezig.core.data;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.FileUtils;
+import eu.beezig.core.util.Message;
 import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
 import eu.beezig.hiveapi.wrapper.utils.json.JObject;
 import org.json.simple.JSONObject;
@@ -91,7 +92,7 @@ public class BeezigData {
         Beezig.logger.info("Downloading data update...");
         URL url = new URL(DataUrls.DOWNLOAD);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.addRequestProperty("User-Agent", "Beezig/7.0.0");
+        conn.addRequestProperty("User-Agent", Message.getUserAgent());
         File futureOut = new File(dataFolder, "hive-data-master");
         if(futureOut.exists()) {
             futureOut.delete();
