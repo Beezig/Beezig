@@ -19,7 +19,6 @@
 
 package eu.beezig.core.data;
 
-import com.google.gson.reflect.TypeToken;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.FileUtils;
 import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
@@ -30,9 +29,10 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -48,12 +48,19 @@ public class BeezigData {
         this.dataFolder = new File(beezigDir, "data");
     }
 
-    public <T> T getData(DataPath path) throws IOException {
+    public <T> T getData(DataPath path, Class<T> marker) throws IOException {
         File f = new File(dataFolder, "hive-data-master/" + path.getPath());
         if(!f.exists()) return null;
         String json = FileUtils.readToString(f);
-        Type token = new TypeToken<T>(){}.getType();
-        return Beezig.gson.fromJson(json, token);
+        return Beezig.gson.fromJson(json, marker);
+    }
+
+    public <T> List<T> getDataList(DataPath path, Class<T[]> marker) throws IOException {
+        File f = new File(dataFolder, "hive-data-master/" + path.getPath());
+        if(!f.exists()) return null;
+        String json = FileUtils.readToString(f);
+        T[] arr = Beezig.gson.fromJson(json, marker);
+        return Arrays.asList(arr);
     }
 
     public void tryUpdate() throws Exception {
@@ -106,10 +113,10 @@ public class BeezigData {
             if(entry.isDirectory()) dest.mkdirs();
             else {
                 dest.getParentFile().mkdirs();
-                byte[] buf = new byte[(int) entry.getSize()];
-                in.read(buf, 0, buf.length);
                 try (FileOutputStream fos = new FileOutputStream(dest)) {
-                    fos.write(buf);
+                    for(int b = in.read(); b != -1; b = in.read()) {
+                        fos.write(b);
+                    }
                 }
             }
             entry = in.getNextEntry();

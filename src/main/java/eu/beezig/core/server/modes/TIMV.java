@@ -23,14 +23,17 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.data.DataPath;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.util.Message;
+import eu.beezig.core.util.StringUtils;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.TimvStats;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TIMV extends HiveMode {
 
     private List<MapData> maps;
+    private MapData currentMapData;
 
     public TIMV() {
         statsFetcher.setScoreboardTitle("Your TIMV Stats");
@@ -47,9 +50,21 @@ public class TIMV extends HiveMode {
         });
     }
 
+    @Override
+    public void setMap(String map) {
+        super.setMap(map);
+        String normalized = StringUtils.normalizeMapName(map);
+        Optional<MapData> data = maps.stream().filter(m -> normalized.equals(m.map)).findAny();
+        if(!data.isPresent()) {
+            Message.error("error.map_not_found");
+            return;
+        }
+        currentMapData = data.get();
+    }
+
     public void initMapData() {
         try {
-            maps = Beezig.get().getData().getData(DataPath.TIMV_MAPS);
+            maps = Beezig.get().getData().getDataList(DataPath.TIMV_MAPS, MapData[].class);
             if(maps == null) {
                 Message.error("error.data_read");
                 Beezig.logger.error("Tried to fetch maps but file wasn't found.");
