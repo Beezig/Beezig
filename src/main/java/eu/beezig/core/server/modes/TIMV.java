@@ -19,11 +19,18 @@
 
 package eu.beezig.core.server.modes;
 
+import eu.beezig.core.Beezig;
+import eu.beezig.core.data.DataPath;
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.util.Message;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.TimvStats;
 
+import java.util.List;
+
 public class TIMV extends HiveMode {
+
+    private List<MapData> maps;
 
     public TIMV() {
         statsFetcher.setScoreboardTitle("Your TIMV Stats");
@@ -40,6 +47,19 @@ public class TIMV extends HiveMode {
         });
     }
 
+    public void initMapData() {
+        try {
+            maps = Beezig.get().getData().getData(DataPath.TIMV_MAPS);
+            if(maps == null) {
+                Message.error("error.data_read");
+                Beezig.logger.error("Tried to fetch maps but file wasn't found.");
+            }
+        } catch (Exception e) {
+            Message.error("error.data_read");
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public String getName() {
         return "Trouble in Mineville";
@@ -48,5 +68,10 @@ public class TIMV extends HiveMode {
     @Override
     public void end() {
 
+    }
+
+    private static class MapData {
+        public String map;
+        public int enderchests;
     }
 }

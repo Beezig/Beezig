@@ -35,6 +35,11 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
     }
 
     @Override
+    public void onGameModeJoin(TIMV gameMode) {
+        gameMode.initMapData();
+    }
+
+    @Override
     public void onMatch(TIMV gameMode, String key, IPatternResult match) {
         if("timv.points_gain".equals(key)) gameMode.addPoints(Integer.parseInt(match.get(0), 10));
         else if("timv.points_loss".equals(key)) gameMode.addPoints(-Integer.parseInt(match.get(0), 10));

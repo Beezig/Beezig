@@ -19,8 +19,10 @@
 
 package eu.beezig.core;
 
+import com.google.gson.Gson;
 import com.mojang.authlib.GameProfile;
 import eu.beezig.core.config.BeezigConfiguration;
+import eu.beezig.core.data.BeezigData;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.DirectoryMigration;
@@ -43,11 +45,14 @@ import java.util.concurrent.Executors;
 @Plugin(name = "Beezig", version = "7.0.0")
 public class Beezig {
     public static Logger logger;
+    public static Gson gson = new Gson();
     private static Beezig instance;
+
     private ModAPI api;
     private ExecutorService asyncExecutor;
     private BeezigConfiguration config;
     private File beezigDir;
+    private BeezigData data;
 
     @EventHandler
     public void load(LoadEvent event) {
@@ -77,6 +82,14 @@ public class Beezig {
             return;
         }
 
+        data = new BeezigData(beezigDir);
+        try {
+            data.tryUpdate();
+        } catch (Exception e) {
+            logger.error("Couldn't update data!");
+            e.printStackTrace();
+        }
+
         // Register Hive stuff
         api.registerServerInstance(this, ServerHive.class);
         Modules.register(this, api);
@@ -100,6 +113,10 @@ public class Beezig {
 
     public BeezigConfiguration getConfig() {
         return config;
+    }
+
+    public BeezigData getData() {
+        return data;
     }
 
     public static Beezig get() {
