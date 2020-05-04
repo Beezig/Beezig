@@ -22,8 +22,8 @@ package eu.beezig.core.briefing.lergin;
 public enum StaffChangeType {
 
 
-    MODERATOR_REMOVE("§cRetiring Moderators"),
-    MODERATOR_ADD("§cNew Moderators"),
+    MODERATOR_REMOVE("§cRetiring Moderators or Helpers"),
+    MODERATOR_ADD("§cNew Moderators or Helpers"),
     SENIOR_MODERATOR_REMOVE("§4Retiring Sr. Moderators"),
     SENIOR_MODERATOR_ADD("§4New Sr. Moderators"),
     NECTAR_REMOVE("§6Retiring Builders"),
