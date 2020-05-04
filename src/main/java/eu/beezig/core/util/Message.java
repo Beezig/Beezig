@@ -62,7 +62,7 @@ public class Message {
         return dateFormatter.format(date);
     }
 
-    public static String ratio(double d) {
+    public static String ratio(Number d) {
         return ratioFormatter.format(d);
     }
 

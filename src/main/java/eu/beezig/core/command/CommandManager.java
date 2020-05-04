@@ -20,6 +20,7 @@ package eu.beezig.core.command;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.commands.BeezigCommand;
+import eu.beezig.core.command.commands.PlayerStatsCommand;
 import eu.beezig.core.util.Message;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
@@ -32,6 +33,7 @@ public class CommandManager {
 
     private static void registerCommands() {
         commandExecutors.add(new BeezigCommand());
+        commandExecutors.add(new PlayerStatsCommand());
     }
 
     @EventHandler
