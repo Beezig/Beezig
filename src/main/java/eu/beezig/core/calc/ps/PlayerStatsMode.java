@@ -25,6 +25,7 @@ import eu.beezig.hiveapi.wrapper.utils.json.JObject;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
@@ -37,12 +38,18 @@ public class PlayerStatsMode {
         this.apiTable = apiTable;
     }
 
-    public PlayerStatsMode(Function<String, CompletableFuture<? extends GameStats>> producer,
-                           PlayerStatsMode from, HashMap<String, String> extra) {
+    PlayerStatsMode(Function<String, CompletableFuture<? extends GameStats>> producer,
+                    PlayerStatsMode from, HashMap<String, String> extra) {
         // The reason we first assign our table to a clone of the template one and not the extra one is
         // because it allows the manager to overwrite values, as they get put last.
         this.apiTable = (HashMap<String, String>) from.apiTable.clone();
         this.apiTable.putAll(extra);
+        this.producer = producer;
+    }
+
+    PlayerStatsMode(Function<String, CompletableFuture<? extends GameStats>> producer,
+                    HashMap<String, String> apiTable) {
+        this(apiTable);
         this.producer = producer;
     }
 
@@ -65,5 +72,9 @@ public class PlayerStatsMode {
         }
         if(value == null) value = source.getSource().getInt(key);
         return new PlayerStatsProfile(displayNames.get(source.getUUID()), value);
+    }
+
+    Set<String> getAvailableStats() {
+        return apiTable.keySet();
     }
 }

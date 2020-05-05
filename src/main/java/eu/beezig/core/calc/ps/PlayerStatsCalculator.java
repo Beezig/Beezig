@@ -32,14 +32,14 @@ import java.util.stream.Stream;
 
 public class PlayerStatsCalculator {
     public static void calculate(String modeName, String stat, List<NetworkPlayerInfo> playersIn) {
-        PlayerStatsMode mode = PlayerStats.modes.get(modeName.toLowerCase(Locale.ROOT));
+        PlayerStatsMode mode = new PlayerStats().modes.get(modeName.toLowerCase(Locale.ROOT));
         if(mode == null) {
             Message.error(Message.translate("error.ps.mode_not_found"));
             return;
         }
         String apiStat = mode.getApiKey(stat);
         if(apiStat == null) {
-            Message.error(Message.translate("error.ps.stat_not_found"));
+            Message.error(Beezig.api().translate("error.ps.stat_not_found", "§6" + String.join(", ", mode.getAvailableStats())));
             return;
         }
         List<NetworkPlayerInfo> players = playersIn == null ? Beezig.api().getServerPlayers() : playersIn;
@@ -63,7 +63,7 @@ public class PlayerStatsCalculator {
                         Message.info(String.format("%s §7-§b %s", p.getDisplayName(), Message.ratio(p.getStat())));
                         return p.getStat().doubleValue();
                     }).summaryStatistics();
-                Message.info(Beezig.api().translate("msg.ps.done", modeName,
+                Message.info(Beezig.api().translate("msg.ps.done", modeName.toUpperCase(Locale.ROOT),
                         "§b" + Message.ratio(summary.getSum()) + "§3", "§b" + Message.ratio(summary.getAverage()) + "§3"));
             }).exceptionally(e -> {
                         Message.error(Message.translate("error.ps.generic"));
