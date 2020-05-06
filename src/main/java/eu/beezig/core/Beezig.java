@@ -125,6 +125,10 @@ public class Beezig {
         return data;
     }
 
+    public File getBeezigDir() {
+        return beezigDir;
+    }
+
     public static Beezig get() {
         return instance;
     }

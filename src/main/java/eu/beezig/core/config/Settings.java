@@ -25,7 +25,9 @@ import eu.beezig.core.util.Message;
 import java.util.Locale;
 
 public enum Settings {
-    THOUSANDS_SEPARATOR(true, "LEVER");
+    THOUSANDS_SEPARATOR(true, "LEVER"),
+    AUTOVOTE(true, "LEVER"),
+    AUTOVOTE_RANDOM(true, "LEVER");
 
     private final Object defaultValue;
     private final Class settingType;

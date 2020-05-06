@@ -20,6 +20,7 @@
 package eu.beezig.core.server;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.autovote.AutovoteManager;
 import eu.beezig.core.util.Message;
 import eu.the5zig.mod.server.GameMode;
 
@@ -35,9 +36,11 @@ public abstract class HiveMode extends GameMode {
      * The player's stats at the start of the game
      */
     private GlobalStats cachedGlobal;
+    private AutovoteManager autovoteManager;
 
     public HiveMode() {
         global = new GlobalStats();
+        autovoteManager = new AutovoteManager(this);
         cachedGlobal = new GlobalStats();
         statsFetcher = new StatsFetcher(getClass());
         statsFetcher.getJob().thenAcceptAsync(this::setGlobal).exceptionally(e -> {
@@ -59,6 +62,12 @@ public abstract class HiveMode extends GameMode {
      * Called when the user returns to the lobby.
      */
     public abstract void end();
+
+    public abstract String getIdentifier();
+
+    public AutovoteManager getAutovoteManager() {
+        return autovoteManager;
+    }
 
     public int getPoints() {
         return points;

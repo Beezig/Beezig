@@ -57,4 +57,9 @@ public class BED extends HiveMode {
     public void end() {
 
     }
+
+    @Override
+    public String getIdentifier() {
+        return "bed";
+    }
 }

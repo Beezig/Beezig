@@ -56,7 +56,7 @@ public class BeezigConfiguration {
     }
 
     Setting get(Settings key) {
-        return config.get(key);
+        return config.getOrDefault(key, new Setting(key.getDefaultValue()));
     }
 
     public void save() throws IOException {

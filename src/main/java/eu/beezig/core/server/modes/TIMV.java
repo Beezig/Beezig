@@ -22,6 +22,7 @@ package eu.beezig.core.server.modes;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.data.DataPath;
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.util.Message;
 import eu.beezig.core.util.StringUtils;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
@@ -30,7 +31,7 @@ import eu.beezig.hiveapi.wrapper.player.games.TimvStats;
 import java.util.List;
 import java.util.Optional;
 
-public class TIMV extends HiveMode {
+public class TIMV extends HiveMode implements IAutovote {
 
     private List<MapData> maps;
     private MapData currentMapData;
@@ -83,6 +84,21 @@ public class TIMV extends HiveMode {
     @Override
     public void end() {
 
+    }
+
+    @Override
+    public String getIdentifier() {
+        return "timv";
+    }
+
+    @Override
+    public int getMaxVoteOptions() {
+        return 6;
+    }
+
+    @Override
+    public boolean isLastRandom() {
+        return true;
     }
 
     private static class MapData {
