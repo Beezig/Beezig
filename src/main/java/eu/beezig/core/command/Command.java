@@ -20,6 +20,8 @@
 package eu.beezig.core.command;
 
 import com.mojang.authlib.GameProfile;
+import eu.beezig.core.Beezig;
+import eu.beezig.core.util.Message;
 
 import java.util.List;
 
@@ -43,4 +45,7 @@ public interface Command {
         return null;
     }
 
+    default void sendUsage(String usage) {
+        Message.info(Beezig.api().translate("command.usage", usage));
+    }
 }

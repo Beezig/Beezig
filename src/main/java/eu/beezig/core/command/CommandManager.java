@@ -19,6 +19,7 @@
 package eu.beezig.core.command;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.command.commands.AutovoteCommand;
 import eu.beezig.core.command.commands.BeezigCommand;
 import eu.beezig.core.command.commands.PlayerStatsCommand;
 import eu.beezig.core.util.Message;
@@ -34,6 +35,7 @@ public class CommandManager {
     private static void registerCommands() {
         commandExecutors.add(new BeezigCommand());
         commandExecutors.add(new PlayerStatsCommand());
+        commandExecutors.add(new AutovoteCommand());
     }
 
     @EventHandler
