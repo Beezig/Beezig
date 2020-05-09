@@ -22,6 +22,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.command.commands.AutovoteCommand;
 import eu.beezig.core.command.commands.BeezigCommand;
 import eu.beezig.core.command.commands.PlayerStatsCommand;
+import eu.beezig.core.command.commands.SettingsCommand;
 import eu.beezig.core.util.Message;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
@@ -36,6 +37,7 @@ public class CommandManager {
         commandExecutors.add(new BeezigCommand());
         commandExecutors.add(new PlayerStatsCommand());
         commandExecutors.add(new AutovoteCommand());
+        commandExecutors.add(new SettingsCommand());
     }
 
     @EventHandler
@@ -78,7 +80,7 @@ public class CommandManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Message.error("An error occurred while attempting to perform this command.");
+            Message.error(Beezig.api().translate("command.error", e.getClass().getName() + ": " + e.getLocalizedMessage()));
         }
         return true;
     }

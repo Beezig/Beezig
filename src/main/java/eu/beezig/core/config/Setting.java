@@ -39,6 +39,10 @@ public class Setting {
     }
 
     public String getString() {
-        return (String) value;
+        return value.toString();
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
     }
 }

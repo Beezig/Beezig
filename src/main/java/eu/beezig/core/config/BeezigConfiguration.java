@@ -59,6 +59,19 @@ public class BeezigConfiguration {
         return config.getOrDefault(key, new Setting(key.getDefaultValue()));
     }
 
+    public void set(Settings key, String newValue) {
+        key.get().setValue(castValue(key.getSettingType(), newValue));
+    }
+
+    private Object castValue(Class cls, String value) {
+        if(cls == Boolean.class) return Boolean.parseBoolean(value);
+        if(cls == Integer.class) return Integer.parseInt(value, 10);
+        if(cls == Double.class) return Double.parseDouble(value);
+        if(cls == Float.class) return Float.parseFloat(value);
+        if(cls == Long.class) return Long.parseLong(value, 10);
+        else return cls.cast(value);
+    }
+
     public void save() throws IOException {
         JSONObject configJson = new JSONObject();
         for(Map.Entry<Settings, Setting> e : config.entrySet()) {
