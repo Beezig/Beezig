@@ -20,6 +20,7 @@
 package eu.beezig.core.server;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.advrec.AdvancedRecords;
 import eu.beezig.core.autovote.AutovoteManager;
 import eu.beezig.core.util.Message;
 import eu.the5zig.mod.server.GameMode;
@@ -37,6 +38,7 @@ public abstract class HiveMode extends GameMode {
      */
     private GlobalStats cachedGlobal;
     private AutovoteManager autovoteManager;
+    private AdvancedRecords advancedRecords;
 
     public HiveMode() {
         global = new GlobalStats();
@@ -48,6 +50,11 @@ public abstract class HiveMode extends GameMode {
             Beezig.logger.error(e);
             return null;
         });
+        advancedRecords = new AdvancedRecords();
+    }
+
+    public AdvancedRecords getAdvancedRecords() {
+        return advancedRecords;
     }
 
     public StatsFetcher getStatsFetcher() {

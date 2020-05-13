@@ -23,11 +23,14 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.data.DataPath;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
+import eu.beezig.core.util.CollectionUtils;
 import eu.beezig.core.util.Message;
 import eu.beezig.core.util.StringUtils;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.TimvStats;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +52,12 @@ public class TIMV extends HiveMode implements IAutovote {
             stats.setPoints(lines.get("Karma"));
             return stats;
         });
+        getAdvancedRecords().setExecutor(this::recordsExecutor);
+    }
+
+    private void recordsExecutor() {
+        List<Pair<String, String>> messages = getAdvancedRecords().getMessages();
+        Collections.swap(messages, 0, CollectionUtils.indexOf(messages, p -> "Karma".equals(p.getLeft())));
     }
 
     @Override

@@ -39,10 +39,16 @@ public class Setting {
     }
 
     public String getString() {
-        return value.toString();
+        return toString();
     }
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        if(value instanceof Enum) return ((Enum)value).name();
+        return value.toString();
     }
 }

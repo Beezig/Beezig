@@ -30,7 +30,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Message {
-    private static final String info = "§7▏ §aBeezig§7 ▏ §3";
     private static final String error = "§7▏ §cBeezig§7 ▏ §c";
     private static final String bar = "    §7§m                                                                                    ";
     private static final DecimalFormat bigintFormatter = new DecimalFormat("#,###");
@@ -71,7 +70,8 @@ public class Message {
     }
 
     public static void info(String text) {
-        Beezig.api().messagePlayer(info + text);
+        String prefix = String.format("§7▏ §aBeezig§7 ▏ %s", Color.primary());
+        Beezig.api().messagePlayer(prefix + text);
     }
 
     public static void error(String text) {

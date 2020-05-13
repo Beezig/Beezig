@@ -17,26 +17,16 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.command.commands;
+package eu.beezig.core.util;
 
-import eu.beezig.core.calc.ps.PlayerStatsCalculator;
-import eu.beezig.core.command.Command;
-import eu.beezig.core.util.ActiveGame;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
-public class PlayerStatsCommand implements Command {
-    @Override
-    public String getName() {
-        return "ps";
-    }
-
-    @Override
-    public String[] getAliases() {
-        return new String[] {"/ps", "/playerstats"};
-    }
-
-    @Override
-    public boolean execute(String[] args) {
-        PlayerStatsCalculator.calculate(args.length == 0 ? ActiveGame.getID() : args[0], args.length > 1 ? args[1] : "points", null);
-        return true;
+public class CollectionUtils {
+    public static <T> int indexOf(List<T> collection, Predicate<T> predicate) {
+        return IntStream.range(0, collection.size())
+                .filter(i -> predicate.test(collection.get(i)))
+        .findAny().orElse(-1);
     }
 }

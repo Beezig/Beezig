@@ -20,6 +20,7 @@
 package eu.beezig.core.calc.ps;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.util.Color;
 import eu.beezig.core.util.Message;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.hiveapi.wrapper.player.GameStats;
@@ -32,7 +33,7 @@ import java.util.stream.Stream;
 
 public class PlayerStatsCalculator {
     public static void calculate(String modeName, String stat, List<NetworkPlayerInfo> playersIn) {
-        PlayerStatsMode mode = new PlayerStats().modes.get(modeName.toLowerCase(Locale.ROOT));
+        PlayerStatsMode mode = modeName == null ? null : new PlayerStats().modes.get(modeName.toLowerCase(Locale.ROOT));
         if(mode == null) {
             Message.error(Message.translate("error.ps.mode_not_found"));
             return;
@@ -60,11 +61,11 @@ public class PlayerStatsCalculator {
                     .map(s -> mode.getProfile(displayNames, s, apiStat, stat))
                     .sorted()
                     .mapToDouble(p -> {
-                        Message.info(String.format("%s §7-§b %s", p.getDisplayName(), Message.ratio(p.getStat())));
+                        Message.info(String.format("%s §7-%s %s", p.getDisplayName(), Color.accent(), Message.ratio(p.getStat())));
                         return p.getStat().doubleValue();
                     }).summaryStatistics();
                 Message.info(Beezig.api().translate("msg.ps.done", modeName.toUpperCase(Locale.ROOT),
-                        "§b" + Message.ratio(summary.getSum()) + "§3", "§b" + Message.ratio(summary.getAverage()) + "§3"));
+                        Color.accent() + Message.ratio(summary.getSum()) + Color.primary(), Color.accent() + Message.ratio(summary.getAverage()) + Color.primary()));
             }).exceptionally(e -> {
                         Message.error(Message.translate("error.ps.generic"));
                         e.printStackTrace();

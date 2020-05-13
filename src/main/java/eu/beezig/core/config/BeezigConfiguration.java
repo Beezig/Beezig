@@ -19,12 +19,16 @@
 
 package eu.beezig.core.config;
 
+import eu.beezig.core.Beezig;
+import eu.beezig.core.util.Message;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,7 +52,12 @@ public class BeezigConfiguration {
                 HashMap<Object, Object> map = (HashMap<Object, Object>)json;
                 config = map.entrySet().stream().map(e -> {
                     Settings key = Settings.valueOf(e.getKey().toString());
-                    Setting value = new Setting(e.getValue());
+                    Setting value = null;
+                    try {
+                        value = new Setting(castValue(key.getSettingType(), (String) e.getValue()));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     return new HashMap.SimpleEntry<>(key, value);
                 }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, HashMap::new));
             }
@@ -59,23 +68,62 @@ public class BeezigConfiguration {
         return config.getOrDefault(key, new Setting(key.getDefaultValue()));
     }
 
-    public void set(Settings key, String newValue) {
-        key.get().setValue(castValue(key.getSettingType(), newValue));
+    private Setting getOrPutDefault(Settings key) {
+        Setting value = config.get(key);
+        if(value == null) {
+            Setting def = new Setting(key.getDefaultValue());
+            config.put(key, def);
+            return def;
+        }
+        return value;
     }
 
-    private Object castValue(Class cls, String value) {
+    public boolean set(Settings key, String newValue) {
+        try {
+            Object casted = castValue(key.getSettingType(), newValue);
+            if(casted == null) return false;
+            getOrPutDefault(key).setValue(casted);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private Object castValue(Class cls, String value) throws Exception {
         if(cls == Boolean.class) return Boolean.parseBoolean(value);
         if(cls == Integer.class) return Integer.parseInt(value, 10);
         if(cls == Double.class) return Double.parseDouble(value);
         if(cls == Float.class) return Float.parseFloat(value);
         if(cls == Long.class) return Long.parseLong(value, 10);
+        if(Enum.class.isAssignableFrom(cls)) {
+            try {
+                return cls.getMethod("valueOf", String.class).invoke(null, value.toUpperCase(Locale.ROOT));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                if(!(e.getCause() instanceof IllegalArgumentException)) return null;
+                Object[] valuesRaw = (Object[]) cls.getMethod("values").invoke(null);
+                Method name = valuesRaw[0].getClass().getMethod("name");
+                String possibleValues = Stream.of(valuesRaw).map(o -> {
+                    try {
+                        return (String) name.invoke(o);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        return null;
+                    }
+                }).collect(Collectors.joining(", "));
+                Message.error(Beezig.api().translate("error.enum", "§6" + possibleValues));
+            }
+            return null;
+        }
         else return cls.cast(value);
     }
 
     public void save() throws IOException {
         JSONObject configJson = new JSONObject();
         for(Map.Entry<Settings, Setting> e : config.entrySet()) {
-            configJson.put(e.getKey().name(), e.getValue().getValue());
+            configJson.put(e.getKey().name(), e.getValue().toString());
         }
         try(FileWriter writer = new FileWriter(file)) {
             try(BufferedWriter buffer = new BufferedWriter(writer)) {

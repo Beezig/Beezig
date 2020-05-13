@@ -32,4 +32,10 @@ public class ActiveGame {
         if(!(mode instanceof HiveMode)) return null;
         return (HiveMode) mode;
     }
+
+    public static String getID() {
+        HiveMode current = get();
+        if(current == null) return null;
+        return current.getIdentifier();
+    }
 }

@@ -27,7 +27,7 @@ import java.util.HashMap;
 class PlayerStats {
     HashMap<String, PlayerStatsMode> modes = new HashMap<>();
 
-    public PlayerStats() {
+    PlayerStats() {
         PlayerStatsMode basicPvP = new PlayerStatsMode(new HashMap<>(ImmutableMap.<String, String>builder()
                 .put("points", "total_points")
                 .put("kills", "kills")

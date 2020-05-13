@@ -23,6 +23,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
+import eu.beezig.core.util.Color;
 import eu.beezig.core.util.FileUtils;
 import eu.beezig.core.util.Message;
 import eu.beezig.core.util.StringUtils;
@@ -77,13 +78,13 @@ public class AutovoteManager {
                 AutovoteMap random = maps.get("/random/");
                 if(random == null) return;
                 Beezig.api().sendPlayerMessage("/v " + random.getIndex());
-                Message.info(Beezig.api().translate("msg.autovote", "§b" + random.getName()));
+                Message.info(Beezig.api().translate("msg.autovote", Color.accent() + random.getName()));
             }
         }
         else {
             AutovoteMap map = maps.get(savedMaps.get(0));
             Beezig.api().sendPlayerMessage("/v " + map.getIndex());
-            Message.info(Beezig.api().translate("msg.autovote", "§b" + map.getName()));
+            Message.info(Beezig.api().translate("msg.autovote", Color.accent() + map.getName()));
         }
     }
 

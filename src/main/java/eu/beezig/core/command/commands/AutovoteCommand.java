@@ -22,6 +22,7 @@ package eu.beezig.core.command.commands;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.autovote.AutovoteConfig;
 import eu.beezig.core.command.Command;
+import eu.beezig.core.util.Color;
 import eu.beezig.core.util.Message;
 
 import java.util.Locale;
@@ -49,9 +50,8 @@ public class AutovoteCommand implements Command {
         AutovoteConfig config = new AutovoteConfig();
         if("list".equalsIgnoreCase(opMode)) {
             Message.info(Beezig.api().translate("msg.autovote.list", mode.toUpperCase(Locale.ROOT)));
-            config.getMaps(mode.toLowerCase(Locale.ROOT)).forEach(s -> {
-                Beezig.api().messagePlayer(" §3- §a" + s);
-            });
+            config.getMaps(mode.toLowerCase(Locale.ROOT))
+                    .forEach(s -> Beezig.api().messagePlayer(String.format(" %s- %s%s", Color.primary(), Color.accent(), s)));
             return true;
         }
         if(args.length < 3) {

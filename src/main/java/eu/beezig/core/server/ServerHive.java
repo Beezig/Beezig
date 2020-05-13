@@ -108,6 +108,8 @@ public class ServerHive extends ServerInstance {
             else if("tokens.boost".equals(key)) ServerHive.this.tokens += Integer.parseInt(match.get(0), 10);
             else if("map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).setMap(match.get(0));
             else if("autovote.map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).getAutovoteManager().parse(match);
+            // Advanced Records
+            if(gameMode instanceof HiveMode) match.ignoreMessage(((HiveMode) gameMode).getAdvancedRecords().parseMessage(key, match));
         }
 
         @Override

@@ -20,14 +20,20 @@
 package eu.beezig.core.config;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.advrec.AdvancedRecords;
 import eu.beezig.core.util.Message;
+import eu.the5zig.util.minecraft.ChatColor;
 
 import java.util.Locale;
 
 public enum Settings {
+    COLOR_PRIMARY(ChatColor.DARK_AQUA, "WOOL"),
+    COLOR_ACCENT(ChatColor.AQUA, "WOOL"),
     THOUSANDS_SEPARATOR(true, "LEVER"),
     AUTOVOTE(true, "LEVER"),
-    AUTOVOTE_RANDOM(true, "LEVER");
+    AUTOVOTE_RANDOM(true, "LEVER"),
+    ADVANCED_RECORDS(true, "LEVER"),
+    ADVREC_MODE(AdvancedRecords.Mode.NORMAL, "LEVER");
 
     private final Object defaultValue;
     private final Class settingType;
@@ -62,4 +68,5 @@ public enum Settings {
     public Setting get() {
         return Beezig.cfg().get(this);
     }
+
 }

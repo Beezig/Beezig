@@ -22,6 +22,7 @@ package eu.beezig.core.command.commands;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.Command;
 import eu.beezig.core.config.Settings;
+import eu.beezig.core.util.Color;
 import eu.beezig.core.util.Message;
 
 import java.io.IOException;
@@ -44,17 +45,19 @@ public class SettingsCommand implements Command {
         if(args.length == 0) {
             Message.info(Message.translate("msg.config.list"));
             for(Settings key : Settings.values()) {
-                Beezig.api().messagePlayer(String.format("§3- §b%s §7[%s] §3(%s): §a%s",
-                        key.getName(), key.name().toLowerCase(Locale.ROOT), key.getDescription(), key.get().getString()));
+                Beezig.api().messagePlayer(String.format("%s- %s%s §7[%s] %s(%s): §a%s",
+                        Color.primary(), Color.accent(), key.getName(), key.name().toLowerCase(Locale.ROOT),
+                        Color.primary(), key.getDescription(), key.get().toString()));
             }
         }
         else if(args.length == 1) {
             if((setting = getSetting(args[0])) == null) return true;
-            Message.info(String.format("§b%s §3(%s):§b %s", setting.getName(), setting.getDescription(), setting.get().getString()));
+            Message.info(String.format("%s%s %s(%s):%s %s", Color.accent(), setting.getName(), Color.primary(),
+                    setting.getDescription(), Color.primary(), setting.get().getString()));
         }
         else if(args.length == 2) {
             if((setting = getSetting(args[0])) == null) return true;
-            Beezig.cfg().set(setting, args[1]);
+            if(!Beezig.cfg().set(setting, args[1])) return true;
             try {
                 Beezig.cfg().save();
                 Message.info(Message.translate("msg.config.save"));
@@ -71,9 +74,9 @@ public class SettingsCommand implements Command {
 
     private Settings getSetting(String name) {
         try {
-            return Settings.valueOf(name.toUpperCase(Locale.ROOT).replace(".", "-"));
+            return Settings.valueOf(name.toUpperCase(Locale.ROOT).replace(".", "_"));
         }
-        catch (EnumConstantNotPresentException ex) {
+        catch (IllegalArgumentException ex) {
             Message.error(Message.translate("error.setting_not_found"));
             return null;
         }
