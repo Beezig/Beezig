@@ -27,13 +27,27 @@ import eu.the5zig.util.minecraft.ChatColor;
 import java.util.Locale;
 
 public enum Settings {
+    // Colors
     COLOR_PRIMARY(ChatColor.DARK_AQUA, "WOOL"),
     COLOR_ACCENT(ChatColor.AQUA, "WOOL"),
+
+    // Misc
     THOUSANDS_SEPARATOR(true, "LEVER"),
+
+    // Autovote
     AUTOVOTE(true, "LEVER"),
     AUTOVOTE_RANDOM(true, "LEVER"),
+
+    // Advanced Records
     ADVANCED_RECORDS(true, "LEVER"),
-    ADVREC_MODE(AdvancedRecords.Mode.NORMAL, "LEVER");
+    ADVREC_MODE(AdvancedRecords.Mode.NORMAL, "LEVER"),
+
+    // Trouble in Mineville
+    TIMV_ADVREC_VICTORIES(true, "LEVER"),
+    TIMV_ADVREC_KRR(true, "LEVER"),
+    TIMV_ADVREC_TRATIO(true, "LEVER"),
+    TIMV_ADVREC_RECORD(true, "LEVER"),
+    TIMV_ADVREC_KPV(true, "LEVER");
 
     private final Object defaultValue;
     private final Class settingType;

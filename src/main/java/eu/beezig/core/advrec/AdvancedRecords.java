@@ -79,6 +79,10 @@ public class AdvancedRecords {
         return Settings.THOUSANDS_SEPARATOR.get().getBoolean() ? Message.formatNumber(Integer.parseInt(old, 10)) : old;
     }
 
+    public String modifyValue(int old) {
+        return Settings.THOUSANDS_SEPARATOR.get().getBoolean() ? Message.formatNumber(old) : Integer.toString(old, 10);
+    }
+
     private void execute() {
         Beezig.get().getAsyncExecutor().submit(() -> {
             if(executor != null) executor.run();
@@ -100,6 +104,11 @@ public class AdvancedRecords {
 
     private String formatMessage(String key, String value) {
         return String.format(" %s%s: %s%s", Color.primary(), key, Color.accent(), value);
+    }
+
+    public String getMessage(String key) {
+        Pair<String, String> pair = messages.stream().filter(p -> key.equals(p.getLeft())).findAny().orElse(null);
+        return pair == null ? null : pair.getRight();
     }
 
     public enum Mode {

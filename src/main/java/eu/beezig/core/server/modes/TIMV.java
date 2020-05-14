@@ -20,14 +20,17 @@
 package eu.beezig.core.server.modes;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.config.Settings;
 import eu.beezig.core.data.DataPath;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.util.CollectionUtils;
+import eu.beezig.core.util.Color;
 import eu.beezig.core.util.Message;
 import eu.beezig.core.util.StringUtils;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.TimvStats;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collections;
@@ -57,7 +60,30 @@ public class TIMV extends HiveMode implements IAutovote {
 
     private void recordsExecutor() {
         List<Pair<String, String>> messages = getAdvancedRecords().getMessages();
+        // Move "Karma" to the top
         Collections.swap(messages, 0, CollectionUtils.indexOf(messages, p -> "Karma".equals(p.getLeft())));
+        int rolePts = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Role points")).intValue();
+        int karma = Message.getNumberFromFormat(messages.get(0).getRight()).intValue();
+        if(Settings.TIMV_ADVREC_VICTORIES.get().getBoolean()) {
+           int estimatedVictories = (rolePts - karma / 10) / 20;
+           messages.add(new ImmutablePair<>("Victories (est.)", getAdvancedRecords().modifyValue(estimatedVictories)));
+           if(Settings.TIMV_ADVREC_KPV.get().getBoolean()) {
+               double kpv = karma / (double) estimatedVictories;
+               messages.add(new ImmutablePair<>("Karma per Victory (est.)", Message.ratio(kpv)));
+           }
+        }
+        if(Settings.TIMV_ADVREC_KRR.get().getBoolean()) {
+            double krr = karma / (double) rolePts;
+            messages.add(new ImmutablePair<>("Karma/Role points", Message.ratio(krr)));
+        }
+        if(Settings.TIMV_ADVREC_TRATIO.get().getBoolean()) {
+            int tIndex = CollectionUtils.indexOf(messages, p -> "Traitor Points".equals(p.getLeft()));
+            String rawPts = messages.get(tIndex).getRight();
+            int tPts = Message.getNumberFromFormat(rawPts).intValue();
+            double ratio = tPts * 100D / (double) rolePts;
+            messages.set(tIndex, new ImmutablePair<>("Traitor Points",
+                    String.format("%s (%s%%%s)", rawPts, (ratio > 30 ? "§c" : "") + Message.ratio(ratio), Color.accent())));
+        }
     }
 
     @Override

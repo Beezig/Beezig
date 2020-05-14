@@ -24,6 +24,8 @@ import eu.beezig.core.Constants;
 import eu.beezig.core.config.Settings;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,6 +69,15 @@ public class Message {
 
     public static void addToSendQueue(String message) {
         toSendQueue.add(message);
+    }
+
+    public static Number getNumberFromFormat(String format) {
+        try {
+            return NumberFormat.getInstance().parse(format);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void info(String text) {
