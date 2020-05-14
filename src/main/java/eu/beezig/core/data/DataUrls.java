@@ -23,4 +23,5 @@ class DataUrls {
     private static final String GITHUB_BASE = "https://api.github.com/";
     static final String LATEST_COMMIT = GITHUB_BASE + "repos/Beezig/hive-data/branches/master";
     static final String DOWNLOAD = "https://github.com/Beezig/hive-data/archive/master.zip";
+    static final String TITLES_FORMAT = "https://api.hivemc.com/v1/game/%s/titles";
 }

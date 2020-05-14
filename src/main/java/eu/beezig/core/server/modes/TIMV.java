@@ -20,6 +20,7 @@
 package eu.beezig.core.server.modes;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.advrec.AdvRecUtils;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.data.DataPath;
 import eu.beezig.core.server.HiveMode;
@@ -83,6 +84,16 @@ public class TIMV extends HiveMode implements IAutovote {
             double ratio = tPts * 100D / (double) rolePts;
             messages.set(tIndex, new ImmutablePair<>("Traitor Points",
                     String.format("%s (%s%%%s)", rawPts, (ratio > 30 ? "§c" : "") + Message.ratio(ratio), Color.accent())));
+        }
+        if(AdvRecUtils.needsAPI()) {
+            AdvRecUtils.announceAPI();
+            try {
+                TimvStats api = Profiles.timv(getAdvancedRecords().getTarget()).get();
+                messages.set(0, new ImmutablePair<>("Karma",
+                        messages.get(0).getRight() + AdvRecUtils.getTitle(getTitleService(), api.getTitle(), karma)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

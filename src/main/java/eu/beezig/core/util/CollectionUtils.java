@@ -29,4 +29,10 @@ public class CollectionUtils {
                 .filter(i -> predicate.test(collection.get(i)))
         .findAny().orElse(-1);
     }
+
+    public static <T> int indexOf(T[] collection, Predicate<T> predicate) {
+        return IntStream.range(0, collection.length)
+                .filter(i -> predicate.test(collection[i]))
+                .findAny().orElse(-1);
+    }
 }

@@ -43,6 +43,10 @@ public class AdvancedRecords {
         mode = (Mode) Settings.ADVREC_MODE.get().getValue();
     }
 
+    public String getTarget() {
+        return target;
+    }
+
     public List<Pair<String, String>> getMessages() {
         return messages;
     }

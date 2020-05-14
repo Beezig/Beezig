@@ -44,9 +44,15 @@ import java.util.zip.ZipInputStream;
  */
 public class BeezigData {
     private File dataFolder;
+    private GameTitles titleManager;
 
     public BeezigData(File beezigDir) {
         this.dataFolder = new File(beezigDir, "data");
+        this.titleManager = new GameTitles(dataFolder);
+    }
+
+    public GameTitles getTitleManager() {
+        return titleManager;
     }
 
     public <T> T getData(DataPath path, Class<T> marker) throws IOException {
@@ -88,7 +94,7 @@ public class BeezigData {
         return null;
     }
 
-    private void installUpdate(String newSha) throws IOException {
+    private void installUpdate(String newSha) throws Exception {
         Beezig.logger.info("Downloading data update...");
         URL url = new URL(DataUrls.DOWNLOAD);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -103,6 +109,7 @@ public class BeezigData {
         JSONObject manifest = new JSONObject();
         manifest.put("sha", newSha);
         FileUtils.writeJson(manifest, new File(dataFolder, "manifest.json"));
+        titleManager.downloadUpdate();
         Beezig.logger.info("Data updated successfully.");
     }
 

@@ -41,6 +41,10 @@ public enum Settings {
     // Advanced Records
     ADVANCED_RECORDS(true, "LEVER"),
     ADVREC_MODE(AdvancedRecords.Mode.NORMAL, "LEVER"),
+    ADVREC_RANK(true, "LEVER"),
+    ADVREC_TONEXT(true, "LEVER"),
+    ADVREC_KD(true, "LEVER"),
+    ADVREC_WINRATE(true, "LEVER"),
 
     // Trouble in Mineville
     TIMV_ADVREC_VICTORIES(true, "LEVER"),

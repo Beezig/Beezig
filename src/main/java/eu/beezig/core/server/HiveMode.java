@@ -25,6 +25,8 @@ import eu.beezig.core.autovote.AutovoteManager;
 import eu.beezig.core.util.Message;
 import eu.the5zig.mod.server.GameMode;
 
+import java.io.IOException;
+
 public abstract class HiveMode extends GameMode {
     private int points;
     private String map;
@@ -39,6 +41,7 @@ public abstract class HiveMode extends GameMode {
     private GlobalStats cachedGlobal;
     private AutovoteManager autovoteManager;
     private AdvancedRecords advancedRecords;
+    private TitleService titleService;
 
     public HiveMode() {
         global = new GlobalStats();
@@ -51,6 +54,11 @@ public abstract class HiveMode extends GameMode {
             return null;
         });
         advancedRecords = new AdvancedRecords();
+        try {
+            titleService = new TitleService(getIdentifier());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public AdvancedRecords getAdvancedRecords() {
@@ -63,6 +71,10 @@ public abstract class HiveMode extends GameMode {
 
     public GlobalStats getCachedGlobal() {
         return cachedGlobal;
+    }
+
+    public TitleService getTitleService() {
+        return titleService;
     }
 
     /**

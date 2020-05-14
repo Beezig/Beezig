@@ -19,9 +19,12 @@
 
 package eu.beezig.core.server.modes;
 
+import eu.beezig.core.advrec.AdvRecUtils;
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.util.Message;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.BedStats;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class BED extends HiveMode {
 
@@ -46,6 +49,18 @@ public class BED extends HiveMode {
             stats.setPlayed(lines.get("Games Played"));
             return stats;
         });
+        getAdvancedRecords().setExecutor(this::recordsExecutor);
+    }
+
+    private void recordsExecutor() {
+        AdvRecUtils.addPvPStats(getAdvancedRecords());
+        int points = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Points")).intValue();
+        if(AdvRecUtils.needsAPI()) {
+            AdvRecUtils.announceAPI();
+            BedStats api = Profiles.bed(getAdvancedRecords().getTarget()).join();
+            getAdvancedRecords().getMessages().set(0, new ImmutablePair<>("Points",
+                    getAdvancedRecords().getMessages().get(0).getRight() + AdvRecUtils.getTitle(getTitleService(), api.getTitle(), points)));
+        }
     }
 
     @Override
