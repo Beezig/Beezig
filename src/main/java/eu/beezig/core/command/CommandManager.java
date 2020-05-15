@@ -23,7 +23,7 @@ import eu.beezig.core.command.commands.AutovoteCommand;
 import eu.beezig.core.command.commands.BeezigCommand;
 import eu.beezig.core.command.commands.PlayerStatsCommand;
 import eu.beezig.core.command.commands.SettingsCommand;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
 

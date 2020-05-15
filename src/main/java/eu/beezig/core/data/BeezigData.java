@@ -21,7 +21,7 @@ package eu.beezig.core.data;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.FileUtils;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
 import eu.beezig.hiveapi.wrapper.utils.json.JObject;
 import org.json.simple.JSONObject;

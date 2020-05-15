@@ -20,7 +20,7 @@
 package eu.beezig.core.config;
 
 import eu.beezig.core.Beezig;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

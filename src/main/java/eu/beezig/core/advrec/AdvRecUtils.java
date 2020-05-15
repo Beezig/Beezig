@@ -23,7 +23,7 @@ import eu.beezig.core.config.Settings;
 import eu.beezig.core.data.HiveTitle;
 import eu.beezig.core.server.TitleService;
 import eu.beezig.core.util.Color;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 

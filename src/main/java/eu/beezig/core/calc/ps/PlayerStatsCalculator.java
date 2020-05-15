@@ -22,8 +22,8 @@ package eu.beezig.core.calc.ps;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.server.TitleService;
 import eu.beezig.core.util.Color;
-import eu.beezig.core.util.Message;
 import eu.beezig.core.util.UUIDUtils;
+import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.GameStats;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 

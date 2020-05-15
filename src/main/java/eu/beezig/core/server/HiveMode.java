@@ -22,7 +22,7 @@ package eu.beezig.core.server;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvancedRecords;
 import eu.beezig.core.autovote.AutovoteManager;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
 
 import java.io.IOException;

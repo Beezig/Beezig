@@ -23,7 +23,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.command.Command;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.Color;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.util.component.MessageComponent;
 import eu.the5zig.mod.util.component.style.MessageAction;
 

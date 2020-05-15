@@ -27,7 +27,7 @@ import eu.beezig.core.data.BeezigData;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.DirectoryMigration;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.HiveWrapper;
 import eu.the5zig.mod.ModAPI;
 import eu.the5zig.mod.The5zigAPI;

@@ -17,7 +17,7 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.util;
+package eu.beezig.core.util.text;
 
 import com.google.common.base.Strings;
 import eu.the5zig.util.minecraft.ChatColor;

@@ -21,7 +21,7 @@ package eu.beezig.core.command;
 
 import com.mojang.authlib.GameProfile;
 import eu.beezig.core.Beezig;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 
 import java.util.List;
 

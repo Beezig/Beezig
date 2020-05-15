@@ -21,7 +21,7 @@ package eu.beezig.core.server.modes;
 
 import eu.beezig.core.advrec.AdvRecUtils;
 import eu.beezig.core.server.HiveMode;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.BedStats;
 import org.apache.commons.lang3.tuple.ImmutablePair;

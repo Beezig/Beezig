@@ -21,8 +21,8 @@ package eu.beezig.core.command.commands;
 
 import eu.beezig.core.Constants;
 import eu.beezig.core.command.Command;
-import eu.beezig.core.util.Message;
 import eu.beezig.core.util.SystemInfo;
+import eu.beezig.core.util.text.Message;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;

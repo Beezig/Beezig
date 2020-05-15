@@ -21,7 +21,7 @@ package eu.beezig.core.calc.ps;
 
 import eu.beezig.core.data.HiveTitle;
 import eu.beezig.core.util.Color;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 
 public class PlayerStatsProfile implements Comparable<PlayerStatsProfile> {
     private String displayName;

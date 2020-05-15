@@ -19,13 +19,18 @@
 
 package eu.beezig.core.command.commands;
 
+import com.google.common.base.Strings;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.autovote.AutovoteConfig;
 import eu.beezig.core.command.Command;
 import eu.beezig.core.util.Color;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
+import eu.beezig.core.util.text.TextButton;
+import eu.the5zig.mod.util.component.MessageComponent;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.IntStream;
 
 public class AutovoteCommand implements Command {
     private static final String usage = "/autovote [list/add/remove/place] [mode] (map) (place)";
@@ -49,9 +54,33 @@ public class AutovoteCommand implements Command {
         String mode = args[1];
         AutovoteConfig config = new AutovoteConfig();
         if("list".equalsIgnoreCase(opMode)) {
-            Message.info(Beezig.api().translate("msg.autovote.list", mode.toUpperCase(Locale.ROOT)));
-            config.getMaps(mode.toLowerCase(Locale.ROOT))
-                    .forEach(s -> Beezig.api().messagePlayer(String.format(" %s- %s%s", Color.primary(), Color.accent(), s)));
+            MessageComponent parent = new MessageComponent(Message.infoPrefix() + Beezig.api().translate("msg.autovote.list", mode.toUpperCase(Locale.ROOT)) + " ");
+            TextButton addBtn = new TextButton("btn.autovote.add.name", "btn.autovote.add.desc", "§a");
+            addBtn.doSuggestCommand("/autovote add " + mode + " ");
+            parent.getSiblings().add(addBtn);
+            Beezig.api().messagePlayerComponent(parent, false);
+            List<String> maps = config.getMaps(mode.toLowerCase(Locale.ROOT));
+            IntStream.range(0, maps.size())
+                    .forEach(i -> {
+                        MessageComponent parentMsg = new MessageComponent("");
+                        String s = maps.get(i);
+                        TextButton deleteBtn = new TextButton("✖", "btn.autovote.delete.desc", "§c");
+                        TextButton moveUpBtn = new TextButton("▲", "btn.autovote.up.desc", "§7");
+                        TextButton moveDownBtn = new TextButton("▼", "btn.autovote.down.desc", "§7");
+                        deleteBtn.doRunCommand("/autovote remove " + mode + " " + s);
+                        moveUpBtn.doRunCommand("/autovote place " + mode + " " + s + " " + i);
+                        moveDownBtn.doRunCommand("/autovote place " + mode + " " + s + " " + (i + 2));
+                        MessageComponent map = new MessageComponent(String.format(" %s%s", Color.primary(), s));
+                        parentMsg.getSiblings().add(deleteBtn);
+                        int spaces = 0;
+                        if(i > 0) parentMsg.getSiblings().add(moveUpBtn);
+                        else spaces += 4;
+                        if(i < maps.size() - 1) parentMsg.getSiblings().add(moveDownBtn);
+                        else spaces += 4;
+                        parentMsg.getSiblings().add(new MessageComponent(Strings.repeat(" ", spaces)));
+                        parentMsg.getSiblings().add(map);
+                        Beezig.api().messagePlayerComponent(parentMsg, false);
+                    });
             return true;
         }
         if(args.length < 3) {

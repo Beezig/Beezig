@@ -22,7 +22,7 @@ package eu.beezig.core.server;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.data.HiveTitle;
 import eu.beezig.core.util.CollectionUtils;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 

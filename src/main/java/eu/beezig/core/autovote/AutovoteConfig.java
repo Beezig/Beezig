@@ -21,8 +21,8 @@ package eu.beezig.core.autovote;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.FileUtils;
-import eu.beezig.core.util.Message;
-import eu.beezig.core.util.StringUtils;
+import eu.beezig.core.util.text.Message;
+import eu.beezig.core.util.text.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

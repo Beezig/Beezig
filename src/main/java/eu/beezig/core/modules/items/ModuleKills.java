@@ -21,7 +21,7 @@ package eu.beezig.core.modules.items;
 
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.HiveMode;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.modules.GameModeItem;
 
 public class ModuleKills extends GameModeItem<HiveMode> {

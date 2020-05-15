@@ -17,11 +17,12 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.util;
+package eu.beezig.core.util.text;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.Constants;
 import eu.beezig.core.config.Settings;
+import eu.beezig.core.util.Color;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -80,9 +81,12 @@ public class Message {
         return null;
     }
 
+    public static String infoPrefix() {
+        return String.format("§7▏ §aBeezig§7 ▏ %s", Color.primary());
+    }
+
     public static void info(String text) {
-        String prefix = String.format("§7▏ §aBeezig§7 ▏ %s", Color.primary());
-        Beezig.api().messagePlayer(prefix + text);
+        Beezig.api().messagePlayer(infoPrefix() + text);
     }
 
     public static void error(String text) {
