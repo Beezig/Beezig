@@ -19,13 +19,22 @@
 
 package eu.beezig.core.calc.ps;
 
+import eu.beezig.core.data.HiveTitle;
+import eu.beezig.core.util.Color;
+import eu.beezig.core.util.Message;
+
 public class PlayerStatsProfile implements Comparable<PlayerStatsProfile> {
     private String displayName;
     private Number stat;
+    private HiveTitle title;
 
     public PlayerStatsProfile(String displayName, Number stat) {
         this.displayName = displayName;
         this.stat = stat;
+    }
+
+    public void setTitle(HiveTitle title) {
+        this.title = title;
     }
 
     public Number getStat() {
@@ -39,5 +48,11 @@ public class PlayerStatsProfile implements Comparable<PlayerStatsProfile> {
     @Override
     public int compareTo(PlayerStatsProfile o) {
         return Double.compare(stat.doubleValue(), o.stat.doubleValue());
+    }
+
+    public String getFormat() {
+        if(title == null)
+            return String.format("%s §7-%s %s", displayName, Color.accent(), Message.ratio(stat));
+        return String.format("%s %s §7-%s %s", title.getColoredName(), displayName, Color.accent(), Message.ratio(stat));
     }
 }

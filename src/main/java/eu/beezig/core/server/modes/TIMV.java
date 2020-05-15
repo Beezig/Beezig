@@ -85,12 +85,14 @@ public class TIMV extends HiveMode implements IAutovote {
             messages.set(tIndex, new ImmutablePair<>("Traitor Points",
                     String.format("%s (%s%%%s)", rawPts, (ratio > 30 ? "§c" : "") + Message.ratio(ratio), Color.accent())));
         }
-        if(AdvRecUtils.needsAPI()) {
+        boolean record = Settings.TIMV_ADVREC_RECORD.get().getBoolean();
+        if(AdvRecUtils.needsAPI() || record) {
             AdvRecUtils.announceAPI();
             try {
                 TimvStats api = Profiles.timv(getAdvancedRecords().getTarget()).get();
                 messages.set(0, new ImmutablePair<>("Karma",
                         messages.get(0).getRight() + AdvRecUtils.getTitle(getTitleService(), api.getTitle(), karma)));
+                if(record) messages.add(new ImmutablePair<>("Karma Record", getAdvancedRecords().modifyValue((int) api.getMostPoints())));
             } catch (Exception e) {
                 e.printStackTrace();
             }

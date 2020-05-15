@@ -46,6 +46,10 @@ public class TitleService {
         return titles[index];
     }
 
+    public boolean isValid() {
+        return titles != null && titles.length > 0;
+    }
+
     public String getToNext(int index, int points) {
         if(getTitleAt(index).getRequiredPoints() == -1) return "Leaderboard Rank";
         if(++index >= titles.length) return "Highest Rank";

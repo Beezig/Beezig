@@ -20,12 +20,14 @@
 package eu.beezig.core.calc.ps;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.server.TitleService;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.Message;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.hiveapi.wrapper.player.GameStats;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -37,6 +39,12 @@ public class PlayerStatsCalculator {
         if(mode == null) {
             Message.error(Message.translate("error.ps.mode_not_found"));
             return;
+        }
+        try {
+            mode.setTitleService(new TitleService(modeName));
+        } catch (IOException e) {
+            Message.error(Message.translate("error.titles"));
+            e.printStackTrace();
         }
         String apiStat = mode.getApiKey(stat);
         if(apiStat == null) {
@@ -61,7 +69,7 @@ public class PlayerStatsCalculator {
                     .map(s -> mode.getProfile(displayNames, s, apiStat, stat))
                     .sorted()
                     .mapToDouble(p -> {
-                        Message.info(String.format("%s §7-%s %s", p.getDisplayName(), Color.accent(), Message.ratio(p.getStat())));
+                        Message.info(p.getFormat());
                         return p.getStat().doubleValue();
                     }).summaryStatistics();
                 Message.info(Beezig.api().translate("msg.ps.done", modeName.toUpperCase(Locale.ROOT),

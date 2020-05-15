@@ -19,8 +19,10 @@
 
 package eu.beezig.core.calc.ps;
 
+import eu.beezig.core.server.TitleService;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.hiveapi.wrapper.player.GameStats;
+import eu.beezig.hiveapi.wrapper.player.Titleable;
 import eu.beezig.hiveapi.wrapper.utils.json.JObject;
 
 import java.util.HashMap;
@@ -33,6 +35,7 @@ import java.util.function.Function;
 public class PlayerStatsMode {
     private HashMap<String, String> apiTable;
     private Function<String, CompletableFuture<? extends GameStats>> producer;
+    private TitleService titleService;
 
     PlayerStatsMode(HashMap<String, String> apiTable) {
         this.apiTable = apiTable;
@@ -61,6 +64,10 @@ public class PlayerStatsMode {
         return producer.apply(UUIDUtils.strip(uuid));
     }
 
+    public void setTitleService(TitleService titleService) {
+        this.titleService = titleService;
+    }
+
     PlayerStatsProfile getProfile(HashMap<String, String> displayNames, GameStats source, String key, String stat) {
         Number value = null;
         JObject src = source.getSource();
@@ -71,7 +78,10 @@ public class PlayerStatsMode {
             value = src.getLong(getApiKey("victories")) * 100D / (double) src.getLong(getApiKey("played"));
         }
         if(value == null) value = source.getSource().getInt(key);
-        return new PlayerStatsProfile(displayNames.get(source.getUUID()), value);
+        PlayerStatsProfile profile = new PlayerStatsProfile(displayNames.get(source.getUUID()), value);
+        if(source instanceof Titleable && titleService != null && titleService.isValid())
+            profile.setTitle(titleService.getTitle(((Titleable)source).getTitle()).getRight());
+        return profile;
     }
 
     Set<String> getAvailableStats() {
