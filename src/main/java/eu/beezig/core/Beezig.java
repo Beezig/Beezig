@@ -56,6 +56,17 @@ public class Beezig {
     private BeezigConfiguration config;
     private File beezigDir;
     private BeezigData data;
+    private boolean laby;
+
+    public Beezig(boolean laby, File labyDir) {
+        this.laby = laby;
+        if(labyDir != null)
+            this.beezigDir = new File(labyDir, "Beezig");
+    }
+
+    public Beezig() {
+        this(false, null);
+    }
 
     @EventHandler
     public void load(LoadEvent event) {
@@ -72,11 +83,14 @@ public class Beezig {
 
         // Init configuration
         try {
-            File minecraftDir = new File(Beezig.class.getProtectionDomain().getCodeSource().getLocation().toURI())
-                    .getParentFile().getParentFile().getParentFile();
-            beezigDir = new File(minecraftDir, "Beezig");
-            DirectoryMigration.migrateIfNeeded(new File(minecraftDir, "5zigtimv"), beezigDir);
-            if(!beezigDir.exists() && !beezigDir.mkdir()) throw new RuntimeException("Could not create config dir.");
+            if(beezigDir != null) {
+                File minecraftDir = new File(Beezig.class.getProtectionDomain().getCodeSource().getLocation().toURI())
+                        .getParentFile().getParentFile().getParentFile();
+                beezigDir = new File(minecraftDir, "Beezig");
+                DirectoryMigration.migrateIfNeeded(new File(minecraftDir, "5zigtimv"), beezigDir);
+                if (!beezigDir.exists() && !beezigDir.mkdir())
+                    throw new RuntimeException("Could not create config dir.");
+            }
             config = new BeezigConfiguration();
             config.load(new File(beezigDir, "config.json"));
         } catch(Exception e) {
@@ -123,6 +137,10 @@ public class Beezig {
 
     public BeezigData getData() {
         return data;
+    }
+
+    public boolean isLaby() {
+        return laby;
     }
 
     public File getBeezigDir() {

@@ -23,6 +23,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.Constants;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.Color;
+import eu.the5zig.mod.The5zigAPI;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -42,12 +43,10 @@ public class Message {
     static List<String> toSendQueue = new ArrayList<>();
 
     public static String getUserAgent() {
-        /*String framework = BeezigMain.laby ? "LabyMod" : "5zig";
-        /return "Beezig/" + BeezigMain.BEEZIG_VERSION + (BeezigMain.VERSION_HASH.isEmpty() ? ""
-                : "/" + BeezigMain.VERSION_HASH) + " (" + framework + "/" + The5zigAPI.getAPI().getModVersion() + " on "
+        String framework = Beezig.get().isLaby() ? "LabyMod" : "5zig";
+        return "Beezig/" + Constants.VERSION  + " (" + framework + "/" + The5zigAPI.getAPI().getModVersion() + " on "
                 + The5zigAPI.getAPI().getMinecraftVersion() + "; Forge=" + The5zigAPI.getAPI().isForgeEnvironment()
-                + "; BeezigForge=" + BeezigMain.hasExpansion + ")";*/
-        return String.format("Beezig/%s", Constants.VERSION);
+                + "; BeezigForge=" + /*BeezigMain.hasExpansion*/ false + ")";
     }
 
     public static String translate(String key) {
