@@ -83,7 +83,7 @@ public class Beezig {
 
         // Init configuration
         try {
-            if(beezigDir != null) {
+            if(beezigDir == null) {
                 File minecraftDir = new File(Beezig.class.getProtectionDomain().getCodeSource().getLocation().toURI())
                         .getParentFile().getParentFile().getParentFile();
                 beezigDir = new File(minecraftDir, "Beezig");
