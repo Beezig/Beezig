@@ -57,7 +57,8 @@ public class CommandManager {
      *
      * @return whether the command was found
      */
-    private static boolean dispatchCommand(String str) {
+    // Public access is required for BeezigLaby.
+    public static boolean dispatchCommand(String str) {
         String[] data = str.split(" ");
         String alias = data[0];
         Command cmdFound = null;

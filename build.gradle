@@ -1,9 +1,22 @@
 import org.apache.tools.ant.filters.EscapeUnicode
 
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "net.ltgt.gradle:gradle-errorprone-plugin:1.1.1"
+    }
+}
+
 plugins {
     id "java"
-    id "net.ltgt.errorprone" version "1.1.1"
 }
+
+if(!project.ext.has("laby"))
+    apply plugin: "net.ltgt.errorprone"
 
 archivesBaseName = "Beezig"
 version = "7.0.0"
@@ -27,8 +40,10 @@ repositories {
 }
 
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:latest.release")
-    errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
+    if(!project.ext.has("laby")) {
+        errorprone("com.google.errorprone:error_prone_core:latest.release")
+        errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
+    }
 
     embed group: 'pw.roccodev.beezig', name: 'hive-api-wrapper', version: '3.0-async-alpha'
     compile group: 'eu.5zigreborn', name: 'plugin-api', version: '3.14.1'
