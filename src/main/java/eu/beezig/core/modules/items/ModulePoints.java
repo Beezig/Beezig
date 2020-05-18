@@ -22,6 +22,7 @@ package eu.beezig.core.modules.items;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.modes.TIMV;
+import eu.beezig.core.util.ModuleUtils;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.modules.GameModeItem;
 
@@ -31,8 +32,15 @@ public class ModulePoints extends GameModeItem<HiveMode> {
     }
 
     @Override
+    public void registerSettings() {
+        getProperties().addSetting("rank", true);
+        getProperties().addSetting("nextrank", false);
+    }
+
+    @Override
     protected Object getValue(boolean b) {
-        return Message.formatNumber(b ? 123456 : getGameMode().getGlobal().getPoints());
+        if(b) return getDummyDisplay();
+        return Message.formatNumber(getGameMode().getGlobal().getPoints()) + getTitleDisplay();
     }
 
     @Override
@@ -43,5 +51,35 @@ public class ModulePoints extends GameModeItem<HiveMode> {
     @Override
     public String getTranslation() {
         return Modules.render() && getGameMode() instanceof TIMV ? "beezig.module.timv.karma" : "modules.item.hive_points";
+    }
+
+    private String getDummyDisplay() {
+        boolean showRank = (boolean) getProperties().getSetting("rank").get();
+        boolean nextRank = (boolean) getProperties().getSetting("nextrank").get();
+        StringBuilder sb = new StringBuilder();
+        sb.append(Message.formatNumber(123456));
+        if(!showRank) return sb.toString();
+        sb.append(" (Rank");
+        if(nextRank) {
+            sb.append(" / 100 to Next Rank");
+        }
+        sb.append(')');
+        return sb.toString();
+    }
+
+    private String getTitleDisplay() {
+        HiveMode mode = getGameMode();
+        if(mode == null || mode.getGlobal().getTitle() == null) return "";
+        boolean showRank = (boolean) getProperties().getSetting("rank").get();
+        if(!showRank) return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append(" (").append(mode.getGlobal().getTitle().getRight().getColoredName());
+        boolean nextRank = (boolean) getProperties().getSetting("nextrank").get();
+        if(nextRank && mode.getTitleService() != null && mode.getTitleService().isValid()) {
+            sb.append(" / ").append(mode.getTitleService().getToNext(mode.getGlobal().getTitle().getLeft(), mode.getGlobal().getPoints()));
+        }
+        sb.append(ModuleUtils.getTextFormatting(this));
+        sb.append(')');
+        return sb.toString();
     }
 }

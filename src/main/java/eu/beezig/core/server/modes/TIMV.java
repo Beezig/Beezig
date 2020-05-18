@@ -27,6 +27,7 @@ import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.util.CollectionUtils;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
@@ -49,11 +50,14 @@ public class TIMV extends HiveMode implements IAutovote {
             TimvStats api = Profiles.timv(name).join();
             GlobalStats stats = new GlobalStats();
             stats.setPoints((int) api.getPoints());
+            stats.setTitle(getTitleService().getTitle(api.getTitle()));
             return stats;
         });
         statsFetcher.setScoreboardComputer(lines -> {
             GlobalStats stats = new GlobalStats();
             stats.setPoints(lines.get("Karma"));
+            Profiles.timv(UUIDUtils.strip(Beezig.user().getId()))
+                    .thenAcceptAsync(api -> stats.setTitle(getTitleService().getTitle(api.getTitle())));
             return stats;
         });
         getAdvancedRecords().setExecutor(this::recordsExecutor);

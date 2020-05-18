@@ -22,8 +22,10 @@ package eu.beezig.core.server;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvancedRecords;
 import eu.beezig.core.autovote.AutovoteManager;
+import eu.beezig.core.data.HiveTitle;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 
@@ -135,6 +137,7 @@ public abstract class HiveMode extends GameMode {
         private Integer deaths;
         private Integer victories;
         private Integer played;
+        private Pair<Integer, HiveTitle> title;
 
         public Integer getPlayed() {
             return played;
@@ -174,6 +177,14 @@ public abstract class HiveMode extends GameMode {
 
         public void setPlayed(Integer played) {
             this.played = played;
+        }
+
+        public Pair<Integer, HiveTitle> getTitle() {
+            return title;
+        }
+
+        public void setTitle(Pair<Integer, HiveTitle> title) {
+            this.title = title;
         }
 
         @Override

@@ -19,8 +19,10 @@
 
 package eu.beezig.core.server.modes;
 
+import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvRecUtils;
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.BedStats;
@@ -38,6 +40,7 @@ public class BED extends HiveMode {
             stats.setDeaths((int) api.getDeaths());
             stats.setVictories((int) api.getVictories());
             stats.setPlayed((int) api.getGamesPlayed());
+            stats.setTitle(getTitleService().getTitle(api.getTitle()));
             return stats;
         });
         statsFetcher.setScoreboardComputer(lines -> {
@@ -47,6 +50,8 @@ public class BED extends HiveMode {
             stats.setDeaths(lines.get("Deaths"));
             stats.setVictories(lines.get("Victories"));
             stats.setPlayed(lines.get("Games Played"));
+            Profiles.bed(UUIDUtils.strip(Beezig.user().getId()))
+                    .thenAcceptAsync(api -> stats.setTitle(getTitleService().getTitle(api.getTitle())));
             return stats;
         });
         getAdvancedRecords().setExecutor(this::recordsExecutor);
