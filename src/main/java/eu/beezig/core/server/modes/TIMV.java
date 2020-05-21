@@ -43,6 +43,62 @@ public class TIMV extends HiveMode implements IAutovote {
 
     private List<MapData> maps;
     private MapData currentMapData;
+    private int traitorsDiscovered, traitorsMax, detectivesDiscovered, detectivesMax;
+    private Role role;
+
+    public int getTraitorsDiscovered() {
+        return traitorsDiscovered;
+    }
+
+    public int getTraitorsMax() {
+        return traitorsMax;
+    }
+
+    public void setTraitorsDiscovered(int traitorsDiscovered) {
+        this.traitorsDiscovered = traitorsDiscovered;
+    }
+
+    public void setDetectivesDiscovered(int detectivesDiscovered) {
+        this.detectivesDiscovered = detectivesDiscovered;
+    }
+
+    public int getDetectivesDiscovered() {
+        return detectivesDiscovered;
+    }
+
+    public void calculateRoles() {
+        int online = Beezig.api().getServerPlayers().size();
+        this.traitorsMax = online / 4;
+        this.traitorsMax = traitorsMax == 0 ? 1 : traitorsMax;
+        this.detectivesMax = online / 8;
+        this.detectivesMax = detectivesMax == 0 ? 1 : detectivesMax;
+    }
+
+    public int getMaxKarma(int online) {
+        if(role == null) return -1;
+        switch(role) {
+            case INNOCENT:
+                return 20 * (traitorsMax - traitorsDiscovered);
+            case DETECTIVE:
+                return 25 * (traitorsMax - traitorsDiscovered);
+            case TRAITOR:
+                return 20 * (detectivesMax - detectivesDiscovered)
+                        + 10 * (online - traitorsMax - (detectivesMax - detectivesDiscovered));
+            default:
+                return -1;
+        }
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        if(role.startsWith("A TRAITOR")) this.role = Role.TRAITOR;
+        else if(role.startsWith("A DETECTIVE")) this.role = Role.DETECTIVE;
+        else this.role = Role.INNOCENT;
+        calculateRoles();
+    }
 
     public TIMV() {
         statsFetcher.setScoreboardTitle("Your TIMV Stats");
@@ -156,5 +212,9 @@ public class TIMV extends HiveMode implements IAutovote {
     private static class MapData {
         public String map;
         public int enderchests;
+    }
+
+    public enum Role {
+        INNOCENT, DETECTIVE, TRAITOR
     }
 }

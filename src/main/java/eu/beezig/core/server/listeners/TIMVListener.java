@@ -43,5 +43,11 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
     public void onMatch(TIMV gameMode, String key, IPatternResult match) {
         if("timv.points_gain".equals(key)) gameMode.addPoints(Integer.parseInt(match.get(0), 10));
         else if("timv.points_loss".equals(key)) gameMode.addPoints(-Integer.parseInt(match.get(0), 10));
+        else if("timv.start".equals(key)) gameMode.setRole(match.get(0));
+        else if("timv.discovery".equals(key)) {
+            String role = match.get(0);
+            if("a Traitor".equals(role)) gameMode.setTraitorsDiscovered(gameMode.getTraitorsDiscovered() + 1);
+            else if("a Detective".equals(role)) gameMode.setDetectivesDiscovered(gameMode.getDetectivesDiscovered() + 1);
+        }
     }
 }
