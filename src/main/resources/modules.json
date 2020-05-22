@@ -30,6 +30,12 @@
         },
         {
           "type": "hive_game"
+        },
+        {
+          "type": "timv_gamekarma"
+        },
+        {
+          "type": "timv_traitors"
         }
       ]
     }

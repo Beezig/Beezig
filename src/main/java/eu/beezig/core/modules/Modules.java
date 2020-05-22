@@ -21,7 +21,7 @@ package eu.beezig.core.modules;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.modules.items.*;
-import eu.beezig.core.modules.items.timv.ModuleMostKarma;
+import eu.beezig.core.modules.items.timv.ModuleGameKarma;
 import eu.beezig.core.modules.items.timv.ModuleTraitorsDiscovered;
 import eu.beezig.core.server.ServerHive;
 import eu.the5zig.mod.ModAPI;
@@ -41,7 +41,7 @@ public class Modules {
 
         // Trouble in Mineville
         api.registerModuleItem(plugin, "timv_traitors", ModuleTraitorsDiscovered.class, HIVE);
-        api.registerModuleItem(plugin, "timv_mostkarma", ModuleMostKarma.class, HIVE);
+        api.registerModuleItem(plugin, "timv_gamekarma", ModuleGameKarma.class, HIVE);
     }
 
     public static boolean render() {

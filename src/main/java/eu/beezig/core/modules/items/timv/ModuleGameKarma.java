@@ -23,14 +23,25 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.server.modes.TIMV;
 import eu.the5zig.mod.modules.GameModeItem;
 
-public class ModuleMostKarma extends GameModeItem<TIMV> {
-    public ModuleMostKarma() {
+public class ModuleGameKarma extends GameModeItem<TIMV> {
+    public ModuleGameKarma() {
         super(TIMV.class);
     }
 
     @Override
+    public void registerSettings() {
+        getProperties().addSetting("potential", true);
+    }
+
+    @Override
     protected Object getValue(boolean b) {
-        return b ? 210 : getGameMode().getMaxKarma(Beezig.api().getServerPlayers().size());
+        boolean showPotentialKarma = (boolean) getProperties().getSetting("potential").get();
+        if(showPotentialKarma) {
+            if(!Beezig.api().isInWorld()) return null;
+            return String.format("%d/%d Karma", b ? 0 : getGameMode().getPoints(),
+                    b ? 210 : getGameMode().getPoints() + getGameMode().getMaxKarma(Beezig.api().getServerPlayers().size()));
+        }
+        return (b ? 210 : getGameMode().getPoints()) + " Karma";
     }
 
     @Override
@@ -41,6 +52,6 @@ public class ModuleMostKarma extends GameModeItem<TIMV> {
 
     @Override
     public String getTranslation() {
-        return "beezig.module.timv.mostkarma";
+        return "beezig.module.game";
     }
 }

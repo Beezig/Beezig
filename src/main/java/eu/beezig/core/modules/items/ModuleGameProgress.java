@@ -33,14 +33,12 @@ public class ModuleGameProgress extends GameModeItem<HiveMode> {
     @Override
     protected Object getValue(boolean b) {
         if(b) return "123 Points";
-        return String.format("%s %s", getGameMode().getPoints(), Message.translate(getGameMode() instanceof TIMV
-                ? "beezig.module.timv.karma"
-                : "modules.item.hive_points"));
+        return String.format("%s %s", getGameMode().getPoints(), Message.translate("modules.item.hive_points"));
     }
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render() && (getGameMode() != null && getGameMode().getPoints() != 0);
+        return dummy || Modules.render() && getGameMode() != null && (!(getGameMode() instanceof TIMV) && getGameMode().getPoints() != 0);
     }
 
     @Override

@@ -43,7 +43,7 @@ public class TIMV extends HiveMode implements IAutovote {
 
     private List<MapData> maps;
     private MapData currentMapData;
-    private int traitorsDiscovered, traitorsMax, detectivesDiscovered, detectivesMax;
+    private int traitorsDiscovered, traitorsMax, detectivesDiscovered, detectivesMax, deadTraitors;
     private Role role;
 
     public int getTraitorsDiscovered() {
@@ -56,6 +56,14 @@ public class TIMV extends HiveMode implements IAutovote {
 
     public void setTraitorsDiscovered(int traitorsDiscovered) {
         this.traitorsDiscovered = traitorsDiscovered;
+    }
+
+    public void setDeadTraitors(int deadTraitors) {
+        this.deadTraitors = deadTraitors;
+    }
+
+    public int getDeadTraitors() {
+        return deadTraitors;
     }
 
     public void setDetectivesDiscovered(int detectivesDiscovered) {
@@ -83,7 +91,7 @@ public class TIMV extends HiveMode implements IAutovote {
                 return 25 * (traitorsMax - traitorsDiscovered);
             case TRAITOR:
                 return 20 * (detectivesMax - detectivesDiscovered)
-                        + 10 * (online - traitorsMax - (detectivesMax - detectivesDiscovered));
+                        + 10 * (online - (traitorsMax - deadTraitors) - (detectivesMax - detectivesDiscovered));
             default:
                 return -1;
         }

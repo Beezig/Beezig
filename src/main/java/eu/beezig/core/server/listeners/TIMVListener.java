@@ -49,5 +49,6 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             if("a Traitor".equals(role)) gameMode.setTraitorsDiscovered(gameMode.getTraitorsDiscovered() + 1);
             else if("a Detective".equals(role)) gameMode.setDetectivesDiscovered(gameMode.getDetectivesDiscovered() + 1);
         }
+        else if("timv.tdeath".equals(key)) gameMode.setDeadTraitors(gameMode.getDeadTraitors() + 1);
     }
 }
