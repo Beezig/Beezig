@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -22,6 +22,7 @@ package eu.beezig.core.server.listeners;
 import eu.beezig.core.server.modes.TIMV;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.IPatternResult;
+import org.apache.commons.lang3.StringUtils;
 
 public class TIMVListener extends AbstractGameListener<TIMV> {
     @Override
@@ -41,7 +42,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
 
     @Override
     public void onMatch(TIMV gameMode, String key, IPatternResult match) {
-        if("timv.points_gain".equals(key)) gameMode.addPoints(Integer.parseInt(match.get(0), 10));
+        if("timv.points_gain".equals(key)) gameMode.addKarma(Integer.parseInt(match.get(0), 10));
         else if("timv.points_loss".equals(key)) gameMode.addPoints(-Integer.parseInt(match.get(0), 10));
         else if("timv.start".equals(key)) gameMode.setRole(match.get(0));
         else if("timv.discovery".equals(key)) {
@@ -50,5 +51,8 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             else if("a Detective".equals(role)) gameMode.setDetectivesDiscovered(gameMode.getDetectivesDiscovered() + 1);
         }
         else if("timv.tdeath".equals(key)) gameMode.setDeadTraitors(gameMode.getDeadTraitors() + 1);
+        else if("timv.pass".equals(key)) gameMode.setPass(StringUtils.capitalize(match.get(0)));
+        else if("timv.pass.revert".equals(key)) gameMode.setPass("No");
+        else if("timv.win".equals(key)) gameMode.setWon();
     }
 }

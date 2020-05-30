@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *

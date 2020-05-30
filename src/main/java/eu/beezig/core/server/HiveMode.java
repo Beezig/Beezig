@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -23,11 +23,13 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvancedRecords;
 import eu.beezig.core.autovote.AutovoteManager;
 import eu.beezig.core.data.HiveTitle;
+import eu.beezig.core.logging.GameLogger;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public abstract class HiveMode extends GameMode {
     private int points;
@@ -44,6 +46,7 @@ public abstract class HiveMode extends GameMode {
     private AutovoteManager autovoteManager;
     private AdvancedRecords advancedRecords;
     private TitleService titleService;
+    protected GameLogger logger;
 
     public HiveMode() {
         global = new GlobalStats();
@@ -61,6 +64,7 @@ public abstract class HiveMode extends GameMode {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        logger = new GameLogger(getIdentifier().toLowerCase(Locale.ROOT));
     }
 
     public AdvancedRecords getAdvancedRecords() {

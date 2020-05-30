@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -43,8 +43,9 @@ public class TIMV extends HiveMode implements IAutovote {
 
     private List<MapData> maps;
     private MapData currentMapData;
-    private int traitorsDiscovered, traitorsMax, detectivesDiscovered, detectivesMax, deadTraitors;
+    private int traitorsDiscovered, traitorsMax, detectivesDiscovered, detectivesMax, deadTraitors, rolePoints;
     private Role role;
+    private String pass = "No";
 
     public int getTraitorsDiscovered() {
         return traitorsDiscovered;
@@ -97,6 +98,10 @@ public class TIMV extends HiveMode implements IAutovote {
         }
     }
 
+    public void setPass(String role) {
+        this.pass = role;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -125,6 +130,8 @@ public class TIMV extends HiveMode implements IAutovote {
             return stats;
         });
         getAdvancedRecords().setExecutor(this::recordsExecutor);
+        logger.setHeaders("Role", "Karma", "Map", "Role Points", "Innocent Points", "Detective Points",
+                "Traitor Points", "GameID", "Passed?", "Timestamp");
     }
 
     private void recordsExecutor() {
@@ -199,7 +206,8 @@ public class TIMV extends HiveMode implements IAutovote {
 
     @Override
     public void end() {
-
+        logger.log(org.apache.commons.lang3.StringUtils.capitalize(role.name().toLowerCase()), getPoints(),
+                getMap(), rolePoints, 0, 0, 0, "GID not supported", pass, System.currentTimeMillis());
     }
 
     @Override
@@ -215,6 +223,15 @@ public class TIMV extends HiveMode implements IAutovote {
     @Override
     public boolean isLastRandom() {
         return true;
+    }
+
+    public void setWon() {
+        rolePoints += 20;
+    }
+
+    public void addKarma(int karma) {
+        addPoints(karma);
+        rolePoints += karma / 10;
     }
 
     private static class MapData {

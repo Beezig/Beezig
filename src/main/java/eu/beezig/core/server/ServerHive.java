@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -118,6 +118,13 @@ public class ServerHive extends ServerInstance {
                 ((HiveMode)gameMode).end();
             }
             getGameListener().switchLobby(null);
+        }
+
+        @Override
+        public void onServerDisconnect(GameMode gameMode) {
+            if(gameMode instanceof HiveMode) {
+                ((HiveMode)gameMode).end();
+            }
         }
 
         @Override
