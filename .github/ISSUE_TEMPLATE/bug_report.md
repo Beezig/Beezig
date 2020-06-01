@@ -1,17 +1,22 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report to help us improve Beezig
+title: ''
+labels: bug
+assignees: ''
 
 ---
 
-**Describe the bug**
+**Describe the Bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+**How to Reproduce**
 Steps to reproduce the behavior:
+- Step one
+- Step two
+- ...
 
-
-**Expected behavior**
+**Expected Behavior**
 A clear and concise description of what you expected to happen.
 
 **Screenshots**
