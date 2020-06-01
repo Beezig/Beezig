@@ -62,6 +62,10 @@ public class StatsFetcher {
         this.scoreboardTitle = Pattern.compile(scoreboardTitle);
     }
 
+    public void setScoreboardTitle(Pattern scoreboardTitle) {
+        this.scoreboardTitle = scoreboardTitle;
+    }
+
     public void setTimeout(long timeout) {
         this.timeout = timeout;
     }

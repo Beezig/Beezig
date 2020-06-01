@@ -206,7 +206,7 @@ public class TIMV extends HiveMode implements IAutovote {
 
     @Override
     public void end() {
-        logger.log(org.apache.commons.lang3.StringUtils.capitalize(role.name().toLowerCase()), getPoints(),
+        logger.log(role == null ? "None" : org.apache.commons.lang3.StringUtils.capitalize(role.name().toLowerCase()), getPoints(),
                 getMap(), rolePoints, 0, 0, 0, "GID not supported", pass, System.currentTimeMillis());
     }
 

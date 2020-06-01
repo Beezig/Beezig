@@ -45,6 +45,9 @@ public class BEDListener extends AbstractGameListener<BED> {
                 if(action.startsWith("Killing")) {
                     gameMode.addKills(1);
                 }
+                else if(action.startsWith("Destroying")) {
+                    gameMode.setBedsDestroyed(gameMode.getBedsDestroyed() + 1);
+                }
             }
         }
         else if("bed.kill.farm".equals(key)) gameMode.addKills(1);

@@ -47,6 +47,7 @@ public abstract class HiveMode extends GameMode {
     private AdvancedRecords advancedRecords;
     private TitleService titleService;
     protected GameLogger logger;
+    private boolean hasVoted;
 
     public HiveMode() {
         global = new GlobalStats();
@@ -65,6 +66,14 @@ public abstract class HiveMode extends GameMode {
             e.printStackTrace();
         }
         logger = new GameLogger(getIdentifier().toLowerCase(Locale.ROOT));
+    }
+
+    public boolean hasVoted() {
+        return hasVoted;
+    }
+
+    public void setVoted(boolean hasVoted) {
+        this.hasVoted = hasVoted;
     }
 
     public AdvancedRecords getAdvancedRecords() {

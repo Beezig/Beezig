@@ -44,7 +44,7 @@ public class GameLogger {
             boolean writeHeaders = false;
             if (!file.exists()) {
                 writeHeaders = true;
-                file.mkdirs();
+                file.getParentFile().mkdirs();
                 file.createNewFile();
             }
             FileWriter writer = new FileWriter(file, true);
@@ -57,7 +57,8 @@ public class GameLogger {
 
             for (Object s : toLog) {
                 if (s != null) csv.write(s.toString());
-                else csv.write("Null string?");
+                if(s instanceof Boolean) csv.write((boolean)s ? "Yes" : "No");
+                else csv.write("Unknown");
             }
             csv.endRecord();
         } catch (Exception e) {

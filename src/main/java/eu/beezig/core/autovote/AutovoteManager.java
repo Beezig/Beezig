@@ -50,6 +50,7 @@ public class AutovoteManager {
             Beezig.logger.warn(String.format("Mode class %s tried to autovote, but it doesn't implement IAutovote.", mode.getClass().getName()));
             return;
         }
+        if(mode.hasVoted()) return;
         String index = messageIn.get(0);
         String mapName = messageIn.get(1);
         String votes = messageIn.get(2);
@@ -62,6 +63,8 @@ public class AutovoteManager {
     }
 
     private void run() {
+        if(mode.hasVoted()) return;
+        mode.setVoted(true);
         Beezig.logger.debug(String.format("[Autovote] Parsed maps: %s", String.join(", ", maps.keySet())));
         String modeName = mode.getIdentifier();
         ArrayList<String> savedMaps;

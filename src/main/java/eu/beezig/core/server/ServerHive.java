@@ -108,13 +108,14 @@ public class ServerHive extends ServerInstance {
             else if("tokens.boost".equals(key)) ServerHive.this.tokens += Integer.parseInt(match.get(0), 10);
             else if("map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).setMap(match.get(0));
             else if("autovote.map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).getAutovoteManager().parse(match);
+            else if(key.endsWith(".setstate")) gameMode.setState(GameState.GAME);
             // Advanced Records
             if(gameMode instanceof HiveMode) match.ignoreMessage(((HiveMode) gameMode).getAdvancedRecords().parseMessage(key, match));
         }
 
         @Override
         public void onServerConnect(GameMode gameMode) {
-            if(gameMode instanceof HiveMode) {
+            if(gameMode instanceof HiveMode && gameMode.getState() != GameState.LOBBY) {
                 ((HiveMode)gameMode).end();
             }
             getGameListener().switchLobby(null);
@@ -122,7 +123,7 @@ public class ServerHive extends ServerInstance {
 
         @Override
         public void onServerDisconnect(GameMode gameMode) {
-            if(gameMode instanceof HiveMode) {
+            if(gameMode instanceof HiveMode && gameMode.getState() != GameState.LOBBY) {
                 ((HiveMode)gameMode).end();
             }
         }
