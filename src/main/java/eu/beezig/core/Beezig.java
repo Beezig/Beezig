@@ -25,6 +25,7 @@ import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.config.BeezigConfiguration;
 import eu.beezig.core.data.BeezigData;
 import eu.beezig.core.modules.Modules;
+import eu.beezig.core.net.BeezigNetManager;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.DirectoryMigration;
 import eu.beezig.core.util.text.Message;
@@ -56,6 +57,7 @@ public class Beezig {
     private BeezigConfiguration config;
     private File beezigDir;
     private BeezigData data;
+    private BeezigNetManager networkManager;
     private boolean laby;
 
     public Beezig(boolean laby, File labyDir) {
@@ -112,6 +114,9 @@ public class Beezig {
         Modules.register(this, api);
         CommandManager.init(this);
 
+        networkManager = new BeezigNetManager();
+        networkManager.connect();
+
         logger.info(String.format("Load complete in %d ms.", System.currentTimeMillis() - timeStart));
     }
 
@@ -147,6 +152,10 @@ public class Beezig {
         return beezigDir;
     }
 
+    public BeezigNetManager getNetworkManager() {
+        return networkManager;
+    }
+
     public static Beezig get() {
         return instance;
     }
@@ -161,5 +170,9 @@ public class Beezig {
 
     public static GameProfile user() {
         return instance.api.getGameProfile();
+    }
+
+    public static BeezigNetManager net() {
+        return instance.networkManager;
     }
 }
