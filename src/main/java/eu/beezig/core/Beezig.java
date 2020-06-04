@@ -26,6 +26,7 @@ import eu.beezig.core.config.BeezigConfiguration;
 import eu.beezig.core.data.BeezigData;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.net.BeezigNetManager;
+import eu.beezig.core.notification.NotificationManager;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.DirectoryMigration;
 import eu.beezig.core.util.text.Message;
@@ -58,6 +59,7 @@ public class Beezig {
     private File beezigDir;
     private BeezigData data;
     private BeezigNetManager networkManager;
+    private NotificationManager notificationManager;
     private boolean laby;
 
     public Beezig(boolean laby, File labyDir) {
@@ -113,6 +115,7 @@ public class Beezig {
         api.registerServerInstance(this, ServerHive.class);
         Modules.register(this, api);
         CommandManager.init(this);
+        notificationManager = new NotificationManager();
 
         networkManager = new BeezigNetManager();
         networkManager.connect();
@@ -154,6 +157,10 @@ public class Beezig {
 
     public BeezigNetManager getNetworkManager() {
         return networkManager;
+    }
+
+    public NotificationManager getNotificationManager() {
+        return notificationManager;
     }
 
     public static Beezig get() {
