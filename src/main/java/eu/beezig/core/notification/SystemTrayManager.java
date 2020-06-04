@@ -24,12 +24,11 @@ import eu.beezig.core.Beezig;
 import java.awt.*;
 
 public class SystemTrayManager {
-    private SystemTray tray;
     private TrayIcon mainIcon;
     private boolean supported;
 
     public SystemTrayManager() {
-        tray = SystemTray.getSystemTray();
+        SystemTray tray = SystemTray.getSystemTray();
         mainIcon = new TrayIcon(Toolkit.getDefaultToolkit().createImage(Beezig.class.getResource("/img/logo.png")), "Beezig");
         mainIcon.setImageAutoSize(true);
         mainIcon.setToolTip("Beezig");
@@ -42,6 +41,7 @@ public class SystemTrayManager {
     }
 
     public void sendNotification(IncomingMessage message) {
+        Beezig.api().playSound("note.pling", 1f);
         if(!supported) return;
         mainIcon.displayMessage(Beezig.api().translate("msg.notify.incoming", message.getSender()), message.getMessage(),
                 TrayIcon.MessageType.INFO);

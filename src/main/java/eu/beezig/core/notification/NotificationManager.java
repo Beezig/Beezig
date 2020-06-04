@@ -74,7 +74,9 @@ public class NotificationManager {
     }
 
     public void printCachedMessages() {
-        Message.info(Message.translate("msg.notify.list"));
+        if(ignoredMessages.size() == 0) return;
+        Message.info(Beezig.api().translate("msg.notify.list",
+                Color.accent() + Message.formatNumber(ignoredMessages.size()) + Color.primary()));
         while(!ignoredMessages.isEmpty()) {
             IncomingMessage msg = ignoredMessages.remove(0);
             Beezig.api().messagePlayer(Color.primary() + " - " + Beezig.api().translate(msg.getType() == MessageType.PRIVATE
