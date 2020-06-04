@@ -21,11 +21,13 @@ package eu.beezig.core.notification;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
+import eu.beezig.core.notification.gui.IncomingMessagesGui;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.IPatternResult;
 import org.lwjgl.opengl.Display;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,8 +35,10 @@ public class NotificationManager {
     private List<IncomingMessage> ignoredMessages = new LinkedList<>();
     private boolean doNotDisturb;
     private SystemTrayManager tray;
+    private IncomingMessagesGui guiHandle;
 
     public NotificationManager() {
+        this.guiHandle = new IncomingMessagesGui();
         this.tray = new SystemTrayManager();
     }
 
@@ -52,13 +56,14 @@ public class NotificationManager {
             tray.sendNotification(new IncomingMessage(type, sender, message));
         }
         if(doNotDisturb) {
+            MessageIgnoreLevel level = (MessageIgnoreLevel) Settings.MSG_DND_MODE.get().getValue();
             // If target contains a space, the message is a broadcast (PRIVATE| RoccoDev -> 7 friends)
-            if(isSenderSelf && !target.contains(" ")) {
+            if(isSenderSelf && level == MessageIgnoreLevel.IGNORE_ALERT && !target.contains(" ")) {
                 match.ignoreMessage(true);
                 return;
             }
             else if(isSenderSelf) return;
-            switch((MessageIgnoreLevel) Settings.MSG_DND_MODE.get().getValue()) {
+            switch(level) {
                 case IGNORE:
                     ignoredMessages.add(new IncomingMessage(type, sender, message));
                     break;
@@ -67,10 +72,23 @@ public class NotificationManager {
                     Beezig.api().sendPlayerMessage("/r " + Settings.MSG_DND_ALERT.get().getString());
                     break;
                 case SEPARATE:
+                    guiHandle.ensureOpen();
+                    guiHandle.getMessages().addElement(Beezig.api().translate(type == MessageType.PRIVATE
+                                    ? "msg.notify.private" : "msg.notify.broadcast",
+                            sender, Message.date(new Date()), message));
                     break;
             }
             match.ignoreMessage(true);
         }
+    }
+
+    private void onDndEnable() {
+        guiHandle.ensureOpen();
+    }
+
+    private void onDndDisable() {
+        printCachedMessages();
+        guiHandle.setVisible(false);
     }
 
     public void printCachedMessages() {
@@ -87,6 +105,8 @@ public class NotificationManager {
     }
 
     public void setDoNotDisturb(boolean doNotDisturb) {
+        if(doNotDisturb) onDndEnable();
+        else onDndEnable();
         this.doNotDisturb = doNotDisturb;
     }
 

@@ -44,7 +44,6 @@ public class DoNotDisturbCommand implements Command {
             else if("false".equalsIgnoreCase(value) || "off".equalsIgnoreCase(value)) dnd = false;
         }
         Beezig.get().getNotificationManager().setDoNotDisturb(dnd);
-        if(!dnd) Beezig.get().getNotificationManager().printCachedMessages();
         Message.info(Message.translate(dnd ? "msg.notify.on" : "msg.notify.off"));
         return true;
     }
