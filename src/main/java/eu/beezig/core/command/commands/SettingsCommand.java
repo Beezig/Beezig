@@ -28,6 +28,7 @@ import eu.the5zig.mod.util.component.MessageComponent;
 import eu.the5zig.mod.util.component.style.MessageAction;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class SettingsCommand implements Command {
@@ -59,9 +60,9 @@ public class SettingsCommand implements Command {
             Message.info(String.format("%s%s %s(%s):%s %s", Color.accent(), setting.getName(), Color.primary(),
                     setting.getDescription(), Color.primary(), setting.get().getString()));
         }
-        else if(args.length == 2) {
+        else {
             if((setting = getSetting(args[0])) == null) return true;
-            if(!Beezig.cfg().set(setting, args[1])) return true;
+            if(!Beezig.cfg().set(setting, String.join(" ", Arrays.copyOfRange(args, 1, args.length)))) return true;
             try {
                 Beezig.cfg().save();
                 Message.info(Message.translate("msg.config.save"));
@@ -69,9 +70,6 @@ public class SettingsCommand implements Command {
                 Message.error(Message.translate("error.data_read"));
                 e.printStackTrace();
             }
-        }
-        else {
-            sendUsage("/bsettings (setting_id) (value)");
         }
         return true;
     }
