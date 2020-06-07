@@ -24,6 +24,7 @@ import eu.beezig.core.ActiveGame;
 import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
 import eu.beezig.core.Log;
+import eu.beezig.core.games.logging.GameLogger;
 import eu.beezig.core.hiveapi.APIValues;
 import eu.beezig.core.hiveapi.stuff.timv.TIMVMap;
 import eu.beezig.core.hiveapi.stuff.timv.TIMVRank;
@@ -84,6 +85,7 @@ public class TIMV extends GameMode {
     public static String role;
 
     // CSV Stuff
+    public static GameLogger logger;
     public static int tPoints;
     public static int dPoints;
     public static int iPoints;
@@ -152,63 +154,33 @@ public class TIMV extends GameMode {
      * @return whether the writer has written the file.
      */
     public static boolean writeCsv() {
-        The5zigAPI.getLogger().info("writing");
         // Prevent from writing a line twice
-        if (role == null)
+        if (role == null || role.isEmpty())
             return false;
-        if (role.isEmpty())
-            return false;
-        The5zigAPI.getLogger().info("writing2");
-        String mapName = mapStr == null ? "Unknown Map" : mapStr;
-        String[] entries = {role, karmaCounter + "", mapName};
-        CsvWriter writer;
 
-        boolean alreadyExists = new File(BeezigMain.mcFile.getAbsolutePath() + "/timv/games.csv").exists();
-        if (!alreadyExists) {
-            try {
-                new File(BeezigMain.mcFile.getAbsolutePath() + "/timv/games.csv").createNewFile();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        try {
-            writer = new CsvWriter(new FileWriter(BeezigMain.mcFile.getAbsolutePath() + "/timv/games.csv", true), ',');
+        logger = new GameLogger(BeezigMain.mcFile + "/timv/games.csv");
+        logger.setHeaders(new String[] {
+                "role",
+                "karma",
+                "map",
+                "points",
+                "i-points",
+                "d-points",
+                "t-points",
+                "gameId",
+                "pass",
+                "timestamp"
+        });
 
-            if (!alreadyExists) {
-                // Create the header
-                writer.write("role");
-                writer.write("karma");
-                writer.write("map");
-                writer.write("points");
-                writer.write("i-points");
-                writer.write("d-points");
-                writer.write("t-points");
-                writer.write("gameId");
-                writer.write("pass");
-                writer.write("timestamp");
-                writer.endRecord();
-            }
+        logger.logGame(role,
+                karmaCounter,
+                mapStr == null ? "Unknown Map" : mapStr,
+                iPoints + dPoints + tPoints,
+                iPoints, dPoints, tPoints,
+                gameID,
+                "Passed: " + (currentPassStatus == 0 ? "No" : (currentPassStatus == 1 ? "Traitor" : "Detective")),
+                System.currentTimeMillis());
 
-            writer.write(role);
-            writer.write(karmaCounter + "");
-            writer.write(mapStr == null ? "Unknown Map" : mapStr);
-            writer.write(iPoints + dPoints + tPoints + "");
-            writer.write(iPoints + "");
-            writer.write(dPoints + "");
-            writer.write(tPoints + "");
-            writer.write(gameID);
-            writer.write("Passed: " + (currentPassStatus == 0 ? "No"
-                    : (currentPassStatus == 1 ? "Traitor" : "Detective")));
-            writer.write(System.currentTimeMillis() + "");
-            writer.endRecord();
-            writer.close();
-
-        } catch (Exception e) {
-            if (The5zigAPI.getAPI().isInWorld())
-                The5zigAPI.getAPI().messagePlayer(Log.error + "Failed to write game csv.");
-            e.printStackTrace();
-        }
         role = null;
         resetCounter();
         TIMV.activeMap = null;
