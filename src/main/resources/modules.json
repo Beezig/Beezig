@@ -6,6 +6,12 @@
       "items": [
         {
           "type": "hive_tokens"
+        },
+        {
+          "type": "hive_medals"
+        },
+        {
+          "type": "hive_lobby"
         }
       ]
     },

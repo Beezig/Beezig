@@ -28,6 +28,7 @@ import eu.beezig.core.modules.Modules;
 import eu.beezig.core.net.BeezigNetManager;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.DirectoryMigration;
+import eu.beezig.core.util.task.WorldTaskManager;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.HiveWrapper;
 import eu.the5zig.mod.ModAPI;
@@ -58,6 +59,7 @@ public class Beezig {
     private File beezigDir;
     private BeezigData data;
     private BeezigNetManager networkManager;
+    private WorldTaskManager worldTaskManager;
     private boolean laby;
 
     public Beezig(boolean laby, File labyDir) {
@@ -80,6 +82,8 @@ public class Beezig {
         instance = this;
         api = The5zigAPI.getAPI();
         asyncExecutor = Executors.newFixedThreadPool(5);
+        worldTaskManager = new WorldTaskManager();
+        Beezig.api().getPluginManager().registerListener(this, worldTaskManager);
         HiveWrapper.setAsyncExecutor(asyncExecutor);
         HiveWrapper.setUserAgent(Message.getUserAgent());
 
@@ -154,6 +158,10 @@ public class Beezig {
 
     public BeezigNetManager getNetworkManager() {
         return networkManager;
+    }
+
+    public WorldTaskManager getWorldTaskManager() {
+        return worldTaskManager;
     }
 
     public static Beezig get() {

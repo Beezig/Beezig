@@ -23,6 +23,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.server.listeners.BEDListener;
 import eu.beezig.core.server.listeners.TIMVListener;
 import eu.beezig.core.util.UUIDUtils;
+import eu.beezig.core.util.task.WorldTask;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.HivePlayer;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
@@ -33,10 +34,24 @@ import java.util.Locale;
 public class ServerHive extends ServerInstance {
 
     private long tokens;
+    private int medals;
+    private String lobby;
     private HivePlayer profile;
 
     public long getTokens() {
         return tokens;
+    }
+
+    public int getMedals() {
+        return medals;
+    }
+
+    public String getLobby() {
+        return lobby;
+    }
+
+    public void setLobby(String lobby) {
+        this.lobby = lobby;
     }
 
     public HivePlayer getProfile() {
@@ -65,6 +80,7 @@ public class ServerHive extends ServerInstance {
         Profiles.global(UUIDUtils.strip(Beezig.user().getId())).thenAcceptAsync(profile -> {
             this.profile = profile;
             this.tokens = profile.getTokens();
+            this.medals = (int) profile.getMedals();
             Beezig.logger.info(String.format("Loaded profile for current user. Data as of %s", Message.date(profile.getCachedAt())));
         }).exceptionally(e -> {
             Message.error(Message.translate("error.token_fetch"));
@@ -103,22 +119,36 @@ public class ServerHive extends ServerInstance {
             if(key == null) return;
             Beezig.logger.debug(String.format("[ServerHive] Matched key %s, %d groups", key, match.size()));
 
-            if(gameMode == null && key.startsWith("join.")) getGameListener().switchLobby(key.replace("join.", ""));
+            if(gameMode == null && key.startsWith("join.")) {
+                WorldTask.submit(() -> Beezig.api().sendPlayerMessage("/whereami"));
+                getGameListener().switchLobby(key.replace("join.", ""));
+            }
             else if("tokens".equals(key)) ServerHive.this.tokens = Integer.parseInt(match.get(1), 10);
             else if("tokens.boost".equals(key)) ServerHive.this.tokens += Integer.parseInt(match.get(0), 10);
+            else if("medals".equals(key)) ServerHive.this.medals = Integer.parseInt(match.get(0), 10);
+            else if("lobby".equals(key)) ServerHive.this.setLobby(match.get(0));
             else if("map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).setMap(match.get(0));
             else if("autovote.map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).getAutovoteManager().parse(match);
-            else if(key.endsWith(".setstate")) gameMode.setState(GameState.GAME);
+            else if(key.endsWith(".setstate")) {
+                gameMode.setState(GameState.GAME);
+                WorldTask.submit(() -> Beezig.api().sendPlayerMessage("/gameid"));
+            }
             // Advanced Records
             if(gameMode instanceof HiveMode) match.ignoreMessage(((HiveMode) gameMode).getAdvancedRecords().parseMessage(key, match));
         }
 
         @Override
         public void onServerConnect(GameMode gameMode) {
-            if(gameMode instanceof HiveMode && gameMode.getState() != GameState.LOBBY) {
-                ((HiveMode)gameMode).end();
+            if(gameMode instanceof HiveMode) {
+                WorldTask.submit(() -> Beezig.api().sendPlayerMessage("/whereami"));
+                if(gameMode.getState() != GameState.LOBBY) ((HiveMode)gameMode).end();
             }
             getGameListener().switchLobby(null);
+        }
+
+        @Override
+        public void onServerJoin() {
+            WorldTask.submit(() -> Beezig.api().sendPlayerMessage("/whereami"));
         }
 
         @Override
