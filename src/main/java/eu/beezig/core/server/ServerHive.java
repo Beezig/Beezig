@@ -127,6 +127,7 @@ public class ServerHive extends ServerInstance {
             else if("tokens.boost".equals(key)) ServerHive.this.tokens += Integer.parseInt(match.get(0), 10);
             else if("medals".equals(key)) ServerHive.this.medals = Integer.parseInt(match.get(0), 10);
             else if("lobby".equals(key)) ServerHive.this.setLobby(match.get(0));
+            else if("gameid".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).setGameID(match.get(0));
             else if("map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).setMap(match.get(0));
             else if("autovote.map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).getAutovoteManager().parse(match);
             else if(key.endsWith(".setstate")) {

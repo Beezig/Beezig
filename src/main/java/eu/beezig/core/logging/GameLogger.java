@@ -56,8 +56,8 @@ public class GameLogger {
             }
 
             for (Object s : toLog) {
-                if (s != null) csv.write(s.toString());
                 if(s instanceof Boolean) csv.write((boolean)s ? "Yes" : "No");
+                else if (s != null) csv.write(s.toString());
                 else csv.write("Unknown");
             }
             csv.endRecord();

@@ -102,7 +102,7 @@ public class BED extends HiveMode implements IAutovote {
     @Override
     public void end() {
         logger.log(getPoints(), mode, getMap(), getKills(), getDeaths(), bedsDestroyed,
-                won, System.currentTimeMillis(), "GID not supported");
+                won, System.currentTimeMillis(), getGameID());
     }
 
     @Override

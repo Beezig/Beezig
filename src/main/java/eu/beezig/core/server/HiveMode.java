@@ -48,6 +48,7 @@ public abstract class HiveMode extends GameMode {
     private TitleService titleService;
     protected GameLogger logger;
     private boolean hasVoted;
+    private String gameID;
 
     public HiveMode() {
         global = new GlobalStats();
@@ -66,6 +67,14 @@ public abstract class HiveMode extends GameMode {
             e.printStackTrace();
         }
         logger = new GameLogger(getIdentifier().toLowerCase(Locale.ROOT));
+    }
+
+    public String getGameID() {
+        return gameID;
+    }
+
+    public void setGameID(String gameID) {
+        this.gameID = gameID;
     }
 
     public boolean hasVoted() {
