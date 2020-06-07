@@ -30,6 +30,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,15 +52,15 @@ public class BeezigConfiguration {
                 JSONObject json = (JSONObject) parser.parse(buffer);
                 HashMap<Object, Object> map = (HashMap<Object, Object>)json;
                 config = map.entrySet().stream().map(e -> {
-                    Settings key = Settings.valueOf(e.getKey().toString());
-                    Setting value = null;
                     try {
-                        value = new Setting(castValue(key.getSettingType(), (String) e.getValue()));
+                    Settings key = Settings.valueOf(e.getKey().toString());
+                    Setting value = new Setting(castValue(key.getSettingType(), (String) e.getValue()));
+                    return new HashMap.SimpleEntry<>(key, value);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                    return new HashMap.SimpleEntry<>(key, value);
-                }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, HashMap::new));
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, HashMap::new));
             }
         }
     }
