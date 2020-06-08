@@ -39,7 +39,7 @@ public class ModuleGameKarma extends GameModeItem<TIMV> {
         if(showPotentialKarma) {
             if(!Beezig.api().isInWorld()) return null;
             return String.format("%d/%d Karma", b ? 0 : getGameMode().getPoints(),
-                    b ? 210 : getGameMode().getPoints() + getGameMode().getMaxKarma(Beezig.api().getServerPlayers().size()));
+                    b ? 210 : getGameMode().getPoints() + getGameMode().getMaxKarma());
         }
         return (b ? 210 : getGameMode().getPoints()) + " Karma";
     }

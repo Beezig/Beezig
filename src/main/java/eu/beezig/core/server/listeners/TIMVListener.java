@@ -54,5 +54,6 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
         else if("timv.pass".equals(key)) gameMode.setPass(StringUtils.capitalize(match.get(0)));
         else if("timv.pass.revert".equals(key)) gameMode.setPass("No");
         else if("timv.win".equals(key)) gameMode.setWon();
+        else if("timv.citizens".equals(key)) gameMode.setCitizens(Integer.parseInt(match.get(0), 10));
     }
 }

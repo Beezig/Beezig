@@ -43,7 +43,7 @@ public class TIMV extends HiveMode implements IAutovote {
 
     private List<MapData> maps;
     private MapData currentMapData;
-    private int traitorsDiscovered, traitorsMax, detectivesDiscovered, detectivesMax, deadTraitors, rolePoints;
+    private int traitorsDiscovered, traitorsMax, detectivesDiscovered, detectivesMax, deadTraitors, rolePoints, citizens;
     private Role role;
     private String pass = "No";
 
@@ -75,15 +75,15 @@ public class TIMV extends HiveMode implements IAutovote {
         return detectivesDiscovered;
     }
 
-    public void calculateRoles() {
-        int online = Beezig.api().getServerPlayers().size();
-        this.traitorsMax = online / 4;
+    private void calculateRoles() {
+        this.citizens = Beezig.api().getServerPlayers().size();
+        this.traitorsMax = citizens / 4;
         this.traitorsMax = traitorsMax == 0 ? 1 : traitorsMax;
-        this.detectivesMax = online / 8;
+        this.detectivesMax = citizens / 8;
         this.detectivesMax = detectivesMax == 0 ? 1 : detectivesMax;
     }
 
-    public int getMaxKarma(int online) {
+    public int getMaxKarma() {
         if(role == null) return -1;
         switch(role) {
             case INNOCENT:
@@ -92,10 +92,14 @@ public class TIMV extends HiveMode implements IAutovote {
                 return 25 * (traitorsMax - traitorsDiscovered);
             case TRAITOR:
                 return 20 * (detectivesMax - detectivesDiscovered)
-                        + 10 * (online - (traitorsMax - deadTraitors) - (detectivesMax - detectivesDiscovered));
+                        + 10 * (citizens - (traitorsMax - deadTraitors) - (detectivesMax - detectivesDiscovered));
             default:
                 return -1;
         }
+    }
+
+    public void setCitizens(int citizens) {
+        this.citizens = citizens;
     }
 
     public void setPass(String role) {
