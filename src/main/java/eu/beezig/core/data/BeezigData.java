@@ -20,6 +20,7 @@
 package eu.beezig.core.data;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.data.timv.TestMessagesManager;
 import eu.beezig.core.util.FileUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
@@ -45,14 +46,21 @@ import java.util.zip.ZipInputStream;
 public class BeezigData {
     private File dataFolder;
     private GameTitles titleManager;
+    private TestMessagesManager customTestMessages;
 
     public BeezigData(File beezigDir) {
         this.dataFolder = new File(beezigDir, "data");
         this.titleManager = new GameTitles(dataFolder);
+        this.customTestMessages = new TestMessagesManager();
+        Beezig.api().getPluginManager().registerListener(Beezig.get(), customTestMessages);
     }
 
     public GameTitles getTitleManager() {
         return titleManager;
+    }
+
+    public TestMessagesManager getCustomTestMessages() {
+        return customTestMessages;
     }
 
     public <T> T getData(DataPath path, Class<T> marker) throws IOException {

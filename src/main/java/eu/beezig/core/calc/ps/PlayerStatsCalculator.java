@@ -54,7 +54,7 @@ public class PlayerStatsCalculator {
         List<NetworkPlayerInfo> players = playersIn == null ? Beezig.api().getServerPlayers() : playersIn;
         // Map all UUIDs to display names, required to format the results later
         HashMap<String, String> displayNames = players.stream()
-            .collect(Collectors.toMap(p -> UUIDUtils.strip(p.getGameProfile().getId()), PlayerStatsCalculator::getDisplayName, (x, y) -> y, HashMap::new));
+            .collect(Collectors.toMap(p -> UUIDUtils.strip(p.getGameProfile().getId()), UUIDUtils::getDisplayName, (x, y) -> y, HashMap::new));
         // Discard exceptions (profile not found etc.)
         CompletableFuture<? extends GameStats>[] stats = players.stream().map(p -> mode.get(p.getGameProfile().getId()).exceptionally(e -> null)).toArray(CompletableFuture[]::new);
         // Wait for the tasks to complete, then sort the results.
@@ -81,7 +81,4 @@ public class PlayerStatsCalculator {
         });
     }
 
-    private static String getDisplayName(NetworkPlayerInfo info) {
-        return info.getDisplayName() != null ? info.getDisplayName() : info.getGameProfile().getName();
-    }
 }

@@ -19,10 +19,16 @@
 
 package eu.beezig.core.util;
 
+import eu.the5zig.mod.util.NetworkPlayerInfo;
+
 import java.util.UUID;
 
 public class UUIDUtils {
     public static String strip(UUID uuid) {
         return uuid.toString().replace("-", "");
+    }
+
+    public static String getDisplayName(NetworkPlayerInfo info) {
+        return info.getDisplayName() != null ? info.getDisplayName() : info.getGameProfile().getName();
     }
 }
