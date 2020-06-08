@@ -75,13 +75,17 @@ public class TestMessagesManager {
         save();
     }
 
-    public void remove(String s) throws IOException {
-        customMessages.remove(s);
+    public void remove(int index) throws IOException {
+        customMessages.remove(index);
         save();
     }
 
     public void save() throws IOException {
         FileUtils.writeLines(configFile, "UTF-8", customMessages);
+    }
+
+    public List<String> getCustomMessages() {
+        return customMessages;
     }
 
     /**
