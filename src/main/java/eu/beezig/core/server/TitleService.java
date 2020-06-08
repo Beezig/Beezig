@@ -50,11 +50,11 @@ public class TitleService {
         return titles != null && titles.length > 0;
     }
 
-    public String getToNext(int index, int points) {
+    public String getToNext(int index, int points, String mainColor) {
         if(getTitleAt(index).getRequiredPoints() == -1) return "Leaderboard Rank";
         if(++index >= titles.length) return "Highest Rank";
         HiveTitle next = getTitleAt(index);
         int delta = next.getRequiredPoints() - points;
-        return Beezig.api().translate("msg.nextrank", Message.formatNumber(delta), next.getColoredName());
+        return Beezig.api().translate("msg.nextrank", mainColor + Message.formatNumber(delta), next.getColoredName() + mainColor);
     }
 }

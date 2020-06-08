@@ -55,8 +55,8 @@ public class AdvRecUtils {
         if(!s(Settings.ADVREC_RANK)) return "";
         Pair<Integer, HiveTitle> title = mgr.getTitle(rank);
         if(!s(Settings.ADVREC_TONEXT)) return title.getRight().getColoredName();
-        String next = mgr.getToNext(title.getLeft(), points);
-        return String.format(" (%s / %s%s)", title.getRight().getColoredName(), next, Color.accent());
+        String next = mgr.getToNext(title.getLeft(), points, Color.accent());
+        return String.format(" (%s %s/ %s%s)", title.getRight().getColoredName(), Color.accent(), next, Color.accent());
     }
 
     private static boolean s(Settings key) {

@@ -76,9 +76,10 @@ public class ModulePoints extends GameModeItem<HiveMode> {
         sb.append(" (").append(mode.getGlobal().getTitle().getRight().getColoredName());
         boolean nextRank = (boolean) getProperties().getSetting("nextrank").get();
         if(nextRank && mode.getTitleService() != null && mode.getTitleService().isValid()) {
-            sb.append(" / ").append(mode.getTitleService().getToNext(mode.getGlobal().getTitle().getLeft(), mode.getGlobal().getPoints()));
+            String fmt = ModuleUtils.getTextFormatting(this);
+            sb.append(fmt).append(" / ").append(mode.getTitleService().getToNext(mode.getGlobal().getTitle().getLeft(), mode.getGlobal().getPoints(),
+                    fmt));
         }
-        sb.append(ModuleUtils.getTextFormatting(this));
         sb.append(')');
         return sb.toString();
     }
