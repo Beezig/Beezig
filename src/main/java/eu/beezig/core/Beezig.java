@@ -24,6 +24,7 @@ import com.mojang.authlib.GameProfile;
 import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.config.BeezigConfiguration;
 import eu.beezig.core.data.BeezigData;
+import eu.beezig.core.logging.TemporaryPointsManager;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.net.BeezigNetManager;
 import eu.beezig.core.server.ServerHive;
@@ -60,6 +61,7 @@ public class Beezig {
     private BeezigData data;
     private BeezigNetManager networkManager;
     private WorldTaskManager worldTaskManager;
+    private TemporaryPointsManager temporaryPointsManager;
     private boolean laby;
 
     public Beezig(boolean laby, File labyDir) {
@@ -113,6 +115,13 @@ public class Beezig {
             e.printStackTrace();
         }
 
+        temporaryPointsManager = new TemporaryPointsManager();
+        try {
+            temporaryPointsManager.init();
+        } catch (ReflectiveOperationException e) {
+            logger.error("Couldn't load temporary points.", e);
+        }
+
         // Register Hive stuff
         api.registerServerInstance(this, ServerHive.class);
         Modules.register(this, api);
@@ -162,6 +171,10 @@ public class Beezig {
 
     public WorldTaskManager getWorldTaskManager() {
         return worldTaskManager;
+    }
+
+    public TemporaryPointsManager getTemporaryPointsManager() {
+        return temporaryPointsManager;
     }
 
     public static Beezig get() {

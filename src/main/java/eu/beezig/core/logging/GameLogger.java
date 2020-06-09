@@ -34,6 +34,10 @@ public class GameLogger {
         this.file = new File(Beezig.get().getBeezigDir(), String.format("%s/games.csv", modeName));
     }
 
+    public File getFile() {
+        return file;
+    }
+
     public void setHeaders(String... headers) {
         this.headers = headers;
     }

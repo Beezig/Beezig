@@ -40,6 +40,7 @@ public class Modules {
         api.registerModuleItem(plugin, "hive_game", ModuleGameProgress.class, HIVE);
         api.registerModuleItem(plugin, "hive_medals", ModuleMedals.class, HIVE);
         api.registerModuleItem(plugin, "hive_lobby", ModuleLobby.class, HIVE);
+        api.registerModuleItem(plugin, "hive_daily", ModuleDaily.class, HIVE);
 
         // Trouble in Mineville
         api.registerModuleItem(plugin, "timv_traitors", ModuleTraitorsDiscovered.class, HIVE);

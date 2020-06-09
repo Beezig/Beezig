@@ -33,7 +33,7 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 public class GameTitles {
-    private static final Class[] modes = new Class[] {BED.class, TIMV.class};
+    public static final Class[] modes = new Class[] {BED.class, TIMV.class};
     private File titlesFolder;
 
     GameTitles(File parent) {

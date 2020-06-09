@@ -23,6 +23,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvancedRecords;
 import eu.beezig.core.autovote.AutovoteManager;
 import eu.beezig.core.data.HiveTitle;
+import eu.beezig.core.logging.DailyService;
 import eu.beezig.core.logging.GameLogger;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
@@ -49,6 +50,7 @@ public abstract class HiveMode extends GameMode {
     protected GameLogger logger;
     private boolean hasVoted;
     private String gameID;
+    private DailyService dailyService;
 
     public HiveMode() {
         global = new GlobalStats();
@@ -67,6 +69,7 @@ public abstract class HiveMode extends GameMode {
             e.printStackTrace();
         }
         logger = new GameLogger(getIdentifier().toLowerCase(Locale.ROOT));
+        dailyService = Beezig.get().getTemporaryPointsManager().getDailyForMode(this);
     }
 
     public String getGameID() {
@@ -101,6 +104,10 @@ public abstract class HiveMode extends GameMode {
         return titleService;
     }
 
+    public DailyService getDailyService() {
+        return dailyService;
+    }
+
     /**
      * Called when the user returns to the lobby.
      */
@@ -110,6 +117,10 @@ public abstract class HiveMode extends GameMode {
 
     public AutovoteManager getAutovoteManager() {
         return autovoteManager;
+    }
+
+    public GameLogger getLogger() {
+        return logger;
     }
 
     public int getPoints() {
@@ -127,6 +138,7 @@ public abstract class HiveMode extends GameMode {
     public void addPoints(int points) {
         this.points += points;
         if(global.points != null) global.points += points;
+        if(dailyService != null) dailyService.addPoints(points);
     }
 
     public void addKills(int kills) {
