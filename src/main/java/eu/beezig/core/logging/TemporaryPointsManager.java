@@ -19,26 +19,46 @@
 
 package eu.beezig.core.logging;
 
+import com.csvreader.CsvWriter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.data.GameTitles;
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.util.UUIDUtils;
+import org.apache.commons.io.FileUtils;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A manager class for daily and session points
  */
 public class TemporaryPointsManager {
-    private Map<String, DailyService> dailyServices = new HashMap<>();
+    private static final DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+    private static final Pattern DAILY_FILE_REGEX = Pattern.compile("(\\d{4}-\\d{1,2}-\\d{1,2})(?:-(.+))?\\.txt");
 
     public DailyService getDailyForMode(HiveMode mode) {
-        DailyService service = dailyServices.get(mode.getIdentifier());
-        if(service != null) service.checkUpdate();
+        String date = dateFormatter.format(new Date());
+        String uuid = UUIDUtils.strip(Beezig.user().getId());
+        File dailyFile = new File(mode.getModeDir(), String.format("dailyPoints/%s-%s.txt", date, uuid));
+        DailyService service = new DailyService(dailyFile);
+        try {
+            service.loadFromFile();
+        } catch (IOException e) {
+            Beezig.logger.error("Couldn't load daily service", e);
+        }
         return service;
     }
 
@@ -47,54 +67,66 @@ public class TemporaryPointsManager {
     }
 
     private void initDailyServices() throws ReflectiveOperationException {
-        Beezig.logger.info("Loading daily points...");
-        Map<CompletableFuture<DailyService>, String> futures = new HashMap<>();
+        Beezig.logger.info("Migrating daily points...");
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
         for(Class modeClass : GameTitles.modes) {
             HiveMode inst = (HiveMode) modeClass.newInstance();
-            futures.put(parseLogForMode(inst), inst.getIdentifier());
+            futures.add(migrateLogsForMode(inst));
         }
-        CompletableFuture.allOf(futures.keySet().toArray(new CompletableFuture[0])).join();
-        for(Map.Entry<CompletableFuture<DailyService>, String> entry : futures.entrySet()) {
-            dailyServices.put(entry.getValue(), entry.getKey().join());
-        }
-        Beezig.logger.info("Daily points loaded.");
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+        Beezig.logger.info("Daily points migrated.");
     }
 
-    private CompletableFuture<DailyService> parseLogForMode(HiveMode mode) {
-        CompletableFuture<DailyService> future = new CompletableFuture<>();
+    private CompletableFuture<Void> migrateLogsForMode(HiveMode mode) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
         Beezig.get().getAsyncExecutor().submit(() -> {
-            if(!(mode instanceof ILoggable)) {
+            File dailyDir = new File(mode.getModeDir(), "dailyPoints");
+            if(!dailyDir.exists() || !dailyDir.isDirectory()) {
                 future.complete(null);
                 return;
             }
-            File logFile = mode.getLogger().getFile();
-            if(!logFile.exists()) {
-                future.complete(new DailyService(0));
+            File[] files =  dailyDir.listFiles((file, s) -> s.toLowerCase(Locale.ROOT).endsWith(".txt"));
+            if(files == null) {
+                future.complete(null);
                 return;
             }
-            ILoggable loggable = (ILoggable) mode;
-            int ptsIndex = loggable.getPointsIndex();
-            int timestampIndex = loggable.getTimestampIndex();
-            int todayYear = Calendar.getInstance().get(Calendar.YEAR);
-            int todayDay = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
-            try(ReverseCsvReader reader = new ReverseCsvReader(logFile, ",")) {
-                int points = 0;
-                String[] record;
-                while((record = reader.getNextRecord()) != null) {
-                    if(timestampIndex < record.length && ptsIndex < record.length) {
-                        try {
-                            long timestamp = Long.parseLong(record[timestampIndex]);
-                            Calendar cal = Calendar.getInstance();
-                            cal.setTimeInMillis(timestamp);
-                            if(cal.get(Calendar.YEAR) != todayYear || cal.get(Calendar.DAY_OF_YEAR) != todayDay) break;
-                            points += Integer.parseInt(record[ptsIndex]);
-                        }
-                        catch(NumberFormatException ex) {
-                            Beezig.logger.error("Couldn't format timestamp or points string", ex);
-                        }
+            File dailyCsv = new File(mode.getModeDir(), "daily.csv");
+            if(!dailyCsv.exists()) {
+                dailyCsv.getParentFile().mkdirs();
+                try {
+                    dailyCsv.createNewFile();
+                } catch (IOException e) {
+                    future.completeExceptionally(e);
+                    return;
+                }
+            }
+            String today = dateFormatter.format(new Date());
+            try(BufferedWriter writer = Files.newBufferedWriter(dailyCsv.toPath(), StandardCharsets.UTF_8,
+                    StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
+                CsvWriter csv = null;
+                try {
+                    csv = new CsvWriter(writer, ',');
+                    for (File file : files) {
+                        String name = file.getName();
+                        Matcher matcher = DAILY_FILE_REGEX.matcher(name);
+                        if(!matcher.matches()) continue;
+                        String date = matcher.group(1);
+                        if(date.equals(today)) continue;
+                        String uuid = "Unknown";
+                        if(matcher.groupCount() > 1) uuid = matcher.group(2);
+                        String contents = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+                        if(contents.isEmpty()) contents = "0";
+                        csv.write(date);
+                        csv.write(uuid);
+                        csv.write(contents);
+                        csv.endRecord();
+                        file.delete();
                     }
                 }
-                future.complete(new DailyService(points));
+                finally {
+                    if(csv != null) csv.close();
+                }
+                future.complete(null);
             } catch (IOException e) {
                 future.completeExceptionally(e);
             }

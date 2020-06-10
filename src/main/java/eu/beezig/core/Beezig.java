@@ -115,6 +115,8 @@ public class Beezig {
             e.printStackTrace();
         }
 
+        DirectoryMigration.migrateFolders(beezigDir);
+
         temporaryPointsManager = new TemporaryPointsManager();
         try {
             temporaryPointsManager.init();

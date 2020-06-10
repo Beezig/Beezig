@@ -22,8 +22,11 @@ package eu.beezig.core.logging;
 import com.csvreader.CsvWriter;
 import eu.beezig.core.Beezig;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 public class GameLogger {
 
@@ -51,8 +54,8 @@ public class GameLogger {
                 file.getParentFile().mkdirs();
                 file.createNewFile();
             }
-            FileWriter writer = new FileWriter(file, true);
-            csv = new CsvWriter(writer, ',');
+            BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                csv = new CsvWriter(writer, ',');
 
             if (writeHeaders) {
                 for (String s : headers) csv.write(s);

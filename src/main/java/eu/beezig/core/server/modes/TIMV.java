@@ -23,7 +23,6 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvRecUtils;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.data.DataPath;
-import eu.beezig.core.logging.ILoggable;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.util.CollectionUtils;
@@ -40,7 +39,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class TIMV extends HiveMode implements IAutovote, ILoggable {
+public class TIMV extends HiveMode implements IAutovote {
 
     private List<MapData> maps;
     private MapData currentMapData;
@@ -211,6 +210,7 @@ public class TIMV extends HiveMode implements IAutovote, ILoggable {
 
     @Override
     public void end() {
+        super.end();
         logger.log(role == null ? "None" : org.apache.commons.lang3.StringUtils.capitalize(role.name().toLowerCase()), getPoints(),
                 getMap(), rolePoints, 0, 0, 0, getGameID(), pass, System.currentTimeMillis());
     }
@@ -237,16 +237,6 @@ public class TIMV extends HiveMode implements IAutovote, ILoggable {
     public void addKarma(int karma) {
         addPoints(karma);
         rolePoints += karma / 10;
-    }
-
-    @Override
-    public int getPointsIndex() {
-        return 1;
-    }
-
-    @Override
-    public int getTimestampIndex() {
-        return 9;
     }
 
     private static class MapData {

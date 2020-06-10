@@ -29,6 +29,7 @@ import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -51,6 +52,7 @@ public abstract class HiveMode extends GameMode {
     private boolean hasVoted;
     private String gameID;
     private DailyService dailyService;
+    private File modeDir;
 
     public HiveMode() {
         global = new GlobalStats();
@@ -69,6 +71,7 @@ public abstract class HiveMode extends GameMode {
             e.printStackTrace();
         }
         logger = new GameLogger(getIdentifier().toLowerCase(Locale.ROOT));
+        modeDir = new File(Beezig.get().getBeezigDir(), getIdentifier().toLowerCase(Locale.ROOT));
         dailyService = Beezig.get().getTemporaryPointsManager().getDailyForMode(this);
     }
 
@@ -108,10 +111,20 @@ public abstract class HiveMode extends GameMode {
         return dailyService;
     }
 
+    public File getModeDir() {
+        return modeDir;
+    }
+
     /**
      * Called when the user returns to the lobby.
      */
-    public abstract void end();
+    protected void end() {
+        try {
+            dailyService.save();
+        } catch (IOException e) {
+            Beezig.logger.error("Couldn't save daily points", e);
+        }
+    }
 
     public abstract String getIdentifier();
 

@@ -26,4 +26,11 @@ public class DirectoryMigration {
         if(!from.exists() || to.exists()) return;
         if(!from.renameTo(to)) throw new RuntimeException("Couldn't migrate configuration directory.");
     }
+
+    public static void migrateFolders(File beezigDir) {
+        File oldBedwars = new File(beezigDir, "bedwars");
+        migrateIfNeeded(oldBedwars, new File(beezigDir, "bed"));
+        File timvDaily = new File(beezigDir, "timv/dailykarma");
+        migrateIfNeeded(timvDaily, new File(beezigDir, "timv/dailyPoints"));
+    }
 }

@@ -19,26 +19,33 @@
 
 package eu.beezig.core.logging;
 
-import java.util.Calendar;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class DailyService {
-    private int day;
     private int points;
+    private File file;
 
-    public DailyService(int points) {
-        this.points = points;
-        this.day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+    public DailyService(File f) {
+        this.file = f;
     }
 
-    /**
-     * Ensures that the stats are reset on a new day.
-     */
-    void checkUpdate() {
-        int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
-        if(day != currentDay) {
-            day = currentDay;
-            points = 0;
+    void loadFromFile() throws IOException {
+        if(!file.exists()) {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+            return;
         }
+        String contents = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+        if(contents.isEmpty()) return;
+        this.points = Integer.parseInt(contents, 10);
+    }
+
+    public void save() throws IOException {
+        FileUtils.write(file, Integer.toString(points, 10), StandardCharsets.UTF_8, false);
     }
 
     public int getPoints() {

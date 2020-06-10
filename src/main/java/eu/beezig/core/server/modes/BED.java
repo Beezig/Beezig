@@ -21,7 +21,6 @@ package eu.beezig.core.server.modes;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvRecUtils;
-import eu.beezig.core.logging.ILoggable;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.util.UUIDUtils;
@@ -36,7 +35,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BED extends HiveMode implements IAutovote, ILoggable {
+public class BED extends HiveMode implements IAutovote {
     private static final Pattern MODE_REGEX = Pattern.compile("Your BED([DTX]?) Stats");
 
     private int bedsDestroyed;
@@ -102,6 +101,7 @@ public class BED extends HiveMode implements IAutovote, ILoggable {
 
     @Override
     public void end() {
+        super.end();
         logger.log(getPoints(), mode, getMap(), getKills(), getDeaths(), bedsDestroyed,
                 won, System.currentTimeMillis(), getGameID());
     }
@@ -153,15 +153,5 @@ public class BED extends HiveMode implements IAutovote, ILoggable {
                     break;
             }
         }
-    }
-
-    @Override
-    public int getPointsIndex() {
-        return 0;
-    }
-
-    @Override
-    public int getTimestampIndex() {
-        return 7;
     }
 }
