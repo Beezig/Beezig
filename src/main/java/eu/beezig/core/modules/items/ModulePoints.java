@@ -25,6 +25,7 @@ import eu.beezig.core.server.modes.TIMV;
 import eu.beezig.core.util.ModuleUtils;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.modules.GameModeItem;
+import eu.the5zig.util.minecraft.ChatColor;
 
 public class ModulePoints extends GameModeItem<HiveMode> {
     public ModulePoints() {
@@ -80,7 +81,7 @@ public class ModulePoints extends GameModeItem<HiveMode> {
             sb.append(fmt).append(" / ").append(mode.getTitleService().getToNext(mode.getGlobal().getTitle().getLeft(), mode.getGlobal().getPoints(),
                     fmt));
         }
-        sb.append(')');
+        sb.append(ChatColor.RESET).append(')');
         return sb.toString();
     }
 }
