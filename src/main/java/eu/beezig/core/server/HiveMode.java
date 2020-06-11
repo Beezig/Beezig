@@ -25,6 +25,7 @@ import eu.beezig.core.autovote.AutovoteManager;
 import eu.beezig.core.data.HiveTitle;
 import eu.beezig.core.logging.DailyService;
 import eu.beezig.core.logging.GameLogger;
+import eu.beezig.core.logging.TemporaryPointsManager;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
 import org.apache.commons.lang3.tuple.Pair;
@@ -72,7 +73,9 @@ public abstract class HiveMode extends GameMode {
         }
         logger = new GameLogger(getIdentifier().toLowerCase(Locale.ROOT));
         modeDir = new File(Beezig.get().getBeezigDir(), getIdentifier().toLowerCase(Locale.ROOT));
-        dailyService = Beezig.get().getTemporaryPointsManager().getDailyForMode(this);
+        TemporaryPointsManager temporaryPointsManager = Beezig.get().getTemporaryPointsManager();
+        if (temporaryPointsManager != null)
+            dailyService = Beezig.get().getTemporaryPointsManager().getDailyForMode(this);
     }
 
     public String getGameID() {
