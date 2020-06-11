@@ -23,6 +23,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvRecUtils;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.data.DataPath;
+import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.util.CollectionUtils;
@@ -213,6 +214,9 @@ public class TIMV extends HiveMode implements IAutovote {
         super.end();
         logger.log(role == null ? "None" : org.apache.commons.lang3.StringUtils.capitalize(role.name().toLowerCase()), getPoints(),
                 getMap(), rolePoints, 0, 0, 0, getGameID(), pass, System.currentTimeMillis());
+        if(getSessionService() != null)
+            Beezig.get().getTemporaryPointsManager().getCurrentSession().pushItem(new SessionItem.Builder(getIdentifier())
+                .points(getPoints()).map(getMap()).gameStart(gameStart).custom("role", role.name()).build());
     }
 
     @Override

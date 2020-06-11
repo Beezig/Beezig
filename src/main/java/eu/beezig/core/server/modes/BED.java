@@ -21,6 +21,7 @@ package eu.beezig.core.server.modes;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvRecUtils;
+import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.util.UUIDUtils;
@@ -104,6 +105,10 @@ public class BED extends HiveMode implements IAutovote {
         super.end();
         logger.log(getPoints(), mode, getMap(), getKills(), getDeaths(), bedsDestroyed,
                 won, System.currentTimeMillis(), getGameID());
+        if(getSessionService() != null)
+            Beezig.get().getTemporaryPointsManager().getCurrentSession().pushItem(new SessionItem.Builder(getIdentifier())
+                    .points(getPoints()).map(getMap()).gameStart(gameStart).kills(getKills()).deaths(getDeaths())
+                    .custom("beds", Integer.toString(bedsDestroyed, 10)).build());
     }
 
     @Override

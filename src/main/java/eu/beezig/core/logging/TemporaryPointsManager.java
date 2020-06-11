@@ -22,6 +22,7 @@ package eu.beezig.core.logging;
 import com.csvreader.CsvWriter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.data.GameTitles;
+import eu.beezig.core.logging.session.CurrentSession;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.util.UUIDUtils;
 import org.apache.commons.io.FileUtils;
@@ -46,8 +47,28 @@ import java.util.regex.Pattern;
  * A manager class for daily and session points
  */
 public class TemporaryPointsManager {
-    private static final DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+    public static final DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
     private static final Pattern DAILY_FILE_REGEX = Pattern.compile("(\\d{4}-\\d{1,2}-\\d{1,2})(?:-(.+))?\\.txt");
+
+    private CurrentSession currentSession;
+
+    public CurrentSession getCurrentSession() {
+        return currentSession;
+    }
+
+    public void startSession() {
+        currentSession = new CurrentSession();
+    }
+
+    public void endSession() {
+        if(currentSession != null) {
+            try {
+                currentSession.closeSession();
+            } catch (IOException e) {
+                Beezig.logger.error("Could not save session data", e);
+            }
+        }
+    }
 
     public DailyService getDailyForMode(HiveMode mode) {
         String date = dateFormatter.format(new Date());

@@ -26,6 +26,7 @@ import eu.beezig.core.data.HiveTitle;
 import eu.beezig.core.logging.DailyService;
 import eu.beezig.core.logging.GameLogger;
 import eu.beezig.core.logging.TemporaryPointsManager;
+import eu.beezig.core.logging.session.SessionService;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
 import org.apache.commons.lang3.tuple.Pair;
@@ -53,7 +54,9 @@ public abstract class HiveMode extends GameMode {
     private boolean hasVoted;
     private String gameID;
     private DailyService dailyService;
+    private SessionService sessionService;
     private File modeDir;
+    protected long gameStart;
 
     public HiveMode() {
         global = new GlobalStats();
@@ -74,8 +77,12 @@ public abstract class HiveMode extends GameMode {
         logger = new GameLogger(getIdentifier().toLowerCase(Locale.ROOT));
         modeDir = new File(Beezig.get().getBeezigDir(), getIdentifier().toLowerCase(Locale.ROOT));
         TemporaryPointsManager temporaryPointsManager = Beezig.get().getTemporaryPointsManager();
-        if (temporaryPointsManager != null)
-            dailyService = Beezig.get().getTemporaryPointsManager().getDailyForMode(this);
+        if (temporaryPointsManager != null) {
+            dailyService = temporaryPointsManager.getDailyForMode(this);
+            if(temporaryPointsManager.getCurrentSession() != null)
+                sessionService = temporaryPointsManager.getCurrentSession().getService(this);
+        }
+        gameStart = System.currentTimeMillis();
     }
 
     public String getGameID() {
@@ -112,6 +119,10 @@ public abstract class HiveMode extends GameMode {
 
     public DailyService getDailyService() {
         return dailyService;
+    }
+
+    public SessionService getSessionService() {
+        return sessionService;
     }
 
     public File getModeDir() {
@@ -155,6 +166,7 @@ public abstract class HiveMode extends GameMode {
         this.points += points;
         if(global.points != null) global.points += points;
         if(dailyService != null) dailyService.addPoints(points);
+        if(sessionService != null) sessionService.addPoints(points);
     }
 
     public void addKills(int kills) {

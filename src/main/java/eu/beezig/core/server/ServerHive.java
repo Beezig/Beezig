@@ -87,6 +87,8 @@ public class ServerHive extends ServerInstance {
             Beezig.logger.error(e);
             return null;
         });
+        if(Beezig.get().getTemporaryPointsManager() != null)
+            Beezig.get().getTemporaryPointsManager().startSession();
     }
 
     @Override
@@ -157,6 +159,8 @@ public class ServerHive extends ServerInstance {
             if(gameMode instanceof HiveMode && gameMode.getState() != GameState.LOBBY) {
                 ((HiveMode)gameMode).end();
             }
+            if(Beezig.get().getTemporaryPointsManager() != null)
+                Beezig.get().getTemporaryPointsManager().endSession();
         }
 
         @Override
