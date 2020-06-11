@@ -29,8 +29,9 @@ public class ModuleTraitorsDiscovered extends GameModeItem<TIMV> {
 
     @Override
     protected Object getValue(boolean b) {
+        if(b) return "2/6 Traitors";
         TIMV mode = getGameMode();
-        return b ? "2/6 Traitors" : String.format("%d/%d Traitors", mode.getTraitorsDiscovered(), mode.getTraitorsMax());
+        return String.format("%d/%d Traitors", mode.getTraitorsDiscovered(), mode.getTraitorsMax());
     }
 
     @Override
