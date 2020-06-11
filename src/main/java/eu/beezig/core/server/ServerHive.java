@@ -21,6 +21,7 @@ package eu.beezig.core.server;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.server.listeners.BEDListener;
+import eu.beezig.core.server.listeners.SKYListener;
 import eu.beezig.core.server.listeners.TIMVListener;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.task.WorldTask;
@@ -64,6 +65,7 @@ public class ServerHive extends ServerInstance {
         registry.registerListener(new ListenerHive());
         registry.registerListener(new TIMVListener());
         registry.registerListener(new BEDListener());
+        registry.registerListener(new SKYListener());
     }
 
     @Override

@@ -21,6 +21,7 @@ package eu.beezig.core.data;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.server.modes.BED;
+import eu.beezig.core.server.modes.SKY;
 import eu.beezig.core.server.modes.TIMV;
 import eu.beezig.core.util.FileUtils;
 import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
@@ -33,7 +34,7 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 public class GameTitles {
-    public static final Class[] modes = new Class[] {BED.class, TIMV.class};
+    public static final Class[] modes = new Class[] {BED.class, TIMV.class, SKY.class};
     private File titlesFolder;
 
     GameTitles(File parent) {

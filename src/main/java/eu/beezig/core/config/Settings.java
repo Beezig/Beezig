@@ -51,7 +51,11 @@ public enum Settings {
     TIMV_ADVREC_KRR(true, "LEVER"),
     TIMV_ADVREC_TRATIO(true, "LEVER"),
     TIMV_ADVREC_RECORD(true, "LEVER"),
-    TIMV_ADVREC_KPV(true, "LEVER");
+    TIMV_ADVREC_KPV(true, "LEVER"),
+
+    // SkyWars
+    SKY_ADVREC_PPG(true, "LEVER"),
+    SKY_ADVREC_KPG(true, "LEVER");
 
     private final Object defaultValue;
     private final Class settingType;

@@ -1,0 +1,148 @@
+package eu.beezig.core.server.modes;
+
+import eu.beezig.core.Beezig;
+import eu.beezig.core.advrec.AdvRecUtils;
+import eu.beezig.core.config.Settings;
+import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.server.IAutovote;
+import eu.beezig.core.util.UUIDUtils;
+import eu.beezig.core.util.text.Message;
+import eu.beezig.hiveapi.wrapper.player.Profiles;
+import eu.beezig.hiveapi.wrapper.player.games.SkyStats;
+import eu.the5zig.mod.The5zigAPI;
+import eu.the5zig.mod.gui.ingame.Scoreboard;
+import eu.the5zig.util.minecraft.ChatColor;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class SKY extends HiveMode implements IAutovote {
+
+    private static final Pattern MODE_REGEX = Pattern.compile("Your SKY([DT]?) Stats");
+
+    private String mode;
+    private boolean won;
+
+    public SKY ()
+    {
+        statsFetcher.setScoreboardTitle(MODE_REGEX);
+        statsFetcher.setApiComputer(name -> {
+            SkyStats api = Profiles.sky(name).join();
+            GlobalStats stats = new GlobalStats();
+            stats.setPoints((int) api.getPoints());
+            stats.setKills((int) api.getKills());
+            stats.setPlayed((int) api.getGamesPlayed());
+            stats.setDeaths((int) api.getDeaths());
+            stats.setVictories((int) api.getVictories());
+            stats.setTitle(getTitleService().getTitle((api.getTitle())));
+            return stats;
+        });
+        statsFetcher.setScoreboardComputer(lines -> {
+            GlobalStats stats = new GlobalStats();
+            stats.setPoints(lines.get("Points"));
+            stats.setKills(lines.get("Kills"));
+            stats.setPlayed(lines.get("Games Played"));
+            stats.setDeaths(lines.get("Deaths"));
+            stats.setVictories(lines.get("Victories"));
+            Profiles.sky(UUIDUtils.strip(Beezig.user().getId()))
+                    .thenAccept(api -> stats.setTitle(getTitleService().getTitle(api.getTitle())));
+            return stats;
+        });
+        getAdvancedRecords().setExecutor(this::recordsExecutor);
+        logger.setHeaders("Points", "Map", "Kills", "Mode", "Victory?", "Timestamp", "GameID");
+    }
+
+    private void recordsExecutor() {
+        AdvRecUtils.addPvPStats(getAdvancedRecords());
+        List<Pair<String, String>> messages = getAdvancedRecords().getMessages();
+        int points = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Points")).intValue();
+        int played = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Games Played")).intValue();
+        int victories = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Victories")).intValue();
+        int kills = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Kills")).intValue();
+
+        if (AdvRecUtils.needsAPI()) {
+            AdvRecUtils.announceAPI();
+            SkyStats api = Profiles.sky(getAdvancedRecords().getTarget()).join();
+            getAdvancedRecords().getMessages().set(0, new ImmutablePair<>("Points",
+                    getAdvancedRecords().getMessages().get(0).getRight() +
+                            AdvRecUtils.getTitle(getTitleService(), api.getTitle(), points)));
+        }
+        if (Settings.SKY_ADVREC_PPG.get().getBoolean()) {
+            messages.add(new ImmutablePair<>("Points Per Game",
+                    Message.ratio((double) points / (double) played)));
+        }
+        if (Settings.SKY_ADVREC_KPG.get().getBoolean()) {
+            messages.add(new ImmutablePair<>("Kills Per Game",
+                    Message.ratio((double) kills / (double) played)));
+        }
+    }
+
+    public void setWon() {
+        addPoints(20);
+        won = true;
+    }
+
+    @Override
+    public void end() {
+        super.end();
+        logger.log(getPoints(), getMap(), getKills(), mode, won, System.currentTimeMillis(), getGameID());
+    }
+
+    @Override
+    public void addKills(int kills) {
+        super.addKills(kills);
+        addPoints(5);
+    }
+
+    @Override
+    public String getIdentifier() {
+        return "sky";
+    }
+
+    @Override
+    public String getName() {
+        return "SkyWars";
+    }
+
+    @Override
+    public int getMaxVoteOptions() {
+        return 6;
+    }
+
+    @Override
+    public boolean isLastRandom() {
+        return true;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    @Override
+    public void setMap(String map) {
+        super.setMap(map);
+        updateMode();
+    }
+
+    private void updateMode() {
+        Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
+        if (sb == null) return;
+        Matcher match = MODE_REGEX.matcher(ChatColor.stripColor(sb.getTitle().trim()));
+        if (match.matches()) {
+            String id = match.group(1);
+            switch(id) {
+                case "D":
+                    mode = "Duos";
+                    break;
+                case "T":
+                    mode = "Teams";
+                    break;
+                default:
+                    mode = "Solo";
+            }
+        }
+    }
+}
