@@ -22,7 +22,6 @@ package eu.beezig.core.modules.items;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.modes.TIMV;
-import eu.beezig.core.util.ModuleUtils;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
@@ -77,7 +76,7 @@ public class ModulePoints extends GameModeItem<HiveMode> {
         sb.append(" (").append(mode.getGlobal().getTitle().getRight().getColoredName());
         boolean nextRank = (boolean) getProperties().getSetting("nextrank").get();
         if(nextRank && mode.getTitleService() != null && mode.getTitleService().isValid()) {
-            String fmt = ModuleUtils.getTextFormatting(this);
+            String fmt = "§r";
             sb.append(fmt).append(" / ").append(mode.getTitleService().getToNext(mode.getGlobal().getTitle().getLeft(), mode.getGlobal().getPoints(),
                     fmt));
         }
