@@ -88,7 +88,7 @@ public class AdvancedRecords {
     }
 
     private void execute() {
-        Beezig.get().getAsyncExecutor().submit(() -> {
+        Beezig.get().getAsyncExecutor().execute(() -> {
             if(executor != null) executor.run();
             sendMessages();
             messages.clear();

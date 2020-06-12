@@ -49,17 +49,15 @@ public enum Settings {
     ADVREC_TONEXT(true),
     ADVREC_KD(true),
     ADVREC_WINRATE(true),
+    ADVREC_PPG(true),
+    ADVREC_KPG(true),
 
     // Trouble in Mineville
     TIMV_ADVREC_VICTORIES(true),
     TIMV_ADVREC_KRR(true),
     TIMV_ADVREC_TRATIO(true),
     TIMV_ADVREC_RECORD(true),
-    TIMV_ADVREC_KPV(true),
-
-    // SkyWars
-    SKY_ADVREC_PPG(true),
-    SKY_ADVREC_KPG(true);
+    TIMV_ADVREC_KPV(true);
 
     private final Object defaultValue;
     private final Class settingType;

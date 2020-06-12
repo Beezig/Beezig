@@ -52,7 +52,7 @@ public class BeezigNetManager {
     }
 
     public void connect() {
-        Beezig.get().getAsyncExecutor().submit(() -> {
+        Beezig.get().getAsyncExecutor().execute(() -> {
             try {
                 start();
             } catch (InterruptedException e) {
@@ -101,7 +101,7 @@ public class BeezigNetManager {
         reconnecting = true;
         reconnectTries++;
         Beezig.logger.info(String.format("Reconnecting in %d seconds...", seconds));
-        Beezig.get().getAsyncExecutor().submit(() -> {
+        Beezig.get().getAsyncExecutor().execute(() -> {
             try {
                 Thread.sleep(seconds * 1000);
             } catch (InterruptedException e) {

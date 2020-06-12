@@ -100,7 +100,7 @@ public class TemporaryPointsManager {
 
     private CompletableFuture<Void> migrateLogsForMode(HiveMode mode) {
         CompletableFuture<Void> future = new CompletableFuture<>();
-        Beezig.get().getAsyncExecutor().submit(() -> {
+        Beezig.get().getAsyncExecutor().execute(() -> {
             File dailyDir = new File(mode.getModeDir(), "dailyPoints");
             if(!dailyDir.exists() || !dailyDir.isDirectory()) {
                 future.complete(null);

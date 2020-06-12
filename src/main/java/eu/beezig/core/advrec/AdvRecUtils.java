@@ -41,6 +41,20 @@ public class AdvRecUtils {
             double wr = played == 0 ? 0 : victories * 100D / (double) played;
             mgr.getMessages().add(new ImmutablePair<>("Win Rate", Message.ratio(wr) + "%"));
         }
+        if(s(Settings.ADVREC_KPG)) {
+            int kills = Message.getNumberFromFormat(mgr.getMessage("Kills")).intValue();
+            int played = Message.getNumberFromFormat(mgr.getMessage("Games Played")).intValue();
+            double kpg = played == 0 ? Double.POSITIVE_INFINITY : kills / (double) played;
+            mgr.getMessages().add(new ImmutablePair<>("Kills Per Game",
+                    Message.ratio(kpg)));
+        }
+        if(s(Settings.ADVREC_PPG)) {
+            int points = Message.getNumberFromFormat(mgr.getMessage("Points")).intValue();
+            int played = Message.getNumberFromFormat(mgr.getMessage("Games Played")).intValue();
+            double ppg = played == 0 ? Double.POSITIVE_INFINITY : points / (double) played;
+            mgr.getMessages().add(new ImmutablePair<>("Points Per Game",
+                    Message.ratio(ppg)));
+        }
     }
 
     public static void announceAPI() {

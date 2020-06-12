@@ -21,7 +21,6 @@ package eu.beezig.core.server.modes;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvRecUtils;
-import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.util.UUIDUtils;
@@ -32,9 +31,7 @@ import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.util.minecraft.ChatColor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,26 +73,13 @@ public class SKY extends HiveMode implements IAutovote {
 
     private void recordsExecutor() {
         AdvRecUtils.addPvPStats(getAdvancedRecords());
-        List<Pair<String, String>> messages = getAdvancedRecords().getMessages();
         int points = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Points")).intValue();
-        int played = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Games Played")).intValue();
-        int victories = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Victories")).intValue();
-        int kills = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Kills")).intValue();
-
         if (AdvRecUtils.needsAPI()) {
             AdvRecUtils.announceAPI();
             SkyStats api = Profiles.sky(getAdvancedRecords().getTarget()).join();
             getAdvancedRecords().getMessages().set(0, new ImmutablePair<>("Points",
                     getAdvancedRecords().getMessages().get(0).getRight() +
                             AdvRecUtils.getTitle(getTitleService(), api.getTitle(), points)));
-        }
-        if (Settings.SKY_ADVREC_PPG.get().getBoolean()) {
-            messages.add(new ImmutablePair<>("Points Per Game",
-                    Message.ratio((double) points / (double) played)));
-        }
-        if (Settings.SKY_ADVREC_KPG.get().getBoolean()) {
-            messages.add(new ImmutablePair<>("Kills Per Game",
-                    Message.ratio((double) kills / (double) played)));
         }
     }
 

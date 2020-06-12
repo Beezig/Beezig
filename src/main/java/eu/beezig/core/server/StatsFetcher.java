@@ -91,7 +91,7 @@ public class StatsFetcher {
             }
             if(System.currentTimeMillis() - firstCheck >= timeout) {
                 Beezig.logger.debug("Scoreboard not found and timeout reached, querying API");
-                Beezig.get().getAsyncExecutor().submit(() -> job.complete(apiComputer.apply(UUIDUtils.strip(Beezig.user().getId()))));
+                Beezig.get().getAsyncExecutor().execute(() -> job.complete(apiComputer.apply(UUIDUtils.strip(Beezig.user().getId()))));
             }
         }
     }
