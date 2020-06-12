@@ -36,6 +36,7 @@ public class CommandManager {
         commandExecutors.add(new AutovoteCommand());
         commandExecutors.add(new SettingsCommand());
         commandExecutors.add(new CustomTestCommand());
+        commandExecutors.add(new DoNotDisturbCommand());
     }
 
     @EventHandler

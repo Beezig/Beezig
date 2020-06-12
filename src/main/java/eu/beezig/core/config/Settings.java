@@ -21,6 +21,7 @@ package eu.beezig.core.config;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvancedRecords;
+import eu.beezig.core.notification.MessageIgnoreLevel;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.util.minecraft.ChatColor;
 
@@ -28,30 +29,33 @@ import java.util.Locale;
 
 public enum Settings {
     // Colors
-    COLOR_PRIMARY(ChatColor.DARK_AQUA, "WOOL"),
-    COLOR_ACCENT(ChatColor.AQUA, "WOOL"),
+    COLOR_PRIMARY(ChatColor.DARK_AQUA),
+    COLOR_ACCENT(ChatColor.AQUA),
 
     // Misc
-    THOUSANDS_SEPARATOR(true, "LEVER"),
+    THOUSANDS_SEPARATOR(true),
+    MSG_PING(true),
+    MSG_DND_MODE(MessageIgnoreLevel.IGNORE_ALERT),
+    MSG_DND_ALERT("I'm currently on Do Not Disturb mode. I'll get back to you later!"),
 
     // Autovote
-    AUTOVOTE(true, "LEVER"),
-    AUTOVOTE_RANDOM(true, "LEVER"),
+    AUTOVOTE(true),
+    AUTOVOTE_RANDOM(true),
 
     // Advanced Records
-    ADVANCED_RECORDS(true, "LEVER"),
-    ADVREC_MODE(AdvancedRecords.Mode.NORMAL, "LEVER"),
-    ADVREC_RANK(true, "LEVER"),
-    ADVREC_TONEXT(true, "LEVER"),
-    ADVREC_KD(true, "LEVER"),
-    ADVREC_WINRATE(true, "LEVER"),
+    ADVANCED_RECORDS(true),
+    ADVREC_MODE(AdvancedRecords.Mode.NORMAL),
+    ADVREC_RANK(true),
+    ADVREC_TONEXT(true),
+    ADVREC_KD(true),
+    ADVREC_WINRATE(true),
 
     // Trouble in Mineville
-    TIMV_ADVREC_VICTORIES(true, "LEVER"),
-    TIMV_ADVREC_KRR(true, "LEVER"),
-    TIMV_ADVREC_TRATIO(true, "LEVER"),
-    TIMV_ADVREC_RECORD(true, "LEVER"),
-    TIMV_ADVREC_KPV(true, "LEVER"),
+    TIMV_ADVREC_VICTORIES(true),
+    TIMV_ADVREC_KRR(true),
+    TIMV_ADVREC_TRATIO(true),
+    TIMV_ADVREC_RECORD(true),
+    TIMV_ADVREC_KPV(true),
 
     // SkyWars
     SKY_ADVREC_PPG(true, "LEVER"),
@@ -59,12 +63,10 @@ public enum Settings {
 
     private final Object defaultValue;
     private final Class settingType;
-    private final String labyIcon;
 
-    Settings(Object defaultValue, String labyIcon) {
+    Settings(Object defaultValue) {
         this.defaultValue = defaultValue;
         this.settingType = defaultValue.getClass();
-        this.labyIcon = labyIcon;
     }
 
     public Object getDefaultValue() {
@@ -73,10 +75,6 @@ public enum Settings {
 
     public Class getSettingType() {
         return settingType;
-    }
-
-    public String getLabyIcon() {
-        return labyIcon;
     }
 
     public String getName() {
