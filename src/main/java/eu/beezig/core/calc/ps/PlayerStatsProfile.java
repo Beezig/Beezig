@@ -55,6 +55,6 @@ public class PlayerStatsProfile implements Comparable<PlayerStatsProfile> {
         if(title == null)
             return String.format("%s §7-%s %s", Message.ratio(stat), Color.accent(), displayName);
         String rankColor = StringUtils.getColor(title.getColoredName());
-        return String.format("%s%s §7- %s %s", rankColor, Message.ratio(stat), title.getColoredName(), displayName);
+        return String.format("%s%s §7- %s %s%s", rankColor, Message.ratio(stat), title.getColoredName(), Color.accent(), displayName);
     }
 }
