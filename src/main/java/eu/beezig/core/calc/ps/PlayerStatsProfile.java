@@ -22,6 +22,7 @@ package eu.beezig.core.calc.ps;
 import eu.beezig.core.data.HiveTitle;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.text.Message;
+import eu.beezig.core.util.text.StringUtils;
 
 public class PlayerStatsProfile implements Comparable<PlayerStatsProfile> {
     private String displayName;
@@ -52,7 +53,8 @@ public class PlayerStatsProfile implements Comparable<PlayerStatsProfile> {
 
     public String getFormat() {
         if(title == null)
-            return String.format("%s §7-%s %s", displayName, Color.accent(), Message.ratio(stat));
-        return String.format("%s %s §7-%s %s", title.getColoredName(), displayName, Color.accent(), Message.ratio(stat));
+            return String.format("%s §7-%s %s", Message.ratio(stat), Color.accent(), displayName);
+        String rankColor = StringUtils.getColor(title.getColoredName());
+        return String.format("%s%s §7- %s %s", rankColor, Message.ratio(stat), title.getColoredName(), displayName);
     }
 }

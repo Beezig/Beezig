@@ -23,11 +23,19 @@ import com.google.common.base.Strings;
 import eu.the5zig.util.minecraft.ChatColor;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
 
 public class StringUtils {
 
     private static final String MAP_REPLACE_REGEX = "[^a-zA-Z0-9]";
     private static final int SPACE_PIXEL_WIDTH = pixelWidth(' ');
+
+    public static String getColor(String input) {
+        Matcher matcher = ChatColor.STRIP_COLOR_PATTERN.matcher(input);
+        StringBuilder sb = new StringBuilder();
+        while(matcher.find()) sb.append(matcher.group(0));
+        return sb.toString();
+    }
 
     public static String normalizeMapName(String mapIn) {
         return mapIn.replaceAll(MAP_REPLACE_REGEX, "").toLowerCase(Locale.ROOT);
