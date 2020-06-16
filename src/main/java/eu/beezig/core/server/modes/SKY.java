@@ -21,6 +21,7 @@ package eu.beezig.core.server.modes;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvRecUtils;
+import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.util.UUIDUtils;
@@ -92,6 +93,9 @@ public class SKY extends HiveMode implements IAutovote {
     public void end() {
         super.end();
         logger.log(getPoints(), getMap(), getKills(), mode, won, System.currentTimeMillis(), getGameID());
+        if(getSessionService() != null)
+            Beezig.get().getTemporaryPointsManager().getCurrentSession().pushItem(new SessionItem.Builder(getIdentifier())
+                    .points(getPoints()).map(getMap()).gameStart(gameStart).kills(getKills()).deaths(getDeaths()).build());
     }
 
     @Override

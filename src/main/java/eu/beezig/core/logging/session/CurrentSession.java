@@ -32,14 +32,25 @@ import java.util.*;
 public class CurrentSession {
     private Deque<SessionItem> items = new ArrayDeque<>();
     private long sessionStart, sessionEnd;
+    private transient long lastItemEnd;
     private Map<String, SessionService> services = new HashMap<>();
 
     public CurrentSession() {
         sessionStart = System.currentTimeMillis();
+        lastItemEnd = sessionStart;
     }
 
     public void pushItem(SessionItem item) {
+        items.push(createHubItem(lastItemEnd, item.getGameStart()));
         items.push(item);
+        lastItemEnd = item.getGameEnd();
+    }
+
+    private SessionItem createHubItem(long start, long end) {
+        return new SessionItem.Builder("HUB")
+                .gameStart(start)
+                .custom("end", Long.toString(end, 10))
+                .build();
     }
 
     public SessionService getService(HiveMode mode) {
@@ -54,6 +65,7 @@ public class CurrentSession {
 
     public void closeSession() throws IOException {
         sessionEnd = System.currentTimeMillis();
+        items.push(createHubItem(lastItemEnd, sessionEnd));
         File sessionFile = new File(Beezig.get().getBeezigDir(),
                 String.format("sessions/%s/%s.json", TemporaryPointsManager.dateFormatter.format(new Date()), sessionStart));
         if(!sessionFile.exists()) {

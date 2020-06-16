@@ -216,7 +216,7 @@ public class TIMV extends HiveMode implements IAutovote {
                 getMap(), rolePoints, 0, 0, 0, getGameID(), pass, System.currentTimeMillis());
         if(getSessionService() != null)
             Beezig.get().getTemporaryPointsManager().getCurrentSession().pushItem(new SessionItem.Builder(getIdentifier())
-                .points(getPoints()).map(getMap()).gameStart(gameStart).custom("role", role.name()).build());
+                .points(getPoints()).map(getMap()).gameStart(gameStart).custom("role", role == null ? null : role.name()).build());
     }
 
     @Override
