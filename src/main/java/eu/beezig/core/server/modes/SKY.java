@@ -54,7 +54,7 @@ public class SKY extends HiveMode implements IAutovote {
             stats.setPlayed((int) api.getGamesPlayed());
             stats.setDeaths((int) api.getDeaths());
             stats.setVictories((int) api.getVictories());
-            stats.setTitle(getTitleService().getTitle((api.getTitle())));
+            stats.setTitle(getTitleService().getTitle(api.getTitle()));
             return stats;
         });
         statsFetcher.setScoreboardComputer(lines -> {
