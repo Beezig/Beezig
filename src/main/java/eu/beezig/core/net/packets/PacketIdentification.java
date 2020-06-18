@@ -42,6 +42,7 @@ public class PacketIdentification implements Packet {
     public void write(PacketBuffer buffer) {
         buffer.writeUUID(profile.getId());
         buffer.writeString(profile.getName());
+        buffer.writeByte((byte) (Beezig.get().isLaby() ? 1 : 0));
     }
 
     @Override
