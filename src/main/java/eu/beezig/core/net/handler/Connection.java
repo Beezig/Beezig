@@ -118,7 +118,7 @@ public class Connection extends SimpleChannelInboundHandler<Packet> {
         }
     }
 
-    private void sendPacket(Packet packet, GenericFutureListener... listeners) {
+    public void sendPacket(Packet packet, GenericFutureListener... listeners) {
         if (isChannelOpen()) {
             this.flushOutboundQueue();
             this.dispatchPacket(packet, listeners);

@@ -19,6 +19,8 @@
 
 package eu.beezig.core.logging;
 
+import eu.beezig.core.Beezig;
+import eu.beezig.core.net.packets.PacketDailyGame;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -28,8 +30,10 @@ import java.nio.charset.StandardCharsets;
 public class DailyService {
     private int points;
     private File file;
+    private String mode;
 
-    public DailyService(File f) {
+    public DailyService(String id, File f) {
+        this.mode = id;
         this.file = f;
     }
 
@@ -54,5 +58,13 @@ public class DailyService {
 
     public void addPoints(int points) {
         this.points += points;
+    }
+
+    public void submitGamePoints(int points, String gameId) {
+        if(gameId != null) {
+            Beezig.get().getAsyncExecutor()
+                    .execute(() -> Beezig.get().getNetworkManager().getHandler()
+                            .sendPacket(new PacketDailyGame(mode, gameId, points)));
+        }
     }
 }

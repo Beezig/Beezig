@@ -42,6 +42,7 @@ public class BeezigNetManager {
     private static final int reconnectAdd = ThreadLocalRandom.current().nextInt(30);
     private static int reconnectTries;
     private static final int MAX_RECONNECT_TIME = 400;
+    private Connection handler;
 
     public Protocol getProtocol() {
         return protocol;
@@ -70,7 +71,7 @@ public class BeezigNetManager {
         client.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel ch) {
-                Connection handler = new Connection();
+                handler = new Connection();
                 ch.pipeline().addLast(
                         new NetworkDecoder(), new NetworkEncoder(), handler);
                 Beezig.api().getPluginManager().registerListener(Beezig.get(), handler);
@@ -115,5 +116,9 @@ public class BeezigNetManager {
                 e.printStackTrace();
             }
         });
+    }
+
+    public Connection getHandler() {
+        return handler;
     }
 }

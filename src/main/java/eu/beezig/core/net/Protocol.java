@@ -19,6 +19,7 @@
 
 package eu.beezig.core.net;
 
+import eu.beezig.core.net.packets.PacketDailyGame;
 import eu.beezig.core.net.packets.PacketDisconnect;
 import eu.beezig.core.net.packets.PacketIdentification;
 
@@ -31,6 +32,7 @@ public class Protocol {
     Protocol() {
         register(0x0, PacketDisconnect.class);
         register(0x1, PacketIdentification.class);
+        register(0x2, PacketDailyGame.class);
     }
 
     private void register(int id, Class<? extends Packet> packet) {
