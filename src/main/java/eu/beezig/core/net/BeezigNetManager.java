@@ -96,7 +96,6 @@ public class BeezigNetManager {
     }
 
     private void reconnectIn(int seconds) {
-        if(!Beezig.DEBUG) return;
         if (reconnecting)
             return;
         reconnecting = true;
