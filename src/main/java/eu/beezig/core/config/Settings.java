@@ -61,7 +61,10 @@ public enum Settings {
     TIMV_ADVREC_KRR(true),
     TIMV_ADVREC_TRATIO(true),
     TIMV_ADVREC_RECORD(true),
-    TIMV_ADVREC_KPV(true);
+    TIMV_ADVREC_KPV(true),
+
+    // Misc
+    CHAT_LINKS(true);
 
     private final Object defaultValue;
     private final Class settingType;

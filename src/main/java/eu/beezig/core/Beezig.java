@@ -32,6 +32,7 @@ import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.DirectoryMigration;
 import eu.beezig.core.util.snipe.AntiSniper;
 import eu.beezig.core.util.task.WorldTaskManager;
+import eu.beezig.core.util.text.LinkSnipper;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.HiveWrapper;
 import eu.the5zig.mod.ModAPI;
@@ -130,6 +131,7 @@ public class Beezig {
 
         antiSniper = new AntiSniper();
         api.getPluginManager().registerListener(this, antiSniper);
+        api.getPluginManager().registerListener(this, new LinkSnipper());
 
         // Register Hive stuff
         api.registerServerInstance(this, ServerHive.class);
