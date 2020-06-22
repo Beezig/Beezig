@@ -27,6 +27,8 @@ import eu.beezig.core.data.BeezigData;
 import eu.beezig.core.logging.TemporaryPointsManager;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.net.BeezigNetManager;
+import eu.beezig.core.net.session.NetSessionManager;
+import eu.beezig.core.net.session.The5zigProvider;
 import eu.beezig.core.notification.NotificationManager;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.DirectoryMigration;
@@ -77,6 +79,11 @@ public class Beezig {
 
     public Beezig() {
         this(false, null);
+        try {
+            NetSessionManager.provider = new The5zigProvider();
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
     }
 
     @EventHandler

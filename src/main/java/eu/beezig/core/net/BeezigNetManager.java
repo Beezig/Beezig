@@ -23,6 +23,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.net.handler.Connection;
 import eu.beezig.core.net.handler.NetworkDecoder;
 import eu.beezig.core.net.handler.NetworkEncoder;
+import eu.beezig.core.net.session.NetSessionManager;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -43,6 +44,11 @@ public class BeezigNetManager {
     private static int reconnectTries;
     private static final int MAX_RECONNECT_TIME = 400;
     private Connection handler;
+    private NetSessionManager sessionManager;
+
+    public NetSessionManager getSessionManager() {
+        return sessionManager;
+    }
 
     public Protocol getProtocol() {
         return protocol;
@@ -50,6 +56,7 @@ public class BeezigNetManager {
 
     public BeezigNetManager() {
         protocol = new Protocol();
+        sessionManager = new NetSessionManager();
     }
 
     public void connect() {

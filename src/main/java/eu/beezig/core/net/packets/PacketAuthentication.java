@@ -19,39 +19,25 @@
 
 package eu.beezig.core.net.packets;
 
-import com.mojang.authlib.GameProfile;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.net.Packet;
 import eu.beezig.core.net.handler.Connection;
 import eu.beezig.core.net.util.PacketBuffer;
 
-public class PacketIdentification implements Packet {
-
-    // Out
-    private GameProfile profile;
-
-    // In
-    private int sharedSecret;
-
-    public PacketIdentification() {
-        profile = Beezig.user();
-    }
+public class PacketAuthentication implements Packet {
 
     @Override
     public void read(PacketBuffer buffer) {
-        sharedSecret = buffer.readInt();
+
     }
 
     @Override
     public void write(PacketBuffer buffer) {
-        buffer.writeUUID(profile.getId());
-        buffer.writeString(profile.getName());
-        buffer.writeByte((byte) (Beezig.get().isLaby() ? 1 : 0));
+
     }
 
     @Override
     public void handle(Connection handler) {
-        handler.setHandshakeSecret(sharedSecret);
-        handler.authenticate();
+        Beezig.logger.info("Authentication successful!");
     }
 }
