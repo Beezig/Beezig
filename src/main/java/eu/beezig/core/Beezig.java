@@ -30,6 +30,7 @@ import eu.beezig.core.net.BeezigNetManager;
 import eu.beezig.core.notification.NotificationManager;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.DirectoryMigration;
+import eu.beezig.core.util.snipe.AntiSniper;
 import eu.beezig.core.util.task.WorldTaskManager;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.HiveWrapper;
@@ -64,6 +65,7 @@ public class Beezig {
     private WorldTaskManager worldTaskManager;
     private TemporaryPointsManager temporaryPointsManager;
     private NotificationManager notificationManager;
+    private AntiSniper antiSniper;
     private boolean laby;
 
     public Beezig(boolean laby, File labyDir) {
@@ -87,7 +89,7 @@ public class Beezig {
         api = The5zigAPI.getAPI();
         asyncExecutor = Executors.newFixedThreadPool(5);
         worldTaskManager = new WorldTaskManager();
-        Beezig.api().getPluginManager().registerListener(this, worldTaskManager);
+        api.getPluginManager().registerListener(this, worldTaskManager);
         HiveWrapper.setAsyncExecutor(asyncExecutor);
         HiveWrapper.setUserAgent(Message.getUserAgent());
 
@@ -125,6 +127,9 @@ public class Beezig {
         } catch (ReflectiveOperationException e) {
             logger.error("Couldn't load temporary points.", e);
         }
+
+        antiSniper = new AntiSniper();
+        api.getPluginManager().registerListener(this, antiSniper);
 
         // Register Hive stuff
         api.registerServerInstance(this, ServerHive.class);
@@ -184,6 +189,10 @@ public class Beezig {
 
     public NotificationManager getNotificationManager() {
         return notificationManager;
+    }
+
+    public AntiSniper getAntiSniper() {
+        return antiSniper;
     }
 
     public static Beezig get() {

@@ -52,6 +52,9 @@ public enum Settings {
     ADVREC_PPG(true),
     ADVREC_KPG(true),
 
+    // Anti Sniper
+    SNIPE_TYPO(true),
+
     // Trouble in Mineville
     TIMV_ADVREC_VICTORIES(true),
     TIMV_ADVREC_KRR(true),
