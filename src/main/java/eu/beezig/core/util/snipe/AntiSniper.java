@@ -27,6 +27,7 @@ import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.TextButton;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
+import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.mod.util.component.MessageComponent;
 import org.apache.commons.io.FileUtils;
 
@@ -34,6 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,19 +66,41 @@ public class AntiSniper {
         else {
             commands = FileUtils.readLines(file, "UTF-8");
         }
-        commandTypoRegex = Pattern.compile("(?:7|[^/]/)((" + String.join("|", commands) + ").*)");
+        commandTypoRegex = Pattern.compile("(?:7|[^/]/)((" + String.join("|", commands) + ").*)", Pattern.CASE_INSENSITIVE);
     }
 
     @EventHandler
     public void onChatSend(ChatSendEvent event) {
-        if(commandTypoRegex == null || !ServerHive.isCurrent()) return;
+        if(!ServerHive.isCurrent()) return;
         String msg = event.getMessage();
-        if(Settings.SNIPE_TYPO.get().getBoolean()) {
+        if(commandTypoRegex != null && Settings.SNIPE_TYPO.get().getBoolean()) {
             Matcher m = commandTypoRegex.matcher(msg);
             if (m.matches()) {
                 event.setCancelled(true);
                 String cmd = m.group(1);
                 sendTypo(new BlockAction(msg, "/" + cmd));
+            }
+        }
+        if(lastSender != null && Settings.SNIPE_PMS.get().getBoolean()) {
+            if(msg.toLowerCase(Locale.ROOT).startsWith("/r ")) {
+                event.setCancelled(true);
+                String[] args = msg.split(" ");
+                String reply = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+                Beezig.api().sendPlayerMessage("/msg " + lastSender + " " + reply);
+            }
+        }
+    }
+
+    public void onMatch(String key, IPatternResult match) {
+        if("msg.private".equals(key)) {
+            String sender = match.get(0);
+            if(!sender.equalsIgnoreCase(Beezig.user().getName()))
+                lastSender = sender;
+        }
+        if("msg.broadcast".equals(key)) {
+            lastBroadcastSender = match.get(0);
+            if(Settings.SNIPE_PMS.get().getBoolean()) {
+                Message.info(Message.translate("msg.snipe.broadcast"));
             }
         }
     }
@@ -91,5 +115,9 @@ public class AntiSniper {
         main.getSiblings().add(new MessageComponent(" "));
         main.getSiblings().add(disable);
         Beezig.api().messagePlayerComponent(main, false);
+    }
+
+    public String getLastBroadcastSender() {
+        return lastBroadcastSender;
     }
 }

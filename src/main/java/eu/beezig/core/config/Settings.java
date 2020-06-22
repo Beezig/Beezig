@@ -54,6 +54,7 @@ public enum Settings {
 
     // Anti Sniper
     SNIPE_TYPO(true),
+    SNIPE_PMS(true),
 
     // Trouble in Mineville
     TIMV_ADVREC_VICTORIES(true),

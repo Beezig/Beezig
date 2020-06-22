@@ -128,6 +128,7 @@ public class ServerHive extends ServerInstance {
                 getGameListener().switchLobby(key.replace("join.", ""));
             }
             Beezig.get().getNotificationManager().onMatch(key, match);
+            Beezig.get().getAntiSniper().onMatch(key, match);
             if("tokens".equals(key)) ServerHive.this.tokens = Integer.parseInt(match.get(1), 10);
             else if("tokens.boost".equals(key)) ServerHive.this.tokens += Integer.parseInt(match.get(0), 10);
             else if("medals".equals(key)) ServerHive.this.medals = Integer.parseInt(match.get(0), 10);
