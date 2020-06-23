@@ -30,6 +30,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 public class NetworkEncoder extends MessageToByteEncoder<Packet> {
     @Override
     protected void encode(ChannelHandlerContext ctx, Packet msg, ByteBuf out) throws Exception {
+        Beezig.logger.debug("Packet -> " + msg.getClass().getSimpleName());
         out.writeByte(Beezig.net().getProtocol().getPacketId(msg));
         try(PacketBuffer buffer = new PacketBuffer(Unpooled.buffer())) {
             msg.write(buffer);

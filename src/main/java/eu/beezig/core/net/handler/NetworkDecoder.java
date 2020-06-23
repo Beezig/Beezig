@@ -32,11 +32,18 @@ import java.util.List;
 public class NetworkDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        if(in.readableBytes() < 1) return;
+        // Make sure we get enough data for id + length
+        if(in.readableBytes() < 5) return;
+        in.markReaderIndex();
         byte id = in.readByte();
         int size = in.readInt();
+        if(in.readableBytes() < size) {
+            in.resetReaderIndex();
+            return;
+        }
         PacketBuffer buf = new PacketBuffer(in.readSlice(size));
         Packet packet = Beezig.net().getProtocol().getPacket(id);
+        Beezig.logger.debug("Packet <- " + packet.getClass().getSimpleName());
         packet.read(buf);
         if(in.readableBytes() > 0) {
             throw new IOException(String.format("Packet %s was larger than expected, found %d extra bytes.",
