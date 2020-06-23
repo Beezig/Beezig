@@ -19,9 +19,12 @@
 
 package eu.beezig.core.util;
 
+import eu.beezig.core.Beezig;
+import eu.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class UUIDUtils {
     public static String strip(UUID uuid) {
@@ -30,5 +33,16 @@ public class UUIDUtils {
 
     public static String getDisplayName(NetworkPlayerInfo info) {
         return info.getDisplayName() != null ? info.getDisplayName() : info.getGameProfile().getName();
+    }
+
+    public static CompletableFuture<UUID> getUUID(String name) {
+        for(NetworkPlayerInfo info : Beezig.api().getServerPlayers()) {
+            if(name.equals(getDisplayName(info))) {
+                return CompletableFuture.completedFuture(info.getGameProfile().getId());
+            }
+        }
+        return UsernameToUuid.getUUID(name).thenApplyAsync(s -> UUID.fromString(s.replaceAll(
+                "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
+                "$1-$2-$3-$4-$5")));
     }
 }

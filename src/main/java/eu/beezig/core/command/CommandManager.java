@@ -39,6 +39,7 @@ public class CommandManager {
         commandExecutors.add(new DoNotDisturbCommand());
         commandExecutors.add(new SayCommand());
         commandExecutors.add(new BroadcastReplyCommand());
+        commandExecutors.add(new OnBeezigCommand());
     }
 
     @EventHandler
