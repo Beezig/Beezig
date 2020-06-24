@@ -26,7 +26,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-import java.io.IOException;
 import java.util.List;
 
 public class NetworkDecoder extends ByteToMessageDecoder {
@@ -45,10 +44,6 @@ public class NetworkDecoder extends ByteToMessageDecoder {
         Packet packet = Beezig.net().getProtocol().getPacket(id);
         Beezig.logger.debug("Packet <- " + packet.getClass().getSimpleName());
         packet.read(buf);
-        if(in.readableBytes() > 0) {
-            throw new IOException(String.format("Packet %s was larger than expected, found %d extra bytes.",
-                    packet.getClass().getSimpleName(), in.readableBytes()));
-        }
-        else out.add(packet);
+        out.add(packet);
     }
 }

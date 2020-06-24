@@ -48,6 +48,7 @@ public class ProfilesCache {
         lastRequestID = new AtomicInteger(0);
         updating = new AtomicBoolean(false);
         cachedPlayers = new HashSet<>();
+        Beezig.api().getPluginManager().registerListener(Beezig.get(), new ProfileBadgeListener());
     }
 
     public void putAll(int requestId, Set<UserProfile> profiles) {
@@ -91,6 +92,10 @@ public class ProfilesCache {
             updateUnconditionally(ids);
         }
         return Optional.empty();
+    }
+
+    public Optional<UserProfile> getIfPresent(UUID id) {
+        return profilesCache.getIfPresent(id);
     }
 
     private void updateUnconditionally(Collection<UUID> ids) {

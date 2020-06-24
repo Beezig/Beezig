@@ -26,6 +26,7 @@ import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.GameStats;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
+import eu.the5zig.util.minecraft.ChatColor;
 
 import java.io.IOException;
 import java.util.*;
@@ -69,7 +70,7 @@ public class PlayerStatsCalculator {
                     .map(s -> mode.getProfile(displayNames, s, apiStat, stat))
                     .sorted()
                     .mapToDouble(p -> {
-                        Message.info(p.getFormat());
+                        Message.info(p.getFormat() + " " + UUIDUtils.getShortRole(UUIDUtils.getLocalUUID(ChatColor.stripColor(p.getDisplayName()))));
                         return p.getStat().doubleValue();
                     }).summaryStatistics();
                 Message.info(Beezig.api().translate("msg.ps.done", modeName.toUpperCase(Locale.ROOT),

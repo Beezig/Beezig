@@ -20,6 +20,8 @@
 package eu.beezig.core.net.profile;
 
 import eu.beezig.core.util.text.Message;
+import eu.the5zig.mod.util.component.MessageComponent;
+import eu.the5zig.mod.util.component.style.MessageAction;
 
 import java.util.Locale;
 
@@ -45,5 +47,16 @@ public enum UserRole {
 
     public String getDisplayName() {
         return prefix + Message.translate("role." + name().toLowerCase(Locale.ROOT));
+    }
+
+    public MessageComponent getDisplayComponent() {
+        MessageComponent dot = new MessageComponent(prefix + " Ⓑ");
+        dot.getStyle().setOnHover(new MessageAction(MessageAction.Action.SHOW_TEXT, new MessageComponent(getDisplayName())));
+        return dot;
+    }
+
+    public String getShortName() {
+        if(this == USER) return prefix + "§lⒷ";
+        return prefix + "(§lⒷ " + prefix + Message.translate("role." + name().toLowerCase(Locale.ROOT) + ".short") + ")";
     }
 }

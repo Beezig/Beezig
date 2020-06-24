@@ -20,9 +20,14 @@
 package eu.beezig.core.util;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.net.profile.UserProfile;
 import eu.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
+import eu.the5zig.mod.util.component.MessageComponent;
+import eu.the5zig.util.minecraft.ChatColor;
 
+import java.util.Collections;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -35,9 +40,30 @@ public class UUIDUtils {
         return info.getDisplayName() != null ? info.getDisplayName() : info.getGameProfile().getName();
     }
 
+    public static MessageComponent getUserRole(UUID id) {
+        if(id == null) return new MessageComponent("");
+        Optional<UserProfile> profile = Beezig.net().getProfilesCache().getNowOrSubmit(id, Collections.singletonList(id));
+        return profile.map(userProfile -> userProfile.getRole().getDisplayComponent()).orElseGet(() -> new MessageComponent(""));
+    }
+
+    public static String getShortRole(UUID id) {
+        if(id == null) return "";
+        Optional<UserProfile> profile = Beezig.net().getProfilesCache().getIfPresent(id);
+        return profile.map(userProfile -> userProfile.getRole().getShortName()).orElse("");
+    }
+
+    public static UUID getLocalUUID(String name) {
+        for(NetworkPlayerInfo info : Beezig.api().getServerPlayers()) {
+            if(name.equalsIgnoreCase(ChatColor.stripColor(getDisplayName(info)))) {
+                return info.getGameProfile().getId();
+            }
+        }
+        return null;
+    }
+
     public static CompletableFuture<UUID> getUUID(String name) {
         for(NetworkPlayerInfo info : Beezig.api().getServerPlayers()) {
-            if(name.equals(getDisplayName(info))) {
+            if(name.equalsIgnoreCase(ChatColor.stripColor(getDisplayName(info)))) {
                 return CompletableFuture.completedFuture(info.getGameProfile().getId());
             }
         }
