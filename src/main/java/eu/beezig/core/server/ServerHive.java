@@ -38,6 +38,8 @@ public class ServerHive extends ServerInstance {
     private int medals;
     private String lobby;
     private HivePlayer profile;
+    private boolean inParty;
+    private boolean inPartyChat;
 
     public long getTokens() {
         return tokens;
@@ -57,6 +59,14 @@ public class ServerHive extends ServerInstance {
 
     public HivePlayer getProfile() {
         return profile;
+    }
+
+    public boolean getInParty() {
+        return inParty;
+    }
+
+    public boolean getInPartyChat() {
+        return inPartyChat;
     }
 
     @Override
@@ -136,6 +146,13 @@ public class ServerHive extends ServerInstance {
             else if("gameid".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).setGameID(match.get(0));
             else if("map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).setMap(match.get(0));
             else if("autovote.map".equals(key) && gameMode instanceof HiveMode) ((HiveMode)gameMode).getAutovoteManager().parse(match);
+            else if("partychat.enable".equals(key)) inPartyChat = true;
+            else if("partychat.disable".equals(key)) inPartyChat = false;
+            else if("party.join".equals(key) || "party.create".equals(key)) inParty = true;
+            else if("party.leave".equals(key) || "party.disband".equals(key)) {
+                inParty = false;
+                inPartyChat = false;
+            }
             else if(key.endsWith(".setstate")) {
                 gameMode.setState(GameState.GAME);
                 WorldTask.submit(() -> Beezig.api().sendPlayerMessage("/gameid"));
