@@ -21,51 +21,104 @@ package eu.beezig.core.net.profile;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.common.collect.ImmutableSet;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.net.packets.PacketOnlineUsers;
+import eu.the5zig.mod.util.NetworkPlayerInfo;
 
-import java.util.ArrayDeque;
-import java.util.List;
-import java.util.Queue;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class ProfilesCache {
-    private Cache<UUID, UserProfile> profilesCache;
+    private Cache<UUID, Optional<UserProfile>> profilesCache;
     private Queue<FutureTask> tasks = new ArrayDeque<>();
     private AtomicInteger lastRequestID;
+    private AtomicBoolean updating;
+    private Set<UUID> cachedPlayers;
 
     public ProfilesCache() {
         profilesCache = Caffeine.newBuilder()
                 .maximumSize(10_000)
                 .expireAfterWrite(15, TimeUnit.MINUTES).build();
         lastRequestID = new AtomicInteger(0);
+        updating = new AtomicBoolean(false);
+        cachedPlayers = new HashSet<>();
     }
 
-    public void putAll(int requestId, List<UserProfile> profiles) {
-        if(profiles.size() == 0) wakeTasks(requestId, null);
+    public void putAll(int requestId, Set<UserProfile> profiles) {
+        if(profiles.size() == 0) {
+            noResults(requestId);
+            return;
+        }
         for(UserProfile profile : profiles) {
-            profilesCache.put(profile.getUuid(), profile);
-            wakeTasks(requestId, profile);
+            profilesCache.put(profile.getUuid(), Optional.of(profile));
         }
+        FutureTask task = getTask(requestId);
+        task.consumer.accept(profiles);
+        Set<UUID> uuidsFound = profiles.stream().map(UserProfile::getUuid).collect(Collectors.toSet());
+        task.uuids.removeAll(uuidsFound);
+        for(UUID uuid : task.uuids) profilesCache.put(uuid, Optional.empty());
+        tasks.remove(task);
     }
 
-    private void wakeTasks(int requestId, UserProfile profile) {
+    private FutureTask getTask(int requestId) {
         for(FutureTask task : tasks) {
-            if(task.requestId == requestId) task.consumer.accept(profile);
+            if(task.requestId == requestId) return task;
+        }
+        return null;
+    }
+
+    public void tryUpdateList() {
+        Collection<NetworkPlayerInfo> players = Beezig.api().getServerPlayers();
+        if(players.size() == cachedPlayers.size()) return;
+        Set<UUID> ids = players.stream().map(info -> info.getGameProfile().getId()).collect(Collectors.toSet());
+        Set<UUID> diff = new HashSet<>(ids);
+        diff.removeAll(cachedPlayers);
+        diff.removeIf(id -> profilesCache.getIfPresent(id) != null);
+        updateUnconditionally(diff);
+        this.cachedPlayers = ids;
+    }
+
+    public Optional<UserProfile> getNowOrSubmit(UUID id, Collection<UUID> ids) {
+        Optional<UserProfile> temp = profilesCache.getIfPresent(id);
+        if(temp != null) return temp;
+        if(!updating.get()) {
+            updateUnconditionally(ids);
+        }
+        return Optional.empty();
+    }
+
+    private void updateUnconditionally(Collection<UUID> ids) {
+        updating.set(true);
+        int id = lastRequestID.getAndIncrement();
+        tasks.add(new FutureTask(id, new HashSet<>(ids), (profiles) -> updating.set(false)));
+        Beezig.get().getAsyncExecutor().execute(() -> Beezig.net().getHandler().sendPacket(new PacketOnlineUsers(id, ids)));
+    }
+
+    private void noResults(int requestId) {
+        for(Iterator<FutureTask> iter = tasks.iterator(); iter.hasNext();) {
+            FutureTask task = iter.next();
+            if(task.requestId == requestId) {
+                task.consumer.accept(ImmutableSet.of());
+                for(UUID uuid : task.uuids) profilesCache.put(uuid, Optional.empty());
+                tasks.remove(task);
+            }
         }
     }
 
-    public CompletableFuture<UserProfile> getProfile(UUID uuid) {
-        CompletableFuture<UserProfile> future = new CompletableFuture<>();
-        UserProfile temp = profilesCache.getIfPresent(uuid);
+    public CompletableFuture<Optional<UserProfile>> getProfile(UUID uuid) {
+        CompletableFuture<Optional<UserProfile>> future = new CompletableFuture<>();
+        Optional<UserProfile> temp = profilesCache.getIfPresent(uuid);
         if(temp != null) future.complete(temp);
         else {
             int id = lastRequestID.getAndIncrement();
-            tasks.add(new FutureTask(id, uuid, future::complete));
+            tasks.add(new FutureTask(id, ImmutableSet.of(uuid),
+                    profiles -> future.complete(profiles.isEmpty() ? Optional.empty() : Optional.of(profiles.toArray(new UserProfile[0])[0]))));
             Beezig.get().getAsyncExecutor().execute(() -> Beezig.get().getNetworkManager().getHandler()
                     .sendPacket(new PacketOnlineUsers(id, uuid)));
         }
@@ -74,12 +127,12 @@ public class ProfilesCache {
 
     private static class FutureTask {
         private int requestId;
-        private UUID uuid;
-        private Consumer<UserProfile> consumer;
+        private Set<UUID> uuids;
+        private Consumer<Set<UserProfile>> consumer;
 
-        FutureTask(int requestId, UUID uuid, Consumer<UserProfile> consumer) {
+        FutureTask(int requestId, Set<UUID> uuids, Consumer<Set<UserProfile>> consumer) {
             this.requestId = requestId;
-            this.uuid = uuid;
+            this.uuids = uuids;
             this.consumer = consumer;
         }
     }

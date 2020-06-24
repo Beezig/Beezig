@@ -45,10 +45,10 @@ public class OnBeezigCommand implements Command {
         UUIDUtils.getUUID(args[0])
                 .thenAcceptAsync(uuid -> Beezig.net().getProfilesCache().getProfile(uuid)
                         .thenAcceptAsync(profile -> {
-                            if (profile == null)
+                            if (!profile.isPresent())
                                 Message.error(Beezig.api().translate("msg.user.offline", args[0]));
                             else Message.info(Beezig.api().translate("msg.user.online",
-                                    Color.accent() + args[0] + Color.primary(), profile.getRole().getDisplayName()));
+                                    Color.accent() + args[0] + Color.primary(), profile.get().getRole().getDisplayName()));
                         })).exceptionally(e -> {
                             Message.error(Message.translate("error.online_users"));
                             Beezig.logger.error(e);

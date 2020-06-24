@@ -30,7 +30,7 @@ import java.util.*;
 public class PacketOnlineUsers implements Packet {
 
     private Collection<UUID> players;
-    private List<UserProfile> profiles = new ArrayList<>();
+    private Set<UserProfile> profiles = new HashSet<>();
     private int requestId;
 
     public PacketOnlineUsers(int requestId, Collection<UUID> players) {

@@ -190,6 +190,7 @@ public class ServerHive extends ServerInstance {
                 HiveMode mode = (HiveMode) gameMode;
                 mode.getStatsFetcher().attemptCompute(mode, Beezig.api().getSideScoreboard());
             }
+            Beezig.net().getProfilesCache().tryUpdateList();
         }
     }
 }
