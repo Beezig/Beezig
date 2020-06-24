@@ -23,6 +23,8 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.net.handler.Connection;
 import eu.beezig.core.net.handler.NetworkDecoder;
 import eu.beezig.core.net.handler.NetworkEncoder;
+import eu.beezig.core.net.profile.ProfilesCache;
+import eu.beezig.core.net.session.NetSessionManager;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -42,6 +44,17 @@ public class BeezigNetManager {
     private static final int reconnectAdd = ThreadLocalRandom.current().nextInt(30);
     private static int reconnectTries;
     private static final int MAX_RECONNECT_TIME = 400;
+    private Connection handler;
+    private NetSessionManager sessionManager;
+    private ProfilesCache profilesCache;
+
+    public NetSessionManager getSessionManager() {
+        return sessionManager;
+    }
+
+    public ProfilesCache getProfilesCache() {
+        return profilesCache;
+    }
 
     public Protocol getProtocol() {
         return protocol;
@@ -49,6 +62,8 @@ public class BeezigNetManager {
 
     public BeezigNetManager() {
         protocol = new Protocol();
+        sessionManager = new NetSessionManager();
+        profilesCache = new ProfilesCache();
     }
 
     public void connect() {
@@ -70,7 +85,7 @@ public class BeezigNetManager {
         client.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel ch) {
-                Connection handler = new Connection();
+                handler = new Connection();
                 ch.pipeline().addLast(
                         new NetworkDecoder(), new NetworkEncoder(), handler);
                 Beezig.api().getPluginManager().registerListener(Beezig.get(), handler);
@@ -95,7 +110,6 @@ public class BeezigNetManager {
     }
 
     private void reconnectIn(int seconds) {
-        if(!Beezig.DEBUG) return;
         if (reconnecting)
             return;
         reconnecting = true;
@@ -115,5 +129,9 @@ public class BeezigNetManager {
                 e.printStackTrace();
             }
         });
+    }
+
+    public Connection getHandler() {
+        return handler;
     }
 }

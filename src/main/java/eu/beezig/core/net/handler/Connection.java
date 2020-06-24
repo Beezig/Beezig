@@ -20,8 +20,10 @@
 package eu.beezig.core.net.handler;
 
 import com.google.common.collect.Queues;
+import com.mojang.authlib.exceptions.AuthenticationException;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.net.Packet;
+import eu.beezig.core.net.packets.PacketAuthentication;
 import eu.beezig.core.net.packets.PacketIdentification;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.event.EventHandler;
@@ -31,6 +33,7 @@ import io.netty.channel.*;
 import io.netty.handler.timeout.ReadTimeoutException;
 import io.netty.util.concurrent.GenericFutureListener;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Queue;
 
 public class Connection extends SimpleChannelInboundHandler<Packet> {
@@ -39,9 +42,24 @@ public class Connection extends SimpleChannelInboundHandler<Packet> {
     private Channel channel;
     private boolean disconnected;
     private String disconnectReason;
+    private int handshakeSecret;
+
+    public void setHandshakeSecret(int handshakeSecret) {
+        this.handshakeSecret = handshakeSecret;
+    }
 
     public void init() {
         sendPacket(new PacketIdentification());
+    }
+
+    public void authenticate() {
+        Beezig.logger.info("Attempting to authenticate...");
+        try {
+            Beezig.get().getNetworkManager().getSessionManager().sendAuthRequest(handshakeSecret);
+            sendPacket(new PacketAuthentication());
+        } catch (NoSuchAlgorithmException | AuthenticationException e) {
+            Beezig.logger.error("Couldn't authenticate connection", e);
+        }
     }
 
     @Override
@@ -118,7 +136,7 @@ public class Connection extends SimpleChannelInboundHandler<Packet> {
         }
     }
 
-    private void sendPacket(Packet packet, GenericFutureListener... listeners) {
+    public void sendPacket(Packet packet, GenericFutureListener... listeners) {
         if (isChannelOpen()) {
             this.flushOutboundQueue();
             this.dispatchPacket(packet, listeners);

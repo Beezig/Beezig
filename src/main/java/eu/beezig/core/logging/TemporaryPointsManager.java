@@ -74,7 +74,7 @@ public class TemporaryPointsManager {
         String date = dateFormatter.format(new Date());
         String uuid = UUIDUtils.strip(Beezig.user().getId());
         File dailyFile = new File(mode.getModeDir(), String.format("dailyPoints/%s-%s.txt", date, uuid));
-        DailyService service = new DailyService(dailyFile);
+        DailyService service = new DailyService(mode.getIdentifier(), dailyFile);
         try {
             service.loadFromFile();
         } catch (IOException e) {

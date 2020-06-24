@@ -37,13 +37,16 @@ public class CommandManager {
         commandExecutors.add(new SettingsCommand());
         commandExecutors.add(new CustomTestCommand());
         commandExecutors.add(new DoNotDisturbCommand());
+        commandExecutors.add(new SayCommand());
+        commandExecutors.add(new BroadcastReplyCommand());
+        commandExecutors.add(new OnBeezigCommand());
     }
 
     @EventHandler
     public void onClientChat(ChatSendEvent event) {
         String message = event.getMessage();
         if(!message.startsWith("/")) return;
-        event.setCancelled(dispatchCommand(message));
+        if(dispatchCommand(message)) event.setCancelled(true);
     }
 
     public static void init(Beezig plugin) {

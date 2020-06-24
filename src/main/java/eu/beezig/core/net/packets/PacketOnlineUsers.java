@@ -19,39 +19,53 @@
 
 package eu.beezig.core.net.packets;
 
-import com.mojang.authlib.GameProfile;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.net.Packet;
 import eu.beezig.core.net.handler.Connection;
+import eu.beezig.core.net.profile.UserProfile;
 import eu.beezig.core.net.util.PacketBuffer;
 
-public class PacketIdentification implements Packet {
+import java.util.*;
 
-    // Out
-    private GameProfile profile;
+public class PacketOnlineUsers implements Packet {
 
-    // In
-    private int sharedSecret;
+    private Collection<UUID> players;
+    private Set<UserProfile> profiles = new HashSet<>();
+    private int requestId;
 
-    public PacketIdentification() {
-        profile = Beezig.user();
+    public PacketOnlineUsers(int requestId, Collection<UUID> players) {
+        this.players = players;
+        this.requestId = requestId;
     }
+
+    public PacketOnlineUsers(int requestId, UUID player) {
+        this(requestId, Collections.singletonList(player));
+    }
+
+    public PacketOnlineUsers() {}
 
     @Override
     public void read(PacketBuffer buffer) {
-        sharedSecret = buffer.readInt();
+        requestId = buffer.readInt();
+        int size = buffer.readInt();
+        for(int i = 0; i < size; i++) {
+            UUID uuid = buffer.readUUID();
+            int role = buffer.readInt();
+            profiles.add(new UserProfile(uuid, role));
+        }
     }
 
     @Override
     public void write(PacketBuffer buffer) {
-        buffer.writeUUID(profile.getId());
-        buffer.writeString(profile.getName());
-        buffer.writeByte((byte) (Beezig.get().isLaby() ? 1 : 0));
+        buffer.writeInt(requestId);
+        buffer.writeInt(players.size());
+        for(UUID player : players) {
+            buffer.writeUUID(player);
+        }
     }
 
     @Override
     public void handle(Connection handler) {
-        handler.setHandshakeSecret(sharedSecret);
-        handler.authenticate();
+        Beezig.get().getNetworkManager().getProfilesCache().putAll(requestId, profiles);
     }
 }

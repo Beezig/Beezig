@@ -17,25 +17,27 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.net.handler;
+package eu.beezig.core.net.packets;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.net.Packet;
+import eu.beezig.core.net.handler.Connection;
 import eu.beezig.core.net.util.PacketBuffer;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToByteEncoder;
 
-public class NetworkEncoder extends MessageToByteEncoder<Packet> {
+public class PacketAuthentication implements Packet {
+
     @Override
-    protected void encode(ChannelHandlerContext ctx, Packet msg, ByteBuf out) throws Exception {
-        Beezig.logger.debug("Packet -> " + msg.getClass().getSimpleName());
-        out.writeByte(Beezig.net().getProtocol().getPacketId(msg));
-        try(PacketBuffer buffer = new PacketBuffer(Unpooled.buffer())) {
-            msg.write(buffer);
-            out.writeInt(buffer.getSize());
-            out.writeBytes(buffer.getInternal());
-        }
+    public void read(PacketBuffer buffer) {
+
+    }
+
+    @Override
+    public void write(PacketBuffer buffer) {
+
+    }
+
+    @Override
+    public void handle(Connection handler) {
+        Beezig.logger.info("Authentication successful!");
     }
 }

@@ -134,6 +134,7 @@ public abstract class HiveMode extends GameMode {
      */
     protected void end() {
         try {
+            dailyService.submitGamePoints(getPoints(), gameID);
             dailyService.save();
         } catch (IOException e) {
             Beezig.logger.error("Couldn't save daily points", e);

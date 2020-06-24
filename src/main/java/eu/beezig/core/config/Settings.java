@@ -52,12 +52,19 @@ public enum Settings {
     ADVREC_PPG(true),
     ADVREC_KPG(true),
 
+    // Anti Sniper
+    SNIPE_TYPO(true),
+    SNIPE_PMS(true),
+
     // Trouble in Mineville
     TIMV_ADVREC_VICTORIES(true),
     TIMV_ADVREC_KRR(true),
     TIMV_ADVREC_TRATIO(true),
     TIMV_ADVREC_RECORD(true),
-    TIMV_ADVREC_KPV(true);
+    TIMV_ADVREC_KPV(true),
+
+    // Misc
+    CHAT_LINKS(true);
 
     private final Object defaultValue;
     private final Class settingType;

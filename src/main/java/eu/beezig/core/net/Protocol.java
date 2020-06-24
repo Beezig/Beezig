@@ -19,8 +19,7 @@
 
 package eu.beezig.core.net;
 
-import eu.beezig.core.net.packets.PacketDisconnect;
-import eu.beezig.core.net.packets.PacketIdentification;
+import eu.beezig.core.net.packets.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +30,9 @@ public class Protocol {
     Protocol() {
         register(0x0, PacketDisconnect.class);
         register(0x1, PacketIdentification.class);
+        register(0x2, PacketDailyGame.class);
+        register(0x3, PacketAuthentication.class);
+        register(0x4, PacketOnlineUsers.class);
     }
 
     private void register(int id, Class<? extends Packet> packet) {

@@ -27,10 +27,14 @@ import eu.beezig.core.data.BeezigData;
 import eu.beezig.core.logging.TemporaryPointsManager;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.net.BeezigNetManager;
+import eu.beezig.core.net.session.NetSessionManager;
+import eu.beezig.core.net.session.The5zigProvider;
 import eu.beezig.core.notification.NotificationManager;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.DirectoryMigration;
+import eu.beezig.core.util.snipe.AntiSniper;
 import eu.beezig.core.util.task.WorldTaskManager;
+import eu.beezig.core.util.text.LinkSnipper;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.HiveWrapper;
 import eu.the5zig.mod.ModAPI;
@@ -64,6 +68,7 @@ public class Beezig {
     private WorldTaskManager worldTaskManager;
     private TemporaryPointsManager temporaryPointsManager;
     private NotificationManager notificationManager;
+    private AntiSniper antiSniper;
     private boolean laby;
 
     public Beezig(boolean laby, File labyDir) {
@@ -74,6 +79,11 @@ public class Beezig {
 
     public Beezig() {
         this(false, null);
+        try {
+            NetSessionManager.provider = new The5zigProvider();
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
     }
 
     @EventHandler
@@ -87,7 +97,7 @@ public class Beezig {
         api = The5zigAPI.getAPI();
         asyncExecutor = Executors.newFixedThreadPool(5);
         worldTaskManager = new WorldTaskManager();
-        Beezig.api().getPluginManager().registerListener(this, worldTaskManager);
+        api.getPluginManager().registerListener(this, worldTaskManager);
         HiveWrapper.setAsyncExecutor(asyncExecutor);
         HiveWrapper.setUserAgent(Message.getUserAgent());
 
@@ -125,6 +135,10 @@ public class Beezig {
         } catch (ReflectiveOperationException e) {
             logger.error("Couldn't load temporary points.", e);
         }
+
+        antiSniper = new AntiSniper();
+        api.getPluginManager().registerListener(this, antiSniper);
+        api.getPluginManager().registerListener(this, new LinkSnipper());
 
         // Register Hive stuff
         api.registerServerInstance(this, ServerHive.class);
@@ -184,6 +198,10 @@ public class Beezig {
 
     public NotificationManager getNotificationManager() {
         return notificationManager;
+    }
+
+    public AntiSniper getAntiSniper() {
+        return antiSniper;
     }
 
     public static Beezig get() {
