@@ -60,7 +60,7 @@ public class TestMessagesManager {
         if(!configFile.exists()) {
             configFile.getParentFile().mkdirs();
             configFile.createNewFile();
-            customMessages.addAll(Arrays.asList("{p} go test please", "{p} test please",
+            customMessages = new ArrayList<>(Arrays.asList("{p} go test please", "{p} test please",
                     "{p} pls test", "{p}, would you mind testing?", "{p}, could you test please?",
                     "{p}, please go into the tester", "{p}, I'd appreciate it if you would test",
                     "{p}, how about testing?", "{p}, would you test for me?"));
