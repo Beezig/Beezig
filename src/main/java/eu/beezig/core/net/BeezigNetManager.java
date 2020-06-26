@@ -77,6 +77,7 @@ public class BeezigNetManager {
     }
 
     private void start() throws InterruptedException {
+        reconnecting = false;
         EventLoopGroup group = new NioEventLoopGroup();
         Bootstrap client = new Bootstrap();
         client.group(group);
