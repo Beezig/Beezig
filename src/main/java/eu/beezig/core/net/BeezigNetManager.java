@@ -76,6 +76,10 @@ public class BeezigNetManager {
         });
     }
 
+    public AtomicBoolean isConnected() {
+        return connected;
+    }
+
     private void start() throws InterruptedException {
         reconnecting = false;
         EventLoopGroup group = new NioEventLoopGroup();
