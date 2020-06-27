@@ -33,6 +33,7 @@ public class Protocol {
         register(0x2, PacketDailyGame.class);
         register(0x3, PacketAuthentication.class);
         register(0x4, PacketOnlineUsers.class);
+        register(0x5, PacketServerMessage.class);
     }
 
     private void register(int id, Class<? extends Packet> packet) {
