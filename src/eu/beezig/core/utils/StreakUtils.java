@@ -35,10 +35,8 @@ public class StreakUtils {
 
     public static void init(File rootDir) {
         winstreakFile = new File(rootDir + "/winstreaks.json");
-        initValues(CAI.class, "cai");
         initValues(BED.class, "bed");
         initValues(SKY.class, "sky");
-        initValues(Giant.class, "gnt");
         initValues(HIDE.class, "hide");
     }
 

@@ -19,11 +19,9 @@
 
 package eu.beezig.core.games;
 
-import com.csvreader.CsvWriter;
 import eu.beezig.core.ActiveGame;
 import eu.beezig.core.BeezigMain;
 import eu.beezig.core.IHive;
-import eu.beezig.core.Log;
 import eu.beezig.core.games.logging.GameLogger;
 import eu.beezig.core.hiveapi.APIValues;
 import eu.beezig.core.hiveapi.stuff.timv.TIMVMap;

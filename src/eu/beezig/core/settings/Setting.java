@@ -70,11 +70,6 @@ public enum Setting {
     HIDE_SHOW_HIDER_KPG(false, "HIDE AdvRec - Hider KPG", "HIDE Advanced Records - Show Kills per Game as Hider", "WORKBENCH"),
     HIDE_SHOW_AMOUNT_UNLOCKED(true, "HIDE AdvRec - Blocks", "HIDE Advanced Records - Show amount of unlocked blocks", "WORKBENCH"),
 
-    CAI_SHOW_CATCHES_CAUGHT(true, "CAI AdvRec - Cc/Ct", "CAI Advanced Records - Show Catches/Caught Ratio", "FEATHER"),
-    CAI_SHOW_CAPTURES_GAME(true, "CAI AdvRec - CPG", "CAI Advanced Records - Show Captures/Games Ratio", "FEATHER"),
-    CAI_TITLE(true, "CAI Better Titles", "Show a better version of the titles", "FEATHER"),
-    CAI_TITLE_SHOWNAME(false, "Leader names", "Show the leader names in the titles", "FEATHER"),
-
     GRAV_SHOW_FINISHRATE(true, "GRAV AdvRec - Finish%", "GRAV Advanced Records - Show Finishrate", "GOLD_BOOTS"),
 
     BP_JUKEBOX(true, "BP Jukebox", "BP - Listen to music while playing", "RECORD_3");

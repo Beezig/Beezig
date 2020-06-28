@@ -25,7 +25,6 @@ import eu.beezig.core.CommandManager;
 import eu.beezig.core.IHive;
 import eu.beezig.core.api.listener.AbstractForgeListener;
 import eu.beezig.core.games.BED;
-import eu.beezig.core.games.CAI;
 import eu.beezig.core.games.TIMV;
 import eu.beezig.core.hiveapi.stuff.RankEnum;
 import eu.beezig.core.hiveapi.stuff.bed.BEDRank;
@@ -37,7 +36,6 @@ import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.beezig.core.utils.ws.Connector;
 import eu.beezig.core.utils.ws.api.PacketOpcodes;
 import eu.the5zig.mod.The5zigAPI;
-import eu.the5zig.util.minecraft.ChatColor;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -71,11 +69,6 @@ public class BeezigAPI {
 
     public boolean isStaffMember() {
         return BeezigMain.isStaffChat();
-    }
-
-    public String getCAITeam() {
-        if (!ActiveGame.is("cai")) return "";
-        return ChatColor.stripColor(CAI.team);
     }
 
     public boolean getSettingValue(String setting) {
