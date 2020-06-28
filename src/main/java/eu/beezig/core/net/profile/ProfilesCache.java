@@ -51,6 +51,10 @@ public class ProfilesCache {
         Beezig.api().getPluginManager().registerListener(Beezig.get(), new ProfileBadgeListener());
     }
 
+    public long getSize() {
+        return profilesCache.estimatedSize();
+    }
+
     public void putAll(int requestId, Set<UserProfile> profiles) {
         if(profiles.size() == 0) {
             noResults(requestId);

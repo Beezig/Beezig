@@ -19,9 +19,11 @@
 
 package eu.beezig.core.util.text;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import eu.the5zig.util.minecraft.ChatColor;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 
@@ -35,6 +37,15 @@ public class StringUtils {
         StringBuilder sb = new StringBuilder();
         while(matcher.find()) sb.append(matcher.group(0));
         return sb.toString();
+    }
+
+    public static String localizedJoin(List<String> list) {
+        return list.size() == 1
+                ? list.get(0)
+                : Joiner.on(", ")
+                .join(list.subList(0, list.size() - 1))
+                .concat(" " + Message.translate("msg.list.and") + " ")
+                .concat(list.get(list.size() - 1));
     }
 
     public static String normalizeMapName(String mapIn) {

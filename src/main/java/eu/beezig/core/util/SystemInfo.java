@@ -37,6 +37,7 @@ public class SystemInfo {
                 (api.getActiveServer().getGameListener().getCurrentGameMode() == null ? null : api.getActiveServer().getGameListener().getCurrentGameMode().getName());
         String lobby = api.getActiveServer() == null ? null : api.getActiveServer().getGameListener().getCurrentLobby();
         String serverInfo = String.format("Srv: %s, GM: %s, L: %s\n", api.getActiveServer(), gameMode, lobby);
+        String netMgrInfo = String.format("Net: %b UsrCache: %d\n", Beezig.net().isConnected().get(), Beezig.net().getProfilesCache().getSize());
 
         return "```\n" +
                 platformInfo +
@@ -44,6 +45,7 @@ public class SystemInfo {
                 systemInfo +
                 resourceInfo +
                 serverInfo +
+                netMgrInfo +
                 "```";
     }
 }
