@@ -344,7 +344,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
                             } else if (s.startsWith("§3 Kills: §b")) kills = Math.toIntExact(currentValue);
                             else if (s.startsWith("§3 Deaths: §b")) deaths = Math.toIntExact(currentValue);
-                            else if (s.startsWith("§3 Wins: §b")) victories = Math.toIntExact(currentValue);
+                            else if (s.startsWith("§3 Victories: §b")) victories = Math.toIntExact(currentValue);
                             else if (s.startsWith("§3 Games Played: §b")) played = Math.toIntExact(currentValue);
 
                             The5zigAPI.getAPI().messagePlayer("§f " + s);
