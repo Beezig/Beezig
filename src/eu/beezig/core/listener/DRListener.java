@@ -35,6 +35,7 @@ import eu.beezig.core.hiveapi.stuff.dr.TotalPB;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.ScoreboardUtils;
 import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
@@ -84,8 +85,8 @@ public class DRListener extends AbstractGameListener<DR> {
             gameMode.rankObject = DRRank.getFromDisplay(api.getTitle());
             gameMode.rank = gameMode.rankObject.getTotalDisplay();
             // Should've read the docs ¯\_(ツ)_/¯
-            if (sb != null && sb.getTitle().contains("Your DR Stats")) {
-                int points = sb.getLines().get(ChatColor.AQUA + "Points");
+            if (sb != null && sb.getTitle().trim().equalsIgnoreCase("§6§lHive§e§lMC")) {
+                int points = ScoreboardUtils.getValue(sb, "Points");
                 APIValues.DRpoints = points;
 
             }

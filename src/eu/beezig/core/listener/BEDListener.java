@@ -30,6 +30,7 @@ import eu.beezig.core.hiveapi.stuff.bed.BEDRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.ScoreboardUtils;
 import eu.beezig.core.utils.StreakUtils;
 import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
@@ -89,9 +90,10 @@ public class BEDListener extends AbstractGameListener<BED> {
 
                 BedStats api = null;
 
-                if (sb != null && sb.getTitle().contains("BED")) {
-                    BED.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
-                    BED.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
+                if (sb != null && sb.getTitle().trim().equalsIgnoreCase("§6§lHive§e§lMC")) {
+                    int points = ScoreboardUtils.getValue(sb, "Points");
+                    BED.apiKills = ScoreboardUtils.getValue(sb, "Kills");
+                    BED.apiDeaths = ScoreboardUtils.getValue(sb, "Deaths");
                 } else {
                     String ign2 = The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "");
                     api = new BedStats(ign2);

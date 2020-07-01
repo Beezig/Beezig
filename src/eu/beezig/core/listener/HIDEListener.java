@@ -31,6 +31,7 @@ import eu.beezig.core.hiveapi.stuff.hide.HIDERank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.ScoreboardUtils;
 import eu.beezig.core.utils.StreakUtils;
 import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
@@ -85,8 +86,8 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
 
                 HideStats api = new HideStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
 
-                if (sb != null && sb.getTitle().contains("Your HIDE Stats")) {
-                    int points = sb.getLines().get(ChatColor.AQUA + "Points");
+                if (sb != null && sb.getTitle().trim().equalsIgnoreCase("§6§lHive§e§lMC")) {
+                    int points = ScoreboardUtils.getValue(sb, "Points");
                     APIValues.HIDEpoints = (long) points;
                 } else {
                     APIValues.HIDEpoints = api.getPoints();

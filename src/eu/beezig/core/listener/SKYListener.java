@@ -30,6 +30,7 @@ import eu.beezig.core.hiveapi.stuff.sky.SKYRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.ScoreboardUtils;
 import eu.beezig.core.utils.StreakUtils;
 import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
@@ -84,17 +85,10 @@ public class SKYListener extends AbstractGameListener<SKY> {
                 SkyStats api = new SkyStats(The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", ""));
 
 
-                if (sb != null && sb.getTitle().contains("Your SKY")) {
-                    if (sb.getTitle().contains("Your SKYT"))
-                        SKY.mode = "Teams";
-                    else if (sb.getTitle().contains("Your SKYD"))
-                        SKY.mode = "Duos";
-                    else
-                        SKY.mode = "Solo";
-
-                    int points = sb.getLines().get(ChatColor.AQUA + "Points");
-                    SKY.apiKills = sb.getLines().get(ChatColor.AQUA + "Kills");
-                    SKY.apiDeaths = sb.getLines().get(ChatColor.AQUA + "Deaths");
+                if (sb != null && sb.getTitle().trim().equalsIgnoreCase("§6§lHive§e§lMC")) {
+                    int points = ScoreboardUtils.getValue(sb, "Points");
+                    SKY.apiKills = ScoreboardUtils.getValue(sb, "Kills");
+                    SKY.apiDeaths = ScoreboardUtils.getValue(sb, "Deaths");
                     APIValues.SKYpoints = (long) points;
                 } else {
                     SKY.apiKills = Math.toIntExact(api.getKills());
