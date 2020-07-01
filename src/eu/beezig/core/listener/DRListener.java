@@ -119,7 +119,7 @@ public class DRListener extends AbstractGameListener<DR> {
             while (matcher.find()) {
                 map = matcher.group(1);
             }
-            gameMode.activeMap = DR.mapsPool.get(map.toLowerCase());
+            gameMode.activeMap = DR.mapsPool.get(map.toLowerCase().trim());
 
         } else if (message.contains("§lYou are a ") && gameMode != null) {
             String afterMsg = message.split(ChatColor.stripColor("You are a "))[1];

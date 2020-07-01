@@ -204,7 +204,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             TIMV.mapStr = map;
             DiscordUtils.updatePresence("Investigating in Trouble in Mineville", "Playing on " + map, "game_timv");
 
-            TIMV.activeMap = TIMV.mapsPool.get(map.toLowerCase());
+            TIMV.activeMap = TIMV.mapsPool.get(map.toLowerCase().trim());
 
 
         } else if (message.contains("is known to have poisonous water...") && gameMode != null && TIMV.activeMap == null) {
