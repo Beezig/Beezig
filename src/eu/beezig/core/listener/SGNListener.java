@@ -175,14 +175,14 @@ public class SGNListener extends AbstractGameListener<SGN> {
                 && Setting.AUTOVOTE.getValue()) {
             SGN.votesToParse.add(message);
         } else if (message.startsWith("§8▍ §b§lCombat§8 ▏ §6Global Points Lost: §e")) {
-            int pts = Integer.parseInt(message.replace("§8▍ §b§lCombat§8 ▏ §6Global Points Lost: §e", ""));
+            int pts = Integer.parseInt(message.replace("§8▍ §e§lHive§3§lSG§8 ▏ §6Global Points Lost: §e", ""));
             if (!SGN.custom)
                 APIValues.SGNpoints -= pts;
             SGN.gamePts -= pts;
             if (!SGN.custom)
                 SGN.dailyPoints -= pts;
-        } else if (message.endsWith("§3§lGlobal points gained.")) {
-            int pts = Integer.parseInt(message.replace("§3§lGlobal points gained.", "").replace(" §b§l", "").trim());
+        } else if (message.endsWith("§3§lPoints gained.")) {
+            int pts = Integer.parseInt(message.replace("§3§lPoints gained.", "").replace("§8▍ §e§lHive§3§lSG§8 ▏ §b§l", "").trim());
             if (!SGN.custom)
                 APIValues.SGNpoints += pts;
             SGN.gamePts += pts;

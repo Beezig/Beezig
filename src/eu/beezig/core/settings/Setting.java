@@ -77,7 +77,7 @@ public enum Setting {
 
     GRAV_SHOW_FINISHRATE(true, "GRAV AdvRec - Finish%", "GRAV Advanced Records - Show Finishrate", "GOLD_BOOTS"),
 
-    BP_JUKEBOX(true, "BP Jukebox", "BP - Listen to music while playing", "RECORD_3");
+    BP_JUKEBOX(false, "BP Jukebox", "BP - Listen to music while playing", "RECORD_3");
 
 
     private boolean value;
