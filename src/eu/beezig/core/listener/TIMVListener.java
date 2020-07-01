@@ -31,6 +31,7 @@ import eu.beezig.core.hiveapi.stuff.timv.TIMVRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.ScoreboardUtils;
 import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
@@ -89,9 +90,9 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             }
             Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 
-            if (sb != null && sb.getTitle().trim().equalsIgnoreCase(ChatColor.YELLOW + "Your TIMV Stats")) {
+            if (sb != null && sb.getTitle().trim().equalsIgnoreCase("§6§lHive§e§lMC")) {
 
-                int karma = sb.getLines().get(ChatColor.AQUA + "Karma");
+                int karma = ScoreboardUtils.getValue(sb, "Karma");
                 if (karma != 0)
                     APIValues.TIMVkarma = (long) karma;
 
@@ -412,7 +413,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             }
         } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §a§lVote received. §3Your map now has") && Setting.AUTOVOTE.getValue()) {
             TIMV.hasVoted = true;
-        } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §6§e§e§l6. §f§cRandom map") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()) {
+        } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §7§l6. §6§cRandom Map") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()) {
             /*
              *
              * Multi-threading to avoid lag on older machines
@@ -456,7 +457,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                 TIMV.votesToParse.clear();
                 TIMV.hasVoted = true;
             }).start();
-        } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §6§e§e§l") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()) {
+        } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §7§l") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()) {
             TIMV.votesToParse.add(message);
         } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §6The body of §4")) {
             TIMV.traitorsDiscovered++;

@@ -455,6 +455,7 @@ public class BeezigMain {
         CommandManager.registerCommand(new BestGameCommand());
         CommandManager.registerCommand(new BeezigPartyCommand());
         CommandManager.registerCommand(new ClaimReportCommand());
+        CommandManager.registerCommand(new Java2Command());
 
         new Thread(() -> {
             try {
