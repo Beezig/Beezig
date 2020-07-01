@@ -25,7 +25,6 @@ import eu.beezig.core.Log;
 import eu.beezig.core.advancedrecords.AdvancedRecords;
 import eu.beezig.core.autovote.AutovoteUtils;
 import eu.beezig.core.games.SGN;
-import eu.beezig.core.games.SKY;
 import eu.beezig.core.hiveapi.APIValues;
 import eu.beezig.core.hiveapi.stuff.sgn.SGNRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
@@ -163,10 +162,15 @@ public class SGNListener extends AbstractGameListener<SGN> {
                     The5zigAPI.getAPI().messagePlayer("§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ "
                             + "§eAutomatically voted for map §6#" + votesindex.firstEntry().getValue());
                 }
+                else if(Setting.AUTOVOTE_RANDOM.getValue()) {
+                    The5zigAPI.getAPI().sendPlayerMessage("/v 6");
+                    The5zigAPI.getAPI().messagePlayer("§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ "
+                            + "§eAutomatically voted for Random Map.");
+                }
                 SGN.votesToParse.clear();
                 SGN.hasVoted = true;
             }).start();
-        } else if (message.startsWith("§8▍ §e§lHive§3§lSG§8 ▏ §7§l") && !SKY.hasVoted
+        } else if (message.startsWith("§8▍ §e§lHive§3§lSG§8 ▏ §7§l") && !SGN.hasVoted
                 && Setting.AUTOVOTE.getValue()) {
             SGN.votesToParse.add(message);
         } else if (message.startsWith("§8▍ §b§lCombat§8 ▏ §6Global Points Lost: §e")) {
