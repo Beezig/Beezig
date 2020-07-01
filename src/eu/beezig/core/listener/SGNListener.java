@@ -120,14 +120,13 @@ public class SGNListener extends AbstractGameListener<SGN> {
         } else if (message.startsWith("§8▍ §e§lHive§3§lSG§b§l2§8 ▏ §a§lVote received.")
                 && Setting.AUTOVOTE.getValue()) {
             SGN.hasVoted = true;
-        } else if (message.startsWith("§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ §6§l§e§l§e§l6.") && !SGN.hasVoted
+        } else if (message.startsWith("§8▍ §e§lHive§3§lSG§8 ▏ §7§l6. §6§cRandom Map") && !SGN.hasVoted
                 && Setting.AUTOVOTE.getValue()) {
             /*
              *
              * Multi-threading to avoid lag on older machines
              *
              */
-            SGN.votesToParse.add(message);
 
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(SGN.votesToParse);
@@ -140,8 +139,8 @@ public class SGNListener extends AbstractGameListener<SGN> {
                 for (String s : votesCopy) {
                     String[] data = s.split("\\.");
                     String index = ChatColor.stripColor(data[0])
-                            .replaceAll("§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ §6§l§e§l§e§l", "")
-                            .replaceAll(ChatColor.stripColor("§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ §6§l§e§l§e§l"),
+                            .replaceAll("§8▍ §e§lHive§3§lSG§8 ▏ §7§l", "")
+                            .replaceAll(ChatColor.stripColor("§8▍ §e§lHive§3§lSG§8 ▏ §7§l"),
                                     "")
                             .trim();
                     String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
@@ -167,7 +166,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
                 SGN.votesToParse.clear();
                 SGN.hasVoted = true;
             }).start();
-        } else if (message.startsWith("§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ §6§l§e§l§e§l") && !SKY.hasVoted
+        } else if (message.startsWith("§8▍ §e§lHive§3§lSG§8 ▏ §7§l") && !SKY.hasVoted
                 && Setting.AUTOVOTE.getValue()) {
             SGN.votesToParse.add(message);
         } else if (message.startsWith("§8▍ §b§lCombat§8 ▏ §6Global Points Lost: §e")) {

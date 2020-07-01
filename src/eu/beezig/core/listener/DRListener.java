@@ -175,7 +175,7 @@ public class DRListener extends AbstractGameListener<DR> {
             gameMode.kills++;
         } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §a§lVote received.") && Setting.AUTOVOTE.getValue()) {
             gameMode.hasVoted = true;
-        } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l6. §f§cRandom map ") && !gameMode.hasVoted
+        } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §7§l6. §6§cRandom Map") && !gameMode.hasVoted
                 && Setting.AUTOVOTE.getValue()) {
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(gameMode.votesToParse);
@@ -217,7 +217,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
 
             }).start();
-        } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §6§e§e§l") && !gameMode.hasVoted && Setting.AUTOVOTE.getValue()) {
+        } else if (message.startsWith("§8▍ §cDeathRun§8 ▏ §7§l") && !gameMode.hasVoted && Setting.AUTOVOTE.getValue()) {
             gameMode.votesToParse.add(message);
         } else if (message.contains("'s Stats §6§m                  ") && !message.startsWith("§f ") && Setting.ADVANCED_RECORDS.getValue()) {
             // " §6§m §f ItsNiklass's Stats §6§m "

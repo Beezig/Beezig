@@ -139,7 +139,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
             The5zigAPI.getAPI().sendPlayerMessage("/gameid");
         } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §a§lVote received. §3Your map now has ") && Setting.AUTOVOTE.getValue()) {
             HIDE.hasVoted = true;
-        } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6§e§e§l6. §f§cRandom map") && !HIDE.hasVoted && Setting.AUTOVOTE.getValue()) {
+        } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §7§l6. §6§cRandom Map") && !HIDE.hasVoted && Setting.AUTOVOTE.getValue()) {
 
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(HIDE.votesToParse);
@@ -180,7 +180,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
                 HIDE.hasVoted = true;
 
             }).start();
-        } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §6§e§e§l") && !HIDE.hasVoted && Setting.AUTOVOTE.getValue()) {
+        } else if (message.startsWith("§8▍ §bHide§aAnd§eSeek§8 ▏ §7§l") && !HIDE.hasVoted && Setting.AUTOVOTE.getValue()) {
             HIDE.votesToParse.add(message);
         }
 

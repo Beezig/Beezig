@@ -447,7 +447,7 @@ public class BEDListener extends AbstractGameListener<BED> {
         } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §a§lVote received.") && Setting.AUTOVOTE.getValue()) {
             BED.updateMode();
             BED.hasVoted = true;
-        } else if (message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l5. ") && !BED.hasVoted && Setting.AUTOVOTE.getValue()) {
+        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §7§l5.") && !BED.hasVoted && Setting.AUTOVOTE.getValue()) {
             //Adding the 6th option, the normal method doesn't work
             BED.votesToParse.add(message);
             new Thread(() -> {
@@ -465,7 +465,7 @@ public class BEDListener extends AbstractGameListener<BED> {
 
                 for (String s : votesCopy) {
                     String[] data = s.split("\\.");
-                    String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l", "").replaceAll("▍ BedWars ▏", "").trim();
+                    String index = ChatColor.stripColor(data[0]).replaceAll("§8▍ §3§lBed§b§lWars§8 ▏ §7§l", "").replaceAll("▍ BedWars ▏", "").trim();
                     String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
                     String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
                     System.out.println("VoteCopy: " + consider);
@@ -504,7 +504,7 @@ public class BEDListener extends AbstractGameListener<BED> {
             BED.ironGen++;
         } else if (message.equals("                   §b§lDiamond Summoner Upgraded!")) {
             BED.diamondGen++;
-        } else if (message.startsWith("§8▍ §3§3§lBed§b§l§b§lWars§8§l ▏ §6§l§e§l§e§l") && !BED.hasVoted && Setting.AUTOVOTE.getValue()) {
+        } else if (message.startsWith("§8▍ §3§lBed§b§lWars§8 ▏ §7§l") && !BED.hasVoted && Setting.AUTOVOTE.getValue()) {
             BED.votesToParse.add(message);
         } else if (message.contains("§aYou levelled up to")) {
             //Update the rank module when you uprank

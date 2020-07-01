@@ -149,7 +149,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
         } else if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §a§lVote received. §3Your map now has")
                 && Setting.AUTOVOTE.getValue()) {
             SKY.hasVoted = true;
-        } else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l5.") && !SKY.hasVoted
+        } else if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §7§l5.") && !SKY.hasVoted
                 && Setting.AUTOVOTE.getValue()) {
             SKY.votesToParse.add(message);
             new Thread(() -> {
@@ -163,7 +163,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
                 for (String s : votesCopy) {
                     String[] data = s.split("\\.");
                     String index = ChatColor.stripColor(data[0])
-                            .replaceAll("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l", "")
+                            .replaceAll("§8▍ §b§lSky§e§lWars§8 ▏ §7§l", "")
                             .replaceAll("▍ SkyWars ▏", "").trim();
                     String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
                     String consider = ChatColor.stripColor(toConsider[0]).trim().replaceAll(" ", "_").toUpperCase();
@@ -197,7 +197,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
 
             }).start();
-        } else if (message.startsWith("§8▍ §b§b§lSky§e§l§e§lWars§8§l ▏ §6§l§e§l§e§l") && !SKY.hasVoted
+        } else if (message.startsWith("§8▍ §b§lSky§e§lWars§8 ▏ §7§l") && !SKY.hasVoted
                 && Setting.AUTOVOTE.getValue()) {
             SKY.votesToParse.add(message);
         } else if (message.contains("§e§lWelcome to SkyWars")) {
