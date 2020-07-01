@@ -412,7 +412,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             }
         } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §a§lVote received. §3Your map now has") && Setting.AUTOVOTE.getValue()) {
             TIMV.hasVoted = true;
-        } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §6§e§e§l6. §f§cRandom map") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()) {
+        } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §7§l6. §6§cRandom Map") && !TIMV.hasVoted && Setting.AUTOVOTE.getValue()) {
             /*
              *
              * Multi-threading to avoid lag on older machines
