@@ -37,7 +37,7 @@ public enum GRAVRank implements RankEnum {
     SKY_DIVER("Sky Diver", YELLOW + "", 15000),
     BASE_JUMPER("Base Jumper", GREEN + "", 35000),
     SWERVER("Swerver", RED + "", 75000),
-    DODGER("Dodger", DARK_BLUE + "", 100000),
+    DODGER("Dodger", BLUE + "", 100000),
     EVADER("Evader", DARK_PURPLE + "", 150000),
 
     EAGLE("Eagle", GOLD + "" + BOLD, 250000),
