@@ -362,9 +362,6 @@ public class BEDListener extends AbstractGameListener<BED> {
                         if (achievements != null) {
                             The5zigAPI.getAPI().messagePlayer("§f §3 Achievements: §b" + achievements + "/67");
                         }
-                        if (streak != null) {
-                            The5zigAPI.getAPI().messagePlayer("§f §3 Win Streak: §b" + streak);
-                        }
                         // "§8▍ §3§lBed§b§lWars§8 ▏ §aYou gained 10§a points for killing"
 
                         if (Setting.BED_SHOW_ELIMINATIONS_PER_GAME.getValue()) {

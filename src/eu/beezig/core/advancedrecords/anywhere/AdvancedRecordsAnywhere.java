@@ -62,7 +62,6 @@ public class AdvancedRecordsAnywhere {
                 .addStatistic(new RecordsStatistic(GM, "games_played"))
                 .addStatistic(new RecordsStatistic(K, "kills"))
                 .addStatistic(new RecordsStatistic(D, "deaths"))
-                .addStatistic(new RecordsStatistic("Win Streak", "win_streak"))
                 .addStatistic(new RecordsStatistic("Beds Destroyed", "beds_destroyed"))
                 .addStatistic(new RecordsStatistic("Teams Eliminated", "teams_eliminated"))
                 .addStatistic(new RatioRecordsStatistic(KD, "kills", "deaths", Setting.SHOW_RECORDS_KDR))
