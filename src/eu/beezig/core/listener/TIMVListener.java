@@ -46,7 +46,6 @@ import pw.roccodev.beezig.hiveapi.wrapper.player.games.TimvStats;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -178,19 +177,8 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                 TIMV.applyPoints(20);
             }
             TIMV.traitorTeam.addAll(Collections.nCopies(7, "fin"));
-            new Thread(() -> {
-                try {
-                    TimeUnit.SECONDS.sleep(5);
-                    The5zigAPI.getAPI().messagePlayer(Log.info + "§6TIMV GameID: §c" + ChatColor.stripColor(TIMV.gameID) + " §6 > §chttp://hivemc.com/trouble-in-mineville/game/" + ChatColor.stripColor(TIMV.gameID));
-                    TIMV.reset(gameMode);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
-
         } else if (message.startsWith("§8▍ §6TIMV§8 ▏ §3Voting has ended! §bThe map") && gameMode != null) {
             String afterMsg = message.split("§8▍ §6TIMV§8 ▏ §3Voting has ended! §bThe map")[1];
-            The5zigAPI.getLogger().info(afterMsg);
             // §bSky Lands§6
             //
             String map = "";
@@ -489,20 +477,17 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             ScoreboardFetcherTask sft = new ScoreboardFetcherTask();
             timer.schedule(sft, 1500);
 
-        } else if (message.contains("   §4") && TIMV.traitorTeam.size() < 7 && TIMV.role.equals("Traitor")) {
-            //§4jordix03, ItsNiklass, Vpnce, BatHex
-            //The5zigAPI.getLogger().info(ChatColor.stripColor(message).split(", "));
-            TIMV.traitorTeam.addAll(Arrays.asList(ChatColor.stripColor(message).replaceAll(" ", "").split(",")));
-            The5zigAPI.getLogger().info(TIMV.traitorTeam.toString());
-        } else if (message.equals("                        §c§m                                ") && TIMV.traitorTeam.size() < 7 && TIMV.traitorTeam.size() > 0 && TIMV.role.equals("Traitor")) {
+        } else if (message.equals("                        §4§m                                ") && TIMV.traitorTeam.size() < 7 && TIMV.traitorTeam.size() > 0 && TIMV.role.equals("Traitor")) {
 
 
             new Thread(() -> {
 
                 ArrayList<Long> TraitorKarma = new ArrayList<>();
                 for (String name : TIMV.traitorTeam) {
-                    TimvStats api = new TimvStats(name);
-                    TraitorKarma.add(api.getKarma());
+                    try {
+                        TimvStats api = new TimvStats(name);
+                        TraitorKarma.add(api.getKarma());
+                    } catch(Exception ignored) {}
                 }
                 long avg = (long) APIUtils.average(TraitorKarma.toArray());
                 The5zigAPI.getAPI().messagePlayer("                        §c§m                                ");
@@ -510,6 +495,12 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
                 The5zigAPI.getAPI().messagePlayer("                        §c§m                                ");
 
             }).start();
+        }
+        else if (message.contains("   §4") && TIMV.traitorTeam.size() < 7 && TIMV.role.equals("Traitor")) {
+            //§4jordix03, ItsNiklass, Vpnce, BatHex
+            //The5zigAPI.getLogger().info(ChatColor.stripColor(message).split(", "));
+            TIMV.traitorTeam.addAll(Arrays.asList(ChatColor.stripColor(message).replaceAll(" ", "").split(",")));
+            The5zigAPI.getLogger().info(TIMV.traitorTeam.toString());
         }
 
         return false;
@@ -531,7 +522,6 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
     @Override
     public boolean onActionBar(TIMV gameMode, String message) {
         if (!TIMV.actionBarChecked) {
-            The5zigAPI.getLogger().info(message != null ? message : "lolnull");
             if (message != null && message.contains("▏ §7")) {
                 String[] data = message.split("▏ §7");
                 TIMV.gameID = data[1];

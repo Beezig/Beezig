@@ -22,7 +22,6 @@ package eu.beezig.core.modules.grav;
 import eu.beezig.core.Log;
 import eu.beezig.core.games.GRAV;
 import eu.beezig.core.hiveapi.APIValues;
-import eu.the5zig.mod.The5zigAPI;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.util.minecraft.ChatColor;
 
@@ -33,20 +32,7 @@ public class PointsItem extends GameModeItem<GRAV> {
     }
 
     private String getMainFormatting() {
-        if (this.getProperties().getFormatting() != null) {
-            if (this.getProperties().getFormatting().getMainColor() != null && this.getProperties().getFormatting().getMainFormatting() == null) {
-                return The5zigAPI.getAPI().getFormatting().getMainFormatting().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting()).charAt(1), this.getProperties().getFormatting().getMainColor().toString().charAt(1));
-                //Replaces Char at index 1 (ColorTag) of the Main formatting with the custom one.
-            }
-            if (this.getProperties().getFormatting().getMainColor() == null && this.getProperties().getFormatting().getMainFormatting() != null) {
-                return The5zigAPI.getAPI().getFormatting().getMainFormatting().replace((The5zigAPI.getAPI().getFormatting().getMainFormatting()).charAt(3), this.getProperties().getFormatting().getMainFormatting().toString().charAt(3));
-                //Replaces Char at index 3 (FormattingTag) of the Main formatting with the custom one.
-            }
-            if (this.getProperties().getFormatting().getMainColor() != null && this.getProperties().getFormatting().getMainFormatting() != null) {
-                return this.getProperties().getFormatting().getMainColor() + "" + this.getProperties().getFormatting().getMainFormatting();
-            }
-        }
-        return The5zigAPI.getAPI().getFormatting().getMainFormatting();
+        return "§r";
     }
 
     @Override
