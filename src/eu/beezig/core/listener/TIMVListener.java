@@ -173,7 +173,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             TIMV.plus25();
             TIMV.applyPoints(2); //+1 Det point
 
-        } else if (message.startsWith("                       §c§lGame. OVER! ") && gameMode != null) {
+        } else if (message.startsWith("             §c§lGame. OVER!") && gameMode != null) {
             if (!TIMV.dead) {
                 TIMV.applyPoints(20);
             }
@@ -475,11 +475,11 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             TIMV.calculatedBeforeRoles = true;
 
             String role = "";
-            if (message.contains("§a§lINNOCENT§f§l")) {
+            if (message.contains("§2INNOCENT")) {
                 role = "Innocent";
-            } else if (message.contains("§c§lA TRAITOR§f§l")) {
+            } else if (message.contains("§4TRAITOR")) {
                 role = "Traitor";
-            } else if (message.contains("§9§lA DETECTIVE§f§l")) { // Assumption
+            } else if (message.contains("§1DETECTIVE")) { // Assumption
                 role = "Detective";
             }
             TIMV.role = role;

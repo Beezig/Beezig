@@ -122,15 +122,11 @@ public class IHive extends ServerInstance {
         gameListener.registerListener(new HiveListener());
         gameListener.registerListener(new DRListener());
         gameListener.registerListener(new BEDListener());
-        gameListener.registerListener(new GiantListener());
         gameListener.registerListener(new HIDEListener());
-        gameListener.registerListener(new CAIListener());
         gameListener.registerListener(new SKYListener());
-        gameListener.registerListener(new MIMVListener());
         gameListener.registerListener(new GRAVListener());
         gameListener.registerListener(new BPListener());
         gameListener.registerListener(new SGNListener());
-        gameListener.registerListener(new LABListener());
         gameListener.registerListener(new ArcadeListener());
 
     }

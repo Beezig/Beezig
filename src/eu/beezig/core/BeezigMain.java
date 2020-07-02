@@ -37,21 +37,13 @@ import eu.beezig.core.modules.arcade.GameItem;
 import eu.beezig.core.modules.bed.MonthlyItem;
 import eu.beezig.core.modules.bed.*;
 import eu.beezig.core.modules.bp.SongItem;
-import eu.beezig.core.modules.cai.CooldownsItem;
-import eu.beezig.core.modules.cai.GamePointsItem;
 import eu.beezig.core.modules.dr.DailyItem;
 import eu.beezig.core.modules.dr.DeathsItem;
 import eu.beezig.core.modules.dr.PointsItem;
 import eu.beezig.core.modules.dr.*;
 import eu.beezig.core.modules.global.MedalsItem;
 import eu.beezig.core.modules.global.TokensItem;
-import eu.beezig.core.modules.gnt.GiantKillsItem;
-import eu.beezig.core.modules.gnt.GoldItem;
-import eu.beezig.core.modules.gnt.ModeItem;
-import eu.beezig.core.modules.gnt.TeamItem;
 import eu.beezig.core.modules.grav.StagesItem;
-import eu.beezig.core.modules.lab.ExperimentsItem;
-import eu.beezig.core.modules.lab.LeaderboardItem;
 import eu.beezig.core.modules.timv.*;
 import eu.beezig.core.modules.utils.RenderUtils;
 import eu.beezig.core.notes.NotesManager;
@@ -281,31 +273,6 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "globaltokens", TokensItem.class,
                 "serverhivemc");
 
-        The5zigAPI.getAPI().registerModuleItem(this, "gntpoints", eu.beezig.core.modules.gnt.PointsItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "gntmode", ModeItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "gntteam", TeamItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "gntmap", eu.beezig.core.modules.gnt.MapItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "gntkills", eu.beezig.core.modules.gnt.KillsItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "gntdeaths", eu.beezig.core.modules.gnt.DeathsItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "gntkdrchange", eu.beezig.core.modules.gnt.KDRChangeItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "gntgiantkills", GiantKillsItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "gntgold", GoldItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "gntdaily", eu.beezig.core.modules.gnt.DailyItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "gntstreak", eu.beezig.core.modules.gnt.WinstreakItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "gntmonthly", eu.beezig.core.modules.gnt.MonthlyItem.class,
-                "serverhivemc");
-
         The5zigAPI.getAPI().registerModuleItem(this, "hidepoints", eu.beezig.core.modules.hide.PointsItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "hidemap", eu.beezig.core.modules.hide.MapItem.class,
@@ -315,23 +282,6 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "hidestreak", eu.beezig.core.modules.hide.WinstreakItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "hidemonthly", eu.beezig.core.modules.hide.MonthlyItem.class,
-                "serverhivemc");
-
-        The5zigAPI.getAPI().registerModuleItem(this, "caipoints", eu.beezig.core.modules.cai.PointsItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "caimap", eu.beezig.core.modules.cai.MapItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "caigame", GamePointsItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "caiteam", eu.beezig.core.modules.cai.TeamItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "caidaily", eu.beezig.core.modules.cai.DailyItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "caistreak", eu.beezig.core.modules.cai.WinstreakItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "caicooldowns", CooldownsItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "caimonthly", eu.beezig.core.modules.cai.MonthlyItem.class,
                 "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "skypoints", eu.beezig.core.modules.sky.PointsItem.class,
@@ -353,17 +303,6 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "skystreak", eu.beezig.core.modules.sky.WinstreakItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "skymonthly", eu.beezig.core.modules.sky.MonthlyItem.class,
-                "serverhivemc");
-
-        The5zigAPI.getAPI().registerModuleItem(this, "mimvkarma", eu.beezig.core.modules.mimv.KarmaItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "mimvrole", eu.beezig.core.modules.mimv.RoleItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "mimvmap", eu.beezig.core.modules.mimv.MapItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "mimvcounter", eu.beezig.core.modules.mimv.KarmaCounterItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "mimvdaily", eu.beezig.core.modules.mimv.DailyItem.class,
                 "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "gravpoints", eu.beezig.core.modules.grav.PointsItem.class,
@@ -389,15 +328,6 @@ public class BeezigMain {
         The5zigAPI.getAPI().registerModuleItem(this, "sgndaily", eu.beezig.core.modules.sgn.DailyItem.class,
                 "serverhivemc");
         The5zigAPI.getAPI().registerModuleItem(this, "sgnmap", eu.beezig.core.modules.sgn.MapItem.class,
-                "serverhivemc");
-
-        The5zigAPI.getAPI().registerModuleItem(this, "labpoints", eu.beezig.core.modules.lab.PointsItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "labdaily", eu.beezig.core.modules.lab.DailyItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "labexperiments", ExperimentsItem.class,
-                "serverhivemc");
-        The5zigAPI.getAPI().registerModuleItem(this, "lablb", LeaderboardItem.class,
                 "serverhivemc");
 
         The5zigAPI.getAPI().registerModuleItem(this, "arcadepoints", eu.beezig.core.modules.arcade.PointsItem.class,
@@ -643,24 +573,14 @@ public class BeezigMain {
 
         The5zigAPI.getLogger().info("Loaded BeezigConfig.");
 
-
-        // Instantiate GNT Classes
-        new Giant();
-        new GNT();
-        new GNTM();
-
         String dailyName = TIMVDay.fromCalendar(Calendar.getInstance()) + '-' + The5zigAPI.getAPI().getGameProfile().getId().toString().replace("-", "") + ".txt";
         dailyFileName = dailyName;
         TIMV.setDailyKarmaFileName(dailyName);
         BP.setDailyPointsFileName(dailyName);
-        CAI.setDailyPointsFileName(dailyName);
         BED.setDailyPointsFileName(dailyName);
         SKY.setDailyPointsFileName(dailyName);
         HIDE.setDailyPointsFileName(dailyName);
-        MIMV.setDailyPointsFileName(dailyName);
-        Giant.setDailyPointsFileName(dailyName);
         SGN.setDailyPointsFileName(dailyName);
-        LAB.setDailyPointsFileName(dailyName);
 
         Calendar cal = Calendar.getInstance();
         if (cal.get(Calendar.DAY_OF_MONTH) == 0x1E && cal.get(Calendar.MONTH) == 0xA) {
@@ -963,16 +883,6 @@ public class BeezigMain {
                 }
 
             }
-        }
-
-    }
-
-    @EventHandler
-    public void onActionBar(ActionBarEvent bar) {
-        if ((ActiveGame.is("gnt") || ActiveGame.is("gntm")) && bar.getMessage().contains("❂")) {
-            // §6❂ §e12§7 ❘ §c§lDestructible Land§7 ❘ §f0§b Kills
-            Giant.gold = Integer
-                    .parseInt(ChatColor.stripColor(bar.getMessage().split("❘")[0].replaceAll("❂", "")).trim());
         }
     }
 }

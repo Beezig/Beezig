@@ -23,13 +23,9 @@ import eu.beezig.core.ActiveGame;
 import eu.beezig.core.Log;
 import eu.beezig.core.hiveapi.stuff.bed.BEDRank;
 import eu.beezig.core.hiveapi.stuff.bp.BPRank;
-import eu.beezig.core.hiveapi.stuff.cai.CAIRank;
 import eu.beezig.core.hiveapi.stuff.dr.DRRank;
-import eu.beezig.core.hiveapi.stuff.gnt.GiantRank;
 import eu.beezig.core.hiveapi.stuff.grav.GRAVRank;
 import eu.beezig.core.hiveapi.stuff.hide.HIDERank;
-import eu.beezig.core.hiveapi.stuff.lab.LABRank;
-import eu.beezig.core.hiveapi.stuff.mimv.MIMVRank;
 import eu.beezig.core.hiveapi.stuff.sgn.SGNRank;
 import eu.beezig.core.hiveapi.stuff.sky.SKYRank;
 import eu.beezig.core.hiveapi.stuff.timv.TIMVRank;
@@ -88,28 +84,6 @@ public class RanksCommand implements Command {
                 The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
             }).start();
         }
-        if (game.equalsIgnoreCase("cai")) {
-            new Thread(() -> {
-                The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
-
-                for (CAIRank caiRank : CAIRank.values()) {
-                    The5zigAPI.getAPI().messagePlayer(Log.info + caiRank.getTotalDisplay() + " §7- " + caiRank.getTotalDisplay().replaceAll(caiRank.getDisplay(), "") + Log.df(caiRank.getStart()));
-                }
-
-                The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
-            }).start();
-        }
-        if (game.toLowerCase().startsWith("gnt")) {
-            new Thread(() -> {
-                The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
-
-                for (GiantRank gntRank : GiantRank.values()) {
-                    The5zigAPI.getAPI().messagePlayer(Log.info + gntRank.getTotalDisplay() + " §7- " + gntRank.getTotalDisplay().replaceAll(gntRank.getDisplay(), "") + Log.df(gntRank.getStart()));
-                }
-
-                The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
-            }).start();
-        }
         if (game.equalsIgnoreCase("hide")) {
             new Thread(() -> {
                 The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
@@ -148,17 +122,6 @@ public class RanksCommand implements Command {
                 The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
             }).start();
         }
-        if (game.equalsIgnoreCase("mimv")) {
-            new Thread(() -> {
-                The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
-
-                for (MIMVRank mimvRank : MIMVRank.values()) {
-                    The5zigAPI.getAPI().messagePlayer(Log.info + mimvRank.getTotalDisplay() + " §7- " + mimvRank.getTotalDisplay().replaceAll(mimvRank.getDisplay(), "") + Log.df(mimvRank.getStart()));
-                }
-
-                The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
-            }).start();
-        }
         if (game.equalsIgnoreCase("bp")) {
             new Thread(() -> {
                 The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
@@ -176,17 +139,6 @@ public class RanksCommand implements Command {
 
                 for (SGNRank sgnRank : SGNRank.values()) {
                     The5zigAPI.getAPI().messagePlayer(Log.info + sgnRank.getTotalDisplay() + " §7- " + sgnRank.getTotalDisplay().replaceAll(sgnRank.getDisplay(), "") + Log.df(sgnRank.getRequiredPoints()));
-                }
-
-                The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");
-            }).start();
-        }
-        if (game.equalsIgnoreCase("lab")) {
-            new Thread(() -> {
-                The5zigAPI.getAPI().messagePlayer("\n" + "    §7§m                                                                                    ");
-
-                for (LABRank sgnRank : LABRank.values()) {
-                    The5zigAPI.getAPI().messagePlayer(Log.info + sgnRank.getTotalDisplay() + " §7- " + sgnRank.getTotalDisplay().replaceAll(sgnRank.getDisplay(), "") + Log.df(sgnRank.getStart()));
                 }
 
                 The5zigAPI.getAPI().messagePlayer("    §7§m                                                                                    " + "\n");

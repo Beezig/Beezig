@@ -20,8 +20,6 @@
 package eu.beezig.core.listener;
 
 import eu.beezig.core.ActiveGame;
-import eu.beezig.core.games.GNT;
-import eu.beezig.core.games.GNTM;
 import eu.beezig.core.games.TIMV;
 import eu.beezig.core.hiveapi.APIValues;
 import eu.beezig.core.utils.rpc.DiscordUtils;
@@ -130,52 +128,17 @@ public class HiveListener extends AbstractGameListener<GameMode> {
                 The5zigAPI.getLogger().info("Connected to BED/BEDT! -Hive");
                 DiscordUtils.updatePresence("Housekeeping in BedWars", "In Lobby", "game_bedwars");
                 break;
-            case "gntm.welcome":
-            case "gntm.fallback":
-
-                The5zigAPI.getLogger().info("Connected to GNTM! -Hive");
-                DiscordUtils.updatePresence("Slaying SkyGiants:Mini", "In Lobby", "game_giant");
-
-
-                GiantListener.listener.setGameMode(GNTM.class, GNTM.instance);
-                The5zigAPI.getLogger().info(GNTM.instance.getClass());
-                getGameListener().switchLobby("GNTM");
-                break;
-            case "gnt.welcome":
-            case "gnt.fallback":
-
-                The5zigAPI.getLogger().info("Connected to GNT! -Hive");
-                DiscordUtils.updatePresence("Slaying SkyGiants", "In Lobby", "game_giant");
-                The5zigAPI.getLogger().info(GNT.instance.getClass());
-
-                GiantListener.listener.setGameMode(GNT.class, GNT.instance);
-
-                getGameListener().switchLobby("GNT");
-                break;
             case "hide.welcome":
             case "hide.fallback":
                 getGameListener().switchLobby("HIDE");
                 The5zigAPI.getLogger().info("Connected to HIDE! -Hive");
                 DiscordUtils.updatePresence("Playing Hide & Seek", "In Lobby", "game_hide");
                 break;
-            case "cai.welcome":
-            case "cai.fallback":
-                getGameListener().switchLobby("CAI");
-                The5zigAPI.getLogger().info("Connected to CAI! -Hive");
-                DiscordUtils.updatePresence("Battling in Cowboys and Indians", "In Lobby", "game_cai");
-                break;
             case "sky.welcome":
             case "sky.fallback":
                 getGameListener().switchLobby("SKY");
                 The5zigAPI.getLogger().info("Connected to SKY! - Hive");
                 DiscordUtils.updatePresence("Fighting in SkyWars", "In Lobby", "game_skywars");
-
-                break;
-            case "mimv.welcome":
-            case "mimv.fallback":
-                getGameListener().switchLobby("MIMV");
-                The5zigAPI.getLogger().info("Connected to MIMV! - Hive");
-                DiscordUtils.updatePresence("Investigating in Murder in Mineville", "In Lobby", "game_mimv");
 
                 break;
             case "grav.welcome":
