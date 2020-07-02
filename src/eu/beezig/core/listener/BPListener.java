@@ -29,6 +29,7 @@ import eu.beezig.core.hiveapi.stuff.bp.BPRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.ScoreboardUtils;
 import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.beezig.core.utils.ws.Connector;
@@ -83,8 +84,8 @@ public class BPListener extends AbstractGameListener<BP> {
 
                 BpStats api = new BpStats(The5zigAPI.getAPI().getGameProfile().getName());
 
-                if (sb != null && sb.getTitle().contains("Your BP Stats")) {
-                    int points = sb.getLines().get(ChatColor.AQUA + "Points");
+                if (sb != null && sb.getTitle().trim().equalsIgnoreCase("§6§lHive§e§lMC")) {
+                    int points = ScoreboardUtils.getValue(sb, "Points");
                     APIValues.BPpoints = (long) points;
 
                     BP.rankObject = BPRank.getFromDisplay(api.getTitle());
@@ -129,12 +130,12 @@ public class BPListener extends AbstractGameListener<BP> {
             BP.gamePts += 10;
             BP.dailyPoints += 10;
 
-        } else if (message.startsWith("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚§b§l 10 points")) {
+        } else if (message.startsWith("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚ §b§l10 points")) {
 
             APIValues.BPpoints += 10;
             BP.gamePts += 10;
             BP.dailyPoints += 10;
-        } else if (message.startsWith("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚§b§l 20 points")) {
+        } else if (message.startsWith("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚ §b§l20 points")) {
 
             APIValues.BPpoints += 20;
             BP.gamePts += 20;
@@ -143,9 +144,9 @@ public class BPListener extends AbstractGameListener<BP> {
             BP.song = ChatColor.stripColor(message).trim();
             gameMode.setState(GameState.GAME);
             DiscordUtils.updatePresence("Dancing in BlockParty", "In rhythm with \"" + BP.song + "\"", "game_bp");
-        } else if (message.contains(" §7") && message.startsWith("   ") && BP.artist == null && !message.startsWith("    §7§m")) {
+        } else if (message.contains(" §7") && message.startsWith("   ") && !message.startsWith("    §7§m")) {
             BP.artist = ChatColor.stripColor(message).trim();
-        } else if (message.startsWith("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚§b§l 5 points§7")) {
+        } else if (message.startsWith("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚ §b§l5 points")) {
             APIValues.BPpoints += 5;
             BP.gamePts += 5;
             BP.dailyPoints += 5;
@@ -164,7 +165,7 @@ public class BPListener extends AbstractGameListener<BP> {
             The5zigAPI.getLogger().info("Found Player URL");
 
             return true;
-        } else if (message.equals("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚§b§l 1 point")) {
+        } else if (message.equals("§8▍ §bB§al§eo§6c§ck§3§lParty§8 ▏ §a✚ §b§l1 point")) {
             APIValues.BPpoints++;
             BP.gamePts++;
             BP.dailyPoints++;
