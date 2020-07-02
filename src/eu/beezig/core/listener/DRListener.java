@@ -477,17 +477,17 @@ public class DRListener extends AbstractGameListener<DR> {
                     // Lets make this more important lmao
                     // All this has a reason, I may overdid it but I learned smth about tags
                     The5zigAPI.getAPI().messagePlayer(
-                            "    §c§m                                                                                    ");
+                            "§c    §c§m                                                                                    ");
                     The5zigAPI.getAPI().messagePlayer("§c  ");
                     The5zigAPI.getAPI().messagePlayer(
                             Log.info + "   §c§lCongratulations! You §4§ltied §c§lthe §4§lWorld Record§c§l!");
                     The5zigAPI.getAPI().messagePlayer("§c  ");
                     The5zigAPI.getAPI().messagePlayer(
-                            "    §c§m                                                                                    ");
+                            "§c    §c§m                                                                                    ");
                     The5zigAPI.getAPI().messagePlayer(message);
                 } else if (diff < 0) {
                     The5zigAPI.getAPI().messagePlayer(
-                            "    §c§m                                                                                    ");
+                            "§c    §c§m                                                                                    ");
                     The5zigAPI.getAPI().messagePlayer("§c  ");
                     The5zigAPI.getAPI().messagePlayer("§c  ");
                     The5zigAPI.getAPI()
@@ -495,7 +495,7 @@ public class DRListener extends AbstractGameListener<DR> {
                     The5zigAPI.getAPI().messagePlayer("§c  ");
                     The5zigAPI.getAPI().messagePlayer("§c  ");
                     The5zigAPI.getAPI().messagePlayer(
-                            "    §c§m                                                                                    ");
+                            "§c    §c§m                                                                                    ");
                     The5zigAPI.getAPI().messagePlayer(message);
                 } else if (finalPb == -1) {
                     The5zigAPI.getAPI()
@@ -533,7 +533,7 @@ public class DRListener extends AbstractGameListener<DR> {
         HashMap<String, Integer> lines = The5zigAPI.getAPI().getSideScoreboard().getLines();
         for (Map.Entry<String, Integer> e : lines.entrySet()) {
             if (e.getValue() == i && e.getKey().contains("§7Points: ")) {
-                int pts = Integer.parseInt(e.getKey().replace("§7Points: ", "").replace("§9", "").replaceAll("§f", ""));
+                int pts = Integer.parseInt(ChatColor.stripColor(e.getKey().replace("§7Points: ", "").replace("§9", "").replaceAll("§f", "")));
                 if (pts != gameMode.lastPts) {
                     gameMode.dailyPoints += (pts - gameMode.lastPts);
                     APIValues.DRpoints += (pts - gameMode.lastPts);
