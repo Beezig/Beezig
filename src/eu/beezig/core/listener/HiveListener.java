@@ -159,6 +159,12 @@ public class HiveListener extends AbstractGameListener<GameMode> {
                 The5zigAPI.getLogger().info("Connected to SGN! - Hive");
                 DiscordUtils.updatePresence("Battling in SG2", "In Lobby", "game_sgn");
                 break;
+            case "sgn2.welcome":
+            case "sgn2.fallback":
+                getGameListener().switchLobby("SGN2");
+                The5zigAPI.getLogger().info("Connected to SGN2! - Hive");
+                DiscordUtils.updatePresence("Battling in SG2", "In Lobby", "game_sgn");
+                break;
         }
 
 

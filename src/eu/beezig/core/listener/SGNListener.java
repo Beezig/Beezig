@@ -51,6 +51,8 @@ import java.util.regex.Pattern;
 
 public class SGNListener extends AbstractGameListener<SGN> {
 
+    private boolean duos;
+
     @Override
     public Class<SGN> getGameMode() {
         return SGN.class;
@@ -58,7 +60,12 @@ public class SGNListener extends AbstractGameListener<SGN> {
 
     @Override
     public boolean matchLobby(String arg0) {
-        return arg0.equals("SGN");
+        if("SGN2".equals(arg0)) {
+            duos = true;
+            return true;
+        }
+        duos = false;
+        return "SGN".equals(arg0);
     }
 
     @Override
@@ -103,10 +110,11 @@ public class SGNListener extends AbstractGameListener<SGN> {
     public boolean onServerChat(SGN gameMode, String message) {
         // (§8▍ §e§e§lHive§3§l§3§lSG§b§l§b§l2§8§l ▏ §6§l§e§l§e§l1. §f§6SG3: Mini
         // §a[§f0§a Votes])
+        String prefix = duos ? "§8▍ §e§lHive§3§lSG §b§lDuos§8 ▏ " : "§8▍ §e§lHive§3§lSG§8 ▏ ";
 
-        if (message.startsWith("§8▍ §e§lHive§3§lSG§b§l2§8 ▏ §3Voting has ended! §bThe map §f")) {
+        if (message.startsWith(prefix + "§3Voting has ended! §bThe map §f")) {
             The5zigAPI.getLogger().info("Voting ended, parsing map");
-            String afterMsg = message.split("§8▍ §e§lHive§3§lSG§b§l2§8 ▏ §3Voting has ended! §bThe map")[1];
+            String afterMsg = message.split(prefix + "§3Voting has ended! §bThe map")[1];
             String map = "";
             Pattern pattern = Pattern.compile(Pattern.quote("§f") + "(.*?)" + Pattern.quote("§b"));
             Matcher matcher = pattern.matcher(afterMsg);
@@ -117,10 +125,10 @@ public class SGNListener extends AbstractGameListener<SGN> {
             SGN.activeMap = map;
 
             DiscordUtils.updatePresence("Battling in SG2", "Playing on " + SGN.activeMap, "game_sgn");
-        } else if (message.startsWith("§8▍ §e§lHive§3§lSG§b§l2§8 ▏ §a§lVote received.")
+        } else if (message.startsWith(prefix + "§a§lVote received.")
                 && Setting.AUTOVOTE.getValue()) {
             SGN.hasVoted = true;
-        } else if (message.startsWith("§8▍ §e§lHive§3§lSG§8 ▏ §7§l6. §6§cRandom Map") && !SGN.hasVoted
+        } else if (message.startsWith(prefix + "§7§l6. §6§cRandom Map") && !SGN.hasVoted
                 && Setting.AUTOVOTE.getValue()) {
             /*
              *
@@ -139,8 +147,8 @@ public class SGNListener extends AbstractGameListener<SGN> {
                 for (String s : votesCopy) {
                     String[] data = s.split("\\.");
                     String index = ChatColor.stripColor(data[0])
-                            .replaceAll("§8▍ §e§lHive§3§lSG§8 ▏ §7§l", "")
-                            .replaceAll(ChatColor.stripColor("§8▍ §e§lHive§3§lSG§8 ▏ §7§l"),
+                            .replaceAll(prefix + "§7§l", "")
+                            .replaceAll(ChatColor.stripColor(prefix + "§7§l"),
                                     "")
                             .trim();
                     String[] toConsider = ChatColor.stripColor(data[1]).split("\\[");
@@ -171,18 +179,18 @@ public class SGNListener extends AbstractGameListener<SGN> {
                 SGN.votesToParse.clear();
                 SGN.hasVoted = true;
             }).start();
-        } else if (message.startsWith("§8▍ §e§lHive§3§lSG§8 ▏ §7§l") && !SGN.hasVoted
+        } else if (message.startsWith(prefix + "§7§l") && !SGN.hasVoted
                 && Setting.AUTOVOTE.getValue()) {
             SGN.votesToParse.add(message);
-        } else if (message.startsWith("§8▍ §b§lCombat§8 ▏ §6Global Points Lost: §e")) {
-            int pts = Integer.parseInt(message.replace("§8▍ §e§lHive§3§lSG§8 ▏ §6Global Points Lost: §e", ""));
+        } else if (message.startsWith(prefix + "§6Global Points Lost: §e")) {
+            int pts = Integer.parseInt(message.replace(prefix + "§6Global Points Lost: §e", ""));
             if (!SGN.custom)
                 APIValues.SGNpoints -= pts;
             SGN.gamePts -= pts;
             if (!SGN.custom)
                 SGN.dailyPoints -= pts;
         } else if (message.endsWith("§3§lPoints gained.")) {
-            int pts = Integer.parseInt(message.replace("§3§lPoints gained.", "").replace("§8▍ §e§lHive§3§lSG§8 ▏ §b§l", "").trim());
+            int pts = Integer.parseInt(message.replace("§3§lPoints gained.", "").replace(prefix + "§b§l", "").trim());
             if (!SGN.custom)
                 APIValues.SGNpoints += pts;
             SGN.gamePts += pts;
