@@ -30,6 +30,7 @@ import eu.beezig.core.hiveapi.stuff.grav.GRAVRank;
 import eu.beezig.core.hiveapi.wrapper.APIUtils;
 import eu.beezig.core.hiveapi.wrapper.NetworkRank;
 import eu.beezig.core.settings.Setting;
+import eu.beezig.core.utils.ScoreboardUtils;
 import eu.beezig.core.utils.rpc.DiscordUtils;
 import eu.beezig.core.utils.tutorial.SendTutorial;
 import eu.the5zig.mod.The5zigAPI;
@@ -73,11 +74,10 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                 Scoreboard sb = The5zigAPI.getAPI().getSideScoreboard();
 
 
-                if (sb != null && sb.getTitle().contains("Your GRAV")) {
-
-                    int points = sb.getLines().get(ChatColor.AQUA + "Points");
-                    GRAV.apiGamesPlayed = sb.getLines().get(ChatColor.AQUA + "Games Played");
-                    GRAV.apiVictories = sb.getLines().get(ChatColor.AQUA + "Victories");
+                if (sb != null && sb.getTitle().trim().equalsIgnoreCase("§6§lHive§e§lMC")) {
+                    int points = ScoreboardUtils.getValue(sb, "Points");
+                    GRAV.apiGamesPlayed = ScoreboardUtils.getValue(sb, "Games Played");
+                    GRAV.apiVictories = ScoreboardUtils.getValue(sb, "Victories");
 
                     APIValues.GRAVpoints = (long) points;
                 }
