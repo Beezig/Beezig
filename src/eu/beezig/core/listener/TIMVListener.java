@@ -423,6 +423,7 @@ public class TIMVListener extends AbstractGameListener<TIMV> {
             new Thread(() -> {
                 List<String> votesCopy = new ArrayList<>(TIMV.votesToParse);
 
+
                 List<String> parsedMaps = new ArrayList<>(AutovoteUtils.getMapsForMode("timv"));
 
                 TreeMap<String, Integer> votesindex = new TreeMap<>();
