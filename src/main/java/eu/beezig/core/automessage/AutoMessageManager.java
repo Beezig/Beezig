@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AutoMessageManager {
     private Setting enabled;
@@ -43,6 +44,8 @@ public abstract class AutoMessageManager {
     private DataPath triggersPath;
     private Map<String, Trigger> triggers;
     private static List<String> messageQueue;
+    private AtomicBoolean skipThis;
+    private static AtomicBoolean skipAll = new AtomicBoolean();
 
     public AutoMessageManager(boolean disablePartyChat) {
         triggers = new HashMap<>();
@@ -51,6 +54,7 @@ public abstract class AutoMessageManager {
         delay = getDelaySetting();
         triggersPath = getTriggersPath();
         this.disablePartyChat = disablePartyChat;
+        skipThis = new AtomicBoolean();
     }
 
     public abstract Setting getEnabledSetting();
@@ -71,6 +75,8 @@ public abstract class AutoMessageManager {
             for (Trigger.Type t : types) {
                 if (trigger.doesTrigger(ChatColor.stripColor(message), t) && !game.isAutoMessageSent(this.getClass())) {
                     game.setAutoMessageSent(this.getClass(), true);
+                    if (skipThis.getAndSet(false) || skipAll.getAndSet(false))
+                        continue;
                     Beezig.get().getAsyncExecutor().execute(() -> {
                         try {
                             if (((ServerHive) Beezig.api().getActiveServer()).getInPartyChat() && disablePartyChat) {
@@ -117,6 +123,22 @@ public abstract class AutoMessageManager {
             Beezig.api().sendPlayerMessage("/p");
         }
         messageQueue.clear();
+    }
+
+    public boolean skip() {
+        boolean tmp;
+        do {
+            tmp = skipThis.get();
+        } while (!skipThis.compareAndSet(tmp, !tmp));
+        return !tmp;
+    }
+
+    public static boolean skipAll () {
+        boolean tmp;
+        do {
+            tmp = skipAll.get();
+        } while (!skipAll.compareAndSet(tmp, !tmp));
+        return  !tmp;
     }
 
     @EventHandler
