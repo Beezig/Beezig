@@ -63,11 +63,11 @@ public abstract class AutoMessageManager {
     public abstract DataPath getTriggersPath();
 
     private synchronized void handleEvent(String message, HiveMode mode, Trigger.Type... types) {
-        if (!enabled.getBoolean() || !shouldFire())
-            return;
-
         HiveMode game = ActiveGame.get();
         if (game == null)
+            return;
+
+        if (!enabled.getBoolean() || !shouldFire())
             return;
 
         Trigger trigger = triggers.get(game.getIdentifier());
