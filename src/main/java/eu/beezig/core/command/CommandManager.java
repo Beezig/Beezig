@@ -45,7 +45,8 @@ public class CommandManager {
         commandExecutors.add(new BUpdateCommand());
         commandExecutors.add(new BlockstatsCommand());
         commandExecutors.add(new RecordsOverlayCommand());
-        commandExecutors.add(new SkipMessageCommand());
+        commandExecutors.add(new ReportCommand());
+        commandExecutors.add(new ReportsCommand());
     }
 
     @EventHandler
