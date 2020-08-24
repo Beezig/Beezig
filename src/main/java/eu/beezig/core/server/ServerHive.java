@@ -93,12 +93,14 @@ public class ServerHive extends ServerInstance {
         registry.registerListener(new HIDEListener());
         registry.registerListener(new DRListener());
         registry.registerListener(new SHUListener());
-        registry.registerListener(new GRAVListener());
         registry.registerListener(new BPListener());
         registry.registerListener(new SPListener());
         DRAWListener draw = new DRAWListener();
         registry.registerListener(draw);
+        GRAVListener grav = new GRAVListener();
+        registry.registerListener(grav);
         Beezig.api().getPluginManager().registerListener(Beezig.get(), draw);
+        Beezig.api().getPluginManager().registerListener(Beezig.get(), grav);
     }
 
     @Override

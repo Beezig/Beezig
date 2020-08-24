@@ -21,20 +21,26 @@ package eu.beezig.core.server.modes;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvRecUtils;
+import eu.beezig.core.autovote.AutovoteMap;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyService;
+import eu.beezig.core.util.Color;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.GravStats;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.lwjgl.input.Mouse;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class GRAV extends HiveMode implements IMonthly {
 
@@ -100,7 +106,6 @@ public class GRAV extends HiveMode implements IMonthly {
             return;
         }
         int place = stageCompletions.getOrDefault(currentStage, 1) - 1;
-        System.out.println("Place: " + place + " Awarding pts: " + Math.max(10, currentStage == 5 ? 70 - 12 * place : 20 - 2 * place));
         if(currentStage == 5) addPoints(Math.max(10, 70 - 12 * place));
         else addPoints(Math.max(10, 20 - 2 * place));
         currentStage++;
@@ -133,5 +138,32 @@ public class GRAV extends HiveMode implements IMonthly {
     public CompletableFuture<? extends MonthlyService> loadProfile() {
         return new GravStats(null).getMonthlyProfile(UUIDUtils.strip(Beezig.user().getId()))
             .thenApplyAsync(MonthlyService::new);
+    }
+
+    // GRAV Autovoting
+    private HashMap<String, AutovoteMap> maps = new HashMap<>();
+    private boolean autovoteRun;
+
+    public HashMap<String, AutovoteMap> getMaps() {
+        return maps;
+    }
+
+    public boolean hasAutovoteRun() {
+        return autovoteRun;
+    }
+
+    public void runAutovote() throws Exception {
+        Mouse.setGrabbed(false);
+        if(autovoteRun) return;
+        if(!Settings.AUTOVOTE.get().getBoolean()) return;
+        autovoteRun = true;
+        List<String> favs = getAutovoteManager().getFavoriteMaps(getIdentifier());
+        if(favs.isEmpty()) return;
+        Map<Integer, Long> parsed = maps.entrySet().stream()
+            .filter(e -> favs.contains(e.getKey())).collect(Collectors.groupingByConcurrent(e -> e.getValue().getIndex(), Collectors.counting()));
+        if(parsed.isEmpty()) return;
+        int index = parsed.entrySet().stream().max(Comparator.comparingLong(Map.Entry::getValue)).map(Map.Entry::getKey).orElse(1);
+        Beezig.api().sendPlayerMessage("/v " + index);
+        Message.info(Beezig.api().translate("msg.autovote.grav", Color.accent() + index + Color.primary()));
     }
 }
