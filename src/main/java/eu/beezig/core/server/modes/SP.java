@@ -80,7 +80,7 @@ public class SP extends HiveMode implements IMonthly {
             int victories = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Victories")).intValue();
             int played = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Games Played")).intValue();
             double wr = played == 0 ? 0 : victories * 100D / (double) played;
-            getAdvancedRecords().getAdvancedMessages().add(new ImmutablePair<>("Win Rate", Message.ratio(wr) + "%"));
+            getAdvancedRecords().addAdvanced(new ImmutablePair<>("Win Rate", Message.ratio(wr) + "%"));
         }
     }
 
@@ -89,6 +89,7 @@ public class SP extends HiveMode implements IMonthly {
         if (AdvRecUtils.needsAPI()) {
             AdvRecUtils.announceAPI();
             SpStats api = Profiles.sp(getAdvancedRecords().getTarget()).join();
+            getAdvancedRecords().setVariables(api);
             getAdvancedRecords().setOrAddAdvanced(0, new ImmutablePair<>("Points",
                 getAdvancedRecords().getMessages().get(0).getRight() +
                     AdvRecUtils.getTitle(getTitleService(), api.getTitle(), points)));

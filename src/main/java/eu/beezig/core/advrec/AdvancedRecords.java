@@ -24,27 +24,39 @@ import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
+import eu.beezig.hiveapi.wrapper.player.GameStats;
 import eu.the5zig.mod.server.IPatternResult;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 public class AdvancedRecords {
+    public static final DateFormat cachedFormatter = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
+    public static final String API_PREFIX = "§7§lⓘ§r";
+    private static final String FOOTER_FORMAT = "                                %s§m                        §r                  ";
     private List<Pair<String, String>> messages;
-    private List<Pair<String, String>> advancedMessages;
+    private List<AdvancedMessage> advancedMessages;
     private boolean listening = false;
     private Mode mode;
     private String target;
     private Callable<Void> executor;
     private Callable<Void> slowExecutor;
+    private Date apiCache;
 
     public AdvancedRecords() {
         messages = new LinkedList<>();
         advancedMessages = new LinkedList<>();
         refreshMode();
+    }
+
+    public void setVariables(GameStats stats) {
+        this.apiCache = stats.getCachedAt();
     }
 
     public String getTarget() {
@@ -55,7 +67,7 @@ public class AdvancedRecords {
         return messages;
     }
 
-    public List<Pair<String, String>> getAdvancedMessages() {
+    public List<AdvancedMessage> getAdvancedMessages() {
         return advancedMessages;
     }
 
@@ -110,9 +122,21 @@ public class AdvancedRecords {
      * @param index the normal message to replace
      * @param message the new message
      */
-    public void setOrAddAdvanced(int index, Pair<String, String> message) {
-        if(mode == Mode.SECOND_CHAT) advancedMessages.add(message);
+    public void setOrAddAdvanced(int index, Pair<String, String> message, boolean api) {
+        if(mode == Mode.SECOND_CHAT) advancedMessages.add(new AdvancedMessage(message, api));
         else messages.set(index, message);
+    }
+
+    public void setOrAddAdvanced(int index, Pair<String, String> message) {
+        setOrAddAdvanced(index, message, false);
+    }
+
+    public void addAdvanced(Pair<String, String> message, boolean api) {
+        advancedMessages.add(new AdvancedMessage(message, api));
+    }
+
+    public void addAdvanced(Pair<String, String> message) {
+        addAdvanced(message, false);
     }
 
     private void execute() {
@@ -132,24 +156,37 @@ public class AdvancedRecords {
         });
     }
 
+    /**
+     * @return whether the footer should be a generic "stats might take a while to update" message
+     */
+    private boolean shouldDisplayGeneric() {
+        return apiCache == null && advancedMessages.stream().anyMatch(msg -> msg.api);
+    }
+
+    private String getGenericMessage() {
+        return StringUtils.linedCenterText(Color.primary(), API_PREFIX + Color.accent() + " " + Message.translate("advrec.update"));
+    }
+
     private void sendAdvanced() {
         if(mode == Mode.SECOND_CHAT) {
             String header = StringUtils.linedCenterText(Color.primary(), Color.primary() + Beezig.api().translate("advrec.header", Color.accent() + target + Color.primary()));
-            String footer = String.format("                      %s§m                        §r                  ", Color.primary());
             Beezig.api().messagePlayerInSecondChat(header);
-            advancedMessages.forEach(p -> sendMessage(formatMessage(p.getLeft(), p.getRight())));
-            Beezig.api().messagePlayerInSecondChat(footer);
+            advancedMessages.forEach(p -> sendMessage(p.format()));
+            if(shouldDisplayGeneric()) Beezig.api().messagePlayerInSecondChat(getGenericMessage());
+            else if(apiCache == null) Beezig.api().messagePlayerInSecondChat(String.format(FOOTER_FORMAT, Color.primary()));
+            else sendLastUpdated(apiCache, true, true);
         }
-        else advancedMessages.forEach(p -> sendMessage(formatMessage(p.getLeft(), p.getRight())));
+        else advancedMessages.forEach(p -> sendMessage(p.format()));
     }
 
     private void sendMessages(boolean includeAdvanced) {
         String header = StringUtils.linedCenterText(Color.primary(), Color.primary() + Beezig.api().translate("advrec.header", Color.accent() + target + Color.primary()));
-        String footer = String.format("                      %s§m                        §r                  ", Color.primary());
         Beezig.api().messagePlayer(header);
         messages.forEach(p -> Beezig.api().messagePlayer(formatMessage(p.getLeft(), p.getRight())));
         if(includeAdvanced) sendAdvanced();
-        Beezig.api().messagePlayer(footer);
+        if(includeAdvanced && shouldDisplayGeneric()) Beezig.api().messagePlayer(getGenericMessage());
+        else if(apiCache == null || !includeAdvanced) Beezig.api().messagePlayer(String.format(FOOTER_FORMAT, Color.primary()));
+        else sendLastUpdated(apiCache, true, false);
     }
 
     private void sendMessage(String msg) {
@@ -157,13 +194,21 @@ public class AdvancedRecords {
         else Beezig.api().messagePlayer(msg);
     }
 
-    private String formatMessage(String key, String value) {
+    private static String formatMessage(String key, String value) {
         return String.format(" %s%s: %s%s", Color.primary(), key, Color.accent(), value);
     }
 
     public String getMessage(String key) {
         Pair<String, String> pair = messages.stream().filter(p -> key.equals(p.getLeft())).findAny().orElse(null);
         return pair == null ? null : pair.getRight();
+    }
+
+    public static void sendLastUpdated(Date cached, boolean includePrefix, boolean secondChat) {
+        String lastUpdate = String.format("%s (%s)", AdvancedRecords.cachedFormatter.format(cached), StringUtils.getTimeAgo(cached.getTime()));
+        String display = StringUtils.linedCenterText(Color.primary(), (includePrefix ? API_PREFIX + " " : "") +
+            Color.primary() + Beezig.api().translate("advrec.last_updated", Color.accent() + lastUpdate));
+        if(secondChat) Beezig.api().messagePlayerInSecondChat(display);
+        else Beezig.api().messagePlayer(display);
     }
 
     public void refreshMode() {
@@ -173,5 +218,19 @@ public class AdvancedRecords {
     public enum Mode {
         NORMAL,
         SECOND_CHAT
+    }
+
+    private static class AdvancedMessage {
+        Pair<String, String> message;
+        boolean api;
+
+        public AdvancedMessage(Pair<String, String> message, boolean api) {
+            this.message = message;
+            this.api = api;
+        }
+
+        String format() {
+            return (api ? " " + API_PREFIX : "") + AdvancedRecords.formatMessage(message.getLeft(), message.getRight());
+        }
     }
 }

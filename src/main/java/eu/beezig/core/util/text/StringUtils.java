@@ -20,7 +20,8 @@
 package eu.beezig.core.util.text;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
+import eu.beezig.core.Beezig;
+import eu.beezig.core.util.text.center.DefaultFontInfo;
 import eu.the5zig.util.minecraft.ChatColor;
 
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.regex.Matcher;
 public class StringUtils {
 
     private static final String MAP_REPLACE_REGEX = "[^a-zA-Z0-9]";
-    private static final int SPACE_PIXEL_WIDTH = pixelWidth(' ');
+
 
     public static String getColor(String input) {
         Matcher matcher = ChatColor.STRIP_COLOR_PATTERN.matcher(input);
@@ -53,63 +54,81 @@ public class StringUtils {
     }
 
     public static String linedCenterText(String color, String text) {
-        StringBuilder sb = new StringBuilder();
-        int spaces = Math.max(0, ((300 - text.chars().map(c -> pixelWidth((char) c)).sum()) / 2 + 1) / (SPACE_PIXEL_WIDTH + 1));
-        String line = Strings.repeat(" ", spaces / 2);
-        sb.append(line).append(color).append(ChatColor.STRIKETHROUGH).append(line).append("§r ")
-                .append(text).append(" §r").append(color).append(ChatColor.STRIKETHROUGH).append(line).append(ChatColor.RESET).append(line);
-        return sb.toString();
+        String lines = " " + color + ChatColor.STRIKETHROUGH + "             ";
+        return centerWithSpaces(lines + "§r " + text + lines);
     }
 
-    // Source: https://github.com/Electroid/PGM/blob/master/util/src/main/java/tc/oc/pgm/util/component/ComponentUtils.java
-    // License: AGPLv3
-    private static int pixelWidth(char c) {
-        if (Character.isUpperCase(c)) {
-            return c == 'I' ? 3 : 5;
-        } else if (Character.isDigit(c)) {
-            return 5;
-        } else if (Character.isLowerCase(c)) {
-            switch (c) {
-                case 'i':
-                    return 1;
-                case 'l':
-                    return 2;
-                case 't':
-                    return 3;
-                case 'f':
-                case 'k':
-                    return 4;
-                default:
-                    return 5;
-            }
-        } else {
-            switch (c) {
-                case '!':
-                case '.':
-                case ',':
-                case ';':
-                case ':':
-                case '|':
-                    return 1;
-                case '\'':
-                    return 2;
-                case '[':
-                case ']':
-                case ' ':
-                    return 3;
-                case '*':
-                case '(':
-                case ')':
-                case '{':
-                case '}':
-                case '<':
-                case '>':
-                    return 4;
-                case '@':
-                    return 6;
-                default:
-                    return 5;
+    // https://www.spigotmc.org/threads/95872/
+    private static String centerWithSpaces(String message) {
+        if (message == null || message.equals("")) return "";
+        int messagePxSize = 0;
+        boolean previousCode = false;
+        boolean isBold = false;
+        for (char c : message.toCharArray()) {
+            if (c == '§') {
+                previousCode = true;
+            } else if (previousCode) {
+                previousCode = false;
+                isBold = c == 'l' || c == 'L';
+            } else {
+                DefaultFontInfo dFI = DefaultFontInfo.getDefaultFontInfo(c);
+                messagePxSize += isBold ? dFI.getBoldLength() : dFI.getLength();
+                messagePxSize++;
             }
         }
+        int halvedMessageSize = messagePxSize / 2;
+        int toCompensate = 160 - halvedMessageSize;
+        int spaceLength = DefaultFontInfo.SPACE.getLength() + 1;
+        int compensated = 0;
+        StringBuilder sb = new StringBuilder();
+        while (compensated < toCompensate) {
+            sb.append(" ");
+            compensated += spaceLength;
+        }
+        return sb.toString() + message;
     }
+
+    /*
+     * Copyright 2012 Google Inc.
+     *
+     * Licensed under the Apache License, Version 2.0 (the "License");
+     * you may not use this file except in compliance with the License.
+     * You may obtain a copy of the License at
+     *
+     *      http://www.apache.org/licenses/LICENSE-2.0
+     *
+     * Unless required by applicable law or agreed to in writing, software
+     * distributed under the License is distributed on an "AS IS" BASIS,
+     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     * See the License for the specific language governing permissions and
+     * limitations under the License.
+     */
+    private static final int SECOND_MILLIS = 1000;
+    private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+    private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+    private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+    public static String getTimeAgo(long time) {
+        if (time < 1000000000000L) {
+            // if timestamp given in seconds, convert to millis
+            time *= 1000;
+        }
+        long now = System.currentTimeMillis();
+        final long diff = now - time;
+        if (diff < MINUTE_MILLIS) {
+            return Message.translate("time.now");
+        } else if (diff < 2 * MINUTE_MILLIS) {
+            return Message.translate("time.minute_ago");
+        } else if (diff < 50 * MINUTE_MILLIS) {
+            return Beezig.api().translate("time.minutes_ago",  diff / MINUTE_MILLIS);
+        } else if (diff < 90 * MINUTE_MILLIS) {
+            return Message.translate("time.hour_ago");
+        } else if (diff < 24 * HOUR_MILLIS) {
+            return Beezig.api().translate("time.hours_ago",  diff / HOUR_MILLIS);
+        } else if (diff < 48 * HOUR_MILLIS) {
+            return  Message.translate("time.yesterday");
+        } else {
+            return Beezig.api().translate("time.days_ago",  diff / DAY_MILLIS);
+        }
+    }
+    // end Apache stuff
 }

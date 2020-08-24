@@ -20,6 +20,7 @@
 package eu.beezig.core.advrec.anywhere;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.advrec.AdvancedRecords;
 import eu.beezig.core.advrec.anywhere.statistic.PercentRatioStatistic;
 import eu.beezig.core.advrec.anywhere.statistic.RatioRecordsStatistic;
 import eu.beezig.core.advrec.anywhere.statistic.RecordsStatistic;
@@ -34,6 +35,7 @@ import eu.beezig.hiveapi.wrapper.player.Profiles;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AdvancedRecordsAnywhere {
@@ -218,13 +220,15 @@ public class AdvancedRecordsAnywhere {
         }
         Message.info(Message.translate("advrec.running"));
         gm.produce(player).thenAcceptAsync(profile -> {
+            Date cached = profile.getCachedAt();
             JSONObject input = profile.getSource().getInput();
             Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.primary() + Beezig.api().translate("advrec.header", Color.accent() + player + Color.primary())));
             for (RecordsStatistic stat : gm.getStatistics()) {
                 if (stat.getSetting() == null || stat.getSetting().get().getBoolean())
                     Beezig.api().messagePlayer(" " + Color.primary() + stat.getKey() + ": " + Color.accent() + stat.getValue(input));
             }
-            Beezig.api().messagePlayer(String.format("                      %s§m                        §r                  ", Color.primary()));
+            if(cached != null) AdvancedRecords.sendLastUpdated(cached, false, false);
+            else Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.accent() + Message.translate("advrec.ara.update")));
         }).exceptionally(e -> {
             e.printStackTrace();
             Message.error(Message.translate("error.ara.player"));

@@ -170,6 +170,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly {
         if (AdvRecUtils.needsAPI()) {
             AdvRecUtils.announceAPI();
             DrStats api = Profiles.dr(getAdvancedRecords().getTarget()).join();
+            getAdvancedRecords().setVariables(api);
             getAdvancedRecords().setOrAddAdvanced(0, new ImmutablePair<>("Points",
                     getAdvancedRecords().getMessages().get(0).getRight() +
                             AdvRecUtils.getTitle(getTitleService(), api.getTitle(), points)));
