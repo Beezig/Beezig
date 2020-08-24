@@ -95,6 +95,7 @@ public class ServerHive extends ServerInstance {
         registry.registerListener(new SHUListener());
         registry.registerListener(new BPListener());
         registry.registerListener(new SPListener());
+        registry.registerListener(new SGNListener());
         DRAWListener draw = new DRAWListener();
         registry.registerListener(draw);
         GRAVListener grav = new GRAVListener();
