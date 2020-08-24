@@ -50,6 +50,7 @@ public class CommandManager {
         commandExecutors.add(new ClaimReportCommand());
         commandExecutors.add(new ReportChatCommand());
         commandExecutors.add(new HandleReportCommand());
+        commandExecutors.add(new SkipMessageCommand());
     }
 
     @EventHandler
