@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 
 public class GRAVListener extends AbstractGameListener<GRAV> {
     private static final Pattern MAP_REGEX = Pattern.compile("([^,&]+)");
-    private static final Pattern MESSAGE_REGEX = Pattern.compile("▍ Gravity ▏ (\\d+)\\. .+ \\[(\\d+) Votes]");
+    private static final Pattern MESSAGE_REGEX = Pattern.compile("▍ Gravity ▏ (\\d+)\\. .+ \\[(\\d+) Votes?]");
 
     @Override
     public Class<GRAV> getGameMode() {
@@ -71,6 +71,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
         if(!Settings.AUTOVOTE.get().getBoolean() || !((mode = Beezig.api().getActiveServer().getGameListener().getCurrentGameMode()) instanceof GRAV)) return;
         GRAV grav = (GRAV) mode;
         if(grav.hasAutovoteRun()) return;
+        if(event.getMessage().startsWith("§o")) return;
         String msg = ChatColor.stripColor(event.getMessage());
         Matcher master = MESSAGE_REGEX.matcher(msg);
         if(master.matches()) {
@@ -80,7 +81,12 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
             if(comp.getSiblings().size() > 0) {
                 MessageComponent first = comp.getSiblings().get(0);
                 if(first.getStyle().getOnHover() != null) {
-                    String mapsMsg = ChatColor.stripColor(first.getStyle().getOnHover().getComponent().getText());
+                    String mapsMsg = first.getStyle().getOnHover().getComponent().getText();
+                    if(Settings.GRAV_MAPNAMES.get().getBoolean()) {
+                        event.setCancelled(true);
+                        Beezig.api().messagePlayer("§o" + event.getMessage().replaceAll("(?:§.[➊➋➌➍➎])+", mapsMsg));
+                    }
+                    mapsMsg = ChatColor.stripColor(mapsMsg);
                     Matcher m = MAP_REGEX.matcher(mapsMsg);
                     while(m.find()) {
                         String name = StringUtils.normalizeMapName(m.group(0));

@@ -66,6 +66,9 @@ public enum Settings {
     // DrawIt
     DRAW_AUTOGUESS(true),
 
+    // Gravity
+    GRAV_MAPNAMES(false),
+
     // Misc
     CHAT_LINKS(true),
     AUTOGG(false),
