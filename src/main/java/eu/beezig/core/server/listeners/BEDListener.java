@@ -19,6 +19,8 @@
 
 package eu.beezig.core.server.listeners;
 
+import eu.beezig.core.Beezig;
+import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.BED;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.IPatternResult;
@@ -41,16 +43,15 @@ public class BEDListener extends AbstractGameListener<BED> {
             int points = Integer.parseInt(match.get(0), 10);
             gameMode.addPoints(points);
             if(match.size() > 1) {
-                String action = match.get(1);
-                if(action.startsWith("Killing")) {
-                    gameMode.addKills(1);
-                }
-                else if(action.startsWith("Destroying")) {
+                if(match.get(1).startsWith("Destroying")) {
                     gameMode.setBedsDestroyed(gameMode.getBedsDestroyed() + 1);
                 }
             }
         }
-        else if("bed.kill.farm".equals(key)) gameMode.addKills(1);
+        else if(key.startsWith("bed.kill") && match.get(0).equals(((ServerHive) Beezig.api().getActiveServer()).getNick())) {
+            gameMode.addKills(1);
+            gameMode.addPoints(key.equals("bed.kill.final") ? 10 : 5);
+        }
         else if("bed.win".equals(key)) gameMode.addPoints(100);
         else if("bed.summoner".equals(key)) gameMode.upgradeSummoner(match.get(0));
     }
