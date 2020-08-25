@@ -79,6 +79,7 @@ public class BeezigServiceLoader {
         mainService.registerFormatNumber(Message::formatNumber);
         mainService.registerTranslate(Message::translate);
         mainService.registerTranslateFormat(pair -> Beezig.api().translate(pair.getLeft(), pair.getRight()));
+        mainService.registerBeezigDir(() -> Beezig.get().getBeezigDir());
         mainService.registerGetRegion(() -> {
             BeezigNetManager net = Beezig.net();
             if(net == null) return null;

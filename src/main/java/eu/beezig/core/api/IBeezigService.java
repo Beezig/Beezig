@@ -36,6 +36,7 @@ public interface IBeezigService {
     void registerNormalizeMapName(Function<String, String> callback);
     void registerGetRegion(Supplier<String> callback);
     void registerTranslateFormat(Function<Pair<String, Object[]>, String> callback);
+    void registerBeezigDir(Supplier<File> callback);
 
     // Functions (Beezig -> BeezigForge)
     void setOnHive(boolean update);

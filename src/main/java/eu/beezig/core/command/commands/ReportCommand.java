@@ -29,7 +29,7 @@ public class ReportCommand implements Command {
 
     @Override
     public String[] getAliases() {
-        return new String[] {"/breport", "/br"};
+        return new String[] {"/breport", "/brep"};
     }
 
     @Override
