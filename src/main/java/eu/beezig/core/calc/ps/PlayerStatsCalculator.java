@@ -35,8 +35,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PlayerStatsCalculator {
-    public static void calculate(String modeName, String stat, List<NetworkPlayerInfo> playersIn) {
-        PlayerStatsMode mode = modeName == null ? null : new PlayerStats().modes.get(modeName.toLowerCase(Locale.ROOT));
+    public static void calculate(PlayerStatsMode mode, String modeName, String stat, List<NetworkPlayerInfo> playersIn) {
         if(mode == null) {
             Message.error(Message.translate("error.ps.mode_not_found"));
             return;

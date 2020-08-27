@@ -29,13 +29,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-class PlayerStats {
+public class PlayerStats {
     HashMap<String, PlayerStatsMode> modes = new HashMap<>();
     private final Map<String, String> conversionTable = ImmutableMap.<String, String>builder().put("Points", "points").put("Games Played", "games")
         .put("Victories", "victories").put("Kills", "kills").put("Deaths", "deaths").put("K/D", "kd").put("W/L", "wl").put("Karma", "points").build();
     private final Map<String, String> modeConversions = ImmutableMap.of("BED[SDTX]?", "bed", "GNTM?", "gnt");
 
-    PlayerStats() {
+    public PlayerStats() {
         loadFromAdvRec();
     }
 
@@ -48,5 +48,9 @@ class PlayerStats {
             }
             modes.put(mode.toLowerCase(Locale.ROOT), new PlayerStatsMode(gm.getProducer(), table));
         }
+    }
+
+    public HashMap<String, PlayerStatsMode> getModes() {
+        return modes;
     }
 }
