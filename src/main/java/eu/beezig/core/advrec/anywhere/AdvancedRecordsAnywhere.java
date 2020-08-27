@@ -19,6 +19,7 @@
 
 package eu.beezig.core.advrec.anywhere;
 
+import com.google.common.collect.ImmutableList;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvancedRecords;
 import eu.beezig.core.advrec.anywhere.statistic.PercentRatioStatistic;
@@ -62,17 +63,21 @@ public class AdvancedRecordsAnywhere {
     }
 
     public static void register() {
-        gamemodes.add(new GamemodeBuilder("BED[SDTX]?", Profiles::bed)
-            .addStatistic(new RecordsStatistic(PTS, "total_points"))
-            .addStatistic(new RecordsStatistic(V, "victories"))
-            .addStatistic(new RecordsStatistic(GM, "games_played"))
-            .addStatistic(new RecordsStatistic(K, "kills"))
-            .addStatistic(new RecordsStatistic(D, "deaths"))
-            .addStatistic(new RecordsStatistic("Beds Destroyed", "beds_destroyed"))
-            .addStatistic(new RecordsStatistic("Teams Eliminated", "teams_eliminated"))
-            .addStatistic(new RatioRecordsStatistic(KD, "kills", "deaths", Settings.ADVREC_KD))
-            .addStatistic(new PercentRatioStatistic(WR, "victories", "games_played", Settings.ADVREC_WINRATE))
-            .build());
+        List<RecordsStatistic> bedStats = ImmutableList.<RecordsStatistic>builder()
+            .add(new RecordsStatistic(PTS, "total_points"))
+            .add(new RecordsStatistic(V, "victories"))
+            .add(new RecordsStatistic(GM, "games_played"))
+            .add(new RecordsStatistic(K, "kills"))
+            .add(new RecordsStatistic(D, "deaths"))
+            .add(new RecordsStatistic("Beds Destroyed", "beds_destroyed"))
+            .add(new RecordsStatistic("Teams Eliminated", "teams_eliminated"))
+            .add(new RatioRecordsStatistic(KD, "kills", "deaths", Settings.ADVREC_KD))
+            .add(new PercentRatioStatistic(WR, "victories", "games_played", Settings.ADVREC_WINRATE)).build();
+        gamemodes.add(new GamemodeBuilder("BED", Profiles::bed).setStatistics(bedStats).build());
+        gamemodes.add(new GamemodeBuilder("BEDS", u -> Profiles.bedSpecific(u, "BEDS")).setStatistics(bedStats).build());
+        gamemodes.add(new GamemodeBuilder("BEDD", u -> Profiles.bedSpecific(u, "BEDD")).setStatistics(bedStats).build());
+        gamemodes.add(new GamemodeBuilder("BEDT", u -> Profiles.bedSpecific(u, "BEDT")).setStatistics(bedStats).build());
+        gamemodes.add(new GamemodeBuilder("BEDX", u -> Profiles.bedSpecific(u, "BEDX")).setStatistics(bedStats).build());
 
         gamemodes.add(new GamemodeBuilder("SKY", Profiles::sky)
             .addStatistic(new RecordsStatistic(PTS, "total_points"))

@@ -38,6 +38,11 @@ public class GamemodeBuilder {
         this.producer = producer;
     }
 
+    public GamemodeBuilder setStatistics(List<RecordsStatistic> statistics) {
+        this.statistics = statistics;
+        return this;
+    }
+
     public GamemodeBuilder addStatistic(RecordsStatistic stat) {
         statistics.add(stat);
         return this;
