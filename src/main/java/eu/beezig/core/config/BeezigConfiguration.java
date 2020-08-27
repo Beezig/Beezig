@@ -111,9 +111,11 @@ public class BeezigConfiguration {
         if (cls == Double.class) return Double.parseDouble(value);
         if (cls == Float.class) return Float.parseFloat(value);
         if (cls == Long.class) return Long.parseLong(value, 10);
-        if (Enum.class.isAssignableFrom(cls)) {
+        if (Enum.class.isAssignableFrom(cls) || EnumSetting.class.isAssignableFrom(cls)) {
             try {
-                return cls.getMethod("valueOf", String.class).invoke(null, value.toUpperCase(Locale.ROOT));
+                Object res = cls.getMethod("valueOf", String.class).invoke(null, value.toUpperCase(Locale.ROOT));
+                if(res == null) throw new RuntimeException(new IllegalArgumentException()); // For custom enums
+                return res;
             } catch (Exception e) {
                 e.printStackTrace();
                 if (!(e.getCause() instanceof IllegalArgumentException)) return null;
@@ -154,6 +156,13 @@ public class BeezigConfiguration {
                 GameMode mode = Beezig.api().getActiveServer().getGameListener().getCurrentGameMode();
                 if(mode instanceof HiveMode) ((HiveMode) mode).getAdvancedRecords().refreshMode();
             }
+        }
+        if(key == Settings.LANGUAGE) {
+            if(!Beezig.get().isLaby()) {
+                Message.error(Message.translate("error.setting.language.platform"));
+                return;
+            }
+            Message.info(Message.translate("msg.setting.language.restart"));
         }
     }
 }

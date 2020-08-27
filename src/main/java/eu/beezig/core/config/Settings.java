@@ -21,6 +21,7 @@ package eu.beezig.core.config;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.advrec.AdvancedRecords;
+import eu.beezig.core.config.i18n.LanguageSetting;
 import eu.beezig.core.notification.MessageIgnoreLevel;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.util.minecraft.ChatColor;
@@ -28,6 +29,8 @@ import eu.the5zig.util.minecraft.ChatColor;
 import java.util.Locale;
 
 public enum Settings {
+    LANGUAGE(new LanguageSetting("ENGLISH", Locale.US)),
+
     // Colors
     COLOR_PRIMARY(ChatColor.DARK_AQUA),
     COLOR_ACCENT(ChatColor.AQUA),

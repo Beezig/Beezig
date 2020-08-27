@@ -25,6 +25,7 @@ import eu.beezig.core.advrec.anywhere.AdvancedRecordsAnywhere;
 import eu.beezig.core.api.BeezigServiceLoader;
 import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.config.BeezigConfiguration;
+import eu.beezig.core.config.i18n.LanguageConfiguration;
 import eu.beezig.core.data.BeezigData;
 import eu.beezig.core.logging.TemporaryPointsManager;
 import eu.beezig.core.modules.Modules;
@@ -126,6 +127,7 @@ public class Beezig {
         HiveWrapper.setUserAgent(Message.getUserAgent());
 
         // Init configuration
+        LanguageConfiguration.load();
         try {
             if(beezigDir == null) {
                 File minecraftDir = new File(Beezig.class.getProtectionDomain().getCodeSource().getLocation().toURI())
