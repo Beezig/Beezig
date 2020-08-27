@@ -71,10 +71,15 @@ public class BeezigNetManager {
         Beezig.get().getAsyncExecutor().execute(() -> {
             try {
                 start();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                catchConnect(e);
             }
         });
+    }
+
+    private void catchConnect(Exception ex) {
+        Beezig.logger.error("Error occurred while connecting:", ex);
+        reconnect();
     }
 
     public synchronized OwnProfile getProfile() {
@@ -90,7 +95,9 @@ public class BeezigNetManager {
     }
 
     private void start() throws InterruptedException {
+        if(handler != null) Beezig.api().getPluginManager().unregisterListener(Beezig.get(), handler);
         reconnecting = false;
+        connected.set(false);
         EventLoopGroup group = new NioEventLoopGroup();
         Bootstrap client = new Bootstrap();
         client.group(group);
@@ -107,6 +114,11 @@ public class BeezigNetManager {
             }
         });
         client.connect().syncUninterruptibly();
+        connected.set(true);
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected.set(connected);
     }
 
     public void reconnect() {
@@ -139,8 +151,8 @@ public class BeezigNetManager {
             if (connected.get()) return;
             try {
                 Beezig.net().start();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                catchConnect(e);
             }
         });
     }

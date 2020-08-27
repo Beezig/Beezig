@@ -103,9 +103,10 @@ public class Connection extends SimpleChannelInboundHandler<Packet> {
     private boolean checkDisconnected() {
         if (!hasNoChannel() && !this.isChannelOpen() && !this.disconnected) {
             this.disconnected = true;
+            if(disconnectReason == null) disconnectReason = Message.translate("connection.internal_error");
             Beezig.logger.info("Disconnected: " + disconnectReason);
             Beezig.api().createOverlay().displayMessageAndSplit(ChatColor.YELLOW + Beezig.api().translate("connection.disconnected", disconnectReason));
-
+            Beezig.net().setConnected(false);
             Beezig.net().reconnect();
             return true;
         }

@@ -40,7 +40,7 @@ public class PlayerStatsCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        String modeName = null;
+        String modeName;
         PlayerStatsMode mode = null;
         String stat = "points";
         if(args.length >= 2) {
