@@ -21,6 +21,7 @@ package eu.beezig.core.api;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.CommandManager;
+import eu.beezig.core.config.Settings;
 import eu.beezig.core.data.HiveTitle;
 import eu.beezig.core.net.BeezigNetManager;
 import eu.beezig.core.net.profile.OwnProfile;
@@ -80,6 +81,8 @@ public class BeezigServiceLoader {
         mainService.registerTranslate(Message::translate);
         mainService.registerTranslateFormat(pair -> Beezig.api().translate(pair.getLeft(), pair.getRight()));
         mainService.registerBeezigDir(() -> Beezig.get().getBeezigDir());
+        mainService.registerGetSetting(name -> Settings.valueOf(name).get().getValue());
+        mainService.registerSetSetting(pair -> Beezig.cfg().set(Settings.valueOf(pair.getKey()), pair.getValue().toString()));
         mainService.registerGetRegion(() -> {
             BeezigNetManager net = Beezig.net();
             if(net == null) return null;
