@@ -1,5 +1,7 @@
 package eu.beezig.core.config.i18n;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.text.StringUtils;
 
@@ -10,13 +12,17 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Collections;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LanguageConfiguration {
     private static final Pattern FILE_REGEX = Pattern.compile("language_(\\w{2}_\\w{2})\\.properties");
-    static Map<String, LanguageSetting> languages = new HashMap<>();
+    private static final LanguageSetting NATIVE = new LanguageSetting("MINECRAFT", null);
+    static Map<String, LanguageSetting> languages = Maps.newHashMap(ImmutableMap.of(NATIVE.name(), NATIVE));
 
     public static void load()  {
         URI lang;

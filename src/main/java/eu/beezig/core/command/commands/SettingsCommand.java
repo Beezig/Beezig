@@ -21,6 +21,7 @@ package eu.beezig.core.command.commands;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.Command;
+import eu.beezig.core.config.EnumSetting;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.ArrayUtils;
 import eu.beezig.core.util.Color;
@@ -85,7 +86,7 @@ public class SettingsCommand implements Command {
         for(Settings key : page) {
             MessageComponent component = new MessageComponent(String.format("%s- %s%s: %s%s", Color.accent(), Color.primary(), key.getName(), Color.accent(), key.get().toString()));
             MessageComponent desc = new MessageComponent(String.format("§7%s\n§m                \n%s%s", key.name().toLowerCase(Locale.ROOT), Color.primary(), key.getDescription()));
-            if(Enum.class.isAssignableFrom(key.getSettingType())) {
+            if(Enum.class.isAssignableFrom(key.getSettingType()) || EnumSetting.class.isAssignableFrom(key.getSettingType())) {
                 try {
                     desc.getSiblings().add(new MessageComponent(WordUtils.wrap("\n\n" + Color.primary()
                             + Beezig.api().translate("msg.enum.values", Color.accent() + Beezig.cfg().getEnumValues(key.getSettingType())),
