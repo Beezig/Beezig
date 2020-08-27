@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 public class LanguageConfiguration {
     private static final Pattern FILE_REGEX = Pattern.compile("language_(\\w{2}_\\w{2})\\.properties");
-    private static final LanguageSetting NATIVE = new LanguageSetting("MINECRAFT", null);
+    public static final LanguageSetting NATIVE = new LanguageSetting("MINECRAFT", null);
     static Map<String, LanguageSetting> languages = Maps.newHashMap(ImmutableMap.of(NATIVE.name(), NATIVE));
 
     public static void load()  {
