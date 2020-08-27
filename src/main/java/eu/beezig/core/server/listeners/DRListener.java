@@ -54,6 +54,7 @@ public class DRListener extends AbstractGameListener<DR> {
     public void onMatch(DR gameMode, String key, IPatternResult match) {
         if("dr.death".equals(key)) gameMode.addDeaths(1);
         else if("dr.checkpoint".equals(key)) {
+            gameMode.addCheckpoint();
             ServerHive server = (ServerHive) Beezig.api().getActiveServer();
             server.addTokens(Integer.parseInt(match.get(0), 10));
         }

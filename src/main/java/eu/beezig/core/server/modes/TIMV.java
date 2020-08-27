@@ -26,6 +26,7 @@ import eu.beezig.core.data.DataPath;
 import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
+import eu.beezig.core.server.IMapExtra;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyService;
 import eu.beezig.core.util.CollectionUtils;
@@ -43,7 +44,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public class TIMV extends HiveMode implements IAutovote, IMonthly {
+public class TIMV extends HiveMode implements IAutovote, IMonthly, IMapExtra {
 
     private List<MapData> maps;
     private MapData currentMapData;
@@ -250,9 +251,14 @@ public class TIMV extends HiveMode implements IAutovote, IMonthly {
                 .thenApplyAsync(m -> new MonthlyService(m));
     }
 
+    @Override
+    public String getMapInformation() {
+        return currentMapData == null ? "?" : Integer.toString(currentMapData.enderchests);
+    }
+
     private static class MapData {
         public String map;
-        public int enderchests;
+        int enderchests;
     }
 
     public enum Role {

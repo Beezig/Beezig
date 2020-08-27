@@ -26,6 +26,7 @@ import eu.beezig.core.data.DataPath;
 import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
+import eu.beezig.core.server.IMapExtra;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyField;
 import eu.beezig.core.server.monthly.MonthlyService;
@@ -41,12 +42,13 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-public class DR extends HiveMode implements IAutovote, IMonthly {
+public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
 
     private Map<String, MapData> maps;
     private MapData currentMapData;
     private int lastSbPoints;
     private int lastSbKills;
+    private int checkpoints;
     private String time;
     /**
      * Cached profile, used to load personal bests
@@ -210,8 +212,17 @@ public class DR extends HiveMode implements IAutovote, IMonthly {
         return pb;
     }
 
+    @Override
+    public String getMapInformation() {
+        return String.format("%d/%d %s", checkpoints, currentMapData == null ? 0 : currentMapData.checkpoints, Message.translate("msg.map.dr.checkpoints"));
+    }
+
+    public void addCheckpoint() {
+        checkpoints++;
+    }
+
     public static class MapData {
         public String speedrun, hive;
-        public int checkpoints;
+        int checkpoints;
     }
 }

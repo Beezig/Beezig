@@ -21,6 +21,7 @@ package eu.beezig.core.modules.items;
 
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.server.IMapExtra;
 import eu.the5zig.mod.modules.GameModeItem;
 
 public class ModuleMap extends GameModeItem<HiveMode> {
@@ -31,12 +32,21 @@ public class ModuleMap extends GameModeItem<HiveMode> {
 
     @Override
     protected Object getValue(boolean b) {
-        return b ? "Kazamuzo Temple" : getGameMode().getMap();
+        if(b) return "Kazamuzo Temple";
+        HiveMode mode = getGameMode();
+        if(mode instanceof IMapExtra && (boolean) getProperties().getSetting("extra").get())
+            return String.format("%s (%s)", mode.getMap(), ((IMapExtra) mode).getMapInformation());
+        else return mode.getMap();
     }
 
     @Override
     public boolean shouldRender(boolean dummy) {
         return dummy || Modules.render() && (getGameMode() != null && getGameMode().getMap() != null);
+    }
+
+    @Override
+    public void registerSettings() {
+        getProperties().addSetting("extra", true);
     }
 
     @Override
