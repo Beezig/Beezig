@@ -48,4 +48,5 @@ public interface IBeezigService {
     void addCommands(List<Object> commands);
     void loadConfig(File beezigDir);
     void autovoteShuffle(List<String> favorites);
+    void displayWelcomeGui();
 }

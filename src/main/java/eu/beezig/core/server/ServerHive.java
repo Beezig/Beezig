@@ -30,6 +30,7 @@ import eu.beezig.hiveapi.wrapper.player.HivePlayer;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.the5zig.mod.server.*;
 
+import java.io.File;
 import java.util.Locale;
 
 public class ServerHive extends ServerInstance {
@@ -130,7 +131,10 @@ public class ServerHive extends ServerInstance {
         Beezig.get().getData().getAutoGGManager().initTriggers();
         Beezig.get().getData().getAutoGLManager().initTriggers();
         Beezig.get().getData().getAutoNewGameManager().initTriggers();
-        if(BeezigForge.isSupported()) BeezigForge.get().setOnHive(true);
+        if(BeezigForge.isSupported()) {
+            BeezigForge.get().setOnHive(true);
+            if(!new File(Beezig.get().getBeezigDir(), "tut").exists()) WorldTask.submit(() -> BeezigForge.get().displayWelcomeGui());
+        }
     }
 
     @Override
