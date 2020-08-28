@@ -32,6 +32,7 @@ import eu.the5zig.mod.server.*;
 
 import java.io.File;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class ServerHive extends ServerInstance {
 
@@ -205,7 +206,7 @@ public class ServerHive extends ServerInstance {
             }
             else if(key.endsWith(".setstate") && gameMode != null) {
                 gameMode.setState(GameState.GAME);
-                WorldTask.submit(() -> Beezig.api().sendPlayerMessage("/gameid"));
+                Beezig.get().getAsyncExecutor().schedule(() -> WorldTask.submit(() -> Beezig.api().sendPlayerMessage("/gameid")), 1, TimeUnit.SECONDS);
             }
             else if("nick".equals(key)) nick = match.get(0);
             else if("nick.reset".equals(key)) nick = null;
