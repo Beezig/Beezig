@@ -38,6 +38,8 @@ public class TitleService {
     public TitleService(String modeId) throws IOException {
         this.modeId = modeId;
         this.titles = Beezig.get().getData().getTitleManager().getTitles(modeId);
+        if (this.titles == null)
+            return;
         if("timv".equals(modeId)) {
             List<HiveTitle> titles = new ArrayList<>(Arrays.asList(this.titles));
             HiveTitle watson = getTitle("Watson", 200_000).getRight();
