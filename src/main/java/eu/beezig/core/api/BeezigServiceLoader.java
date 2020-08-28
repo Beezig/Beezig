@@ -70,7 +70,7 @@ public class BeezigServiceLoader {
             if(mode instanceof HiveMode) {
                 TitleService titles = ((HiveMode) mode).getTitleService();
                 if(titles == null) return null;
-                Pair<Integer, HiveTitle> pair = titles.getTitle(raw);
+                Pair<Integer, HiveTitle> pair = titles.getTitle(raw.getKey(), raw.getValue());
                 if(pair == null) return null;
                 return pair.getRight().getColoredName();
             }

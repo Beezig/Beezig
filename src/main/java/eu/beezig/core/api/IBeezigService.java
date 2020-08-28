@@ -32,7 +32,7 @@ import java.util.function.Supplier;
 public interface IBeezigService {
     // Callbacks (BeezigForge -> Beezig)
     void registerUserIndicator(Function<UUID, Integer> callback);
-    void registerTitle(Function<String, String> callback);
+    void registerTitle(Function<Map.Entry<String, Integer>, String> callback);
     void registerFormatNumber(Function<Long, String> callback);
     void registerTranslate(Function<String, String> callback);
     void registerNormalizeMapName(Function<String, String> callback);

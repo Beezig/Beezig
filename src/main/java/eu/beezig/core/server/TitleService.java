@@ -27,18 +27,59 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TitleService {
     private HiveTitle[] titles;
+    private String modeId;
 
     public TitleService(String modeId) throws IOException {
+        this.modeId = modeId;
         this.titles = Beezig.get().getData().getTitleManager().getTitles(modeId);
+        if("timv".equals(modeId)) {
+            List<HiveTitle> titles = new ArrayList<>(Arrays.asList(this.titles));
+            HiveTitle watson = getTitle("Watson", 200_000).getRight();
+            titles.remove(watson);
+            for(int i = 0; i <= 20; i++) {
+                HiveTitle level = new HiveTitle();
+                level.setRequiredPoints(watson.getRequiredPoints() + 100_000 * i);
+                level.setPlainName("Watson");
+                level.setHumanName(watson.getHumanName());
+                level.setExtraData(" " + Integer.toString(i + 1, 10));
+                titles.add(titles.size() - 1, level);
+            }
+            this.titles = titles.toArray(new HiveTitle[0]);
+        }
+        else if("bed".equals(modeId)) {
+            titles = Arrays.copyOf(titles, titles.length + 1);
+            HiveTitle top = new HiveTitle();
+            top.setRequiredPoints(-1);
+            top.setPlainName("Zzzzzz");
+            top.setHumanName("§f§l✸ Zzzzzz");
+            titles[titles.length - 1] = top;
+        }
     }
 
     public Pair<Integer, HiveTitle> getTitle(String api) {
+        return getTitle(api, 0);
+    }
+
+    public Pair<Integer, HiveTitle> getTitle(String api, int points) {
         int index = CollectionUtils.indexOf(titles, title -> api.equals(title.getPlainName()));
         if(index == -1) return null;
-        return new ImmutablePair<>(index, titles[index]);
+        HiveTitle title = titles[index];
+        if("timv".equals(modeId) && "Watson".equals(title.getPlainName())) {
+            int i2 = CollectionUtils.indexOf(titles, t -> api.equals(t.getPlainName()) && (points - title.getRequiredPoints()) < 100_000);
+            if(i2 == -1) return new ImmutablePair<>(index, title);
+            return new ImmutablePair<>(i2, titles[i2]);
+        }
+        else if("bed".equals(modeId) && points > title.getRequiredPoints()) {
+            // Top rank, currently it shows as "Sleepy 5" in the API
+            return new ImmutablePair<>(titles.length - 1, titles[titles.length - 1]);
+        }
+        return new ImmutablePair<>(index, title);
     }
 
     public HiveTitle getTitleAt(int index) {

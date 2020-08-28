@@ -45,10 +45,27 @@ public class HiveTitle {
     }
 
     public String getColoredName() {
-        return ChatColor.translateAlternateColorCodes('&', humanName);
+        return ChatColor.translateAlternateColorCodes('&', getHumanName());
     }
 
     public String getPlainName() {
         return plainName;
+    }
+
+    public void setPlainName(String plainName) {
+        this.plainName = plainName;
+    }
+
+    public String getHumanName() {
+        if(extraData == null) return humanName;
+        return humanName + extraData;
+    }
+
+    public void setHumanName(String humanName) {
+        this.humanName = humanName;
+    }
+
+    public void setRequiredPoints(int requiredPoints) {
+        this.requiredPoints = requiredPoints;
     }
 }

@@ -127,14 +127,14 @@ public class TIMV extends HiveMode implements IAutovote, IMonthly, IMapExtra {
             TimvStats api = Profiles.timv(name).join();
             GlobalStats stats = new GlobalStats();
             stats.setPoints((int) api.getPoints());
-            stats.setTitle(getTitleService().getTitle(api.getTitle()));
+            stats.setTitle(getTitleService().getTitle(api.getTitle(), Math.toIntExact(api.getPoints())));
             return stats;
         });
         statsFetcher.setScoreboardComputer(lines -> {
             GlobalStats stats = new GlobalStats();
             stats.setPoints(lines.get("Karma"));
             Profiles.timv(UUIDUtils.strip(Beezig.user().getId()))
-                    .thenAcceptAsync(api -> stats.setTitle(getTitleService().getTitle(api.getTitle())));
+                    .thenAcceptAsync(api -> stats.setTitle(getTitleService().getTitle(api.getTitle(), Math.toIntExact(api.getPoints()))));
             return stats;
         });
         getAdvancedRecords().setExecutor(this::recordsExecutor);

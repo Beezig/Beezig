@@ -89,7 +89,7 @@ public class PlayerStatsMode {
         }
         PlayerStatsProfile profile = new PlayerStatsProfile(displayNames.get(source.getUUID()), value);
         if(source instanceof Titleable && titleService != null && titleService.isValid())
-            profile.setTitle(titleService.getTitle(((Titleable)source).getTitle()).getRight());
+            profile.setTitle(titleService.getTitle(((Titleable)source).getTitle(), Math.toIntExact(source.getPoints())).getRight());
         return profile;
     }
 

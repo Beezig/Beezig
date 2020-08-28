@@ -71,7 +71,7 @@ public class AdvRecUtils {
 
     public static String getTitle(TitleService mgr, String rank, int points) {
         if(!s(Settings.ADVREC_RANK)) return "";
-        Pair<Integer, HiveTitle> title = mgr.getTitle(rank);
+        Pair<Integer, HiveTitle> title = mgr.getTitle(rank, points);
         if(!s(Settings.ADVREC_TONEXT)) return title.getRight().getColoredName();
         String next = mgr.getToNext(title.getLeft(), points, Color.accent());
         return String.format(" (%s %s %s/ %s%s)", AdvancedRecords.API_PREFIX, title.getRight().getColoredName(), Color.accent(), next, Color.accent());

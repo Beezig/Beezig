@@ -77,7 +77,7 @@ public class BED extends HiveMode implements IAutovote, IMonthly {
             stats.setDeaths((int) api.getDeaths());
             stats.setVictories((int) api.getVictories());
             stats.setPlayed((int) api.getGamesPlayed());
-            stats.setTitle(getTitleService().getTitle(api.getTitle()));
+            stats.setTitle(getTitleService().getTitle(api.getTitle(), Math.toIntExact(api.getPoints())));
             return stats;
         });
         statsFetcher.setScoreboardComputer(lines -> {
@@ -88,7 +88,7 @@ public class BED extends HiveMode implements IAutovote, IMonthly {
             stats.setVictories(lines.get("Victories"));
             stats.setPlayed(lines.get("Games Played"));
             Profiles.bed(UUIDUtils.strip(Beezig.user().getId()))
-                    .thenAcceptAsync(api -> stats.setTitle(getTitleService().getTitle(api.getTitle())));
+                    .thenAcceptAsync(api -> stats.setTitle(getTitleService().getTitle(api.getTitle(), Math.toIntExact(api.getPoints()))));
             return stats;
         });
         getAdvancedRecords().setExecutor(this::recordsExecutor);
