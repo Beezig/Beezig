@@ -34,7 +34,7 @@ public class ReportCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if(!ServerHive.isCurrent()) return true;
+        if(!ServerHive.isCurrent()) return false;
         if(args.length > 1) {
             String cmd = String.join(" ", args);
             Matcher m = REPORT_CMD_REGEX.matcher(cmd);

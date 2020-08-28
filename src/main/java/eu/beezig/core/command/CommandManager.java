@@ -51,6 +51,8 @@ public class CommandManager {
         commandExecutors.add(new ReportChatCommand());
         commandExecutors.add(new HandleReportCommand());
         commandExecutors.add(new SkipMessageCommand());
+        commandExecutors.add(new LeaderboardCommand());
+        commandExecutors.add(new MonthlyCommand());
     }
 
     @EventHandler
