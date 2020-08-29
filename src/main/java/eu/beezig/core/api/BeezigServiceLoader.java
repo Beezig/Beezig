@@ -92,6 +92,10 @@ public class BeezigServiceLoader {
             return profile.getRegion().getId();
         });
         mainService.loadConfig(Beezig.get().getBeezigDir());
-        mainService.addCommands(new ArrayList<>(CommandManager.commandExecutors));
+        try {
+            mainService.addCommands(new ArrayList<>(CommandManager.commandExecutors));
+        } catch(Throwable ex) {
+            Beezig.logger.error("Couldn't load commands", ex);
+        }
     }
 }
