@@ -46,6 +46,11 @@ public class Setting {
         return toString();
     }
 
+    public String getDisplay() {
+        if(value instanceof Boolean) return (boolean) value ? "§a●" : "§c●";
+        return toString();
+    }
+
     public void setValue(Object value) {
         this.value = value;
     }

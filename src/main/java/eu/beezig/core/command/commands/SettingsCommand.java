@@ -59,7 +59,7 @@ public class SettingsCommand implements Command {
             }
             if((setting = getSetting(args[0])) == null) return true;
             Message.info(String.format("%s%s %s(%s):%s %s", Color.accent(), setting.getName(), Color.primary(),
-                    setting.getDescription(), Color.primary(), setting.get().getString()));
+                    setting.getDescription(), Color.primary(), setting.get().getDisplay()));
         }
         else {
             if((setting = getSetting(args[0])) == null) return true;
@@ -84,7 +84,7 @@ public class SettingsCommand implements Command {
         Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.accent()
                 + Message.translate("msg.config.list") + " " + Beezig.api().translate("msg.page", pageNo)));
         for(Settings key : page) {
-            MessageComponent component = new MessageComponent(String.format("%s- %s%s: %s%s", Color.accent(), Color.primary(), key.getName(), Color.accent(), key.get().toString()));
+            MessageComponent component = new MessageComponent(String.format("%s- %s%s: %s%s", Color.accent(), Color.primary(), key.getName(), Color.accent(), key.get().getDisplay()));
             MessageComponent desc = new MessageComponent(String.format("§7%s\n§m                \n%s%s", key.name().toLowerCase(Locale.ROOT), Color.primary(), key.getDescription()));
             if(Enum.class.isAssignableFrom(key.getSettingType()) || EnumSetting.class.isAssignableFrom(key.getSettingType())) {
                 try {
@@ -96,7 +96,9 @@ public class SettingsCommand implements Command {
                 }
             }
             component.getStyle().setOnHover(new MessageAction(MessageAction.Action.SHOW_TEXT, desc));
-            component.getStyle().setOnClick(new MessageAction(MessageAction.Action.SUGGEST_COMMAND, String.format("/bsettings %s ", key.name())));
+            if(key.getSettingType() == Boolean.class)
+                component.getStyle().setOnClick(new MessageAction(MessageAction.Action.RUN_COMMAND, String.format("/bsettings %s %s", key.name(), Boolean.toString(!key.get().getBoolean()))));
+            else component.getStyle().setOnClick(new MessageAction(MessageAction.Action.SUGGEST_COMMAND, String.format("/bsettings %s ", key.name())));
             Beezig.api().messagePlayerComponent(component, false);
         }
         Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.accent() + Message.translate("cmd.settings")));

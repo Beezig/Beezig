@@ -124,7 +124,7 @@ public class ProfilesCache {
             if(task.requestId == requestId) {
                 task.consumer.accept(Sets.newHashSet());
                 for(UUID uuid : task.uuids) profilesCache.put(uuid, Optional.empty());
-                tasks.remove(task);
+                iter.remove();
             }
         }
     }
