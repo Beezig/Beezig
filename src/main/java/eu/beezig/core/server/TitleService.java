@@ -77,7 +77,7 @@ public class TitleService {
             if(i2 == -1) return new ImmutablePair<>(index, title);
             return new ImmutablePair<>(i2, titles[i2]);
         }
-        else if("bed".equals(modeId) && points > title.getRequiredPoints()) {
+        else if("bed".equals(modeId) && "Sleepy 5".equals(title.getPlainName()) && points > 100) {
             // Top rank, currently it shows as "Sleepy 5" in the API
             return new ImmutablePair<>(titles.length - 1, titles[titles.length - 1]);
         }
