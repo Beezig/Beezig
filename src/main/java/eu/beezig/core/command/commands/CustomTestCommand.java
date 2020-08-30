@@ -41,7 +41,7 @@ public class CustomTestCommand implements Command {
 
     @Override
     public String[] getAliases() {
-        return new String[] {"/ctest", "/customtest"};
+        return new String[] {"/customtest", "/ctest"};
     }
 
     @Override

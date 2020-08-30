@@ -31,7 +31,7 @@ public class DoNotDisturbCommand implements Command {
 
     @Override
     public String[] getAliases() {
-        return new String[] {"/dnd", "/donotdisturb", "/busy"};
+        return new String[] {"/donotdisturb", "/dnd", "/busy"};
     }
 
     @Override

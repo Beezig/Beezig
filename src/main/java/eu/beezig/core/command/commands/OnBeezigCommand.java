@@ -34,7 +34,7 @@ public class OnBeezigCommand implements Command {
 
     @Override
     public String[] getAliases() {
-        return new String[]{"/ob", "/onbeezig"};
+        return new String[]{"/onbeezig", "/ob"};
     }
 
     @Override

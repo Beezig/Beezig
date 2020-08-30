@@ -22,11 +22,20 @@ package eu.beezig.core.command.commands;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.Constants;
 import eu.beezig.core.command.Command;
+import eu.beezig.core.command.CommandManager;
+import eu.beezig.core.util.ArrayUtils;
+import eu.beezig.core.util.Color;
 import eu.beezig.core.util.SystemInfo;
 import eu.beezig.core.util.text.Message;
+import eu.beezig.core.util.text.StringUtils;
+import eu.the5zig.mod.util.component.MessageComponent;
+import eu.the5zig.mod.util.component.style.MessageAction;
+import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class BeezigCommand implements Command {
     @Override
@@ -57,7 +66,34 @@ public class BeezigCommand implements Command {
             else if("debug".equalsIgnoreCase(mode)) {
                 Message.info("Title debug: " + (Beezig.get().toggleTitleDebug() ? "§aenabled" : "§cdisabled"));
             }
+            else if("commands".equalsIgnoreCase(mode)) {
+                int page = args.length < 2 ? 1 : Integer.parseInt(args[1], 10);
+                showCommands(page);
+            }
         }
         return true;
+    }
+
+    private void showCommands(int pageNo) {
+        Mouse.setGrabbed(false);
+        Command[] page = ArrayUtils.getPage(CommandManager.commandExecutors.stream().sorted(Comparator.comparing(c -> c.getAliases()[0])).toArray(Command[]::new), pageNo - 1, 10);
+        if(page == null) {
+            Message.error(Message.translate("error.page"));
+            return;
+        }
+        Beezig.api().messagePlayer(StringUtils.linedCenterText(eu.beezig.core.util.Color.primary(), eu.beezig.core.util.Color.accent()
+            + Message.translate("msg.commands.list") + " " + Beezig.api().translate("msg.page", pageNo)));
+        for(Command cmd : page) {
+            MessageComponent base = new MessageComponent(Color.primary() + " - " + Color.accent() + cmd.getAliases()[0]);
+            String[] otherAliases = cmd.getAliases().length <= 1 ? null : Arrays.copyOfRange(cmd.getAliases(), 1, cmd.getAliases().length);
+            if(otherAliases != null) {
+                MessageComponent hover = new MessageComponent(Color.primary() + Beezig.api().translate("msg.commands.aliases",
+                    Color.accent() + String.join(Color.primary() + ", " + Color.accent(), otherAliases)));
+                base.getStyle().setOnHover(new MessageAction(MessageAction.Action.SHOW_TEXT, hover));
+            }
+            base.getStyle().setOnClick(new MessageAction(MessageAction.Action.SUGGEST_COMMAND, cmd.getAliases()[0]));
+            Beezig.api().messagePlayerComponent(base, false);
+        }
+        Beezig.api().messagePlayer(StringUtils.linedCenterText(eu.beezig.core.util.Color.primary(), Color.accent() + Message.translate("cmd.commands")));
     }
 }

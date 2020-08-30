@@ -30,7 +30,7 @@ public class BroadcastReplyCommand implements Command {
 
     @Override
     public String[] getAliases() {
-        return new String[] {"/br", "/bcr"};
+        return new String[] {"/broadcastreply", "/br", "/bcr"};
     }
 
     @Override
