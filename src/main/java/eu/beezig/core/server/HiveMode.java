@@ -36,9 +36,9 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public abstract class HiveMode extends GameMode {
     private int points;
@@ -59,8 +59,8 @@ public abstract class HiveMode extends GameMode {
     private boolean hasVoted;
     private Map<Class<? extends AutoMessageManager>, Boolean> autoMessageSent;
     private String gameID;
-    private DailyService dailyService;
-    private SessionService sessionService;
+    protected DailyService dailyService;
+    protected SessionService sessionService;
     private File modeDir;
     protected long gameStart;
     private MonthlyService monthlyProfile;
@@ -91,11 +91,13 @@ public abstract class HiveMode extends GameMode {
     protected void onModeJoin() {
         if(!init) {
             init = true;
-            statsFetcher.getJob().thenAcceptAsync(this::setGlobal).exceptionally(e -> {
-                Message.error(Message.translate("error.stats_fetch"));
-                Beezig.logger.error(e);
-                return null;
-            });
+            if(statsFetcher.isReady()) {
+                statsFetcher.getJob().thenAcceptAsync(this::setGlobal).exceptionally(e -> {
+                    Message.error(Message.translate("error.stats_fetch"));
+                    Beezig.logger.error(e);
+                    return null;
+                });
+            }
             gameStart = System.currentTimeMillis();
             if (this instanceof IMonthly) {
                 if (!MonthlyService.ignoredModes.contains(getClass())) {

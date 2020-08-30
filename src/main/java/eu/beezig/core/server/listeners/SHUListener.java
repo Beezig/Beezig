@@ -20,7 +20,6 @@
 package eu.beezig.core.server.listeners;
 
 import eu.beezig.core.server.modes.SHU;
-import eu.beezig.core.server.modes.SKY;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.IPatternResult;
 
@@ -38,6 +37,6 @@ public class SHUListener extends AbstractGameListener<SHU> {
 
     @Override
     public void onMatch(SHU gameMode, String key, IPatternResult match) {
-
+        if("shu.game".equals(key) && gameMode.getGame() == null) gameMode.setGame(match.get(0));
     }
 }

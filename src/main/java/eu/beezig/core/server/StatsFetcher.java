@@ -63,6 +63,10 @@ public class StatsFetcher {
         this.scoreboardComputer = scoreboardComputer;
     }
 
+    public boolean isReady() {
+        return scoreboardComputer != null || apiComputer != null;
+    }
+
     public void setTimeout(long timeout) {
         this.timeout = timeout;
     }
