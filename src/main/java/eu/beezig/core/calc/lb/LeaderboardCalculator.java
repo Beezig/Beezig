@@ -38,7 +38,8 @@ public class LeaderboardCalculator {
         Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.primary() + Beezig.api().translate("msg.leaderboard",
             Color.accent() + mode.toUpperCase(Locale.ROOT) + Color.primary())));
         for(LeaderboardPlace place : lb) {
-            String key = place.containsKey("points") ? "points" : (place.containsKey("total_points") ? "total_points" : "karma");
+            String key = place.containsKey("points") ? "points" : (place.containsKey("total_points") ? "total_points" :
+                (place.containsKey("karma") ? "karma" : "victories"));
             Beezig.api().messagePlayer(Color.primary() + " #" + Color.accent() + place.getHumanPlace()
                 + Color.primary() + "§7 ▏ " + Color.accent() + Message.formatNumber((long) place.get(key)) + "§7 - "
                 + Color.accent() + place.get("username"));
