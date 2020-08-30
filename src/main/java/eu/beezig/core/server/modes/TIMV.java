@@ -187,7 +187,7 @@ public class TIMV extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         String normalized = StringUtils.normalizeMapName(map);
         Optional<MapData> data = maps.stream().filter(m -> normalized.equals(m.map)).findAny();
         if(!data.isPresent()) {
-            Message.error("error.map_not_found");
+            Message.error(Message.translate("error.map_not_found"));
             return;
         }
         currentMapData = data.get();

@@ -107,7 +107,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         String normalized = StringUtils.normalizeMapName(map);
         MapData data = maps.get(normalized);
         if(data == null) {
-            Message.error("error.map_not_found");
+            Message.error(Message.translate("error.map_not_found"));
             return;
         }
         currentMapData = data;
@@ -120,7 +120,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         }
         WorldRecords.getRecord(currentMapData).thenAcceptAsync(record -> wr = record)
             .exceptionally(e -> {
-                Message.error("error.map_not_found");
+                Message.error(Message.translate("error.map_not_found"));
                 return null;
             });
     }
@@ -215,6 +215,10 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
     @Override
     public String getMapInformation() {
         return String.format("%d/%d %s", checkpoints, currentMapData == null ? 0 : currentMapData.checkpoints, Message.translate("msg.map.dr.checkpoints"));
+    }
+
+    public MapData getCurrentMapData() {
+        return currentMapData;
     }
 
     public void addCheckpoint() {

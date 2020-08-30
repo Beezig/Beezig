@@ -53,6 +53,8 @@ public class CommandManager {
         commandExecutors.add(new SkipMessageCommand());
         commandExecutors.add(new LeaderboardCommand());
         commandExecutors.add(new MonthlyCommand());
+        commandExecutors.add(new DrPbCommand());
+        commandExecutors.add(new DrWrCommand());
     }
 
     @EventHandler

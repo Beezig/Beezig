@@ -46,7 +46,11 @@ public class WorldRecords {
 
         public String getDisplay() {
             if(display != null) return display;
-            return display = String.format("%s (%s)", DurationFormatUtils.formatDuration(wr_millis, "mm':'ss"), name);
+            return display = String.format("%s (%s)", getTimeDisplay(), name);
+        }
+
+        public String getTimeDisplay() {
+            return DurationFormatUtils.formatDuration(wr_millis, "mm':'ss");
         }
 
         public String getName() {
