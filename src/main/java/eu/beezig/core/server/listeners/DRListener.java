@@ -58,8 +58,12 @@ public class DRListener extends AbstractGameListener<DR> {
             ServerHive server = (ServerHive) Beezig.api().getActiveServer();
             server.addTokens(Integer.parseInt(match.get(0), 10));
         }
-        else if("dr.pbnew".equals(key) || "dr.pb".equals(key) || "dr.nopb".equals(key)) {
-            gameMode.setTime(match.get(0));
+        else if("dr.finish".equals(key)) {
+            String nick = ((ServerHive)Beezig.api().getActiveServer()).getNick();
+            if(match.get(0).equals(nick)) {
+                gameMode.setTime(match.get(1));
+                gameMode.calcTime();
+            }
         }
     }
 

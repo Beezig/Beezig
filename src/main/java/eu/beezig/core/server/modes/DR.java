@@ -30,6 +30,7 @@ import eu.beezig.core.server.IMapExtra;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyField;
 import eu.beezig.core.server.monthly.MonthlyService;
+import eu.beezig.core.util.Color;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.speedrun.WorldRecords;
 import eu.beezig.core.util.text.Message;
@@ -41,8 +42,11 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
+    private static final Pattern TIME_REGEX = Pattern.compile("(\\d+):(\\d+)\\.(\\d+)");
 
     private Map<String, MapData> maps;
     private MapData currentMapData;
@@ -66,6 +70,25 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public void calcTime() {
+        if(time == null || wr == null) return;
+        Matcher matcher = TIME_REGEX.matcher(time);
+        if(matcher.matches()) {
+            int mins = Integer.parseInt(matcher.group(1), 10);
+            int secs = Integer.parseInt(matcher.group(2), 10);
+            int millis = Integer.parseInt(matcher.group(3), 10);
+            int total = mins * 60 * 1000 + secs * 1000 + millis;
+            int delta = total - wr.getMillis();
+            if(delta >= 0) Beezig.api().playSound("note.pling", 1f);
+            if(delta == 0) {
+                Message.info(Message.translate("msg.dr.wr.tie"));
+                return;
+            }
+            String display = DurationFormatUtils.formatDuration(Math.abs(delta), "m:ss.SSS");
+            Message.info(Beezig.api().translate("msg.dr.wr." + (delta > 0 ? "loss" : "beat"), Color.accent() + display + Color.primary()));
+        }
     }
 
     public void initMapData() {
