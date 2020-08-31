@@ -35,15 +35,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AntiSniper {
-    private String lastSender;
     private String lastBroadcastSender;
-    private boolean kickedFromParty;
+    private long lastPartyRemove;
+    private boolean wasInPartyChat;
     private Pattern commandTypoRegex;
 
     public AntiSniper() {
@@ -82,22 +81,15 @@ public class AntiSniper {
                 sendTypo(new BlockAction(msg, "/" + cmd));
             }
         }
-        if(lastSender != null && Settings.SNIPE_PMS.get().getBoolean()) {
-            if(msg.toLowerCase(Locale.ROOT).startsWith("/r ")) {
+        if(Settings.SNIPE_PARTY.get().getBoolean() && System.currentTimeMillis() - lastPartyRemove < 2000L) {
+            if(wasInPartyChat || msg.trim().startsWith("@")) {
                 event.setCancelled(true);
-                String[] args = msg.split(" ");
-                String reply = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-                Beezig.api().sendPlayerMessage("/msg " + lastSender + " " + reply);
+                sendParty(msg);
             }
         }
     }
 
     public void onMatch(String key, IPatternResult match) {
-        if("msg.private".equals(key)) {
-            String sender = match.get(0);
-            if(!sender.equalsIgnoreCase(Beezig.user().getName()))
-                lastSender = sender;
-        }
         if("msg.broadcast".equals(key)) {
             lastBroadcastSender = match.get(0);
             String text = match.get(2);
@@ -125,7 +117,25 @@ public class AntiSniper {
         Beezig.api().messagePlayerComponent(main, false);
     }
 
+    private void sendParty(String message) {
+        MessageComponent main = new MessageComponent(Message.infoPrefix() + Beezig.api().translate("msg.snipe.party") + "\n");
+        main.getSiblings().add(new MessageComponent(Message.infoPrefix() + Beezig.api().translate("msg.snipe.party2") + "\n"));
+        TextButton btn1 = new TextButton("btn.snipe.original", "btn.snipe.original", "§e");
+        btn1.doRunCommand("/bsay " + message);
+        main.getSiblings().add(btn1);
+        TextButton disable = new TextButton("btn.snipe.disable", "btn.snipe.disable", "§c");
+        disable.doRunCommand("/bsettings snipe.party false");
+        main.getSiblings().add(new MessageComponent(" "));
+        main.getSiblings().add(disable);
+        Beezig.api().messagePlayerComponent(main, false);
+    }
+
     public String getLastBroadcastSender() {
         return lastBroadcastSender;
+    }
+
+    public void onPartyRemove(boolean partyChat) {
+        wasInPartyChat = partyChat;
+        lastPartyRemove = System.currentTimeMillis();
     }
 }

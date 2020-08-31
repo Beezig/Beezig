@@ -201,9 +201,9 @@ public class ServerHive extends ServerInstance {
                 AutoMessageManager.sendQueuedMessages();
             }
             else if("party.join".equals(key) || "party.create".equals(key)) inParty = true;
-            else if("party.leave".equals(key) || "party.disband".equals(key)) {
+            else if("party.leave".equals(key) || "party.disband".equals(key) || "party.kicked".equals(key) || "party.disband2".equals(key)) {
+                if(!"party.leave".equals(key)) Beezig.get().getAntiSniper().onPartyRemove(inPartyChat);
                 inParty = false;
-                inPartyChat = false;
             }
             else if(key.endsWith(".setstate") && gameMode != null) {
                 gameMode.setState(GameState.GAME);
