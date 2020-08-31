@@ -117,6 +117,7 @@ public class ServerHive extends ServerInstance {
     }
 
     private void onServerJoin() {
+        Beezig.net().connect();
         Profiles.global(UUIDUtils.strip(Beezig.user().getId())).thenAcceptAsync(profile -> {
             this.profile = profile;
             this.tokens = profile.getTokens();
@@ -235,6 +236,7 @@ public class ServerHive extends ServerInstance {
             if(Beezig.get().getTemporaryPointsManager() != null)
                 Beezig.get().getTemporaryPointsManager().endSession();
             if(BeezigForge.isSupported()) BeezigForge.get().setOnHive(false);
+            Beezig.net().disconnect();
         }
 
         @Override

@@ -26,6 +26,7 @@ import eu.beezig.core.net.handler.NetworkEncoder;
 import eu.beezig.core.net.profile.OwnProfile;
 import eu.beezig.core.net.profile.ProfilesCache;
 import eu.beezig.core.net.session.NetSessionManager;
+import eu.beezig.core.server.ServerHive;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -94,6 +95,13 @@ public class BeezigNetManager {
         return connected;
     }
 
+    public void disconnect() {
+        if(handler.disconnectSilently()) {
+            setProfile(null);
+            profilesCache = new ProfilesCache();
+        }
+    }
+
     private void start() throws InterruptedException {
         if(handler != null) Beezig.api().getPluginManager().unregisterListener(Beezig.get(), handler);
         reconnecting = false;
@@ -149,6 +157,7 @@ public class BeezigNetManager {
                 return;
             }
             if (connected.get()) return;
+            if(!ServerHive.isCurrent()) return;
             try {
                 Beezig.net().start();
             } catch (Exception e) {

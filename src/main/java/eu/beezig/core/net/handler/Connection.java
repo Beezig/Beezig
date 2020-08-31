@@ -100,6 +100,16 @@ public class Connection extends SimpleChannelInboundHandler<Packet> {
         }
     }
 
+    public boolean disconnectSilently() {
+        if(isChannelOpen() && !this.disconnected) {
+            this.disconnected = true;
+            closeChannel();
+            Beezig.net().setConnected(false);
+            return true;
+        }
+        return false;
+    }
+
     private boolean checkDisconnected() {
         if (!hasNoChannel() && !this.isChannelOpen() && !this.disconnected) {
             this.disconnected = true;

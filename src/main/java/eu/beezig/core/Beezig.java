@@ -173,9 +173,7 @@ public class Beezig {
         notificationManager = new NotificationManager();
         processManager = new ProcessManager();
         AdvancedRecordsAnywhere.register();
-
         networkManager = new BeezigNetManager();
-        networkManager.connect();
 
         serviceLoader = new BeezigServiceLoader();
         serviceLoader.attemptLoad();
