@@ -23,6 +23,7 @@ import com.csvreader.CsvWriter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.data.GameTitles;
 import eu.beezig.core.logging.session.CurrentSession;
+import eu.beezig.core.logging.session.LogRotation;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.util.UUIDUtils;
 import org.apache.commons.io.FileUtils;
@@ -85,6 +86,11 @@ public class TemporaryPointsManager {
 
     public void init() throws ReflectiveOperationException {
         initDailyServices();
+        try {
+            new LogRotation().rotateLogs();
+        } catch (IOException e) {
+            Beezig.logger.error("Couldn't rotate session logs", e);
+        }
     }
 
     private void initDailyServices() throws ReflectiveOperationException {
