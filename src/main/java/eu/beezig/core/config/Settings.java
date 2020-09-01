@@ -87,7 +87,8 @@ public enum Settings {
     RECORD_DND(false),
     CHAT_PARTY(true),
     CHAT_FRIENDS(true),
-    REPORTS_NOTIFY(true);
+    REPORTS_NOTIFY(true),
+    TABLIST_BADGES(true);
 
     private final Object defaultValue;
     private final Class settingType;
