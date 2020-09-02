@@ -47,8 +47,8 @@ public class ToggleBeeCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if(Beezig.net().getProfile() == null || Beezig.net().getProfile().getRole().compareTo(DefaultUserRoles.USER) < 1) return false;
-        UserRole current = Beezig.net().getProfile().getRole();
+        if(Beezig.net().getProfile() == null || Beezig.net().getProfile().getRoleContainer().getRole().compareTo(DefaultUserRoles.USER) < 1) return false;
+        UserRole current = Beezig.net().getProfile().getRoleContainer().getRole();
         long now = System.currentTimeMillis();
         if(now - lastSettingTime < 5000) {
             Message.error(Beezig.api().translate("error.wait", (5000 - (now - lastSettingTime)) / 1000));

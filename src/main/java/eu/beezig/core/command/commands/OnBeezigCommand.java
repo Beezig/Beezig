@@ -49,7 +49,7 @@ public class OnBeezigCommand implements Command {
                             if (!profile.isPresent())
                                 Message.error(Beezig.api().translate("msg.user.offline", args[0]));
                             else Message.info(Beezig.api().translate("msg.user.online",
-                                    Color.accent() + args[0] + Color.primary(), profile.get().getRole().getDisplayName()));
+                                    Color.accent() + args[0] + Color.primary(), profile.get().getRoleContainer().getRole().getDisplayName()));
                         })).exceptionally(e -> {
                             Message.error(Message.translate("error.online_users"));
                             Beezig.logger.error(e);

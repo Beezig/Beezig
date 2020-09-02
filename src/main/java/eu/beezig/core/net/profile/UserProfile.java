@@ -19,27 +19,26 @@
 
 package eu.beezig.core.net.profile;
 
-import eu.beezig.core.net.profile.role.DefaultUserRoles;
+import eu.beezig.core.net.profile.role.RoleContainer;
 import eu.beezig.core.net.profile.role.RoleService;
-import eu.beezig.core.net.profile.role.UserRole;
 
 import java.util.UUID;
 
 public class UserProfile {
     private UUID uuid;
-    private UserRole role;
+    private RoleContainer role;
 
     public UserProfile(UUID uuid, int role) {
         this.uuid = uuid;
-        this.role = DefaultUserRoles.USER;
-        RoleService.getRole(role).thenAcceptAsync(r -> this.role = r);
+        this.role = OwnProfile.defaultRole;
+        RoleService.getRole(role, uuid).thenAcceptAsync(r -> this.role = r);
     }
 
     public UUID getUuid() {
         return uuid;
     }
 
-    public UserRole getRole() {
+    public RoleContainer getRoleContainer() {
         return role;
     }
 }

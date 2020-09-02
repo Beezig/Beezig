@@ -43,14 +43,14 @@ public class UUIDUtils {
     public static MessageComponent getUserRole(UUID id) {
         if(id == null) return new MessageComponent("");
         Optional<UserProfile> profile = Beezig.net().getProfilesCache().getNowOrSubmit(id, Collections.singletonList(id));
-        return profile.map(userProfile -> userProfile.getRole().getDisplayComponent()).orElseGet(() -> new MessageComponent(""));
+        return profile.map(userProfile -> userProfile.getRoleContainer().getRole().getDisplayComponent()).orElseGet(() -> new MessageComponent(""));
     }
 
     public static String getShortRole(UUID id) {
         if(id == null) return "";
         Optional<UserProfile> profile = Beezig.net().getProfilesCache().getIfPresent(id);
         if(profile == null) return "";
-        return profile.map(userProfile -> userProfile.getRole().getShortName()).orElse("");
+        return profile.map(userProfile -> userProfile.getRoleContainer().getRole().getShortName()).orElse("");
     }
 
     public static UUID getLocalUUID(String name) {

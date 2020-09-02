@@ -19,22 +19,24 @@
 
 package eu.beezig.core.net.profile;
 
+import eu.beezig.core.Beezig;
 import eu.beezig.core.net.profile.role.DefaultUserRoles;
+import eu.beezig.core.net.profile.role.RoleContainer;
 import eu.beezig.core.net.profile.role.RoleService;
-import eu.beezig.core.net.profile.role.UserRole;
 
 import java.util.Date;
 
 public class OwnProfile {
+    static final RoleContainer defaultRole = new RoleContainer(DefaultUserRoles.USER);
     private int id;
-    private UserRole role;
+    private RoleContainer role;
     private Date firstLogin;
     private Region region;
 
     public OwnProfile(int id, byte role, long firstLogin, String regionId, String regionName) {
         this.id = id;
-        this.role = DefaultUserRoles.USER;
-        RoleService.getRole(role).thenAcceptAsync(r -> this.role = r);
+        this.role = defaultRole;
+        RoleService.getRole(role, Beezig.user().getId()).thenAcceptAsync(r -> this.role = r);
         this.firstLogin = new Date(firstLogin);
         if(regionId != null) {
             this.region = new Region(regionId, regionName);
@@ -45,7 +47,7 @@ public class OwnProfile {
         return id;
     }
 
-    public UserRole getRole() {
+    public RoleContainer getRoleContainer() {
         return role;
     }
 

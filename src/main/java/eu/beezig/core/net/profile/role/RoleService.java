@@ -22,17 +22,35 @@ package eu.beezig.core.net.profile.role;
 import com.github.benmanes.caffeine.cache.AsyncCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import eu.beezig.core.Beezig;
+import eu.beezig.core.net.profile.override.UserOverride;
 import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
 import eu.beezig.hiveapi.wrapper.utils.json.JObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class RoleService {
     private static AsyncCache<Integer, UserRole> roleCache = Caffeine.newBuilder().maximumSize(100).buildAsync();
 
-    public static CompletableFuture<UserRole> getRole(int id) {
+    public static CompletableFuture<RoleContainer> getRole(int id, UUID uuid) {
+        CompletableFuture<UserOverride> override = CompletableFuture.completedFuture(null);
+        // If 31st bit is set, we need to download a custom user override.
+        if((id & (1 << 31)) == (1 << 31)) {
+            id = id ^ (1 << 31);
+            override = getOverride(uuid);
+        }
+        CompletableFuture<UserRole> role = getUserRole(id);
+        CompletableFuture<UserOverride> finalOverride = override;
+        return CompletableFuture.allOf(override, role).thenApplyAsync(v -> {
+            RoleContainer cnt = new RoleContainer(role.join());
+            cnt.setOverride(finalOverride.join());
+            return cnt;
+        });
+    }
+
+    public static CompletableFuture<UserRole> getUserRole(int id) {
         UserRole role = DefaultUserRoles.fromIndex(id);
         if(role != null) return CompletableFuture.completedFuture(role);
         return roleCache.get(id, RoleService::getRemoteRole);
@@ -46,5 +64,15 @@ public class RoleService {
             e.printStackTrace();
         }
         return Beezig.gson.fromJson(json.getInput().toJSONString(), RemoteUserRole.class);
+    }
+
+    private static CompletableFuture<UserOverride> getOverride(UUID id) {
+        try {
+            return Downloader.getJsonObject(new URL("https://static.beezig.eu/useroverrides/" + id.toString() + ".json"))
+                .thenApplyAsync(j -> Beezig.gson.fromJson(j.getInput().toJSONString(), UserOverride.class));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
