@@ -50,7 +50,7 @@ public class TitleService {
                 level.setPlainName("Watson");
                 level.setHumanName(watson.getHumanName());
                 level.setExtraData(" " + Integer.toString(i + 1, 10));
-                titles.add(titles.size() - 1, level);
+                titles.add(level);
             }
             this.titles = titles.toArray(new HiveTitle[0]);
         }
