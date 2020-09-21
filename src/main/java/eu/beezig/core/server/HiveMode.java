@@ -174,11 +174,13 @@ public abstract class HiveMode extends GameMode {
      * Called when the user returns to the lobby.
      */
     protected void end() {
-        try {
-            dailyService.submitGamePoints(getPoints(), gameID);
-            dailyService.save();
-        } catch (IOException e) {
-            Beezig.logger.error("Couldn't save daily points", e);
+        if(dailyService != null) {
+            try {
+                dailyService.submitGamePoints(getPoints(), gameID);
+                dailyService.save();
+            } catch (IOException e) {
+                Beezig.logger.error("Couldn't save daily points", e);
+            }
         }
     }
 
