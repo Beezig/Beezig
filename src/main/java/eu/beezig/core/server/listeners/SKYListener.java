@@ -24,6 +24,7 @@ import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.SKY;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.IPatternResult;
+import eu.the5zig.util.minecraft.ChatColor;
 
 public class SKYListener extends AbstractGameListener<SKY> {
 
@@ -44,6 +45,13 @@ public class SKYListener extends AbstractGameListener<SKY> {
         }
         else if ("sky.win".equals(key)) {
             gameMode.setWon();
+        }
+    }
+
+    @Override
+    public void onTitle(SKY gameMode, String title, String subTitle) {
+        if (ChatColor.stripColor(subTitle).equals("You died!")) {
+            gameMode.addDeaths(1);
         }
     }
 }
