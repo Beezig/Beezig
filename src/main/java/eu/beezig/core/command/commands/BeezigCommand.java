@@ -75,7 +75,6 @@ public class BeezigCommand implements Command {
     }
 
     private void showCommands(int pageNo) {
-        Mouse.setGrabbed(false);
         Command[] page = ArrayUtils.getPage(CommandManager.commandExecutors.stream().sorted(Comparator.comparing(c -> c.getAliases()[0])).toArray(Command[]::new), pageNo - 1, 10);
         if(page == null) {
             Message.error(Message.translate("error.page"));

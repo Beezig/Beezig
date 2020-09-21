@@ -153,7 +153,6 @@ public class GRAV extends HiveMode implements IMonthly {
     }
 
     public void runAutovote() throws Exception {
-        Mouse.setGrabbed(false);
         if(autovoteRun) return;
         if(!Settings.AUTOVOTE.get().getBoolean()) return;
         autovoteRun = true;
