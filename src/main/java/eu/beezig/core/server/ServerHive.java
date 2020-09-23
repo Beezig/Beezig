@@ -117,7 +117,7 @@ public class ServerHive extends ServerInstance {
     }
 
     private void onServerJoin() {
-        Beezig.net().connect();
+        if(Beezig.net() != null) Beezig.net().connect();
         Profiles.global(UUIDUtils.strip(Beezig.user().getId())).thenAcceptAsync(profile -> {
             this.profile = profile;
             this.tokens = profile.getTokens();

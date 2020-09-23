@@ -45,7 +45,11 @@ public class DailyService {
         }
         String contents = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         if(contents.isEmpty()) return;
-        this.points = Integer.parseInt(contents, 10);
+        try {
+            this.points = Integer.parseInt(contents, 10);
+        } catch (Exception ex) {
+            Beezig.logger.error("Couldn't load daily points", ex);
+        }
     }
 
     public void save() throws IOException {
