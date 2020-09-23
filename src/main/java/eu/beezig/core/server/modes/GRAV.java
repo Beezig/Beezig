@@ -32,14 +32,15 @@ import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.GravStats;
+import eu.the5zig.mod.server.GameState;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.lwjgl.input.Mouse;
 
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class GRAV extends HiveMode implements IMonthly {
@@ -48,6 +49,7 @@ public class GRAV extends HiveMode implements IMonthly {
     // Keeps tracked of the other players' stage completions, to assign points based on the place
     private Map<Integer, Integer> stageCompletions = new HashMap<>();
     private int currentStage;
+    private AtomicLong lastConfirmed = new AtomicLong(0L);
 
     public GRAV()
     {
@@ -164,5 +166,13 @@ public class GRAV extends HiveMode implements IMonthly {
         int index = parsed.entrySet().stream().max(Comparator.comparingLong(Map.Entry::getValue)).map(Map.Entry::getKey).orElse(1);
         Beezig.api().sendPlayerMessage("/v " + index);
         Message.info(Beezig.api().translate("msg.autovote.grav", Color.accent() + index + Color.primary()));
+    }
+
+    /**
+     * @return whether Beezig should ask for confirmation
+     */
+    public boolean confirmDisconnect() {
+        long now = System.currentTimeMillis();
+        return !won && getState() != GameState.LOBBY && lastConfirmed.getAndSet(now) < now - 5000L;
     }
 }

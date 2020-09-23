@@ -104,4 +104,10 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
             }
         }
     }
+
+    @Override
+    public void onTitle(GRAV gameMode, String title, String subTitle) {
+        if (ChatColor.stripColor(title).equals("Gravity"))
+            gameMode.setState(GameState.GAME);
+    }
 }

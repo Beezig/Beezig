@@ -20,6 +20,10 @@ package eu.beezig.core.command;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.commands.*;
+import eu.beezig.core.config.Settings;
+import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.server.modes.GRAV;
+import eu.beezig.core.util.ActiveGame;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
@@ -70,8 +74,16 @@ public class CommandManager {
         String message = event.getMessage();
         if(!message.startsWith("/")) return;
         if(dispatchCommand(message)) event.setCancelled(true);
-        else if (message.matches("^/(?:ng|newgame|hub|q|queue|jf|joinfriend|modtp|server).*"))
+        else if (message.matches("^/(?:ng|newgame|hub|q|queue|jf|joinfriend|modtp|server).*")) {
+            HiveMode mode = ActiveGame.get();
+            if (Settings.GRAV_CONFIRM_DISCONNECT.get().getBoolean() && mode instanceof GRAV
+                && ((GRAV) mode).confirmDisconnect()) {
+                Message.info(Beezig.api().translate("msg.grav.confirm_disconnect"));
+                event.setCancelled(true);
+                return;
+            }
             lastTeleportCommand = System.currentTimeMillis();
+        }
     }
 
     public static void init(Beezig plugin) {

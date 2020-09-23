@@ -72,6 +72,7 @@ public enum Settings {
 
     // Gravity
     GRAV_MAPNAMES(false),
+    GRAV_CONFIRM_DISCONNECT(true),
 
     // Misc
     CHAT_LINKS(true),
