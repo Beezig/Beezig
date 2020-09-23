@@ -20,6 +20,7 @@
 package eu.beezig.core.automessage;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.config.Setting;
 import eu.beezig.core.data.DataPath;
 import eu.beezig.core.server.HiveMode;
@@ -81,14 +82,16 @@ public abstract class AutoMessageManager {
                         try {
                             if (((ServerHive) Beezig.api().getActiveServer()).getInPartyChat() && disablePartyChat) {
                                 Beezig.get().getAsyncExecutor().schedule(() -> {
-                                    if (ActiveGame.get() == mode) {
+                                    if (ActiveGame.get() == mode &&
+                                        System.currentTimeMillis() - CommandManager.lastTeleportCommand() > 2000) {
                                         Beezig.api().sendPlayerMessage("/p");
                                         messageQueue.add(getMessage());
                                     }
                                 }, delay.getLong(), TimeUnit.MILLISECONDS);
                             } else {
                                 Beezig.get().getAsyncExecutor().schedule(() -> {
-                                        if (ActiveGame.get() == mode)
+                                        if (ActiveGame.get() == mode &&
+                                            System.currentTimeMillis() - CommandManager.lastTeleportCommand() > 2000)
                                             Beezig.api().sendPlayerMessage(getMessage());
                                     }, delay.getLong(), TimeUnit.MILLISECONDS);
                             }

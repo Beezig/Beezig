@@ -29,6 +29,7 @@ import java.util.*;
 public class CommandManager {
 
     public static Set<Command> commandExecutors = new HashSet<>();
+    private static long lastTeleportCommand = 0L;
 
     private static void registerCommands() {
         commandExecutors.add(new BeezigCommand());
@@ -57,11 +58,20 @@ public class CommandManager {
         commandExecutors.add(new DrWrCommand());
     }
 
+    /**
+     * @return Timestamp of the last teleport command (e.g. /ng)
+     */
+    public static long lastTeleportCommand () {
+        return lastTeleportCommand;
+    }
+
     @EventHandler
     public void onClientChat(ChatSendEvent event) {
         String message = event.getMessage();
         if(!message.startsWith("/")) return;
         if(dispatchCommand(message)) event.setCancelled(true);
+        else if (message.matches("^/(?:ng|newgame|hub|q|queue|jf|joinfriend|modtp|server).*"))
+            lastTeleportCommand = System.currentTimeMillis();
     }
 
     public static void init(Beezig plugin) {
