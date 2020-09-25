@@ -20,6 +20,7 @@
 package eu.beezig.core;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import eu.beezig.core.advrec.anywhere.AdvancedRecordsAnywhere;
 import eu.beezig.core.api.BeezigServiceLoader;
@@ -30,6 +31,8 @@ import eu.beezig.core.data.BeezigData;
 import eu.beezig.core.logging.TemporaryPointsManager;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.net.BeezigNetManager;
+import eu.beezig.core.net.profile.override.UserOverride;
+import eu.beezig.core.net.profile.override.UserOverrideDeserializer;
 import eu.beezig.core.net.session.NetSessionManager;
 import eu.beezig.core.net.session.The5zigProvider;
 import eu.beezig.core.notification.NotificationManager;
@@ -62,7 +65,7 @@ import java.util.concurrent.ScheduledExecutorService;
 @Plugin(name = "Beezig", version = Constants.VERSION)
 public class Beezig {
     public static Logger logger;
-    public static Gson gson = new Gson();
+    public static Gson gson = new GsonBuilder().registerTypeAdapter(UserOverride.class, new UserOverrideDeserializer()).create();
     public static boolean DEBUG = false;
     private static Beezig instance;
 

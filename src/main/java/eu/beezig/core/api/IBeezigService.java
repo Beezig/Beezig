@@ -41,6 +41,7 @@ public interface IBeezigService {
     void registerBeezigDir(Supplier<File> callback);
     void registerGetSetting(Function<String, Object> callback);
     void registerSetSetting(Consumer<Map.Entry<String, Object>> callback);
+    void registerGetOverrides(Function<UUID, Map<String, Object>> callback);
 
     // Functions (Beezig -> BeezigForge)
     void setOnHive(boolean update);
