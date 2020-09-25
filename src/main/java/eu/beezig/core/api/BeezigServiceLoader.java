@@ -26,6 +26,7 @@ import eu.beezig.core.data.HiveTitle;
 import eu.beezig.core.net.BeezigNetManager;
 import eu.beezig.core.net.profile.OwnProfile;
 import eu.beezig.core.net.profile.UserProfile;
+import eu.beezig.core.net.profile.override.UserOverride;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.TitleService;
@@ -34,10 +35,7 @@ import eu.beezig.core.util.text.StringUtils;
 import eu.the5zig.mod.server.GameMode;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.ServiceLoader;
+import java.util.*;
 
 public class BeezigServiceLoader {
     private ServiceLoader<IBeezigService> services = ServiceLoader.load(IBeezigService.class,
@@ -90,6 +88,19 @@ public class BeezigServiceLoader {
             if(profile == null) return null;
             if(profile.getRegion() == null) return null;
             return profile.getRegion().getId();
+        });
+        mainService.registerGetOverrides(uuid -> {
+            Optional<UserProfile> profile = Beezig.get().getNetworkManager().getProfilesCache().getIfPresent(uuid);
+            if (profile != null && profile.isPresent()) {
+                UserOverride overrides = profile.get().getRoleContainer().getOverride();
+                if (overrides == null) return null;
+                HashMap<String, Object> ret = new HashMap<>();
+                overrides.getOverrides().forEach(override -> {
+                    ret.putAll(override.getAsMap());
+                });
+                return ret;
+            }
+            return null;
         });
         mainService.loadConfig(Beezig.get().getBeezigDir());
         try {
