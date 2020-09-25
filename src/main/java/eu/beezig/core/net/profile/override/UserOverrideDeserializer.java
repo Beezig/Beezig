@@ -35,8 +35,11 @@ public class UserOverrideDeserializer implements JsonDeserializer<UserOverride> 
         List<UserOverrideBase> overrideList = new ArrayList<>(5);
         for (JsonElement overrideElem : overrides) {
             overrideObj = overrideElem.getAsJsonObject();
-            if (overrideObj.get("id").getAsString().equals("custom-badge")) {
+            String id = overrideObj.get("id").getAsString();
+            if (id.equals("custom-badge")) {
                 overrideList.add(new CustomBadgeOverride().loadFromObject (overrideObj));
+            } else if (id.equals("steve-mode")) {
+                overrideList.add(new SteveModeOverride().loadFromObject(overrideObj));
             }
         }
         return new UserOverride(overrideList);
