@@ -50,7 +50,7 @@ public class WorldRecords {
         }
 
         public String getTimeDisplay() {
-            return DurationFormatUtils.formatDuration(wr_millis, "m':'ss");
+            return DurationFormatUtils.formatDuration(wr_millis, "m':'ss.SSS");
         }
 
         public int getMillis() {
