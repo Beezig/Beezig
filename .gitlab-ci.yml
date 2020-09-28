@@ -6,7 +6,7 @@ image: alpine:latest
 
 deploy version:
     before_script:
-        - apk add openssh git jq bash coreutils
+        - apk add openssh git jq bash coreutils curl
     script:
         - chmod go= "$DEPLOY_KEY"
         - mkdir -p ~/.ssh/ || true
