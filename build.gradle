@@ -1,4 +1,5 @@
 import org.apache.tools.ant.filters.EscapeUnicode
+import org.apache.tools.ant.filters.ReplaceTokens
 
 buildscript {
     repositories {
@@ -61,6 +62,20 @@ tasks.withType(ProcessResources).each { task ->
     task.from(task.getSource()) {
         include '**/*.properties'
         filter(EscapeUnicode) // native2ascii for i18n files
+
+        include '**/*.json'
+        filesMatching('**/*.json') {
+            def beezigCommit = "git rev-parse HEAD".execute().text.trim()
+            def beezigCommits = ("git rev-list --count " + "git log --tags -1 --pretty=%H".execute().text.trim() +
+                "..HEAD").execute().text.trim()
+            def beezigDate = ("git log -1 --pretty=%cI " + beezigCommit).execute().text.trim()
+
+            filter(ReplaceTokens, tokens: [beezigversion: '7.0.0',
+                                           beezigcommit: beezigCommit,
+                                           beezigcommits: beezigCommits,
+                                           beezigtype: 'beta',
+                                           beezigdate: beezigDate])
+        }
     }
 }
 

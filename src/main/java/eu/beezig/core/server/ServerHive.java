@@ -19,7 +19,11 @@
 
 package eu.beezig.core.server;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import eu.beezig.core.Beezig;
+import eu.beezig.core.Constants;
+import eu.beezig.core.Version;
 import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.automessage.AutoMessageManager;
 import eu.beezig.core.server.listeners.*;
@@ -29,10 +33,17 @@ import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.HivePlayer;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.the5zig.mod.server.*;
+import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ServerHive extends ServerInstance {
 
@@ -155,6 +166,7 @@ public class ServerHive extends ServerInstance {
 
     private class ListenerHive extends AbstractGameListener<GameMode> {
         private boolean readyForLobby = true;
+        private final AtomicBoolean updateCheckPerformed = new AtomicBoolean(false);
 
         @Override
         public Class<GameMode> getGameMode() {
@@ -226,6 +238,78 @@ public class ServerHive extends ServerInstance {
             }
             getGameListener().switchLobby(null);
             if(BeezigForge.isSupported()) BeezigForge.get().setCurrentGame(null);
+
+            if (updateCheckPerformed.get())
+                return;
+            // Check for updates
+            try {
+                updateCheckPerformed.set(true);
+                URL url = new URL("https://go.beezig.eu/version-beta.json?donttrack");
+                URLConnection connection = url.openConnection();
+                connection.setRequestProperty("User-Agent", String.format("Beezig/7.0 (%s) Beezig/%s-%s",
+                    (SystemUtils.IS_OS_MAC ? "Macintosh" : System.getProperty("os.name")),
+                    Constants.VERSION, Beezig.getVersion()));
+                JsonParser parser = new JsonParser();
+                JsonObject jsonObject = parser.parse(new InputStreamReader(connection.getInputStream())).getAsJsonObject();
+
+                Version beezigVersion = new Version(jsonObject.get("beezig").getAsJsonObject());
+                Version localBeezigVersion = new Version(parser.parse(new InputStreamReader(this.getClass().getResourceAsStream("/beezig-version.json"))).getAsJsonObject());
+                int versionsBehind = 0;
+                List<String> updates = new ArrayList<>(4);
+                if (localBeezigVersion.compareTo(beezigVersion) < 0) {
+                    updates.add(Beezig.api().translate("update.check.available", "Beezig",
+                        String.format("%s (%s)", localBeezigVersion.getVersion(), localBeezigVersion.getCommits()),
+                        String.format("%s (%s)", beezigVersion.getVersion(), beezigVersion.getCommits())));
+                    versionsBehind = localBeezigVersion.getVersionsBehind(beezigVersion);
+                }
+                if (BeezigForge.isSupported()) {
+                    Version beezigForgeVersion = new Version(jsonObject.get("beezig-forge").getAsJsonObject());
+                    Version localBeezigForgeVersion = new Version(parser.parse(new InputStreamReader(this.getClass().getResourceAsStream("/beezig-forge-version.json"))).getAsJsonObject());
+                    if (localBeezigForgeVersion.compareTo(beezigVersion) < 0) {
+                        updates.add(Beezig.api().translate("update.check.available", "BeezigForge",
+                            String.format("%s (%s)", localBeezigForgeVersion.getVersion(), localBeezigForgeVersion.getCommits()),
+                            String.format("%s (%s)", beezigForgeVersion.getVersion(), beezigForgeVersion.getCommits())));
+                        int versions = localBeezigForgeVersion.getVersionsBehind(beezigForgeVersion);
+                        if (versions > versionsBehind)
+                            versionsBehind = versions;
+                    }
+                }
+                if (Beezig.get().isLaby()) {
+                    Version beezigLabyVersion = new Version(jsonObject.get("beezig-laby").getAsJsonObject());
+                    Version localBeezigLabyVersion = new Version(parser.parse(new InputStreamReader(this.getClass().getResourceAsStream("/beezig-laby-version.json"))).getAsJsonObject());
+                    if (localBeezigLabyVersion.compareTo(beezigLabyVersion) < 0) {
+                        updates.add(Beezig.api().translate("update.check.available", "BeezigLaby",
+                            String.format("%s (%s)", localBeezigLabyVersion.getVersion(), localBeezigLabyVersion.getCommits()),
+                            String.format("%s (%s)", beezigLabyVersion.getVersion(), beezigLabyVersion.getCommits())));
+                        int versions = localBeezigLabyVersion.getVersionsBehind(beezigLabyVersion);
+                        if (versions > versionsBehind)
+                            versionsBehind = versions;
+                    }
+                }
+                if (versionsBehind == -1) {
+                    // New stable version
+                    WorldTask.submit(() -> {
+                        Message.bar();
+                        Message.info(Beezig.api().translate("update.check.available.new_stable"));
+                        updates.forEach(Message::info);
+                        Message.info(Beezig.api().translate("update.check.command"));
+                        Message.bar();
+                    });
+                } else if (versionsBehind > 0) {
+                    // New beta
+                    int finalVersionsBehind = versionsBehind;
+                    WorldTask.submit(() -> {
+                        Message.bar();
+                        Message.info(Beezig.api().translate("update.check.available.same_patch", finalVersionsBehind));
+                        updates.forEach(Message::info);
+                        Message.info(Beezig.api().translate("update.check.command"));
+                        Message.bar();
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                WorldTask.submit(() -> Message.error(Beezig.api().translate("update.check.failed")));
+            }
         }
 
         @Override
