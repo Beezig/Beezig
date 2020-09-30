@@ -30,7 +30,6 @@ import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.the5zig.mod.util.component.MessageComponent;
 import eu.the5zig.mod.util.component.style.MessageAction;
-import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
@@ -52,7 +51,7 @@ public class BeezigCommand implements Command {
     public boolean execute(String[] args) {
         if(args.length == 0) {
             Message.bar();
-            Message.info(String.format("Running Beezig %s (%s)", Constants.VERSION, Beezig.getVersion ()));
+            Message.info(String.format("Running Beezig %s (%s)", Constants.VERSION, Beezig.getVersionString()));
             Message.bar();
         }
         else {

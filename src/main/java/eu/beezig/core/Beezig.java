@@ -58,9 +58,9 @@ import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 
 import java.io.File;
-import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Plugin(name = "Beezig", version = Constants.VERSION)
 public class Beezig {
@@ -84,6 +84,12 @@ public class Beezig {
     private boolean laby;
     private boolean titleDebug;
     private boolean isMod;
+    private Version version;
+    private AtomicBoolean updateAvailable = new AtomicBoolean(false);
+    private Version beezigForgeVersion;
+    private AtomicBoolean beezigForgeUpdateAvailable = new AtomicBoolean(false);;
+    private Version beezigLabyVersion;
+    private AtomicBoolean beezigLabyUpdateAvailable = new AtomicBoolean(false);;
 
     public Beezig(boolean laby, File labyDir) {
         this.laby = laby;
@@ -102,9 +108,9 @@ public class Beezig {
         }
     }
 
-    public static String getVersion() {
+    public static String getVersionString() {
         try {
-            return new Scanner(Beezig.class.getResourceAsStream("/version.txt"), "UTF-8").useDelimiter("\\A").next();
+            return get().version.getCommit().substring(0, 8);
         } catch (Exception e) {
             logger.error(String.format("Couldn't load commit from version.txt: %s", e.getMessage()));
             return "development";
@@ -279,5 +285,53 @@ public class Beezig {
 
     public static BeezigNetManager net() {
         return instance.networkManager;
+    }
+
+    public Version getVersion() {
+        return version;
+    }
+
+    public void setVersion(Version version) {
+        this.version = version;
+    }
+
+    public boolean getUpdateAvailable() {
+        return updateAvailable.get();
+    }
+
+    public void setUpdateAvailable() {
+        this.updateAvailable.set(true);
+    }
+
+    public Version getBeezigForgeVersion() {
+        return beezigForgeVersion;
+    }
+
+    public void setBeezigForgeVersion(Version beezigForgeVersion) {
+        this.beezigForgeVersion = beezigForgeVersion;
+    }
+
+    public boolean getBeezigForgeUpdateAvailable() {
+        return beezigForgeUpdateAvailable.get();
+    }
+
+    public void setBeezigForgeUpdateAvailable() {
+        this.beezigForgeUpdateAvailable.set(true);
+    }
+
+    public Version getBeezigLabyVersion() {
+        return beezigLabyVersion;
+    }
+
+    public void setBeezigLabyVersion(Version beezigLabyVersion) {
+        this.beezigLabyVersion = beezigLabyVersion;
+    }
+
+    public boolean getBeezigLabyUpdateAvailable() {
+        return beezigLabyUpdateAvailable.get();
+    }
+
+    public void setBeezigLabyUpdateAvailable() {
+        this.beezigLabyUpdateAvailable.set(true);
     }
 }

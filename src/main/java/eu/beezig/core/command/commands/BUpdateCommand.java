@@ -21,6 +21,7 @@ package eu.beezig.core.command.commands;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.Constants;
+import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.command.Command;
 import eu.beezig.core.util.text.Message;
 import org.apache.commons.lang3.SystemUtils;
@@ -33,13 +34,16 @@ import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BUpdateCommand implements Command {
 
     private static long confirmUntil = 0L;
-    private static boolean updated = false;
-    private static String code;
+    private static AtomicBoolean updated = new AtomicBoolean(false);
+    private static String code = "";
 
     @Override
     public String getName() {
@@ -53,61 +57,78 @@ public class BUpdateCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if (updated) {
-            Message.error(Beezig.api().translate("update.error.already_updated"));
+        if (updated.get()) {
+            Message.error(Message.translate("update.error.already_updated"));
             return true;
         }
-        if (args.length == 1 && args[0].equals("confirm")) {
-            if (System.currentTimeMillis() > confirmUntil)
-            {
-                Message.error(Beezig.api().translate("update.error.expired"));
-                return true;
-            }
-            Beezig.get().getAsyncExecutor().execute(() -> {
-                try {
-                    URL updateUrl = new URL(String.format("https://go.beezig.eu/%s-beta", code));
-                    URLConnection connection = updateUrl.openConnection();
-                    // We need this to "bypass" Cloudflare
-                    connection.setRequestProperty("User-Agent", String.format("Beezig/7.0 (%s) Beezig/%s-%s",
+        if (args.length > 0) {
+            switch (args[0]) {
+                case "confirm":
+                    try {
+                        Beezig beezig = Beezig.get();
+                        if (System.currentTimeMillis() > confirmUntil) {
+                            Message.error(Message.translate("update.error.expired"));
+                            return true;
+                        }
+                        Map<URL, Class<?>> updates = new HashMap<>(4);
+                        if (beezig.isLaby()) {
+                            // Only update the BeezigLaby jar
+                            updates.put(new URL("https://go.beezig.eu/" + code + "laby-beta"), Class.forName("eu.beezig.laby.LabyMain"));
+                        } else {
+                            if (BeezigForge.isSupported() && beezig.getBeezigForgeUpdateAvailable()) {
+                                updates.put(new URL("https://go.beezig.eu/beezigforge-beta"), Class.forName("eu.beezig.forge.BeezigForgeMod"));
+                            }
+                            // Update Beezig even if no update is available
+                            if (beezig.getUpdateAvailable() || updates.isEmpty()) {
+                                updates.put(new URL("https://go.beezig.eu/" + code + "5zig-beta"), Beezig.class);
+                            }
+                        }
+                        final String userAgent = String.format("Beezig/7.0 (%s) Beezig/%s-%s",
                             (SystemUtils.IS_OS_MAC ? "Macintosh" : System.getProperty("os.name")),
-                            Constants.VERSION, Beezig.getVersion()));
-                    ReadableByteChannel byteChannel = Channels.newChannel(connection.getInputStream());
-                    URL jarLocation = Beezig.class.getProtectionDomain().getCodeSource().getLocation();
-                    String jarFile = jarLocation.getFile();
-                    if (jarLocation.getProtocol().equals("jar")) {
-                        jarFile = jarFile.substring(0, jarFile.lastIndexOf("!"));
+                            Constants.VERSION, Beezig.getVersionString());
+                        updates.forEach((k, v) -> {
+                            try {
+                                URLConnection connection = k.openConnection();
+                                connection.setRequestProperty("User-Agent", userAgent);
+                                ReadableByteChannel byteChannel = Channels.newChannel(connection.getInputStream());
+                                URL jarLocation = v.getProtectionDomain().getCodeSource().getLocation();
+                                String jarFile = jarLocation.getFile();
+                                if (jarLocation.getProtocol().equals("jar")) {
+                                    jarFile = jarFile.substring(0, jarFile.lastIndexOf("!"));
+                                }
+                                FileChannel fileChannel = new FileOutputStream(new URI(jarFile).getPath()).getChannel();
+                                fileChannel.transferFrom(byteChannel, 0, Long.MAX_VALUE);
+                            } catch (Exception e) {
+                                Message.error(Message.translate("update.error"));
+                                Message.error(e.getMessage());
+                                e.printStackTrace();
+                            }
+                        });
+                        updated.set(true);
+                        Message.info(Message.translate("update.success"));
+                    } catch (MalformedURLException e) {
+                        Message.error(Message.translate("update.invalid"));
+                    } catch (ClassNotFoundException e) {
+                        Message.info(Message.translate("update.error"));
+                        Message.error(e.getMessage());
+                        e.printStackTrace();
                     }
-                    FileChannel fileChannel = new FileOutputStream(new URI(jarFile).getPath()).getChannel();
-                    fileChannel.transferFrom(byteChannel, 0, Long.MAX_VALUE);
-                    updated = true;
-                    Message.info(Beezig.api().translate("update.success"));
-                } catch (MalformedURLException e) {
-                    Message.error((Beezig.api().translate("update.error.code.invalid")));
-                } catch (Exception e) {
-                    Message.error(Beezig.api().translate("update.error"));
-                    // We're leaving this error message untranslated
-                    Message.error(e.getMessage());
-                    // TODO Add Discord link?
-                    e.printStackTrace();
-                }
-            });
-            return true;
-        }
-
-        code = Beezig.get().isLaby() ? "laby" : "5zig";
-        // Timeout in minutes for the /bupdate confirm command
-        int confirm_timeout = 2;
-        if (args.length == 2 && args[0].equalsIgnoreCase("code")) {
-            // Use a custom beta (format: code-platform)
-            code = String.format("%s-%s", args[1], code);
-            Message.info(Beezig.api().translate("update.confirm.custom", code));
-            confirmUntil = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(confirm_timeout);
-        } else if (args.length > 0) {
-            Message.error(Beezig.api().translate("update.syntax"));
+                    break;
+                case "code":
+                    if (args.length == 2) {
+                        code = args[1] + "-";
+                        Message.info(Beezig.api().translate("update.confirm.custom", code));
+                        confirmUntil = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2);
+                        break;
+                    }
+                default:
+                    Message.error(Message.translate("update.syntax"));
+                    break;
+            }
         } else {
             // Use the latest beta
             Message.info(Beezig.api().translate("update.confirm"));
-            confirmUntil = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(confirm_timeout);
+            confirmUntil = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2);
         }
         return true;
     }
