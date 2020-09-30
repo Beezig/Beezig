@@ -173,6 +173,6 @@ public class GRAV extends HiveMode implements IMonthly {
      */
     public boolean confirmDisconnect() {
         long now = System.currentTimeMillis();
-        return !won && getState() != GameState.LOBBY && lastConfirmed.getAndSet(now) < now - 5000L;
+        return !won && getState() == GameState.GAME && lastConfirmed.getAndSet(now) < now - 5000L;
     }
 }
