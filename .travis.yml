@@ -1,4 +1,6 @@
 language: java
+git:
+  depth: false
 jdk:
   - openjdk8
 before_install:
