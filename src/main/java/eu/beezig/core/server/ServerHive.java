@@ -244,7 +244,7 @@ public class ServerHive extends ServerInstance {
             // Check for updates
             try {
                 updateCheckPerformed.set(true);
-                URL url = new URL("https://go.beezig.eu/version-beta.json?donttrack");
+                URL url = new URL("https://go.beezig.eu/version-beta.json");
                 URLConnection connection = url.openConnection();
                 connection.setRequestProperty("User-Agent", String.format("Beezig/7.0 (%s) Beezig/%s-%s",
                     (SystemUtils.IS_OS_MAC ? "Macintosh" : System.getProperty("os.name")),
