@@ -26,6 +26,7 @@ import eu.beezig.core.Constants;
 import eu.beezig.core.Version;
 import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.automessage.AutoMessageManager;
+import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.listeners.*;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.task.WorldTask;
@@ -239,7 +240,7 @@ public class ServerHive extends ServerInstance {
             getGameListener().switchLobby(null);
             if(BeezigForge.isSupported()) BeezigForge.get().setCurrentGame(null);
 
-            if (!updateCheckPerformed.get())
+            if (!updateCheckPerformed.get() && Settings.UPDATE_CHECK.get().getBoolean())
                 Beezig.get().getAsyncExecutor().execute(() -> {
                     // Check for updates
                     try {
