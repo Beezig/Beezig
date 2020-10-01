@@ -68,7 +68,7 @@ public enum Settings {
     TIMV_ADVREC_KPV(true),
 
     // DrawIt
-    DRAW_AUTOGUESS(true),
+    DRAW_AUTOGUESS(false),
 
     // Gravity
     GRAV_MAPNAMES(false),
