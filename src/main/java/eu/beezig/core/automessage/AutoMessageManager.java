@@ -39,14 +39,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AutoMessageManager {
-    private Setting enabled;
-    private boolean disablePartyChat;
-    private Setting delay;
-    private DataPath triggersPath;
-    private Map<String, Trigger> triggers;
+    private final Setting enabled;
+    private final boolean disablePartyChat;
+    private final Setting delay;
+    private final DataPath triggersPath;
+    private final Map<String, Trigger> triggers;
     private static List<String> messageQueue;
-    private AtomicBoolean skipThis;
-    private static AtomicBoolean skipAll = new AtomicBoolean();
+    private final AtomicBoolean skipThis;
+    private static final AtomicBoolean skipAll = new AtomicBoolean();
 
     public AutoMessageManager(boolean disablePartyChat) {
         triggers = new HashMap<>();
@@ -63,44 +63,35 @@ public abstract class AutoMessageManager {
     public abstract Setting getDelaySetting();
     public abstract DataPath getTriggersPath();
 
-    private synchronized void handleEvent(String message, HiveMode mode, Trigger.Type... types) {
+    private synchronized void handleEvent(String message, HiveMode mode, Trigger.Type type) {
         HiveMode game = ActiveGame.get();
-        if (game == null)
+        if (game == null || !enabled.getBoolean() || !shouldFire())
             return;
-
-        if (!enabled.getBoolean() || !shouldFire())
-            return;
-
         Trigger trigger = triggers.get(game.getIdentifier());
-        if (trigger != null) {
-            for (Trigger.Type t : types) {
-                if (trigger.doesTrigger(ChatColor.stripColor(message), t) && !game.isAutoMessageSent(this.getClass())) {
-                    game.setAutoMessageSent(this.getClass(), true);
-                    if (skipThis.getAndSet(false) || skipAll.getAndSet(false))
-                        continue;
-                    Beezig.get().getAsyncExecutor().execute(() -> {
-                        try {
-                            if (((ServerHive) Beezig.api().getActiveServer()).getInPartyChat() && disablePartyChat) {
-                                Beezig.get().getAsyncExecutor().schedule(() -> {
+        if (trigger != null && trigger.doesTrigger(ChatColor.stripColor(message), type) && !game.isAutoMessageSent(this.getClass())) {
+            game.setAutoMessageSent(this.getClass(), true);
+            if (!(skipThis.getAndSet(false) || skipAll.getAndSet(false)))
+                Beezig.get().getAsyncExecutor().execute(() -> {
+                    try {
+                        if (((ServerHive) Beezig.api().getActiveServer()).getInPartyChat() && disablePartyChat) {
+                            Beezig.get().getAsyncExecutor().schedule(() -> {
+                                if (ActiveGame.get() == mode &&
+                                    System.currentTimeMillis() - CommandManager.lastTeleportCommand() > 2000) {
+                                    Beezig.api().sendPlayerMessage("/p");
+                                    messageQueue.add(getMessage());
+                                }
+                            }, delay.getLong(), TimeUnit.MILLISECONDS);
+                        } else {
+                            Beezig.get().getAsyncExecutor().schedule(() -> {
                                     if (ActiveGame.get() == mode &&
-                                        System.currentTimeMillis() - CommandManager.lastTeleportCommand() > 2000) {
-                                        Beezig.api().sendPlayerMessage("/p");
-                                        messageQueue.add(getMessage());
-                                    }
+                                        System.currentTimeMillis() - CommandManager.lastTeleportCommand() > 2000)
+                                        Beezig.api().sendPlayerMessage(getMessage());
                                 }, delay.getLong(), TimeUnit.MILLISECONDS);
-                            } else {
-                                Beezig.get().getAsyncExecutor().schedule(() -> {
-                                        if (ActiveGame.get() == mode &&
-                                            System.currentTimeMillis() - CommandManager.lastTeleportCommand() > 2000)
-                                            Beezig.api().sendPlayerMessage(getMessage());
-                                    }, delay.getLong(), TimeUnit.MILLISECONDS);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                    });
-                }
-            }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
         }
     }
 
@@ -153,7 +144,8 @@ public abstract class AutoMessageManager {
     public void onTitle(TitleEvent event) {
         // We're calling handleEvent for TITLE and SUBTITLE as this event triggers
         // for both types.
-        handleEvent(event.getTitle(), ActiveGame.get(), Trigger.Type.TITLE, Trigger.Type.SUBTITLE);
+        handleEvent(event.getTitle(), ActiveGame.get(), Trigger.Type.TITLE);
+        handleEvent(event.getSubTitle(), ActiveGame.get(), Trigger.Type.SUBTITLE);
     }
 
     /**
