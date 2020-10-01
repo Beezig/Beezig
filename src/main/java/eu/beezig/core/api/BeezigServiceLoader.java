@@ -90,17 +90,16 @@ public class BeezigServiceLoader {
             return profile.getRegion().getId();
         });
         mainService.registerGetOverrides(uuid -> {
-            Optional<UserProfile> profile = Beezig.get().getNetworkManager().getProfilesCache().getIfPresent(uuid);
-            if (profile != null && profile.isPresent()) {
-                UserOverride overrides = profile.get().getRoleContainer().getOverride();
+            Optional<UserProfile> profile = Beezig.get().getNetworkManager().getProfilesCache().getNowOrSubmit(uuid, Collections.singletonList(uuid));
+            return profile.map(p -> {
+                UserOverride overrides = p.getRoleContainer().getOverride();
                 if (overrides == null) return null;
                 HashMap<String, Object> ret = new HashMap<>();
                 overrides.getOverrides().forEach(override -> {
                     ret.putAll(override.getAsMap());
                 });
                 return ret;
-            }
-            return null;
+            });
         });
         mainService.loadConfig(Beezig.get().getBeezigDir());
         try {

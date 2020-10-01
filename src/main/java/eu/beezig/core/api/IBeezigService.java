@@ -24,6 +24,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -41,7 +42,7 @@ public interface IBeezigService {
     void registerBeezigDir(Supplier<File> callback);
     void registerGetSetting(Function<String, Object> callback);
     void registerSetSetting(Consumer<Map.Entry<String, Object>> callback);
-    void registerGetOverrides(Function<UUID, Map<String, Object>> callback);
+    void registerGetOverrides(Function<UUID, Optional<Map<String, Object>>> callback);
 
     // Functions (Beezig -> BeezigForge)
     void setOnHive(boolean update);
