@@ -35,10 +35,7 @@ import eu.beezig.hiveapi.wrapper.player.games.GravStats;
 import eu.the5zig.mod.server.GameState;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -50,6 +47,8 @@ public class GRAV extends HiveMode implements IMonthly {
     private Map<Integer, Integer> stageCompletions = new HashMap<>();
     private int currentStage;
     private AtomicLong lastConfirmed = new AtomicLong(0L);
+    private String[] finalMaps = new String[5];
+    private String nextMap;
 
     public GRAV()
     {
@@ -103,6 +102,8 @@ public class GRAV extends HiveMode implements IMonthly {
     }
 
     public void stageDone() {
+        if (currentStage < 4)
+            nextMap = finalMaps[currentStage + 1];
         if(currentStage == 0) {
             currentStage++;
             return;
@@ -174,5 +175,23 @@ public class GRAV extends HiveMode implements IMonthly {
     public boolean confirmDisconnect() {
         long now = System.currentTimeMillis();
         return !won && getState() == GameState.GAME && lastConfirmed.getAndSet(now) < now - 5000L;
+    }
+
+    public void setFinalMaps(String[] maps) {
+        for (int i = 0; i < 5; ++i) {
+            finalMaps[i] = maps[i];
+        }
+    }
+
+    public String getMap(int i) {
+        return i > 0 && i < 5 ? finalMaps[i] : "";
+    }
+
+    public String getNextMap() {
+        return nextMap;
+    }
+
+    public int getCurrentStage() {
+        return currentStage;
     }
 }

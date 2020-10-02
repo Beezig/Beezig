@@ -35,12 +35,15 @@ import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.mod.util.component.MessageComponent;
 import eu.the5zig.util.minecraft.ChatColor;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GRAVListener extends AbstractGameListener<GRAV> {
     private static final Pattern MAP_REGEX = Pattern.compile("([^,&]+)");
     private static final Pattern MESSAGE_REGEX = Pattern.compile("▍ Gravity ▏ (\\d+)\\. .+ \\[(\\d+) Votes?]");
+    private static final Pattern FINAL_MAPS_REGEX = Pattern.compile("§8▍ §bGra§avi§ety§8 ▏ §7§oVoting not active! The winning map was ([^,]+), ([^,]+), ([^,]+), (.+) & ([^!]+)!");
+    private final AtomicBoolean waitingForFinalMaps = new AtomicBoolean(false);
 
     @Override
     public Class<GRAV> getGameMode() {
@@ -61,6 +64,11 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
             gameMode.stageDone();
         }
         if("grav.finish".equals(key)) gameMode.setWon();
+        // Hotfix as Hive forgot to send the winning maps
+        if("map".equals(key)) {
+            Beezig.api().sendPlayerMessage("/v");
+            waitingForFinalMaps.set(true);
+        }
     }
 
     @EventHandler
@@ -70,9 +78,19 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
         GameMode mode;
         if(!Settings.AUTOVOTE.get().getBoolean() || !((mode = Beezig.api().getActiveServer().getGameListener().getCurrentGameMode()) instanceof GRAV)) return;
         GRAV grav = (GRAV) mode;
+        String msg = event.getMessage();
+        Matcher finalMapsMatcher = FINAL_MAPS_REGEX.matcher(msg);
+        if (finalMapsMatcher.matches() && waitingForFinalMaps.getAndSet(false)) {
+            event.setCancelled(true);
+            String[] maps = new String[5];
+            for (int i = 0; i < 5; ++i) {
+                maps[i] = finalMapsMatcher.group(i + 1);
+            }
+            grav.setFinalMaps(maps);
+        }
         if(grav.hasAutovoteRun()) return;
         if(event.getMessage().startsWith("§o")) return;
-        String msg = ChatColor.stripColor(event.getMessage());
+        msg = ChatColor.stripColor(msg);
         Matcher master = MESSAGE_REGEX.matcher(msg);
         if(master.matches()) {
             int index = Integer.parseInt(master.group(1), 10);
