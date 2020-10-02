@@ -102,8 +102,11 @@ public class GRAV extends HiveMode implements IMonthly {
     }
 
     public void stageDone() {
-        if (currentStage < 4)
+        if (currentStage < 4) {
             nextMap = finalMaps[currentStage + 1];
+            if (Settings.GRAV_NEXT_MAP.get().getBoolean())
+                Message.info(Beezig.api().translate("msg.grav.next_map", nextMap));
+        }
         if(currentStage == 0) {
             currentStage++;
             return;
