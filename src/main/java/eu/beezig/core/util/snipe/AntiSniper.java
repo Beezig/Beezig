@@ -90,7 +90,7 @@ public class AntiSniper {
     }
 
     public void onMatch(String key, IPatternResult match) {
-        if("msg.broadcast".equals(key)) {
+        if("msg.broadcast".equals(key) && Settings.BROADCAST_ACTIONS.get().getBoolean()) {
             lastBroadcastSender = match.get(0);
             String text = match.get(2);
             MessageComponent base = new MessageComponent(Message.infoPrefix());

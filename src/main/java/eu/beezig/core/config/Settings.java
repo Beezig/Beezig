@@ -40,6 +40,7 @@ public enum Settings {
     MSG_PING(true),
     MSG_DND_MODE(MessageIgnoreLevel.IGNORE_ALERT),
     MSG_DND_ALERT("I'm currently on Do Not Disturb mode. I'll get back to you later!"),
+    BROADCAST_ACTIONS(true),
 
     // Autovote
     AUTOVOTE(true),
