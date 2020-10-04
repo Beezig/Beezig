@@ -33,6 +33,7 @@ import eu.the5zig.mod.server.GameMode;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.mod.util.component.MessageComponent;
+import eu.the5zig.mod.util.component.style.MessageAction;
 import eu.the5zig.util.minecraft.ChatColor;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -90,8 +91,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
         }
         if(grav.hasAutovoteRun()) return;
         if(event.getMessage().startsWith("§o")) return;
-        msg = ChatColor.stripColor(msg);
-        Matcher master = MESSAGE_REGEX.matcher(msg);
+        Matcher master = MESSAGE_REGEX.matcher(ChatColor.stripColor(msg));
         if(master.matches()) {
             int index = Integer.parseInt(master.group(1), 10);
             int votes = Integer.parseInt(master.group(2), 10);
@@ -102,7 +102,9 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                     String mapsMsg = first.getStyle().getOnHover().getComponent().getText();
                     if(Settings.GRAV_MAPNAMES.get().getBoolean()) {
                         event.setCancelled(true);
-                        Beezig.api().messagePlayer("§o" + event.getMessage().replaceAll("(?:§.[➊➋➌➍➎])+", mapsMsg));
+                        MessageComponent message = new MessageComponent("§o" + event.getMessage().replaceAll("(?:§.[➊➋➌➍➎])+", mapsMsg));
+                        message.getStyle().setOnClick(new MessageAction(MessageAction.Action.RUN_COMMAND, "/v " + index));
+                        Beezig.api().messagePlayerComponent(message, false);
                     }
                     mapsMsg = ChatColor.stripColor(mapsMsg);
                     Matcher m = MAP_REGEX.matcher(mapsMsg);
