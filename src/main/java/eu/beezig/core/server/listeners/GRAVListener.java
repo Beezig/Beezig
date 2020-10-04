@@ -89,7 +89,6 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
             }
             grav.setFinalMaps(maps);
         }
-        if(grav.hasAutovoteRun()) return;
         if(event.getMessage().startsWith("§o")) return;
         Matcher master = MESSAGE_REGEX.matcher(ChatColor.stripColor(msg));
         if(master.matches()) {
@@ -106,8 +105,8 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                         message.getStyle().setOnClick(new MessageAction(MessageAction.Action.RUN_COMMAND, "/v " + index));
                         Beezig.api().messagePlayerComponent(message, false);
                     }
-                    mapsMsg = ChatColor.stripColor(mapsMsg);
-                    Matcher m = MAP_REGEX.matcher(mapsMsg);
+                    if(grav.hasAutovoteRun()) return;
+                    Matcher m = MAP_REGEX.matcher(ChatColor.stripColor(mapsMsg));
                     while(m.find()) {
                         String name = StringUtils.normalizeMapName(m.group(0));
                         grav.getMaps().put(name, new AutovoteMap(name, index, votes));
