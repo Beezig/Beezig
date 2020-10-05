@@ -26,6 +26,7 @@ import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.util.ArrayUtils;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.SystemInfo;
+import eu.beezig.core.util.modules.IModulesProvider;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.the5zig.mod.util.component.MessageComponent;
@@ -37,6 +38,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class BeezigCommand implements Command {
+    public static IModulesProvider modulesProvider;
+
     @Override
     public String getName() {
         return "beezig";
@@ -50,8 +53,16 @@ public class BeezigCommand implements Command {
     @Override
     public boolean execute(String[] args) {
         if(args.length == 0) {
+            MessageComponent commands = new MessageComponent(Message.infoPrefix() + Message.translate("msg.hint.commands"));
+            commands.getStyle().setOnClick(new MessageAction(MessageAction.Action.RUN_COMMAND, "/beezig commands"));
+            commands.getStyle().setOnHover(new MessageAction(MessageAction.Action.SHOW_TEXT, new MessageComponent(Color.primary() + Message.translate("msg.hint.commands"))));
+            MessageComponent modules = new MessageComponent(Message.infoPrefix() + Message.translate("msg.hint.modules"));
+            modules.getStyle().setOnClick(new MessageAction(MessageAction.Action.RUN_COMMAND, "/beezig modules"));
+            modules.getStyle().setOnHover(new MessageAction(MessageAction.Action.SHOW_TEXT, new MessageComponent(Color.primary() + Message.translate("msg.hint.modules"))));
             Message.bar();
-            Message.info(String.format("Running Beezig %s (%s)", Constants.VERSION, Beezig.getVersionString()));
+            Message.info(String.format("Running Beezig %s (%s%s%s)", Constants.VERSION, Color.accent(), Beezig.getVersionString(), Color.primary()));
+            Beezig.api().messagePlayerComponent(commands, false);
+            Beezig.api().messagePlayerComponent(modules, false);
             Message.bar();
         }
         else {
@@ -68,6 +79,10 @@ public class BeezigCommand implements Command {
             else if("commands".equalsIgnoreCase(mode)) {
                 int page = args.length < 2 ? 1 : Integer.parseInt(args[1], 10);
                 showCommands(page);
+            }
+            else if("modules".equalsIgnoreCase(mode)) {
+                if(modulesProvider != null) modulesProvider.openModulesGui();
+                else Message.error(Message.translate("error.hint.modules"));
             }
         }
         return true;

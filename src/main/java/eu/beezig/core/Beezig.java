@@ -25,6 +25,7 @@ import com.mojang.authlib.GameProfile;
 import eu.beezig.core.advrec.anywhere.AdvancedRecordsAnywhere;
 import eu.beezig.core.api.BeezigServiceLoader;
 import eu.beezig.core.command.CommandManager;
+import eu.beezig.core.command.commands.BeezigCommand;
 import eu.beezig.core.config.BeezigConfiguration;
 import eu.beezig.core.config.i18n.LanguageConfiguration;
 import eu.beezig.core.data.BeezigData;
@@ -38,6 +39,7 @@ import eu.beezig.core.net.session.The5zigProvider;
 import eu.beezig.core.notification.NotificationManager;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.DirectoryMigration;
+import eu.beezig.core.util.modules.The5zigModules;
 import eu.beezig.core.util.process.ProcessManager;
 import eu.beezig.core.util.snipe.AntiSniper;
 import eu.beezig.core.util.task.WorldTaskManager;
@@ -103,6 +105,7 @@ public class Beezig {
         this(false, null);
         try {
             NetSessionManager.provider = new The5zigProvider();
+            BeezigCommand.modulesProvider = new The5zigModules();
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }

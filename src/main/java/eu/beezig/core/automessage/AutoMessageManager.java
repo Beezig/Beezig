@@ -99,6 +99,7 @@ public abstract class AutoMessageManager {
         try {
             List<TriggerModeConnection> triggers = Beezig.get().getData().getDataList(triggersPath,
                     TriggerModeConnection[].class);
+            this.triggers.clear();
             triggers.forEach(t -> this.triggers.put(t.mode, t.trigger));
         } catch (Exception e) {
             e.printStackTrace();
