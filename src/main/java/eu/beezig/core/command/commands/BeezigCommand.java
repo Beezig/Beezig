@@ -59,10 +59,15 @@ public class BeezigCommand implements Command {
             MessageComponent modules = new MessageComponent(Message.infoPrefix() + Message.translate("msg.hint.modules"));
             modules.getStyle().setOnClick(new MessageAction(MessageAction.Action.RUN_COMMAND, "/beezig modules"));
             modules.getStyle().setOnHover(new MessageAction(MessageAction.Action.SHOW_TEXT, new MessageComponent(Color.primary() + Message.translate("msg.hint.modules"))));
+            MessageComponent discord = new MessageComponent(Message.infoPrefix() + Message.translate("msg.hint.discord"));
+            discord.getStyle().setOnClick(new MessageAction(MessageAction.Action.OPEN_URL, "https://go.beezig.eu/discord"));
+            discord.getStyle().setOnHover(new MessageAction(MessageAction.Action.SHOW_TEXT, new MessageComponent(Color.primary() + Message.translate("msg.hint.discord"))));
             Message.bar();
             Message.info(String.format("Running Beezig %s (%s%s%s)", Constants.VERSION, Color.accent(), Beezig.getVersionString(), Color.primary()));
             Beezig.api().messagePlayerComponent(commands, false);
             Beezig.api().messagePlayerComponent(modules, false);
+            Beezig.api().messagePlayer("");
+            Beezig.api().messagePlayerComponent(discord, false);
             Message.bar();
         }
         else {
