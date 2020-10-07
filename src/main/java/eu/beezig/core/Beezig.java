@@ -38,7 +38,8 @@ import eu.beezig.core.net.session.NetSessionManager;
 import eu.beezig.core.net.session.The5zigProvider;
 import eu.beezig.core.notification.NotificationManager;
 import eu.beezig.core.server.ServerHive;
-import eu.beezig.core.util.DirectoryMigration;
+import eu.beezig.core.util.migrate.AutovoteMigration;
+import eu.beezig.core.util.migrate.DirectoryMigration;
 import eu.beezig.core.util.modules.The5zigModules;
 import eu.beezig.core.util.process.ProcessManager;
 import eu.beezig.core.util.snipe.AntiSniper;
@@ -166,6 +167,7 @@ public class Beezig {
         }
 
         DirectoryMigration.migrateFolders(beezigDir);
+        new AutovoteMigration().migrate();
 
         temporaryPointsManager = new TemporaryPointsManager();
         try {
