@@ -40,6 +40,7 @@ import eu.beezig.core.notification.NotificationManager;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.migrate.AutovoteMigration;
 import eu.beezig.core.util.migrate.DirectoryMigration;
+import eu.beezig.core.util.migrate.SettingsMigration;
 import eu.beezig.core.util.modules.The5zigModules;
 import eu.beezig.core.util.process.ProcessManager;
 import eu.beezig.core.util.snipe.AntiSniper;
@@ -168,6 +169,7 @@ public class Beezig {
 
         DirectoryMigration.migrateFolders(beezigDir);
         new AutovoteMigration().migrate();
+        new SettingsMigration().migrate();
 
         temporaryPointsManager = new TemporaryPointsManager();
         try {
