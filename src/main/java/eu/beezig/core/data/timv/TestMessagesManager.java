@@ -21,6 +21,7 @@ package eu.beezig.core.data.timv;
 
 import com.google.common.base.Joiner;
 import eu.beezig.core.Beezig;
+import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.TIMV;
 import eu.beezig.core.util.UUIDUtils;
@@ -133,7 +134,7 @@ public class TestMessagesManager {
     @EventHandler
     public void onSend(ChatSendEvent event) {
         if(ServerHive.isCurrent() && Beezig.api().getActiveServer().getGameListener().getCurrentGameMode() instanceof TIMV) {
-            if(sendCustomMessage(event.getMessage())) event.setCancelled(true);
+            if(Settings.TIMV_TESTMESSAGES.get().getBoolean() && sendCustomMessage(event.getMessage())) event.setCancelled(true);
         }
     }
 }

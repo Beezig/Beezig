@@ -67,6 +67,7 @@ public enum Settings {
     TIMV_ADVREC_TRATIO(true),
     TIMV_ADVREC_RECORD(true),
     TIMV_ADVREC_KPV(true),
+    TIMV_TESTMESSAGES(true),
 
     // DrawIt
     DRAW_AUTOGUESS(false),
