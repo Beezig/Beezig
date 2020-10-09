@@ -132,14 +132,8 @@ public enum Settings {
         GRAVITY,
         MISC;
 
-        private final String name;
-
-        Category() {
-            name = Message.translate(String.format("settings_category.%s.name", name().toLowerCase()));
-        }
-
         public String getName () {
-            return name;
+            return Message.translate(String.format("settings_category.%s.name", name().toLowerCase()));
         }
     }
 }
