@@ -122,9 +122,12 @@ public class Beezig {
 
     public static String getVersionString() {
         try {
-            if (get().version == null)
+            Beezig beezig = get();
+            if (beezig.version == null)
                 loadVersion();
-            return get().version.getCommit().substring(0, 8);
+            return beezig.version.getType().equals("release") ?
+                "release" :
+                beezig.version.getCommits() + "-" + beezig.version.getCommit().substring(0, 8);
         } catch (Exception e) {
             logger.error(String.format("Couldn't fetch version: %s", e.getMessage()));
             return "development";
