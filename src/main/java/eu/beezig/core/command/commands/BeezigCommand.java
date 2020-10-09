@@ -21,12 +21,14 @@ package eu.beezig.core.command.commands;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.Constants;
+import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.command.Command;
 import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.util.ArrayUtils;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.SystemInfo;
 import eu.beezig.core.util.modules.IModulesProvider;
+import eu.beezig.core.util.task.WorldTask;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.the5zig.mod.util.component.MessageComponent;
@@ -88,6 +90,9 @@ public class BeezigCommand implements Command {
             else if("modules".equalsIgnoreCase(mode)) {
                 if(modulesProvider != null) modulesProvider.openModulesGui();
                 else Message.error(Message.translate("error.hint.modules"));
+            }
+            else if("settings".equalsIgnoreCase(mode) && BeezigForge.isSupported()) {
+                WorldTask.submit(() -> BeezigForge.get().openSettings(Beezig.cfg().toForge()));
             }
         }
         return true;

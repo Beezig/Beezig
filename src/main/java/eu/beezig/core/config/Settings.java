@@ -122,6 +122,10 @@ public enum Settings {
         return Beezig.cfg().get(this);
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
     public enum Category {
         APPEARANCE,
         AUTOVOTE,

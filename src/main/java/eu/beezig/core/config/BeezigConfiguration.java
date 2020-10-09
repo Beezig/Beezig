@@ -20,6 +20,7 @@
 package eu.beezig.core.config;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.api.SettingInfo;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.Color;
@@ -36,10 +37,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -86,6 +84,11 @@ public class BeezigConfiguration {
             return def;
         }
         return value;
+    }
+
+    public void setAsIs(Settings key, Object newValue) {
+        getOrPutDefault(key).setValue(newValue);
+        onSettingsChange(key);
     }
 
     public boolean set(Settings key, String newValue) {
@@ -164,5 +167,22 @@ public class BeezigConfiguration {
             }
             Message.info(Message.translate("msg.setting.language.restart"));
         }
+    }
+
+    public Map<String, List<SettingInfo>> toForge() {
+        Map<String, List<SettingInfo>> result = new LinkedHashMap<>();
+        for(Settings setting : Settings.values()) {
+            SettingInfo info = new SettingInfo();
+            info.key = setting.name();
+            info.name = setting.getName();
+            info.desc = setting.getDescription();
+            info.value = setting.get().getValue();
+            result.compute(setting.getCategory().getName(), (k, v) -> {
+               if(v == null) v = new ArrayList<>();
+               v.add(info);
+               return v;
+            });
+        }
+        return result;
     }
 }

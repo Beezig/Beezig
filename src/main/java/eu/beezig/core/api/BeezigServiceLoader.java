@@ -35,6 +35,7 @@ import eu.beezig.core.util.text.StringUtils;
 import eu.the5zig.mod.server.GameMode;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.IOException;
 import java.util.*;
 
 public class BeezigServiceLoader {
@@ -81,6 +82,7 @@ public class BeezigServiceLoader {
         mainService.registerBeezigDir(() -> Beezig.get().getBeezigDir());
         mainService.registerGetSetting(name -> Settings.valueOf(name).get().getValue());
         mainService.registerSetSetting(pair -> Beezig.cfg().set(Settings.valueOf(pair.getKey()), pair.getValue().toString()));
+        mainService.registerSetSettingAsIs(pair -> Beezig.cfg().setAsIs(Settings.valueOf(pair.getKey()), pair.getValue()));
         mainService.registerGetRegion(() -> {
             BeezigNetManager net = Beezig.net();
             if(net == null) return null;
@@ -88,6 +90,14 @@ public class BeezigServiceLoader {
             if(profile == null) return null;
             if(profile.getRegion() == null) return null;
             return profile.getRegion().getId();
+        });
+        mainService.registerSaveConfig(() -> {
+            try {
+                Beezig.cfg().save();
+            } catch (IOException e) {
+                Beezig.logger.error("Couldn't save config", e);
+                Message.error(Message.translate("error.data_read"));
+            }
         });
         mainService.registerGetOverrides(uuid -> {
             Optional<UserProfile> profile = Beezig.get().getNetworkManager().getProfilesCache().getNowOrSubmit(uuid, Collections.singletonList(uuid));

@@ -43,6 +43,8 @@ public interface IBeezigService {
     void registerGetSetting(Function<String, Object> callback);
     void registerSetSetting(Consumer<Map.Entry<String, Object>> callback);
     void registerGetOverrides(Function<UUID, Optional<Map<String, Object>>> callback);
+    void registerSaveConfig(Runnable runnable);
+    void registerSetSettingAsIs(Consumer<Map.Entry<String, Object>> callback);
 
     // Functions (Beezig -> BeezigForge)
     void setOnHive(boolean update);
@@ -51,4 +53,5 @@ public interface IBeezigService {
     void loadConfig(File beezigDir);
     void autovoteShuffle(List<String> favorites);
     void displayWelcomeGui();
+    void openSettings(Map<String, List<SettingInfo>> settings);
 }
