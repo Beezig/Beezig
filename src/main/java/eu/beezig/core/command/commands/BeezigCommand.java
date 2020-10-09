@@ -66,7 +66,7 @@ public class BeezigCommand implements Command {
             Message.info(String.format("Running Beezig %s (%s%s%s)", Constants.VERSION, Color.accent(), Beezig.getVersionString(), Color.primary()));
             Beezig.api().messagePlayerComponent(commands, false);
             Beezig.api().messagePlayerComponent(modules, false);
-            Beezig.api().messagePlayer("");
+            Beezig.api().messagePlayer(Message.infoPrefix());
             Beezig.api().messagePlayerComponent(discord, false);
             Message.bar();
         }
