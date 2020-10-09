@@ -29,78 +29,77 @@ import eu.the5zig.util.minecraft.ChatColor;
 import java.util.Locale;
 
 public enum Settings {
-    LANGUAGE(LanguageConfiguration.NATIVE),
-
-    // Colors
-    COLOR_PRIMARY(ChatColor.DARK_AQUA),
-    COLOR_ACCENT(ChatColor.AQUA),
-
-    // Misc
-    THOUSANDS_SEPARATOR(true),
-    MSG_PING(true),
-    MSG_DND_MODE(MessageIgnoreLevel.IGNORE_ALERT),
-    MSG_DND_ALERT("I'm currently on Do Not Disturb mode. I'll get back to you later!"),
-    BROADCAST_ACTIONS(true),
+    // Appearance
+    LANGUAGE(LanguageConfiguration.NATIVE, Category.APPEARANCE),
+    COLOR_PRIMARY(ChatColor.DARK_AQUA, Category.APPEARANCE),
+    COLOR_ACCENT(ChatColor.AQUA, Category.APPEARANCE),
+    THOUSANDS_SEPARATOR(true, Category.APPEARANCE),
 
     // Autovote
-    AUTOVOTE(true),
-    AUTOVOTE_RANDOM(true),
-    AUTOVOTE_SHUFFLE(true),
+    AUTOVOTE(true, Category.AUTOVOTE),
+    AUTOVOTE_RANDOM(true, Category.AUTOVOTE),
+    AUTOVOTE_SHUFFLE(true, Category.AUTOVOTE),
 
     // Advanced Records
-    ADVANCED_RECORDS(true),
-    ADVREC_MODE(AdvancedRecords.Mode.NORMAL),
-    ADVREC_RANK(true),
-    ADVREC_TONEXT(true),
-    ADVREC_KD(true),
-    ADVREC_WINRATE(true),
-    ADVREC_PPG(true),
-    ADVREC_KPG(true),
+    ADVANCED_RECORDS(true, Category.ADVANCED_RECORDS),
+    ADVREC_MODE(AdvancedRecords.Mode.NORMAL, Category.ADVANCED_RECORDS),
+    ADVREC_RANK(true, Category.ADVANCED_RECORDS),
+    ADVREC_TONEXT(true, Category.ADVANCED_RECORDS),
+    ADVREC_KD(true, Category.ADVANCED_RECORDS),
+    ADVREC_WINRATE(true, Category.ADVANCED_RECORDS),
+    ADVREC_PPG(true, Category.ADVANCED_RECORDS),
+    ADVREC_KPG(true, Category.ADVANCED_RECORDS),
 
     // Anti Sniper
-    SNIPE_TYPO(true),
-    SNIPE_PMS(true),
-    SNIPE_PARTY(true),
+    SNIPE_TYPO(true, Category.ANTI_SNIPER),
+    SNIPE_PMS(true, Category.ANTI_SNIPER),
+    SNIPE_PARTY(true, Category.ANTI_SNIPER),
 
     // Trouble in Mineville
-    TIMV_ADVREC_KRR(true),
-    TIMV_ADVREC_TRATIO(true),
-    TIMV_ADVREC_RECORD(true),
-    TIMV_ADVREC_KPV(true),
-    TIMV_TESTMESSAGES(true),
+    TIMV_ADVREC_KRR(true, Category.TROUBLE_IN_MINEVILLE),
+    TIMV_ADVREC_TRATIO(true, Category.TROUBLE_IN_MINEVILLE),
+    TIMV_ADVREC_RECORD(true, Category.TROUBLE_IN_MINEVILLE),
+    TIMV_ADVREC_KPV(true, Category.TROUBLE_IN_MINEVILLE),
+    TIMV_TESTMESSAGES(true, Category.TROUBLE_IN_MINEVILLE),
 
     // DrawIt
-    DRAW_AUTOGUESS(false),
+    DRAW_AUTOGUESS(false, Category.DRAW_IT),
 
     // Gravity
-    GRAV_MAPNAMES(false),
-    GRAV_CONFIRM_DISCONNECT(true),
-    GRAV_NEXT_MAP(false),
+    GRAV_MAPNAMES(false, Category.GRAVITY),
+    GRAV_CONFIRM_DISCONNECT(true, Category.GRAVITY),
+    GRAV_NEXT_MAP(false, Category.GRAVITY),
 
     // Misc
-    CHAT_LINKS(true),
-    AUTOGG(false),
-    AUTOGG_MESSAGE("gg"),
-    AUTOGG_DELAY(0L),
-    AUTOGL(false),
-    AUTOGL_MESSAGE("gl & hf"),
-    AUTOGL_DELAY(0L),
-    AUTONEWGAME(false),
-    AUTONEWGAME_DELAY(500L),
-    AUTONEWGAME_IN_PARTIES(false),
-    RECORD_DND(false),
-    CHAT_PARTY(true),
-    CHAT_FRIENDS(true),
-    REPORTS_NOTIFY(true),
-    TABLIST_BADGES(true),
-    UPDATE_CHECK(true);
+    MSG_PING(true, Category.MISC),
+    MSG_DND_MODE(MessageIgnoreLevel.IGNORE_ALERT, Category.MISC),
+    MSG_DND_ALERT("I'm currently on Do Not Disturb mode. I'll get back to you later!", Category.MISC),
+    BROADCAST_ACTIONS(true, Category.MISC),
+    CHAT_LINKS(true, Category.MISC),
+    AUTOGG(false, Category.MISC),
+    AUTOGG_MESSAGE("gg", Category.MISC),
+    AUTOGG_DELAY(0L, Category.MISC),
+    AUTOGL(false, Category.MISC),
+    AUTOGL_MESSAGE("gl & hf", Category.MISC),
+    AUTOGL_DELAY(0L, Category.MISC),
+    AUTONEWGAME(false, Category.MISC),
+    AUTONEWGAME_DELAY(500L, Category.MISC),
+    AUTONEWGAME_IN_PARTIES(false, Category.MISC),
+    RECORD_DND(false, Category.MISC),
+    CHAT_PARTY(true, Category.MISC),
+    CHAT_FRIENDS(true, Category.MISC),
+    REPORTS_NOTIFY(true, Category.MISC),
+    TABLIST_BADGES(true, Category.MISC),
+    UPDATE_CHECK(true, Category.MISC);
 
     private final Object defaultValue;
     private final Class settingType;
+    private final Category category;
 
-    Settings(Object defaultValue) {
+    Settings(Object defaultValue, Category category) {
         this.defaultValue = defaultValue;
         this.settingType = defaultValue.getClass();
+        this.category = category;
     }
 
     public Object getDefaultValue() {
@@ -123,4 +122,24 @@ public enum Settings {
         return Beezig.cfg().get(this);
     }
 
+    public enum Category {
+        APPEARANCE,
+        AUTOVOTE,
+        ADVANCED_RECORDS,
+        ANTI_SNIPER,
+        TROUBLE_IN_MINEVILLE,
+        DRAW_IT,
+        GRAVITY,
+        MISC;
+
+        private final String name;
+
+        Category() {
+            name = Message.translate(String.format("settings_category.%s.name", name().toLowerCase()));
+        }
+
+        public String getName () {
+            return name;
+        }
+    }
 }
