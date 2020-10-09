@@ -254,8 +254,7 @@ public class ServerHive extends ServerInstance {
                         JsonObject jsonObject = parser.parse(new InputStreamReader(connection.getInputStream())).getAsJsonObject();
 
                         Version beezigVersion = new Version(jsonObject.get("beezig").getAsJsonObject());
-                        Version localBeezigVersion = new Version(parser.parse(new InputStreamReader(this.getClass().getResourceAsStream("/beezig-version.json"))).getAsJsonObject());
-                        Beezig.get().setVersion(localBeezigVersion);
+                        Version localBeezigVersion = Beezig.get().getVersion();
                         int versionsBehind = 0;
                         List<String> updates = new ArrayList<>(4);
                         if (localBeezigVersion.compareTo(beezigVersion) < 0) {

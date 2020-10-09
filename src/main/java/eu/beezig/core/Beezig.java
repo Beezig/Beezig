@@ -21,6 +21,7 @@ package eu.beezig.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import eu.beezig.core.advrec.anywhere.AdvancedRecordsAnywhere;
 import eu.beezig.core.api.BeezigServiceLoader;
@@ -62,6 +63,7 @@ import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 
 import java.io.File;
+import java.io.InputStreamReader;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -113,11 +115,18 @@ public class Beezig {
         }
     }
 
+    public static void loadVersion() {
+        JsonParser parser = new JsonParser();
+        get().version = new Version(parser.parse(new InputStreamReader(Beezig.class.getResourceAsStream("/beezig-version.json"))).getAsJsonObject());
+    }
+
     public static String getVersionString() {
         try {
+            if (get().version == null)
+                loadVersion();
             return get().version.getCommit().substring(0, 8);
         } catch (Exception e) {
-            logger.error(String.format("Couldn't load commit from version.txt: %s", e.getMessage()));
+            logger.error(String.format("Couldn't fetch version: %s", e.getMessage()));
             return "development";
         }
     }
@@ -295,11 +304,15 @@ public class Beezig {
     }
 
     public Version getVersion() {
+        if (version == null) {
+            try {
+                loadVersion();
+            } catch (Exception e) {
+                logger.error("Couldn't load version: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
         return version;
-    }
-
-    public void setVersion(Version version) {
-        this.version = version;
     }
 
     public boolean getUpdateAvailable() {
