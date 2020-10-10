@@ -26,6 +26,7 @@ import eu.beezig.core.Constants;
 import eu.beezig.core.Version;
 import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.automessage.AutoMessageManager;
+import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.listeners.*;
 import eu.beezig.core.util.UUIDUtils;
@@ -149,6 +150,7 @@ public class ServerHive extends ServerInstance {
             BeezigForge.get().setOnHive(true);
             if(!new File(Beezig.get().getBeezigDir(), "tut").exists()) WorldTask.submit(() -> BeezigForge.get().displayWelcomeGui());
         }
+        WorldTask.submit(() -> CommandManager.dispatchCommand("/beezig"));
     }
 
     @Override
