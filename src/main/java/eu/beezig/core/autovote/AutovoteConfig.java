@@ -28,8 +28,7 @@ import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
 public class AutovoteConfig {
     private JSONObject currentConfig;
@@ -78,6 +77,22 @@ public class AutovoteConfig {
         Object mm = currentConfig.get(mode);
         if(!(mm instanceof JSONArray)) return new ArrayList<>();
         return (JSONArray) mm;
+    }
+
+    public Map<String, List<String>> getAll() {
+        Map<String, List<String>> result = new HashMap<>();
+        for(Object o : currentConfig.entrySet()) {
+            Map.Entry<String, Object> entry = (Map.Entry<String, Object>) o;
+            if(entry.getValue() instanceof JSONArray) result.put(entry.getKey(), (JSONArray) entry.getValue());
+        }
+        return result;
+    }
+
+    public void setMaps(String key, List<String> maps) {
+        JSONArray array = new JSONArray();
+        array.addAll(maps);
+        currentConfig.put(key, array);
+        save();
     }
 
     public void save() {

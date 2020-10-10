@@ -20,6 +20,7 @@
 package eu.beezig.core.api;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.autovote.AutovoteConfig;
 import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.data.HiveTitle;
@@ -91,6 +92,7 @@ public class BeezigServiceLoader {
             if(profile.getRegion() == null) return null;
             return profile.getRegion().getId();
         });
+        mainService.registerSetAutovoteMaps(pair -> new AutovoteConfig().setMaps(pair.getKey(), pair.getValue()));
         mainService.registerSaveConfig(() -> {
             try {
                 Beezig.cfg().save();

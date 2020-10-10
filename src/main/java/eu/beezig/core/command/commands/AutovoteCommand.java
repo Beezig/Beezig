@@ -21,9 +21,11 @@ package eu.beezig.core.command.commands;
 
 import com.google.common.base.Strings;
 import eu.beezig.core.Beezig;
+import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.autovote.AutovoteConfig;
 import eu.beezig.core.command.Command;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.task.WorldTask;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.TextButton;
 import eu.the5zig.mod.util.component.MessageComponent;
@@ -47,6 +49,10 @@ public class AutovoteCommand implements Command {
     @Override
     public boolean execute(String[] args) {
         if(args.length < 2) {
+            if(BeezigForge.isSupported()) {
+                WorldTask.submit(() -> BeezigForge.get().openAutovote(new AutovoteConfig().getAll()));
+                return true;
+            }
             sendUsage(usage);
             return true;
         }
