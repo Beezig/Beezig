@@ -90,7 +90,10 @@ public enum Settings {
     CHAT_FRIENDS(true, Category.MISC),
     REPORTS_NOTIFY(true, Category.MISC),
     TABLIST_BADGES(true, Category.MISC),
-    UPDATE_CHECK(true, Category.MISC);
+
+    // Meta
+    UPDATE_CHECK(true, Category.META),
+    TELEMETRY(true, Category.META);
 
     private final Object defaultValue;
     private final Class settingType;
@@ -134,7 +137,8 @@ public enum Settings {
         TROUBLE_IN_MINEVILLE,
         DRAW_IT,
         GRAVITY,
-        MISC;
+        MISC,
+        META;
 
         public String getName () {
             return Message.translate(String.format("settings_category.%s.name", name().toLowerCase()));
