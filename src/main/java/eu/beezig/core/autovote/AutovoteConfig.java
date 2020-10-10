@@ -83,7 +83,7 @@ public class AutovoteConfig {
         Map<String, List<String>> result = new HashMap<>();
         for(Object o : currentConfig.entrySet()) {
             Map.Entry<String, Object> entry = (Map.Entry<String, Object>) o;
-            if(entry.getValue() instanceof JSONArray) result.put(entry.getKey(), (JSONArray) entry.getValue());
+            if(entry.getValue() instanceof JSONArray) result.put(entry.getKey().toUpperCase(), (JSONArray) entry.getValue());
         }
         return result;
     }
@@ -91,7 +91,7 @@ public class AutovoteConfig {
     public void setMaps(String key, List<String> maps) {
         JSONArray array = new JSONArray();
         array.addAll(maps);
-        currentConfig.put(key, array);
+        currentConfig.put(key.toLowerCase(), array);
         save();
     }
 
