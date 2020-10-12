@@ -25,7 +25,7 @@ import java.time.OffsetDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Version implements Comparable<Version>{
+public class Version implements Comparable<Version> {
     private final String version;
     private final String commit;
     private final int commits;
@@ -117,5 +117,9 @@ public class Version implements Comparable<Version>{
         if (this.version.equals(version.version))
             return Math.abs(version.commits - commits);
         return -1;
+    }
+
+    public String getVersionDisplay() {
+        return type.equals("release") ? "release" : commits + "-" + commit.substring(0, 8);
     }
 }

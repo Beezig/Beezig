@@ -25,6 +25,7 @@ import eu.beezig.core.config.EnumSetting;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.ArrayUtils;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.the5zig.mod.util.component.MessageComponent;
@@ -69,7 +70,7 @@ public class SettingsCommand implements Command {
                 Message.info(Message.translate("msg.config.save"));
             } catch (IOException e) {
                 Message.error(Message.translate("error.data_read"));
-                e.printStackTrace();
+                ExceptionHandler.catchException(e);
             }
         }
         return true;
@@ -92,7 +93,7 @@ public class SettingsCommand implements Command {
                             + Beezig.api().translate("msg.enum.values", Color.accent() + Beezig.cfg().getEnumValues(key.getSettingType())),
                             50,"\n" + Color.accent(), false)));
                 } catch (ReflectiveOperationException e) {
-                    Beezig.logger.error("Couldn't add values information", e);
+                    ExceptionHandler.catchException(e, "Couldn't add values information");
                 }
             }
             component.getStyle().setOnHover(new MessageAction(MessageAction.Action.SHOW_TEXT, desc));

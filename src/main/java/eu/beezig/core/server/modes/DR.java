@@ -31,6 +31,7 @@ import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyField;
 import eu.beezig.core.server.monthly.MonthlyService;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.speedrun.WorldRecords;
 import eu.beezig.core.util.text.Message;
@@ -100,7 +101,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
             }
         } catch (Exception e) {
             Message.error("error.data_read");
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
         }
     }
 

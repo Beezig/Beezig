@@ -23,6 +23,7 @@ import com.github.benmanes.caffeine.cache.AsyncCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.net.profile.override.UserOverride;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
 import eu.beezig.hiveapi.wrapper.utils.json.JObject;
 
@@ -61,7 +62,7 @@ public class RoleService {
         try {
             json = Downloader.getJsonObject(new URL("https://web.beezig.eu/v1/server/roles/" + id)).join();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
         }
         return Beezig.gson.fromJson(json.getInput().toJSONString(), RemoteUserRole.class);
     }
@@ -71,7 +72,7 @@ public class RoleService {
             return Downloader.getJsonObject(new URL("https://static.beezig.eu/useroverrides/" + id.toString() + ".json"))
                 .thenApplyAsync(j -> Beezig.gson.fromJson(j.getInput().toJSONString(), UserOverride.class));
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
             return null;
         }
     }

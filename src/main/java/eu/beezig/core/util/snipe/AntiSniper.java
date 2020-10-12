@@ -23,6 +23,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.TextButton;
 import eu.the5zig.mod.event.ChatSendEvent;
@@ -49,7 +50,7 @@ public class AntiSniper {
         try {
             loadRegex();
         } catch (IOException e) {
-            Beezig.logger.error("Couldn't load the command typo regex", e);
+            ExceptionHandler.catchException(e, "Couldn't load the command typo regex");
         }
     }
 

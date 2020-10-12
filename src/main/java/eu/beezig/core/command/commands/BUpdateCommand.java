@@ -23,6 +23,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.Constants;
 import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.command.Command;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -101,7 +102,7 @@ public class BUpdateCommand implements Command {
                             } catch (Exception e) {
                                 Message.error(Message.translate("update.error"));
                                 Message.error(e.getMessage());
-                                e.printStackTrace();
+                                ExceptionHandler.catchException(e);
                             }
                         });
                         updated.set(true);
@@ -111,7 +112,7 @@ public class BUpdateCommand implements Command {
                     } catch (ClassNotFoundException e) {
                         Message.info(Message.translate("update.error"));
                         Message.error(e.getMessage());
-                        e.printStackTrace();
+                        ExceptionHandler.catchException(e);
                     }
                     break;
                 case "code":

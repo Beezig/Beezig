@@ -24,6 +24,7 @@ import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.FileUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
@@ -72,7 +73,7 @@ public class AutovoteManager {
             savedMaps = getFavoriteMaps(modeName);
         } catch (Exception e) {
             Message.error(Message.translate("error.data_read"));
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
             return;
         }
         savedMaps.retainAll(maps.keySet());

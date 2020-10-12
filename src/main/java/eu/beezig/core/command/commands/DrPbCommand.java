@@ -7,6 +7,7 @@ import eu.beezig.core.data.DataPath;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.DR;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
@@ -60,7 +61,7 @@ public class DrPbCommand implements Command {
             Message.info(Beezig.api().translate("msg.dr.pb", Color.accent() + display + Color.primary()));
         }).exceptionally(e -> {
             Message.error(Message.translate("error.dr.pb"));
-            Beezig.logger.error("Error fetching player profile", e);
+            ExceptionHandler.catchException(e, "Error fetching player profile");
             return null;
         });
         return true;
@@ -71,7 +72,7 @@ public class DrPbCommand implements Command {
             Map<String, DR.MapData> maps = Beezig.get().getData().getDataMap(DataPath.DR_MAPS, new TypeToken<Map<String, DR.MapData>>() {});
             return maps.get(StringUtils.normalizeMapName(name));
         } catch (IOException e) {
-            Beezig.logger.error("Tried to fetch maps but file wasn't found.", e);
+            ExceptionHandler.catchException(e, "Tried to fetch maps but file wasn't found.");
             return null;
         }
     }

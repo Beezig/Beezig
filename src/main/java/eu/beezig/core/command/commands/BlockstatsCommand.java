@@ -22,6 +22,7 @@ package eu.beezig.core.command.commands;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.Command;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
@@ -62,7 +63,7 @@ public class BlockstatsCommand implements Command {
             });
             Beezig.api().messagePlayer(StringUtils.linedCenterText("§7", Color.primary() + Message.translate("cmd.blockstats")));
         }).exceptionally(e -> {
-            Beezig.logger.error("Error in blockstats", e);
+            ExceptionHandler.catchException(e, "Error in blockstats");
             Message.error(Message.translate("error.blockstats"));
            return null;
         });

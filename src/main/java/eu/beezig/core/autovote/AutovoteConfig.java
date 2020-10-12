@@ -20,6 +20,7 @@
 package eu.beezig.core.autovote;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.FileUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
@@ -40,7 +41,7 @@ public class AutovoteConfig {
             this.currentConfig = FileUtils.readJson(configFile);
         } catch (Exception e) {
             Message.error(Message.translate("error.data_read"));
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
         }
     }
 
@@ -100,7 +101,7 @@ public class AutovoteConfig {
             FileUtils.writeJson(currentConfig, configFile);
         } catch (IOException e) {
             Message.error(Message.translate("error.data_read"));
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
         }
     }
 }

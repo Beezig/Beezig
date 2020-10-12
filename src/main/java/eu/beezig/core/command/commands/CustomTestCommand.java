@@ -23,6 +23,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.command.Command;
 import eu.beezig.core.data.timv.TestMessagesManager;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.TextButton;
 import eu.the5zig.mod.util.component.MessageComponent;
@@ -79,7 +80,7 @@ public class CustomTestCommand implements Command {
                 return true;
             }
         } catch(IOException e) {
-            Beezig.logger.error("Couldn't save ctest config", e);
+            ExceptionHandler.catchException(e, "Couldn't save ctest config");
             Message.error(Message.translate("error.data_read"));
         }
         Message.info(Message.translate("msg.ctest.success"));

@@ -24,6 +24,7 @@ import eu.beezig.core.Constants;
 import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.the5zig.mod.The5zigAPI;
 
 import java.text.DecimalFormat;
@@ -76,7 +77,7 @@ public class Message {
         try {
             return NumberFormat.getInstance().parse(format);
         } catch (ParseException e) {
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
         }
         return null;
     }
