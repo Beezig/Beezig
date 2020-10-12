@@ -21,7 +21,6 @@ package eu.beezig.core.data;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.server.modes.*;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.FileUtils;
 import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
 
@@ -60,7 +59,7 @@ public class GameTitles {
                 try {
                     FileUtils.writeJson(json.getInput(), dest);
                 } catch (IOException e) {
-                    ExceptionHandler.catchException(e);
+                    e.printStackTrace();
                 }
             }));
         }

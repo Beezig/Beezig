@@ -26,7 +26,6 @@ import eu.beezig.core.data.DataPath;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.ActiveGame;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.TitleEvent;
@@ -90,7 +89,7 @@ public abstract class AutoMessageManager {
                                 }, delay.getLong(), TimeUnit.MILLISECONDS);
                         }
                     } catch (Exception e) {
-                        ExceptionHandler.catchException(e);
+                        e.printStackTrace();
                     }
                 });
         }
@@ -103,7 +102,7 @@ public abstract class AutoMessageManager {
             this.triggers.clear();
             triggers.forEach(t -> this.triggers.put(t.mode, t.trigger));
         } catch (Exception e) {
-            ExceptionHandler.catchException(e);
+            e.printStackTrace();
         }
     }
 

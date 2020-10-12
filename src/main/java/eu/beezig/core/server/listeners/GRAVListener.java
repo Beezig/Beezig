@@ -24,7 +24,6 @@ import eu.beezig.core.autovote.AutovoteMap;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.GRAV;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.the5zig.mod.event.ChatEvent;
@@ -119,7 +118,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                     grav.runAutovote();
                 } catch (Exception e) {
                     Message.error(Message.translate("error.data_read"));
-                    ExceptionHandler.catchException(e);
+                    e.printStackTrace();
                 }
             }
         }

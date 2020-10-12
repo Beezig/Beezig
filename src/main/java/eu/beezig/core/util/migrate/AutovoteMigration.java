@@ -1,7 +1,6 @@
 package eu.beezig.core.util.migrate;
 
 import eu.beezig.core.Beezig;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.StringUtils;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
@@ -48,7 +47,7 @@ public class AutovoteMigration {
             }
             eu.beezig.core.util.FileUtils.writeJson(json, newFile);
         } catch (Exception ex) {
-            ExceptionHandler.catchException(ex, "Couldn't migrate autovote");
+            Beezig.logger.error("Couldn't migrate autovote", ex);
         }
     }
 }

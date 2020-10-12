@@ -27,7 +27,6 @@ import eu.beezig.core.net.profile.OwnProfile;
 import eu.beezig.core.net.profile.ProfilesCache;
 import eu.beezig.core.net.session.NetSessionManager;
 import eu.beezig.core.server.ServerHive;
-import eu.beezig.core.util.ExceptionHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -80,7 +79,7 @@ public class BeezigNetManager {
     }
 
     private void catchConnect(Exception ex) {
-        ExceptionHandler.catchException(ex, "Error occurred while connecting:");
+        Beezig.logger.error("Error occurred while connecting:", ex);
         reconnect();
     }
 
@@ -154,7 +153,7 @@ public class BeezigNetManager {
             try {
                 Thread.sleep(seconds * 1000);
             } catch (InterruptedException e) {
-                ExceptionHandler.catchException(e);
+                e.printStackTrace();
                 return;
             }
             if (connected.get()) return;

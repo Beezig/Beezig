@@ -39,7 +39,6 @@ import eu.beezig.core.net.session.NetSessionManager;
 import eu.beezig.core.net.session.The5zigProvider;
 import eu.beezig.core.notification.NotificationManager;
 import eu.beezig.core.server.ServerHive;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.migrate.AutovoteMigration;
 import eu.beezig.core.util.migrate.DirectoryMigration;
 import eu.beezig.core.util.migrate.SettingsMigration;
@@ -88,15 +87,15 @@ public class Beezig {
     private AntiSniper antiSniper;
     private ProcessManager processManager;
     private BeezigServiceLoader serviceLoader;
-    private final boolean laby;
+    private boolean laby;
     private boolean titleDebug;
     private boolean isMod;
     private Version version;
-    private final AtomicBoolean updateAvailable = new AtomicBoolean(false);
+    private AtomicBoolean updateAvailable = new AtomicBoolean(false);
     private Version beezigForgeVersion;
-    private final AtomicBoolean beezigForgeUpdateAvailable = new AtomicBoolean(false);
+    private AtomicBoolean beezigForgeUpdateAvailable = new AtomicBoolean(false);;
     private Version beezigLabyVersion;
-    private final AtomicBoolean beezigLabyUpdateAvailable = new AtomicBoolean(false);
+    private AtomicBoolean beezigLabyUpdateAvailable = new AtomicBoolean(false);;
 
     public Beezig(boolean laby, File labyDir) {
         this.laby = laby;
@@ -112,7 +111,7 @@ public class Beezig {
             NetSessionManager.provider = new The5zigProvider();
             BeezigCommand.modulesProvider = new The5zigModules();
         } catch (ReflectiveOperationException e) {
-            ExceptionHandler.catchException(e);
+            e.printStackTrace();
         }
     }
 
@@ -126,7 +125,9 @@ public class Beezig {
             Beezig beezig = get();
             if (beezig.version == null)
                 loadVersion();
-            return beezig.version.getVersionDisplay();
+            return beezig.version.getType().equals("release") ?
+                "release" :
+                beezig.version.getCommits() + "-" + beezig.version.getCommit().substring(0, 8);
         } catch (Exception e) {
             logger.error(String.format("Couldn't fetch version: %s", e.getMessage()));
             return "development";
@@ -166,17 +167,16 @@ public class Beezig {
             config.load(new File(beezigDir, "config.json"));
         } catch(Exception e) {
             logger.error("Could not create config directory! Aborting load.");
-            ExceptionHandler.catchException(e);
+            e.printStackTrace();
             return;
         }
-        newExceptionHandler(); // Enable exception handler here for startup errors
 
         data = new BeezigData(beezigDir);
         try {
             data.tryUpdate();
         } catch (Exception e) {
             logger.error("Couldn't update data!");
-            ExceptionHandler.catchException(e);
+            e.printStackTrace();
         }
 
         DirectoryMigration.migrateFolders(beezigDir);
@@ -208,15 +208,6 @@ public class Beezig {
 
         logger.info(String.format("Load complete in %d ms.", System.currentTimeMillis() - timeStart));
         progress.displayMessage("Beezig", "Loaded!");
-        disableExceptionHandler(); // Disable exception handler (only enable it on Hive)
-    }
-
-    public void disableExceptionHandler() {
-        ExceptionHandler.stop();
-    }
-
-    public void newExceptionHandler() {
-        ExceptionHandler.configure();
     }
 
     private void setupLogger() {
@@ -321,7 +312,7 @@ public class Beezig {
                 loadVersion();
             } catch (Exception e) {
                 logger.error("Couldn't load version: " + e.getMessage());
-                ExceptionHandler.catchException(e);
+                e.printStackTrace();
             }
         }
         return version;

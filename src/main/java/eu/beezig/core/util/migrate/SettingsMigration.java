@@ -2,7 +2,6 @@ package eu.beezig.core.util.migrate;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
-import eu.beezig.core.util.ExceptionHandler;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 
@@ -26,7 +25,7 @@ public class SettingsMigration {
             }
             Beezig.cfg().save();
         } catch (Exception ex) {
-            ExceptionHandler.catchException(ex, "Couldn't migrate settings");
+            Beezig.logger.error("Couldn't migrate settings", ex);
         }
     }
 

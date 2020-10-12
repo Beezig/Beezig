@@ -1,6 +1,5 @@
 package eu.beezig.core.util.modules;
 
-import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 
 import java.lang.reflect.Constructor;
@@ -27,7 +26,7 @@ public class The5zigModules implements IModulesProvider {
         try {
             openGui.invoke(vars, modulesGui.newInstance(new Object[] {null}));
         } catch (ReflectiveOperationException e) {
-            ExceptionHandler.catchException(e);
+            e.printStackTrace();
             Message.error(Message.translate("error.hint.modules"));
         }
     }

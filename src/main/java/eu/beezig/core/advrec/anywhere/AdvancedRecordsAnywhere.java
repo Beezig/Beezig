@@ -30,7 +30,6 @@ import eu.beezig.core.advrec.anywhere.util.ArcadeGamemodeBuilder;
 import eu.beezig.core.advrec.anywhere.util.GamemodeBuilder;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.Color;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
@@ -236,7 +235,7 @@ public class AdvancedRecordsAnywhere {
             if(cached != null) AdvancedRecords.sendLastUpdated(cached, false, false);
             else Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.accent() + Message.translate("advrec.ara.update")));
         }).exceptionally(e -> {
-            ExceptionHandler.catchException(e);
+            e.printStackTrace();
             Message.error(Message.translate("error.ara.player"));
             return null;
         });

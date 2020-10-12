@@ -22,7 +22,6 @@ package eu.beezig.core.advrec;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.Color;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.beezig.hiveapi.wrapper.player.GameStats;
@@ -149,7 +148,7 @@ public class AdvancedRecords {
                 if (mode == Mode.SECOND_CHAT) sendAdvanced();
                 else sendMessages(true);
             } catch (Exception ex) {
-                ExceptionHandler.catchException(ex, "Exception in advrec");
+                Beezig.logger.error("Exception in advrec", ex);
                 Message.error(Message.translate("error.advrec"));
             }
             messages.clear();

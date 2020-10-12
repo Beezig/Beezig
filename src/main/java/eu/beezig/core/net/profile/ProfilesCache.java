@@ -29,7 +29,6 @@ import eu.the5zig.mod.util.NetworkPlayerInfo;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -38,7 +37,7 @@ import java.util.stream.Collectors;
 
 public class ProfilesCache {
     private Cache<UUID, Optional<UserProfile>> profilesCache;
-    private Queue<FutureTask> tasks = new ConcurrentLinkedDeque<>();
+    private Queue<FutureTask> tasks = new ArrayDeque<>();
     private AtomicInteger lastRequestID;
     private AtomicBoolean updating;
     private Set<UUID> cachedPlayers;

@@ -30,7 +30,6 @@ import eu.beezig.core.logging.TemporaryPointsManager;
 import eu.beezig.core.logging.session.SessionService;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyService;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
 import org.apache.commons.lang3.tuple.Pair;
@@ -76,7 +75,7 @@ public abstract class HiveMode extends GameMode {
         try {
             titleService = new TitleService(getIdentifier());
         } catch (IOException e) {
-            ExceptionHandler.catchException(e);
+            e.printStackTrace();
         }
         logger = new GameLogger(getIdentifier().toLowerCase(Locale.ROOT));
         autoMessageSent = new HashMap<>();
@@ -180,7 +179,7 @@ public abstract class HiveMode extends GameMode {
                 dailyService.submitGamePoints(getPoints(), gameID);
                 dailyService.save();
             } catch (IOException e) {
-                ExceptionHandler.catchException(e, "Couldn't save daily points");
+                Beezig.logger.error("Couldn't save daily points", e);
             }
         }
     }

@@ -24,7 +24,6 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.TIMV;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
@@ -54,7 +53,7 @@ public class TestMessagesManager {
         try {
             init();
         } catch (IOException e) {
-            ExceptionHandler.catchException(e, "Could not load TIMV test messages");
+            Beezig.logger.error("Could not load TIMV test messages", e);
         }
     }
 

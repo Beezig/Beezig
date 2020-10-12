@@ -21,7 +21,6 @@ package eu.beezig.core.logging;
 
 import com.csvreader.CsvWriter;
 import eu.beezig.core.Beezig;
-import eu.beezig.core.util.ExceptionHandler;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -70,7 +69,7 @@ public class GameLogger {
             }
             csv.endRecord();
         } catch (Exception e) {
-            ExceptionHandler.catchException(e);
+            e.printStackTrace();
         } finally {
             if(csv != null) csv.close();
         }

@@ -23,7 +23,6 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.Color;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.the5zig.mod.event.ChatEvent;
 import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.util.component.MessageComponent;
@@ -57,7 +56,7 @@ public class LinkSnipper {
             main.getSiblings().add(new MessageComponent(message.substring(lastEnd)));
         } catch (URISyntaxException e) {
             lastEnd = 0;
-            ExceptionHandler.catchException(e, "Couldn't parse URI");
+            Beezig.logger.error("Couldn't parse URI", e);
         }
         if (lastEnd != 0) {
             event.setCancelled(true);

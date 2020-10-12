@@ -25,7 +25,6 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.net.Packet;
 import eu.beezig.core.net.packets.PacketAuthentication;
 import eu.beezig.core.net.packets.PacketIdentification;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.TickEvent;
@@ -59,7 +58,7 @@ public class Connection extends SimpleChannelInboundHandler<Packet> {
             Beezig.get().getNetworkManager().getSessionManager().sendAuthRequest(handshakeSecret);
             sendPacket(new PacketAuthentication());
         } catch (NoSuchAlgorithmException | AuthenticationException e) {
-            ExceptionHandler.catchException(e, "Couldn't authenticate connection");
+            Beezig.logger.error("Couldn't authenticate connection", e);
         }
     }
 
@@ -83,7 +82,7 @@ public class Connection extends SimpleChannelInboundHandler<Packet> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        ExceptionHandler.catchException(cause, "An Internal Exception occurred");
+        Beezig.logger.error("An Internal Exception occurred", cause);
         if (cause instanceof ReadTimeoutException)
             disconnect(Message.translate("connection.timed_out"));
         else

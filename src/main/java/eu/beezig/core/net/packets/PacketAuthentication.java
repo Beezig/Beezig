@@ -24,7 +24,6 @@ import eu.beezig.core.net.Packet;
 import eu.beezig.core.net.handler.Connection;
 import eu.beezig.core.net.profile.TimezoneUtils;
 import eu.beezig.core.net.util.PacketBuffer;
-import eu.beezig.core.util.ExceptionHandler;
 
 public class PacketAuthentication implements Packet {
 
@@ -43,7 +42,7 @@ public class PacketAuthentication implements Packet {
         Beezig.logger.info("Authentication successful!");
         TimezoneUtils.getTimezone().thenAcceptAsync(tz -> handler.sendPacket(new PacketProfile(tz)))
                 .exceptionally(e -> {
-                    ExceptionHandler.catchException(e, "Error on Profile Fetch");
+                    Beezig.logger.error("Error on Profile Fetch", e);
                     return null;
                 });
     }

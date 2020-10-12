@@ -21,7 +21,6 @@ package eu.beezig.core.util.speedrun;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.server.modes.DR;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
@@ -35,7 +34,7 @@ public class WorldRecords {
         try {
             return Downloader.getJsonObject(new URL(url)).thenApplyAsync(o -> Beezig.gson.fromJson(o.getInput().toJSONString(), WorldRecord.class));
         } catch (MalformedURLException e) {
-            ExceptionHandler.catchException(e);
+            e.printStackTrace();
             return null;
         }
     }

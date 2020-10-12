@@ -31,7 +31,6 @@ import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyService;
 import eu.beezig.core.util.CollectionUtils;
 import eu.beezig.core.util.Color;
-import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
@@ -177,7 +176,7 @@ public class TIMV extends HiveMode implements IAutovote, IMonthly, IMapExtra {
                         messages.get(0).getRight() + AdvRecUtils.getTitle(getTitleService(), api.getTitle(), karma)));
                 if(record) getAdvancedRecords().addAdvanced(new ImmutablePair<>("Karma Record", getAdvancedRecords().modifyValue((int) api.getMostPoints())), true);
             } catch (Exception e) {
-                ExceptionHandler.catchException(e);
+                e.printStackTrace();
             }
         }
     }
@@ -203,7 +202,7 @@ public class TIMV extends HiveMode implements IAutovote, IMonthly, IMapExtra {
             }
         } catch (Exception e) {
             Message.error("error.data_read");
-            ExceptionHandler.catchException(e);
+            e.printStackTrace();
         }
     }
 
