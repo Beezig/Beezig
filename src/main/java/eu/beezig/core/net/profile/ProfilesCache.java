@@ -41,6 +41,7 @@ public class ProfilesCache {
     private AtomicInteger lastRequestID;
     private AtomicBoolean updating;
     private Set<UUID> cachedPlayers;
+    private ProfileBadgeListener badgeListener;
 
     public ProfilesCache() {
         profilesCache = Caffeine.newBuilder()
@@ -49,7 +50,11 @@ public class ProfilesCache {
         lastRequestID = new AtomicInteger(0);
         updating = new AtomicBoolean(false);
         cachedPlayers = new HashSet<>();
-        Beezig.api().getPluginManager().registerListener(Beezig.get(), new ProfileBadgeListener());
+        Beezig.api().getPluginManager().registerListener(Beezig.get(), badgeListener = new ProfileBadgeListener());
+    }
+
+    public void unregister() {
+        Beezig.api().getPluginManager().unregisterListener(Beezig.get(), badgeListener);
     }
 
     public long getSize() {

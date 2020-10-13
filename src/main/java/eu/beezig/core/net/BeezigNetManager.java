@@ -98,6 +98,7 @@ public class BeezigNetManager {
     public void disconnect() {
         if(handler.disconnectSilently()) {
             setProfile(null);
+            profilesCache.unregister();
             profilesCache = new ProfilesCache();
         }
     }
