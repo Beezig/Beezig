@@ -18,7 +18,6 @@ public class ExceptionHandler {
                 return event;
             });
         });
-        Sentry.setTag("version_group", Constants.VERSION);
         Sentry.setTag("version", Beezig.getVersionString());
         Sentry.setTag("os", System.getProperty("os.name"));
         Sentry.setTag("forge", String.valueOf(Beezig.api().isForgeEnvironment()));
