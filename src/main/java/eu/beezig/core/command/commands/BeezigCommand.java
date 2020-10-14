@@ -26,6 +26,7 @@ import eu.beezig.core.command.Command;
 import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.util.ArrayUtils;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.SystemInfo;
 import eu.beezig.core.util.modules.IModulesProvider;
 import eu.beezig.core.util.task.WorldTask;
@@ -97,6 +98,9 @@ public class BeezigCommand implements Command {
             }
             else if("settings".equalsIgnoreCase(mode) && BeezigForge.isSupported()) {
                 WorldTask.submit(() -> BeezigForge.get().openSettings(Beezig.cfg().toForge()));
+            }
+            else if("exception".equalsIgnoreCase(mode)) {
+                ExceptionHandler.catchException(new NullPointerException("Test new API"));
             }
         }
         return true;

@@ -24,6 +24,7 @@ import eu.beezig.core.api.SettingInfo;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
 import org.json.simple.JSONObject;
@@ -99,7 +100,7 @@ public class BeezigConfiguration {
             onSettingsChange(key);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
         }
         return false;
     }
@@ -120,7 +121,7 @@ public class BeezigConfiguration {
                 if(res == null) throw new RuntimeException(new IllegalArgumentException()); // For custom enums
                 return res;
             } catch (Exception e) {
-                e.printStackTrace();
+                ExceptionHandler.catchException(e);
                 if (!(e.getCause() instanceof IllegalArgumentException)) return null;
 
                 Message.error(Beezig.api().translate("error.enum", "§6" + getEnumValues(cls)));

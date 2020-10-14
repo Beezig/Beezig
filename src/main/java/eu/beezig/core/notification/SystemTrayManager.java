@@ -20,6 +20,7 @@
 package eu.beezig.core.notification;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.util.ExceptionHandler;
 
 import java.awt.*;
 
@@ -36,7 +37,7 @@ public class SystemTrayManager {
             tray.add(mainIcon);
             supported = true;
         } catch (AWTException e) {
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
         }
     }
 

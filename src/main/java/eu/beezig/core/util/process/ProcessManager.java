@@ -3,6 +3,7 @@ package eu.beezig.core.util.process;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.process.processes.ScreenRecorders;
 import eu.beezig.core.util.process.providers.UnixProcessProvider;
 import eu.beezig.core.util.process.providers.WindowsProcessProvider;
@@ -31,7 +32,7 @@ public class ProcessManager {
             try {
                 updateProcesses();
             } catch (IOException e) {
-                e.printStackTrace();
+                ExceptionHandler.catchException(e);
             }
         }, 5, 10, TimeUnit.SECONDS);
     }

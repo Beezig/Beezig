@@ -2,6 +2,7 @@ package eu.beezig.core.calc.lb;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
@@ -33,14 +34,14 @@ public class MonthlyCalculator {
         if(player != null) {
             getProfile().thenAcceptAsync(this::displayProfile).exceptionally(e -> {
                 Message.error(Message.translate("error.leaderboard"));
-                e.printStackTrace();
+                ExceptionHandler.catchException(e);
                 return null;
             });
         }
         else {
             calculateLeaderboard().thenAcceptAsync(this::displayLeaderboard).exceptionally(e -> {
                 Message.error(Message.translate("error.leaderboard"));
-                e.printStackTrace();
+                ExceptionHandler.catchException(e);
                 return null;
             });
         }
@@ -111,7 +112,7 @@ public class MonthlyCalculator {
         try {
             url = new URL("https://api.rocco.dev/" + mode + "/monthlies/leaderboard?from=" + (start - 1) + "&to=" + end);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
             return null;
         }
         return Downloader.getJsonObject(url);
@@ -123,7 +124,7 @@ public class MonthlyCalculator {
             try {
                 url = new URL("https://api.rocco.dev/" + mode + "/monthlies/profile/" + uuid);
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                ExceptionHandler.catchException(e);
                 return null;
             }
             return Downloader.getJsonObject(url).join();

@@ -22,6 +22,7 @@ package eu.beezig.core.calc.ps;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.server.TitleService;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.GameStats;
@@ -44,7 +45,7 @@ public class PlayerStatsCalculator {
             mode.setTitleService(new TitleService(modeName));
         } catch (IOException e) {
             Message.error(Message.translate("error.titles"));
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
         }
         String apiStat = mode.getApiKey(stat);
         if(apiStat == null) {
@@ -77,7 +78,7 @@ public class PlayerStatsCalculator {
                         Color.accent() + Message.ratio(summary.getSum()) + Color.primary(), Color.accent() + Message.ratio(summary.getAverage()) + Color.primary()));
             }).exceptionally(e -> {
                         Message.error(Message.translate("error.ps.generic"));
-                        e.printStackTrace();
+                        ExceptionHandler.catchException(e);
                         return null;
         });
     }

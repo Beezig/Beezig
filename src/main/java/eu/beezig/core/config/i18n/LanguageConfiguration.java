@@ -3,6 +3,7 @@ package eu.beezig.core.config.i18n;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import eu.beezig.core.Beezig;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.StringUtils;
 
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class LanguageConfiguration {
         try {
             lang = Beezig.class.getResource("/lang").toURI();
         } catch (URISyntaxException e) {
-            Beezig.logger.error("Couldn't find language bundle", e);
+            ExceptionHandler.catchException(e, "Couldn't find language bundle");
             return;
         }
         if(!"jar".equals(lang.getScheme())) return; // Dev env
@@ -44,7 +45,7 @@ public class LanguageConfiguration {
                 languages.put(enumName, new LanguageSetting(enumName, locale));
             });
         } catch (IOException e) {
-            Beezig.logger.error("Couldn't find language bundle", e);
+            ExceptionHandler.catchException(e, "Couldn't find language bundle");
         }
     }
 }

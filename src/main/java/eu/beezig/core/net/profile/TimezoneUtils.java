@@ -1,6 +1,6 @@
 package eu.beezig.core.net.profile;
 
-import eu.beezig.core.Beezig;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
 
 import java.net.MalformedURLException;
@@ -17,7 +17,7 @@ public class TimezoneUtils {
                return null;
             });
         } catch (MalformedURLException e) {
-            Beezig.logger.error("Malformed Timezone URL", e);
+            ExceptionHandler.catchException(e, "Malformed Timezone URL");
         }
         return null;
     }

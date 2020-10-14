@@ -24,6 +24,7 @@ import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.modes.GRAV;
 import eu.beezig.core.util.ActiveGame;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
@@ -119,7 +120,7 @@ public class CommandManager {
                 return false; // Skip the command
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
             Message.error(Beezig.api().translate("command.error", e.getClass().getName() + ": " + e.getLocalizedMessage()));
         }
         return true;

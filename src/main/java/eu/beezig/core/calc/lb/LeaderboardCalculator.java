@@ -2,6 +2,7 @@ package eu.beezig.core.calc.lb;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.beezig.hiveapi.wrapper.game.Game;
@@ -25,7 +26,7 @@ public class LeaderboardCalculator {
     public void run() {
         calculate().thenAcceptAsync(this::display).exceptionally(e -> {
             Message.error(Message.translate("error.leaderboard"));
-            e.printStackTrace();
+            ExceptionHandler.catchException(e);
             return null;
         });
     }

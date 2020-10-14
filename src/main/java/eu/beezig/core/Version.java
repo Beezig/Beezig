@@ -118,4 +118,8 @@ public class Version implements Comparable<Version>{
             return Math.abs(version.commits - commits);
         return -1;
     }
+
+    public String getVersionDisplay() {
+        return type.equals("release") ? "release" : commits + "-" + commit.substring(0, 8);
+    }
 }

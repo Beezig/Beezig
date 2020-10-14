@@ -19,6 +19,7 @@
 
 package eu.beezig.core.logging;
 
+import eu.beezig.core.util.ExceptionHandler;
 import org.apache.commons.io.input.ReversedLinesFileReader;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class ReverseCsvReader implements AutoCloseable {
             try {
                 reader.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                ExceptionHandler.catchException(e);
             }
         }
     }

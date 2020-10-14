@@ -31,6 +31,7 @@ import eu.beezig.core.net.profile.override.UserOverride;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.TitleService;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.the5zig.mod.server.GameMode;
@@ -97,7 +98,7 @@ public class BeezigServiceLoader {
             try {
                 Beezig.cfg().save();
             } catch (IOException e) {
-                Beezig.logger.error("Couldn't save config", e);
+                ExceptionHandler.catchException(e, "Couldn't save config");
                 Message.error(Message.translate("error.data_read"));
             }
         });
@@ -117,7 +118,7 @@ public class BeezigServiceLoader {
         try {
             mainService.addCommands(new ArrayList<>(CommandManager.commandExecutors));
         } catch(Throwable ex) {
-            Beezig.logger.error("Couldn't load commands", ex);
+            ExceptionHandler.catchException(ex, "Couldn't load commands");
         }
     }
 }

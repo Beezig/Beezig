@@ -21,6 +21,7 @@ package eu.beezig.core.logging;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.net.packets.PacketDailyGame;
+import eu.beezig.core.util.ExceptionHandler;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -48,7 +49,7 @@ public class DailyService {
         try {
             this.points = Integer.parseInt(contents, 10);
         } catch (Exception ex) {
-            Beezig.logger.error("Couldn't load daily points", ex);
+            ExceptionHandler.catchException(ex, "Couldn't load daily points");
         }
     }
 

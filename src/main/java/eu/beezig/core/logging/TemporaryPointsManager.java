@@ -25,6 +25,7 @@ import eu.beezig.core.data.GameTitles;
 import eu.beezig.core.logging.session.CurrentSession;
 import eu.beezig.core.logging.session.LogRotation;
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
 import org.apache.commons.io.FileUtils;
 
@@ -66,7 +67,7 @@ public class TemporaryPointsManager {
             try {
                 currentSession.closeSession();
             } catch (IOException e) {
-                Beezig.logger.error("Could not save session data", e);
+                ExceptionHandler.catchException(e, "Could not save session data");
             }
         }
     }
@@ -79,7 +80,7 @@ public class TemporaryPointsManager {
         try {
             service.loadFromFile();
         } catch (IOException e) {
-            Beezig.logger.error("Couldn't load daily service", e);
+            ExceptionHandler.catchException(e, "Couldn't load daily service");
         }
         return service;
     }
@@ -89,7 +90,7 @@ public class TemporaryPointsManager {
         try {
             new LogRotation().rotateLogs();
         } catch (IOException e) {
-            Beezig.logger.error("Couldn't rotate session logs", e);
+            ExceptionHandler.catchException(e, "Couldn't rotate session logs");
         }
     }
 
