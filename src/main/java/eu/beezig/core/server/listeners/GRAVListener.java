@@ -78,7 +78,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
         if(!(event.getChatComponent() instanceof MessageComponent)) return;
         if(!ServerHive.isCurrent()) return;
         GameMode mode;
-        if(!Settings.AUTOVOTE.get().getBoolean() || !((mode = Beezig.api().getActiveServer().getGameListener().getCurrentGameMode()) instanceof GRAV)) return;
+        if(!((mode = Beezig.api().getActiveServer().getGameListener().getCurrentGameMode()) instanceof GRAV)) return;
         GRAV grav = (GRAV) mode;
         String msg = event.getMessage();
         String stripped = ChatColor.stripColor(msg);
@@ -91,7 +91,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
             }
             grav.setFinalMaps(maps);
         }
-        if(event.getMessage().startsWith("§o")) return;
+        if(!Settings.AUTOVOTE.get().getBoolean() || event.getMessage().startsWith("§o")) return;
         Matcher master = MESSAGE_REGEX.matcher(stripped);
         if(master.matches()) {
             int index = Integer.parseInt(master.group(1), 10);

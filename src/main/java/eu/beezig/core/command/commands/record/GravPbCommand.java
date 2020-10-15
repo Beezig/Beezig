@@ -59,7 +59,7 @@ public class GravPbCommand implements Command {
                 Message.error(Message.translate("error.dr.pb"));
                 return;
             }
-            String display = DurationFormatUtils.formatDuration(time * 1000, "m:ss.SSS");
+            String display = DurationFormatUtils.formatDuration(time, "m:ss.SSS");
             Message.info(Beezig.api().translate("msg.dr.pb", Color.accent() + display + Color.primary()));
         }).exceptionally(e -> {
             Message.error(Message.translate("error.dr.pb"));

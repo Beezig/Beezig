@@ -173,6 +173,10 @@ public class GRAV extends HiveMode implements IMonthly {
                     .points(getPoints()).victory(won).gameStart(gameStart).build());
     }
 
+    public Map<String, GravWorldRecords.WorldRecord> getCachedWrs() {
+        return mapWrs;
+    }
+
     @Override
     public String getIdentifier() {
         return "grav";
