@@ -1,63 +1,65 @@
-package eu.beezig.core.command.commands;
+package eu.beezig.core.command.commands.record;
 
-import com.google.common.reflect.TypeToken;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.Command;
-import eu.beezig.core.data.DataPath;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.DR;
+import eu.beezig.core.server.modes.GRAV;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
-import eu.beezig.core.util.text.StringUtils;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.the5zig.mod.server.GameMode;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.Locale;
 
-public class DrPbCommand implements Command {
+public class GravPbCommand implements Command {
     @Override
     public String getName() {
-        return "drpb";
+        return "gravpb";
     }
 
     @Override
     public String[] getAliases() {
-        return new String[] {"/drpb"};
+        return new String[] {"/gravpb", "/grpb"};
     }
 
     @Override
     public boolean execute(String[] args) {
         String player;
         GameMode mode = !ServerHive.isCurrent() ? null : Beezig.api().getActiveServer().getGameListener().getCurrentGameMode();
-        DR.MapData map;
-        if(args.length == 0 && mode instanceof DR) {
-            map = ((DR) mode).getCurrentMapData();
+        String map;
+        if(args.length == 0 && mode instanceof GRAV) {
+            map = ((GRAV) mode).getMap();
             player = Beezig.user().getName();
         }
         else if(args.length == 1) {
             if(mode instanceof DR && ((DR) mode).getCurrentMapData() != null) {
-                map = ((DR) mode).getCurrentMapData();
+                map = ((DR) mode).getMap();
                 player = args[0];
             }
             else {
                 player = Beezig.user().getName();
-                map = getData(args[0]);
+                map = args[0];
             }
         }
         else {
             player = args[0];
-            map = getData(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
+            map = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         }
         if(map == null) {
             Message.error(Message.translate("error.map_not_found"));
             return true;
         }
-        Profiles.dr(player).thenAcceptAsync(stats -> {
-            String display = DurationFormatUtils.formatDuration(stats.getMapRecords().get(map.hive) * 1000, "m:ss");
+        Profiles.grav(player).thenAcceptAsync(stats -> {
+            Long time = stats.getMapRecords().get(map.toUpperCase(Locale.ROOT).replace(" ", "_"));
+            if(time == null) {
+                Message.error(Message.translate("error.dr.pb"));
+                return;
+            }
+            String display = DurationFormatUtils.formatDuration(time * 1000, "m:ss.SSS");
             Message.info(Beezig.api().translate("msg.dr.pb", Color.accent() + display + Color.primary()));
         }).exceptionally(e -> {
             Message.error(Message.translate("error.dr.pb"));
@@ -65,15 +67,5 @@ public class DrPbCommand implements Command {
             return null;
         });
         return true;
-    }
-
-    private DR.MapData getData(String name) {
-        try {
-            Map<String, DR.MapData> maps = Beezig.get().getData().getDataMap(DataPath.DR_MAPS, new TypeToken<Map<String, DR.MapData>>() {});
-            return maps.get(StringUtils.normalizeMapName(name));
-        } catch (IOException e) {
-            ExceptionHandler.catchException(e, "Tried to fetch maps but file wasn't found.");
-            return null;
-        }
     }
 }

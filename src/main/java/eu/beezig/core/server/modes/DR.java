@@ -33,7 +33,7 @@ import eu.beezig.core.server.monthly.MonthlyService;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
-import eu.beezig.core.util.speedrun.WorldRecords;
+import eu.beezig.core.util.speedrun.DrWorldRecords;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
@@ -63,7 +63,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
     // Personal Best
     private long pbSecs;
     private String pb;
-    private WorldRecords.WorldRecord wr;
+    private DrWorldRecords.WorldRecord wr;
 
     public String getEndTime() {
         return time;
@@ -142,7 +142,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
                 pb = DurationFormatUtils.formatDuration(pbSecs * 1000, "m:ss");
             }
         }
-        WorldRecords.getRecord(currentMapData).thenAcceptAsync(record -> wr = record)
+        DrWorldRecords.getRecord(currentMapData).thenAcceptAsync(record -> wr = record)
             .exceptionally(e -> {
                 Message.error(Message.translate("error.map_not_found"));
                 return null;
@@ -183,7 +183,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         setGameID(Long.toString(System.currentTimeMillis(), 10));
     }
 
-    public WorldRecords.WorldRecord getWorldRecord() {
+    public DrWorldRecords.WorldRecord getWorldRecord() {
         return wr;
     }
 

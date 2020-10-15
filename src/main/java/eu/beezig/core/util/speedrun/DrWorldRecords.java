@@ -29,7 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 
-public class WorldRecords {
+public class DrWorldRecords {
     public static CompletableFuture<WorldRecord> getRecord(DR.MapData map) {
         String url = "https://web.beezig.eu/v1/proxy/speedrun/" + map.speedrun;
         try {

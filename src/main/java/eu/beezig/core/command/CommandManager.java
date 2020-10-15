@@ -20,6 +20,10 @@ package eu.beezig.core.command;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.commands.*;
+import eu.beezig.core.command.commands.record.DrPbCommand;
+import eu.beezig.core.command.commands.record.DrWrCommand;
+import eu.beezig.core.command.commands.record.GravPbCommand;
+import eu.beezig.core.command.commands.record.GravWrCommand;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.modes.GRAV;
@@ -61,6 +65,8 @@ public class CommandManager {
         commandExecutors.add(new MonthlyCommand());
         commandExecutors.add(new DrPbCommand());
         commandExecutors.add(new DrWrCommand());
+        commandExecutors.add(new GravPbCommand());
+        commandExecutors.add(new GravWrCommand());
     }
 
     /**
