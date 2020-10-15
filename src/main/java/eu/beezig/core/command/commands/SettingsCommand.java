@@ -103,6 +103,10 @@ public class SettingsCommand implements Command {
             Beezig.api().messagePlayerComponent(component, false);
         }
         Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.accent() + Message.translate("cmd.settings")));
+        MessageComponent settings = new MessageComponent(Message.infoPrefix() + Message.translate("msg.hint.settings2"));
+        settings.getStyle().setOnClick(new MessageAction(MessageAction.Action.RUN_COMMAND, "/beezig settings"));
+        settings.getStyle().setOnHover(new MessageAction(MessageAction.Action.SHOW_TEXT, new MessageComponent(Color.primary() + Message.translate("msg.hint.settings"))));
+        Beezig.api().messagePlayerComponent(settings, false);
     }
 
     private Settings getSetting(String name) {
