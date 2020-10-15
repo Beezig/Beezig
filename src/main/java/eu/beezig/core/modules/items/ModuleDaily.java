@@ -31,10 +31,22 @@ public class ModuleDaily extends GameModeItem<HiveMode> {
     }
 
     @Override
+    public void registerSettings() {
+        getProperties().addSetting("place", true);
+    }
+
+    @Override
     protected Object getValue(boolean b) {
         if(b) return "123 Points";
-        return String.format("%s %s", Message.formatNumber(getGameMode().getDailyService().getPoints()),
-                getGameMode() instanceof TIMV ? "Karma" : Message.translate("modules.item.hive_points"));
+        HiveMode mode = getGameMode();
+        boolean place = (boolean) getProperties().getSetting("place").get() && mode.getDailyService().getPlace() != -1;
+        StringBuilder builder = new StringBuilder();
+        builder.append(Message.formatNumber(getGameMode().getDailyService().getPoints())).append(" ")
+            .append(getGameMode() instanceof TIMV ? "Karma" : Message.translate("modules.item.hive_points"));
+        if(place) {
+            builder.append(" (#").append(Message.formatNumber(mode.getDailyService().getPlace())).append(")");
+        }
+        return builder.toString();
     }
 
     @Override

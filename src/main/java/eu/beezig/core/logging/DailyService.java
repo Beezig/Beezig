@@ -22,16 +22,21 @@ package eu.beezig.core.logging;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.net.packets.PacketDailyGame;
 import eu.beezig.core.util.ExceptionHandler;
+import eu.beezig.core.util.UUIDUtils;
+import eu.beezig.hiveapi.wrapper.exception.ProfileNotFoundException;
+import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class DailyService {
     private int points;
     private File file;
     private String mode;
+    private int place = -1;
 
     public DailyService(String id, File f) {
         this.mode = id;
@@ -51,6 +56,15 @@ public class DailyService {
         } catch (Exception ex) {
             ExceptionHandler.catchException(ex, "Couldn't load daily points");
         }
+        Downloader.getJsonObject(new URL((Beezig.DEBUG ? "http://localhost:8726" : "https://web.beezig.eu") + "/v1/dailies/profile/" + mode + "/" + UUIDUtils.strip(Beezig.user().getId())))
+            .thenAcceptAsync(json -> place = (int) json.getLong("place")).exceptionally(e -> {
+                if(!(e instanceof ProfileNotFoundException)) ExceptionHandler.catchException(e, "Daily profile load");
+                return null;
+        });
+    }
+
+    public int getPlace() {
+        return place;
     }
 
     public void save() throws IOException {
