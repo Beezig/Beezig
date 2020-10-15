@@ -44,7 +44,7 @@ import java.util.regex.Pattern;
 public class GRAVListener extends AbstractGameListener<GRAV> {
     private static final Pattern MAP_REGEX = Pattern.compile("([^,&]+)");
     private static final Pattern MESSAGE_REGEX = Pattern.compile("▍ Gravity ▏ (\\d+)\\. .+ \\[(\\d+) Votes?]");
-    private static final Pattern FINAL_MAPS_REGEX = Pattern.compile("§8▍ §bGra§avi§ety§8 ▏ §7§oVoting not active! The winning map was ([^,]+), ([^,]+), ([^,]+), (.+) & ([^!]+)!");
+    private static final Pattern FINAL_MAPS_REGEX = Pattern.compile("▍ Gravity ▏ Voting not active! The winning map was ([^,]+), ([^,]+), ([^,]+), (.+) & ([^!]+)!");
     private final AtomicBoolean waitingForFinalMaps = new AtomicBoolean(false);
 
     @Override
@@ -81,8 +81,9 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
         if(!Settings.AUTOVOTE.get().getBoolean() || !((mode = Beezig.api().getActiveServer().getGameListener().getCurrentGameMode()) instanceof GRAV)) return;
         GRAV grav = (GRAV) mode;
         String msg = event.getMessage();
-        Matcher finalMapsMatcher = FINAL_MAPS_REGEX.matcher(msg);
-        if (finalMapsMatcher.matches() && waitingForFinalMaps.getAndSet(false)) {
+        String stripped = ChatColor.stripColor(msg);
+        Matcher finalMapsMatcher = FINAL_MAPS_REGEX.matcher(stripped);
+        if (finalMapsMatcher.matches() && waitingForFinalMaps.compareAndSet(true, false)) {
             event.setCancelled(true);
             String[] maps = new String[5];
             for (int i = 0; i < 5; ++i) {
@@ -91,7 +92,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
             grav.setFinalMaps(maps);
         }
         if(event.getMessage().startsWith("§o")) return;
-        Matcher master = MESSAGE_REGEX.matcher(ChatColor.stripColor(msg));
+        Matcher master = MESSAGE_REGEX.matcher(stripped);
         if(master.matches()) {
             int index = Integer.parseInt(master.group(1), 10);
             int votes = Integer.parseInt(master.group(2), 10);

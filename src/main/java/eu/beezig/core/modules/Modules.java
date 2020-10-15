@@ -63,6 +63,8 @@ public class Modules {
 
         // Gravity
         api.registerModuleItem(plugin, "grav_nextmap", ModuleNextMap.class, HIVE);
+        api.registerModuleItem(plugin, "grav_pb", eu.beezig.core.modules.items.grav.ModulePersonalBest.class, HIVE);
+        api.registerModuleItem(plugin, "grav_wr", eu.beezig.core.modules.items.grav.ModuleWorldRecord.class, HIVE);
     }
 
     public static boolean render() {
