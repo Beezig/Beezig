@@ -60,7 +60,7 @@ public class ToggleBeeCommand implements Command {
                 if(current == DefaultUserRoles.DEVELOPER) changed = DefaultUserRoles.NONE;
                 else changed = DefaultUserRoles.USER;
             }
-            Beezig.net().getHandler().sendPacket(new PacketUserSettings(changed));
+            Beezig.net().getHandler().sendPacket(PacketUserSettings.changeDisplayRole(changed));
             Message.info(Beezig.api().translate("msg.rank.toggle", changed.getDisplayName() + Color.primary()));
             isFakeRole = !isFakeRole;
             lastSettingTime = now;
@@ -84,7 +84,7 @@ public class ToggleBeeCommand implements Command {
             Message.error(Beezig.api().translate("error.rank.perm", role.getDisplayName() + "§c"));
             return true;
         }
-        Beezig.net().getHandler().sendPacket(new PacketUserSettings(role));
+        Beezig.net().getHandler().sendPacket(PacketUserSettings.changeDisplayRole(role));
         Message.info(Beezig.api().translate("msg.rank.toggle", role.getDisplayName() + Color.primary()));
         isFakeRole = role != current;
         lastSettingTime = now;

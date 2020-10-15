@@ -24,6 +24,7 @@ import eu.beezig.core.Constants;
 import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.command.Command;
 import eu.beezig.core.command.CommandManager;
+import eu.beezig.core.net.packets.PacketUserSettings;
 import eu.beezig.core.util.ArrayUtils;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
@@ -101,6 +102,25 @@ public class BeezigCommand implements Command {
             }
             else if("exception".equalsIgnoreCase(mode)) {
                 ExceptionHandler.catchException(new NullPointerException("Test new API"));
+            }
+            else if("daily".equalsIgnoreCase(mode)) {
+                if(args.length < 2) {
+                    sendUsage("/beezig daily [show/hide]");
+                    return true;
+                }
+                String arg = args[1];
+                if("show".equalsIgnoreCase(arg)) {
+                    Beezig.net().getHandler().sendPacket(PacketUserSettings.optDaily(true));
+                } else if("hide".equalsIgnoreCase(arg)) {
+                    if(args.length > 2) Beezig.net().getHandler().sendPacket(PacketUserSettings.optDaily(false));
+                    else {
+                        Message.info(Message.translate("msg.daily.opt.warn"));
+                        MessageComponent confirm = new MessageComponent(Message.infoPrefix() + Message.translate("msg.daily.opt.confirm"));
+                        confirm.getStyle().setOnClick(new MessageAction(MessageAction.Action.RUN_COMMAND, "/beezig daily hide confirm"));
+                        confirm.getStyle().setOnHover(new MessageAction(MessageAction.Action.SHOW_TEXT, new MessageComponent(Color.accent() + Message.translate("msg.daily.opt.warn2"))));
+                        Beezig.api().messagePlayerComponent(confirm, false);
+                    }
+                }
             }
         }
         return true;

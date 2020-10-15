@@ -56,8 +56,6 @@ public class ServerHive extends ServerInstance {
     private boolean inParty;
     private boolean inPartyChat;
     private ListenerHive listener;
-    private GRAVListener grav;
-    private DRAWListener draw;
 
     public long getTokens() {
         return tokens;
@@ -113,9 +111,9 @@ public class ServerHive extends ServerInstance {
         registry.registerListener(new BPListener());
         registry.registerListener(new SPListener());
         registry.registerListener(new SGNListener());
-        draw = new DRAWListener();
+        DRAWListener draw = new DRAWListener();
         registry.registerListener(draw);
-        grav = new GRAVListener();
+        GRAVListener grav = new GRAVListener();
         registry.registerListener(grav);
         Beezig.api().getPluginManager().registerListener(Beezig.get(), draw);
         Beezig.api().getPluginManager().registerListener(Beezig.get(), grav);
@@ -331,8 +329,6 @@ public class ServerHive extends ServerInstance {
                 Beezig.get().getTemporaryPointsManager().endSession();
             if(BeezigForge.isSupported()) BeezigForge.get().setOnHive(false);
             Beezig.net().disconnect();
-            Beezig.api().getPluginManager().unregisterListener(Beezig.get(), draw);
-            Beezig.api().getPluginManager().unregisterListener(Beezig.get(), grav);
             Beezig.get().disableExceptionHandler();
         }
 

@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Protocol {
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     private Map<Byte, Class<? extends Packet>> packets = new HashMap<>();
 
     Protocol() {
