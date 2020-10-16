@@ -93,7 +93,8 @@ public enum Settings {
 
     // Meta
     UPDATE_CHECK(true, Category.META),
-    TELEMETRY(true, Category.META);
+    TELEMETRY(true, Category.META),
+    NEWS(true, Category.META);
 
     private final Object defaultValue;
     private final Class settingType;

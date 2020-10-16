@@ -1,8 +1,10 @@
 package eu.beezig.core.news;
 
 import eu.beezig.core.util.ExceptionHandler;
+import eu.beezig.core.util.text.Message;
 
 import java.text.ParseException;
+import java.util.Locale;
 
 public enum NewsType {
     BEEZIG(NewsUrls.BEEZIG_NEWS, (item, k, v) -> {
@@ -38,5 +40,9 @@ public enum NewsType {
 
     public RssItemIterator.ItemTransformer getParser() {
         return parser;
+    }
+
+    public String translateName() {
+        return Message.translate("news.type." + name().toLowerCase(Locale.ROOT));
     }
 }

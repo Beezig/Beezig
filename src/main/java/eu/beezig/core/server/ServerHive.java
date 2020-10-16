@@ -231,11 +231,13 @@ public class ServerHive extends ServerInstance {
                 }
             });
         }
-        Beezig.get().getAsyncExecutor().execute(() -> {
-            NewsManager newsManager = new NewsManager();
-            Beezig.get().setNewsManager(newsManager);
-            newsManager.sendUpdates(new Date(0));
-        });
+        if(Beezig.DEBUG && Settings.NEWS.get().getBoolean()) { // Disabled until fully working
+            Beezig.get().getAsyncExecutor().execute(() -> {
+                NewsManager newsManager = new NewsManager();
+                Beezig.get().setNewsManager(newsManager);
+                newsManager.sendUpdates(new Date(0));
+            });
+        }
     }
 
     @Override

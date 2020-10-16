@@ -3,6 +3,7 @@ package eu.beezig.core.news;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.task.WorldTask;
+import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 
 import java.util.*;
@@ -21,13 +22,13 @@ public class NewsManager {
         Map<NewsType, Set<NewsEntry>> unread = getUnreadNews(lastLogin);
         boolean hasUpdates = unread.entrySet().stream().anyMatch(e -> !e.getValue().isEmpty());
         if(!hasUpdates) return;
-        Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.accent() + "§lBeezig Briefing"));
+        Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.accent() + "§l" + Message.translate("news.title")));
         WorldTask.submit(() -> {
             for (Map.Entry<NewsType, Set<NewsEntry>> entry : unread.entrySet()) {
                 if (entry.getValue().isEmpty()) continue;
-                Beezig.api().messagePlayer(StringUtils.centerWithSpaces("§l" + entry.getKey()));
+                Beezig.api().messagePlayer(StringUtils.centerWithSpaces("§l" + entry.getKey().translateName()));
                 for (NewsEntry news : entry.getValue()) {
-                    Beezig.api().messagePlayer(Color.primary() + "§l" + news.getTitle());
+                    Beezig.api().messagePlayer(StringUtils.centerWithSpaces(Color.primary() + "§l" + news.getTitle()));
                     Beezig.api().messagePlayer(Color.accent() + news.getContent());
                 }
             }
