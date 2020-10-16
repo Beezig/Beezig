@@ -28,6 +28,7 @@ import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.automessage.AutoMessageManager;
 import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.config.Settings;
+import eu.beezig.core.news.NewsManager;
 import eu.beezig.core.server.listeners.*;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
@@ -43,6 +44,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -229,6 +231,11 @@ public class ServerHive extends ServerInstance {
                 }
             });
         }
+        Beezig.get().getAsyncExecutor().execute(() -> {
+            NewsManager newsManager = new NewsManager();
+            Beezig.get().setNewsManager(newsManager);
+            newsManager.sendUpdates(new Date(0));
+        });
     }
 
     @Override
@@ -330,6 +337,7 @@ public class ServerHive extends ServerInstance {
             if(BeezigForge.isSupported()) BeezigForge.get().setOnHive(false);
             Beezig.net().disconnect();
             Beezig.get().disableExceptionHandler();
+            Beezig.get().setNewsManager(null);
         }
 
         @Override

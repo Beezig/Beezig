@@ -37,6 +37,7 @@ import eu.beezig.core.net.profile.override.UserOverride;
 import eu.beezig.core.net.profile.override.UserOverrideDeserializer;
 import eu.beezig.core.net.session.NetSessionManager;
 import eu.beezig.core.net.session.The5zigProvider;
+import eu.beezig.core.news.NewsManager;
 import eu.beezig.core.notification.NotificationManager;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.ExceptionHandler;
@@ -97,6 +98,7 @@ public class Beezig {
     private final AtomicBoolean beezigForgeUpdateAvailable = new AtomicBoolean(false);
     private Version beezigLabyVersion;
     private final AtomicBoolean beezigLabyUpdateAvailable = new AtomicBoolean(false);
+    private NewsManager newsManager;
 
     public Beezig(boolean laby, File labyDir) {
         this.laby = laby;
@@ -286,6 +288,14 @@ public class Beezig {
 
     public BeezigServiceLoader getServiceLoader() {
         return serviceLoader;
+    }
+
+    public NewsManager getNewsManager() {
+        return newsManager;
+    }
+
+    public void setNewsManager(NewsManager newsManager) {
+        this.newsManager = newsManager;
     }
 
     public boolean isTitleDebugEnabled() {

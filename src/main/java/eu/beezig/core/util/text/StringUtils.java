@@ -59,7 +59,7 @@ public class StringUtils {
     }
 
     // https://www.spigotmc.org/threads/95872/
-    private static String centerWithSpaces(String message) {
+    public static String centerWithSpaces(String message) {
         if (message == null || message.equals("")) return "";
         int messagePxSize = 0;
         boolean previousCode = false;
