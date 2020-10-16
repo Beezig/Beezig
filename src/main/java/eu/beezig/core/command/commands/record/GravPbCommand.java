@@ -31,9 +31,14 @@ public class GravPbCommand implements Command {
         String player;
         GameMode mode = !ServerHive.isCurrent() ? null : Beezig.api().getActiveServer().getGameListener().getCurrentGameMode();
         String map;
-        if(args.length == 0 && mode instanceof GRAV) {
-            map = ((GRAV) mode).getMap();
-            player = Beezig.user().getName();
+        if(args.length == 0) {
+            if (mode instanceof GRAV) {
+                map = ((GRAV) mode).getMap();
+                player = Beezig.user().getName();
+            } else {
+                Message.error(Message.translate("error.map_not_found"));
+                return true;
+            }
         }
         else if(args.length == 1) {
             if(mode instanceof DR && ((DR) mode).getCurrentMapData() != null) {
