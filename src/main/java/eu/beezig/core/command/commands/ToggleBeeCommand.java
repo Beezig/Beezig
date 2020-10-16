@@ -80,7 +80,8 @@ public class ToggleBeeCommand implements Command {
             Message.error(Beezig.api().translate("error.rank.perm", DefaultUserRoles.DEVELOPER.getDisplayName() + "§c"));
             return true;
         }
-        if(current.compareTo(role) < 0) {
+        if(role != current && role != DefaultUserRoles.USER
+            || role == DefaultUserRoles.DEVELOPER) {
             Message.error(Beezig.api().translate("error.rank.perm", role.getDisplayName() + "§c"));
             return true;
         }
