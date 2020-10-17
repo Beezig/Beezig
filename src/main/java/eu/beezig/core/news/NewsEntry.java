@@ -27,6 +27,17 @@ public class NewsEntry implements Comparable<NewsEntry> {
     private String content, link;
     private Map<String, Object> extra;
 
+    public ForgeNewsEntry toForge() {
+        ForgeNewsEntry forge = new ForgeNewsEntry();
+        forge.author = author;
+        forge.title = title;
+        forge.pubDate = pubDate;
+        forge.content = content;
+        forge.link = link;
+        forge.extra = extra;
+        return forge;
+    }
+
     public Map<String, Object> getExtra() {
         return extra;
     }

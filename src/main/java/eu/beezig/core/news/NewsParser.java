@@ -43,6 +43,7 @@ public class NewsParser {
         try {
             conn = (HttpURLConnection) url.openConnection();
             conn.addRequestProperty("User-Agent", Message.getUserAgent());
+            if(conn.getResponseCode() != 200) throw new RuntimeException("HTTP error while fetching news");
             parse(conn.getInputStream(), parser);
         } catch (Exception e) {
             ExceptionHandler.catchException(e, "XML parse");

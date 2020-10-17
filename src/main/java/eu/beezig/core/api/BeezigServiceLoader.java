@@ -19,6 +19,7 @@
 
 package eu.beezig.core.api;
 
+import com.google.common.collect.ImmutableSet;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.autovote.AutovoteConfig;
 import eu.beezig.core.command.CommandManager;
@@ -28,6 +29,9 @@ import eu.beezig.core.net.BeezigNetManager;
 import eu.beezig.core.net.profile.OwnProfile;
 import eu.beezig.core.net.profile.UserProfile;
 import eu.beezig.core.net.profile.override.UserOverride;
+import eu.beezig.core.news.ForgeNewsEntry;
+import eu.beezig.core.news.NewsEntry;
+import eu.beezig.core.news.NewsType;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.TitleService;
@@ -39,6 +43,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BeezigServiceLoader {
     private ServiceLoader<IBeezigService> services = ServiceLoader.load(IBeezigService.class,
@@ -85,6 +90,19 @@ public class BeezigServiceLoader {
         mainService.registerGetSetting(name -> Settings.valueOf(name).get().getValue());
         mainService.registerSetSetting(pair -> Beezig.cfg().set(Settings.valueOf(pair.getKey()), pair.getValue().toString()));
         mainService.registerSetSettingAsIs(pair -> Beezig.cfg().setAsIs(Settings.valueOf(pair.getKey()), pair.getValue()));
+        mainService.registerGetLoadedNews(category -> {
+            if(Beezig.get().getNewsManager() == null) return ImmutableSet.of();
+            NewsType type;
+            try {
+                type = NewsType.valueOf(category);
+            } catch (IllegalArgumentException noEnum) {
+                return ImmutableSet.of();
+            }
+            Set<ForgeNewsEntry> result = new TreeSet<>(Comparator.<ForgeNewsEntry>comparingLong(e -> e.pubDate.getTime()).reversed());
+            result.addAll(Beezig.get().getNewsManager().getLoadedNews().
+                getOrDefault(type, ImmutableSet.of()).stream().map(NewsEntry::toForge).collect(Collectors.toList()));
+            return result;
+        });
         mainService.registerGetRegion(() -> {
             BeezigNetManager net = Beezig.net();
             if(net == null) return null;

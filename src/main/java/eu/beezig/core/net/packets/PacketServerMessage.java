@@ -34,7 +34,7 @@ public class PacketServerMessage implements Packet {
             WorldTask.submit(this::sendAnnouncement);
             return;
         }
-        String message = Beezig.api().translate(key, (Object[]) format);
+        String message = Beezig.api().translate(key, format);
         WorldTask.submit(() -> {
             if (type == Type.INFO) Message.info(message);
             else Message.error(message);

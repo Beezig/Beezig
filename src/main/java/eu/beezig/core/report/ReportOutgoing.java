@@ -14,7 +14,7 @@ public class ReportOutgoing {
     }
 
     public enum ReportType {
-        BLOCK, PLAYER;
+        BLOCK, PLAYER
     }
 
     public void writeTo(PacketBuffer buffer) {

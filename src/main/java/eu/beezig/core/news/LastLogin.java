@@ -18,7 +18,7 @@ public class LastLogin {
 
     public void read() throws IOException {
         if(!file.exists()) {
-            lastLogin = new Date(0);
+            lastLogin = new Date(Beezig.DEBUG ? 0 : System.currentTimeMillis());
             return;
         }
         String contents = FileUtils.readFileToString(file, Charset.defaultCharset());

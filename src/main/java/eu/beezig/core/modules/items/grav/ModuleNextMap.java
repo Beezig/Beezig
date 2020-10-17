@@ -54,7 +54,7 @@ public class ModuleNextMap extends GameModeItem<GRAV> {
     public boolean shouldRender(boolean dummy) {
         if (dummy) return true;
         return  super.shouldRender(false) && Beezig.api().isInWorld() &&
-            getGameMode().getState() == GameState.GAME && ((GRAV)getGameMode()).getCurrentStage() < 5;
+            getGameMode().getState() == GameState.GAME && getGameMode().getCurrentStage() < 5;
     }
 
     @Override
