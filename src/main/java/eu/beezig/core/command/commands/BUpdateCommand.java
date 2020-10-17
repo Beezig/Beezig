@@ -123,8 +123,15 @@ public class BUpdateCommand implements Command {
                                     default:
                                         remoteVersion = beezig.getRemoteVersion();
                                 }
-                                FileChannel fileChannel = new FileOutputStream(String.format("%s-%s.jar", new URI(jarFile).getPath(),
-                                    remoteVersion == null ? "unknown" : remoteVersion.getCommit().substring(0, 8))).getChannel();
+                                String newPath = String.format("%s-%s", new URI(jarFile).getPath(),
+                                    remoteVersion == null ? "unknown" : remoteVersion.getCommit().substring(0, 8));
+                                String currentJarName = currentJar.getName();
+                                if (newPath.endsWith(currentJarName.substring(0, currentJarName.lastIndexOf(".jar")))) {
+                                    newPath += "-new.jar";
+                                } else {
+                                    newPath += ".jar";
+                                }
+                                FileChannel fileChannel = new FileOutputStream(newPath).getChannel();
                                 fileChannel.transferFrom(byteChannel, 0, Long.MAX_VALUE);
                                 currentJar.deleteOnExit();
                             } catch (Exception e) {
