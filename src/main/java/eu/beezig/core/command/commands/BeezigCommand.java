@@ -104,15 +104,15 @@ public class BeezigCommand implements Command {
                 ExceptionHandler.catchException(new NullPointerException("Test new API"));
             }
             else if("daily".equalsIgnoreCase(mode)) {
-                if(args.length < 2) {
+                if (args.length < 2) {
                     sendUsage("/beezig daily [show/hide]");
                     return true;
                 }
                 String arg = args[1];
-                if("show".equalsIgnoreCase(arg)) {
+                if ("show".equalsIgnoreCase(arg)) {
                     Beezig.net().getHandler().sendPacket(PacketUserSettings.optDaily(true));
-                } else if("hide".equalsIgnoreCase(arg)) {
-                    if(args.length > 2) Beezig.net().getHandler().sendPacket(PacketUserSettings.optDaily(false));
+                } else if ("hide".equalsIgnoreCase(arg)) {
+                    if (args.length > 2) Beezig.net().getHandler().sendPacket(PacketUserSettings.optDaily(false));
                     else {
                         Message.info(Message.translate("msg.daily.opt.warn"));
                         MessageComponent confirm = new MessageComponent(Message.infoPrefix() + Message.translate("msg.daily.opt.confirm"));
@@ -121,6 +121,13 @@ public class BeezigCommand implements Command {
                         Beezig.api().messagePlayerComponent(confirm, false);
                     }
                 }
+            }
+            else if("news".equalsIgnoreCase(mode)) {
+                if(Beezig.get().getNewsManager() == null) {
+                    Message.error(Message.translate("error.news.unread"));
+                    return true;
+                }
+                Beezig.get().getNewsManager().readUnread();
             }
         }
         return true;

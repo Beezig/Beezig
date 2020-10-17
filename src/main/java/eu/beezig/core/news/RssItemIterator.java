@@ -36,7 +36,7 @@ public class RssItemIterator implements Iterator<NewsEntry> {
         }
     }
 
-    void peekNext() {
+    private void peekNext() {
         if (nextItem == null) {
             try {
                 nextItem = next();
@@ -93,7 +93,7 @@ public class RssItemIterator implements Iterator<NewsEntry> {
         throw new NoSuchElementException();
     }
 
-    void parseStartElement() {
+    private void parseStartElement() {
         textBuilder.setLength(0);
         elementName = reader.getLocalName();
 
@@ -106,7 +106,7 @@ public class RssItemIterator implements Iterator<NewsEntry> {
         }
     }
 
-    void parseAttributes() {
+    private void parseAttributes() {
         if ("link".equals(reader.getLocalName())) {
             String rel = reader.getAttributeValue(null, "rel");
             String link = reader.getAttributeValue(null, "href");
@@ -118,7 +118,7 @@ public class RssItemIterator implements Iterator<NewsEntry> {
         }
     }
 
-    boolean parseEndElement() {
+    private boolean parseEndElement() {
         String name = reader.getLocalName();
         String text = textBuilder.toString().trim();
         if (!isChannelPart) parseItemCharacters(elementName, item, text);
@@ -126,7 +126,7 @@ public class RssItemIterator implements Iterator<NewsEntry> {
         return "item".equals(name) || "entry".equals(name);
     }
 
-    void parseCharacters() {
+    private void parseCharacters() {
         String text = reader.getText();
 
         if (text.trim().isEmpty())
@@ -135,7 +135,7 @@ public class RssItemIterator implements Iterator<NewsEntry> {
         textBuilder.append(text);
     }
 
-    void parseItemCharacters(String elementName, NewsEntry item, String text) {
+    private void parseItemCharacters(String elementName, NewsEntry item, String text) {
         if (text.isEmpty())
             return;
         if ("title".equals(elementName))

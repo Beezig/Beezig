@@ -8,13 +8,13 @@ import java.util.Locale;
 
 public enum NewsType {
     BEEZIG(NewsUrls.BEEZIG_NEWS, (item, k, v) -> {
-        if("pubDate".equals(k)) {
+        if("updated".equals(k)) {
             try {
-                item.setPubDate(NewsParser.RSS_DATE_FORMAT.parse(v));
+                item.setPubDate(NewsParser.ISO_8601.parse(v));
             } catch (ParseException e) {
                 ExceptionHandler.catchException(e);
             }
-        }
+        } else if("id".equals(k)) item.setLink(v);
     }),
     STATUS(NewsUrls.BEEZIG_STATUS, (item, k, v) -> {
         if("published".equals(k)) {

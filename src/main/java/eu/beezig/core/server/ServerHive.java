@@ -44,7 +44,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -235,7 +234,7 @@ public class ServerHive extends ServerInstance {
             Beezig.get().getAsyncExecutor().execute(() -> {
                 NewsManager newsManager = new NewsManager();
                 Beezig.get().setNewsManager(newsManager);
-                newsManager.sendUpdates(new Date(0));
+                newsManager.sendUpdates();
             });
         }
     }
