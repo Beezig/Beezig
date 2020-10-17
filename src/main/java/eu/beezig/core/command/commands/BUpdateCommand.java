@@ -21,13 +21,16 @@ package eu.beezig.core.command.commands;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.Constants;
+import eu.beezig.core.Version;
 import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.command.Command;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import org.apache.commons.lang3.SystemUtils;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -39,6 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 public class BUpdateCommand implements Command {
 
@@ -87,6 +91,11 @@ public class BUpdateCommand implements Command {
                         final String userAgent = String.format("Beezig/7.0 (%s) Beezig/%s-%s",
                             (SystemUtils.IS_OS_MAC ? "Macintosh" : System.getProperty("os.name")),
                             Constants.VERSION, Beezig.getVersionString());
+                        try {
+                            beezig.fetchRemoteVersions();
+                        } catch (IOException e) {
+                            ExceptionHandler.catchException(e);
+                        }
                         updates.forEach((k, v) -> {
                             try {
                                 URLConnection connection = k.openConnection();
@@ -97,8 +106,27 @@ public class BUpdateCommand implements Command {
                                 if (jarLocation.getProtocol().equals("jar")) {
                                     jarFile = jarFile.substring(0, jarFile.lastIndexOf("!"));
                                 }
-                                FileChannel fileChannel = new FileOutputStream(new URI(jarFile).getPath()).getChannel();
+                                File currentJar = new File(new URI(jarFile).getPath());
+                                if (Pattern.compile("^.*-[a-f\\d]{8}\\.jar$").matcher(jarFile).matches()) {
+                                    jarFile = jarFile.substring(0, jarFile.lastIndexOf("-"));
+                                } else {
+                                    jarFile = jarFile.substring(0, jarFile.lastIndexOf(".jar"));
+                                }
+                                Version remoteVersion;
+                                switch (v.getName()) {
+                                    case "eu.beezig.laby.LabyMain":
+                                        remoteVersion = beezig.getRemoteLabyVersion();
+                                        break;
+                                    case "eu.beezig.forge.BeezigForgeMod":
+                                        remoteVersion = beezig.getRemoteBeezigForgeVersion();
+                                        break;
+                                    default:
+                                        remoteVersion = beezig.getRemoteVersion();
+                                }
+                                FileChannel fileChannel = new FileOutputStream(String.format("%s-%s.jar", new URI(jarFile).getPath(),
+                                    remoteVersion == null ? "unknown" : remoteVersion.getCommit().substring(0, 8))).getChannel();
                                 fileChannel.transferFrom(byteChannel, 0, Long.MAX_VALUE);
+                                currentJar.deleteOnExit();
                             } catch (Exception e) {
                                 Message.error(Message.translate("update.error"));
                                 Message.error(e.getMessage());

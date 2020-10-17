@@ -21,6 +21,7 @@ package eu.beezig.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import eu.beezig.core.advrec.anywhere.AdvancedRecordsAnywhere;
@@ -58,6 +59,7 @@ import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.event.LoadEvent;
 import eu.the5zig.mod.gui.IOverlay;
 import eu.the5zig.mod.plugin.Plugin;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -65,7 +67,10 @@ import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -93,10 +98,13 @@ public class Beezig {
     private boolean titleDebug;
     private boolean isMod;
     private Version version;
+    private Version remoteVersion = null;
     private final AtomicBoolean updateAvailable = new AtomicBoolean(false);
     private Version beezigForgeVersion;
+    private Version remoteBeezigForgeVersion = null;
     private final AtomicBoolean beezigForgeUpdateAvailable = new AtomicBoolean(false);
     private Version beezigLabyVersion;
+    private Version remoteLabyVersion = null;
     private final AtomicBoolean beezigLabyUpdateAvailable = new AtomicBoolean(false);
     private NewsManager newsManager;
 
@@ -326,6 +334,21 @@ public class Beezig {
         return instance.networkManager;
     }
 
+    public void fetchRemoteVersions() throws IOException {
+        if (remoteVersion != null && remoteBeezigForgeVersion != null && remoteLabyVersion != null)
+            return;
+        URL url = new URL("https://go.beezig.eu/version-beta.json");
+        URLConnection connection = url.openConnection();
+        connection.setRequestProperty("User-Agent", String.format("Beezig/7.0 (%s) Beezig/%s-%s",
+            (SystemUtils.IS_OS_MAC ? "Macintosh" : System.getProperty("os.name")),
+            Constants.VERSION, Beezig.getVersionString()));
+        JsonParser parser = new JsonParser();
+        JsonObject jsonObject = parser.parse(new InputStreamReader(connection.getInputStream())).getAsJsonObject();
+        setRemoteVersion(new Version(jsonObject.get("beezig").getAsJsonObject()));
+        setRemoteBeezigForgeVersion(new Version(jsonObject.get("beezig-forge").getAsJsonObject()));
+        setRemoteLabyVersion(new Version(jsonObject.get("beezig-laby").getAsJsonObject()));
+    }
+
     public Version getVersion() {
         if (version == null) {
             try {
@@ -336,6 +359,14 @@ public class Beezig {
             }
         }
         return version;
+    }
+
+    public Version getRemoteVersion() {
+        return remoteVersion;
+    }
+
+    public void setRemoteVersion(Version remoteVersion) {
+        this.remoteVersion = remoteVersion;
     }
 
     public boolean getUpdateAvailable() {
@@ -354,6 +385,14 @@ public class Beezig {
         this.beezigForgeVersion = beezigForgeVersion;
     }
 
+    public Version getRemoteBeezigForgeVersion() {
+        return remoteBeezigForgeVersion;
+    }
+
+    public void setRemoteBeezigForgeVersion(Version remoteBeezigForgeVersion) {
+        this.remoteBeezigForgeVersion = remoteBeezigForgeVersion;
+    }
+
     public boolean getBeezigForgeUpdateAvailable() {
         return beezigForgeUpdateAvailable.get();
     }
@@ -368,6 +407,14 @@ public class Beezig {
 
     public void setBeezigLabyVersion(Version beezigLabyVersion) {
         this.beezigLabyVersion = beezigLabyVersion;
+    }
+
+    public Version getRemoteLabyVersion() {
+        return remoteLabyVersion;
+    }
+
+    public void setRemoteLabyVersion(Version remoteLabyVersion) {
+        this.remoteLabyVersion = remoteLabyVersion;
     }
 
     public boolean getBeezigLabyUpdateAvailable() {
