@@ -45,6 +45,7 @@ public interface IBeezigService {
     void registerSetSettingAsIs(Consumer<Map.Entry<String, Object>> callback);
     void registerSetAutovoteMaps(Consumer<Pair<String, List<String>>> callback);
     void registerGetLoadedNews(Function<String, Set<ForgeNewsEntry>> callback);
+    void registerGetForumsNews(Supplier<Set<ForgeNewsEntry>> callback);
 
     // Functions (Beezig -> BeezigForge)
     void setOnHive(boolean update);

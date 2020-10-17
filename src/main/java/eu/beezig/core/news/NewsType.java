@@ -37,6 +37,15 @@ public enum NewsType {
             item.setContent(Beezig.api().translate("news.map", Color.primary() + item.getExtra().get("game")
                 + Color.accent(), Color.primary() + item.getAuthor()));
         }
+    }),
+    HIVE_FORUMS(NewsUrls.HIVE_NEWS, FileType.RSS, (item, k, v) -> {
+        if("pubDate".equals(k)) {
+            try {
+                item.setPubDate(NewsParser.RSS_DATE_FORMAT.parse(v));
+            } catch (ParseException e) {
+                ExceptionHandler.catchException(e);
+            }
+        } else if("dc:creator".equals(k)) item.setAuthor(v);
     });
 
     private final FileType type;

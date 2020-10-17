@@ -140,7 +140,7 @@ public class RssItemIterator implements Iterator<NewsEntry> {
             return;
         if ("title".equals(elementName))
             item.setTitle(text);
-        else if ("description".equals(elementName) || "summary".equals(elementName) || "content".equals(elementName)) {
+        else if ("description".equals(elementName) || "summary".equals(elementName) || "content".equals(elementName) || "content:encoded".equals(elementName)) {
             String escapedContent = StringEscapeUtils.unescapeHtml4(text).replaceAll("<.*?>", "").replace("\u200b", "");
             item.setContent(escapedContent.replace("\r\n", "\n"));
         }

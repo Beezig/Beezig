@@ -103,6 +103,12 @@ public class BeezigServiceLoader {
                 getOrDefault(type, ImmutableSet.of()).stream().map(NewsEntry::toForge).collect(Collectors.toList()));
             return result;
         });
+        mainService.registerGetForumsNews(() -> {
+            if(Beezig.get().getNewsManager() == null) return new HashSet<>();
+            Set<ForgeNewsEntry> result = new TreeSet<>(Comparator.<ForgeNewsEntry>comparingLong(e -> e.pubDate.getTime()).reversed());
+            result.addAll(Beezig.get().getNewsManager().downloadForums().stream().limit(10).map(NewsEntry::toForge).collect(Collectors.toList()));
+            return result;
+        });
         mainService.registerGetRegion(() -> {
             BeezigNetManager net = Beezig.net();
             if(net == null) return null;
@@ -126,9 +132,7 @@ public class BeezigServiceLoader {
                 UserOverride overrides = p.getRoleContainer().getOverride();
                 if (overrides == null) return null;
                 HashMap<String, Object> ret = new HashMap<>();
-                overrides.getOverrides().forEach(override -> {
-                    ret.putAll(override.getAsMap());
-                });
+                overrides.getOverrides().forEach(override -> ret.putAll(override.getAsMap()));
                 return ret;
             });
         });

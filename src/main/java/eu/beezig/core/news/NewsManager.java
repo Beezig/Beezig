@@ -30,7 +30,9 @@ public class NewsManager {
             return;
         }
         NewsParser parser = new NewsParser();
-        for(NewsType type : NewsType.values()) parser.download(type);
+        for(NewsType type : NewsType.values()) {
+            if(type != NewsType.HIVE_FORUMS) parser.download(type);
+        }
         this.loadedNews = parser.done();
     }
 
@@ -52,6 +54,12 @@ public class NewsManager {
             Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.accent() + "§l" + Message.translate("news.title")));
             sendNews(unread, true);
         });
+    }
+
+    public Set<NewsEntry> downloadForums() {
+        NewsParser parser = new NewsParser();
+        parser.download(NewsType.HIVE_FORUMS);
+        return ((TreeSet)parser.done().getOrDefault(NewsType.HIVE_FORUMS, new TreeSet<>())).descendingSet();
     }
 
     private void sendNews(Map<NewsType, Set<NewsEntry>> unread, boolean limitUnread) {
