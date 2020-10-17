@@ -18,18 +18,22 @@
 package eu.beezig.core.news;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NewsEntry implements Comparable<NewsEntry> {
     private String author, title;
     private Date pubDate;
     private String content, link;
+    private Map<String, Object> extra;
 
-    public NewsEntry(String title, String content) {
-        this.title = title;
-        this.content = content;
+    public Map<String, Object> getExtra() {
+        return extra;
     }
 
-    public NewsEntry() {
+    public void setExtra(String key, Object value) {
+        if(extra == null) extra = new HashMap<>();
+        extra.put(key, value);
     }
 
     public void setAuthor(String author) {
@@ -70,6 +74,10 @@ public class NewsEntry implements Comparable<NewsEntry> {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public boolean hasExtra(String key) {
+        return extra != null && extra.containsKey(key);
     }
 
     @Override
