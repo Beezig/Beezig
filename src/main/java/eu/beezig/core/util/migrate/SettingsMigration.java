@@ -1,5 +1,6 @@
 package eu.beezig.core.util.migrate;
 
+import com.google.common.base.Splitter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.ExceptionHandler;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SettingsMigration {
@@ -31,14 +33,15 @@ public class SettingsMigration {
     }
 
     private Map<String, String> getOldConfig() throws IOException {
+        Splitter equals = Splitter.on('=');
         File file = new File(Beezig.get().getBeezigDir(), "settings.properties");
         if(!file.exists()) return null;
         Map<String, String> matches = new HashMap<>();
         try(BufferedReader reader = Files.newBufferedReader(file.toPath(), Charset.defaultCharset())) {
             reader.lines().forEach(s -> {
                 if(s.charAt(0) == '#') return;
-                String[] data = s.split("=");
-                matches.put(data[0].trim(), data[1].trim());
+                List<String> data = equals.splitToList(s);
+                matches.put(data.get(0).trim(), data.get(1).trim());
             });
         }
         file.deleteOnExit();
@@ -46,11 +49,12 @@ public class SettingsMigration {
     }
 
     private Map<String, String> getDictionary() throws IOException {
+        Splitter space = Splitter.on(' ');
         Map<String, String> matches = new HashMap<>();
         LineIterator lines = IOUtils.lineIterator(Beezig.class.getResourceAsStream("/migrate-settings.map"), Charset.defaultCharset());
         lines.forEachRemaining(s -> {
-            String[] data = s.split(" ");
-            matches.put(data[0], data[1]);
+            List<String> data = space.splitToList(s);
+            matches.put(data.get(0), data.get(1));
         });
         return matches;
     }

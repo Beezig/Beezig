@@ -23,6 +23,7 @@ public class ProcessManager {
     private IProcessProvider provider;
     private Set<IProcess> processes = new HashSet<>();
 
+    @SuppressWarnings("FutureReturnValueIgnored")
     public ProcessManager() {
         String os = System.getProperty("os.name").toLowerCase(Locale.ROOT);
         if(os.contains("mac") || os.contains("nix") || os.contains("nux") || os.contains("aix"))

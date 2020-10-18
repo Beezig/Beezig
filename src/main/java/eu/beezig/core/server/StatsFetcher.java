@@ -19,12 +19,15 @@
 
 package eu.beezig.core.server;
 
+import com.google.common.base.Splitter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.UUIDUtils;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.util.minecraft.ChatColor;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;
@@ -42,6 +45,7 @@ import java.util.stream.Collectors;
  * this interface, or set up the producers accordingly.
  */
 public class StatsFetcher {
+    private static final Splitter COLON = Splitter.on(": ");
     private final Class<? extends HiveMode> gamemode;
     private final CompletableFuture<HiveMode.GlobalStats> job;
     private Function<String, HiveMode.GlobalStats> apiComputer;
@@ -75,6 +79,7 @@ public class StatsFetcher {
         return job;
     }
 
+    @SuppressWarnings("FutureReturnValueIgnored")
     void attemptCompute(HiveMode mode, Scoreboard board) {
         if(started.get()) return;
         if(!gamemode.isAssignableFrom(mode.getClass())) return;
@@ -83,9 +88,9 @@ public class StatsFetcher {
             Beezig.logger.debug("Found matching scoreboard using title backend");
             HashMap<String, Integer> normalized = board.getLines().entrySet().stream()
                     .map(e -> {
-                        String[] lineSegments = ChatColor.stripColor(e.getKey()).split(": ");
-                        return new HashMap.SimpleEntry<>(lineSegments[0].trim(),
-                                lineSegments.length > 1 ? Integer.parseInt(lineSegments[1].replaceAll(",", "").trim()) : e.getValue());
+                        List<String> lineSegments = COLON.splitToList(ChatColor.stripColor(e.getKey()));
+                        return new AbstractMap.SimpleEntry<>(lineSegments.get(0).trim(),
+                                lineSegments.size() > 1 ? Integer.parseInt(lineSegments.get(1).replaceAll(",", "").trim()) : e.getValue());
                     }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, HashMap::new));
             job.complete(scoreboardComputer.apply(normalized));
         }

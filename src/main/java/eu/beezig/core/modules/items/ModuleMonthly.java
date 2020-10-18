@@ -52,6 +52,6 @@ public class ModuleMonthly extends GameModeItem<HiveMode> {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render() && getGameMode() instanceof IMonthly && getGameMode().getMonthlyProfile() != null;
+        return dummy || (Modules.render() && getGameMode() instanceof IMonthly && getGameMode().getMonthlyProfile() != null);
     }
 }

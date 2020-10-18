@@ -45,7 +45,7 @@ public class ModulePoints extends GameModeItem<HiveMode> {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render() && (getGameMode() != null && getGameMode().getGlobal().getPoints() != null);
+        return dummy || (Modules.render() && (getGameMode() != null && getGameMode().getGlobal().getPoints() != null));
     }
 
     @Override

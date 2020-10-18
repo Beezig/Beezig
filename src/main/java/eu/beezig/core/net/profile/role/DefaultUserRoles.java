@@ -33,8 +33,8 @@ public enum DefaultUserRoles implements UserRole {
     DAILY_WINNER(52, "§a"),
     DEVELOPER(100, "§b");
 
-    private int index;
-    private String prefix;
+    private final int index;
+    private final String prefix;
 
     DefaultUserRoles(int index, String prefix) {
         this.index = index;

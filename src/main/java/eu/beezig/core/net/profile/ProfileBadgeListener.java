@@ -19,6 +19,7 @@
 
 package eu.beezig.core.net.profile;
 
+import com.google.common.base.Splitter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.UUIDUtils;
@@ -27,29 +28,30 @@ import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.util.component.MessageComponent;
 import eu.the5zig.util.minecraft.ChatColor;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ProfileBadgeListener {
-
     private static final Pattern LIST_REGEX = Pattern.compile("§8▍ .+ ▏ §3Online (?:spectators|participants) \\(.+\\): .+");
+    private static final Splitter COLON = Splitter.on(':'), COMMA = Splitter.on(", ");
 
     @EventHandler
     public void onChat(ChatEvent event) {
         if(!ServerHive.isCurrent()) return;
         Matcher m = LIST_REGEX.matcher(event.getMessage());
         if(m.matches()) {
-            String[] parts = event.getMessage().split(":");
-            MessageComponent main = new MessageComponent("§a" + parts[0] + ": ");
-            String[] players = parts[1].split(", ");
-            for(int i = 0; i < players.length; i++) {
-                String player = players[i].replace(".", "").trim();
+            List<String> parts = COLON.splitToList(event.getMessage());
+            MessageComponent main = new MessageComponent("§a" + parts.get(0) + ": ");
+            List<String> players = COMMA.splitToList(parts.get(1));
+            for(int i = 0; i < players.size(); i++) {
+                String player = players.get(i).replace(".", "").trim();
                 MessageComponent cmp = new MessageComponent(player);
                 UUID id = UUIDUtils.getLocalUUID(ChatColor.stripColor(player));
                 if(id != null) cmp.getSiblings().add(UUIDUtils.getUserRole(id));
                 main.getSiblings().add(cmp);
-                if(i != players.length - 1) main.getSiblings().add(new MessageComponent("§3, "));
+                if(i != players.size() - 1) main.getSiblings().add(new MessageComponent("§3, "));
             }
             main.getSiblings().add(new MessageComponent("§3."));
             event.setCancelled(true);

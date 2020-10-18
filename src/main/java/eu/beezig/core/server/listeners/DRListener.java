@@ -61,7 +61,7 @@ public class DRListener extends AbstractGameListener<DR> {
         else if("dr.finish".equals(key)) {
             String nick = ((ServerHive)Beezig.api().getActiveServer()).getNick();
             if(match.get(0).equals(nick)) {
-                gameMode.setTime(match.get(1));
+                gameMode.setFinishTime(match.get(1));
                 gameMode.calcTime();
             }
         }

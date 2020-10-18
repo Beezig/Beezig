@@ -148,7 +148,7 @@ public class ComparableVersion
             {
                 return true;
             }
-            if ( o == null || getClass() != o.getClass() )
+            if (!(o instanceof IntItem))
             {
                 return false;
             }
@@ -233,7 +233,7 @@ public class ComparableVersion
             {
                 return true;
             }
-            if ( o == null || getClass() != o.getClass() )
+            if (!(o instanceof LongItem))
             {
                 return false;
             }
@@ -317,7 +317,7 @@ public class ComparableVersion
             {
                 return true;
             }
-            if ( o == null || getClass() != o.getClass() )
+            if (!(o instanceof BigIntegerItem))
             {
                 return false;
             }
@@ -334,6 +334,7 @@ public class ComparableVersion
             return value.hashCode();
         }
 
+        @Override
         public String toString()
         {
             return value.toString();
@@ -410,7 +411,7 @@ public class ComparableVersion
          * or QUALIFIERS.size and then resort to lexical ordering. Most comparisons are decided by the first character,
          * so this is still fast. If more characters are needed then it requires a lexical sort anyway.
          *
-         * @param qualifier
+         * @param qualifier the qualifier
          * @return an equivalent value that can be used with lexical comparison
          */
         public static String comparableQualifier( String qualifier )
@@ -453,7 +454,7 @@ public class ComparableVersion
             {
                 return true;
             }
-            if ( o == null || getClass() != o.getClass() )
+            if (!(o instanceof StringItem))
             {
                 return false;
             }
@@ -470,6 +471,7 @@ public class ComparableVersion
             return value.hashCode();
         }
 
+        @Override
         public String toString()
         {
             return value;

@@ -54,7 +54,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
     private int lastSbPoints;
     private int lastSbKills;
     private int checkpoints;
-    private String time;
+    private String finishTime;
     /**
      * Cached profile, used to load personal bests
      */
@@ -66,24 +66,24 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
     private DrWorldRecords.WorldRecord wr;
 
     public String getEndTime() {
-        return time;
+        return finishTime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setFinishTime(String finishTime) {
+        this.finishTime = finishTime;
     }
 
     public void calcTime() {
-        if(time == null || wr == null) return;
-        Matcher matcher = TIME_REGEX.matcher(time);
-        if(matcher.matches()) {
+        if (finishTime == null || wr == null) return;
+        Matcher matcher = TIME_REGEX.matcher(finishTime);
+        if (matcher.matches()) {
             int mins = Integer.parseInt(matcher.group(1), 10);
             int secs = Integer.parseInt(matcher.group(2), 10);
             int millis = Integer.parseInt(matcher.group(3), 10);
             int total = mins * 60 * 1000 + secs * 1000 + millis;
             int delta = total - wr.getMillis();
-            if(delta >= 0) Beezig.api().playSound("note.pling", 1f);
-            if(delta == 0) {
+            if (delta >= 0) Beezig.api().playSound("note.pling", 1f);
+            if (delta == 0) {
                 Message.info(Message.translate("msg.dr.wr.tie"));
                 return;
             }
@@ -94,8 +94,9 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
 
     public void initMapData() {
         try {
-            maps = Beezig.get().getData().getDataMap(DataPath.DR_MAPS, new TypeToken<Map<String, MapData>>() {});
-            if(maps == null) {
+            maps = Beezig.get().getData().getDataMap(DataPath.DR_MAPS, new TypeToken<Map<String, MapData>>() {
+            });
+            if (maps == null) {
                 Message.error("error.data_read");
                 Beezig.logger.error("Tried to fetch maps but file wasn't found.");
             }
@@ -130,14 +131,14 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         super.setMap(map);
         String normalized = StringUtils.normalizeMapName(map);
         MapData data = maps.get(normalized);
-        if(data == null) {
+        if (data == null) {
             Message.error(Message.translate("error.map_not_found"));
             return;
         }
         currentMapData = data;
-        if(profile != null) {
+        if (profile != null) {
             Long record = profile.getMapRecords().get(currentMapData.hive);
-            if(record != null) {
+            if (record != null) {
                 pbSecs = record;
                 pb = DurationFormatUtils.formatDuration(pbSecs * 1000, "m:ss");
             }
@@ -149,8 +150,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
             });
     }
 
-    public DR ()
-    {
+    public DR() {
         statsFetcher.setApiComputer(name -> {
             DrStats api = Profiles.dr(name).join();
             profile = api;
@@ -171,10 +171,14 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
             stats.setDeaths(lines.get("Deaths"));
             stats.setVictories(lines.get("Victories"));
             Profiles.dr(UUIDUtils.strip(Beezig.user().getId()))
-                    .thenAcceptAsync(api -> {
-                        profile = api;
-                        stats.setTitle(getTitleService().getTitle(api.getTitle()));
-                    });
+                .thenAcceptAsync(api -> {
+                    profile = api;
+                    stats.setTitle(getTitleService().getTitle(api.getTitle()));
+                }).exceptionally(e -> {
+                ExceptionHandler.catchException(e);
+                Message.error(Message.translate("error.stats_fetch"));
+                return null;
+            });
             return stats;
         });
         getAdvancedRecords().setExecutor(this::recordsExecutor);
@@ -198,30 +202,30 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
             DrStats api = Profiles.dr(getAdvancedRecords().getTarget()).join();
             getAdvancedRecords().setVariables(api);
             getAdvancedRecords().setOrAddAdvanced(0, new ImmutablePair<>("Points",
-                    getAdvancedRecords().getMessages().get(0).getRight() +
-                            AdvRecUtils.getTitle(getTitleService(), api.getTitle(), points)));
+                getAdvancedRecords().getMessages().get(0).getRight() +
+                    AdvRecUtils.getTitle(getTitleService(), api.getTitle(), points)));
         }
     }
 
     @Override
     public void end() {
         super.end();
-        logger.log(getPoints(), getMap(), getKills(), getDeaths(), getGameID(), System.currentTimeMillis(), time);
-        if(getSessionService() != null)
+        logger.log(getPoints(), getMap(), getKills(), getDeaths(), getGameID(), System.currentTimeMillis(), finishTime);
+        if (getSessionService() != null)
             Beezig.get().getTemporaryPointsManager().getCurrentSession().pushItem(new SessionItem.Builder(getIdentifier())
-                    .points(getPoints()).map(getMap()).custom("time", time).gameStart(gameStart).kills(getKills()).deaths(getDeaths()).build());
+                .points(getPoints()).map(getMap()).custom("time", finishTime).gameStart(gameStart).kills(getKills()).deaths(getDeaths()).build());
     }
 
     public void tryUpdatePoints(String newAmount) {
         int num = Integer.parseInt(newAmount, 10);
-        if(lastSbPoints == num) return;
+        if (lastSbPoints == num) return;
         addPoints(num - lastSbPoints);
         lastSbPoints = num;
     }
 
     public void tryUpdateKills(String newAmount) {
         int num = Integer.parseInt(newAmount, 10);
-        if(lastSbKills == num) return;
+        if (lastSbKills == num) return;
         addKills(num - lastSbKills);
         lastSbKills = num;
     }
@@ -229,7 +233,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
     @Override
     public CompletableFuture<? extends MonthlyService> loadProfile() {
         return new DrStats(null).getMonthlyProfile(UUIDUtils.strip(Beezig.user().getId()))
-                .thenApplyAsync(m -> new MonthlyService(m, MonthlyField.KILLS, MonthlyField.DEATHS, MonthlyField.KD));
+            .thenApplyAsync(m -> new MonthlyService(m, MonthlyField.KILLS, MonthlyField.DEATHS, MonthlyField.KD));
     }
 
     public String getPersonalBest() {

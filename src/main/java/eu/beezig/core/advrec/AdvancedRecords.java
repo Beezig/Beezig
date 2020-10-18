@@ -31,8 +31,8 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Callable;
@@ -51,8 +51,8 @@ public class AdvancedRecords {
     private Date apiCache;
 
     public AdvancedRecords() {
-        messages = new LinkedList<>();
-        advancedMessages = new LinkedList<>();
+        messages = new ArrayList<>();
+        advancedMessages = new ArrayList<>();
         refreshMode();
     }
 

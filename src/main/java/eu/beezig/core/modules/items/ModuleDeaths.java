@@ -48,7 +48,7 @@ public class ModuleDeaths extends GameModeItem<HiveMode> {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render() && (getGameMode() != null && getGameMode().getDeaths() != 0);
+        return dummy || (Modules.render() && (getGameMode() != null && getGameMode().getDeaths() != 0));
     }
 
     @Override

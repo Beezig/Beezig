@@ -21,6 +21,7 @@ package eu.beezig.core.net.profile;
 
 import eu.beezig.core.net.profile.role.RoleContainer;
 import eu.beezig.core.net.profile.role.RoleService;
+import eu.beezig.core.util.ExceptionHandler;
 
 import java.util.UUID;
 
@@ -31,7 +32,10 @@ public class UserProfile {
     public UserProfile(UUID uuid, int role) {
         this.uuid = uuid;
         this.role = OwnProfile.defaultRole;
-        RoleService.getRole(role, uuid).thenAcceptAsync(r -> this.role = r);
+        RoleService.getRole(role, uuid).thenAcceptAsync(r -> this.role = r).exceptionally(e -> {
+            ExceptionHandler.catchException(e, "Profile load");
+            return null;
+        });
     }
 
     public UUID getUuid() {

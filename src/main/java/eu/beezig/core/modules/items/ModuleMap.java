@@ -41,7 +41,7 @@ public class ModuleMap extends GameModeItem<HiveMode> {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render() && (getGameMode() != null && getGameMode().getMap() != null);
+        return dummy || (Modules.render() && getGameMode() != null && getGameMode().getMap() != null);
     }
 
     @Override

@@ -25,6 +25,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import javax.swing.*;
 import java.awt.*;
 
+@SuppressWarnings({"InvalidBlockTag", "MissingSummary"})
 public class IncomingMessagesGui extends JFrame {
     private JPanel panel1;
     private JList<String> messages;

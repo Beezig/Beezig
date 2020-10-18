@@ -11,11 +11,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 
+@SuppressWarnings("ImmutableEnumChecker")
 public enum NewsType {
     BEEZIG(NewsUrls.BEEZIG_NEWS, FileType.RSS, (item, k, v) -> {
         if("updated".equals(k)) {
             try {
-                item.setPubDate(NewsParser.ISO_8601.parse(v));
+                item.setPubDate(NewsParser.ISO_8601.get().parse(v));
             } catch (ParseException e) {
                 ExceptionHandler.catchException(e);
             }
@@ -55,7 +56,7 @@ public enum NewsType {
     STATUS(NewsUrls.BEEZIG_STATUS, FileType.RSS, (item, k, v) -> {
         if("published".equals(k)) {
             try {
-                item.setPubDate(NewsParser.ISO_8601.parse(v));
+                item.setPubDate(NewsParser.ISO_8601.get().parse(v));
             } catch (ParseException e) {
                 ExceptionHandler.catchException(e);
             }
@@ -74,7 +75,7 @@ public enum NewsType {
     HIVE_FORUMS(NewsUrls.HIVE_NEWS, FileType.RSS, (item, k, v) -> {
         if("pubDate".equals(k)) {
             try {
-                item.setPubDate(NewsParser.RSS_DATE_FORMAT.parse(v));
+                item.setPubDate(NewsParser.RSS_DATE_FORMAT.get().parse(v));
             } catch (ParseException e) {
                 ExceptionHandler.catchException(e);
             }

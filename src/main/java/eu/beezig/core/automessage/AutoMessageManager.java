@@ -49,7 +49,7 @@ public abstract class AutoMessageManager {
     private final AtomicBoolean skipThis;
     private static final AtomicBoolean skipAll = new AtomicBoolean();
 
-    public AutoMessageManager(boolean disablePartyChat) {
+    protected AutoMessageManager(boolean disablePartyChat) {
         triggers = new HashMap<>();
         messageQueue = new ArrayList<>();
         enabled = getEnabledSetting();
@@ -64,6 +64,7 @@ public abstract class AutoMessageManager {
     public abstract Setting getDelaySetting();
     public abstract DataPath getTriggersPath();
 
+    @SuppressWarnings("FutureReturnValueIgnored")
     private synchronized void handleEvent(String message, HiveMode mode, Trigger.Type type) {
         HiveMode game = ActiveGame.get();
         if (game == null || !enabled.getBoolean() || !shouldFire())

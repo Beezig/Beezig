@@ -67,7 +67,7 @@ public abstract class HiveMode extends GameMode {
     private MonthlyService monthlyProfile;
     private boolean init;
 
-    public HiveMode() {
+    protected HiveMode() {
         global = new GlobalStats();
         autovoteManager = new AutovoteManager(this);
         cachedGlobal = new GlobalStats();
@@ -105,7 +105,10 @@ public abstract class HiveMode extends GameMode {
                     ((IMonthly) this).loadProfile().exceptionally(e -> {
                         MonthlyService.ignoredModes.add(HiveMode.this.getClass());
                         return null;
-                    }).thenAcceptAsync(this::setMonthlyProfile);
+                    }).thenAcceptAsync(this::setMonthlyProfile).exceptionally(e -> {
+                        // This actually never fails, we use the value so Errorprone doesn't complain.
+                        return null;
+                    });
                 }
             }
         }

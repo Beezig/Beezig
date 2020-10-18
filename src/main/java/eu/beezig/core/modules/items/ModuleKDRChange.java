@@ -40,7 +40,7 @@ public class ModuleKDRChange extends GameModeItem<HiveMode> {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render() && (currentData = calculateKdr()) != null && currentData.kdrChange != 0;
+        return dummy || (Modules.render() && (currentData = calculateKdr()) != null && currentData.kdrChange != 0);
     }
 
     @Override

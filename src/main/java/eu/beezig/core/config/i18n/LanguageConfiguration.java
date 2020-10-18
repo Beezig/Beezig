@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class LanguageConfiguration {
     private static final Pattern FILE_REGEX = Pattern.compile("language_(\\w{2}_\\w{2})\\.properties");
@@ -36,14 +37,16 @@ public class LanguageConfiguration {
         if(!"jar".equals(lang.getScheme())) return; // Dev env
         try(FileSystem fs = FileSystems.newFileSystem(lang, Collections.emptyMap())) {
             Path path = fs.getPath("/lang");
-            Files.walk(path).map(s -> {
-                Matcher m = FILE_REGEX.matcher(s.getFileName().toString());
-                if(!m.matches()) return null;
-                return m.group(1);
-            }).filter(Objects::nonNull).map(s -> Locale.forLanguageTag(s.replace("_", "-"))).filter(Objects::nonNull).forEach(locale -> {
-                String enumName = StringUtils.normalizeMapName(locale.getDisplayLanguage(Locale.ENGLISH)).toUpperCase(Locale.ROOT);
-                languages.put(enumName, new LanguageSetting(enumName, locale));
-            });
+            try(Stream<Path> stream = Files.walk(path)) {
+                stream.map(s -> {
+                    Matcher m = FILE_REGEX.matcher(s.getFileName().toString());
+                    if(!m.matches()) return null;
+                    return m.group(1);
+                }).filter(Objects::nonNull).map(s -> Locale.forLanguageTag(s.replace("_", "-"))).filter(Objects::nonNull).forEach(locale -> {
+                    String enumName = StringUtils.normalizeMapName(locale.getDisplayLanguage(Locale.ENGLISH)).toUpperCase(Locale.ROOT);
+                    languages.put(enumName, new LanguageSetting(enumName, locale));
+                });
+            }
         } catch (IOException e) {
             ExceptionHandler.catchException(e, "Couldn't find language bundle");
         }

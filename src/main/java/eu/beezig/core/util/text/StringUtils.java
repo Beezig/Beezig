@@ -29,9 +29,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 
 public class StringUtils {
-
     private static final String MAP_REPLACE_REGEX = "[^a-zA-Z0-9]";
-
 
     public static String getColor(String input) {
         Matcher matcher = ChatColor.STRIP_COLOR_PATTERN.matcher(input);

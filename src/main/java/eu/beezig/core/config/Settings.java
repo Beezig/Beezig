@@ -28,6 +28,7 @@ import eu.the5zig.util.minecraft.ChatColor;
 
 import java.util.Locale;
 
+@SuppressWarnings("ImmutableEnumChecker")
 public enum Settings {
     // Appearance
     LANGUAGE(LanguageConfiguration.NATIVE, Category.APPEARANCE),

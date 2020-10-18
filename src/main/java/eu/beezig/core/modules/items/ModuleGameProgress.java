@@ -38,7 +38,7 @@ public class ModuleGameProgress extends GameModeItem<HiveMode> {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render() && getGameMode() != null && (!(getGameMode() instanceof TIMV) && getGameMode().getPoints() != 0);
+        return dummy || (Modules.render() && getGameMode() != null && (!(getGameMode() instanceof TIMV) && getGameMode().getPoints() != 0));
     }
 
     @Override

@@ -49,7 +49,7 @@ public class BeezigConfiguration {
     public void load(File file) throws IOException, ParseException {
         this.file = file;
         if (!file.exists()) {
-            config = Stream.of(Settings.values()).map(key -> new HashMap.SimpleEntry<>(key, new Setting(key.getDefaultValue())))
+            config = Stream.of(Settings.values()).map(key -> new AbstractMap.SimpleEntry<>(key, new Setting(key.getDefaultValue())))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, HashMap::new));
             save();
             Color.refreshCache();
@@ -63,9 +63,9 @@ public class BeezigConfiguration {
                 try {
                     Settings key = Settings.valueOf(e.getKey().toString());
                     Setting value = new Setting(castValue(key.getSettingType(), (String) e.getValue()));
-                    return new HashMap.SimpleEntry<>(key, value);
+                    return new AbstractMap.SimpleEntry<>(key, value);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    ExceptionHandler.catchException(ex);
                 }
                 return null;
             }).filter(Objects::nonNull).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, HashMap::new));

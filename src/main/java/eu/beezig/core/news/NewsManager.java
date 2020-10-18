@@ -1,5 +1,6 @@
 package eu.beezig.core.news;
 
+import com.google.common.base.Splitter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
@@ -16,6 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class NewsManager {
+    private static final Splitter NEWLINE = Splitter.on('\n');
     private Map<NewsType, Set<NewsEntry>> loadedNews;
     private Map<NewsType, Set<NewsEntry>> unreadNews;
     private final LastLogin lastLogin;
@@ -83,7 +85,7 @@ public class NewsManager {
                 if(firstNews) firstNews = false;
                 else Beezig.api().messagePlayer(""); // 1 newline
                 Beezig.api().messagePlayer(StringUtils.centerWithSpaces(Color.primary() + ChatColor.UNDERLINE + news.getTitle()));
-                String[] lines = WordUtils.wrap(news.getContent(), 50).split("\n");
+                List<String> lines = NEWLINE.splitToList(WordUtils.wrap(news.getContent(), 50));
                 int count = 0;
                 for(String line : lines) {
                     Beezig.api().messagePlayer(StringUtils.centerWithSpaces(Color.accent() + line));
@@ -114,7 +116,7 @@ public class NewsManager {
                 NewsEntry entry = iter.next();
                 if(!entry.isPersistent() && entry.getPubDate().compareTo(compareTo) < 0) {
                     iter.remove();
-                    entries.headSet(entry).clear();
+                    entries.headSet(entry, false).clear();
                     break;
                 }
             }

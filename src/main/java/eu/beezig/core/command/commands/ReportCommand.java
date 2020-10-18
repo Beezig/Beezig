@@ -1,5 +1,6 @@
 package eu.beezig.core.command.commands;
 
+import com.google.common.base.Splitter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.Command;
 import eu.beezig.core.net.packets.PacketReport;
@@ -13,11 +14,10 @@ import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
 import eu.beezig.hiveapi.wrapper.utils.json.JObject;
 
 import java.net.URL;
-import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class ReportCommand implements Command {
     private static final Pattern REPORT_CMD_REGEX = Pattern.compile("(.+?)(?=(?<!,)\\s) (.+)$");
@@ -41,12 +41,12 @@ public class ReportCommand implements Command {
             if (m.matches()) {
                 String gPlayers = m.group(1);
                 String gReasons = m.group(2);
-                String[] players = gPlayers.split(",\\s?");
-                String[] reasons = gReasons.split("\\s");
-                String pDisplay = Color.accent() + StringUtils.localizedJoin(Arrays.asList(players)) + Color.primary();
-                String rDisplay = Color.accent() + StringUtils.localizedJoin(Arrays.asList(reasons)) + Color.primary();
+                List<String> players = Splitter.onPattern(",\\s?").splitToList(gPlayers);
+                List<String> reasons = Splitter.onPattern("\\s").splitToList(gReasons);
+                String pDisplay = Color.accent() + StringUtils.localizedJoin(players) + Color.primary();
+                String rDisplay = Color.accent() + StringUtils.localizedJoin(reasons) + Color.primary();
                 Message.info(Beezig.api().translate("msg.report.submit", pDisplay, rDisplay));
-                CompletableFuture.allOf(Stream.of(players).map(this::checkUsername).toArray(CompletableFuture[]::new))
+                CompletableFuture.allOf(players.stream().map(this::checkUsername).toArray(CompletableFuture[]::new))
                     .thenAcceptAsync(v -> Beezig.net().getHandler()
                         .sendPacket(PacketReport.newReport(new ReportOutgoing(ReportOutgoing.ReportType.PLAYER, players, reasons))))
                     .exceptionally(e -> {

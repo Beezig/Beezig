@@ -90,6 +90,7 @@ public class AntiSniper {
         }
     }
 
+    @SuppressWarnings("FutureReturnValueIgnored")
     public void onMatch(String key, IPatternResult match) {
         if("msg.broadcast".equals(key) && Settings.BROADCAST_ACTIONS.get().getBoolean()) {
             lastBroadcastSender = match.get(0);

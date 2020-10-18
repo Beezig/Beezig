@@ -19,7 +19,9 @@
 
 package eu.beezig.core.data;
 
+import com.google.common.collect.ImmutableList;
 import eu.beezig.core.Beezig;
+import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.modes.*;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.FileUtils;
@@ -29,12 +31,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 public class GameTitles {
-    public static final Class[] modes = new Class[] {BED.class, TIMV.class, SKY.class, HIDE.class, DR.class,
-        GRAV.class, BP.class, SP.class, DRAW.class};
+    public static final List<Class<? extends HiveMode>> modes = ImmutableList.of(BED.class, TIMV.class, SKY.class, HIDE.class, DR.class,
+        GRAV.class, BP.class, SP.class, DRAW.class);
     private File titlesFolder;
 
     GameTitles(File parent) {
@@ -53,7 +56,7 @@ public class GameTitles {
         Beezig.logger.info("Updating titles...");
         ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
         for(Class cls : modes) {
-            String id = (String) cls.getMethod("getIdentifier").invoke(cls.newInstance());
+            String id = (String) cls.getMethod("getIdentifier").invoke(cls.getConstructor().newInstance());
             File dest = new File(titlesFolder, id.toUpperCase(Locale.ROOT) + ".json");
             futures.add(Downloader.getJsonArray(new URL(String.format(DataUrls.TITLES_FORMAT, id.toUpperCase(Locale.ROOT))))
             .thenAcceptAsync(json -> {

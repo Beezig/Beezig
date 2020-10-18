@@ -31,8 +31,8 @@ import org.apache.commons.lang3.SystemUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
@@ -47,7 +47,7 @@ import java.util.regex.Pattern;
 public class BUpdateCommand implements Command {
 
     private static long confirmUntil = 0L;
-    private static AtomicBoolean updated = new AtomicBoolean(false);
+    private static final AtomicBoolean updated = new AtomicBoolean(false);
     private static String code = "";
 
     @Override
@@ -75,17 +75,17 @@ public class BUpdateCommand implements Command {
                             Message.error(Message.translate("update.error.expired"));
                             return true;
                         }
-                        Map<URL, Class<?>> updates = new HashMap<>(4);
+                        Map<URI, Class<?>> updates = new HashMap<>(4);
                         if (beezig.isLaby()) {
                             // Only update the BeezigLaby jar
-                            updates.put(new URL("https://go.beezig.eu/" + code + "laby-beta"), Class.forName("eu.beezig.laby.LabyMain"));
+                            updates.put(new URI("https://go.beezig.eu/" + code + "laby-beta"), Class.forName("eu.beezig.laby.LabyMain"));
                         } else {
                             if (BeezigForge.isSupported() && beezig.getBeezigForgeUpdateAvailable()) {
-                                updates.put(new URL("https://go.beezig.eu/beezigforge-beta"), Class.forName("eu.beezig.forge.BeezigForgeMod"));
+                                updates.put(new URI("https://go.beezig.eu/beezigforge-beta"), Class.forName("eu.beezig.forge.BeezigForgeMod"));
                             }
                             // Update Beezig even if no update is available
                             if (beezig.getUpdateAvailable() || updates.isEmpty()) {
-                                updates.put(new URL("https://go.beezig.eu/" + code + "5zig-beta"), Beezig.class);
+                                updates.put(new URI("https://go.beezig.eu/" + code + "5zig-beta"), Beezig.class);
                             }
                         }
                         final String userAgent = String.format("Beezig/7.0 (%s) Beezig/%s-%s",
@@ -98,7 +98,7 @@ public class BUpdateCommand implements Command {
                         }
                         updates.forEach((k, v) -> {
                             try {
-                                URLConnection connection = k.openConnection();
+                                URLConnection connection = k.toURL().openConnection();
                                 connection.setRequestProperty("User-Agent", userAgent);
                                 ReadableByteChannel byteChannel = Channels.newChannel(connection.getInputStream());
                                 URL jarLocation = v.getProtectionDomain().getCodeSource().getLocation();
@@ -142,7 +142,7 @@ public class BUpdateCommand implements Command {
                         });
                         updated.set(true);
                         Message.info(Message.translate("update.success"));
-                    } catch (MalformedURLException e) {
+                    } catch (URISyntaxException e) {
                         Message.error(Message.translate("update.invalid"));
                     } catch (ClassNotFoundException e) {
                         Message.info(Message.translate("update.error"));
@@ -157,6 +157,7 @@ public class BUpdateCommand implements Command {
                         confirmUntil = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2);
                         break;
                     }
+                    // fall through
                 default:
                     Message.error(Message.translate("update.syntax"));
                     break;

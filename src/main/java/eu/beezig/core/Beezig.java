@@ -71,6 +71,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -116,6 +117,7 @@ public class Beezig {
         }
     }
 
+    @SuppressWarnings("StaticAssignmentInConstructor")
     public Beezig() {
         this(false, null);
         try {
@@ -128,7 +130,7 @@ public class Beezig {
 
     public static void loadVersion() {
         JsonParser parser = new JsonParser();
-        get().version = new Version(parser.parse(new InputStreamReader(Beezig.class.getResourceAsStream("/beezig-version.json"))).getAsJsonObject());
+        get().version = new Version(parser.parse(new InputStreamReader(Beezig.class.getResourceAsStream("/beezig-version.json"), StandardCharsets.UTF_8)).getAsJsonObject());
     }
 
     public static String getVersionString() {
@@ -343,7 +345,7 @@ public class Beezig {
             (SystemUtils.IS_OS_MAC ? "Macintosh" : System.getProperty("os.name")),
             Constants.VERSION, Beezig.getVersionString()));
         JsonParser parser = new JsonParser();
-        JsonObject jsonObject = parser.parse(new InputStreamReader(connection.getInputStream())).getAsJsonObject();
+        JsonObject jsonObject = parser.parse(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8)).getAsJsonObject();
         setRemoteVersion(new Version(jsonObject.get("beezig").getAsJsonObject()));
         setRemoteBeezigForgeVersion(new Version(jsonObject.get("beezig-forge").getAsJsonObject()));
         setRemoteLabyVersion(new Version(jsonObject.get("beezig-laby").getAsJsonObject()));

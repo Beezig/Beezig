@@ -23,6 +23,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.net.profile.role.DefaultUserRoles;
 import eu.beezig.core.net.profile.role.RoleContainer;
 import eu.beezig.core.net.profile.role.RoleService;
+import eu.beezig.core.util.ExceptionHandler;
 
 import java.util.Date;
 
@@ -36,7 +37,10 @@ public class OwnProfile {
     public OwnProfile(int id, byte role, long firstLogin, String regionId, String regionName) {
         this.id = id;
         this.role = defaultRole;
-        RoleService.getRole(role, Beezig.user().getId()).thenAcceptAsync(r -> this.role = r);
+        RoleService.getRole(role, Beezig.user().getId()).thenAcceptAsync(r -> this.role = r).exceptionally(e -> {
+            ExceptionHandler.catchException(e, "Profile load");
+            return null;
+        });
         this.firstLogin = new Date(firstLogin);
         if(regionId != null) {
             this.region = new Region(regionId, regionName);

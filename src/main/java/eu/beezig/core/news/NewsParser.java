@@ -15,13 +15,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class NewsParser {
-    public static final SimpleDateFormat RSS_DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
-    public static final SimpleDateFormat ISO_8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.US);
+    public static final ThreadLocal<SimpleDateFormat> RSS_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US));
+    public static final ThreadLocal<SimpleDateFormat> ISO_8601 = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.US));
     public static final Pattern VERSION_EXCLUSIVITY_REGEX = Pattern.compile("([><]=?)?(.+)");
     public static final ComparableVersion VERSION = new ComparableVersion(Constants.VERSION);
     private final XMLInputFactory xmlFactory;
@@ -71,7 +72,7 @@ public class NewsParser {
         } else if(type.getType() == NewsType.FileType.JSON) {
             RssItemIterator.ItemTransformer transformer = type.getParser();
             JSONParser parser = new JSONParser();
-            try(InputStreamReader reader = new InputStreamReader(in)) {
+            try(InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
                 JSONArray array = (JSONArray) parser.parse(reader);
                 for(Object o : array) {
                     JSONObject json = (JSONObject) o;

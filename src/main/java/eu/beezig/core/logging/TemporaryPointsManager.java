@@ -98,7 +98,7 @@ public class TemporaryPointsManager {
         Beezig.logger.info("Migrating daily points...");
         List<CompletableFuture<Void>> futures = new ArrayList<>();
         for(Class modeClass : GameTitles.modes) {
-            HiveMode inst = (HiveMode) modeClass.newInstance();
+            HiveMode inst = (HiveMode) modeClass.getConstructor().newInstance();
             futures.add(migrateLogsForMode(inst));
         }
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();

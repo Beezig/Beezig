@@ -45,7 +45,7 @@ public class ModuleSession extends GameModeItem<HiveMode> {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render() && getGameMode() != null && getGameMode().getSessionService() != null;
+        return dummy || (Modules.render() && getGameMode() != null && getGameMode().getSessionService() != null);
     }
 
     @Override

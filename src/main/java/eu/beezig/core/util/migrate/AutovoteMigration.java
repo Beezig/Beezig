@@ -1,5 +1,6 @@
 package eu.beezig.core.util.migrate;
 
+import com.google.common.base.Splitter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.StringUtils;
@@ -10,7 +11,10 @@ import org.json.simple.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -19,6 +23,7 @@ public class AutovoteMigration {
     private final Pattern YAML_REGEX = Pattern.compile("(\\w+): \\[(.+)]", Pattern.MULTILINE);
 
     private Map<String, List<String>> getAutovoteMaps() throws IOException {
+        Splitter comma = Splitter.on(", ");
         File file = new File(Beezig.get().getBeezigDir(), "autovote.yml");
         if(!file.exists()) return null;
         String contents = FileUtils.readFileToString(file, Charset.defaultCharset());
@@ -27,7 +32,7 @@ public class AutovoteMigration {
         while(matcher.find()) {
             String key = matcher.group(1).toLowerCase(Locale.ROOT);
             String text = matcher.group(2);
-            List<String> maps = Arrays.stream(text.split(", ")).map(s ->
+            List<String> maps = comma.splitToList(text).stream().map(s ->
                 StringUtils.normalizeMapName(s.replace("{c}", ":").replaceAll("['\"]", ""))).collect(Collectors.toList());
             matches.put(key, maps);
         }

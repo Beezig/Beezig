@@ -18,6 +18,7 @@
  */
 package eu.beezig.core.command;
 
+import com.google.common.base.Splitter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.commands.*;
 import eu.beezig.core.command.commands.record.DrPbCommand;
@@ -33,10 +34,13 @@ import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class CommandManager {
-
+    private static final Splitter SPACE = Splitter.on(' ');
     public static Set<Command> commandExecutors = new HashSet<>();
     private static long lastTeleportCommand = 0L;
 
@@ -70,7 +74,7 @@ public class CommandManager {
     }
 
     /**
-     * @return Timestamp of the last teleport command (e.g. /ng)
+     * Timestamp of the last teleport command (e.g. /ng)
      */
     public static long lastTeleportCommand () {
         return lastTeleportCommand;
@@ -105,8 +109,8 @@ public class CommandManager {
      */
     // Public access is required for BeezigLaby.
     public static boolean dispatchCommand(String str) {
-        String[] data = str.split(" ");
-        String alias = data[0];
+        List<String> data = new ArrayList<>(SPACE.splitToList(str));
+        String alias = data.get(0);
         Command cmdFound = null;
         for (Command cmd : commandExecutors) {
             for (String s : cmd.getAliases()) {
@@ -117,12 +121,9 @@ public class CommandManager {
             }
         }
         if (cmdFound == null) return false;
-
-        List<String> dataList = new ArrayList<>(Arrays.asList(data));
-        dataList.remove(0); // Remove alias
-
+        data.remove(0); // Remove alias
         try {
-            if (!cmdFound.execute(dataList.toArray(new String[0]))) {
+            if (!cmdFound.execute(data.toArray(new String[0]))) {
                 return false; // Skip the command
             }
         } catch (Exception e) {

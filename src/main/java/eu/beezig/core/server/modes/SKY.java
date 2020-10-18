@@ -27,6 +27,7 @@ import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyField;
 import eu.beezig.core.server.monthly.MonthlyService;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
@@ -61,7 +62,12 @@ public class SKY extends HiveMode implements IAutovote, IMonthly {
             stats.setDeaths(lines.get("Deaths"));
             stats.setVictories(lines.get("Victories"));
             Profiles.sky(UUIDUtils.strip(Beezig.user().getId()))
-                    .thenAccept(api -> stats.setTitle(getTitleService().getTitle(api.getTitle())));
+                    .thenAcceptAsync(api -> stats.setTitle(getTitleService().getTitle(api.getTitle())))
+                .exceptionally(e -> {
+                    ExceptionHandler.catchException(e);
+                    Message.error(Message.translate("error.stats_fetch"));
+                    return null;
+                });
             return stats;
         });
         getAdvancedRecords().setExecutor(this::recordsExecutor);

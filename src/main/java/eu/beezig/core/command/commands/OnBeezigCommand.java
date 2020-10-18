@@ -38,6 +38,7 @@ public class OnBeezigCommand implements Command {
     }
 
     @Override
+    @SuppressWarnings("FutureReturnValueIgnored")
     public boolean execute(String[] args) {
         if (args.length == 0) {
             Beezig.net().getHandler().sendPacket(new PacketServerStats());

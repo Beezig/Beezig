@@ -51,7 +51,7 @@ public class ModuleDaily extends GameModeItem<HiveMode> {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render() && getGameMode() != null && getGameMode().getDailyService() != null;
+        return dummy || (Modules.render() && getGameMode() != null && getGameMode().getDailyService() != null);
     }
 
     @Override

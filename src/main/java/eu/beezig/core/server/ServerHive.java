@@ -38,6 +38,7 @@ import eu.the5zig.mod.server.*;
 
 import java.io.File;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -149,8 +150,8 @@ public class ServerHive extends ServerInstance {
         WorldTask.submit(() -> CommandManager.dispatchCommand("/beezig"));
         Beezig.get().newExceptionHandler();
         JsonParser parser = new JsonParser();
-        Version localBeezigForgeVersion = BeezigForge.isSupported() ? new Version(parser.parse(new InputStreamReader(this.getClass().getResourceAsStream("/beezig-forge-version.json"))).getAsJsonObject()) : null;
-        Version localBeezigLabyVersion = Beezig.get().isLaby() ? new Version(parser.parse(new InputStreamReader(this.getClass().getResourceAsStream("/beezig-laby-version.json"))).getAsJsonObject()) : null;
+        Version localBeezigForgeVersion = BeezigForge.isSupported() ? new Version(parser.parse(new InputStreamReader(this.getClass().getResourceAsStream("/beezig-forge-version.json"), StandardCharsets.UTF_8)).getAsJsonObject()) : null;
+        Version localBeezigLabyVersion = Beezig.get().isLaby() ? new Version(parser.parse(new InputStreamReader(this.getClass().getResourceAsStream("/beezig-laby-version.json"), StandardCharsets.UTF_8)).getAsJsonObject()) : null;
         if(localBeezigForgeVersion != null) Beezig.get().setBeezigForgeVersion(localBeezigForgeVersion);
         if(localBeezigLabyVersion != null) Beezig.get().setBeezigLabyVersion(localBeezigLabyVersion);
         Beezig.get().newExceptionHandler();
@@ -267,6 +268,7 @@ public class ServerHive extends ServerInstance {
         }
 
         @Override
+        @SuppressWarnings("FutureReturnValueIgnored")
         public void onMatch(GameMode gameMode, String key, IPatternResult match) {
             if(key == null) return;
             Beezig.logger.debug(String.format("[ServerHive] Matched key %s, %d groups", key, match.size()));

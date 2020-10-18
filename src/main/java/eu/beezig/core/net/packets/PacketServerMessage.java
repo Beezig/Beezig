@@ -15,7 +15,7 @@ public class PacketServerMessage implements Packet {
 
     @Override
     public void read(PacketBuffer buffer) {
-        type = Type.values()[(int)buffer.readByte()];
+        type = Type.values()[buffer.readByte()];
         key = buffer.readString(buffer.readInt());
         if(type != Type.ANNOUNCEMENT) {
             format = new String[buffer.readInt()];
@@ -34,7 +34,7 @@ public class PacketServerMessage implements Packet {
             WorldTask.submit(this::sendAnnouncement);
             return;
         }
-        String message = Beezig.api().translate(key, format);
+        String message = Beezig.api().translate(key, (Object[]) format);
         WorldTask.submit(() -> {
             if (type == Type.INFO) Message.info(message);
             else Message.error(message);

@@ -27,12 +27,12 @@ import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.IPatternResult;
 import org.lwjgl.opengl.Display;
 
+import java.util.ArrayDeque;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Queue;
 
 public class NotificationManager {
-    private List<IncomingMessage> ignoredMessages = new LinkedList<>();
+    private Queue<IncomingMessage> ignoredMessages = new ArrayDeque<>();
     private boolean doNotDisturb;
     private SystemTrayManager tray;
     private IncomingMessagesGui guiHandle;
@@ -96,7 +96,7 @@ public class NotificationManager {
         Message.info(Beezig.api().translate("msg.notify.list",
                 Color.accent() + Message.formatNumber(ignoredMessages.size()) + Color.primary()));
         while(!ignoredMessages.isEmpty()) {
-            IncomingMessage msg = ignoredMessages.remove(0);
+            IncomingMessage msg = ignoredMessages.poll();
             Beezig.api().messagePlayer(Color.primary() + " - " + Beezig.api().translate(msg.getType() == MessageType.PRIVATE
                             ? "msg.notify.private" : "msg.notify.broadcast",
                     Color.accent() + msg.getSender() + Color.primary(),
@@ -106,7 +106,7 @@ public class NotificationManager {
 
     public void setDoNotDisturb(boolean doNotDisturb) {
         if(doNotDisturb) onDndEnable();
-        else onDndEnable();
+        else onDndDisable();
         this.doNotDisturb = doNotDisturb;
     }
 

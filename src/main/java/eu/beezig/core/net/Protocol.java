@@ -63,6 +63,6 @@ public class Protocol {
         if (!packets.containsKey(id)) {
             throw new RuntimeException("Could not get unregistered packet (" + id + ")!");
         }
-        return packets.get(id).newInstance();
+        return packets.get(id).getConstructor().newInstance();
     }
 }

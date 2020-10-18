@@ -49,7 +49,6 @@ public class GRAV extends HiveMode implements IMonthly {
     // Keeps track of the other players' stage completions, to assign points based on the place
     private Map<Integer, Integer> stageCompletions = new HashMap<>();
     private int currentStage;
-    private boolean afterFirst; // Whether currentStage is initialized, set either on map selection or on first map
     private AtomicLong lastConfirmed = new AtomicLong(0L);
     private String[] finalMaps = new String[5];
     private String nextMap;
@@ -78,7 +77,12 @@ public class GRAV extends HiveMode implements IMonthly {
             stats.setPlayed(lines.get("Games Played"));
             stats.setVictories(lines.get("Victories"));
             Profiles.grav(UUIDUtils.strip(Beezig.user().getId()))
-                    .thenAccept(api -> stats.setTitle(getTitleService().getTitle(api.getTitle())));
+                    .thenAcceptAsync(api -> stats.setTitle(getTitleService().getTitle(api.getTitle())))
+                .exceptionally(e -> {
+                    ExceptionHandler.catchException(e);
+                    Message.error(Message.translate("error.stats_fetch"));
+                    return null;
+                });
             return stats;
         });
         getAdvancedRecords().setExecutor(this::recordsExecutor);
@@ -220,7 +224,7 @@ public class GRAV extends HiveMode implements IMonthly {
     }
 
     /**
-     * @return whether Beezig should ask for confirmation
+     * Whether Beezig should ask for confirmation
      */
     public boolean confirmDisconnect() {
         long now = System.currentTimeMillis();

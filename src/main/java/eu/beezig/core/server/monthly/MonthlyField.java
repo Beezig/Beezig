@@ -25,6 +25,7 @@ import eu.beezig.hiveapi.wrapper.monthly.PvPMonthlyProfile;
 
 import java.util.function.Function;
 
+@SuppressWarnings("ImmutableEnumChecker")
 public enum MonthlyField {
     POINTS("modules.item.hive_points", MonthlyProfile::getPoints),
     KILLS("modules.item.hive_kills", p -> ((PvPMonthlyProfile)p).getKills()),
