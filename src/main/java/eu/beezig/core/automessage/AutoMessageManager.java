@@ -45,13 +45,12 @@ public abstract class AutoMessageManager {
     private final Setting delay;
     private final DataPath triggersPath;
     private final Map<String, Trigger> triggers;
-    private static List<String> messageQueue;
+    private static List<String> messageQueue = new ArrayList<>();
     private final AtomicBoolean skipThis;
     private static final AtomicBoolean skipAll = new AtomicBoolean();
 
     protected AutoMessageManager(boolean disablePartyChat) {
         triggers = new HashMap<>();
-        messageQueue = new ArrayList<>();
         enabled = getEnabledSetting();
         delay = getDelaySetting();
         triggersPath = getTriggersPath();
