@@ -35,6 +35,7 @@ import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.GravStats;
 import eu.the5zig.mod.server.GameState;
+import eu.the5zig.util.minecraft.ChatColor;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -131,7 +132,7 @@ public class GRAV extends HiveMode implements IMonthly {
     }
 
     private void updateRecords() {
-        String map = finalMaps[currentStage].toUpperCase(Locale.ROOT).replace(" ", "_");
+        String map = ChatColor.stripColor(finalMaps[currentStage]).toUpperCase(Locale.ROOT).replace(" ", "_");
         if(mapWrs != null) currentMapWr = mapWrs.get(map);
         if(mapPbs == null) return;
         Long pb = mapPbs.get(map);
@@ -140,7 +141,7 @@ public class GRAV extends HiveMode implements IMonthly {
 
     public void stageDone() {
         if(currentStage < 5) {
-            setMap(finalMaps[currentStage]);
+            setMap(ChatColor.stripColor(finalMaps[currentStage]));
             if (currentStage < 4) {
                 nextMap = finalMaps[currentStage + 1];
                 if (Settings.GRAV_NEXT_MAP.get().getBoolean())
@@ -251,7 +252,7 @@ public class GRAV extends HiveMode implements IMonthly {
     }
 
     public String getMap(int i) {
-        return i > 0 && i < 5 ? finalMaps[i] : "";
+        return i > 0 && i < 5 ? ChatColor.stripColor(finalMaps[i]) : "";
     }
 
     public String getNextMap() {
