@@ -8,4 +8,5 @@ public class ForgeNewsEntry {
     public Date pubDate;
     public String content, link;
     public Map<String, Object> extra;
+    public boolean persistent;
 }

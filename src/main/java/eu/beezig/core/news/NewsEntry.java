@@ -17,6 +17,7 @@
 
 package eu.beezig.core.news;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class NewsEntry implements Comparable<NewsEntry> {
     private Date pubDate;
     private String content, link;
     private Map<String, Object> extra;
+    private boolean persistent, isVersionAllowed = true;
 
     public ForgeNewsEntry toForge() {
         ForgeNewsEntry forge = new ForgeNewsEntry();
@@ -35,7 +37,16 @@ public class NewsEntry implements Comparable<NewsEntry> {
         forge.content = content;
         forge.link = link;
         forge.extra = extra;
+        forge.persistent = persistent;
         return forge;
+    }
+
+    public boolean isVersionAllowed() {
+        return isVersionAllowed;
+    }
+
+    public void setVersionAllowed(boolean versionAllowed) {
+        isVersionAllowed = versionAllowed;
     }
 
     public Map<String, Object> getExtra() {
@@ -61,6 +72,14 @@ public class NewsEntry implements Comparable<NewsEntry> {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setPersistent(boolean persistent) {
+        this.persistent = persistent;
+    }
+
+    public boolean isPersistent() {
+        return persistent;
     }
 
     public Date getPubDate() {
@@ -94,6 +113,18 @@ public class NewsEntry implements Comparable<NewsEntry> {
     @Override
     public int compareTo(NewsEntry newsEntry) {
         if(newsEntry == null) return 1;
+        if(persistent && newsEntry.persistent) return pubDate.compareTo(newsEntry.pubDate);
+        if(persistent) return 1;
+        if(newsEntry.persistent) return -1;
         return pubDate.compareTo(newsEntry.pubDate);
+    }
+
+    public static Comparator<ForgeNewsEntry> compareForge() {
+        return (o1, o2) -> {
+            if(o1.persistent && o2.persistent) return o1.pubDate.compareTo(o2.pubDate);
+            if(o1.persistent) return 1;
+            if(o2.persistent) return -1;
+            return o1.pubDate.compareTo(o2.pubDate);
+        };
     }
 }

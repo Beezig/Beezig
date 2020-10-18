@@ -112,7 +112,7 @@ public class NewsManager {
             TreeSet<NewsEntry> entries = new TreeSet<>(e.getValue());
             for(Iterator<NewsEntry> iter = entries.descendingIterator(); iter.hasNext();) {
                 NewsEntry entry = iter.next();
-                if(entry.getPubDate().compareTo(compareTo) < 0) {
+                if(!entry.isPersistent() && entry.getPubDate().compareTo(compareTo) < 0) {
                     iter.remove();
                     entries.headSet(entry).clear();
                     break;

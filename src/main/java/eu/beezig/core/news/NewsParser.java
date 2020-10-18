@@ -1,5 +1,6 @@
 package eu.beezig.core.news;
 
+import eu.beezig.core.Constants;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import org.json.simple.JSONArray;
@@ -16,10 +17,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class NewsParser {
     public static final SimpleDateFormat RSS_DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
     public static final SimpleDateFormat ISO_8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.US);
+    public static final Pattern VERSION_EXCLUSIVITY_REGEX = Pattern.compile("([><]=?)?(.+)");
+    public static final ComparableVersion VERSION = new ComparableVersion(Constants.VERSION);
     private final XMLInputFactory xmlFactory;
     private final Map<NewsType, Set<NewsEntry>> entries = new EnumMap<>(NewsType.class);
 
@@ -56,11 +60,13 @@ public class NewsParser {
         if(type.getType() == NewsType.FileType.RSS) {
             for (RssItemIterator iter = new RssItemIterator(xmlFactory, in, type.getParser()); iter.hasNext(); ) {
                 NewsEntry item = iter.next();
-                if (item != null) this.entries.compute(type, ($, v) -> {
-                    if (v == null) v = new TreeSet<>();
-                    v.add(item);
-                    return v;
-                });
+                if (item != null && item.isVersionAllowed()) {
+                    this.entries.compute(type, ($, v) -> {
+                        if (v == null) v = new TreeSet<>();
+                        v.add(item);
+                        return v;
+                    });
+                }
             }
         } else if(type.getType() == NewsType.FileType.JSON) {
             RssItemIterator.ItemTransformer transformer = type.getParser();
@@ -74,11 +80,13 @@ public class NewsParser {
                         Map.Entry<String, Object> item = (Map.Entry<String, Object>) o1;
                         if(transformer != null) transformer.transformItem(entry, item.getKey(), item.getValue().toString());
                     }
-                    this.entries.compute(type, ($, v) -> {
-                        if (v == null) v = new TreeSet<>();
-                        v.add(entry);
-                        return v;
-                    });
+                    if(entry.isVersionAllowed()) {
+                        this.entries.compute(type, ($, v) -> {
+                            if (v == null) v = new TreeSet<>();
+                            v.add(entry);
+                            return v;
+                        });
+                    }
                 }
             } catch (IOException | ParseException e) {
                 ExceptionHandler.catchException(e, "JSON parse");

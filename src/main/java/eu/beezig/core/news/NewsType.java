@@ -4,10 +4,12 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
 
 public enum NewsType {
     BEEZIG(NewsUrls.BEEZIG_NEWS, FileType.RSS, (item, k, v) -> {
@@ -17,7 +19,38 @@ public enum NewsType {
             } catch (ParseException e) {
                 ExceptionHandler.catchException(e);
             }
-        } else if("id".equals(k)) item.setLink(v);
+        }
+        else if("id".equals(k)) item.setLink(v);
+        else if("persistent".equals(k)) item.setPersistent(Boolean.parseBoolean(v));
+        else if("versions".equals(k)) {
+            Matcher matcher = NewsParser.VERSION_EXCLUSIVITY_REGEX.matcher(StringEscapeUtils.unescapeXml(v));
+            if(matcher.matches()) {
+                String mode = matcher.group(1);
+                ComparableVersion version = new ComparableVersion(matcher.group(2));
+                int comparison = NewsParser.VERSION.compareTo(version);
+                boolean allowed = false;
+                if(mode == null) allowed = comparison == 0;
+                else switch (mode) {
+                    case ">":
+                        allowed = comparison > 0;
+                        break;
+                    case ">=":
+                        allowed = comparison >= 0;
+                        break;
+                    case "<":
+                        allowed = comparison < 0;
+                        break;
+                    case "<=":
+                        allowed = comparison <= 0;
+                        break;
+                    case "":
+                    case "=":
+                        allowed = comparison == 0;
+                        break;
+                }
+                item.setVersionAllowed(allowed);
+            }
+        }
     }),
     STATUS(NewsUrls.BEEZIG_STATUS, FileType.RSS, (item, k, v) -> {
         if("published".equals(k)) {

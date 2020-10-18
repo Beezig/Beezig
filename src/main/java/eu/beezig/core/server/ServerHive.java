@@ -19,10 +19,8 @@
 
 package eu.beezig.core.server;
 
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import eu.beezig.core.Beezig;
-import eu.beezig.core.Constants;
 import eu.beezig.core.Version;
 import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.automessage.AutoMessageManager;
@@ -37,12 +35,9 @@ import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.HivePlayer;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.the5zig.mod.server.*;
-import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
 import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -228,7 +223,7 @@ public class ServerHive extends ServerInstance {
                 }
             });
         }
-        if(Beezig.DEBUG && Settings.NEWS.get().getBoolean()) { // Disabled until fully working
+        if(Settings.NEWS.get().getBoolean()) {
             Beezig.get().getAsyncExecutor().execute(() -> {
                 NewsManager newsManager = new NewsManager();
                 Beezig.get().setNewsManager(newsManager);

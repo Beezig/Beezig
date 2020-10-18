@@ -98,14 +98,14 @@ public class BeezigServiceLoader {
             } catch (IllegalArgumentException noEnum) {
                 return ImmutableSet.of();
             }
-            Set<ForgeNewsEntry> result = new TreeSet<>(Comparator.<ForgeNewsEntry>comparingLong(e -> e.pubDate.getTime()).reversed());
+            Set<ForgeNewsEntry> result = new TreeSet<>(NewsEntry.compareForge().reversed());
             result.addAll(Beezig.get().getNewsManager().getLoadedNews().
                 getOrDefault(type, ImmutableSet.of()).stream().map(NewsEntry::toForge).collect(Collectors.toList()));
             return result;
         });
         mainService.registerGetForumsNews(() -> {
             if(Beezig.get().getNewsManager() == null) return new HashSet<>();
-            Set<ForgeNewsEntry> result = new TreeSet<>(Comparator.<ForgeNewsEntry>comparingLong(e -> e.pubDate.getTime()).reversed());
+            Set<ForgeNewsEntry> result = new TreeSet<>(NewsEntry.compareForge().reversed());
             result.addAll(Beezig.get().getNewsManager().downloadForums().stream().limit(10).map(NewsEntry::toForge).collect(Collectors.toList()));
             return result;
         });
