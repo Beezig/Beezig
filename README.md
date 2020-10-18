@@ -1,29 +1,21 @@
 
-![Title](http://i.imgur.com/3rXuQls.png)
+![Title](https://i.imgur.com/0DLVz1c.png)
 
-# Beezig v6.0 - A Hive 5zig Plugin
+# Beezig v7.0 - A Hive 5zig Plugin
 
 [![Discord](https://discordapp.com/api/guilds/346695724253184014/embed.png?style=banner2)](http://discord.gg/se7zJsU)  
+[![Travis Master](https://travis-ci.org/Beezig/Beezig.svg?branch=master)](http://travis-ci.org/Beezig/Beezig)
 ![Github All Releases](https://img.shields.io/github/downloads/Beezig/Beezig/total.svg)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Beezig/Beezig.svg)
-![Unique users](https://l.beezig.eu/badgeunique)
 ![LOC](https://badgen.net/codeclimate/loc/Beezig/Beezig)
+[![Crowdin](https://badges.crowdin.net/beezig/localized.svg)](https://crowdin.com/project/beezig)
 
-A 5zig plugin to add functionality for The Hive.
-By RoccoDev and ItsNiklass.
+A 5zig plugin to add functionality for The Hive.  
+By RoccoDev, ItsNiklass and archer_321.
 
 A LabyMod version is available [here](https://github.com/Beezig/BeezigLaby).
 
 ![supported](https://i.imgur.com/eTUPy2g.png)
-
-
-### Build Status
-
-[![Travis Master](https://travis-ci.org/Beezig/Beezig.svg?branch=master)](http://travis-ci.org/Beezig/Beezig) (Master)
-
-[![Travis Exp](https://travis-ci.org/Beezig/Beezig.svg?branch=experimental)](http://travis-ci.org/Beezig/Beezig) (Experimental)
-
-[![Travis Frg](https://travis-ci.org/Beezig/BeezigForge.svg?branch=master)](http://travis-ci.org/Beezig/BeezigForge) (Forge Expansion)
 
 # Features
 
@@ -31,30 +23,22 @@ A LabyMod version is available [here](https://github.com/Beezig/BeezigLaby).
 * Advanced /records for more data out of the command!
 	Coloring the username in their network-rank color! (Optional: Full title)
 	Colored ingame-rank in brackets after the points!
-* /settings for toggling almost everything of the plugin on/off!
-* A LOT MORE
+* Autovoting
+  
+...and more!
 
 More features can be found in the [Forge Expansion](https://github.com/Beezig/BeezigForge).
 
 ## Download
-
-# GET THE INSTALLER HERE: https://l.beezig.eu/installer
-
 * You can download normal stable releases in the Releases tab.
-
-If you want beta features, you can choose one of these downloads:
-
-* Master branch (unreleased changes, stable): [Click here](https://github.com/RoccoDev/Beezig-Deploy/raw/master/master/jar/Beezig.jar)
-* Experimental branch (unreleased changes, bleeding edge): [Click here](https://github.com/RoccoDev/Beezig-Deploy/raw/experimental/experimental/jar/Beezig.jar)
-
+* For LabyMod files, head over to [BeezigLaby](https://gitlab.com/Beezig/BeezigLaby).
 ## APIs
 This plugin uses:
 * [5zig's API](https://github.com/5zig/The-5zig-API)
 * The Hive's API (a Java wrapper is available [here](https://github.com/Beezig/hive-api-wrapper))
 * Speedrun.com's API
 * [Lergin](https://github.com/Lergin)'s Staff and Map data API
-* [Maxthat](https://github.com/Maxthat)'s Monthlies API
-* [RoccoDev](https://github.com/RoccoDev)'s Bedwars Toolkit API
+* [RoccoDev](https://github.com/RoccoDev)'s Monthlies and Bedwars Toolkit APIs
 
 ## [Image Album](https://imgur.com/a/LIxhh)
 
