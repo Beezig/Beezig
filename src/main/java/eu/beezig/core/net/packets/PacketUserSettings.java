@@ -1,5 +1,6 @@
 package eu.beezig.core.net.packets;
 
+import eu.beezig.core.Beezig;
 import eu.beezig.core.net.Packet;
 import eu.beezig.core.net.handler.Connection;
 import eu.beezig.core.net.profile.role.UserRole;
@@ -46,7 +47,10 @@ public class PacketUserSettings implements Packet {
     @Override
     public void handle(Connection handler) {
         if(action == Action.UPDATE_DISPLAY_ROLE) WorldTask.submit(() -> Message.info(Message.translate("msg.config.save")));
-        else if(action == Action.OPT_DAILY) WorldTask.submit(() -> Message.info(Message.translate("msg.daily.opt." + (optDaily ? "in" : "out"))));
+        else if(action == Action.OPT_DAILY) {
+            if(Beezig.net().getProfile() != null) Beezig.net().getProfile().setHasDailyScores(optDaily);
+            WorldTask.submit(() -> Message.info(Message.translate("msg.daily.opt." + (optDaily ? "in" : "out"))));
+        }
     }
 
     private enum Action {

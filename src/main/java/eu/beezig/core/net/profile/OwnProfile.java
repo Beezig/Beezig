@@ -33,6 +33,7 @@ public class OwnProfile {
     private RoleContainer role;
     private Date firstLogin;
     private Region region;
+    private boolean dailyScores;
 
     public OwnProfile(int id, byte role, long firstLogin, String regionId, String regionName) {
         this.id = id;
@@ -61,5 +62,16 @@ public class OwnProfile {
 
     public Region getRegion() {
         return region;
+    }
+
+    public void setHasDailyScores(boolean dailyScores) {
+        this.dailyScores = dailyScores;
+    }
+
+    /**
+     * Returns whether the user's daily scores are available online
+     */
+    public boolean hasDailyScores() {
+        return dailyScores;
     }
 }

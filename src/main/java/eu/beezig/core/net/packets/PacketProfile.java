@@ -17,6 +17,7 @@ public class PacketProfile implements Packet {
     private long firstLogin;
     private String regionId;
     private String regionName;
+    private boolean dailyScores;
 
     // Out
     private String timezone;
@@ -37,6 +38,7 @@ public class PacketProfile implements Packet {
             regionId = buffer.readString();
             regionName = buffer.readString();
         }
+        dailyScores = buffer.readBoolean();
     }
 
     @Override
@@ -49,6 +51,8 @@ public class PacketProfile implements Packet {
 
     @Override
     public void handle(Connection handler) {
-        Beezig.net().setProfile(new OwnProfile(id, role, firstLogin, regionId, regionName));
+        OwnProfile profile = new OwnProfile(id, role, firstLogin, regionId, regionName);
+        profile.setHasDailyScores(dailyScores);
+        Beezig.net().setProfile(profile);
     }
 }

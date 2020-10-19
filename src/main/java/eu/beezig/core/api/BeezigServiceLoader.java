@@ -117,6 +117,12 @@ public class BeezigServiceLoader {
             if(profile.getRegion() == null) return null;
             return profile.getRegion().getId();
         });
+        mainService.registerHasDailyScores(() -> {
+            if(Beezig.net() == null) return false;
+            OwnProfile profile = Beezig.net().getProfile();
+            if(profile == null) return false;
+            return profile.hasDailyScores();
+        });
         mainService.registerSetAutovoteMaps(pair -> new AutovoteConfig().setMaps(pair.getKey(), pair.getValue()));
         mainService.registerSaveConfig(() -> {
             try {
