@@ -19,6 +19,8 @@
 
 package eu.beezig.core.automessage;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.config.Setting;
@@ -33,9 +35,8 @@ import eu.the5zig.mod.event.TitleEvent;
 import eu.the5zig.util.minecraft.ChatColor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -44,13 +45,13 @@ public abstract class AutoMessageManager {
     private final boolean disablePartyChat;
     private final Setting delay;
     private final DataPath triggersPath;
-    private final Map<String, Trigger> triggers;
+    private final Multimap<String, Trigger> triggers;
     private static List<String> messageQueue = new ArrayList<>();
     private final AtomicBoolean skipThis;
     private static final AtomicBoolean skipAll = new AtomicBoolean();
 
     protected AutoMessageManager(boolean disablePartyChat) {
-        triggers = new HashMap<>();
+        triggers = ArrayListMultimap.create();
         enabled = getEnabledSetting();
         delay = getDelaySetting();
         triggersPath = getTriggersPath();
@@ -68,31 +69,33 @@ public abstract class AutoMessageManager {
         HiveMode game = ActiveGame.get();
         if (game == null || !enabled.getBoolean() || !shouldFire())
             return;
-        Trigger trigger = triggers.get(game.getIdentifier());
-        if (trigger != null && trigger.doesTrigger(ChatColor.stripColor(message), type) && !game.isAutoMessageSent(this.getClass())) {
-            game.setAutoMessageSent(this.getClass(), true);
-            if (!(skipThis.getAndSet(false) || skipAll.getAndSet(false)))
-                Beezig.get().getAsyncExecutor().execute(() -> {
-                    try {
-                        if (((ServerHive) Beezig.api().getActiveServer()).getInPartyChat() && disablePartyChat) {
-                            Beezig.get().getAsyncExecutor().schedule(() -> {
-                                if (ActiveGame.get() == mode &&
-                                    System.currentTimeMillis() - CommandManager.lastTeleportCommand() > 2000) {
-                                    Beezig.api().sendPlayerMessage("/p");
-                                    messageQueue.add(getMessage());
-                                }
-                            }, delay.getLong(), TimeUnit.MILLISECONDS);
-                        } else {
-                            Beezig.get().getAsyncExecutor().schedule(() -> {
+        Collection<Trigger> triggers = this.triggers.get(game.getIdentifier());
+        for (Trigger trigger : triggers) {
+            if (trigger != null && trigger.doesTrigger(ChatColor.stripColor(message), type) && !game.isAutoMessageSent(this.getClass())) {
+                game.setAutoMessageSent(this.getClass(), true);
+                if (!(skipThis.getAndSet(false) || skipAll.getAndSet(false)))
+                    Beezig.get().getAsyncExecutor().execute(() -> {
+                        try {
+                            if (((ServerHive) Beezig.api().getActiveServer()).getInPartyChat() && disablePartyChat) {
+                                Beezig.get().getAsyncExecutor().schedule(() -> {
+                                    if (ActiveGame.get() == mode &&
+                                        System.currentTimeMillis() - CommandManager.lastTeleportCommand() > 2000) {
+                                        Beezig.api().sendPlayerMessage("/p");
+                                        messageQueue.add(getMessage());
+                                    }
+                                }, delay.getLong(), TimeUnit.MILLISECONDS);
+                            } else {
+                                Beezig.get().getAsyncExecutor().schedule(() -> {
                                     if (ActiveGame.get() == mode &&
                                         System.currentTimeMillis() - CommandManager.lastTeleportCommand() > 2000)
                                         Beezig.api().sendPlayerMessage(getMessage());
                                 }, delay.getLong(), TimeUnit.MILLISECONDS);
+                            }
+                        } catch (Exception e) {
+                            ExceptionHandler.catchException(e);
                         }
-                    } catch (Exception e) {
-                        ExceptionHandler.catchException(e);
-                    }
-                });
+                    });
+            }
         }
     }
 
