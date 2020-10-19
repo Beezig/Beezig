@@ -43,6 +43,7 @@ import eu.beezig.core.notification.NotificationManager;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.migrate.AutovoteMigration;
+import eu.beezig.core.util.migrate.CommandMigration;
 import eu.beezig.core.util.migrate.DirectoryMigration;
 import eu.beezig.core.util.migrate.SettingsMigration;
 import eu.beezig.core.util.modules.The5zigModules;
@@ -160,6 +161,7 @@ public class Beezig {
         worldTaskManager = new WorldTaskManager();
         api.getPluginManager().registerListener(this, worldTaskManager);
         api.getPluginManager().registerListener(this, new PartyMembers());
+        api.getPluginManager().registerListener(this, new CommandMigration());
         HiveWrapper.setAsyncExecutor(asyncExecutor);
         HiveWrapper.setUserAgent(Message.getUserAgent());
 

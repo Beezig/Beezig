@@ -144,10 +144,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
             }
         }
         DrWorldRecords.getRecord(currentMapData).thenAcceptAsync(record -> wr = record)
-            .exceptionally(e -> {
-                Message.error(Message.translate("error.map_not_found"));
-                return null;
-            });
+            .exceptionally(e -> null); // Most of the times it's just map/record not found
     }
 
     public DR() {

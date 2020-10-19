@@ -32,8 +32,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DRListener extends AbstractGameListener<DR> {
-    private static Pattern POINTS_REGEX = Pattern.compile("Points: (\\d+)");
-    private static Pattern KILLS_REGEX = Pattern.compile("Kills: (\\d+)");
+    private static final Pattern POINTS_REGEX = Pattern.compile("Points: (\\d+)");
+    private static final Pattern KILLS_REGEX = Pattern.compile("Kills: (\\d+)");
 
     @Override
     public Class<DR> getGameMode() {
@@ -80,7 +80,7 @@ public class DRListener extends AbstractGameListener<DR> {
                 }
                 Matcher m2 = KILLS_REGEX.matcher(s);
                 if(m2.matches()) {
-                    gameMode.tryUpdateKills(m.group(1));
+                    gameMode.tryUpdateKills(m2.group(1));
                 }
             }
         }
