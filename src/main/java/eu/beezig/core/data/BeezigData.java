@@ -124,7 +124,7 @@ public class BeezigData {
     private String checkForUpdates() throws IOException, ParseException {
         File manifest = new File(dataFolder, "manifest.json");
         JObject remote = Downloader.getJsonObject(new URL(DataUrls.LATEST_COMMIT)).join();
-        String newSha = remote.getJObject("commit").getString("sha");
+        String newSha = remote.getJObject("commit").getString("id");
         if(!manifest.exists()) {
             manifest.createNewFile();
             return newSha;
@@ -140,15 +140,19 @@ public class BeezigData {
         URL url = new URL(DataUrls.DOWNLOAD);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.addRequestProperty("User-Agent", Message.getUserAgent());
-        File futureOut = new File(dataFolder, "hive-data-master");
-        if(futureOut.exists()) {
-            futureOut.delete();
+        conn.addRequestProperty("Accept", "application/zip");
+        File[] oldFiles = dataFolder.listFiles((file, name) -> file.isDirectory() && name.startsWith("hive-data-master"));
+        if(oldFiles != null) {
+            for(File file : oldFiles) org.apache.commons.io.FileUtils.deleteDirectory(file);
         }
         try(ZipInputStream zip = new ZipInputStream(conn.getInputStream())) {
             uncompressRepo(zip, dataFolder);
         }
         JSONObject manifest = new JSONObject();
         manifest.put("sha", newSha);
+        File[] files = dataFolder.listFiles((file, name) -> file.isDirectory() && name.startsWith("hive-data-master"));
+        if(files == null || files.length < 1) throw new IOException("Output dir not found");
+        org.apache.commons.io.FileUtils.moveDirectory(files[0], new File(dataFolder, "hive-data-master"));
         FileUtils.writeJson(manifest, new File(dataFolder, "manifest.json"));
         titleManager.downloadUpdate();
         Beezig.logger.info("Data updated successfully.");
