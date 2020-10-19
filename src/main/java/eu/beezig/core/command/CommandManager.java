@@ -71,6 +71,8 @@ public class CommandManager {
         commandExecutors.add(new DrWrCommand());
         commandExecutors.add(new GravPbCommand());
         commandExecutors.add(new GravWrCommand());
+        commandExecutors.add(new TokensCommand());
+        commandExecutors.add(new MedalsCommand());
     }
 
     /**
