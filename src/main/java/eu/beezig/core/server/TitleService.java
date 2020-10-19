@@ -73,7 +73,7 @@ public class TitleService {
         if(index == -1) return null;
         HiveTitle title = titles[index];
         if("timv".equals(modeId) && "Watson".equals(title.getPlainName())) {
-            int i2 = CollectionUtils.indexOf(titles, t -> api.equals(t.getPlainName()) && (points - title.getRequiredPoints()) < 100_000);
+            int i2 = CollectionUtils.indexOf(titles, t -> "Watson".equals(t.getPlainName()) && (points - t.getRequiredPoints()) < 100_000);
             if(i2 == -1) return new ImmutablePair<>(index, title);
             return new ImmutablePair<>(i2, titles[i2]);
         }
