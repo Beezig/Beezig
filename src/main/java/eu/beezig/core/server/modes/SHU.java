@@ -21,11 +21,6 @@ public class SHU extends HiveMode {
         return "Arcade Shuffle";
     }
 
-    public SHU() {
-        dailyService = null;
-        sessionService = null;
-    }
-
     @Override
     protected void onModeJoin() {
         super.onModeJoin();
@@ -39,6 +34,11 @@ public class SHU extends HiveMode {
             }
         }
         if(BeezigForge.isSupported()) BeezigForge.get().setCurrentGame(null);
+    }
+
+    @Override
+    protected boolean supportsTemporaryPoints() {
+        return false;
     }
 
     public void setGame(String game) {

@@ -81,12 +81,6 @@ public abstract class HiveMode extends GameMode {
         logger = new GameLogger(getIdentifier().toLowerCase(Locale.ROOT));
         autoMessageSent = new HashMap<>();
         modeDir = new File(Beezig.get().getBeezigDir(), getIdentifier().toLowerCase(Locale.ROOT));
-        TemporaryPointsManager temporaryPointsManager = Beezig.get().getTemporaryPointsManager();
-        if (temporaryPointsManager != null) {
-            dailyService = temporaryPointsManager.getDailyForMode(this);
-            if(temporaryPointsManager.getCurrentSession() != null)
-                sessionService = temporaryPointsManager.getCurrentSession().getService(this);
-        }
     }
 
     protected void onModeJoin() {
@@ -100,6 +94,12 @@ public abstract class HiveMode extends GameMode {
                 });
             }
             gameStart = System.currentTimeMillis();
+            TemporaryPointsManager temporaryPointsManager = Beezig.get().getTemporaryPointsManager();
+            if (supportsTemporaryPoints() && temporaryPointsManager != null) {
+                dailyService = temporaryPointsManager.getDailyForMode(this);
+                if(temporaryPointsManager.getCurrentSession() != null)
+                    sessionService = temporaryPointsManager.getCurrentSession().getService(this);
+            }
             if (this instanceof IMonthly) {
                 if (!MonthlyService.ignoredModes.contains(getClass())) {
                     ((IMonthly) this).loadProfile().exceptionally(e -> {
@@ -112,6 +112,13 @@ public abstract class HiveMode extends GameMode {
                 }
             }
         }
+    }
+
+    /**
+     * Returns whether the mode supports temporary points (daily, session)
+     */
+    protected boolean supportsTemporaryPoints() {
+        return true;
     }
 
     private void setMonthlyProfile(MonthlyService monthlyProfile) {
