@@ -34,9 +34,14 @@ public class DrPbCommand implements Command {
         String player;
         GameMode mode = !ServerHive.isCurrent() ? null : Beezig.api().getActiveServer().getGameListener().getCurrentGameMode();
         DR.MapData map;
-        if(args.length == 0 && mode instanceof DR) {
-            map = ((DR) mode).getCurrentMapData();
-            player = Beezig.user().getName();
+        if(args.length == 0) {
+            if(mode instanceof DR) {
+                map = ((DR) mode).getCurrentMapData();
+                player = Beezig.user().getName();
+            } else {
+                Message.error(Message.translate("error.map_not_found"));
+                return true;
+            }
         }
         else if(args.length == 1) {
             if(mode instanceof DR && ((DR) mode).getCurrentMapData() != null) {
