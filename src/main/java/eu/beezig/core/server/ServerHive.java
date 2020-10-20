@@ -68,10 +68,14 @@ public class ServerHive extends ServerInstance {
 
     public void setLobby(String lobby) {
         this.lobby = lobby;
-        if(getGameListener().getCurrentGameMode() == null) {
+        GameMode mode = getGameListener().getCurrentGameMode();
+        if(mode == null) {
             String id = lobby.replaceAll("\\d", "").toLowerCase(Locale.ROOT);
             if("hub".equals(id) || "premhub".equals(id)) return;
             listener.updateLobby(id);
+        } else if(mode instanceof IDynamicMode) {
+            String id = lobby.replaceAll("\\d", "").toLowerCase(Locale.ROOT);
+            ((IDynamicMode) mode).setModeFromLobby(id);
         }
     }
 

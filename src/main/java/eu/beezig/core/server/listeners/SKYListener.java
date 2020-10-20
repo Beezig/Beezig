@@ -27,6 +27,7 @@ import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.util.minecraft.ChatColor;
 
 public class SKYListener extends AbstractGameListener<SKY> {
+    private String lobby;
 
     @Override
     public Class<SKY> getGameMode() {
@@ -35,7 +36,16 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
     @Override
     public boolean matchLobby(String s) {
-        return s.matches("sky[dt]?");
+        if(s.matches("sky[dt]?")) {
+            lobby = s;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onGameModeJoin(SKY gameMode) {
+        gameMode.setModeFromLobby(lobby);
     }
 
     @Override

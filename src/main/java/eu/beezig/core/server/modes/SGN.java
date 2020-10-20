@@ -24,10 +24,11 @@ import eu.beezig.core.advrec.AdvRecUtils;
 import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
+import eu.beezig.core.server.IDynamicMode;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.SgnStats;
 
-public class SGN extends HiveMode implements IAutovote {
+public class SGN extends HiveMode implements IAutovote, IDynamicMode {
 
     private String mode;
     private boolean won;
@@ -100,7 +101,8 @@ public class SGN extends HiveMode implements IAutovote {
         return mode;
     }
 
-    public void setMode(String mode) {
-        this.mode = mode;
+    @Override
+    public void setModeFromLobby(String lobby) {
+        mode = "sgd".equals(lobby) ? "Duos" : "Solo";
     }
 }

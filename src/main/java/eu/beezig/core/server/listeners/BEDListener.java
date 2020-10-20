@@ -27,6 +27,8 @@ import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.util.minecraft.ChatColor;
 
 public class BEDListener extends AbstractGameListener<BED> {
+    private String lobby;
+
     @Override
     public Class<BED> getGameMode() {
         return BED.class;
@@ -34,7 +36,16 @@ public class BEDListener extends AbstractGameListener<BED> {
 
     @Override
     public boolean matchLobby(String s) {
-        return s.matches("bed[dtx]?");
+        if(s.matches("bed[dtx]?")) {
+            lobby = s;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onGameModeJoin(BED gameMode) {
+        gameMode.setModeFromLobby(lobby);
     }
 
     @Override

@@ -24,6 +24,7 @@ import eu.beezig.core.advrec.AdvRecUtils;
 import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
+import eu.beezig.core.server.IDynamicMode;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyField;
 import eu.beezig.core.server.monthly.MonthlyService;
@@ -36,7 +37,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.concurrent.CompletableFuture;
 
-public class BED extends HiveMode implements IAutovote, IMonthly {
+public class BED extends HiveMode implements IAutovote, IMonthly, IDynamicMode {
 
     private int bedsDestroyed;
     private String mode;
@@ -158,13 +159,14 @@ public class BED extends HiveMode implements IAutovote, IMonthly {
     }
 
     @Override
-    public void setMap(String map) {
-        super.setMap(map);
-        updateMode();
-    }
-
-    private void updateMode() {
-        // TODO: Java 2 Fix
+    public void setModeFromLobby(String lobby) {
+        if("bedd".equals(lobby)) {
+            mode = "Duos";
+        } else if("bedt".equals(lobby)) {
+            mode = "Teams";
+        } else if("bedx".equals(lobby)) {
+            mode = "LTM";
+        } else mode = "Solo";
     }
 
     @Override

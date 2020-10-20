@@ -24,8 +24,7 @@ import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.IPatternResult;
 
 public class SGNListener extends AbstractGameListener<SGN> {
-
-    private String mode;
+    private String lobby;
 
     @Override
     public Class<SGN> getGameMode() {
@@ -34,11 +33,8 @@ public class SGNListener extends AbstractGameListener<SGN> {
 
     @Override
     public boolean matchLobby(String s) {
-        if("sg".equals(s)) {
-            mode = "Solo";
-            return true;
-        } else if("sgd".equals(s)) {
-            mode = "Duos";
+        if(s.matches("sgd?")) {
+            lobby = s;
             return true;
         }
         return false;
@@ -46,7 +42,7 @@ public class SGNListener extends AbstractGameListener<SGN> {
 
     @Override
     public void onGameModeJoin(SGN gameMode) {
-        gameMode.setMode(mode);
+        gameMode.setModeFromLobby(lobby);
     }
 
     @Override
