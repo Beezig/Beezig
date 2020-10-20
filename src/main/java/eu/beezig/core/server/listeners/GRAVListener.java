@@ -44,7 +44,8 @@ import java.util.regex.Pattern;
 public class GRAVListener extends AbstractGameListener<GRAV> {
     private static final Pattern MAP_REGEX = Pattern.compile("([^,&]+)");
     private static final Pattern MESSAGE_REGEX = Pattern.compile("▍ Gravity ▏ (\\d+)\\. .+ \\[(\\d+) Votes?]");
-    private static final Pattern FINAL_MAPS_REGEX = Pattern.compile("§8▍ §bGra§avi§ety§8 ▏ §7§oVoting not active! The winning map was ([^,]+), ([^,]+), ([^,]+), (.+) & ([^!]+)!");
+    private static final Pattern FINAL_MAPS_REGEX = Pattern.compile("§8▍ §bGra§avi§ety§8 ▏ §7§oVoting not active! The winning map was (([^,]+), ([^,]+), ([^,]+), (.+) & ([^!]+))!");
+    private static final Pattern VOTING_ENDED = Pattern.compile("▍ Gravity ▏ Voting has ended! The map ➊➋➌➍➎ has won!");
     private final AtomicBoolean waitingForFinalMaps = new AtomicBoolean(false);
 
     @Override
@@ -66,11 +67,6 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
             gameMode.stageDone();
         }
         if("grav.finish".equals(key)) gameMode.setWon();
-        // Hotfix as Hive forgot to send the winning maps
-        if("map".equals(key)) {
-            Beezig.api().sendPlayerMessage("/v");
-            waitingForFinalMaps.set(true);
-        }
     }
 
     @EventHandler
@@ -82,14 +78,25 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
         GRAV grav = (GRAV) mode;
         String msg = event.getMessage();
         String stripped = ChatColor.stripColor(msg);
+        // Hotfix as Hive forgot to send the winning maps
+        if (VOTING_ENDED.matcher(stripped).matches()) {
+            Beezig.api().sendPlayerMessage("/v");
+            waitingForFinalMaps.set(true);
+            if (Settings.GRAV_MAPNAMES.get().getBoolean())
+                event.setCancelled(true);
+        }
         Matcher finalMapsMatcher = FINAL_MAPS_REGEX.matcher(msg);
         if (finalMapsMatcher.matches() && waitingForFinalMaps.compareAndSet(true, false)) {
             event.setCancelled(true);
             String[] maps = new String[5];
             for (int i = 0; i < 5; ++i) {
-                maps[i] = finalMapsMatcher.group(i + 1);
+                // The first group is the entire final maps string, so we skip it
+                maps[i] = finalMapsMatcher.group(i + 2);
             }
             grav.setFinalMaps(maps);
+            if (Settings.GRAV_MAPNAMES.get().getBoolean()) {
+                Beezig.api().messagePlayer(String.format("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe map %s§b has won!", finalMapsMatcher.group(1)));
+            }
         }
         if(msg.startsWith("§o")) return;
         Matcher master = MESSAGE_REGEX.matcher(stripped);
