@@ -71,6 +71,6 @@ public class LinkSnipper {
         if (hostname != null) {
             return hostname.startsWith("www.") ? hostname.substring(4) : hostname;
         }
-        return hostname;
+        return null;
     }
 }

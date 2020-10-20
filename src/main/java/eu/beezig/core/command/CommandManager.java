@@ -73,6 +73,7 @@ public class CommandManager {
         commandExecutors.add(new GravWrCommand());
         commandExecutors.add(new TokensCommand());
         commandExecutors.add(new MedalsCommand());
+        commandExecutors.add(new BestGameCommand());
     }
 
     /**
