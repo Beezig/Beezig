@@ -53,6 +53,8 @@ public class GRAV extends HiveMode implements IMonthly {
     private AtomicLong lastConfirmed = new AtomicLong(0L);
     private String[] finalMaps = new String[5];
     private String nextMap;
+    private final Map<Integer, String> mapChoices = new HashMap<>(5);
+    private int currentChoice;
 
     // Record caches
     private Map<String, Long> mapPbs = new HashMap<>();
@@ -221,6 +223,7 @@ public class GRAV extends HiveMode implements IMonthly {
         if(parsed.isEmpty()) return;
         int index = parsed.entrySet().stream().max(Comparator.comparingLong(Map.Entry::getValue)).map(Map.Entry::getKey).orElse(1);
         Beezig.api().sendPlayerMessage("/v " + index);
+        currentChoice = index;
         Message.info(Beezig.api().translate("msg.autovote.grav", Color.accent() + index + Color.primary()));
     }
 
@@ -253,6 +256,18 @@ public class GRAV extends HiveMode implements IMonthly {
 
     public String getMap(int i) {
         return i > 0 && i < 5 ? ChatColor.stripColor(finalMaps[i]) : "";
+    }
+
+    public Map<Integer, String> getMapChoices() {
+        return mapChoices;
+    }
+
+    public int getCurrentChoice() {
+        return currentChoice;
+    }
+
+    public void setCurrentChoice(int currentChoice) {
+        this.currentChoice = currentChoice;
     }
 
     public String getNextMap() {

@@ -22,12 +22,15 @@ package eu.beezig.core.server.listeners;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.autovote.AutovoteMap;
 import eu.beezig.core.config.Settings;
+import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.GRAV;
+import eu.beezig.core.util.ActiveGame;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.the5zig.mod.event.ChatEvent;
+import eu.the5zig.mod.event.ChatSendEvent;
 import eu.the5zig.mod.event.EventHandler;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameMode;
@@ -37,6 +40,7 @@ import eu.the5zig.mod.util.component.MessageComponent;
 import eu.the5zig.mod.util.component.style.MessageAction;
 import eu.the5zig.util.minecraft.ChatColor;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,6 +50,8 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
     private static final Pattern MESSAGE_REGEX = Pattern.compile("▍ Gravity ▏ (\\d+)\\. .+ \\[(\\d+) Votes?]");
     private static final Pattern FINAL_MAPS_REGEX = Pattern.compile("§8▍ §bGra§avi§ety§8 ▏ §7§oVoting not active! The winning map was (([^,]+), ([^,]+), ([^,]+), (.+) & ([^!]+))!");
     private static final Pattern VOTING_ENDED = Pattern.compile("▍ Gravity ▏ Voting has ended! The map ➊➋➌➍➎ has won!");
+    private static final Pattern VOTED = Pattern.compile("▍ Gravity ▏ You voted for ➊➋➌➍➎! \\[\\d+ Total]");
+    private static final Pattern VOTE_COMMAND = Pattern.compile("^/v(?:ote)?\\s+(\\d+)\\s*$");
     private final AtomicBoolean waitingForFinalMaps = new AtomicBoolean(false);
 
     @Override
@@ -78,12 +84,19 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
         GRAV grav = (GRAV) mode;
         String msg = event.getMessage();
         String stripped = ChatColor.stripColor(msg);
+        boolean grav_mapnames = Settings.GRAV_MAPNAMES.get().getBoolean();
         // Hotfix as Hive forgot to send the winning maps
         if (VOTING_ENDED.matcher(stripped).matches()) {
             Beezig.api().sendPlayerMessage("/v");
             waitingForFinalMaps.set(true);
-            if (Settings.GRAV_MAPNAMES.get().getBoolean())
+            if (grav_mapnames)
                 event.setCancelled(true);
+        }
+        if (VOTED.matcher(stripped).matches() && grav_mapnames) {
+            event.setCancelled(true);
+            if (grav.getCurrentChoice() >= 1 && grav.getCurrentChoice() <= 5) {
+                Beezig.api().messagePlayer(msg.replaceAll("§.➊§.➋§.➌§.➍§.➎", grav.getMapChoices().get(grav.getCurrentChoice())));
+            }
         }
         Matcher finalMapsMatcher = FINAL_MAPS_REGEX.matcher(msg);
         if (finalMapsMatcher.matches() && waitingForFinalMaps.compareAndSet(true, false)) {
@@ -94,7 +107,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                 maps[i] = finalMapsMatcher.group(i + 2);
             }
             grav.setFinalMaps(maps);
-            if (Settings.GRAV_MAPNAMES.get().getBoolean()) {
+            if (grav_mapnames) {
                 Beezig.api().messagePlayer(String.format("§8▍ §bGra§avi§ety§8 ▏ §3Voting has ended! §bThe map %s§b has won!", finalMapsMatcher.group(1)));
             }
         }
@@ -108,7 +121,10 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                 MessageComponent first = comp.getSiblings().get(0);
                 if(first.getStyle().getOnHover() != null) {
                     String mapsMsg = first.getStyle().getOnHover().getComponent().getText();
-                    if(Settings.GRAV_MAPNAMES.get().getBoolean()) {
+                    Map<Integer, String> mapChoices = grav.getMapChoices();
+                    if (!mapChoices.containsKey(index))
+                        mapChoices.put(index, mapsMsg);
+                    if(grav_mapnames) {
                         event.setCancelled(true);
                         MessageComponent message = new MessageComponent("§o" + event.getMessage().replaceAll("(?:§.[➊➋➌➍➎])+", mapsMsg));
                         message.getStyle().setOnClick(new MessageAction(MessageAction.Action.RUN_COMMAND, "/v " + index));
@@ -130,6 +146,17 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
                     ExceptionHandler.catchException(e);
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onClientChat(ChatSendEvent event) {
+        HiveMode mode = ActiveGame.get();
+        if (!(mode instanceof GRAV)) return;
+        GRAV grav = (GRAV) mode;
+        Matcher matcher = VOTE_COMMAND.matcher(event.getMessage());
+        if (matcher.matches()) {
+            grav.setCurrentChoice(Integer.parseInt(matcher.group(1)));
         }
     }
 
