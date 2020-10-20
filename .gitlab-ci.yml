@@ -10,6 +10,8 @@ stages:
 
 build:
     stage: build
+    before_script:
+        - apk add git
     script:
     - ./gradlew build
     artifacts:
