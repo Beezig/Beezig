@@ -145,7 +145,7 @@ public class ServerHive extends ServerInstance {
         Beezig.get().getData().getAutoNewGameManager().initTriggers();
         if(BeezigForge.isSupported()) {
             BeezigForge.get().setOnHive(true);
-            if(!new File(Beezig.get().getBeezigDir(), "tut").exists()) WorldTask.submit(() -> BeezigForge.get().displayWelcomeGui());
+            if(!new File(Beezig.get().getBeezigDir(), "tut.new").exists()) WorldTask.submit(() -> BeezigForge.get().displayWelcomeGui());
         }
         WorldTask.submit(() -> CommandManager.dispatchCommand("/beezig"));
         Beezig.get().newExceptionHandler();
