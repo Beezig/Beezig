@@ -6,9 +6,10 @@
 [![Discord](https://discordapp.com/api/guilds/346695724253184014/embed.png?style=banner2)](http://discord.gg/se7zJsU)  
 [![Travis Master](https://travis-ci.org/Beezig/Beezig.svg?branch=master)](http://travis-ci.org/Beezig/Beezig)
 ![Github All Releases](https://img.shields.io/github/downloads/Beezig/Beezig/total.svg)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Beezig/Beezig.svg)
+[![CodeFactor](https://www.codefactor.io/repository/github/beezig/beezig/badge)](https://www.codefactor.io/repository/github/beezig/beezig)
 ![LOC](https://badgen.net/codeclimate/loc/Beezig/Beezig)
 [![Crowdin](https://badges.crowdin.net/beezig/localized.svg)](https://crowdin.com/project/beezig)
+
 
 A 5zig plugin to add functionality for The Hive.  
 By RoccoDev, ItsNiklass and archer_321.
