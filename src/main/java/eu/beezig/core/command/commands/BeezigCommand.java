@@ -35,11 +35,17 @@ import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.the5zig.mod.util.component.MessageComponent;
 import eu.the5zig.mod.util.component.style.MessageAction;
+import org.apache.commons.io.IOUtils;
+import org.json.simple.parser.ContainerFactory;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.io.IOException;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BeezigCommand implements Command {
     public static IModulesProvider modulesProvider;
@@ -76,7 +82,10 @@ public class BeezigCommand implements Command {
             Beezig.api().messagePlayerComponent(settings, false);
             Beezig.api().messagePlayer(Message.infoPrefix());
             Beezig.api().messagePlayerComponent(discord, false);
-            Message.bar();
+            MessageComponent credits = new MessageComponent(StringUtils.linedCenterText("§7", Color.primary() + Message.translate("news.credits")));
+            credits.getStyle().setOnClick(new MessageAction(MessageAction.Action.RUN_COMMAND, "/beezig credits"));
+            credits.getStyle().setOnHover(new MessageAction(MessageAction.Action.SHOW_TEXT, new MessageComponent("§7" + Message.translate("msg.credits.desc"))));
+            Beezig.api().messagePlayerComponent(credits, false);
         }
         else {
             String mode = args[0];
@@ -129,8 +138,36 @@ public class BeezigCommand implements Command {
                 }
                 Beezig.get().getNewsManager().readUnread();
             }
+            else if("credits".equalsIgnoreCase(mode)) sendCredits();
         }
         return true;
+    }
+
+    private void sendCredits() {
+        try {
+            String credits = IOUtils.toString(Beezig.class.getResourceAsStream("/beezig-credits.json"));
+            JSONParser parser = new JSONParser();
+            Map<String, Object> object = (Map<String, Object>) parser.parse(credits, new ContainerFactory() {
+                @Override
+                public Map createObjectContainer() {
+                    return new LinkedHashMap(); // Preserve key order
+                }
+
+                @Override
+                public List creatArrayContainer() { // LULW
+                    return new ArrayList();
+                }
+            });
+            Message.info(Beezig.api().translate("msg.credits.title", Color.accent() + Constants.VERSION + Color.primary()));
+            for(Map.Entry<String, Object> entry : object.entrySet()) {
+                if(entry.getValue() instanceof List) {
+                    String display = Color.accent() + ((List) entry.getValue()).stream().map(Object::toString).collect(Collectors.joining(", "));
+                    Message.info(Beezig.api().translate("credits." + entry.getKey()) + ": " + display);
+                }
+            }
+        } catch (IOException | ParseException e) {
+            ExceptionHandler.catchException(e);
+        }
     }
 
     private void showCommands(int pageNo) {
