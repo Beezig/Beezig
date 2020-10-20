@@ -2,9 +2,23 @@
 # Copyright (C) 2020  Beezig Team
 ---
 
-image: alpine:latest
+image: openjdk:8-alpine
+
+stages:
+    - build
+    - deploy
+
+build:
+    stage: build
+    script:
+    - ./gradlew build
+    artifacts:
+        paths:
+            - build/libs/*.jar
+        expire_in: 1 week
 
 deploy version:
+    stage: deploy
     before_script:
         - apk add openssh git jq bash coreutils curl
     script:
