@@ -52,7 +52,7 @@ public class BEDListener extends AbstractGameListener<BED> {
             gameMode.addKills(1);
             gameMode.addPoints(key.equals("bed.kill.final") ? 10 : 5);
         }
-        else if("bed.win".equals(key)) gameMode.addPoints(100);
+        else if("bed.win".equals(key)) gameMode.won();
         else if("bed.summoner".equals(key)) gameMode.upgradeSummoner(match.get(0));
     }
 
