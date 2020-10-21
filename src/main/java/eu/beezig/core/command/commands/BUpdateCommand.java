@@ -62,6 +62,8 @@ public class BUpdateCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
+        Beezig beezig = Beezig.get();
+        if (beezig.isLaby() && beezig.getVersion().getType().equals("release")) return false;
         if (updated.get()) {
             Message.error(Message.translate("update.error.already_updated"));
             return true;
@@ -70,7 +72,6 @@ public class BUpdateCommand implements Command {
             switch (args[0]) {
                 case "confirm":
                     try {
-                        Beezig beezig = Beezig.get();
                         if (System.currentTimeMillis() > confirmUntil) {
                             Message.error(Message.translate("update.error.expired"));
                             return true;
