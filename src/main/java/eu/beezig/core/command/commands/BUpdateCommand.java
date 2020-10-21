@@ -75,6 +75,11 @@ public class BUpdateCommand implements Command {
                             Message.error(Message.translate("update.error.expired"));
                             return true;
                         }
+                        try {
+                            beezig.fetchRemoteVersions();
+                        } catch (IOException e) {
+                            ExceptionHandler.catchException(e);
+                        }
                         Map<URI, Class<?>> updates = new HashMap<>(4);
                         if (beezig.isLaby()) {
                             // Only update the BeezigLaby jar
@@ -91,11 +96,6 @@ public class BUpdateCommand implements Command {
                         final String userAgent = String.format("Beezig/7.0 (%s) Beezig/%s-%s",
                             (SystemUtils.IS_OS_MAC ? "Macintosh" : System.getProperty("os.name")),
                             Constants.VERSION, Beezig.getVersionString());
-                        try {
-                            beezig.fetchRemoteVersions();
-                        } catch (IOException e) {
-                            ExceptionHandler.catchException(e);
-                        }
                         updates.forEach((k, v) -> {
                             try {
                                 URLConnection connection = k.toURL().openConnection();
@@ -107,23 +107,21 @@ public class BUpdateCommand implements Command {
                                     jarFile = jarFile.substring(0, jarFile.lastIndexOf("!"));
                                 }
                                 File currentJar = new File(new URI(jarFile).getPath());
-                                if (Pattern.compile("^.*-[a-f\\d]{8}\\.jar$").matcher(jarFile).matches()) {
-                                    jarFile = jarFile.substring(0, jarFile.lastIndexOf("-"));
-                                } else {
-                                    jarFile = jarFile.substring(0, jarFile.lastIndexOf(".jar"));
-                                }
                                 Version remoteVersion;
                                 switch (v.getName()) {
                                     case "eu.beezig.laby.LabyMain":
                                         remoteVersion = beezig.getRemoteLabyVersion();
+                                        jarFile = "BeezigLaby-" + Constants.VERSION;
                                         break;
                                     case "eu.beezig.forge.BeezigForgeMod":
                                         remoteVersion = beezig.getRemoteBeezigForgeVersion();
+                                        jarFile = "BeezigForge-" + Constants.VERSION;
                                         break;
                                     default:
+                                        jarFile = "Beezig-" + Constants.VERSION;
                                         remoteVersion = beezig.getRemoteVersion();
                                 }
-                                String newPath = String.format("%s-%s", new URI(jarFile).getPath(),
+                                String newPath = String.format("%s%s%s-%s", currentJar.getParent(), File.separator, jarFile,
                                     remoteVersion == null ? "unknown" : remoteVersion.getCommit().substring(0, 8));
                                 String currentJarName = currentJar.getName();
                                 if (newPath.endsWith(currentJarName.substring(0, currentJarName.lastIndexOf(".jar")))) {

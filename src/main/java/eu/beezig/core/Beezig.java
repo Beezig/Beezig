@@ -370,15 +370,13 @@ public class Beezig {
     }
 
     public void setRemoteVersion(Version remoteVersion) {
+        if (version != null && version.compareTo(remoteVersion) < 0)
+            updateAvailable.set(true);
         this.remoteVersion = remoteVersion;
     }
 
     public boolean getUpdateAvailable() {
         return updateAvailable.get();
-    }
-
-    public void setUpdateAvailable() {
-        this.updateAvailable.set(true);
     }
 
     public Version getBeezigForgeVersion() {
@@ -394,15 +392,13 @@ public class Beezig {
     }
 
     public void setRemoteBeezigForgeVersion(Version remoteBeezigForgeVersion) {
+        if (beezigForgeVersion != null && beezigForgeVersion.compareTo(remoteBeezigForgeVersion) < 0)
+            beezigForgeUpdateAvailable.set(true);
         this.remoteBeezigForgeVersion = remoteBeezigForgeVersion;
     }
 
     public boolean getBeezigForgeUpdateAvailable() {
         return beezigForgeUpdateAvailable.get();
-    }
-
-    public void setBeezigForgeUpdateAvailable() {
-        this.beezigForgeUpdateAvailable.set(true);
     }
 
     public Version getBeezigLabyVersion() {
@@ -418,14 +414,8 @@ public class Beezig {
     }
 
     public void setRemoteLabyVersion(Version remoteLabyVersion) {
+        if (beezigLabyVersion != null && beezigLabyVersion.compareTo(remoteLabyVersion) < 0)
+            beezigLabyUpdateAvailable.set(true);
         this.remoteLabyVersion = remoteLabyVersion;
-    }
-
-    public boolean getBeezigLabyUpdateAvailable() {
-        return beezigLabyUpdateAvailable.get();
-    }
-
-    public void setBeezigLabyUpdateAvailable() {
-        this.beezigLabyUpdateAvailable.set(true);
     }
 }
