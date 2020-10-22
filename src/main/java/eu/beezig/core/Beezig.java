@@ -341,7 +341,7 @@ public class Beezig {
     public void fetchRemoteVersions() throws IOException {
         if (remoteVersion != null && remoteBeezigForgeVersion != null && remoteLabyVersion != null)
             return;
-        URL url = new URL("https://go.beezig.eu/version-beta.json");
+        URL url = new URL("https://go.beezig.eu/version-" + version.getType() + ".json");
         URLConnection connection = url.openConnection();
         connection.setRequestProperty("User-Agent", String.format("Beezig/7.0 (%s) Beezig/%s-%s",
             (SystemUtils.IS_OS_MAC ? "Macintosh" : System.getProperty("os.name")),

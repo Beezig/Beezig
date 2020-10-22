@@ -42,7 +42,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Pattern;
 
 public class BUpdateCommand implements Command {
 
@@ -63,7 +62,8 @@ public class BUpdateCommand implements Command {
     @Override
     public boolean execute(String[] args) {
         Beezig beezig = Beezig.get();
-        if (beezig.isLaby() && beezig.getVersion().getType().equals("release")) return false;
+        Version beezigVersion = beezig.getVersion();
+        if (beezig.isLaby() && beezigVersion.getType().equals("release")) return false;
         if (updated.get()) {
             Message.error(Message.translate("update.error.already_updated"));
             return true;
@@ -84,14 +84,16 @@ public class BUpdateCommand implements Command {
                         Map<URI, Class<?>> updates = new HashMap<>(4);
                         if (beezig.isLaby()) {
                             // Only update the BeezigLaby jar
-                            updates.put(new URI("https://go.beezig.eu/" + code + "laby-beta"), Class.forName("eu.beezig.laby.LabyMain"));
+                            updates.put(new URI("https://go.beezig.eu/" + code + "laby-" + beezigVersion.getType()),
+                                Class.forName("eu.beezig.laby.LabyMain"));
                         } else {
                             if (BeezigForge.isSupported() && beezig.getBeezigForgeUpdateAvailable()) {
-                                updates.put(new URI("https://go.beezig.eu/beezigforge-beta"), Class.forName("eu.beezig.forge.BeezigForgeMod"));
+                                updates.put(new URI("https://go.beezig.eu/beezigforge-" + beezigVersion.getType()),
+                                    Class.forName("eu.beezig.forge.BeezigForgeMod"));
                             }
                             // Update Beezig even if no update is available
                             if (beezig.getUpdateAvailable() || updates.isEmpty()) {
-                                updates.put(new URI("https://go.beezig.eu/" + code + "5zig-beta"), Beezig.class);
+                                updates.put(new URI("https://go.beezig.eu/" + code + "5zig-"+ beezigVersion.getType()), Beezig.class);
                             }
                         }
                         final String userAgent = String.format("Beezig/7.0 (%s) Beezig/%s-%s",
