@@ -19,6 +19,7 @@
 
 package eu.beezig.core;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -75,6 +76,7 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Plugin(name = "Beezig", version = Constants.VERSION)
@@ -164,6 +166,7 @@ public class Beezig {
         api.getPluginManager().registerListener(this, new CommandMigration());
         HiveWrapper.setAsyncExecutor(asyncExecutor);
         HiveWrapper.setUserAgent(Message.getUserAgent());
+        HiveWrapper.setUUIDCache(Caffeine.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES).buildAsync());
 
         // Init configuration
         LanguageConfiguration.load();
