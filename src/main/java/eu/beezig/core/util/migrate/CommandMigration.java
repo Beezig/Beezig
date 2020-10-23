@@ -18,7 +18,8 @@ public class CommandMigration {
         if(!ServerHive.isCurrent() || event.getMessage().charAt(0) != '/') return;
         GameMode mode = Beezig.api().getActiveServer().getGameListener().getCurrentGameMode();
         String message = SPACE.split(event.getMessage()).iterator().next();
-        if(mode instanceof DR) {
+        if("/report".equalsIgnoreCase(message)) sendMessage("/breport");
+        else if(mode instanceof DR) {
             if("/wr".equalsIgnoreCase(message)) sendMessage("/drwr");
             else if("/pb".equalsIgnoreCase(message)) sendMessage("/drpb");
         } else if(mode instanceof HIDE) {

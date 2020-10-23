@@ -13,10 +13,10 @@ import org.json.simple.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 
 public class MonthlyCalculator {
@@ -47,9 +47,9 @@ public class MonthlyCalculator {
         }
     }
 
-    private CompletableFuture<List<MonthlyPlace>> calculateLeaderboard() {
+    private CompletableFuture<Set<MonthlyPlace>> calculateLeaderboard() {
         return getLeaderboard().thenApplyAsync(json -> {
-            List<MonthlyPlace> places = new ArrayList<>();
+            Set<MonthlyPlace> places = new TreeSet<>();
             for(Object o : json.getInput().entrySet()) {
                 Map.Entry<String, JSONObject> entry = (Map.Entry<String, JSONObject>) o;
                 MonthlyPlace place = new MonthlyPlace();
@@ -62,7 +62,7 @@ public class MonthlyCalculator {
         });
     }
 
-    private void displayLeaderboard(List<MonthlyPlace> lb) {
+    private void displayLeaderboard(Set<MonthlyPlace> lb) {
         Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.primary() + Beezig.api().translate("msg.leaderboard",
             Color.accent() + mode.toUpperCase(Locale.ROOT) + Color.primary())));
         for(MonthlyPlace place : lb) {
@@ -131,9 +131,14 @@ public class MonthlyCalculator {
         });
     }
 
-    private static class MonthlyPlace {
+    private static class MonthlyPlace implements Comparable<MonthlyPlace> {
         long place;
         long points;
         String username;
+
+        @Override
+        public int compareTo(MonthlyPlace monthlyPlace) {
+            return (int) Math.signum(place - monthlyPlace.place);
+        }
     }
 }
