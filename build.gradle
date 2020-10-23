@@ -76,7 +76,7 @@ tasks.withType(ProcessResources).each { task ->
             def beezigDir = new File ('Beezig/.git')
             if (beezigDir.exists()) {
                 def beezigCommit = "git --git-dir Beezig/.git rev-parse HEAD".execute().text.trim()
-                def beezigCommits = ("git --git-dir Beezig/.git rev-list --count " + "git --git-dir Beezig/.git log --tags -1 --pretty=%H".execute().text.trim() +
+                def beezigCommits = ("git --git-dir Beezig/.git rev-list --count " + "git --git-dir Beezig/.git describe --tags --abbrev=0".execute().text.trim() +
                     "..HEAD").execute().text.trim()
                 def beezigDate = ("git --git-dir Beezig/.git log -1 --pretty=%cI " + beezigCommit).execute().text.trim()
 
@@ -87,7 +87,7 @@ tasks.withType(ProcessResources).each { task ->
                                                beezigdate: beezigDate])
             } else {
                 def beezigCommit = "git rev-parse HEAD".execute().text.trim()
-                def beezigCommits = ("git rev-list --count " + "git log --tags -1 --pretty=%H".execute().text.trim() +
+                def beezigCommits = ("git rev-list --count " + "git describe --tags --abbrev=0".execute().text.trim() +
                     "..HEAD").execute().text.trim()
                 def beezigDate = ("git log -1 --pretty=%cI " + beezigCommit).execute().text.trim()
 
