@@ -71,10 +71,8 @@ import org.apache.logging.log4j.core.config.LoggerConfig;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.channels.OverlappingFileLockException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -152,31 +150,9 @@ public class Beezig {
 
     @EventHandler
     public void load(LoadEvent event) {
-        setupLogger();
-        RandomAccessFile lock = null;
-        try {
-            lock = new RandomAccessFile("beezig.lock", "rw");
-            if (lock.getChannel().tryLock() == null) {
-                logger.error("Another Beezig instance is running, exiting.");
-                lock.close();
-                return;
-            }
-        } catch (Exception ex) {
-            if(ex instanceof OverlappingFileLockException) {
-                logger.error("Another Beezig instance is running, exiting.");
-                if(lock != null) {
-                    try {
-                        lock.close();
-                    } catch (IOException e) {
-                        logger.error("Couldn't close lock file", e);
-                    }
-                }
-                return;
-            }
-            logger.error("Couldn't acquire the lock.", ex);
-        }
         IOverlay progress = The5zigAPI.getAPI().createOverlay();
         progress.displayMessage("Beezig", "Loading...");
+        setupLogger();
         logger.info("Load started");
         long timeStart = System.currentTimeMillis();
 
