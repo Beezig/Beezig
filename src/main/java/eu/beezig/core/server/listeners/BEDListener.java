@@ -69,10 +69,9 @@ public class BEDListener extends AbstractGameListener<BED> {
 
     @Override
     public void onTitle(BED gameMode, String rawTitle, String rawSubTitle) {
-        if(rawTitle == null) return;
         if(rawSubTitle == null) return;
-        String title = ChatColor.stripColor(rawTitle);
         String sub = ChatColor.stripColor(rawSubTitle);
-        if("➋".equals(title) && "Respawning in 2 seconds".equals(sub)) gameMode.addDeaths(1);
+        if("➊ seconds until respawn...".equals(sub) ||
+            /* future proofing */ "➊ second until respawn...".equals(sub)) gameMode.addDeaths(1);
     }
 }

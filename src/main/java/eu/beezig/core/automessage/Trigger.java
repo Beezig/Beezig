@@ -42,7 +42,8 @@ public class Trigger {
     @Expose
     private String trigger;
 
-    public boolean doesTrigger(String message, Type type){
+    public boolean doesTrigger(String message, Type type) {
+        if(message == null) return false;
         return Pattern.matches(trigger, message) && this.type == type;
     }
 
