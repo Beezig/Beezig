@@ -40,6 +40,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -111,7 +112,30 @@ public class BeezigData {
         return Beezig.gson.fromJson(json, marker.getType());
     }
 
-    public void tryUpdate() throws Exception {
+    public void tryUpdate(int timeout) {
+        CompletableFuture<Void> update = new CompletableFuture<>();
+        CompletableFuture<Void> timeoutFuture = new CompletableFuture<>();
+        Beezig.get().getAsyncExecutor().execute(() -> {
+            try {
+                Thread.sleep(timeout * 1000);
+                timeoutFuture.completeExceptionally(new InterruptedException("Update took too long"));
+            } catch (InterruptedException ignored) {
+                Beezig.logger.debug("Interrupting timeout task");
+            }
+            timeoutFuture.complete(null);
+        });
+        Beezig.get().getAsyncExecutor().execute(() -> {
+            try {
+                tryUpdate();
+                update.complete(null);
+            } catch (Exception e) {
+                update.completeExceptionally(e);
+            }
+        });
+        CompletableFuture.anyOf(update, timeoutFuture).join();
+    }
+
+    private void tryUpdate() throws Exception {
         Beezig.logger.info("Checking for data updates...");
         String updateSha;
         if((updateSha = checkForUpdates()) == null) {

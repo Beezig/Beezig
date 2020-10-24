@@ -186,16 +186,15 @@ public class Beezig {
             ExceptionHandler.catchException(e);
             return;
         }
-        newExceptionHandler();
+        newExceptionHandler(); // Enable exception handler here for startup errors
 
         data = new BeezigData(beezigDir);
         try {
-            data.tryUpdate();
+            data.tryUpdate(20);
         } catch (Exception e) {
             logger.error("Couldn't update data!");
             ExceptionHandler.catchException(e);
         }
-        newExceptionHandler(); // Enable exception handler here for startup errors
 
         DirectoryMigration.migrateFolders(beezigDir);
         new AutovoteMigration().migrate();
