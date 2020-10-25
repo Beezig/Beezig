@@ -31,6 +31,7 @@ import org.apache.commons.lang3.SystemUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -124,17 +125,24 @@ public class BUpdateCommand implements Command {
                                         jarFile = "Beezig-" + Constants.VERSION;
                                         remoteVersion = beezig.getRemoteVersion();
                                 }
-                                String newPath = String.format("%s%s%s-%s", currentJar.getParent(), File.separator, jarFile,
-                                    remoteVersion == null ? "unknown" : remoteVersion.getCommit().substring(0, 8));
-                                String currentJarName = currentJar.getName();
-                                if (newPath.endsWith(currentJarName.substring(0, currentJarName.lastIndexOf(".jar")))) {
-                                    newPath += "-new.jar";
+                                if (SystemUtils.IS_OS_WINDOWS) {
+                                    try (FileChannel fileChannel = new FileOutputStream(currentJar).getChannel()) {
+                                        fileChannel.transferFrom(byteChannel, 0, Long.MAX_VALUE);
+                                    }
                                 } else {
-                                    newPath += ".jar";
+                                    String newPath = String.format("%s%s%s-%s", currentJar.getParent(), File.separator, jarFile,
+                                        remoteVersion == null ? "unknown" : remoteVersion.getCommit().substring(0, 8));
+                                    String currentJarName = currentJar.getName();
+                                    if (newPath.endsWith(currentJarName.substring(0, currentJarName.lastIndexOf(".jar")))) {
+                                        newPath += "-new.jar";
+                                    } else {
+                                        newPath += ".jar";
+                                    }
+                                    try (FileChannel fileChannel = new FileOutputStream(newPath).getChannel()) {
+                                        fileChannel.transferFrom(byteChannel, 0, Long.MAX_VALUE);
+                                    }
+                                    currentJar.deleteOnExit();
                                 }
-                                FileChannel fileChannel = new FileOutputStream(newPath).getChannel();
-                                fileChannel.transferFrom(byteChannel, 0, Long.MAX_VALUE);
-                                currentJar.deleteOnExit();
                             } catch (Exception e) {
                                 Message.error(Message.translate("update.error"));
                                 Message.error(e.getMessage());
@@ -143,6 +151,25 @@ public class BUpdateCommand implements Command {
                         });
                         updated.set(true);
                         Message.info(Message.translate("update.success"));
+                        if (SystemUtils.IS_OS_WINDOWS) {
+                            try {
+                                if (Beezig.api().isForgeEnvironment()) {
+                                    Class<?> fchClass = Class.forName("net.minecraftforge.fml.common.FMLCommonHandler");
+                                    Method exitJava = fchClass.getMethod("exitJava", int.class, boolean.class);
+                                    Object fch = fchClass.getMethod("instance").invoke(null);
+                                    exitJava.invoke(fch, 0, false);
+                                } else {
+                                    Class<?> mcClass = Class.forName("ave");
+                                    Method shutDown = mcClass.getDeclaredMethod("g");
+                                    Object mc = mcClass.getMethod("A").invoke(null);
+                                    shutDown.invoke(mc);
+                                }
+                            } catch (Exception e) {
+                                Message.error(Message.translate("update.error"));
+                                Message.error(e.getMessage());
+                                ExceptionHandler.catchException(e);
+                            }
+                        }
                     } catch (URISyntaxException e) {
                         Message.error(Message.translate("update.invalid"));
                     } catch (ClassNotFoundException e) {
@@ -155,6 +182,8 @@ public class BUpdateCommand implements Command {
                     if (args.length == 2) {
                         code = args[1] + "-";
                         Message.info(Beezig.api().translate("update.confirm.custom", code));
+                        if (SystemUtils.IS_OS_WINDOWS)
+                            Message.error(Beezig.api().translate("update.warning.restart"));
                         confirmUntil = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2);
                         break;
                     }
@@ -166,6 +195,8 @@ public class BUpdateCommand implements Command {
         } else {
             // Use the latest beta
             Message.info(Beezig.api().translate("update.confirm"));
+            if (SystemUtils.IS_OS_WINDOWS)
+                Message.error(Beezig.api().translate("update.warning.restart"));
             confirmUntil = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2);
         }
         return true;
