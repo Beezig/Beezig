@@ -154,14 +154,16 @@ public class BUpdateCommand implements Command {
                         if (SystemUtils.IS_OS_WINDOWS) {
                             try {
                                 if (Beezig.api().isForgeEnvironment()) {
+                                    // Exit Beezig using Forge's FMLCommonHandler.instance().exitJava()
                                     Class<?> fchClass = Class.forName("net.minecraftforge.fml.common.FMLCommonHandler");
                                     Method exitJava = fchClass.getMethod("exitJava", int.class, boolean.class);
                                     Object fch = fchClass.getMethod("instance").invoke(null);
                                     exitJava.invoke(fch, 0, false);
                                 } else {
-                                    Class<?> mcClass = Class.forName("ave");
-                                    Method shutDown = mcClass.getDeclaredMethod("g");
-                                    Object mc = mcClass.getMethod("A").invoke(null);
+                                    // Exit Beezig using Minecraft.getMinecraft().shutdownMinecraftApplet()
+                                    Class<?> mcClass = Class.forName(/* net.minecraft.client.Minecraft */ "ave");
+                                    Method shutDown = mcClass.getDeclaredMethod(/* shutdownMinecraftApplet */ "g");
+                                    Object mc = mcClass.getMethod(/* getMinecraft */ "A").invoke(null);
                                     shutDown.invoke(mc);
                                 }
                             } catch (Exception e) {
