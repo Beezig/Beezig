@@ -34,6 +34,8 @@ public class WorldTaskManager {
         if(Beezig.api().isInWorld()) {
             while(!tasks.isEmpty()) {
                 WorldTask task = tasks.poll();
+                if (task == null)
+                    continue;
                 try {
                     task.run();
                 } catch (Exception e) {
