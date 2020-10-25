@@ -2,7 +2,6 @@ package eu.beezig.core.net.packets;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.Constants;
-import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.net.Packet;
 import eu.beezig.core.net.Protocol;
 import eu.beezig.core.net.handler.Connection;
@@ -46,7 +45,7 @@ public class PacketProfile implements Packet {
         buffer.writeInt(Protocol.VERSION);
         buffer.writeString(timezone == null ? "" : timezone);
         buffer.writeString(Constants.VERSION);
-        buffer.writeBoolean(BeezigForge.isSupported());
+        buffer.writeBoolean(Beezig.api().isForgeEnvironment());
     }
 
     @Override
