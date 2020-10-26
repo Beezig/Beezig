@@ -38,7 +38,7 @@ deploy beta:
     environment:
         name: beta
     before_script:
-        - apk add git
+        - apk add openssh git
     script:
         - chmod go= "$DEPLOYMENTS_KEY"
         - mkdir -p ~/.ssh/ || true
@@ -55,6 +55,8 @@ deploy release:
     stage: deploy
     environment:
         name: release
+    before_script:
+        - apk add openssh git
     script:
         - chmod go= "$DEPLOYMENTS_KEY"
         - mkdir -p ~/.ssh/ || true
