@@ -16,13 +16,16 @@ plugins {
     id "java"
 }
 
-if(!project.ext.has("laby"))
+if(!project.ext.has("laby")) {
     apply plugin: "net.ltgt.errorprone"
+}
 
 archivesBaseName = "Beezig"
 version = "7.0.0"
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
 
 configurations {
     embed

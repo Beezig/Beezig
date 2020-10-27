@@ -27,7 +27,9 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class GravWorldRecords {
@@ -37,14 +39,10 @@ public class GravWorldRecords {
     }
 
     public static CompletableFuture<Map<String, WorldRecord>> getRecords() {
-        String url = "https://grav-wrs.eu/worldrecords/api/";
+        String url = (Beezig.DEBUG ? "http://localhost:8726" : "https://web.beezig.eu") + "/v1/proxy/gravity";
         try {
-            return Downloader.getJsonArray(new URL(url)).thenApplyAsync(o -> {
-                List<WorldRecord> records = Beezig.gson.fromJson(o.getInput().toJSONString(), new TypeToken<ArrayList<WorldRecord>>(){}.getType());
-                Map<String, WorldRecord> result = new HashMap<>();
-                for(WorldRecord record : records) result.put(record.getMap(), record);
-                return result;
-            });
+            return Downloader.getJsonObject(new URL(url))
+                .thenApplyAsync(o -> Beezig.gson.fromJson(o.getInput().toJSONString(), new TypeToken<HashMap<String, WorldRecord>>(){}.getType()));
         } catch (MalformedURLException e) {
             ExceptionHandler.catchException(e);
             return null;
