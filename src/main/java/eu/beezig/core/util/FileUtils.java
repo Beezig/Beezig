@@ -38,7 +38,7 @@ public class FileUtils {
 
     public static String readToString(File file) throws IOException {
         try(FileInputStream in = new FileInputStream(file)) {
-            return IOUtils.toString(in);
+            return IOUtils.toString(in, StandardCharsets.UTF_8);
         }
     }
 
