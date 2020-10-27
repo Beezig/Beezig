@@ -16,8 +16,9 @@ plugins {
     id "java"
 }
 
-if(!project.ext.has("laby"))
+if(!project.ext.has("laby")) {
     apply plugin: "net.ltgt.errorprone"
+}
 
 archivesBaseName = "Beezig"
 version = "7.0.0"
