@@ -4,7 +4,7 @@
 # Beezig v7.0 - A Hive 5zig Plugin
 
 [![Discord](https://discordapp.com/api/guilds/346695724253184014/embed.png?style=banner2)](http://discord.gg/se7zJsU)  
-[![Travis Master](https://travis-ci.org/Beezig/Beezig.svg?branch=master)](http://travis-ci.org/Beezig/Beezig)
+[![pipeline status](https://gitlab.com/Beezig/Beezig/badges/master/pipeline.svg)](https://gitlab.com/Beezig/Beezig/-/commits/master)
 ![Github All Releases](https://img.shields.io/github/downloads/Beezig/Beezig/total.svg)
 [![CodeFactor](https://www.codefactor.io/repository/github/beezig/beezig/badge)](https://www.codefactor.io/repository/github/beezig/beezig)
 ![LOC](https://badgen.net/codeclimate/loc/Beezig/Beezig)
