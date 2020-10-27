@@ -4,22 +4,60 @@
 
 image: openjdk:8-alpine
 
+include:
+- template: Security/SAST.gitlab-ci.yml
+
+variables:
+    GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+
+cache: &global_cache
+  key: ${CI_COMMIT_SHA}
+  paths:
+     - .gradle/wrapper
+     - .gradle/caches
+     - build
+  policy: pull
+
 stages:
     - build
+    - test
     - deploy
+
+sast:
+    needs: [build]
+    before_script:
+        - apk add git
+    variables:
+        SAST_DEFAULT_ANALYZERS: spotbugs
+    stage: test
+    cache:
+        <<: *global_cache
 
 build:
     stage: build
     before_script:
         - apk add git
     script:
-    - ./gradlew build
+        - ./gradlew build
+    cache:
+        <<: *global_cache
+        policy: pull-push
+
+deploy artifacts:
+    needs: [build]
+    stage: deploy
+    image: alpine:latest
+    script: # Placeholder
+        - pwd
     artifacts:
         paths:
             - build/libs/*.jar
         expire_in: 1 week
+    cache:
+        <<: *global_cache
 
 deploy version:
+    needs: [build]
     stage: deploy
     before_script:
         - apk add openssh git jq bash coreutils curl
@@ -32,5 +70,4 @@ deploy version:
     only:
         refs:
             - rewrite-2020
-
 ...
