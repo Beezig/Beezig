@@ -26,3 +26,6 @@ hs_err_pid*
 .settings/
 
 .github/
+.gradle/
+build/
+out/

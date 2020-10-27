@@ -1,0 +1,67 @@
+{
+  "modules": [
+    {
+      "id": "The Hive",
+      "name": "The Hive - Global",
+      "items": [
+        {
+          "type": "hive_tokens"
+        },
+        {
+          "type": "hive_medals"
+        },
+        {
+          "type": "hive_lobby"
+        }
+      ]
+    },
+    {
+      "id": "The Hive Games",
+      "name": "The Hive - Games",
+      "items": [
+        {
+          "type": "hive_points"
+        },
+        {
+          "type": "hive_map"
+        },
+        {
+          "type": "hive_kills"
+        },
+        {
+          "type": "hive_deaths"
+        },
+        {
+          "type": "hive_kdr"
+        },
+        {
+          "type": "hive_game"
+        },
+        {
+          "type": "hive_daily"
+        },
+        {
+          "type": "hive_session"
+        },
+        {
+          "type": "timv_gamekarma"
+        },
+        {
+          "type": "timv_traitors"
+        },
+        {
+          "type": "bed_resources"
+        },
+        {
+          "type": "bed_summoners"
+        },
+        {
+          "type": "hive_monthly"
+        },
+        {
+          "type": "dr_pb"
+        }
+      ]
+    }
+  ]
+}
