@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -17,13 +17,25 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.util;
+package eu.beezig.core.notification;
 
-import java.io.File;
+/**
+ * Specifies the behavior that the notification manager should have when parsing private messages when the
+ * 'Do not disturb' mode is on.
+ */
+public enum MessageIgnoreLevel {
+    /**
+     * Ignore the message completely.
+     */
+    IGNORE,
 
-public class DirectoryMigration {
-    public static void migrateIfNeeded(File from, File to) throws RuntimeException {
-        if(!from.exists() || to.exists()) return;
-        if(!from.renameTo(to)) throw new RuntimeException("Couldn't migrate configuration directory.");
-    }
+    /**
+     * Ignore the message completely, and alert the sender of your absence.
+     */
+    IGNORE_ALERT,
+
+    /**
+     * Show the message in a separate window.
+     */
+    SEPARATE
 }

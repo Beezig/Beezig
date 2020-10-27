@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -21,6 +21,13 @@ package eu.beezig.core.modules;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.modules.items.*;
+import eu.beezig.core.modules.items.bed.ModuleResources;
+import eu.beezig.core.modules.items.bed.ModuleSummoners;
+import eu.beezig.core.modules.items.dr.ModulePersonalBest;
+import eu.beezig.core.modules.items.dr.ModuleWorldRecord;
+import eu.beezig.core.modules.items.grav.ModuleNextMap;
+import eu.beezig.core.modules.items.timv.ModuleGameKarma;
+import eu.beezig.core.modules.items.timv.ModuleTraitorsDiscovered;
 import eu.beezig.core.server.ServerHive;
 import eu.the5zig.mod.ModAPI;
 
@@ -36,6 +43,28 @@ public class Modules {
         api.registerModuleItem(plugin, "hive_map", ModuleMap.class, HIVE);
         api.registerModuleItem(plugin, "hive_kdr", ModuleKDRChange.class, HIVE);
         api.registerModuleItem(plugin, "hive_game", ModuleGameProgress.class, HIVE);
+        api.registerModuleItem(plugin, "hive_medals", ModuleMedals.class, HIVE);
+        api.registerModuleItem(plugin, "hive_lobby", ModuleLobby.class, HIVE);
+        api.registerModuleItem(plugin, "hive_daily", ModuleDaily.class, HIVE);
+        api.registerModuleItem(plugin, "hive_session", ModuleSession.class, HIVE);
+        api.registerModuleItem(plugin, "hive_monthly", ModuleMonthly.class, HIVE);
+
+        // Trouble in Mineville
+        api.registerModuleItem(plugin, "timv_traitors", ModuleTraitorsDiscovered.class, HIVE);
+        api.registerModuleItem(plugin, "timv_gamekarma", ModuleGameKarma.class, HIVE);
+
+        // Bedwars
+        api.registerModuleItem(plugin, "bed_resources", ModuleResources.class, HIVE);
+        api.registerModuleItem(plugin, "bed_summoners", ModuleSummoners.class, HIVE);
+
+        // Deathrun
+        api.registerModuleItem(plugin, "dr_pb", ModulePersonalBest.class, HIVE);
+        api.registerModuleItem(plugin, "dr_wr", ModuleWorldRecord.class, HIVE);
+
+        // Gravity
+        api.registerModuleItem(plugin, "grav_nextmap", ModuleNextMap.class, HIVE);
+        api.registerModuleItem(plugin, "grav_pb", eu.beezig.core.modules.items.grav.ModulePersonalBest.class, HIVE);
+        api.registerModuleItem(plugin, "grav_wr", eu.beezig.core.modules.items.grav.ModuleWorldRecord.class, HIVE);
     }
 
     public static boolean render() {

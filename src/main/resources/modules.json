@@ -6,6 +6,12 @@
       "items": [
         {
           "type": "hive_tokens"
+        },
+        {
+          "type": "hive_medals"
+        },
+        {
+          "type": "hive_lobby"
         }
       ]
     },
@@ -30,6 +36,30 @@
         },
         {
           "type": "hive_game"
+        },
+        {
+          "type": "hive_daily"
+        },
+        {
+          "type": "hive_session"
+        },
+        {
+          "type": "timv_gamekarma"
+        },
+        {
+          "type": "timv_traitors"
+        },
+        {
+          "type": "bed_resources"
+        },
+        {
+          "type": "bed_summoners"
+        },
+        {
+          "type": "hive_monthly"
+        },
+        {
+          "type": "dr_pb"
         }
       ]
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -22,7 +22,7 @@ package eu.beezig.core.modules.items;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.ServerHive;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.modules.StringItem;
 
 public class ModuleTokens extends StringItem {

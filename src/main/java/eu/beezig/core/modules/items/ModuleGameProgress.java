@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -22,7 +22,7 @@ package eu.beezig.core.modules.items;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.modes.TIMV;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.modules.GameModeItem;
 
 public class ModuleGameProgress extends GameModeItem<HiveMode> {
@@ -33,14 +33,12 @@ public class ModuleGameProgress extends GameModeItem<HiveMode> {
     @Override
     protected Object getValue(boolean b) {
         if(b) return "123 Points";
-        return String.format("%s %s", getGameMode().getPoints(), Message.translate(getGameMode() instanceof TIMV
-                ? "beezig.module.timv.karma"
-                : "modules.item.hive_points"));
+        return String.format("%s %s", getGameMode().getPoints(), Message.translate("modules.item.hive_points"));
     }
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render() && (getGameMode() != null && getGameMode().getPoints() != 0);
+        return dummy || (Modules.render() && getGameMode() != null && (!(getGameMode() instanceof TIMV) && getGameMode().getPoints() != 0));
     }
 
     @Override

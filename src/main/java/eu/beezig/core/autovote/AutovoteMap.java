@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -17,15 +17,28 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.util;
+package eu.beezig.core.autovote;
 
-import java.util.Locale;
+public class AutovoteMap {
+    private String name;
+    private int index;
+    private int votes;
 
-public class StringUtils {
+    public AutovoteMap(String name, int index, int votes) {
+        this.index = index;
+        this.votes = votes;
+        this.name = name;
+    }
 
-    private static final String MAP_REPLACE_REGEX = "[^a-zA-Z0-9]";
+    public String getName() {
+        return name;
+    }
 
-    public static String normalizeMapName(String mapIn) {
-        return mapIn.replaceAll(MAP_REPLACE_REGEX, "").toLowerCase(Locale.ROOT);
+    public int getIndex() {
+        return index;
+    }
+
+    public int getVotes() {
+        return votes;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -20,8 +20,26 @@
 package eu.beezig.core.server;
 
 import eu.beezig.core.Beezig;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.advrec.AdvancedRecords;
+import eu.beezig.core.automessage.AutoMessageManager;
+import eu.beezig.core.autovote.AutovoteManager;
+import eu.beezig.core.data.HiveTitle;
+import eu.beezig.core.logging.DailyService;
+import eu.beezig.core.logging.GameLogger;
+import eu.beezig.core.logging.TemporaryPointsManager;
+import eu.beezig.core.logging.session.SessionService;
+import eu.beezig.core.server.monthly.IMonthly;
+import eu.beezig.core.server.monthly.MonthlyService;
+import eu.beezig.core.util.ExceptionHandler;
+import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public abstract class HiveMode extends GameMode {
     private int points;
@@ -35,16 +53,104 @@ public abstract class HiveMode extends GameMode {
      * The player's stats at the start of the game
      */
     private GlobalStats cachedGlobal;
+    private AutovoteManager autovoteManager;
+    private AdvancedRecords advancedRecords;
+    private TitleService titleService;
+    protected GameLogger logger;
+    private boolean hasVoted;
+    private Map<Class<? extends AutoMessageManager>, Boolean> autoMessageSent;
+    private String gameID;
+    protected DailyService dailyService;
+    protected SessionService sessionService;
+    private File modeDir;
+    protected long gameStart;
+    private MonthlyService monthlyProfile;
+    private boolean init;
 
-    public HiveMode() {
+    protected HiveMode() {
         global = new GlobalStats();
+        autovoteManager = new AutovoteManager(this);
         cachedGlobal = new GlobalStats();
         statsFetcher = new StatsFetcher(getClass());
-        statsFetcher.getJob().thenAcceptAsync(this::setGlobal).exceptionally(e -> {
-            Message.error(Message.translate("error.stats_fetch"));
-            Beezig.logger.error(e);
-            return null;
-        });
+        advancedRecords = new AdvancedRecords();
+        try {
+            titleService = new TitleService(getIdentifier());
+        } catch (IOException e) {
+            ExceptionHandler.catchException(e);
+        }
+        logger = new GameLogger(getIdentifier().toLowerCase(Locale.ROOT));
+        autoMessageSent = new HashMap<>();
+        modeDir = new File(Beezig.get().getBeezigDir(), getIdentifier().toLowerCase(Locale.ROOT));
+    }
+
+    protected void onModeJoin() {
+        if(!init) {
+            init = true;
+            if(statsFetcher.isReady()) {
+                statsFetcher.getJob().thenAcceptAsync(this::setGlobal).exceptionally(e -> {
+                    Message.error(Message.translate("error.stats_fetch"));
+                    Beezig.logger.error(e);
+                    return null;
+                });
+            }
+            gameStart = System.currentTimeMillis();
+            TemporaryPointsManager temporaryPointsManager = Beezig.get().getTemporaryPointsManager();
+            if (supportsTemporaryPoints() && temporaryPointsManager != null) {
+                dailyService = temporaryPointsManager.getDailyForMode(this);
+                if(temporaryPointsManager.getCurrentSession() != null)
+                    sessionService = temporaryPointsManager.getCurrentSession().getService(this);
+            }
+            if (this instanceof IMonthly) {
+                if (!MonthlyService.ignoredModes.contains(getClass())) {
+                    ((IMonthly) this).loadProfile().exceptionally(e -> {
+                        MonthlyService.ignoredModes.add(HiveMode.this.getClass());
+                        return null;
+                    }).thenAcceptAsync(this::setMonthlyProfile).exceptionally(e -> {
+                        // This actually never fails, we use the value so Errorprone doesn't complain.
+                        return null;
+                    });
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns whether the mode supports temporary points (daily, session)
+     */
+    protected boolean supportsTemporaryPoints() {
+        return true;
+    }
+
+    private void setMonthlyProfile(MonthlyService monthlyProfile) {
+        this.monthlyProfile = monthlyProfile;
+    }
+
+    public String getGameID() {
+        return gameID;
+    }
+
+    public void setGameID(String gameID) {
+        this.gameID = gameID;
+    }
+
+    public boolean hasVoted() {
+        return hasVoted;
+    }
+
+    public void setVoted(boolean hasVoted) {
+        this.hasVoted = hasVoted;
+    }
+
+    public boolean isAutoMessageSent(Class<? extends AutoMessageManager> autoMessageManagerClass) {
+        return autoMessageSent.containsKey(autoMessageManagerClass) && autoMessageSent.get(autoMessageManagerClass);
+    }
+
+    public void setAutoMessageSent(Class<? extends AutoMessageManager> autoMessageManagerClass, boolean sent) {
+        autoMessageSent.put(autoMessageManagerClass, sent);
+    }
+
+    public AdvancedRecords getAdvancedRecords() {
+        return advancedRecords;
     }
 
     public StatsFetcher getStatsFetcher() {
@@ -55,10 +161,49 @@ public abstract class HiveMode extends GameMode {
         return cachedGlobal;
     }
 
+    public TitleService getTitleService() {
+        return titleService;
+    }
+
+    public DailyService getDailyService() {
+        return dailyService;
+    }
+
+    public SessionService getSessionService() {
+        return sessionService;
+    }
+
+    public File getModeDir() {
+        return modeDir;
+    }
+
+    public MonthlyService getMonthlyProfile() {
+        return monthlyProfile;
+    }
+
     /**
      * Called when the user returns to the lobby.
      */
-    public abstract void end();
+    protected void end() {
+        if(dailyService != null) {
+            try {
+                dailyService.submitGamePoints(getPoints(), gameID);
+                dailyService.save();
+            } catch (IOException e) {
+                ExceptionHandler.catchException(e, "Couldn't save daily points");
+            }
+        }
+    }
+
+    public abstract String getIdentifier();
+
+    public AutovoteManager getAutovoteManager() {
+        return autovoteManager;
+    }
+
+    public GameLogger getLogger() {
+        return logger;
+    }
 
     public int getPoints() {
         return points;
@@ -75,6 +220,8 @@ public abstract class HiveMode extends GameMode {
     public void addPoints(int points) {
         this.points += points;
         if(global.points != null) global.points += points;
+        if(dailyService != null) dailyService.addPoints(points);
+        if(sessionService != null) sessionService.addPoints(points);
     }
 
     public void addKills(int kills) {
@@ -107,6 +254,7 @@ public abstract class HiveMode extends GameMode {
         private Integer deaths;
         private Integer victories;
         private Integer played;
+        private Pair<Integer, HiveTitle> title;
 
         public Integer getPlayed() {
             return played;
@@ -146,6 +294,14 @@ public abstract class HiveMode extends GameMode {
 
         public void setPlayed(Integer played) {
             this.played = played;
+        }
+
+        public Pair<Integer, HiveTitle> getTitle() {
+            return title;
+        }
+
+        public void setTitle(Pair<Integer, HiveTitle> title) {
+            this.title = title;
         }
 
         @Override

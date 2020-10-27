@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -21,7 +21,10 @@ package eu.beezig.core.data;
 
 public enum DataPath {
     TIMV_MAPS("timv/maps.json"),
-    DR_MAPS("dr/maps.json");
+    DR_MAPS("dr/maps.json"),
+    AUTOGG_TRIGGERS("autogg-triggers.json"),
+    AUTOGL_TRIGGERS("autogl-triggers.json"),
+    AUTONEWGAME_TRIGGERS("autonewgame-triggers.json");
 
     private final String path;
 

@@ -1,14 +1,31 @@
 import org.apache.tools.ant.filters.EscapeUnicode
+import org.apache.tools.ant.filters.ReplaceTokens
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "net.ltgt.gradle:gradle-errorprone-plugin:1.1.1"
+    }
+}
 
 plugins {
     id "java"
-    id "net.ltgt.errorprone" version "1.1.1"
+}
+
+if(!project.ext.has("laby")) {
+    apply plugin: "net.ltgt.errorprone"
 }
 
 archivesBaseName = "Beezig"
 version = "7.0.0"
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
 
 configurations {
     embed
@@ -24,22 +41,66 @@ repositories {
     maven {
         url "https://libraries.minecraft.net"
     }
+    maven {
+        url  "https://dl.bintray.com/roccodev/maven"
+    }
 }
 
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:latest.release")
-    errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
+    if(!project.ext.has("laby")) {
+        errorprone("com.google.errorprone:error_prone_core:2.4.0")
+        errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
+    }
 
-    embed group: 'pw.roccodev.beezig', name: 'hive-api-wrapper', version: '3.0-async-alpha'
-    compile group: 'eu.5zigreborn', name: 'plugin-api', version: '3.13.0'
+    embed(group: 'pw.roccodev.beezig', name: 'hive-api-wrapper', version: '3.2.0') {
+        exclude module: 'caffeine'
+    }
+    embed group: 'net.sourceforge.javacsv', name: 'javacsv', version: '2.0'
+    embed group: 'com.intellij', name: 'forms_rt', version: '7.0.3'
+    embed group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.8.4'
+    embed(group: 'io.sentry', name: 'sentry', version: '3.1.1-MCFIX') {
+        exclude module: 'gson'
+    }
+
+    compile group: 'eu.5zigreborn', name: 'plugin-api', version: '3.14.1'
     compile group: 'com.mojang', name: 'authlib', version: '1.6.25'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    compile group: 'org.lwjgl.lwjgl', name: 'lwjgl', version: '2.9.3'
+    compile group: 'org.apache.commons', name: 'commons-compress', version: '1.8.1'
 }
 
 tasks.withType(ProcessResources).each { task ->
     task.from(task.getSource()) {
         include '**/*.properties'
         filter(EscapeUnicode) // native2ascii for i18n files
+
+        include '**/*.json'
+        filesMatching('**/*.json') {
+            def beezigDir = new File ('Beezig/.git')
+            if (beezigDir.exists()) {
+                def beezigCommit = "git --git-dir Beezig/.git rev-parse HEAD".execute().text.trim()
+                def beezigCommits = ("git --git-dir Beezig/.git rev-list --count " + "git --git-dir Beezig/.git describe --tags --abbrev=0".execute().text.trim() +
+                    "..HEAD").execute().text.trim()
+                def beezigDate = ("git --git-dir Beezig/.git log -1 --pretty=%cI " + beezigCommit).execute().text.trim()
+
+                filter(ReplaceTokens, tokens: [beezigversion: '7.0.0',
+                                               beezigcommit: beezigCommit,
+                                               beezigcommits: beezigCommits,
+                                               beezigtype: 'beta',
+                                               beezigdate: beezigDate])
+            } else {
+                def beezigCommit = "git rev-parse HEAD".execute().text.trim()
+                def beezigCommits = ("git rev-list --count " + "git describe --tags --abbrev=0".execute().text.trim() +
+                    "..HEAD").execute().text.trim()
+                def beezigDate = ("git log -1 --pretty=%cI " + beezigCommit).execute().text.trim()
+
+                filter(ReplaceTokens, tokens: [beezigversion: '7.0.0',
+                                               beezigcommit: beezigCommit,
+                                               beezigcommits: beezigCommits,
+                                               beezigtype: 'beta',
+                                               beezigdate: beezigDate])
+            }
+        }
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -19,12 +19,16 @@
 
 package eu.beezig.core.server.listeners;
 
+import eu.beezig.core.Beezig;
+import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.BED;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.util.minecraft.ChatColor;
 
 public class BEDListener extends AbstractGameListener<BED> {
+    private String lobby;
+
     @Override
     public Class<BED> getGameMode() {
         return BED.class;
@@ -32,7 +36,16 @@ public class BEDListener extends AbstractGameListener<BED> {
 
     @Override
     public boolean matchLobby(String s) {
-        return "bed".equals(s);
+        if(s.matches("bed[dtx]?")) {
+            lobby = s;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onGameModeJoin(BED gameMode) {
+        gameMode.setModeFromLobby(lobby);
     }
 
     @Override
@@ -41,22 +54,24 @@ public class BEDListener extends AbstractGameListener<BED> {
             int points = Integer.parseInt(match.get(0), 10);
             gameMode.addPoints(points);
             if(match.size() > 1) {
-                String action = match.get(1);
-                if(action.startsWith("Killing")) {
-                    gameMode.addKills(1);
+                if(match.get(1).startsWith("Destroying")) {
+                    gameMode.setBedsDestroyed(gameMode.getBedsDestroyed() + 1);
                 }
             }
         }
-        else if("bed.kill.farm".equals(key)) gameMode.addKills(1);
-        else if("bed.win".equals(key)) gameMode.addPoints(100);
+        else if(key.startsWith("bed.kill") && match.get(0).equals(((ServerHive) Beezig.api().getActiveServer()).getNick())) {
+            gameMode.addKills(1);
+            gameMode.addPoints(key.equals("bed.kill.final") ? 10 : 5);
+        }
+        else if("bed.win".equals(key)) gameMode.won();
+        else if("bed.summoner".equals(key)) gameMode.upgradeSummoner(match.get(0));
     }
 
     @Override
     public void onTitle(BED gameMode, String rawTitle, String rawSubTitle) {
-        if(rawTitle == null) return;
         if(rawSubTitle == null) return;
-        String title = ChatColor.stripColor(rawTitle);
         String sub = ChatColor.stripColor(rawSubTitle);
-        if("➋".equals(title) && "Respawning in 2 seconds".equals(sub)) gameMode.addDeaths(1);
+        if("➊ seconds until respawn...".equals(sub) ||
+            /* future proofing */ "➊ second until respawn...".equals(sub)) gameMode.addDeaths(1);
     }
 }

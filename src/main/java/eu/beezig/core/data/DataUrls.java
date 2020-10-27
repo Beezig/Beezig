@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -20,7 +20,8 @@
 package eu.beezig.core.data;
 
 class DataUrls {
-    private static final String GITHUB_BASE = "https://api.github.com/";
-    static final String LATEST_COMMIT = GITHUB_BASE + "repos/Beezig/hive-data/branches/master";
-    static final String DOWNLOAD = "https://github.com/Beezig/hive-data/archive/master.zip";
+    private static final String GITLAB_BASE = "https://gitlab.com/api/v4/projects/21868639/repository/";
+    static final String LATEST_COMMIT = GITLAB_BASE + "branches/master";
+    static final String DOWNLOAD = GITLAB_BASE + "archive.zip";
+    static final String TITLES_FORMAT = "https://api.hivemc.com/v1/game/%s/titles";
 }

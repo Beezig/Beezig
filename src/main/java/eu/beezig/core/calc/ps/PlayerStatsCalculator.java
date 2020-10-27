@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -20,22 +20,32 @@
 package eu.beezig.core.calc.ps;
 
 import eu.beezig.core.Beezig;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.server.TitleService;
+import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
+import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.GameStats;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
+import eu.the5zig.util.minecraft.ChatColor;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PlayerStatsCalculator {
-    public static void calculate(String modeName, String stat, List<NetworkPlayerInfo> playersIn) {
-        PlayerStatsMode mode = new PlayerStats().modes.get(modeName.toLowerCase(Locale.ROOT));
+    public static void calculate(PlayerStatsMode mode, String modeName, String stat, List<NetworkPlayerInfo> playersIn) {
         if(mode == null) {
             Message.error(Message.translate("error.ps.mode_not_found"));
             return;
+        }
+        try {
+            mode.setTitleService(new TitleService(modeName));
+        } catch (IOException e) {
+            Message.error(Message.translate("error.titles"));
+            ExceptionHandler.catchException(e);
         }
         String apiStat = mode.getApiKey(stat);
         if(apiStat == null) {
@@ -45,7 +55,7 @@ public class PlayerStatsCalculator {
         List<NetworkPlayerInfo> players = playersIn == null ? Beezig.api().getServerPlayers() : playersIn;
         // Map all UUIDs to display names, required to format the results later
         HashMap<String, String> displayNames = players.stream()
-            .collect(Collectors.toMap(p -> UUIDUtils.strip(p.getGameProfile().getId()), NetworkPlayerInfo::getDisplayName, (x, y) -> y, HashMap::new));
+            .collect(Collectors.toMap(p -> UUIDUtils.strip(p.getGameProfile().getId()), UUIDUtils::getDisplayName, (x, y) -> y, HashMap::new));
         // Discard exceptions (profile not found etc.)
         CompletableFuture<? extends GameStats>[] stats = players.stream().map(p -> mode.get(p.getGameProfile().getId()).exceptionally(e -> null)).toArray(CompletableFuture[]::new);
         // Wait for the tasks to complete, then sort the results.
@@ -58,17 +68,19 @@ public class PlayerStatsCalculator {
                     .map(CompletableFuture::join)
                     .filter(Objects::nonNull)
                     .map(s -> mode.getProfile(displayNames, s, apiStat, stat))
+                        .filter(Objects::nonNull)
                     .sorted()
                     .mapToDouble(p -> {
-                        Message.info(String.format("%s §7-§b %s", p.getDisplayName(), Message.ratio(p.getStat())));
+                        Message.info(p.getFormat() + " " + UUIDUtils.getShortRole(UUIDUtils.getLocalUUID(ChatColor.stripColor(p.getDisplayName()))));
                         return p.getStat().doubleValue();
                     }).summaryStatistics();
                 Message.info(Beezig.api().translate("msg.ps.done", modeName.toUpperCase(Locale.ROOT),
-                        "§b" + Message.ratio(summary.getSum()) + "§3", "§b" + Message.ratio(summary.getAverage()) + "§3"));
+                        Color.accent() + Message.ratio(summary.getSum()) + Color.primary(), Color.accent() + Message.ratio(summary.getAverage()) + Color.primary()));
             }).exceptionally(e -> {
                         Message.error(Message.translate("error.ps.generic"));
-                        e.printStackTrace();
+                        ExceptionHandler.catchException(e);
                         return null;
         });
     }
+
 }

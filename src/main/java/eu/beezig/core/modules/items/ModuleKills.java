@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -21,7 +21,7 @@ package eu.beezig.core.modules.items;
 
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.HiveMode;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.modules.GameModeItem;
 
 public class ModuleKills extends GameModeItem<HiveMode> {
@@ -48,7 +48,7 @@ public class ModuleKills extends GameModeItem<HiveMode> {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        return dummy || Modules.render() && (getGameMode() != null && getGameMode().getKills() != 0);
+        return dummy || (Modules.render() && (getGameMode() != null && getGameMode().getKills() != 0));
     }
 
     @Override

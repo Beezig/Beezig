@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -19,14 +19,21 @@
 
 package eu.beezig.core.server;
 
+import com.google.common.base.Splitter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.UUIDUtils;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.util.minecraft.ChatColor;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -38,15 +45,17 @@ import java.util.stream.Collectors;
  * this interface, or set up the producers accordingly.
  */
 public class StatsFetcher {
-    private Class<? extends HiveMode> gamemode;
-    private CompletableFuture<HiveMode.GlobalStats> job;
-    private Pattern scoreboardTitle;
+    private static final Splitter COLON = Splitter.on(": ");
+    private final Class<? extends HiveMode> gamemode;
+    private final CompletableFuture<HiveMode.GlobalStats> job;
     private Function<String, HiveMode.GlobalStats> apiComputer;
     private Function<HashMap<String, Integer>, HiveMode.GlobalStats> scoreboardComputer;
     private long firstCheck = -1, timeout = 2000L;
+    private AtomicBoolean started;
 
     StatsFetcher(Class<? extends HiveMode> mode) {
         gamemode = mode;
+        started = new AtomicBoolean(false);
         job = new CompletableFuture<>();
     }
 
@@ -58,26 +67,31 @@ public class StatsFetcher {
         this.scoreboardComputer = scoreboardComputer;
     }
 
-    public void setScoreboardTitle(String scoreboardTitle) {
-        this.scoreboardTitle = Pattern.compile(scoreboardTitle);
+    public boolean isReady() {
+        return scoreboardComputer != null || apiComputer != null;
     }
 
     public void setTimeout(long timeout) {
         this.timeout = timeout;
     }
 
-    public CompletableFuture<HiveMode.GlobalStats> getJob() {
+    CompletableFuture<HiveMode.GlobalStats> getJob() {
         return job;
     }
 
+    @SuppressWarnings("FutureReturnValueIgnored")
     void attemptCompute(HiveMode mode, Scoreboard board) {
-        if(job.isDone()) return;
+        if(started.get()) return;
         if(!gamemode.isAssignableFrom(mode.getClass())) return;
-        if(board != null && scoreboardTitle.matcher(ChatColor.stripColor(board.getTitle()).trim()).matches()) {
+        if(board != null && Pattern.matches("HiveMC", ChatColor.stripColor(board.getTitle()).trim())) {
+            started.compareAndSet(false, true);
             Beezig.logger.debug("Found matching scoreboard using title backend");
             HashMap<String, Integer> normalized = board.getLines().entrySet().stream()
-                    .map(e -> new HashMap.SimpleEntry<>(ChatColor.stripColor(e.getKey()), e.getValue()))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, HashMap::new));
+                    .map(e -> {
+                        List<String> lineSegments = COLON.splitToList(ChatColor.stripColor(e.getKey()));
+                        return new AbstractMap.SimpleEntry<>(lineSegments.get(0).trim(),
+                                lineSegments.size() > 1 ? Integer.parseInt(lineSegments.get(1).replaceAll(",", "").trim()) : e.getValue());
+                    }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, HashMap::new));
             job.complete(scoreboardComputer.apply(normalized));
         }
         else {
@@ -86,8 +100,11 @@ public class StatsFetcher {
                 return;
             }
             if(System.currentTimeMillis() - firstCheck >= timeout) {
+                started.compareAndSet(false, true);
                 Beezig.logger.debug("Scoreboard not found and timeout reached, querying API");
-                Beezig.get().getAsyncExecutor().submit(() -> job.complete(apiComputer.apply(UUIDUtils.strip(Beezig.user().getId()))));
+                ScheduledExecutorService executor = Beezig.get().getAsyncExecutor();
+                executor.execute(() -> job.complete(apiComputer.apply(UUIDUtils.strip(Beezig.user().getId()))));
+                executor.schedule(() -> job.completeExceptionally(new TimeoutException("API Timeout")), 5000, TimeUnit.MILLISECONDS);
             }
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -19,11 +19,17 @@
 
 package eu.beezig.core.data;
 
+import com.google.common.reflect.TypeToken;
 import eu.beezig.core.Beezig;
+import eu.beezig.core.automessage.AutoGGManager;
+import eu.beezig.core.automessage.AutoGLManager;
+import eu.beezig.core.automessage.AutoNewGameManager;
+import eu.beezig.core.data.timv.TestMessagesManager;
 import eu.beezig.core.util.FileUtils;
-import eu.beezig.core.util.Message;
+import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
 import eu.beezig.hiveapi.wrapper.utils.json.JObject;
+import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
@@ -34,6 +40,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -44,9 +52,43 @@ import java.util.zip.ZipInputStream;
  */
 public class BeezigData {
     private File dataFolder;
+    private GameTitles titleManager;
+    private TestMessagesManager customTestMessages;
+    private AutoGGManager autoGGManager;
+    private AutoGLManager autoGLManager;
+    private AutoNewGameManager autoNewGameManager;
 
     public BeezigData(File beezigDir) {
         this.dataFolder = new File(beezigDir, "data");
+        this.titleManager = new GameTitles(dataFolder);
+        this.customTestMessages = new TestMessagesManager();
+        Beezig.api().getPluginManager().registerListener(Beezig.get(), customTestMessages);
+        this.autoGGManager = new AutoGGManager();
+        Beezig.api().getPluginManager().registerListener(Beezig.get(), autoGGManager);
+        this.autoGLManager = new AutoGLManager();
+        Beezig.api().getPluginManager().registerListener(Beezig.get(), autoGLManager);
+        this.autoNewGameManager = new AutoNewGameManager();
+        Beezig.api().getPluginManager().registerListener(Beezig.get(), autoNewGameManager);
+    }
+
+    public GameTitles getTitleManager() {
+        return titleManager;
+    }
+
+    public TestMessagesManager getCustomTestMessages() {
+        return customTestMessages;
+    }
+
+    public AutoGGManager getAutoGGManager() {
+        return autoGGManager;
+    }
+
+    public AutoGLManager getAutoGLManager() {
+        return autoGLManager;
+    }
+
+    public AutoNewGameManager getAutoNewGameManager() {
+        return autoNewGameManager;
     }
 
     public <T> T getData(DataPath path, Class<T> marker) throws IOException {
@@ -64,7 +106,37 @@ public class BeezigData {
         return Arrays.asList(arr);
     }
 
-    public void tryUpdate() throws Exception {
+    public <T> Map<String, T> getDataMap(DataPath path, TypeToken marker) throws IOException {
+        File f = new File(dataFolder, "hive-data-master/" + path.getPath());
+        if(!f.exists()) return null;
+        String json = FileUtils.readToString(f);
+        return Beezig.gson.fromJson(json, marker.getType());
+    }
+
+    public void tryUpdate(int timeout) {
+        CompletableFuture<Void> update = new CompletableFuture<>();
+        CompletableFuture<Void> timeoutFuture = new CompletableFuture<>();
+        Beezig.get().getAsyncExecutor().execute(() -> {
+            try {
+                Thread.sleep(timeout * 1000);
+                timeoutFuture.completeExceptionally(new InterruptedException("Update took too long"));
+            } catch (InterruptedException ignored) {
+                Beezig.logger.debug("Interrupting timeout task");
+            }
+            timeoutFuture.complete(null);
+        });
+        Beezig.get().getAsyncExecutor().execute(() -> {
+            try {
+                tryUpdate();
+                update.complete(null);
+            } catch (Exception e) {
+                update.completeExceptionally(e);
+            }
+        });
+        CompletableFuture.anyOf(update, timeoutFuture).join();
+    }
+
+    private void tryUpdate() throws Exception {
         Beezig.logger.info("Checking for data updates...");
         String updateSha;
         if((updateSha = checkForUpdates()) == null) {
@@ -77,7 +149,7 @@ public class BeezigData {
     private String checkForUpdates() throws IOException, ParseException {
         File manifest = new File(dataFolder, "manifest.json");
         JObject remote = Downloader.getJsonObject(new URL(DataUrls.LATEST_COMMIT)).join();
-        String newSha = remote.getJObject("commit").getString("sha");
+        String newSha = remote.getJObject("commit").getString("id");
         if(!manifest.exists()) {
             manifest.createNewFile();
             return newSha;
@@ -88,21 +160,26 @@ public class BeezigData {
         return null;
     }
 
-    private void installUpdate(String newSha) throws IOException {
+    private void installUpdate(String newSha) throws Exception {
         Beezig.logger.info("Downloading data update...");
         URL url = new URL(DataUrls.DOWNLOAD);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.addRequestProperty("User-Agent", Message.getUserAgent());
-        File futureOut = new File(dataFolder, "hive-data-master");
-        if(futureOut.exists()) {
-            futureOut.delete();
+        conn.addRequestProperty("Accept", "application/zip");
+        File[] oldFiles = dataFolder.listFiles((file, name) -> file.isDirectory() && name.startsWith("hive-data-master"));
+        if(oldFiles != null) {
+            for(File file : oldFiles) org.apache.commons.io.FileUtils.deleteDirectory(file);
         }
         try(ZipInputStream zip = new ZipInputStream(conn.getInputStream())) {
             uncompressRepo(zip, dataFolder);
         }
         JSONObject manifest = new JSONObject();
         manifest.put("sha", newSha);
+        File[] files = dataFolder.listFiles((file, name) -> file.isDirectory() && name.startsWith("hive-data-master"));
+        if(files == null || files.length < 1) throw new IOException("Output dir not found");
+        org.apache.commons.io.FileUtils.moveDirectory(files[0], new File(dataFolder, "hive-data-master"));
         FileUtils.writeJson(manifest, new File(dataFolder, "manifest.json"));
+        titleManager.downloadUpdate();
         Beezig.logger.info("Data updated successfully.");
     }
 
@@ -110,7 +187,7 @@ public class BeezigData {
         ZipEntry entry = in.getNextEntry();
         while(entry != null) {
             validatePath(entry, out);
-            File dest = new File(out, entry.getName());
+            File dest = new File(out, FilenameUtils.normalize(entry.getName()));
             if(entry.isDirectory()) dest.mkdirs();
             else {
                 dest.getParentFile().mkdirs();
@@ -128,7 +205,7 @@ public class BeezigData {
     // https://snyk.io/research/zip-slip-vulnerability
     private void validatePath(ZipEntry entry, File out) throws IOException {
         String canonicalDestinationDirPath = out.getCanonicalPath();
-        File destinationFile = new File(out, entry.getName());
+        File destinationFile = new File(out, FilenameUtils.normalize(entry.getName()));
         String canonicalDestinationFile = destinationFile.getCanonicalPath();
         if (!canonicalDestinationFile.startsWith(canonicalDestinationDirPath + File.separator)) {
             throw new RuntimeException("Entry is outside of the target dir: " + entry.getName());

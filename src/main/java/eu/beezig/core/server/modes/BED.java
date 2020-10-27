@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -19,14 +19,58 @@
 
 package eu.beezig.core.server.modes;
 
+import eu.beezig.core.Beezig;
+import eu.beezig.core.advrec.AdvRecUtils;
+import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.server.IAutovote;
+import eu.beezig.core.server.IDynamicMode;
+import eu.beezig.core.server.monthly.IMonthly;
+import eu.beezig.core.server.monthly.MonthlyField;
+import eu.beezig.core.server.monthly.MonthlyService;
+import eu.beezig.core.util.ExceptionHandler;
+import eu.beezig.core.util.UUIDUtils;
+import eu.beezig.core.util.text.Message;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.BedStats;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
-public class BED extends HiveMode {
+import java.util.concurrent.CompletableFuture;
+
+public class BED extends HiveMode implements IAutovote, IMonthly, IDynamicMode {
+
+    private int bedsDestroyed;
+    private String mode;
+    private boolean won;
+    private int ironSummoner = 1, goldSummoner, diamondSummoner;
+
+    public int getDiamondSummoner() {
+        return diamondSummoner;
+    }
+
+    public int getGoldSummoner() {
+        return goldSummoner;
+    }
+
+    public int getIronSummoner() {
+        return ironSummoner;
+    }
+
+    public void upgradeSummoner(String name) {
+        if("Iron Ingot".equals(name)) ironSummoner++;
+        else if("Gold Ingot".equals(name)) goldSummoner++;
+        else if("Diamond".equals(name)) diamondSummoner++;
+    }
+
+    public int getBedsDestroyed() {
+        return bedsDestroyed;
+    }
+
+    public void setBedsDestroyed(int bedsDestroyed) {
+        this.bedsDestroyed = bedsDestroyed;
+    }
 
     public BED() {
-        statsFetcher.setScoreboardTitle("Your BED[DTX]? Stats");
         statsFetcher.setApiComputer(name -> {
             BedStats api = Profiles.bed(name).join();
             GlobalStats stats = new GlobalStats();
@@ -35,6 +79,7 @@ public class BED extends HiveMode {
             stats.setDeaths((int) api.getDeaths());
             stats.setVictories((int) api.getVictories());
             stats.setPlayed((int) api.getGamesPlayed());
+            stats.setTitle(getTitleService().getTitle(api.getTitle(), Math.toIntExact(api.getPoints())));
             return stats;
         });
         statsFetcher.setScoreboardComputer(lines -> {
@@ -44,8 +89,38 @@ public class BED extends HiveMode {
             stats.setDeaths(lines.get("Deaths"));
             stats.setVictories(lines.get("Victories"));
             stats.setPlayed(lines.get("Games Played"));
+            Profiles.bed(UUIDUtils.strip(Beezig.user().getId()))
+                    .thenAcceptAsync(api -> stats.setTitle(getTitleService().getTitle(api.getTitle(), Math.toIntExact(api.getPoints()))))
+                .exceptionally(e -> {
+                ExceptionHandler.catchException(e);
+                Message.error(Message.translate("error.stats_fetch"));
+                return null;
+            });
             return stats;
         });
+        getAdvancedRecords().setExecutor(this::recordsExecutor);
+        getAdvancedRecords().setSlowExecutor(this::slowRecordsExecutor);
+        logger.setHeaders("Points", "Mode", "Map", "Kills", "Deaths", "Beds", "Victory?", "Timestamp", "GameID");
+    }
+
+    public void won() {
+        addPoints(100);
+        won = true;
+    }
+
+    private void recordsExecutor() {
+        AdvRecUtils.addPvPStats(getAdvancedRecords());
+    }
+
+    private void slowRecordsExecutor() {
+            int points = Message.getNumberFromFormat(getAdvancedRecords().getMessage("Points")).intValue();
+            if (AdvRecUtils.needsAPI()) {
+                AdvRecUtils.announceAPI();
+                BedStats api = Profiles.bed(getAdvancedRecords().getTarget()).join();
+                getAdvancedRecords().setVariables(api);
+                getAdvancedRecords().setOrAddAdvanced(0, new ImmutablePair<>("Points",
+                        getAdvancedRecords().getMessages().get(0).getRight() + AdvRecUtils.getTitle(getTitleService(), api.getTitle(), points)));
+            }
     }
 
     @Override
@@ -55,6 +130,48 @@ public class BED extends HiveMode {
 
     @Override
     public void end() {
+        super.end();
+        logger.log(getPoints(), mode, getMap(), getKills(), getDeaths(), bedsDestroyed,
+                won, System.currentTimeMillis(), getGameID());
+        if(getSessionService() != null)
+            Beezig.get().getTemporaryPointsManager().getCurrentSession().pushItem(new SessionItem.Builder(getIdentifier())
+                    .points(getPoints()).map(getMap()).gameStart(gameStart).kills(getKills()).deaths(getDeaths())
+                    .custom("beds", Integer.toString(bedsDestroyed, 10)).build());
+    }
 
+    @Override
+    public String getIdentifier() {
+        return "bed";
+    }
+
+    @Override
+    public int getMaxVoteOptions() {
+        return 6;
+    }
+
+    @Override
+    public boolean isLastRandom() {
+        return true;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    @Override
+    public void setModeFromLobby(String lobby) {
+        if("bedd".equals(lobby)) {
+            mode = "Duos";
+        } else if("bedt".equals(lobby)) {
+            mode = "Teams";
+        } else if("bedx".equals(lobby)) {
+            mode = "LTM";
+        } else mode = "Solo";
+    }
+
+    @Override
+    public CompletableFuture<? extends MonthlyService> loadProfile() {
+        return new BedStats(null).getMonthlyProfile(UUIDUtils.strip(Beezig.user().getId()))
+                .thenApplyAsync(m -> new MonthlyService(m, MonthlyField.KILLS, MonthlyField.DEATHS, MonthlyField.KD));
     }
 }

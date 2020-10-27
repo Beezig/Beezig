@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -19,8 +19,10 @@
 
 package eu.beezig.core.calc.ps;
 
+import eu.beezig.core.server.TitleService;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.hiveapi.wrapper.player.GameStats;
+import eu.beezig.hiveapi.wrapper.player.Titleable;
 import eu.beezig.hiveapi.wrapper.utils.json.JObject;
 
 import java.util.HashMap;
@@ -33,6 +35,7 @@ import java.util.function.Function;
 public class PlayerStatsMode {
     private HashMap<String, String> apiTable;
     private Function<String, CompletableFuture<? extends GameStats>> producer;
+    private TitleService titleService;
 
     PlayerStatsMode(HashMap<String, String> apiTable) {
         this.apiTable = apiTable;
@@ -61,17 +64,33 @@ public class PlayerStatsMode {
         return producer.apply(UUIDUtils.strip(uuid));
     }
 
+    public void setTitleService(TitleService titleService) {
+        this.titleService = titleService;
+    }
+
     PlayerStatsProfile getProfile(HashMap<String, String> displayNames, GameStats source, String key, String stat) {
         Number value = null;
         JObject src = source.getSource();
         if("kd".equalsIgnoreCase(stat)) {
+            String apiKills = getApiKey("kills");
+            String apiDeaths = getApiKey("deaths");
+            if(src.getInput().get(apiKills) == null || src.getInput().get(apiDeaths) == null) return null;
             value = src.getLong(getApiKey("kills")) / (double) src.getLong(getApiKey("deaths"));
         }
         else if("wl".equalsIgnoreCase(stat)) {
+            String apiWins = getApiKey("victories");
+            String apiGames = getApiKey("played");
+            if(src.getInput().get(apiWins) == null || src.getInput().get(apiGames) == null) return null;
             value = src.getLong(getApiKey("victories")) * 100D / (double) src.getLong(getApiKey("played"));
         }
-        if(value == null) value = source.getSource().getInt(key);
-        return new PlayerStatsProfile(displayNames.get(source.getUUID()), value);
+        if(value == null) {
+            if(source.getSource().getInput().get(key) == null) return null;
+            value = source.getSource().getInt(key);
+        }
+        PlayerStatsProfile profile = new PlayerStatsProfile(displayNames.get(source.getUUID()), value);
+        if(source instanceof Titleable && titleService != null && titleService.isValid())
+            profile.setTitle(titleService.getTitle(((Titleable)source).getTitle(), Math.toIntExact(source.getPoints())).getRight());
+        return profile;
     }
 
     Set<String> getAvailableStats() {

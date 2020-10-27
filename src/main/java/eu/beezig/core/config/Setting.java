@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -38,7 +38,26 @@ public class Setting {
         return (int) value;
     }
 
+    public long getLong() {
+        return (long) value;
+    }
+
     public String getString() {
-        return (String) value;
+        return toString();
+    }
+
+    public String getDisplay() {
+        if(value instanceof Boolean) return (boolean) value ? "§a●" : "§c●";
+        return toString();
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        if(value instanceof Enum) return ((Enum)value).name();
+        return value.toString();
     }
 }

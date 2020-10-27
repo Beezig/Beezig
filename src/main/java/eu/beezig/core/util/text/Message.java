@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -17,20 +17,25 @@
  * along with Beezig.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.beezig.core.util;
+package eu.beezig.core.util.text;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.Constants;
+import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.config.Settings;
+import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
+import eu.the5zig.mod.The5zigAPI;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Message {
-    private static final String info = "§7▏ §aBeezig§7 ▏ §3";
     private static final String error = "§7▏ §cBeezig§7 ▏ §c";
     private static final String bar = "    §7§m                                                                                    ";
     private static final DecimalFormat bigintFormatter = new DecimalFormat("#,###");
@@ -40,12 +45,10 @@ public class Message {
     static List<String> toSendQueue = new ArrayList<>();
 
     public static String getUserAgent() {
-        /*String framework = BeezigMain.laby ? "LabyMod" : "5zig";
-        /return "Beezig/" + BeezigMain.BEEZIG_VERSION + (BeezigMain.VERSION_HASH.isEmpty() ? ""
-                : "/" + BeezigMain.VERSION_HASH) + " (" + framework + "/" + The5zigAPI.getAPI().getModVersion() + " on "
+        String framework = Beezig.get().isLaby() ? "LabyMod" : "5zig";
+        return "Beezig/" + Constants.VERSION  + " (" + framework + "/" + The5zigAPI.getAPI().getModVersion() + " on "
                 + The5zigAPI.getAPI().getMinecraftVersion() + "; Forge=" + The5zigAPI.getAPI().isForgeEnvironment()
-                + "; BeezigForge=" + BeezigMain.hasExpansion + ")";*/
-        return String.format("Beezig/%s", Constants.VERSION);
+                + "; BeezigForge=" + BeezigForge.isSupported() + ")";
     }
 
     public static String translate(String key) {
@@ -54,7 +57,7 @@ public class Message {
 
     public static String formatNumber(long l) {
         return Settings.THOUSANDS_SEPARATOR.get().getBoolean()
-                ? bigintFormatter.format(l).replaceAll("\u00A0", " ")
+                ? bigintFormatter.format(l).replaceAll("\u00A0", " ") // Replace nbsp with space
                 : Long.toString(l);
     }
 
@@ -70,8 +73,21 @@ public class Message {
         toSendQueue.add(message);
     }
 
+    public static Number getNumberFromFormat(String format) {
+        try {
+            return NumberFormat.getInstance().parse(format.replace(" ", "\u00a0")); // Replace space with nbsp
+        } catch (ParseException e) {
+            ExceptionHandler.catchException(e);
+        }
+        return null;
+    }
+
+    public static String infoPrefix() {
+        return String.format("§7▏ §aBeezig§7 ▏ %s", Color.primary());
+    }
+
     public static void info(String text) {
-        Beezig.api().messagePlayer(info + text);
+        Beezig.api().messagePlayer(infoPrefix() + text);
     }
 
     public static void error(String text) {

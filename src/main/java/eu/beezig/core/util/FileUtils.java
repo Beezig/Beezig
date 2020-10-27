@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Beezig Team
+ * Copyright (C) 2017-2020 Beezig Team
  *
  * This file is part of Beezig.
  *
@@ -20,6 +20,7 @@
 package eu.beezig.core.util;
 
 import org.apache.commons.io.IOUtils;
+import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -37,11 +38,11 @@ public class FileUtils {
 
     public static String readToString(File file) throws IOException {
         try(FileInputStream in = new FileInputStream(file)) {
-            return IOUtils.toString(in);
+            return IOUtils.toString(in, StandardCharsets.UTF_8);
         }
     }
 
-    public static void writeJson(JSONObject json, File out) throws IOException {
+    public static void writeJson(JSONAware json, File out) throws IOException {
         try(BufferedWriter writer = Files.newBufferedWriter(out.toPath(), StandardCharsets.UTF_8)) {
             writer.write(json.toJSONString());
         }
