@@ -77,7 +77,8 @@ public class SettingsCommand implements Command {
     }
 
     private void show(int pageNo) {
-        Settings[] page = ArrayUtils.getPage(Settings.values(), pageNo - 1, 10);
+        Settings[] page = ArrayUtils.getPage(Arrays.stream(Settings.values()).filter(s -> s.getCategory() != Settings.Category.HIDDEN).toArray(Settings[]::new),
+            pageNo - 1, 10);
         if(page == null) {
             Message.error(Message.translate("error.page"));
             return;

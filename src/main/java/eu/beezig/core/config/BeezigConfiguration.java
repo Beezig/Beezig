@@ -173,6 +173,7 @@ public class BeezigConfiguration {
     public Map<String, List<SettingInfo>> toForge() {
         Map<String, List<SettingInfo>> result = new LinkedHashMap<>();
         for(Settings setting : Settings.values()) {
+            if(setting.getCategory() == Settings.Category.HIDDEN) continue;
             SettingInfo info = new SettingInfo();
             info.key = setting.name();
             info.name = setting.getName();

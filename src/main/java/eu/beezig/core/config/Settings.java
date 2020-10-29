@@ -95,7 +95,10 @@ public enum Settings {
     // Meta
     UPDATE_CHECK(true, Category.META),
     TELEMETRY(true, Category.META),
-    NEWS(true, Category.META);
+    NEWS(true, Category.META),
+
+    // Hidden
+    DAILY_EXTENSIONS(10, Category.HIDDEN);
 
     private final Object defaultValue;
     private final Class settingType;
@@ -140,7 +143,8 @@ public enum Settings {
         DRAW_IT,
         GRAVITY,
         MISC,
-        META;
+        META,
+        HIDDEN;
 
         public String getName () {
             return Message.translate(String.format("settings_category.%s.name", name().toLowerCase()));

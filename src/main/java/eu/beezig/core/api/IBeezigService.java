@@ -47,6 +47,7 @@ public interface IBeezigService {
     void registerGetLoadedNews(Function<String, Set<ForgeNewsEntry>> callback);
     void registerGetForumsNews(Supplier<Set<ForgeNewsEntry>> callback);
     void registerHasDailyScores(Supplier<Boolean> callback);
+    void registerSendDailyExtensions(Consumer<List<Pair<String, String>>> callback);
 
     // Functions (Beezig -> BeezigForge)
     void setOnHive(boolean update);

@@ -35,6 +35,7 @@ import eu.beezig.core.news.NewsType;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.TitleService;
+import eu.beezig.core.util.DailyExtensions;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
@@ -123,6 +124,7 @@ public class BeezigServiceLoader {
             if(profile == null) return false;
             return profile.hasDailyScores();
         });
+        mainService.registerSendDailyExtensions(DailyExtensions::send);
         mainService.registerSetAutovoteMaps(pair -> new AutovoteConfig().setMaps(pair.getKey(), pair.getValue()));
         mainService.registerSaveConfig(() -> {
             try {
