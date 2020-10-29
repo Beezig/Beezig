@@ -70,7 +70,7 @@ deploy version:
         - curl -X POST -F token=$BEEZIGLABY_TRIGGER -F ref=rewrite https://gitlab.com/api/v4/projects/11233515/trigger/pipeline
     only:
         refs:
-            - rewrite-2020
+            - master
 
 .deployments:
     stage: deploy
