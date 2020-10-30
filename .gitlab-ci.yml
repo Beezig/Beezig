@@ -60,6 +60,7 @@ deploy artifacts:
 deploy version:
     needs: [build]
     stage: deploy
+    interruptible: true
     before_script:
         - apk add openssh git jq bash coreutils curl
     script:
@@ -74,6 +75,7 @@ deploy version:
 
 .deployments:
     stage: deploy
+    interruptible: true
     before_script:
         - apk add openssh git
 
