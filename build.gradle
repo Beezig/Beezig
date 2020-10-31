@@ -86,7 +86,7 @@ tasks.withType(ProcessResources).each { task ->
                 filter(ReplaceTokens, tokens: [beezigversion: '7.0.0-rc1',
                                                beezigcommit: beezigCommit,
                                                beezigcommits: beezigCommits,
-                                               beezigtype: 'beta',
+                                               beezigtype: 'release',
                                                beezigdate: beezigDate])
             } else {
                 def beezigCommit = "git rev-parse HEAD".execute().text.trim()
@@ -97,7 +97,7 @@ tasks.withType(ProcessResources).each { task ->
                 filter(ReplaceTokens, tokens: [beezigversion: '7.0.0-rc1',
                                                beezigcommit: beezigCommit,
                                                beezigcommits: beezigCommits,
-                                               beezigtype: 'beta',
+                                               beezigtype: 'release',
                                                beezigdate: beezigDate])
             }
         }
