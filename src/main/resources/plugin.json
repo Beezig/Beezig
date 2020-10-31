@@ -1,7 +1,7 @@
 {
   "main": "eu.beezig.core.Beezig",
   "name": "Beezig",
-  "version": "7.0.0",
+  "version": "7.0.0-rc1",
   "author": "Beezig Team",
   "desc": "The Hive support for 5zig.",
   "license": "GPLv3",
