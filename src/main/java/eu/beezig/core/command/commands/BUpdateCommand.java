@@ -161,11 +161,17 @@ public class BUpdateCommand implements Command {
                                     Object fch = fchClass.getMethod("instance").invoke(null);
                                     exitJava.invoke(fch, 0, false);
                                 } else {
-                                    // Exit Beezig using Minecraft.getMinecraft().shutdownMinecraftApplet()
-                                    Class<?> mcClass = Class.forName(/* net.minecraft.client.Minecraft */ "ave");
-                                    Method shutDown = mcClass.getDeclaredMethod(/* shutdownMinecraftApplet */ "g");
-                                    Object mc = mcClass.getMethod(/* getMinecraft */ "A").invoke(null);
-                                    shutDown.invoke(mc);
+                                    try {
+                                        // Exit Beezig using Minecraft.getMinecraft().shutdownMinecraftApplet()
+                                        Class<?> mcClass = Class.forName(/* net.minecraft.client.Minecraft */ "ave");
+                                        Method shutDown = mcClass.getDeclaredMethod(/* shutdownMinecraftApplet */ "g");
+                                        Object mc = mcClass.getMethod(/* getMinecraft */ "A").invoke(null);
+                                        shutDown.invoke(mc);
+                                    } catch (Exception ignored) {
+                                        // We're most likely on 1.12 or any other 5zig vanilla version.
+                                        // Restart using the classic way...
+                                        System.exit(0);
+                                    }
                                 }
                             } catch (Exception e) {
                                 Message.error(Message.translate("update.error"));
