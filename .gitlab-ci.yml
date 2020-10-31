@@ -25,14 +25,13 @@ stages:
     - deploy
 
 sast:
-    needs: [build]
+    needs: []
     before_script:
         - apk add git
     variables:
         SAST_DEFAULT_ANALYZERS: spotbugs
     stage: test
-    cache:
-        <<: *global_cache
+    cache: {}
 
 build:
     stage: build
@@ -75,7 +74,6 @@ deploy version:
 trigger laby build:
     stage: deploy
     trigger: Beezig/BeezigLaby
-    interruptible: true
     needs: [build]
     only:
         - master
