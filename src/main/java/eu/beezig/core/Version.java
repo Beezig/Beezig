@@ -32,7 +32,7 @@ public class Version implements Comparable<Version>{
     private final int commits;
     private final String type;
     private final OffsetDateTime date;
-    private final Pattern versionPattern = Pattern.compile("^(\\d+)\\.(\\d)\\.(\\d)$");
+    private final Pattern versionPattern = Pattern.compile("^(\\d+)\\.(\\d)\\.(\\d)(?:-.+)?$");
 
     public Version(JsonObject version) throws IllegalArgumentException {
         if (version == null || !version.has("version") || !version.has("commit") ||

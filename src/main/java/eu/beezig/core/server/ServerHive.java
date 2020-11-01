@@ -159,7 +159,7 @@ public class ServerHive extends ServerInstance {
         if(localBeezigForgeVersion != null) Beezig.get().setBeezigForgeVersion(localBeezigForgeVersion);
         if(localBeezigLabyVersion != null) Beezig.get().setBeezigLabyVersion(localBeezigLabyVersion);
         Beezig.get().newExceptionHandler();
-        if (Settings.UPDATE_CHECK.get().getBoolean()) {
+        if ((!Beezig.get().isLaby() || !"release".equals(Beezig.get().getVersion().getType())) && Settings.UPDATE_CHECK.get().getBoolean()) {
             Beezig.get().getAsyncExecutor().execute(() -> {
                 // Check for updates
                 try {
