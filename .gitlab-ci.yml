@@ -65,6 +65,8 @@ deploy artifacts:
 
 deploy beta version:
     extends: .deploy version
+    environment:
+      name: beta-versioning
     script:
         - chmod go= "$DEPLOY_KEY"
         - mkdir -p ~/.ssh/ || true
@@ -75,6 +77,8 @@ deploy beta version:
 
 deploy release version:
     extends: .deploy version
+    environment:
+      name: release-versioning
     script:
         - chmod go= "$DEPLOY_KEY"
         - mkdir -p ~/.ssh/ || true
