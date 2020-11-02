@@ -47,13 +47,13 @@ public class AutovoteConfig {
 
     public void addMapToMode(String mode, String map) {
         map = StringUtils.normalizeMapName(map);
-        JSONArray modeMaps = (JSONArray) currentConfig.getOrDefault(mode, new JSONArray());
+        JSONArray modeMaps = (JSONArray) currentConfig.getOrDefault(mode.toLowerCase(Locale.ROOT), new JSONArray());
         modeMaps.add(map);
         currentConfig.put(mode, modeMaps);
     }
 
     public void removeMapForMode(String mode, String map) {
-        Object mm = currentConfig.get(mode);
+        Object mm = currentConfig.get(mode.toLowerCase(Locale.ROOT));
         if(!(mm instanceof JSONArray)) return;
         map = StringUtils.normalizeMapName(map);
         JSONArray modeMaps = (JSONArray) mm;
@@ -62,7 +62,7 @@ public class AutovoteConfig {
     }
 
     public void setPlace(String mode, String map, int place) {
-        Object mm = currentConfig.get(mode);
+        Object mm = currentConfig.get(mode.toLowerCase(Locale.ROOT));
         if(!(mm instanceof JSONArray)) return;
         map = StringUtils.normalizeMapName(map);
         JSONArray modeMaps = (JSONArray) mm;
@@ -75,7 +75,7 @@ public class AutovoteConfig {
     }
 
     public ArrayList<String> getMaps(String mode) {
-        Object mm = currentConfig.get(mode);
+        Object mm = currentConfig.get(mode.toLowerCase(Locale.ROOT));
         if(!(mm instanceof JSONArray)) return new ArrayList<>();
         return (JSONArray) mm;
     }
@@ -84,7 +84,11 @@ public class AutovoteConfig {
         Map<String, List<String>> result = new HashMap<>();
         for(Object o : currentConfig.entrySet()) {
             Map.Entry<String, Object> entry = (Map.Entry<String, Object>) o;
-            if(entry.getValue() instanceof JSONArray) result.put(entry.getKey().toUpperCase(), (JSONArray) entry.getValue());
+            if(entry.getValue() instanceof JSONArray) result.compute(entry.getKey().toLowerCase(Locale.ROOT), ($, v) -> {
+                if(v == null) v = (JSONArray) entry.getValue();
+                else v.addAll((JSONArray) entry.getValue());
+                return v;
+            });
         }
         return result;
     }
@@ -92,7 +96,7 @@ public class AutovoteConfig {
     public void setMaps(String key, List<String> maps) {
         JSONArray array = new JSONArray();
         array.addAll(maps);
-        currentConfig.put(key.toLowerCase(), array);
+        currentConfig.put(key.toLowerCase(Locale.ROOT), array);
         save();
     }
 
