@@ -56,20 +56,32 @@ deploy artifacts:
     cache:
         <<: *global_cache
 
-deploy version:
+.deploy version:
     needs: [build]
     stage: deploy
     interruptible: true
     before_script:
         - apk add openssh git jq bash coreutils curl
+
+deploy beta version:
+    extends: .deploy version
+    script:
+        - chmod go= "$DEPLOY_KEY"
+        - mkdir -p ~/.ssh/ || true
+        - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
+        - ssh-agent bash -c "ssh-add \"$DEPLOY_KEY\"; git clone git@gitlab.com:Beezig/version.git ; version/update-version.sh --module beezig --type beta --version $VERSION version/beta.json ; cd version; git add beta.json ; git -c 'user.name=GitLab Deploy' -c 'user.email=noreply@gitlab.com' commit -m 'Update beta version' ; git push origin master"
+    only:
+        - master
+
+deploy release version:
+    extends: .deploy version
     script:
         - chmod go= "$DEPLOY_KEY"
         - mkdir -p ~/.ssh/ || true
         - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
         - ssh-agent bash -c "ssh-add \"$DEPLOY_KEY\"; git clone git@gitlab.com:Beezig/version.git ; version/update-version.sh --module beezig --type release --version $VERSION version/release.json ; cd version; git add release.json ; git -c 'user.name=GitLab Deploy' -c 'user.email=noreply@gitlab.com' commit -m 'Update release version' ; git push origin master"
     only:
-        refs:
-            - master
+        - tags
 
 trigger laby build:
     stage: deploy
@@ -112,3 +124,4 @@ deploy release:
     only:
         - tags
 ...
+
