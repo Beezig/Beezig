@@ -161,7 +161,8 @@ public class BeezigCommand implements Command {
             Message.info(Beezig.api().translate("msg.credits.title", Color.accent() + Constants.VERSION + Color.primary()));
             for(Map.Entry<String, Object> entry : object.entrySet()) {
                 if(entry.getValue() instanceof List) {
-                    String display = Color.accent() + ((List) entry.getValue()).stream().map(Object::toString).collect(Collectors.joining(", "));
+                    List<Object> list = (List<Object>) entry.getValue();
+                    String display = StringUtils.localizedJoin(list.stream().map(o -> Color.accent() + o + Color.primary()).collect(Collectors.toList()));
                     Message.info(Beezig.api().translate("credits." + entry.getKey()) + ": " + display);
                 }
             }
