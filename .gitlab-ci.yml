@@ -9,7 +9,7 @@ include:
 
 variables:
     GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
-    VERSION: 7.0.0-rc1
+    VERSION: 7.0.0-rc2
 
 cache: &global_cache
   key: ${CI_COMMIT_SHA}
