@@ -26,7 +26,7 @@ public class AutovoteMigration {
         Splitter comma = Splitter.on(", ");
         File file = new File(Beezig.get().getBeezigDir(), "autovote.yml");
         if(!file.exists()) return null;
-        String contents = FileUtils.readFileToString(file, Charset.defaultCharset());
+        String contents = FileUtils.readFileToString(file, Charset.defaultCharset()).replaceAll("\\s{2,}", " ");
         Matcher matcher = YAML_REGEX.matcher(contents);
         Map<String, List<String>> matches = new HashMap<>();
         while(matcher.find()) {
