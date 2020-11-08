@@ -9,11 +9,8 @@ import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
-import eu.beezig.hiveapi.wrapper.exception.ProfileNotFoundException;
-import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
-import eu.beezig.hiveapi.wrapper.utils.json.JObject;
+import eu.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
 
-import java.net.URL;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
@@ -61,16 +58,6 @@ public class ReportCommand implements Command {
     }
 
     private CompletableFuture<Void> checkUsername(String name) {
-        CompletableFuture<Void> future = new CompletableFuture<>();
-        Beezig.get().getAsyncExecutor().execute(() -> {
-            try {
-                JObject obj = Downloader.getJsonObject(new URL("https://api.minetools.eu/uuid/" + name)).join();
-                if("OK".equals(obj.getString("status"))) future.complete(null);
-                else future.completeExceptionally(new ProfileNotFoundException());
-            } catch (Exception e) {
-                future.completeExceptionally(e);
-            }
-        });
-        return future;
+        return UsernameToUuid.getUUID(name).thenAcceptAsync(s -> {});
     }
 }
