@@ -39,6 +39,7 @@ public class StringUtils {
     }
 
     public static String localizedJoin(List<String> list) {
+        if(list == null || list.isEmpty()) return "";
         return list.size() == 1
                 ? list.get(0)
                 : Joiner.on(", ")
