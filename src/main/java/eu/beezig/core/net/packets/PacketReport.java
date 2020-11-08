@@ -124,7 +124,7 @@ public class PacketReport implements Packet {
             Message.info(Beezig.api().translate("msg.report.incoming", in.getSender(), in.formatTargets(), in.formatReasons()));
             Beezig.api().messagePlayerComponent(in.getActions(), false);
         }
-        else if(type == Type.CLAIM) Beezig.api().translate("msg.report.claim", id);
+        else if(type == Type.CLAIM) Message.info(Beezig.api().translate("msg.report.claim", id));
         else if(type == Type.HANDLE) Message.info(Beezig.api().translate("msg.report.handle", id));
         else if(type == Type.CHAT) Beezig.api().messagePlayerComponent(ReportIncoming.getChatActions(targets, sender, message, id), false);
         else if(type == Type.REQUEST) ReportsCommand.sendResult(reports, claimed, page);
