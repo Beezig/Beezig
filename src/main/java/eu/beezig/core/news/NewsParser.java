@@ -22,9 +22,14 @@ import java.util.regex.Pattern;
 
 public class NewsParser {
     public static final ThreadLocal<SimpleDateFormat> RSS_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US));
-    public static final ThreadLocal<SimpleDateFormat> ISO_8601 = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.US));
+    public static final ThreadLocal<SimpleDateFormat> ISO_8601 = ThreadLocal.withInitial(() -> {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.US);
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdf;
+    });
     public static final Pattern VERSION_EXCLUSIVITY_REGEX = Pattern.compile("([><]=?)?(.+)");
-    public static final ComparableVersion VERSION = new ComparableVersion(Constants.VERSION);
+    public static final ComparableVersion VERSION = new ComparableVersion(Constants.VERSION
+    );
     private final XMLInputFactory xmlFactory;
     private final Map<NewsType, Set<NewsEntry>> entries = new EnumMap<>(NewsType.class);
 

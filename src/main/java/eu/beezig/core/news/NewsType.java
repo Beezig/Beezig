@@ -17,7 +17,7 @@ public enum NewsType {
         if("updated".equals(k)) {
             try {
                 item.setPubDate(NewsParser.ISO_8601.get().parse(v));
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 ExceptionHandler.catchException(e);
             }
         }

@@ -21,7 +21,7 @@ if(!project.ext.has("laby")) {
 }
 
 archivesBaseName = "Beezig"
-version = "7.0.0"
+version = "7.0.1"
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 compileJava.options.encoding = "UTF-8"
@@ -83,7 +83,7 @@ tasks.withType(ProcessResources).each { task ->
                     "..HEAD").execute().text.trim()
                 def beezigDate = ("git --git-dir Beezig/.git log -1 --pretty=%cI " + beezigCommit).execute().text.trim()
 
-                filter(ReplaceTokens, tokens: [beezigversion: '7.0.0',
+                filter(ReplaceTokens, tokens: [beezigversion: '7.0.1',
                                                beezigcommit: beezigCommit,
                                                beezigcommits: beezigCommits,
                                                beezigtype: 'release',
@@ -94,7 +94,7 @@ tasks.withType(ProcessResources).each { task ->
                     "..HEAD").execute().text.trim()
                 def beezigDate = ("git log -1 --pretty=%cI " + beezigCommit).execute().text.trim()
 
-                filter(ReplaceTokens, tokens: [beezigversion: '7.0.0',
+                filter(ReplaceTokens, tokens: [beezigversion: '7.0.1',
                                                beezigcommit: beezigCommit,
                                                beezigcommits: beezigCommits,
                                                beezigtype: 'release',
