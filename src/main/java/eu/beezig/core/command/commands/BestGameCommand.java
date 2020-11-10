@@ -95,7 +95,7 @@ public class BestGameCommand implements Command {
             LeaderboardPlace first = lb.getPlayers().get(0);
             String place = first.containsKey("points") ? "points" : (first.containsKey("total_points") ? "total_points" :
                 (first.containsKey("karma") ? "karma" : "victories"));
-            return lb.getPlayers().stream().mapToInt(p -> (int)(long) p.get(place)).average().orElse(0);
+            return lb.getPlayers().stream().filter(p -> p.get(place) != null).mapToInt(p -> (int)(long) p.get(place)).average().orElse(0);
         }));
     }
 
