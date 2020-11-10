@@ -30,6 +30,7 @@ import eu.beezig.core.server.IMapExtra;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyField;
 import eu.beezig.core.server.monthly.MonthlyService;
+import eu.beezig.core.speedrun.Run;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
@@ -48,7 +49,6 @@ import java.util.regex.Pattern;
 
 public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
     private static final Pattern TIME_REGEX = Pattern.compile("(\\d+):(\\d+)\\.(\\d+)");
-
     private Map<String, MapData> maps;
     private MapData currentMapData;
     private int lastSbPoints;
@@ -64,6 +64,11 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
     private long pbSecs;
     private String pb;
     private DrWorldRecords.WorldRecord wr;
+
+    private boolean started;
+
+    // Native LiveSplit
+    private Run currentRun;
 
     public String getEndTime() {
         return finishTime;
@@ -136,6 +141,11 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
             return;
         }
         currentMapData = data;
+        if(currentRun != null) {
+            for (int i = 0; i < currentMapData.checkpoints; i++) {
+                currentRun.loadSegment("Checkpoint #" + (i + 1));
+            }
+        }
         if (profile != null) {
             Long record = profile.getMapRecords().get(currentMapData.hive);
             if (record != null) {
@@ -182,6 +192,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         getAdvancedRecords().setSlowExecutor(this::slowRecordsExecutor);
         logger.setHeaders("Points", "Map", "Kills", "Deaths", "GameID", "Timestamp", "Time");
         setGameID(Long.toString(System.currentTimeMillis(), 10));
+        if(Beezig.get().isNativeSpeedrun()) currentRun = new Run();
     }
 
     public DrWorldRecords.WorldRecord getWorldRecord() {
@@ -213,6 +224,12 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
                 .points(getPoints()).map(getMap()).custom("time", finishTime).gameStart(gameStart).kills(getKills()).deaths(getDeaths()).build());
     }
 
+    public void tryStart() {
+        if(started) return;
+        started = true;
+        if(currentRun != null) currentRun.start();
+    }
+
     public void tryUpdatePoints(String newAmount) {
         int num = Integer.parseInt(newAmount, 10);
         if (lastSbPoints == num) return;
@@ -242,12 +259,21 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         return String.format("%d/%d %s", checkpoints, currentMapData == null ? 0 : currentMapData.checkpoints, Message.translate("msg.map.dr.checkpoints"));
     }
 
+    public Run getCurrentRun() {
+        return currentRun;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
     public MapData getCurrentMapData() {
         return currentMapData;
     }
 
     public void addCheckpoint() {
         checkpoints++;
+        if(currentRun != null) currentRun.split();
     }
 
     public static class MapData {

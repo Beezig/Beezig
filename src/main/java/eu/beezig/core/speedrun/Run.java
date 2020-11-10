@@ -13,13 +13,13 @@ public class Run {
         api.setCategoryName("Any%");
     }
 
-    public void loadSegments(Segment... segments) {
-        for(Segment segment : segments) api.pushSegment(segment);
+    public void loadSegment(String name) {
+        api.pushSegment(new Segment(name));
     }
 
     public void start() {
         if(isTimerRunning()) throw new IllegalStateException("Timer is already running");
-        timer = Timer.create(api);
+        timer = Timer.create(api.copy());
         timer.start();
     }
 
@@ -35,6 +35,11 @@ public class Run {
     public void reset(boolean saveAttempt) {
         if(!isTimerRunning()) return;
         timer.reset(saveAttempt);
+    }
+
+    public double getSeconds() {
+        if(!isTimerRunning()) return 0D;
+        return timer.currentTime().realTime().totalSeconds();
     }
 
     public boolean isTimerRunning() {
