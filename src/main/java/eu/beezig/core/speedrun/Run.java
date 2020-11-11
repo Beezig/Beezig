@@ -28,12 +28,12 @@ public class Run {
     private SpeedrunColorConfig colorConfig;
 
     // Components
-    private final Layout layout;
     private final GeneralLayoutSettings settings;
     private final DetailedTimerComponent detailedTimerComponent;
     private final SplitsComponent splitsComponent;
     private final PreviousSegmentComponent previousSegmentComponent;
     private final SumOfBestComponent sumOfBestComponent;
+    private final PossibleTimeSaveComponent possibleTimeSaveComponent;
 
     public Run(String mapName, DR.MapData data) throws IOException {
         splits = new File(Beezig.get().getBeezigDir(), "dr/splits/" + FilenameUtils.getName(mapName) + ".lss");
@@ -53,15 +53,16 @@ public class Run {
         }
         timer = Timer.create(api.copy());
         renderer = new TimerRenderer(this, ImmutableList.of(new SpeedrunGameInfo(), new SpeedrunSegmentView(),
-            new SpeedrunDetailedTimer(), new SpeedrunPrevSegment(), new SpeedrunSumOfBest()));
+            new SpeedrunDetailedTimer(), new SpeedrunPrevSegment(), new SpeedrunPossibleTimeSave(), new SpeedrunSumOfBest()));
         settings = GeneralLayoutSettings.createDefault();
 
         // Components
-        layout = Layout.defaultLayout();
         detailedTimerComponent = new DetailedTimerComponent();
         splitsComponent = new SplitsComponent();
         previousSegmentComponent = new PreviousSegmentComponent();
         sumOfBestComponent = new SumOfBestComponent();
+        possibleTimeSaveComponent = new PossibleTimeSaveComponent();
+
         colorConfig = new SpeedrunColorConfig();
     }
 
@@ -122,9 +123,14 @@ public class Run {
         return previousSegmentComponent.state(timer, settings);
     }
 
-    public SumOfBestComponentState getSumOfBestComponent() {
+    public SumOfBestComponentState getSumOfBestState() {
         if(timer == null || sumOfBestComponent == null) return null;
         return sumOfBestComponent.state(timer);
+    }
+
+    public PossibleTimeSaveComponentState getPossibleTimeSaveState() {
+        if(timer == null || possibleTimeSaveComponent == null) return null;
+        return possibleTimeSaveComponent.state(timer);
     }
 
     public void save() {
