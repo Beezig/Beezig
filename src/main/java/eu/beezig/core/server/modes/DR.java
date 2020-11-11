@@ -146,7 +146,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         currentMapData = data;
         if(Beezig.get().isNativeSpeedrun()) {
             try {
-                currentRun = new Run(normalized, currentMapData);
+                currentRun = new Run(normalized, currentMapData, map);
             } catch (IOException e) {
                 ExceptionHandler.catchException(e, "Run init");
             }

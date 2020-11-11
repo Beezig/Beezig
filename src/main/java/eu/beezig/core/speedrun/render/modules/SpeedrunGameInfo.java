@@ -11,7 +11,8 @@ public class SpeedrunGameInfo extends TimerModule {
     @Override
     public void render(RenderHelper renderer, Run run, int x, int y) {
         renderer.drawScaledCenteredString(Run.GAME_NAME, x + TimerRenderer.MODULE_WIDTH / 2, y, SCALE_FACTOR);
-        renderer.drawScaledCenteredString(Run.CATEGORY, x + TimerRenderer.MODULE_WIDTH / 2, y + 9, SCALE_FACTOR);
+        renderer.drawScaledCenteredString(run.getHumanMapName() + " - " + Run.CATEGORY, x + TimerRenderer.MODULE_WIDTH / 2, y + 9, SCALE_FACTOR);
+
     }
 
     @Override

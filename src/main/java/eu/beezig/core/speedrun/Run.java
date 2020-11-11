@@ -20,8 +20,9 @@ import java.util.Collections;
 public class Run {
     public static final String GAME_NAME = "Minecraft: The Hive - DeathRun";
     public static final String CATEGORY = "Any%";
+    private final String humanMapName;
 
-    private final livesplitcore.Run api;
+    private livesplitcore.Run api;
     private Timer timer;
     private final File splits;
     private final TimerRenderer renderer;
@@ -35,7 +36,8 @@ public class Run {
     private final SumOfBestComponent sumOfBestComponent;
     private final PossibleTimeSaveComponent possibleTimeSaveComponent;
 
-    public Run(String mapName, DR.MapData data) throws IOException {
+    public Run(String mapName, DR.MapData data, String humanMapName) throws IOException {
+        this.humanMapName = humanMapName;
         splits = new File(Beezig.get().getBeezigDir(), "dr/splits/" + FilenameUtils.getName(mapName) + ".lss");
         if(!splits.exists()) {
             splits.getParentFile().mkdirs();
@@ -51,6 +53,9 @@ public class Run {
         for (int i = (int) api.len(); i < data.checkpoints; i++) {
             loadSegment("Checkpoint #" + (i + 1));
         }
+        RunEditor editor = RunEditor.create(api);
+        editor.setPlatformName(mapName);
+        api = editor.finish();
         timer = Timer.create(api.copy());
         renderer = new TimerRenderer(this, ImmutableList.of(new SpeedrunGameInfo(), new SpeedrunSegmentView(),
             new SpeedrunDetailedTimer(), new SpeedrunPrevSegment(), new SpeedrunPossibleTimeSave(), new SpeedrunSumOfBest()));
@@ -64,6 +69,10 @@ public class Run {
         possibleTimeSaveComponent = new PossibleTimeSaveComponent();
 
         colorConfig = new SpeedrunColorConfig();
+    }
+
+    public String getHumanMapName() {
+        return humanMapName;
     }
 
     public TimerRenderer getRenderer() {
