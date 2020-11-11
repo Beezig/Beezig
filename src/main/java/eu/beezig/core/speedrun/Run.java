@@ -1,10 +1,12 @@
 package eu.beezig.core.speedrun;
 
+import com.google.common.collect.ImmutableList;
 import eu.beezig.core.Beezig;
+import eu.beezig.core.speedrun.render.TimerRenderer;
+import eu.beezig.core.speedrun.render.modules.SpeedrunDetailedTimer;
+import eu.beezig.core.speedrun.render.modules.SpeedrunGameInfo;
 import eu.beezig.core.util.ExceptionHandler;
-import livesplitcore.ParseRunResult;
-import livesplitcore.Segment;
-import livesplitcore.Timer;
+import livesplitcore.*;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -15,9 +17,17 @@ import java.nio.file.Files;
 import java.util.Collections;
 
 public class Run {
+    public static final String GAME_NAME = "Minecraft: The Hive - DeathRun";
+    public static final String CATEGORY = "Any%";
+
     private final livesplitcore.Run api;
     private Timer timer;
     private final File splits;
+    private final TimerRenderer renderer;
+
+    // Components
+    private final GeneralLayoutSettings settings;
+    private final DetailedTimerComponent detailedTimerComponent;
 
     public Run(String mapName) throws IOException {
         splits = new File(Beezig.get().getBeezigDir(), "dr/splits/" + FilenameUtils.getName(mapName) + ".lss");
@@ -30,8 +40,15 @@ public class Run {
             if(!result.parsedSuccessfully()) throw new IOException("Couldn't parse run");
             api = result.unwrap();
         }
-        api.setGameName("Minecraft: The Hive - DeathRun");
-        api.setCategoryName("Any%");
+        api.setGameName(GAME_NAME);
+        api.setCategoryName(CATEGORY);
+        renderer = new TimerRenderer(this, ImmutableList.of(new SpeedrunGameInfo(), new SpeedrunDetailedTimer()));
+        settings = GeneralLayoutSettings.createDefault();
+        detailedTimerComponent = new DetailedTimerComponent();
+    }
+
+    public TimerRenderer getRenderer() {
+        return renderer;
     }
 
     public void loadSegment(String name) {
@@ -61,6 +78,11 @@ public class Run {
     public double getSeconds() {
         if(!isTimerRunning()) return 0D;
         return timer.currentTime().realTime().totalSeconds();
+    }
+
+    public DetailedTimerComponentState getDetailedTimerState() {
+        if(timer == null || detailedTimerComponent == null) return null;
+        return detailedTimerComponent.state(timer, settings);
     }
 
     public void save() {
