@@ -1,14 +1,35 @@
 package eu.beezig.core.speedrun;
 
+import eu.beezig.core.Beezig;
+import eu.beezig.core.util.ExceptionHandler;
+import livesplitcore.ParseRunResult;
 import livesplitcore.Segment;
 import livesplitcore.Timer;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.Collections;
 
 public class Run {
     private final livesplitcore.Run api;
     private Timer timer;
+    private final File splits;
 
-    public Run() {
-        api = new livesplitcore.Run();
+    public Run(String mapName) throws IOException {
+        splits = new File(Beezig.get().getBeezigDir(), "dr/splits/" + FilenameUtils.getName(mapName) + ".lss");
+        if(!splits.exists()) {
+            splits.getParentFile().mkdirs();
+            splits.createNewFile();
+        }
+        try(InputStream stream = Files.newInputStream(splits.toPath())) {
+            ParseRunResult result = livesplitcore.Run.parse(stream, splits.getAbsolutePath(), false);
+            if(!result.parsedSuccessfully()) throw new IOException("Couldn't parse run");
+            api = result.unwrap();
+        }
         api.setGameName("Minecraft: The Hive - DeathRun");
         api.setCategoryName("Any%");
     }
@@ -40,6 +61,21 @@ public class Run {
     public double getSeconds() {
         if(!isTimerRunning()) return 0D;
         return timer.currentTime().realTime().totalSeconds();
+    }
+
+    public void save() {
+        if(timer != null) {
+            try {
+                Files.write(splits.toPath(), Collections.singleton(timer.saveAsLss()), Charset.defaultCharset());
+            } catch (IOException e) {
+                ExceptionHandler.catchException(e, "Run save");
+            }
+        }
+    }
+
+    public void endNow() {
+        if(timer != null) timer.close();
+        api.close();
     }
 
     public boolean isTimerRunning() {

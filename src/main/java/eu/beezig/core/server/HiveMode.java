@@ -182,7 +182,7 @@ public abstract class HiveMode extends GameMode {
     }
 
     /**
-     * Called when the user returns to the lobby.
+     * Called when the user returns to the lobby, if the game had started.
      */
     protected void end() {
         if(dailyService != null) {
@@ -194,6 +194,11 @@ public abstract class HiveMode extends GameMode {
             }
         }
     }
+
+    /**
+     * Always called when the user returns to the lobby.
+     */
+    protected void stop() {}
 
     public abstract String getIdentifier();
 

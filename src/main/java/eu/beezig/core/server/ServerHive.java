@@ -314,8 +314,10 @@ public class ServerHive extends ServerInstance {
 
         @Override
         public void onServerConnect(GameMode gameMode) {
-            if(gameMode instanceof HiveMode && gameMode.getState() != GameState.LOBBY) {
-                ((HiveMode) gameMode).end();
+            if(gameMode instanceof HiveMode) {
+                HiveMode hive = (HiveMode) gameMode;
+                if(hive.getState() != GameState.LOBBY) hive.end();
+                hive.stop();
             }
             if(readyForLobby) {
                 readyForLobby = false;
@@ -327,8 +329,10 @@ public class ServerHive extends ServerInstance {
 
         @Override
         public void onServerDisconnect(GameMode gameMode) {
-            if(gameMode instanceof HiveMode && gameMode.getState() != GameState.LOBBY) {
-                ((HiveMode) gameMode).end();
+            if(gameMode instanceof HiveMode) {
+                HiveMode hive = (HiveMode) gameMode;
+                if(hive.getState() != GameState.LOBBY) hive.end();
+                hive.stop();
             }
             if(Beezig.get().getTemporaryPointsManager() != null)
                 Beezig.get().getTemporaryPointsManager().endSession();

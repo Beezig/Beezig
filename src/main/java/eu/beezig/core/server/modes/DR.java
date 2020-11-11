@@ -42,6 +42,7 @@ import eu.beezig.hiveapi.wrapper.player.games.DrStats;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
@@ -141,7 +142,12 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
             return;
         }
         currentMapData = data;
-        if(currentRun != null) {
+        if(Beezig.get().isNativeSpeedrun()) {
+            try {
+                currentRun = new Run(normalized);
+            } catch (IOException e) {
+                ExceptionHandler.catchException(e, "Run init");
+            }
             for (int i = 0; i < currentMapData.checkpoints; i++) {
                 currentRun.loadSegment("Checkpoint #" + (i + 1));
             }
@@ -192,7 +198,6 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         getAdvancedRecords().setSlowExecutor(this::slowRecordsExecutor);
         logger.setHeaders("Points", "Map", "Kills", "Deaths", "GameID", "Timestamp", "Time");
         setGameID(Long.toString(System.currentTimeMillis(), 10));
-        if(Beezig.get().isNativeSpeedrun()) currentRun = new Run();
     }
 
     public DrWorldRecords.WorldRecord getWorldRecord() {
@@ -222,6 +227,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         if (getSessionService() != null)
             Beezig.get().getTemporaryPointsManager().getCurrentSession().pushItem(new SessionItem.Builder(getIdentifier())
                 .points(getPoints()).map(getMap()).custom("time", finishTime).gameStart(gameStart).kills(getKills()).deaths(getDeaths()).build());
+        if (currentRun != null) currentRun.save();
     }
 
     public void tryStart() {
@@ -274,6 +280,11 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
     public void addCheckpoint() {
         checkpoints++;
         if(currentRun != null) currentRun.split();
+    }
+
+    @Override
+    protected void stop() {
+        if(currentRun != null) currentRun.endNow();
     }
 
     public static class MapData {
