@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.server.modes.DR;
 import eu.beezig.core.speedrun.render.TimerRenderer;
+import eu.beezig.core.speedrun.render.config.SpeedrunColorConfig;
 import eu.beezig.core.speedrun.render.modules.SpeedrunDetailedTimer;
 import eu.beezig.core.speedrun.render.modules.SpeedrunGameInfo;
 import eu.beezig.core.speedrun.render.modules.SpeedrunSegmentView;
@@ -26,6 +27,7 @@ public class Run {
     private Timer timer;
     private final File splits;
     private final TimerRenderer renderer;
+    private SpeedrunColorConfig colorConfig;
 
     // Components
     private final GeneralLayoutSettings settings;
@@ -53,10 +55,15 @@ public class Run {
         settings = GeneralLayoutSettings.createDefault();
         detailedTimerComponent = new DetailedTimerComponent();
         splitsComponent = new SplitsComponent();
+        colorConfig = new SpeedrunColorConfig();
     }
 
     public TimerRenderer getRenderer() {
         return renderer;
+    }
+
+    public SpeedrunColorConfig getColorConfig() {
+        return colorConfig;
     }
 
     private void loadSegment(String name) {
