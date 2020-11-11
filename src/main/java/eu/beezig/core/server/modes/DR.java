@@ -144,12 +144,9 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         currentMapData = data;
         if(Beezig.get().isNativeSpeedrun()) {
             try {
-                currentRun = new Run(normalized);
+                currentRun = new Run(normalized, currentMapData);
             } catch (IOException e) {
                 ExceptionHandler.catchException(e, "Run init");
-            }
-            for (int i = 0; i < currentMapData.checkpoints; i++) {
-                currentRun.loadSegment("Checkpoint #" + (i + 1));
             }
         }
         if (profile != null) {
@@ -289,6 +286,6 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
 
     public static class MapData {
         public String speedrun, hive;
-        int checkpoints;
+        public int checkpoints;
     }
 }

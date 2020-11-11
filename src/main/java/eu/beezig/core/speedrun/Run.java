@@ -2,9 +2,11 @@ package eu.beezig.core.speedrun;
 
 import com.google.common.collect.ImmutableList;
 import eu.beezig.core.Beezig;
+import eu.beezig.core.server.modes.DR;
 import eu.beezig.core.speedrun.render.TimerRenderer;
 import eu.beezig.core.speedrun.render.modules.SpeedrunDetailedTimer;
 import eu.beezig.core.speedrun.render.modules.SpeedrunGameInfo;
+import eu.beezig.core.speedrun.render.modules.SpeedrunSegmentView;
 import eu.beezig.core.util.ExceptionHandler;
 import livesplitcore.*;
 import org.apache.commons.io.FilenameUtils;
@@ -28,8 +30,9 @@ public class Run {
     // Components
     private final GeneralLayoutSettings settings;
     private final DetailedTimerComponent detailedTimerComponent;
+    private final SplitsComponent splitsComponent;
 
-    public Run(String mapName) throws IOException {
+    public Run(String mapName, DR.MapData data) throws IOException {
         splits = new File(Beezig.get().getBeezigDir(), "dr/splits/" + FilenameUtils.getName(mapName) + ".lss");
         if(!splits.exists()) {
             splits.getParentFile().mkdirs();
@@ -42,22 +45,26 @@ public class Run {
         }
         api.setGameName(GAME_NAME);
         api.setCategoryName(CATEGORY);
-        renderer = new TimerRenderer(this, ImmutableList.of(new SpeedrunGameInfo(), new SpeedrunDetailedTimer()));
+        for (int i = (int) api.len(); i < data.checkpoints; i++) {
+            loadSegment("Checkpoint #" + (i + 1));
+        }
+        timer = Timer.create(api.copy());
+        renderer = new TimerRenderer(this, ImmutableList.of(new SpeedrunGameInfo(), new SpeedrunSegmentView(), new SpeedrunDetailedTimer()));
         settings = GeneralLayoutSettings.createDefault();
         detailedTimerComponent = new DetailedTimerComponent();
+        splitsComponent = new SplitsComponent();
     }
 
     public TimerRenderer getRenderer() {
         return renderer;
     }
 
-    public void loadSegment(String name) {
+    private void loadSegment(String name) {
         api.pushSegment(new Segment(name));
     }
 
     public void start() {
         if(isTimerRunning()) throw new IllegalStateException("Timer is already running");
-        timer = Timer.create(api.copy());
         timer.start();
     }
 
@@ -83,6 +90,11 @@ public class Run {
     public DetailedTimerComponentState getDetailedTimerState() {
         if(timer == null || detailedTimerComponent == null) return null;
         return detailedTimerComponent.state(timer, settings);
+    }
+
+    public SplitsComponentState getSplitsState() {
+        if(timer == null || splitsComponent == null) return null;
+        return splitsComponent.state(timer, settings);
     }
 
     public void save() {
