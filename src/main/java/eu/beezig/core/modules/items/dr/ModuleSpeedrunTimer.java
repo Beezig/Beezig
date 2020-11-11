@@ -25,11 +25,12 @@ public class ModuleSpeedrunTimer extends GameModeItem<DR> {
 
     @Override
     protected Object getValue(boolean b) {
-        return null;
+        return false;
     }
 
     @Override
     public boolean shouldRender(boolean dummy) {
+        if(!super.shouldRender(false)) return false;
         DR mode = getGameMode();
         if(mode == null) return false;
         return mode.getCurrentRun() != null;

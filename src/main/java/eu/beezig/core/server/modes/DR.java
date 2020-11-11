@@ -39,6 +39,7 @@ import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.DrStats;
+import livesplitcore.TimeSpan;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -83,6 +84,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         if (finishTime == null || wr == null) return;
         Matcher matcher = TIME_REGEX.matcher(finishTime);
         if (matcher.matches()) {
+            if(currentRun != null) currentRun.forceEnd(TimeSpan.parse(finishTime));
             int mins = Integer.parseInt(matcher.group(1), 10);
             int secs = Integer.parseInt(matcher.group(2), 10);
             int millis = Integer.parseInt(matcher.group(3), 10);

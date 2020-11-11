@@ -5,9 +5,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.server.modes.DR;
 import eu.beezig.core.speedrun.render.TimerRenderer;
 import eu.beezig.core.speedrun.render.config.SpeedrunColorConfig;
-import eu.beezig.core.speedrun.render.modules.SpeedrunDetailedTimer;
-import eu.beezig.core.speedrun.render.modules.SpeedrunGameInfo;
-import eu.beezig.core.speedrun.render.modules.SpeedrunSegmentView;
+import eu.beezig.core.speedrun.render.modules.*;
 import eu.beezig.core.util.ExceptionHandler;
 import livesplitcore.*;
 import org.apache.commons.io.FilenameUtils;
@@ -30,9 +28,12 @@ public class Run {
     private SpeedrunColorConfig colorConfig;
 
     // Components
+    private final Layout layout;
     private final GeneralLayoutSettings settings;
     private final DetailedTimerComponent detailedTimerComponent;
     private final SplitsComponent splitsComponent;
+    private final PreviousSegmentComponent previousSegmentComponent;
+    private final SumOfBestComponent sumOfBestComponent;
 
     public Run(String mapName, DR.MapData data) throws IOException {
         splits = new File(Beezig.get().getBeezigDir(), "dr/splits/" + FilenameUtils.getName(mapName) + ".lss");
@@ -51,10 +52,16 @@ public class Run {
             loadSegment("Checkpoint #" + (i + 1));
         }
         timer = Timer.create(api.copy());
-        renderer = new TimerRenderer(this, ImmutableList.of(new SpeedrunGameInfo(), new SpeedrunSegmentView(), new SpeedrunDetailedTimer()));
+        renderer = new TimerRenderer(this, ImmutableList.of(new SpeedrunGameInfo(), new SpeedrunSegmentView(),
+            new SpeedrunDetailedTimer(), new SpeedrunPrevSegment(), new SpeedrunSumOfBest()));
         settings = GeneralLayoutSettings.createDefault();
+
+        // Components
+        layout = Layout.defaultLayout();
         detailedTimerComponent = new DetailedTimerComponent();
         splitsComponent = new SplitsComponent();
+        previousSegmentComponent = new PreviousSegmentComponent();
+        sumOfBestComponent = new SumOfBestComponent();
         colorConfig = new SpeedrunColorConfig();
     }
 
@@ -80,6 +87,12 @@ public class Run {
         timer.split();
     }
 
+    public void forceEnd(TimeSpanRef gameTime) {
+        if(!isTimerRunning()) return;
+        for(int i = 0; i < api.len(); i++) timer.skipSplit();
+        timer.setGameTime(gameTime);
+    }
+
     /**
      * Resets the ongoing timer, or does nothing if the timer isn't running.
      * @param saveAttempt whether the current attempt should be saved to disk
@@ -102,6 +115,16 @@ public class Run {
     public SplitsComponentState getSplitsState() {
         if(timer == null || splitsComponent == null) return null;
         return splitsComponent.state(timer, settings);
+    }
+
+    public PreviousSegmentComponentState getPreviousSegmentState() {
+        if(timer == null || previousSegmentComponent == null) return null;
+        return previousSegmentComponent.state(timer, settings);
+    }
+
+    public SumOfBestComponentState getSumOfBestComponent() {
+        if(timer == null || sumOfBestComponent == null) return null;
+        return sumOfBestComponent.state(timer);
     }
 
     public void save() {
