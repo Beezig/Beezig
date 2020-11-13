@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 @SuppressWarnings("ImmutableEnumChecker")
 public enum SpeedrunConfigValues {
+    MODULES(SpeedrunConfig::getModules, (cfg, v) -> cfg.setModules((String[]) v)),
     COLOR_BACKGROUND(SpeedrunConfig::getBackgroundColor, (cfg, v) -> cfg.setBackgroundColor((int)(long) v)),
     COLOR_PREFIX(SpeedrunConfig::getPrefixColor, (cfg, v) -> cfg.setPrefixColor((int)(long) v)),
     COLOR_DEFAULT(SpeedrunConfig::getDefaultColor, (cfg, v) -> cfg.setDefault((int)(long) v)),

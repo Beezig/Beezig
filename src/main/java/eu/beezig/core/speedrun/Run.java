@@ -1,12 +1,11 @@
 package eu.beezig.core.speedrun;
 
-import com.google.common.collect.ImmutableList;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.server.modes.DR;
 import eu.beezig.core.speedrun.config.SpeedrunConfig;
 import eu.beezig.core.speedrun.config.SpeedrunSerializer;
+import eu.beezig.core.speedrun.render.TimerModule;
 import eu.beezig.core.speedrun.render.TimerRenderer;
-import eu.beezig.core.speedrun.render.modules.*;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import livesplitcore.*;
@@ -18,7 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Run {
     public static final String GAME_NAME = "Minecraft: The Hive - DeathRun";
@@ -28,7 +29,7 @@ public class Run {
     private livesplitcore.Run api;
     private Timer timer;
     private final File splits;
-    private final TimerRenderer renderer;
+    private TimerRenderer renderer;
     private SpeedrunConfig colorConfig;
 
     // Components
@@ -46,6 +47,13 @@ public class Run {
             splits.getParentFile().mkdirs();
             splits.createNewFile();
         }
+        colorConfig = new SpeedrunConfig();
+        try {
+            SpeedrunSerializer.read(colorConfig);
+        } catch (ParseException e) {
+            Message.error(Message.translate("error.speedrun.config.load"));
+            ExceptionHandler.catchException(e, "Speedrun config load");
+        }
         try(InputStream stream = Files.newInputStream(splits.toPath())) {
             ParseRunResult result = livesplitcore.Run.parse(stream, splits.getAbsolutePath(), false);
             if(!result.parsedSuccessfully()) throw new IOException("Couldn't parse run");
@@ -60,8 +68,7 @@ public class Run {
         editor.setPlatformName(mapName);
         api = editor.finish();
         timer = Timer.create(api.copy());
-        renderer = new TimerRenderer(this, ImmutableList.of(new SpeedrunGameInfo(), new SpeedrunSegmentView(),
-            new SpeedrunDetailedTimer(), new SpeedrunPrevSegment(), new SpeedrunPossibleTimeSave(), new SpeedrunSumOfBest()));
+        renderer = new TimerRenderer(this, loadModules());
         settings = GeneralLayoutSettings.createDefault();
 
         // Components
@@ -70,14 +77,23 @@ public class Run {
         previousSegmentComponent = new PreviousSegmentComponent();
         sumOfBestComponent = new SumOfBestComponent();
         possibleTimeSaveComponent = new PossibleTimeSaveComponent();
+    }
 
-        colorConfig = new SpeedrunConfig();
-        try {
-            SpeedrunSerializer.read(colorConfig);
-        } catch (ParseException e) {
-            Message.error(Message.translate("error.speedrun.config.load"));
-            ExceptionHandler.catchException(e, "Speedrun config load");
+    private List<? extends TimerModule> loadModules() {
+        List<TimerModule> result = new ArrayList<>();
+        String[] enabled = colorConfig.getModules();
+        for(String module : enabled) {
+            try {
+                result.add(SpeedrunModules.registry.get(module).getConstructor().newInstance());
+            } catch (ReflectiveOperationException ex) {
+                ExceptionHandler.catchException(ex);
+            }
         }
+        return result;
+    }
+
+    public void reloadConfig() {
+        renderer = new TimerRenderer(this, loadModules());
     }
 
     public String getHumanMapName() {

@@ -9,11 +9,13 @@ import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.FileUtils;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +23,25 @@ public class SpeedrunSerializer {
     private static void save(SpeedrunConfig config) throws IOException {
         JSONObject json = new JSONObject();
         for(SpeedrunConfigValues value : SpeedrunConfigValues.values()) {
-            json.put(value.name(), value.get(config));
+            json.put(value.name(), serialize(value.get(config)));
         }
         FileUtils.writeJson(json, getFile());
+    }
+
+    private static Object serialize(Object in) {
+        if(in instanceof String[]) {
+            JSONArray array = new JSONArray();
+            Collections.addAll(array, (String[]) in);
+            return array;
+        }
+        return in;
+    }
+
+    private static Object deserialize(Object in) {
+        if(in instanceof JSONArray) {
+            return ((JSONArray) in).stream().map(Object::toString).toArray(String[]::new);
+        }
+        return in;
     }
 
     public static void read(SpeedrunConfig config) throws IOException, ParseException {
@@ -32,13 +50,13 @@ public class SpeedrunSerializer {
         JSONObject json = FileUtils.readJson(file);
         for(Object o : json.entrySet()) {
             Map.Entry<String, Object> entry = (Map.Entry<String, Object>) o;
-            SpeedrunConfigValues.valueOf(entry.getKey()).setValue(config, entry.getValue());
+            SpeedrunConfigValues.valueOf(entry.getKey()).setValue(config, deserialize(entry.getValue()));
         }
     }
 
     public static void saveAndCopy(List<SettingInfo> settings) {
         GameMode gm;
-        Run currentRun;
+        Run currentRun = null;
         SpeedrunConfig config;
         if(ServerHive.isCurrent()
             && (gm = Beezig.api().getActiveServer().getGameListener().getCurrentGameMode()) instanceof DR
@@ -46,6 +64,7 @@ public class SpeedrunSerializer {
             config = currentRun.getConfig();
         } else config = new SpeedrunConfig();
         config.setAll(settings);
+        if(currentRun != null) currentRun.reloadConfig();
         try {
             save(config);
         } catch (IOException e) {

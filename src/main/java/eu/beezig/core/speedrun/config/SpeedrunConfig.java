@@ -1,6 +1,8 @@
 package eu.beezig.core.speedrun.config;
 
 import eu.beezig.core.api.SettingInfo;
+import eu.beezig.core.speedrun.SpeedrunModules;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
 
@@ -65,6 +67,11 @@ public class SpeedrunConfig {
      */
     private int prefixColor = 0xFFFFFFFF;
 
+    /**
+     * The enabled modules
+     */
+    private String[] modules = SpeedrunModules.defaultModules.toArray(new String[0]);
+
     public int getColor(String semantic) {
         switch (semantic) {
             case "Default":
@@ -93,7 +100,9 @@ public class SpeedrunConfig {
         for(SpeedrunConfigValues value : SpeedrunConfigValues.values()) {
             SettingInfo info = new SettingInfo();
             info.key = value.name();
-            info.value = value.get(this);
+            if(value == SpeedrunConfigValues.MODULES)
+                info.value = ArrayUtils.addAll(modules, SpeedrunModules.registry.keySet().stream().map(s -> "Model: " + s).toArray(String[]::new));
+            else info.value = value.get(this);
             info.name = value.translateName();
             info.desc = value.translateDescription();
             config.add(info);
@@ -155,6 +164,10 @@ public class SpeedrunConfig {
         this.prefixColor = prefixColor;
     }
 
+    public void setModules(String[] modules) {
+        this.modules = modules;
+    }
+
     public int getCurrentSegmentColor() {
         return currentSegmentColor;
     }
@@ -201,5 +214,9 @@ public class SpeedrunConfig {
 
     public int getPrefixColor() {
         return prefixColor;
+    }
+
+    public String[] getModules() {
+        return modules;
     }
 }
