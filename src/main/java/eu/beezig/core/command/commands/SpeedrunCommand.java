@@ -44,7 +44,7 @@ public class SpeedrunCommand implements Command {
             }
         } else if(args.length > 0) {
             String mode = args[0];
-            if("natives".equalsIgnoreCase(mode)) {
+            if("natives".equalsIgnoreCase(mode) || "native".equalsIgnoreCase(mode)) {
                 Message.info(Message.translate("msg.speedrun.libraries.download"));
                 SplitLibraryLoader.downloadNatives().thenAcceptAsync(v -> {
                     boolean success = SplitLibraryLoader.loadSpeedrunLibrary(Beezig.get().getBeezigDir());
@@ -56,7 +56,7 @@ public class SpeedrunCommand implements Command {
                     ExceptionHandler.catchException(e);
                     return null;
                 });
-            }
+            } else sendUsage("/drsplit (natives)");
         }
         return true;
     }

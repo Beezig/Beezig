@@ -10,6 +10,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.*;
@@ -26,6 +27,7 @@ public class SplitLibraryLoader {
         System.setProperty("jna.library.path", nativeDir);
         try {
             Native.loadLibrary("livesplit_core", LiveSplitCoreNative.class);
+            System.setProperty("jna.encoding", "UTF-8");
             return true;
         } catch (UnsatisfiedLinkError error) {
             if (Beezig.DEBUG) ExceptionHandler.catchException(error);
@@ -70,7 +72,7 @@ public class SplitLibraryLoader {
                             if (name.endsWith(".so") || name.endsWith(".dll") || name.endsWith(".dylib")) {
                                 int count;
                                 byte[] data = new byte[1024];
-                                try (FileOutputStream fos = new FileOutputStream(new File(outDir, entry.getName()), false);
+                                try (FileOutputStream fos = new FileOutputStream(new File(outDir, FilenameUtils.getName(entry.getName())), false);
                                      BufferedOutputStream dest = new BufferedOutputStream(fos, 1024)) {
                                     while ((count = tar.read(data, 0, 1024)) != -1) {
                                         dest.write(data, 0, count);
@@ -100,7 +102,7 @@ public class SplitLibraryLoader {
                     if (name.endsWith(".so") || name.endsWith(".dll") || name.endsWith(".dylib")) {
                         int count;
                         byte[] data = new byte[1024];
-                        try (FileOutputStream fos = new FileOutputStream(new File(outDir, entry.getName()), false);
+                        try (FileOutputStream fos = new FileOutputStream(new File(outDir, FilenameUtils.getName(entry.getName())), false);
                              BufferedOutputStream dest = new BufferedOutputStream(fos, 1024)) {
                             while ((count = zip.read(data, 0, 1024)) != -1) {
                                 dest.write(data, 0, count);

@@ -1,6 +1,7 @@
 package eu.beezig.core.modules.items.dr;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.modes.DR;
 import eu.beezig.core.speedrun.render.TimerRenderer;
 import eu.the5zig.mod.modules.GameModeItem;
@@ -34,7 +35,7 @@ public class ModuleSpeedrunTimer extends GameModeItem<DR> {
 
     @Override
     public boolean shouldRender(boolean dummy) {
-        if(dummy) return false;
+        if(dummy || !Modules.render()) return false;
         if(!super.shouldRender(false)) return false;
         DR mode = getGameMode();
         if(mode == null) return false;
