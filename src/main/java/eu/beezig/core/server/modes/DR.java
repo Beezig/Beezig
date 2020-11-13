@@ -30,25 +30,30 @@ import eu.beezig.core.server.IMapExtra;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyField;
 import eu.beezig.core.server.monthly.MonthlyService;
+import eu.beezig.core.speedrun.Run;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.speedrun.DrWorldRecords;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
+import eu.beezig.core.util.text.TextButton;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.DrStats;
+import eu.the5zig.mod.util.component.MessageComponent;
+import livesplitcore.TimeSpan;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
     private static final Pattern TIME_REGEX = Pattern.compile("(\\d+):(\\d+)\\.(\\d+)");
-
     private Map<String, MapData> maps;
     private MapData currentMapData;
     private int lastSbPoints;
@@ -60,10 +65,14 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
      */
     private DrStats profile;
 
-    // Personal Best
-    private long pbSecs;
     private String pb;
     private DrWorldRecords.WorldRecord wr;
+
+    private boolean started;
+
+    // Native LiveSplit
+    private Run currentRun;
+    private AtomicBoolean checkedForNatives = new AtomicBoolean(false);
 
     public String getEndTime() {
         return finishTime;
@@ -77,18 +86,36 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         if (finishTime == null || wr == null) return;
         Matcher matcher = TIME_REGEX.matcher(finishTime);
         if (matcher.matches()) {
+            if(currentRun != null) currentRun.forceEnd(TimeSpan.parse(finishTime));
             int mins = Integer.parseInt(matcher.group(1), 10);
             int secs = Integer.parseInt(matcher.group(2), 10);
             int millis = Integer.parseInt(matcher.group(3), 10);
             int total = mins * 60 * 1000 + secs * 1000 + millis;
             int delta = total - wr.getMillis();
-            if (delta >= 0) Beezig.api().playSound("note.pling", 1f);
+            if (delta <= 0) Beezig.api().playSound("note.pling", 1f);
             if (delta == 0) {
                 Message.info(Message.translate("msg.dr.wr.tie"));
                 return;
             }
             String display = DurationFormatUtils.formatDuration(Math.abs(delta), "m:ss.SSS");
             Message.info(Beezig.api().translate("msg.dr.wr." + (delta > 0 ? "loss" : "beat"), Color.accent() + display + Color.primary()));
+        }
+    }
+
+    /**
+     * Called by the Speedrun Timer module when it is rendered.
+     * Checks if the natives are properly installed, and warns the user otherwise.
+     */
+    public void checkForNatives() {
+        if(checkedForNatives.compareAndSet(false, true)) {
+            if(!Beezig.get().isNativeSpeedrun()) {
+                Message.info(Message.translate("msg.speedrun.libraries"));
+                TextButton btn = new TextButton("btn.speedrun.libraries.name", "btn.speedrun.libraries.desc", Color.accent());
+                btn.doRunCommand("/drsplit natives");
+                MessageComponent info = new MessageComponent(Message.infoPrefix());
+                info.getSiblings().add(btn);
+                Beezig.api().messagePlayerComponent(info, false);
+            }
         }
     }
 
@@ -136,10 +163,18 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
             return;
         }
         currentMapData = data;
+        if(Beezig.get().isNativeSpeedrun()) {
+            try {
+                currentRun = new Run(normalized, currentMapData, map);
+            } catch (IOException e) {
+                ExceptionHandler.catchException(e, "Run init");
+            }
+        }
         if (profile != null) {
             Long record = profile.getMapRecords().get(currentMapData.hive);
             if (record != null) {
-                pbSecs = record;
+                // Personal Best
+                long pbSecs = record;
                 pb = DurationFormatUtils.formatDuration(pbSecs * 1000, "m:ss");
             }
         }
@@ -211,6 +246,13 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         if (getSessionService() != null)
             Beezig.get().getTemporaryPointsManager().getCurrentSession().pushItem(new SessionItem.Builder(getIdentifier())
                 .points(getPoints()).map(getMap()).custom("time", finishTime).gameStart(gameStart).kills(getKills()).deaths(getDeaths()).build());
+        if (currentRun != null) currentRun.save();
+    }
+
+    public void tryStart() {
+        if(started) return;
+        started = true;
+        if(currentRun != null) currentRun.start();
     }
 
     public void tryUpdatePoints(String newAmount) {
@@ -242,16 +284,30 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         return String.format("%d/%d %s", checkpoints, currentMapData == null ? 0 : currentMapData.checkpoints, Message.translate("msg.map.dr.checkpoints"));
     }
 
+    public Run getCurrentRun() {
+        return currentRun;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
     public MapData getCurrentMapData() {
         return currentMapData;
     }
 
     public void addCheckpoint() {
         checkpoints++;
+        if(currentRun != null) currentRun.split();
+    }
+
+    @Override
+    protected void stop() {
+        if(currentRun != null) currentRun.endNow();
     }
 
     public static class MapData {
         public String speedrun, hive;
-        int checkpoints;
+        public int checkpoints;
     }
 }

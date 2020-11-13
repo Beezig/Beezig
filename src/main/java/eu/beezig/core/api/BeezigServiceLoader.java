@@ -35,6 +35,7 @@ import eu.beezig.core.news.NewsType;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.TitleService;
+import eu.beezig.core.speedrun.config.SpeedrunSerializer;
 import eu.beezig.core.util.DailyExtensions;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
@@ -47,7 +48,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BeezigServiceLoader {
-    private ServiceLoader<IBeezigService> services = ServiceLoader.load(IBeezigService.class,
+    private final ServiceLoader<IBeezigService> services = ServiceLoader.load(IBeezigService.class,
             Beezig.get().isLaby() ? getClass().getClassLoader() : getClass().getClassLoader().getParent());
     private IBeezigService mainService;
 
@@ -145,6 +146,7 @@ public class BeezigServiceLoader {
             });
         });
         mainService.loadConfig(Beezig.get().getBeezigDir());
+        mainService.registerSaveSpeedrunConfig(SpeedrunSerializer::saveAndCopy);
         try {
             mainService.addCommands(new ArrayList<>(CommandManager.commandExecutors));
         } catch(Throwable ex) {

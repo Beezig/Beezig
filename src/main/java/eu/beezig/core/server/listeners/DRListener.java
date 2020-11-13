@@ -68,6 +68,13 @@ public class DRListener extends AbstractGameListener<DR> {
     }
 
     @Override
+    public void onTitle(DR gameMode, String title, String subTitle) {
+        if(subTitle == null) return;
+        String stripped = ChatColor.stripColor(subTitle);
+        if("The game has BEGUN!".equals(stripped)) gameMode.tryStart();
+    }
+
+    @Override
     public void onTick(DR gameMode) {
         Scoreboard sb = Beezig.api().getSideScoreboard();
         if(sb == null) return;

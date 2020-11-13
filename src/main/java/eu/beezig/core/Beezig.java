@@ -42,6 +42,7 @@ import eu.beezig.core.net.session.The5zigProvider;
 import eu.beezig.core.news.NewsManager;
 import eu.beezig.core.notification.NotificationManager;
 import eu.beezig.core.server.ServerHive;
+import eu.beezig.core.speedrun.SplitLibraryLoader;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.migrate.AutovoteMigration;
 import eu.beezig.core.util.migrate.CommandMigration;
@@ -111,6 +112,7 @@ public class Beezig {
     private Version remoteLabyVersion = null;
     private final AtomicBoolean beezigLabyUpdateAvailable = new AtomicBoolean(false);
     private NewsManager newsManager;
+    private boolean isNativeSpeedrun;
 
     public Beezig(boolean laby, File labyDir) {
         this.laby = laby;
@@ -206,6 +208,8 @@ public class Beezig {
         } catch (ReflectiveOperationException e) {
             logger.error("Couldn't load temporary points.", e);
         }
+
+        isNativeSpeedrun = SplitLibraryLoader.loadSpeedrunLibrary(beezigDir);
 
         antiSniper = new AntiSniper();
         api.getPluginManager().registerListener(this, antiSniper);
@@ -318,6 +322,14 @@ public class Beezig {
 
     public boolean toggleTitleDebug() {
         return titleDebug = !titleDebug;
+    }
+
+    public boolean isNativeSpeedrun() {
+        return isNativeSpeedrun;
+    }
+
+    public void setIsNativeSpeedrun(boolean nativeSpeedrun) {
+        isNativeSpeedrun = nativeSpeedrun;
     }
 
     public static Beezig get() {

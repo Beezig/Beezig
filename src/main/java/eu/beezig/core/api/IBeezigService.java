@@ -48,6 +48,7 @@ public interface IBeezigService {
     void registerGetForumsNews(Supplier<Set<ForgeNewsEntry>> callback);
     void registerHasDailyScores(Supplier<Boolean> callback);
     void registerSendDailyExtensions(Consumer<List<Pair<String, String>>> callback);
+    void registerSaveSpeedrunConfig(Consumer<List<SettingInfo>> callback);
 
     // Functions (Beezig -> BeezigForge)
     void setOnHive(boolean update);
@@ -58,4 +59,5 @@ public interface IBeezigService {
     void displayWelcomeGui();
     void openSettings(Map<String, List<SettingInfo>> settings);
     void openAutovote(Map<String, List<String>> maps);
+    void openSpeedrunConfig(List<SettingInfo> settings);
 }

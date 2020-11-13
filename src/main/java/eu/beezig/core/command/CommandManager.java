@@ -74,6 +74,7 @@ public class CommandManager {
         commandExecutors.add(new TokensCommand());
         commandExecutors.add(new MedalsCommand());
         commandExecutors.add(new BestGameCommand());
+        commandExecutors.add(new SpeedrunCommand());
     }
 
     /**
