@@ -7,7 +7,7 @@ import eu.the5zig.mod.render.RenderHelper;
 import org.lwjgl.opengl.GL11;
 
 public class SpeedrunGameInfo extends TimerModule {
-    private static final float SCALE_FACTOR = 0.8f;
+    private static final float SCALE_FACTOR = 0.9f;
 
     @Override
     public void render(RenderHelper renderer, Run run, int x, int y) {
@@ -26,6 +26,6 @@ public class SpeedrunGameInfo extends TimerModule {
 
     @Override
     public int getHeight() {
-        return (int) (9 * SCALE_FACTOR * 2) + 4;
+        return (int) (9 * SCALE_FACTOR * 2) + 8;
     }
 }
