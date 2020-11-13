@@ -37,6 +37,8 @@ public class ModuleSpeedrunTimer extends GameModeItem<DR> {
         if(dummy) return false;
         if(!super.shouldRender(false)) return false;
         DR mode = getGameMode();
-        return mode != null && mode.getCurrentRun() != null;
+        if(mode == null) return false;
+        mode.checkForNatives();
+        return mode.getCurrentRun() != null;
     }
 }

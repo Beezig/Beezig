@@ -37,8 +37,10 @@ import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.speedrun.DrWorldRecords;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
+import eu.beezig.core.util.text.TextButton;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.DrStats;
+import eu.the5zig.mod.util.component.MessageComponent;
 import livesplitcore.TimeSpan;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -46,6 +48,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,8 +65,6 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
      */
     private DrStats profile;
 
-    // Personal Best
-    private long pbSecs;
     private String pb;
     private DrWorldRecords.WorldRecord wr;
 
@@ -71,6 +72,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
 
     // Native LiveSplit
     private Run currentRun;
+    private AtomicBoolean checkedForNatives = new AtomicBoolean(false);
 
     public String getEndTime() {
         return finishTime;
@@ -90,13 +92,30 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
             int millis = Integer.parseInt(matcher.group(3), 10);
             int total = mins * 60 * 1000 + secs * 1000 + millis;
             int delta = total - wr.getMillis();
-            if (delta >= 0) Beezig.api().playSound("note.pling", 1f);
+            if (delta <= 0) Beezig.api().playSound("note.pling", 1f);
             if (delta == 0) {
                 Message.info(Message.translate("msg.dr.wr.tie"));
                 return;
             }
             String display = DurationFormatUtils.formatDuration(Math.abs(delta), "m:ss.SSS");
             Message.info(Beezig.api().translate("msg.dr.wr." + (delta > 0 ? "loss" : "beat"), Color.accent() + display + Color.primary()));
+        }
+    }
+
+    /**
+     * Called by the Speedrun Timer module when it is rendered.
+     * Checks if the natives are properly installed, and warns the user otherwise.
+     */
+    public void checkForNatives() {
+        if(checkedForNatives.compareAndSet(false, true)) {
+            if(!Beezig.get().isNativeSpeedrun()) {
+                Message.info(Message.translate("msg.speedrun.libraries"));
+                TextButton btn = new TextButton("btn.speedrun.libraries.name", "btn.speedrun.libraries.desc", Color.accent());
+                btn.doRunCommand("/drsplit natives");
+                MessageComponent info = new MessageComponent(Message.infoPrefix());
+                info.getSiblings().add(btn);
+                Beezig.api().messagePlayerComponent(info, false);
+            }
         }
     }
 
@@ -154,7 +173,8 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         if (profile != null) {
             Long record = profile.getMapRecords().get(currentMapData.hive);
             if (record != null) {
-                pbSecs = record;
+                // Personal Best
+                long pbSecs = record;
                 pb = DurationFormatUtils.formatDuration(pbSecs * 1000, "m:ss");
             }
         }
