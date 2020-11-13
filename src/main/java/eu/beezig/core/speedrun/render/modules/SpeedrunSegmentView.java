@@ -21,11 +21,11 @@ public class SpeedrunSegmentView extends TimerModule {
             long columns = SplitComponentBridge.getColumnsLength(state, i);
             int knownWidth = 0;
             if(state.isCurrentSplit(i)) {
-                renderer.drawRect(x, y, x + TimerRenderer.MODULE_WIDTH, y + 10, run.getConfig().getCurrentSegment());
+                renderer.drawRect(x, y, x + TimerRenderer.MODULE_WIDTH, y + 10, run.getConfig().getCurrentSegmentColor());
             }
             String name = state.name(i);
             if(name.isEmpty()) continue;
-            renderer.drawString(name, x, y);
+            renderer.drawString(name, x, y, run.getConfig().getPrefixColor());
             for(int column = 0; column < columns; column++) {
                 String columnValue = state.columnValue(i, column);
                 int color = run.getConfig().getColor(state.columnSemanticColor(i, column));

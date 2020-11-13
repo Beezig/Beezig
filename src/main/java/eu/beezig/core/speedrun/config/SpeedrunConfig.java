@@ -13,68 +13,78 @@ public class SpeedrunConfig {
     /**
      * The runner is ahead of the comparison and is gaining even more time.
      */
-    private int aheadGainingTime = 0xFF00CC36;
+    private int aheadGainingTimeColor = 0xFF00CC36;
 
     /**
      * The runner is ahead of the comparison, but is losing time.
      */
-    private int aheadLosingTime = 0xFF61D17F;
+    private int aheadLosingTimeColor = 0xFF61D17F;
 
     /**
      * The runner is behind the comparison and is losing even more time.
      */
-    private int behindLosingTime = 0xFFCC0000;
+    private int behindLosingTimeColor = 0xFFCC0000;
 
     /**
      * The runner is behind the comparison, but is gaining back time.
      */
-    private int behindGainingTime = 0xFFD16161;
+    private int behindGainingTimeColor = 0xFFD16161;
 
     /**
      * The runner achieved a best segment. (aka gold split)
      */
-    private int bestSegment = 0xFFFFD500;
+    private int bestSegmentColor = 0xFFFFD500;
 
     /**
      * There's no active attempt.
      */
-    private int notRunning = 0xFFABABAB;
+    private int notRunningColor = 0xFFABABAB;
 
     /**
      * The timer is paused.
      */
-    private int paused = 0xFF7A7A7A;
+    private int pausedColor = 0xFF7A7A7A;
 
     /**
      * The runner achieved a new Personal Best.
      */
-    private int personalBest = 0xFF14A5FF;
+    private int personalBestColor = 0xFF14A5FF;
 
     /**
      * The background for the current segment
      */
-    private int currentSegment = 0x8014A5FF;
+    private int currentSegmentColor = 0x8014A5FF;
+
+    /**
+     * The background color
+     */
+    private int backgroundColor = 0xFF000000;
+
+    /**
+     * The color for titles, prefixes etc.
+     */
+    private int prefixColor = 0xFFFFFFFF;
 
     public int getColor(String semantic) {
         switch (semantic) {
             case "Default":
                 break;
             case "AheadGainingTime":
-                return aheadGainingTime;
+                return aheadGainingTimeColor;
             case "AheadLosingTime":
-                return aheadLosingTime;
+                return aheadLosingTimeColor;
             case "BehindGainingTime":
-                return behindGainingTime;
+                return behindGainingTimeColor;
             case "BehindLosingTime":
-                return behindLosingTime;
+                return behindLosingTimeColor;
             case "BestSegment":
-                return bestSegment;
+                return bestSegmentColor;
             case "NotRunning":
-                return notRunning;
+                return notRunningColor;
             case "Paused":
-                return paused;
+                return pausedColor;
             case "PersonalBest":
-                return personalBest;
+                return personalBestColor;
         }
         return defaultColor;
     }
@@ -97,83 +107,99 @@ public class SpeedrunConfig {
         }
     }
 
-    public void setAheadGainingTime(int aheadGainingTime) {
-        this.aheadGainingTime = aheadGainingTime;
+    public void setAheadGainingTimeColor(int aheadGainingTimeColor) {
+        this.aheadGainingTimeColor = aheadGainingTimeColor;
     }
 
-    public void setAheadLosingTime(int aheadLosingTime) {
-        this.aheadLosingTime = aheadLosingTime;
+    public void setAheadLosingTimeColor(int aheadLosingTimeColor) {
+        this.aheadLosingTimeColor = aheadLosingTimeColor;
     }
 
-    public void setBehindLosingTime(int behindLosingTime) {
-        this.behindLosingTime = behindLosingTime;
+    public void setBehindLosingTimeColor(int behindLosingTimeColor) {
+        this.behindLosingTimeColor = behindLosingTimeColor;
     }
 
-    public void setBehindGainingTime(int behindGainingTime) {
-        this.behindGainingTime = behindGainingTime;
+    public void setBehindGainingTimeColor(int behindGainingTimeColor) {
+        this.behindGainingTimeColor = behindGainingTimeColor;
     }
 
-    public void setBestSegment(int bestSegment) {
-        this.bestSegment = bestSegment;
+    public void setBestSegmentColor(int bestSegmentColor) {
+        this.bestSegmentColor = bestSegmentColor;
     }
 
-    public void setNotRunning(int notRunning) {
-        this.notRunning = notRunning;
+    public void setNotRunningColor(int notRunningColor) {
+        this.notRunningColor = notRunningColor;
     }
 
-    public void setPaused(int paused) {
-        this.paused = paused;
+    public void setPausedColor(int pausedColor) {
+        this.pausedColor = pausedColor;
     }
 
-    public void setPersonalBest(int personalBest) {
-        this.personalBest = personalBest;
+    public void setPersonalBestColor(int personalBestColor) {
+        this.personalBestColor = personalBestColor;
     }
 
     public void setDefault(int defaultColor) {
         this.defaultColor = defaultColor;
     }
 
-    public void setCurrentSegment(int currentSegment) {
-        this.currentSegment = currentSegment;
+    public void setCurrentSegmentColor(int currentSegmentColor) {
+        this.currentSegmentColor = currentSegmentColor;
     }
 
-    public int getCurrentSegment() {
-        return currentSegment;
+    public void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public void setPrefixColor(int prefixColor) {
+        this.prefixColor = prefixColor;
+    }
+
+    public int getCurrentSegmentColor() {
+        return currentSegmentColor;
     }
 
     public int getDefaultColor() {
         return defaultColor;
     }
 
-    public int getAheadGainingTime() {
-        return aheadGainingTime;
+    public int getAheadGainingTimeColor() {
+        return aheadGainingTimeColor;
     }
 
-    public int getAheadLosingTime() {
-        return aheadLosingTime;
+    public int getAheadLosingTimeColor() {
+        return aheadLosingTimeColor;
     }
 
-    public int getBehindLosingTime() {
-        return behindLosingTime;
+    public int getBehindLosingTimeColor() {
+        return behindLosingTimeColor;
     }
 
-    public int getBehindGainingTime() {
-        return behindGainingTime;
+    public int getBehindGainingTimeColor() {
+        return behindGainingTimeColor;
     }
 
-    public int getBestSegment() {
-        return bestSegment;
+    public int getBestSegmentColor() {
+        return bestSegmentColor;
     }
 
-    public int getNotRunning() {
-        return notRunning;
+    public int getNotRunningColor() {
+        return notRunningColor;
     }
 
-    public int getPaused() {
-        return paused;
+    public int getPausedColor() {
+        return pausedColor;
     }
 
-    public int getPersonalBest() {
-        return personalBest;
+    public int getPersonalBestColor() {
+        return personalBestColor;
+    }
+
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public int getPrefixColor() {
+        return prefixColor;
     }
 }

@@ -16,7 +16,7 @@ public class TimerRenderer {
     }
 
     public void render(RenderHelper renderHelper, int x, int y) {
-        renderHelper.drawRect(x, y, x + MODULE_WIDTH, y + getTotalHeight(), 0xFF000000);
+        renderHelper.drawRect(x, y, x + MODULE_WIDTH, y + getTotalHeight(), run.getConfig().getBackgroundColor());
         int mutY = y;
         for(TimerModule module : activeModules) {
             module.render(renderHelper, run, x, mutY);

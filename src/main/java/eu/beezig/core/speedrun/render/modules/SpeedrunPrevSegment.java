@@ -11,7 +11,7 @@ public class SpeedrunPrevSegment extends TimerModule {
     public void render(RenderHelper renderer, Run run, int x, int y) {
         PreviousSegmentComponentState state = run.getPreviousSegmentState();
         if(state == null) return;
-        renderer.drawString("Previous Segment", x, y);
+        renderer.drawString("Previous Segment", x, y, run.getConfig().getPrefixColor());
         String display = state.time();
         renderer.drawString(display, x + TimerRenderer.MODULE_WIDTH - renderer.getStringWidth(display), y, run.getConfig().getColor(state.semanticColor()));
     }

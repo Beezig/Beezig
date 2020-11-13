@@ -11,9 +11,9 @@ public class SpeedrunPossibleTimeSave extends TimerModule {
     public void render(RenderHelper renderer, Run run, int x, int y) {
         PossibleTimeSaveComponentState state = run.getPossibleTimeSaveState();
         if(state == null) return;
-        renderer.drawString("Possible Time Save", x, y);
+        renderer.drawString("Possible Time Save", x, y, run.getConfig().getPrefixColor());
         String display = state.time();
-        renderer.drawString(display, x + TimerRenderer.MODULE_WIDTH - renderer.getStringWidth(display), y);
+        renderer.drawString(display, x + TimerRenderer.MODULE_WIDTH - renderer.getStringWidth(display), y, run.getConfig().getDefaultColor());
     }
 
     @Override

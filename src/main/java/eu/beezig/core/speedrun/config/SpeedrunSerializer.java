@@ -15,6 +15,7 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class SpeedrunSerializer {
     private static void save(SpeedrunConfig config) throws IOException {
@@ -29,8 +30,9 @@ public class SpeedrunSerializer {
         File file = getFile();
         if(!file.exists()) return;
         JSONObject json = FileUtils.readJson(file);
-        for(SpeedrunConfigValues value : SpeedrunConfigValues.values()) {
-            value.setValue(config, json.get(value.name()));
+        for(Object o : json.entrySet()) {
+            Map.Entry<String, Object> entry = (Map.Entry<String, Object>) o;
+            SpeedrunConfigValues.valueOf(entry.getKey()).setValue(config, entry.getValue());
         }
     }
 
