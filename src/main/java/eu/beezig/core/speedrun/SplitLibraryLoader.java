@@ -10,6 +10,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.lang3.SystemUtils;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -52,18 +53,19 @@ public class SplitLibraryLoader {
                     + LIVESPLIT_VERSION + "/livesplit-core-v" + LIVESPLIT_VERSION + "-" + buildTarget() + ".tar.gz");
                 conn = (HttpURLConnection) url.openConnection();
                 conn.addRequestProperty("User-Agent", Message.getUserAgent());
-                try (GzipCompressorInputStream gzip = new GzipCompressorInputStream(conn.getInputStream());
-                     TarArchiveInputStream tar = new TarArchiveInputStream(gzip)) {
+                try (BufferedInputStream buffered = new BufferedInputStream(conn.getInputStream());
+                     GzipCompressorInputStream gzip = new GzipCompressorInputStream(buffered);
+                     TarArchiveInputStream tar = new TarArchiveInputStream(gzip, 4096)) {
                     TarArchiveEntry entry;
                     while ((entry = (TarArchiveEntry) tar.getNextEntry()) != null) {
-                        if (!entry.isDirectory()) {
+                        if (entry.isFile()) {
                             String name = entry.getName();
                             if (name.endsWith(".so") || name.endsWith(".dll") || name.endsWith(".dylib")) {
                                 int count;
-                                byte[] data = new byte[4096];
-                                FileOutputStream fos = new FileOutputStream(new File(outDir, entry.getName()), false);
-                                try (BufferedOutputStream dest = new BufferedOutputStream(fos, 4096)) {
-                                    while ((count = tar.read(data, 0, 4096)) != -1) {
+                                byte[] data = new byte[1024];
+                                try (FileOutputStream fos = new FileOutputStream(new File(outDir, entry.getName()), false);
+                                     BufferedOutputStream dest = new BufferedOutputStream(fos, 1024)) {
+                                    while ((count = tar.read(data, 0, 1024)) != -1) {
                                         dest.write(data, 0, count);
                                     }
                                 }
