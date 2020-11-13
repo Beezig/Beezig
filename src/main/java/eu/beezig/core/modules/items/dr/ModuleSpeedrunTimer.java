@@ -13,13 +13,17 @@ public class ModuleSpeedrunTimer extends GameModeItem<DR> {
 
     @Override
     public void render(int x, int y, RenderLocation renderLocation, boolean dummy) {
-        TimerRenderer renderer = getGameMode().getCurrentRun().getRenderer();
+        DR mode = getGameMode();
+        if(mode == null || mode.getCurrentRun() == null) return;
+        TimerRenderer renderer = mode.getCurrentRun().getRenderer();
         renderer.render(Beezig.api().getRenderHelper(), x, y);
     }
 
     @Override
     public int getHeight(boolean dummy) {
-        TimerRenderer renderer = getGameMode().getCurrentRun().getRenderer();
+        DR mode = getGameMode();
+        if(mode == null || mode.getCurrentRun() == null) return 0;
+        TimerRenderer renderer = mode.getCurrentRun().getRenderer();
         return renderer.getTotalHeight();
     }
 
@@ -30,9 +34,9 @@ public class ModuleSpeedrunTimer extends GameModeItem<DR> {
 
     @Override
     public boolean shouldRender(boolean dummy) {
+        if(dummy) return false;
         if(!super.shouldRender(false)) return false;
         DR mode = getGameMode();
-        if(mode == null) return false;
-        return mode.getCurrentRun() != null;
+        return mode != null && mode.getCurrentRun() != null;
     }
 }
