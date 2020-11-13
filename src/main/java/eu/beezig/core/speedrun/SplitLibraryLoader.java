@@ -7,13 +7,12 @@ import eu.beezig.core.util.text.Message;
 import livesplitcore.LiveSplitCoreNative;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.lang3.SystemUtils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
@@ -49,9 +48,17 @@ public class SplitLibraryLoader {
         Beezig.get().getAsyncExecutor().execute(() -> {
             HttpURLConnection conn = null;
             try {
-                URL url = new URL("https://github.com/LiveSplit/livesplit-core/releases/download/v"
-                    + LIVESPLIT_VERSION + "/livesplit-core-v" + LIVESPLIT_VERSION + "-" + buildTarget() + ".tar.gz");
+                String noExt = "https://github.com/LiveSplit/livesplit-core/releases/download/v"
+                    + LIVESPLIT_VERSION + "/livesplit-core-v" + LIVESPLIT_VERSION + "-" + buildTarget();
+                URL url = new URL(noExt + ".tar.gz");
                 conn = (HttpURLConnection) url.openConnection();
+                if (conn.getResponseCode() == 404) {
+                    conn.disconnect();
+                    conn = (HttpURLConnection) new URL(noExt + ".zip").openConnection();
+                    downloadZip(conn.getInputStream(), outDir);
+                    future.complete(null);
+                    return;
+                }
                 conn.addRequestProperty("User-Agent", Message.getUserAgent());
                 try (BufferedInputStream buffered = new BufferedInputStream(conn.getInputStream());
                      GzipCompressorInputStream gzip = new GzipCompressorInputStream(buffered);
@@ -81,5 +88,27 @@ public class SplitLibraryLoader {
             }
         });
         return future;
+    }
+
+    private static void downloadZip(InputStream stream, File outDir) throws IOException {
+        try (BufferedInputStream buffered = new BufferedInputStream(stream);
+             ZipArchiveInputStream zip = new ZipArchiveInputStream(buffered)) {
+            ZipArchiveEntry entry;
+            while ((entry = (ZipArchiveEntry) zip.getNextEntry()) != null) {
+                if (!entry.isDirectory()) {
+                    String name = entry.getName();
+                    if (name.endsWith(".so") || name.endsWith(".dll") || name.endsWith(".dylib")) {
+                        int count;
+                        byte[] data = new byte[1024];
+                        try (FileOutputStream fos = new FileOutputStream(new File(outDir, entry.getName()), false);
+                             BufferedOutputStream dest = new BufferedOutputStream(fos, 1024)) {
+                            while ((count = zip.read(data, 0, 1024)) != -1) {
+                                dest.write(data, 0, count);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
