@@ -1,6 +1,10 @@
-package eu.beezig.core.speedrun.render.config;
+package eu.beezig.core.speedrun.config;
 
-public class SpeedrunColorConfig {
+import eu.beezig.core.api.SettingInfo;
+
+import java.util.List;
+
+public class SpeedrunConfig {
     /**
      * Default color
      */
@@ -75,6 +79,24 @@ public class SpeedrunColorConfig {
         return defaultColor;
     }
 
+    public void putAll(List<SettingInfo> config) {
+        for(SpeedrunConfigValues value : SpeedrunConfigValues.values()) {
+            SettingInfo info = new SettingInfo();
+            info.key = value.name();
+            info.value = value.get(this);
+            info.name = value.translateName();
+            info.desc = value.translateDescription();
+            config.add(info);
+        }
+    }
+
+    public void setAll(List<SettingInfo> config) {
+        for(SettingInfo info : config) {
+            SpeedrunConfigValues value = SpeedrunConfigValues.valueOf(info.key);
+            value.setValue(this, info.value);
+        }
+    }
+
     public void setAheadGainingTime(int aheadGainingTime) {
         this.aheadGainingTime = aheadGainingTime;
     }
@@ -117,5 +139,41 @@ public class SpeedrunColorConfig {
 
     public int getCurrentSegment() {
         return currentSegment;
+    }
+
+    public int getDefaultColor() {
+        return defaultColor;
+    }
+
+    public int getAheadGainingTime() {
+        return aheadGainingTime;
+    }
+
+    public int getAheadLosingTime() {
+        return aheadLosingTime;
+    }
+
+    public int getBehindLosingTime() {
+        return behindLosingTime;
+    }
+
+    public int getBehindGainingTime() {
+        return behindGainingTime;
+    }
+
+    public int getBestSegment() {
+        return bestSegment;
+    }
+
+    public int getNotRunning() {
+        return notRunning;
+    }
+
+    public int getPaused() {
+        return paused;
+    }
+
+    public int getPersonalBest() {
+        return personalBest;
     }
 }

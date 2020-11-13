@@ -3,12 +3,15 @@ package eu.beezig.core.speedrun;
 import com.google.common.collect.ImmutableList;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.server.modes.DR;
+import eu.beezig.core.speedrun.config.SpeedrunConfig;
+import eu.beezig.core.speedrun.config.SpeedrunSerializer;
 import eu.beezig.core.speedrun.render.TimerRenderer;
-import eu.beezig.core.speedrun.render.config.SpeedrunColorConfig;
 import eu.beezig.core.speedrun.render.modules.*;
 import eu.beezig.core.util.ExceptionHandler;
+import eu.beezig.core.util.text.Message;
 import livesplitcore.*;
 import org.apache.commons.io.FilenameUtils;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +29,7 @@ public class Run {
     private Timer timer;
     private final File splits;
     private final TimerRenderer renderer;
-    private SpeedrunColorConfig colorConfig;
+    private SpeedrunConfig colorConfig;
 
     // Components
     private final GeneralLayoutSettings settings;
@@ -68,7 +71,13 @@ public class Run {
         sumOfBestComponent = new SumOfBestComponent();
         possibleTimeSaveComponent = new PossibleTimeSaveComponent();
 
-        colorConfig = new SpeedrunColorConfig();
+        colorConfig = new SpeedrunConfig();
+        try {
+            SpeedrunSerializer.read(colorConfig);
+        } catch (ParseException e) {
+            Message.error(Message.translate("error.speedrun.config.load"));
+            ExceptionHandler.catchException(e, "Speedrun config load");
+        }
     }
 
     public String getHumanMapName() {
@@ -79,7 +88,7 @@ public class Run {
         return renderer;
     }
 
-    public SpeedrunColorConfig getColorConfig() {
+    public SpeedrunConfig getConfig() {
         return colorConfig;
     }
 

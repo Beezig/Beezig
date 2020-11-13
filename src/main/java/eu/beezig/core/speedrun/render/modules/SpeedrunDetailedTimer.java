@@ -23,7 +23,7 @@ public class SpeedrunDetailedTimer extends TimerModule {
         int segmentTimeLength = (int) (renderer.getStringWidth(segmentTime) * SCALE_FACTOR_CURRENT);
         int segmentFractionLength = (int) (renderer.getStringWidth(segmentFraction) * SCALE_FACTOR_CURRENT_FRACTION);
         int segmentY = (int) (y + 9 * SCALE_FACTOR_TOTAL);
-        int color = state == null ? 0xFFFFFFFF : run.getColorConfig().getColor(state.timerSemanticColor());
+        int color = state == null ? 0xFFFFFFFF : run.getConfig().getColor(state.timerSemanticColor());
 
         // Total
         drawScaledString(renderer, timerTime, x + TimerRenderer.MODULE_WIDTH - timerFractionLength - timerTimeLength, y, SCALE_FACTOR_TOTAL, color);
