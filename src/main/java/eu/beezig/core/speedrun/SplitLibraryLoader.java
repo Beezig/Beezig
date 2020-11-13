@@ -54,6 +54,7 @@ public class SplitLibraryLoader {
                     + LIVESPLIT_VERSION + "/livesplit-core-v" + LIVESPLIT_VERSION + "-" + buildTarget();
                 URL url = new URL(noExt + ".tar.gz");
                 conn = (HttpURLConnection) url.openConnection();
+                conn.addRequestProperty("User-Agent", Message.getUserAgent());
                 if (conn.getResponseCode() == 404) {
                     conn.disconnect();
                     conn = (HttpURLConnection) new URL(noExt + ".zip").openConnection();
@@ -61,7 +62,6 @@ public class SplitLibraryLoader {
                     future.complete(null);
                     return;
                 }
-                conn.addRequestProperty("User-Agent", Message.getUserAgent());
                 try (BufferedInputStream buffered = new BufferedInputStream(conn.getInputStream());
                      GzipCompressorInputStream gzip = new GzipCompressorInputStream(buffered);
                      TarArchiveInputStream tar = new TarArchiveInputStream(gzip, 4096)) {
