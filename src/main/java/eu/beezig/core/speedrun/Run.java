@@ -125,6 +125,7 @@ public class Run {
     public void forceEnd(TimeSpanRef gameTime) {
         if(!isTimerRunning()) return;
         for(int i = 0; i < api.len(); i++) timer.skipSplit();
+        timer.split();
         timer.setGameTime(gameTime);
     }
 
