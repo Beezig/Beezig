@@ -47,8 +47,10 @@ public class SpeedrunCommand implements Command {
             if("natives".equalsIgnoreCase(mode)) {
                 Message.info(Message.translate("msg.speedrun.libraries.download"));
                 SplitLibraryLoader.downloadNatives().thenAcceptAsync(v -> {
-                    SplitLibraryLoader.loadSpeedrunLibrary(Beezig.get().getBeezigDir());
-                    Message.info(Message.translate("msg.speedrun.libraries.download.complete"));
+                    boolean success = SplitLibraryLoader.loadSpeedrunLibrary(Beezig.get().getBeezigDir());
+                    Beezig.get().setIsNativeSpeedrun(success);
+                    if(success) Message.info(Message.translate("msg.speedrun.libraries.download.complete"));
+                    else Message.error(Message.translate("error.speedrun.libraries"));
                 }).exceptionally(e -> {
                     Message.error(Message.translate("error.speedrun.libraries"));
                     ExceptionHandler.catchException(e);

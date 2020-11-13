@@ -328,6 +328,10 @@ public class Beezig {
         return isNativeSpeedrun;
     }
 
+    public void setIsNativeSpeedrun(boolean nativeSpeedrun) {
+        isNativeSpeedrun = nativeSpeedrun;
+    }
+
     public static Beezig get() {
         return instance;
     }
