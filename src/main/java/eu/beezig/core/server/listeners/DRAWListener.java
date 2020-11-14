@@ -66,6 +66,7 @@ public class DRAWListener extends AbstractGameListener<DRAW> {
         GameMode mode;
         if(!Settings.DRAW_AUTOGUESS.get().getBoolean() || !((mode = Beezig.api().getActiveServer().getGameListener().getCurrentGameMode()) instanceof DRAW)) return;
         if(mode.getState() != GameState.GAME) return;
+        if(((ServerHive) Beezig.api().getActiveServer()).getInPartyChat()) return;
         if(event.getMessage().startsWith("/")) return;
         if(event.getMessage().startsWith("!")) {
             event.setCancelled(true);
