@@ -54,7 +54,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
             gameMode.addKills(1);
         }
         else if ("sky.win".equals(key)) {
-            gameMode.setWon();
+            gameMode.won();
         }
     }
 

@@ -24,6 +24,7 @@ import eu.beezig.core.advrec.AdvRecUtils;
 import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
+import eu.beezig.core.server.IWinstreak;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyService;
 import eu.beezig.core.util.ExceptionHandler;
@@ -35,7 +36,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.concurrent.CompletableFuture;
 
-public class HIDE extends HiveMode implements IAutovote, IMonthly {
+public class HIDE extends HiveMode implements IAutovote, IMonthly, IWinstreak {
 
     private boolean won;
     private int lastSbPoints;
@@ -110,8 +111,10 @@ public class HIDE extends HiveMode implements IAutovote, IMonthly {
         return "Hide and Seek";
     }
 
-    public void setWon() {
+    @Override
+    public void won() {
         won = true;
+        winstreakService.increment();
     }
 
     @Override

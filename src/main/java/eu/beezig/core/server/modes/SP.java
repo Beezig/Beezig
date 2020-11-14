@@ -24,6 +24,7 @@ import eu.beezig.core.advrec.AdvRecUtils;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.server.IWinstreak;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyService;
 import eu.beezig.core.util.ExceptionHandler;
@@ -35,7 +36,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.concurrent.CompletableFuture;
 
-public class SP extends HiveMode implements IMonthly {
+public class SP extends HiveMode implements IMonthly, IWinstreak {
     private boolean won;
 
     public SP() {
@@ -68,7 +69,8 @@ public class SP extends HiveMode implements IMonthly {
         setGameID(Long.toString(System.currentTimeMillis(), 10));
     }
 
-    public void setWon() {
+    @Override
+    public void won() {
         this.won = true;
     }
 

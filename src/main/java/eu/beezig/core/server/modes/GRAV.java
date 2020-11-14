@@ -25,6 +25,7 @@ import eu.beezig.core.autovote.AutovoteMap;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.server.IWinstreak;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyService;
 import eu.beezig.core.util.Color;
@@ -44,7 +45,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-public class GRAV extends HiveMode implements IMonthly {
+public class GRAV extends HiveMode implements IMonthly, IWinstreak {
 
     private boolean won;
     // Keeps track of the other players' stage completions, to assign points based on the place
@@ -129,7 +130,8 @@ public class GRAV extends HiveMode implements IMonthly {
         downloadRecords();
     }
 
-    public void setWon() {
+    @Override
+    public void won() {
         this.won = true;
     }
 

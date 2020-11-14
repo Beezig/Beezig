@@ -50,6 +50,6 @@ public class SGNListener extends AbstractGameListener<SGN> {
         if("sgn.kill".equals(key)) gameMode.addKills(1);
         else if("sgn.gain".equals(key)) gameMode.addPoints(Integer.parseInt(match.get(0), 10));
         else if("sgn.loss".equals(key)) gameMode.addPoints(-Integer.parseInt(match.get(0), 10));
-        else if("sgn.win".equals(key)) gameMode.setWon();
+        else if("sgn.win".equals(key)) gameMode.won();
     }
 }

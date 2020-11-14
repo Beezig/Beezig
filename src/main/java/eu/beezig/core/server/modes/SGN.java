@@ -25,10 +25,11 @@ import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.server.IDynamicMode;
+import eu.beezig.core.server.IWinstreak;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.beezig.hiveapi.wrapper.player.games.SgnStats;
 
-public class SGN extends HiveMode implements IAutovote, IDynamicMode {
+public class SGN extends HiveMode implements IAutovote, IDynamicMode, IWinstreak {
 
     private String mode;
     private boolean won;
@@ -64,7 +65,8 @@ public class SGN extends HiveMode implements IAutovote, IDynamicMode {
     private void slowRecordsExecutor() {
     }
 
-    public void setWon() {
+    @Override
+    public void won() {
         won = true;
     }
 

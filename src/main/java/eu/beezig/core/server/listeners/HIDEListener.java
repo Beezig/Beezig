@@ -53,7 +53,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
             server.addTokens(Integer.parseInt(match.get(1), 10));
         }
         else if("hide.win".equals(key)) {
-            gameMode.setWon();
+            gameMode.won();
             gameMode.addPoints(Integer.parseInt(match.get(0), 10));
         }
     }

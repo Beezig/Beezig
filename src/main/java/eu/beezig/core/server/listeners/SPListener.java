@@ -47,7 +47,7 @@ public class SPListener extends AbstractGameListener<SP> {
         }
         else if("sp.win".equals(key)) {
             gameMode.addPoints(170);
-            gameMode.setWon();
+            gameMode.won();
         }
     }
 

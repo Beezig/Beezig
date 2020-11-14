@@ -25,6 +25,7 @@ import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.server.IDynamicMode;
+import eu.beezig.core.server.IWinstreak;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyField;
 import eu.beezig.core.server.monthly.MonthlyService;
@@ -37,7 +38,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.concurrent.CompletableFuture;
 
-public class SKY extends HiveMode implements IAutovote, IMonthly, IDynamicMode {
+public class SKY extends HiveMode implements IAutovote, IMonthly, IDynamicMode, IWinstreak {
 
     private String mode;
     private boolean won;
@@ -92,7 +93,8 @@ public class SKY extends HiveMode implements IAutovote, IMonthly, IDynamicMode {
         }
     }
 
-    public void setWon() {
+    @Override
+    public void won() {
         addPoints(20);
         won = true;
     }

@@ -28,6 +28,7 @@ import eu.beezig.core.logging.DailyService;
 import eu.beezig.core.logging.GameLogger;
 import eu.beezig.core.logging.TemporaryPointsManager;
 import eu.beezig.core.logging.session.SessionService;
+import eu.beezig.core.logging.ws.WinstreakService;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyService;
 import eu.beezig.core.util.ExceptionHandler;
@@ -66,6 +67,7 @@ public abstract class HiveMode extends GameMode {
     protected long gameStart;
     private MonthlyService monthlyProfile;
     private boolean init;
+    protected WinstreakService winstreakService;
 
     protected HiveMode() {
         global = new GlobalStats();
@@ -110,6 +112,9 @@ public abstract class HiveMode extends GameMode {
                         return null;
                     });
                 }
+            }
+            if(this instanceof IWinstreak) {
+                winstreakService = Beezig.get().getWinstreakManager().getService(getIdentifier());
             }
         }
     }
@@ -191,6 +196,15 @@ public abstract class HiveMode extends GameMode {
                 dailyService.save();
             } catch (IOException e) {
                 ExceptionHandler.catchException(e, "Couldn't save daily points");
+            }
+        }
+        if(winstreakService != null) {
+            winstreakService.reset();
+            try {
+                Beezig.get().getWinstreakManager().saveService(getIdentifier(), winstreakService);
+            } catch (IOException e) {
+                Message.error(Message.translate("error.winstreak_save"));
+                ExceptionHandler.catchException(e, "Winstreak save");
             }
         }
     }

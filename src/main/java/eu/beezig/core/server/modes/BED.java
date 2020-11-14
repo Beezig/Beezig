@@ -25,6 +25,7 @@ import eu.beezig.core.logging.session.SessionItem;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.IAutovote;
 import eu.beezig.core.server.IDynamicMode;
+import eu.beezig.core.server.IWinstreak;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyField;
 import eu.beezig.core.server.monthly.MonthlyService;
@@ -37,7 +38,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.concurrent.CompletableFuture;
 
-public class BED extends HiveMode implements IAutovote, IMonthly, IDynamicMode {
+public class BED extends HiveMode implements IAutovote, IMonthly, IDynamicMode, IWinstreak {
 
     private int bedsDestroyed;
     private String mode;
@@ -106,6 +107,7 @@ public class BED extends HiveMode implements IAutovote, IMonthly, IDynamicMode {
     public void won() {
         addPoints(100);
         won = true;
+        winstreakService.increment();
     }
 
     private void recordsExecutor() {

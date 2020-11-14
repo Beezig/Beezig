@@ -72,7 +72,7 @@ public class GRAVListener extends AbstractGameListener<GRAV> {
             gameMode.setState(GameState.GAME);
             gameMode.stageDone();
         }
-        if("grav.finish".equals(key)) gameMode.setWon();
+        if("grav.finish".equals(key)) gameMode.won();
     }
 
     @EventHandler

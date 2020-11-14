@@ -56,7 +56,7 @@ public class DRAWListener extends AbstractGameListener<DRAW> {
                 gameMode.addPoints(points);
             }
         }
-        else if("draw.win".equals(key)) gameMode.setWon();
+        else if("draw.win".equals(key)) gameMode.won();
         else if("draw.drawer".equals(key)) gameMode.setCurrentDrawer(match.get(0));
     }
 

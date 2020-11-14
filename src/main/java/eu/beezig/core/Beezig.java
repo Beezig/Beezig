@@ -33,6 +33,7 @@ import eu.beezig.core.config.BeezigConfiguration;
 import eu.beezig.core.config.i18n.LanguageConfiguration;
 import eu.beezig.core.data.BeezigData;
 import eu.beezig.core.logging.TemporaryPointsManager;
+import eu.beezig.core.logging.ws.WinstreakManager;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.net.BeezigNetManager;
 import eu.beezig.core.net.profile.override.UserOverride;
@@ -86,11 +87,12 @@ public class Beezig {
     public static Gson gson = new GsonBuilder().registerTypeAdapter(UserOverride.class, new UserOverrideDeserializer()).create();
     public static boolean DEBUG = false;
     private static Beezig instance;
-
     private ModAPI api;
     private ScheduledExecutorService asyncExecutor;
-    private BeezigConfiguration config;
     private File beezigDir;
+
+    // Managers
+    private BeezigConfiguration config;
     private BeezigData data;
     private BeezigNetManager networkManager;
     private WorldTaskManager worldTaskManager;
@@ -98,7 +100,11 @@ public class Beezig {
     private NotificationManager notificationManager;
     private AntiSniper antiSniper;
     private ProcessManager processManager;
+    private NewsManager newsManager;
     private BeezigServiceLoader serviceLoader;
+    private WinstreakManager winstreakManager;
+
+    // Flags
     private final boolean laby;
     private boolean titleDebug;
     private boolean isMod;
@@ -111,7 +117,6 @@ public class Beezig {
     private Version beezigLabyVersion;
     private Version remoteLabyVersion = null;
     private final AtomicBoolean beezigLabyUpdateAvailable = new AtomicBoolean(false);
-    private NewsManager newsManager;
     private boolean isNativeSpeedrun;
 
     public Beezig(boolean laby, File labyDir) {
@@ -208,6 +213,7 @@ public class Beezig {
         } catch (ReflectiveOperationException e) {
             logger.error("Couldn't load temporary points.", e);
         }
+        winstreakManager = new WinstreakManager(beezigDir);
 
         isNativeSpeedrun = SplitLibraryLoader.loadSpeedrunLibrary(beezigDir);
 
@@ -300,8 +306,8 @@ public class Beezig {
         return antiSniper;
     }
 
-    public ProcessManager getProcessManager() {
-        return processManager;
+    public WinstreakManager getWinstreakManager() {
+        return winstreakManager;
     }
 
     public BeezigServiceLoader getServiceLoader() {
