@@ -7,7 +7,6 @@ public class WinstreakService {
     private int current;
     @SerializedName("bestStreak")
     private int best;
-    @SuppressWarnings("unused")
     private Long lastReset, bestReset;
 
     /**
@@ -30,6 +29,14 @@ public class WinstreakService {
 
     public int getCurrent() {
         return current;
+    }
+
+    public Long getLastReset() {
+        return lastReset;
+    }
+
+    public Long getBestReset() {
+        return bestReset;
     }
 
     public int getBest() {
