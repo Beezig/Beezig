@@ -30,6 +30,11 @@ public class ModuleSpeedrunTimer extends GameModeItem<DR> implements ICustomRend
     }
 
     @Override
+    public String getTranslation() {
+        return "Speedrun";
+    }
+
+    @Override
     protected Object getValue(boolean b) {
         return false;
     }

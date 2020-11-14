@@ -110,6 +110,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
         if(checkedForNatives.compareAndSet(false, true)) {
             if(!Beezig.get().isNativeSpeedrun()) {
                 Message.info(Message.translate("msg.speedrun.libraries"));
+                Message.info(Beezig.api().translate("msg.speedrun.libraries.size", Color.accent() + "4MB" + Color.primary()));
                 TextButton btn = new TextButton("btn.speedrun.libraries.name", "btn.speedrun.libraries.desc", Color.accent());
                 btn.doRunCommand("/drsplit natives");
                 MessageComponent info = new MessageComponent(Message.infoPrefix());
