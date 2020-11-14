@@ -1,13 +1,14 @@
 package eu.beezig.core.modules.items.dr;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.modules.ICustomRender;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.modes.DR;
 import eu.beezig.core.speedrun.render.TimerRenderer;
 import eu.the5zig.mod.modules.GameModeItem;
 import eu.the5zig.mod.render.RenderLocation;
 
-public class ModuleSpeedrunTimer extends GameModeItem<DR> {
+public class ModuleSpeedrunTimer extends GameModeItem<DR> implements ICustomRender {
     public ModuleSpeedrunTimer() {
         super(DR.class);
     }
