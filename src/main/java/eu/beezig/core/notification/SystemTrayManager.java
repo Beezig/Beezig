@@ -20,34 +20,56 @@
 package eu.beezig.core.notification;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.ExceptionHandler;
+import org.apache.commons.lang3.SystemUtils;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class SystemTrayManager {
     private TrayIcon mainIcon;
     private boolean supported;
 
     public SystemTrayManager() {
-        try {
-            SystemTray tray = SystemTray.getSystemTray();
-            mainIcon = new TrayIcon(Toolkit.getDefaultToolkit().createImage(Beezig.class.getResource("/img/logo.png")), "Beezig");
-            mainIcon.setImageAutoSize(true);
-            mainIcon.setToolTip("Beezig");
-            tray.add(mainIcon);
-            supported = true;
-        } catch (UnsupportedOperationException ignored) {
-            Beezig.logger.warn("System tray is NOT supported.");
-        } catch (AWTException e) {
-            ExceptionHandler.catchException(e);
+        if(SystemUtils.IS_OS_WINDOWS && Settings.MSG_PING.get().getBoolean()) {
+            try {
+                SystemTray tray = SystemTray.getSystemTray();
+                mainIcon = new TrayIcon(Toolkit.getDefaultToolkit().createImage(Beezig.class.getResource("/img/logo.png")), "Beezig");
+                mainIcon.setImageAutoSize(true);
+                mainIcon.setToolTip("Beezig");
+                mainIcon.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        tray.remove(mainIcon);
+                    }
+                });
+                tray.add(mainIcon);
+                supported = true;
+            } catch (UnsupportedOperationException ignored) {
+                Beezig.logger.warn("System tray is NOT supported.");
+            } catch (AWTException e) {
+                ExceptionHandler.catchException(e);
+            }
         }
     }
 
     public void sendNotification(IncomingMessage message) {
         Beezig.api().playSound("note.pling", 1f);
-        if(!supported) return;
-        mainIcon.displayMessage(Beezig.api().translate(message.getType() == NotificationManager.MessageType.BROADCAST
-                        ? "msg.notify.incoming.broadcast" : "msg.notify.incoming", message.getSender()), message.getMessage(),
-                TrayIcon.MessageType.INFO);
+        String title = Beezig.api().translate(message.getType() == NotificationManager.MessageType.BROADCAST
+            ? "msg.notify.incoming.broadcast" : "msg.notify.incoming", message.getSender());
+        String content = message.getMessage();
+        try {
+            if (SystemUtils.IS_OS_UNIX) {
+                Runtime.getRuntime().exec(new String[]{"notify-send", title, content});
+            } else if (SystemUtils.IS_OS_MAC) {
+                Runtime.getRuntime().exec(new String[]{"osascript", "-e", "display notification \"" + content + "\" with title \"" + title + "\""});
+            } else if (supported) {
+                mainIcon.displayMessage(title, content, TrayIcon.MessageType.INFO);
+            }
+        } catch (Exception ex) {
+            ExceptionHandler.catchException(ex, "Notify send");
+        }
     }
 }
