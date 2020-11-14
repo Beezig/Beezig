@@ -3,6 +3,7 @@ package eu.beezig.core.news;
 import com.google.common.base.Splitter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.DateUtils;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.task.WorldTask;
 import eu.beezig.core.util.text.Message;
@@ -13,6 +14,7 @@ import eu.the5zig.util.minecraft.ChatColor;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -109,12 +111,12 @@ public class NewsManager {
         return loadedNews;
     }
 
-    private Map<NewsType, Set<NewsEntry>> getUnreadNews(Date compareTo) {
+    private Map<NewsType, Set<NewsEntry>> getUnreadNews(Instant compareTo) {
         return loadedNews.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> {
             TreeSet<NewsEntry> entries = new TreeSet<>(e.getValue());
             for(Iterator<NewsEntry> iter = entries.descendingIterator(); iter.hasNext();) {
                 NewsEntry entry = iter.next();
-                if(!entry.isPersistent() && entry.getPubDate().compareTo(compareTo) < 0) {
+                if(!entry.isPersistent() && DateUtils.toInstant(entry.getPubDate()).compareTo(compareTo) < 0) {
                     iter.remove();
                     entries.headSet(entry, false).clear();
                     break;

@@ -6,10 +6,10 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Date;
+import java.time.Instant;
 
 public class LastLogin {
-    private Date lastLogin;
+    private Instant lastLogin;
     private File file;
 
     LastLogin() {
@@ -18,15 +18,15 @@ public class LastLogin {
 
     public void read() throws IOException {
         if(!file.exists()) {
-            lastLogin = new Date(Beezig.DEBUG ? 0 : System.currentTimeMillis());
+            lastLogin = Instant.ofEpochMilli(Beezig.DEBUG ? 0 : System.currentTimeMillis());
             return;
         }
         String contents = FileUtils.readFileToString(file, Charset.defaultCharset());
         long time = Long.parseLong(contents, 10);
-        lastLogin = new Date(time);
+        lastLogin = Instant.ofEpochMilli(time);
     }
 
-    public Date getLastLogin() {
+    public Instant getLastLogin() {
         return lastLogin;
     }
 

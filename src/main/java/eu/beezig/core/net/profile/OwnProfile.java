@@ -25,13 +25,13 @@ import eu.beezig.core.net.profile.role.RoleContainer;
 import eu.beezig.core.net.profile.role.RoleService;
 import eu.beezig.core.util.ExceptionHandler;
 
-import java.util.Date;
+import java.time.Instant;
 
 public class OwnProfile {
     static final RoleContainer defaultRole = new RoleContainer(DefaultUserRoles.USER);
     private int id;
     private RoleContainer role;
-    private Date firstLogin;
+    private final Instant firstLogin;
     private Region region;
     private boolean dailyScores;
 
@@ -42,7 +42,7 @@ public class OwnProfile {
             ExceptionHandler.catchException(e, "Profile load");
             return null;
         });
-        this.firstLogin = new Date(firstLogin);
+        this.firstLogin = Instant.ofEpochMilli(firstLogin);
         if(regionId != null) {
             this.region = new Region(regionId, regionName);
         }
@@ -56,7 +56,7 @@ public class OwnProfile {
         return role;
     }
 
-    public Date getFirstLogin() {
+    public Instant getFirstLogin() {
         return firstLogin;
     }
 

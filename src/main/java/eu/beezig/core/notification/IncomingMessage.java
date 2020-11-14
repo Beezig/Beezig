@@ -19,19 +19,19 @@
 
 package eu.beezig.core.notification;
 
-import java.util.Date;
+import java.time.Instant;
 
 public class IncomingMessage {
     private String sender;
     private String message;
-    private Date sendDate;
+    private Instant sendDate;
     private NotificationManager.MessageType type;
 
     public IncomingMessage(NotificationManager.MessageType type, String sender, String message) {
-        this(type, sender, message, new Date());
+        this(type, sender, message, Instant.now());
     }
 
-    public IncomingMessage(NotificationManager.MessageType type, String sender, String message, Date sendDate) {
+    public IncomingMessage(NotificationManager.MessageType type, String sender, String message, Instant sendDate) {
         this.type = type;
         this.sender = sender;
         this.message = message;
@@ -42,7 +42,7 @@ public class IncomingMessage {
         return type;
     }
 
-    public Date getSendDate() {
+    public Instant getSendDate() {
         return sendDate;
     }
 

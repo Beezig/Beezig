@@ -46,7 +46,7 @@ public class ProfileCommand implements Command {
         }
         Beezig.api().messagePlayer(StringUtils.linedCenterText("§7", Color.accent() + Message.translate("msg.profile")));
         Beezig.api().messagePlayer(" " + Color.primary() + Beezig.api().translate("msg.profile.id", Color.accent() + profile.getId() + Color.primary(),
-                Color.accent() + Message.date(profile.getFirstLogin()) + Color.primary()));
+                Color.accent() + Message.formatTime(profile.getFirstLogin()) + Color.primary()));
         Beezig.api().messagePlayer(" " + Color.primary() + Beezig.api().translate("msg.profile.rank", profile.getRoleContainer().getRole().getDisplayName()));
         if(profile.getRegion() != null) {
             Beezig.api().messagePlayer(" " + Color.primary() + Beezig.api().translate("msg.profile.region", Color.accent() + profile.getRegion().getName()));

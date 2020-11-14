@@ -22,6 +22,7 @@ package eu.beezig.core.advrec;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.DateUtils;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
@@ -30,15 +31,12 @@ import eu.the5zig.mod.server.IPatternResult;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.text.DateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.Callable;
 
 public class AdvancedRecords {
-    public static final DateFormat cachedFormatter = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
     public static final String API_PREFIX = "§7§lⓘ§r";
     private static final String FOOTER_FORMAT = "                                %s§m                        §r                  ";
     private List<Pair<String, String>> messages;
@@ -48,7 +46,7 @@ public class AdvancedRecords {
     private String target;
     private Callable<Void> executor;
     private Callable<Void> slowExecutor;
-    private Date apiCache;
+    private Instant apiCache;
 
     public AdvancedRecords() {
         messages = new ArrayList<>();
@@ -57,7 +55,7 @@ public class AdvancedRecords {
     }
 
     public void setVariables(GameStats stats) {
-        this.apiCache = stats.getCachedAt();
+        this.apiCache = DateUtils.toInstant(stats.getCachedAt());
     }
 
     public String getTarget() {
@@ -204,8 +202,8 @@ public class AdvancedRecords {
         return pair == null ? null : pair.getRight();
     }
 
-    public static void sendLastUpdated(Date cached, boolean includePrefix, boolean secondChat) {
-        String lastUpdate = String.format("%s (%s)", AdvancedRecords.cachedFormatter.format(cached), StringUtils.getTimeAgo(cached.getTime()));
+    public static void sendLastUpdated(Instant cached, boolean includePrefix, boolean secondChat) {
+        String lastUpdate = String.format("%s (%s)", Message.formatTime(cached), StringUtils.getTimeAgo(cached.toEpochMilli()));
         String display = StringUtils.linedCenterText(Color.primary(), (includePrefix ? API_PREFIX + " " : "") +
             Color.primary() + Beezig.api().translate("advrec.last_updated", Color.accent() + lastUpdate));
         if(secondChat) Beezig.api().messagePlayerInSecondChat(display);

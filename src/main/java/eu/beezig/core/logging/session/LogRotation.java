@@ -1,6 +1,7 @@
 package eu.beezig.core.logging.session;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.logging.TemporaryPointsManager;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -12,7 +13,6 @@ import org.apache.commons.io.IOUtils;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
@@ -22,10 +22,9 @@ public class LogRotation {
         File[] subs = sessions.listFiles();
         if (subs == null) return new File[0];
         LocalDate expiry = LocalDate.now(ZoneId.systemDefault()).minus(30, ChronoUnit.DAYS);
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return Arrays.stream(subs).filter(f -> {
             if (!f.isDirectory()) return false;
-            return LocalDate.parse(f.getName(), fmt).isBefore(expiry);
+            return LocalDate.parse(f.getName(), TemporaryPointsManager.dateFormatter).isBefore(expiry);
         }).sorted().toArray(File[]::new);
     }
 

@@ -30,14 +30,15 @@ import eu.beezig.core.advrec.anywhere.util.ArcadeGamemodeBuilder;
 import eu.beezig.core.advrec.anywhere.util.GamemodeBuilder;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.DateUtils;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
 import org.json.simple.JSONObject;
 
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class AdvancedRecordsAnywhere {
@@ -226,7 +227,7 @@ public class AdvancedRecordsAnywhere {
         }
         Message.info(Message.translate("advrec.running"));
         gm.produce(player).thenAcceptAsync(profile -> {
-            Date cached = profile.getCachedAt();
+            Instant cached = DateUtils.toInstant(profile.getCachedAt());
             JSONObject input = profile.getSource().getInput();
             Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.primary() + Beezig.api().translate("advrec.header", Color.accent() + player + Color.primary())));
             for (RecordsStatistic stat : gm.getStatistics()) {

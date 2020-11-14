@@ -2,12 +2,13 @@ package eu.beezig.core.news;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.DateUtils;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.text.ParseException;
-import java.util.Date;
+import java.time.Instant;
 import java.util.Locale;
 import java.util.regex.Matcher;
 
@@ -66,7 +67,7 @@ public enum NewsType {
         if("author".equals(k)) item.setAuthor(v);
         else if("mapName".equals(k)) item.setTitle(v);
         else if("gameType".equals(k)) item.setExtra("game", v);
-        else if("date".equals(k)) item.setPubDate(new Date(Long.parseLong(v, 10)));
+        else if("date".equals(k)) item.setPubDate(DateUtils.toDate(Instant.ofEpochMilli(Long.parseLong(v, 10))));
         if(item.getContent() == null && item.getAuthor() != null && item.hasExtra("game")) {
             item.setContent(Beezig.api().translate("news.map", Color.primary() + item.getExtra().get("game")
                 + Color.accent(), Color.primary() + item.getAuthor()));

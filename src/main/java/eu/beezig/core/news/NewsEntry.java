@@ -17,6 +17,8 @@
 
 package eu.beezig.core.news;
 
+import eu.beezig.core.util.DateUtils;
+
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -113,18 +115,18 @@ public class NewsEntry implements Comparable<NewsEntry> {
     @Override
     public int compareTo(NewsEntry newsEntry) {
         if(newsEntry == null) return 1;
-        if(persistent && newsEntry.persistent) return pubDate.compareTo(newsEntry.pubDate);
+        if(persistent && newsEntry.persistent) return DateUtils.instantCompare(pubDate, newsEntry.pubDate);
         if(persistent) return 1;
         if(newsEntry.persistent) return -1;
-        return pubDate.compareTo(newsEntry.pubDate);
+        return DateUtils.instantCompare(pubDate, newsEntry.pubDate);
     }
 
     public static Comparator<ForgeNewsEntry> compareForge() {
         return (o1, o2) -> {
-            if(o1.persistent && o2.persistent) return o1.pubDate.compareTo(o2.pubDate);
+            if(o1.persistent && o2.persistent) return DateUtils.instantCompare(o1.pubDate, o2.pubDate);
             if(o1.persistent) return 1;
             if(o2.persistent) return -1;
-            return o1.pubDate.compareTo(o2.pubDate);
+            return DateUtils.instantCompare(o1.pubDate, o2.pubDate);
         };
     }
 }

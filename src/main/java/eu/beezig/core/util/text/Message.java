@@ -30,9 +30,11 @@ import eu.the5zig.mod.The5zigAPI;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Message {
@@ -40,7 +42,7 @@ public class Message {
     private static final String bar = "    §7§m                                                                                    ";
     private static final DecimalFormat bigintFormatter = new DecimalFormat("#,###");
     private static final DecimalFormat ratioFormatter = new DecimalFormat("#,###.##");
-    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withZone(ZoneId.systemDefault());
 
     static List<String> toSendQueue = new ArrayList<>();
 
@@ -61,7 +63,7 @@ public class Message {
                 : Long.toString(l);
     }
 
-    public static String date(Date date) {
+    public static String formatTime(TemporalAccessor date) {
         return dateFormatter.format(date);
     }
 

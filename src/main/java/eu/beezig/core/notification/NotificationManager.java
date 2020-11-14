@@ -27,8 +27,8 @@ import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.IPatternResult;
 import org.lwjgl.opengl.Display;
 
+import java.time.Instant;
 import java.util.ArrayDeque;
-import java.util.Date;
 import java.util.Queue;
 
 public class NotificationManager {
@@ -75,7 +75,7 @@ public class NotificationManager {
                     guiHandle.ensureOpen();
                     guiHandle.getMessages().addElement(Beezig.api().translate(type == MessageType.PRIVATE
                                     ? "msg.notify.private" : "msg.notify.broadcast",
-                            sender, Message.date(new Date()), message));
+                            sender, Message.formatTime(Instant.now()), message));
                     break;
             }
             match.ignoreMessage(true);
@@ -100,7 +100,7 @@ public class NotificationManager {
             Beezig.api().messagePlayer(Color.primary() + " - " + Beezig.api().translate(msg.getType() == MessageType.PRIVATE
                             ? "msg.notify.private" : "msg.notify.broadcast",
                     Color.accent() + msg.getSender() + Color.primary(),
-                    Color.accent() + Message.date(msg.getSendDate()) + Color.primary(), Color.accent() + msg.getMessage()));
+                    Color.accent() + Message.formatTime(msg.getSendDate()) + Color.primary(), Color.accent() + msg.getMessage()));
         }
     }
 

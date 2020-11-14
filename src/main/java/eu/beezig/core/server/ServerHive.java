@@ -28,6 +28,7 @@ import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.news.NewsManager;
 import eu.beezig.core.server.listeners.*;
+import eu.beezig.core.util.DateUtils;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.task.WorldTask;
@@ -136,7 +137,7 @@ public class ServerHive extends ServerInstance {
             this.profile = profile;
             this.tokens = profile.getTokens();
             this.medals = (int) profile.getMedals();
-            Beezig.logger.info(String.format("Loaded profile for current user. Data as of %s", Message.date(profile.getCachedAt())));
+            Beezig.logger.info(String.format("Loaded profile for current user. Data as of %s", Message.formatTime(DateUtils.toInstant(profile.getCachedAt()))));
         }).exceptionally(e -> {
             Message.error(Message.translate("error.token_fetch"));
             Beezig.logger.error(e);

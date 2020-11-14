@@ -27,7 +27,11 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.time.Instant;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CurrentSession {
     private Deque<SessionItem> items = new ArrayDeque<>();
@@ -67,7 +71,7 @@ public class CurrentSession {
         sessionEnd = System.currentTimeMillis();
         items.push(createHubItem(lastItemEnd, sessionEnd));
         File sessionFile = new File(Beezig.get().getBeezigDir(),
-                String.format("sessions/%s/%s.json", TemporaryPointsManager.dateFormatter.format(new Date()), sessionStart));
+                String.format("sessions/%s/%s.json", TemporaryPointsManager.dateFormatter.format(Instant.now()), sessionStart));
         if(!sessionFile.exists()) {
             sessionFile.getParentFile().mkdirs();
             sessionFile.createNewFile();

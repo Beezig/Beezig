@@ -10,14 +10,9 @@ import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Locale;
 
 public class WinstreakCommand implements Command {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
     @Override
     public String getName() {
         return "streak";
@@ -39,10 +34,10 @@ public class WinstreakCommand implements Command {
         WinstreakService service = Beezig.get().getWinstreakManager().getService(id.toLowerCase(Locale.ROOT));
         Message.info(Beezig.api().translate("msg.winstreak", Color.accent() + Message.formatNumber(service.getCurrent()) + Color.primary(),
             Color.accent() + Message.formatNumber(service.getBest()) + Color.primary()));
-        ZonedDateTime last = service.getLastReset() == null ? null : Instant.ofEpochMilli(service.getLastReset()).atZone(ZoneId.systemDefault());
-        ZonedDateTime best = service.getBestReset() == null ? null : Instant.ofEpochMilli(service.getBestReset()).atZone(ZoneId.systemDefault());
-        if(last != null) Message.info(Beezig.api().translate("msg.winstreak.reset", Color.accent() + last.format(formatter) + " (" + StringUtils.getTimeAgo(service.getLastReset()) + ")"));
-        if(best != null) Message.info(Beezig.api().translate("msg.winstreak.reset.best", Color.accent() + best.format(formatter) + " (" + StringUtils.getTimeAgo(service.getBestReset()) + ")"));
+        Instant last = service.getLastReset() == null ? null : Instant.ofEpochMilli(service.getLastReset());
+        Instant best = service.getBestReset() == null ? null : Instant.ofEpochMilli(service.getBestReset());
+        if(last != null) Message.info(Beezig.api().translate("msg.winstreak.reset", Color.accent() + Message.formatTime(last) + " (" + StringUtils.getTimeAgo(service.getLastReset()) + ")"));
+        if(best != null) Message.info(Beezig.api().translate("msg.winstreak.reset.best", Color.accent() + Message.formatTime(best) + " (" + StringUtils.getTimeAgo(service.getBestReset()) + ")"));
         return true;
     }
 }

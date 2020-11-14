@@ -35,10 +35,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
@@ -49,7 +49,7 @@ import java.util.regex.Pattern;
  * A manager class for daily and session points
  */
 public class TemporaryPointsManager {
-    public static final DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+    public static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault());
     private static final Pattern DAILY_FILE_REGEX = Pattern.compile("(\\d{4}-\\d{1,2}-\\d{1,2})(?:-(.+))?\\.txt");
 
     private CurrentSession currentSession;
@@ -73,7 +73,7 @@ public class TemporaryPointsManager {
     }
 
     public DailyService getDailyForMode(HiveMode mode) {
-        String date = dateFormatter.format(new Date());
+        String date = dateFormatter.format(Instant.now());
         String uuid = UUIDUtils.strip(Beezig.user().getId());
         File dailyFile = new File(mode.getModeDir(), String.format("dailyPoints/%s-%s.txt", date, uuid));
         DailyService service = new DailyService(mode.getIdentifier(), dailyFile);
@@ -128,7 +128,7 @@ public class TemporaryPointsManager {
                     return;
                 }
             }
-            String today = dateFormatter.format(new Date());
+            String today = dateFormatter.format(Instant.now());
             try(BufferedWriter writer = Files.newBufferedWriter(dailyCsv.toPath(), StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
                 CsvWriter csv = null;
