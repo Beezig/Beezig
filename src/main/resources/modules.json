@@ -59,6 +59,9 @@
                     "type": "hive_monthly"
                 },
                 {
+                    "type": "hive_streak"
+                },
+                {
                     "type": "dr_pb"
                 },
                 {

@@ -27,4 +27,12 @@ public class WinstreakService {
         if(best <= current) bestReset = lastReset;
         current = 0;
     }
+
+    public int getCurrent() {
+        return current;
+    }
+
+    public int getBest() {
+        return best;
+    }
 }

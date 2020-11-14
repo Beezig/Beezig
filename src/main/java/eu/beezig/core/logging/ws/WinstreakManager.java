@@ -24,6 +24,7 @@ public class WinstreakManager {
     public WinstreakService getService(String game) {
         Map<String, Map<String, WinstreakService>> data = readFile();
         String uuid = UUIDUtils.strip(Beezig.user().getId());
+        if(data == null) return new WinstreakService();
         Map<String, WinstreakService> games = data.get(uuid);
         if(games == null) return new WinstreakService();
         return games.getOrDefault(game, new WinstreakService());
@@ -31,6 +32,7 @@ public class WinstreakManager {
 
     public void saveService(String game, WinstreakService service) throws IOException {
         Map<String, Map<String, WinstreakService>> data = readFile();
+        if(data == null) data = new LinkedHashMap<>();
         String uuid = UUIDUtils.strip(Beezig.user().getId());
         Map<String, WinstreakService> games = data.computeIfAbsent(uuid, $ -> new LinkedHashMap<>());
         games.put(game, service);

@@ -186,6 +186,10 @@ public abstract class HiveMode extends GameMode {
         return monthlyProfile;
     }
 
+    public WinstreakService getWinstreakService() {
+        return winstreakService;
+    }
+
     /**
      * Called when the user returns to the lobby, if the game had started.
      */

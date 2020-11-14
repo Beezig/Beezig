@@ -104,6 +104,7 @@ public class BED extends HiveMode implements IAutovote, IMonthly, IDynamicMode, 
         logger.setHeaders("Points", "Mode", "Map", "Kills", "Deaths", "Beds", "Victory?", "Timestamp", "GameID");
     }
 
+    @Override
     public void won() {
         addPoints(100);
         won = true;

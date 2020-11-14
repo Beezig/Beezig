@@ -99,7 +99,6 @@ public class Beezig {
     private TemporaryPointsManager temporaryPointsManager;
     private NotificationManager notificationManager;
     private AntiSniper antiSniper;
-    private ProcessManager processManager;
     private NewsManager newsManager;
     private BeezigServiceLoader serviceLoader;
     private WinstreakManager winstreakManager;
@@ -226,7 +225,7 @@ public class Beezig {
         Modules.register(this, api);
         CommandManager.init(this);
         notificationManager = new NotificationManager();
-        processManager = new ProcessManager();
+        new ProcessManager();
         AdvancedRecordsAnywhere.register();
         networkManager = new BeezigNetManager();
 
