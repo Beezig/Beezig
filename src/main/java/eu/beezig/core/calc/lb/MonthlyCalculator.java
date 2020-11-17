@@ -3,6 +3,7 @@ package eu.beezig.core.calc.lb;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
+import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
 import eu.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
@@ -13,15 +14,12 @@ import org.json.simple.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class MonthlyCalculator {
-    private String mode, player;
-    private int start, end;
+    private final String mode, player;
+    private final int start, end;
 
     public MonthlyCalculator(String mode, String player, int start, int end) {
         this.mode = mode;
@@ -49,16 +47,19 @@ public class MonthlyCalculator {
 
     private CompletableFuture<Set<MonthlyPlace>> calculateLeaderboard() {
         return getLeaderboard().thenApplyAsync(json -> {
-            Set<MonthlyPlace> places = new TreeSet<>();
+            Set<MonthlyPlace> result = new TreeSet<>();
+            List<CompletableFuture<Void>> names = new ArrayList<>(json.getInput().size());
             for(Object o : json.getInput().entrySet()) {
                 Map.Entry<String, JSONObject> entry = (Map.Entry<String, JSONObject>) o;
                 MonthlyPlace place = new MonthlyPlace();
                 place.place = (long) entry.getValue().get("place");
                 place.points = (long) entry.getValue().get(entry.getValue().containsKey("points") ? "points" : "karma");
                 place.username = entry.getValue().get(entry.getValue().containsKey("username") ? "username" : "name").toString();
-                places.add(place);
+                names.add(UUIDUtils.getNameWithOptionalRank(entry.getKey(), place.username, null).thenAcceptAsync(name -> place.username = name));
+                result.add(place);
             }
-            return places;
+            CompletableFuture.allOf(names.toArray(new CompletableFuture[0])).join();
+            return result;
         });
     }
 
@@ -68,23 +69,21 @@ public class MonthlyCalculator {
         for(MonthlyPlace place : lb) {
             Beezig.api().messagePlayer(Color.primary() + " #" + Color.accent() + place.place
                 + Color.primary() + "§7 ▏ " + Color.accent() + Message.formatNumber(place.points) + "§7 - "
-                + Color.accent() + place.username);
+                + place.username);
         }
         Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.primary() + "#" + Color.accent() + (start == end ? start : start + "-" + end)));
     }
 
     private void displayProfile(JObject json) {
         JSONObject input = json.getInput();
+        String displayName = input.remove("__display__").toString();
         input.remove("UUID");
         input.remove("username");
         input.remove("name");
-        long place = (long) input.get("place");
-        input.remove("place");
-        long points = (long) input.get(input.containsKey("points") ? "points" : "karma");
-        input.remove("points");
-        input.remove("karma");
+        long place = (long) input.remove("place");
+        long points = (long) input.remove(input.containsKey("points") ? "points" : "karma");
         Beezig.api().messagePlayer(StringUtils.linedCenterText(Color.primary(), Color.primary() + Beezig.api().translate("msg.monthly.profile",
-            Color.accent() + player + Color.primary())));
+            displayName + Color.primary())));
         sendProfileLine("Points", Message.formatNumber(points));
         for(Object o : input.entrySet()) {
             Map.Entry<String, Object> entry = (Map.Entry<String, Object>) o;
@@ -127,7 +126,13 @@ public class MonthlyCalculator {
                 ExceptionHandler.catchException(e);
                 return null;
             }
-            return Downloader.getJsonObject(url).join();
+            CompletableFuture<JObject> json = Downloader.getJsonObject(url);
+            CompletableFuture<String> name = UUIDUtils.getNameWithOptionalRank(uuid, player, null);
+            return CompletableFuture.allOf(json, name).thenApplyAsync(v -> {
+                JObject j = json.join();
+                j.getInput().put("__display__", name.join());
+                return j;
+            }).join();
         });
     }
 
