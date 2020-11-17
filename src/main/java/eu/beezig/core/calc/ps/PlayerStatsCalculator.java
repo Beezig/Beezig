@@ -25,7 +25,6 @@ import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.text.Message;
-import eu.beezig.hiveapi.wrapper.exception.ProfileNotFoundException;
 import eu.beezig.hiveapi.wrapper.player.GameStats;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
@@ -57,12 +56,7 @@ public class PlayerStatsCalculator {
         // Map all UUIDs to display names, required to format the results later
         Map<String, CompletableFuture<String>> displayNames = players.stream()
             .collect(Collectors.toMap(p -> UUIDUtils.strip(p.getGameProfile().getId()),
-                p -> UUIDUtils.getNameWithOptionalRank(UUIDUtils.strip(p.getGameProfile().getId()), UUIDUtils.getDisplayName(p), null)
-                    .exceptionally(e -> {
-                        if(!(e.getCause() instanceof ProfileNotFoundException))
-                            ExceptionHandler.catchException(e, "/ps username query");
-                        return Color.accent() + UUIDUtils.getDisplayName(p);
-                    }),
+                p -> UUIDUtils.getNameWithOptionalRank(UUIDUtils.strip(p.getGameProfile().getId()), UUIDUtils.getDisplayName(p), null),
                 (x, y) -> y, HashMap::new));
         // Discard exceptions (profile not found etc.)
         CompletableFuture<? extends GameStats>[] stats = players.stream().map(p -> mode.get(p.getGameProfile().getId()).exceptionally(e -> null)).toArray(CompletableFuture[]::new);

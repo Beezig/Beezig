@@ -22,6 +22,7 @@ package eu.beezig.core.util;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.net.profile.UserProfile;
+import eu.beezig.hiveapi.wrapper.exception.ProfileNotFoundException;
 import eu.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
 import eu.beezig.hiveapi.wrapper.player.HivePlayer;
 import eu.beezig.hiveapi.wrapper.player.Profiles;
@@ -36,8 +37,14 @@ import java.util.concurrent.CompletableFuture;
 
 public class UUIDUtils {
     public static CompletableFuture<String> getNameWithOptionalRank(String uuid, String rawName, HivePlayer profile) {
-        if(!Settings.HIVE_RANK.get().getBoolean()) return CompletableFuture.completedFuture(Color.accent() + rawName);
-        if(profile == null) return Profiles.global(uuid).thenApplyAsync(p -> Color.RankColor.safeGet(p.getRank().getEnumName()) + p.getUsername());
+        if (!Settings.HIVE_RANK.get().getBoolean()) return CompletableFuture.completedFuture(Color.accent() + rawName);
+        if (profile == null)
+            return Profiles.global(uuid).thenApplyAsync(p -> Color.RankColor.safeGet(p.getRank().getEnumName()) + p.getUsername())
+                .exceptionally(e -> {
+                    if (!(e.getCause() instanceof ProfileNotFoundException))
+                        ExceptionHandler.catchException(e, "UUIDUtils username query");
+                    return Color.accent() + rawName;
+                });
         return CompletableFuture.completedFuture(Color.RankColor.safeGet(profile.getRank().getEnumName()) + profile.getUsername());
     }
 
@@ -50,21 +57,21 @@ public class UUIDUtils {
     }
 
     public static MessageComponent getUserRole(UUID id) {
-        if(id == null) return new MessageComponent("");
+        if (id == null) return new MessageComponent("");
         Optional<UserProfile> profile = Beezig.net().getProfilesCache().getNowOrSubmit(id, Collections.singletonList(id));
         return profile.map(userProfile -> userProfile.getRoleContainer().getRole().getDisplayComponent()).orElseGet(() -> new MessageComponent(""));
     }
 
     public static String getShortRole(UUID id) {
-        if(id == null) return "";
+        if (id == null) return "";
         Optional<UserProfile> profile = Beezig.net().getProfilesCache().getIfPresent(id);
-        if(profile == null) return "";
+        if (profile == null) return "";
         return profile.map(userProfile -> userProfile.getRoleContainer().getRole().getShortName()).orElse("");
     }
 
     public static UUID getLocalUUID(String name) {
-        for(NetworkPlayerInfo info : Beezig.api().getServerPlayers()) {
-            if(name.equalsIgnoreCase(ChatColor.stripColor(getDisplayName(info)))) {
+        for (NetworkPlayerInfo info : Beezig.api().getServerPlayers()) {
+            if (name.equalsIgnoreCase(ChatColor.stripColor(getDisplayName(info)))) {
                 return info.getGameProfile().getId();
             }
         }
@@ -72,13 +79,13 @@ public class UUIDUtils {
     }
 
     public static CompletableFuture<UUID> getUUID(String name) {
-        for(NetworkPlayerInfo info : Beezig.api().getServerPlayers()) {
-            if(name.equalsIgnoreCase(ChatColor.stripColor(getDisplayName(info)))) {
+        for (NetworkPlayerInfo info : Beezig.api().getServerPlayers()) {
+            if (name.equalsIgnoreCase(ChatColor.stripColor(getDisplayName(info)))) {
                 return CompletableFuture.completedFuture(info.getGameProfile().getId());
             }
         }
         return UsernameToUuid.getUUID(name).thenApplyAsync(s -> UUID.fromString(s.replaceAll(
-                "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
-                "$1-$2-$3-$4-$5")));
+            "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
+            "$1-$2-$3-$4-$5")));
     }
 }
