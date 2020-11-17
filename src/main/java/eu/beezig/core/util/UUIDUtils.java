@@ -29,6 +29,7 @@ import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.mod.util.component.MessageComponent;
 import eu.the5zig.util.minecraft.ChatColor;
+import org.json.simple.parser.ParseException;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -41,9 +42,9 @@ public class UUIDUtils {
         if (profile == null)
             return Profiles.global(uuid).thenApplyAsync(p -> Color.RankColor.safeGet(p.getRank().getEnumName()) + p.getUsername())
                 .exceptionally(e -> {
-                    if (!(e.getCause() instanceof ProfileNotFoundException))
+                    if (!(e.getCause() instanceof ProfileNotFoundException) && !(e.getCause() instanceof ParseException))
                         ExceptionHandler.catchException(e, "UUIDUtils username query");
-                    return Color.accent() + rawName;
+                    return Color.RankColor.REGULAR + rawName;
                 });
         return CompletableFuture.completedFuture(Color.RankColor.safeGet(profile.getRank().getEnumName()) + profile.getUsername());
     }

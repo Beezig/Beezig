@@ -28,7 +28,7 @@ public class TokensCommand implements Command {
         String name = args.length == 0 ? Beezig.user().getName() : args[0];
         Profiles.global(args.length == 0 ? UUIDUtils.strip(Beezig.user().getId()) : args[0])
             .thenAcceptAsync(profile -> {
-                Message.info(Beezig.api().translate("msg.tokens", Color.accent() + name + Color.primary(), Color.accent()
+                Message.info(Beezig.api().translate("msg.tokens", UUIDUtils.getNameWithOptionalRank(name, name, profile).join() + Color.primary(), Color.accent()
                     + Message.formatNumber(profile.getTokens()) + Color.primary()));
             }).exceptionally(e -> {
                 if(e.getCause() instanceof ProfileNotFoundException || e.getCause() instanceof ParseException) {
