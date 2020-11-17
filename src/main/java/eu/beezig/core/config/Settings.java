@@ -91,6 +91,7 @@ public enum Settings {
     CHAT_FRIENDS(true, Category.MISC),
     REPORTS_NOTIFY(true, Category.MISC),
     TABLIST_BADGES(true, Category.MISC),
+    HIVE_RANK(false, Category.MISC),
 
     // Meta
     UPDATE_CHECK(true, Category.META),

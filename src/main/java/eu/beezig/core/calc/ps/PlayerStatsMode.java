@@ -68,7 +68,7 @@ public class PlayerStatsMode {
         this.titleService = titleService;
     }
 
-    PlayerStatsProfile getProfile(HashMap<String, String> displayNames, GameStats source, String key, String stat) {
+    PlayerStatsProfile getProfile(String displayName, GameStats source, String key, String stat) {
         Number value = null;
         JObject src = source.getSource();
         if("kd".equalsIgnoreCase(stat)) {
@@ -87,7 +87,7 @@ public class PlayerStatsMode {
             if(source.getSource().getInput().get(key) == null) return null;
             value = source.getSource().getInt(key);
         }
-        PlayerStatsProfile profile = new PlayerStatsProfile(displayNames.get(source.getUUID()), value);
+        PlayerStatsProfile profile = new PlayerStatsProfile(displayName, value);
         if(source instanceof Titleable && titleService != null && titleService.isValid())
             profile.setTitle(titleService.getTitle(((Titleable)source).getTitle(), Math.toIntExact(source.getPoints())).getRight());
         return profile;

@@ -22,7 +22,6 @@ package eu.beezig.core.util;
 import eu.beezig.core.config.Settings;
 
 public class Color {
-
     private static String primary, accent;
 
     public static String primary() {
@@ -35,5 +34,45 @@ public class Color {
     public static void refreshCache() {
         primary = Settings.COLOR_PRIMARY.get().getValue().toString();
         accent = Settings.COLOR_ACCENT.get().getValue().toString();
+    }
+
+    public enum RankColor {
+        REGULAR("§9"),
+        GOLD("§6"),
+        DIAMOND("§b"),
+        EMERALD("§a"),
+        ULTIMATE("§d"),
+        VIP("§5"),
+        YOUTUBER("§5"),
+        STREAMER("§5"),
+        CONTRIBUTOR("§5"),
+        NECTAR("§3"),
+        RESERVED_STAFF("§2"),
+        HELPER("§2"),
+        MODERATOR("§c"),
+        SRMODERATOR("§3"),
+        STAFFMANAGER("§e"),
+        COMMUNITYMANAGER("§e"),
+        DEVELOPER("§e"),
+        OWNER("§e");
+
+        private final String prefix;
+
+        RankColor(String prefix) {
+            this.prefix = prefix;
+        }
+
+        public static RankColor safeGet(String id) {
+            try {
+                return RankColor.valueOf(id);
+            } catch (IllegalArgumentException ignored) {
+                return REGULAR;
+            }
+        }
+
+        @Override
+        public String toString() {
+            return prefix;
+        }
     }
 }

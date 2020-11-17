@@ -20,8 +20,11 @@
 package eu.beezig.core.util;
 
 import eu.beezig.core.Beezig;
+import eu.beezig.core.config.Settings;
 import eu.beezig.core.net.profile.UserProfile;
 import eu.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
+import eu.beezig.hiveapi.wrapper.player.HivePlayer;
+import eu.beezig.hiveapi.wrapper.player.Profiles;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.mod.util.component.MessageComponent;
 import eu.the5zig.util.minecraft.ChatColor;
@@ -32,6 +35,12 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class UUIDUtils {
+    public static CompletableFuture<String> getNameWithOptionalRank(String uuid, String rawName, HivePlayer profile) {
+        if(!Settings.HIVE_RANK.get().getBoolean()) return CompletableFuture.completedFuture(Color.accent() + rawName);
+        if(profile == null) return Profiles.global(uuid).thenApplyAsync(p -> Color.RankColor.safeGet(p.getRank().getEnumName()) + p.getUsername());
+        return CompletableFuture.completedFuture(Color.RankColor.safeGet(profile.getRank().getEnumName()) + profile.getUsername());
+    }
+
     public static String strip(UUID uuid) {
         return uuid.toString().replace("-", "");
     }

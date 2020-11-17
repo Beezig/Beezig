@@ -25,6 +25,7 @@ import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
 import eu.beezig.core.util.text.Message;
+import eu.beezig.hiveapi.wrapper.exception.ProfileNotFoundException;
 import eu.beezig.hiveapi.wrapper.player.GameStats;
 import eu.the5zig.mod.util.NetworkPlayerInfo;
 import eu.the5zig.util.minecraft.ChatColor;
@@ -54,20 +55,27 @@ public class PlayerStatsCalculator {
         }
         List<NetworkPlayerInfo> players = playersIn == null ? Beezig.api().getServerPlayers() : playersIn;
         // Map all UUIDs to display names, required to format the results later
-        HashMap<String, String> displayNames = players.stream()
-            .collect(Collectors.toMap(p -> UUIDUtils.strip(p.getGameProfile().getId()), UUIDUtils::getDisplayName, (x, y) -> y, HashMap::new));
+        Map<String, CompletableFuture<String>> displayNames = players.stream()
+            .collect(Collectors.toMap(p -> UUIDUtils.strip(p.getGameProfile().getId()),
+                p -> UUIDUtils.getNameWithOptionalRank(UUIDUtils.strip(p.getGameProfile().getId()), UUIDUtils.getDisplayName(p), null)
+                    .exceptionally(e -> {
+                        if(!(e.getCause() instanceof ProfileNotFoundException))
+                            ExceptionHandler.catchException(e, "/ps username query");
+                        return Color.accent() + UUIDUtils.getDisplayName(p);
+                    }),
+                (x, y) -> y, HashMap::new));
         // Discard exceptions (profile not found etc.)
         CompletableFuture<? extends GameStats>[] stats = players.stream().map(p -> mode.get(p.getGameProfile().getId()).exceptionally(e -> null)).toArray(CompletableFuture[]::new);
         // Wait for the tasks to complete, then sort the results.
         // PlayerStatsProfile implements Comparable for itself, so a call to .sorted() will give us
         // the profiles sorted in ascending order.
         Message.info(Message.translate("msg.loading"));
-        CompletableFuture.allOf(stats)
+        CompletableFuture.allOf(CompletableFuture.allOf(displayNames.values().toArray(new CompletableFuture[0])), CompletableFuture.allOf(stats))
             .thenAcceptAsync(v -> {
                 DoubleSummaryStatistics summary = Stream.of(stats)
                     .map(CompletableFuture::join)
                     .filter(Objects::nonNull)
-                    .map(s -> mode.getProfile(displayNames, s, apiStat, stat))
+                    .map(s -> mode.getProfile(displayNames.get(s.getUUID()).join(), s, apiStat, stat))
                         .filter(Objects::nonNull)
                     .sorted()
                     .mapToDouble(p -> {
