@@ -24,9 +24,11 @@ import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.DR;
 import eu.the5zig.mod.gui.ingame.Scoreboard;
 import eu.the5zig.mod.server.AbstractGameListener;
+import eu.the5zig.mod.server.GameState;
 import eu.the5zig.mod.server.IPatternResult;
 import eu.the5zig.util.minecraft.ChatColor;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,6 +66,10 @@ public class DRListener extends AbstractGameListener<DR> {
                 gameMode.setFinishTime(match.get(1));
                 gameMode.calcTime();
             }
+        }
+        else if("dr.role".equals(key)) {
+            gameMode.setState(GameState.GAME);
+            gameMode.setRole(match.get(0).toLowerCase(Locale.ROOT));
         }
     }
 

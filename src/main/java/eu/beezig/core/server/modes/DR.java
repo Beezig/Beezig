@@ -59,7 +59,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
     private int lastSbPoints;
     private int lastSbKills;
     private int checkpoints;
-    private String finishTime;
+    private String finishTime, role;
     /**
      * Cached profile, used to load personal bests
      */
@@ -72,7 +72,7 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
 
     // Native LiveSplit
     private Run currentRun;
-    private AtomicBoolean checkedForNatives = new AtomicBoolean(false);
+    private final AtomicBoolean checkedForNatives = new AtomicBoolean(false);
 
     public String getEndTime() {
         return finishTime;
@@ -80,6 +80,15 @@ public class DR extends HiveMode implements IAutovote, IMonthly, IMapExtra {
 
     public void setFinishTime(String finishTime) {
         this.finishTime = finishTime;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+        if("death".equals(role)) currentRun = null;
     }
 
     public void calcTime() {

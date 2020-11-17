@@ -43,7 +43,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class ServerHive extends ServerInstance {
 
@@ -271,7 +270,6 @@ public class ServerHive extends ServerInstance {
         }
 
         @Override
-        @SuppressWarnings("FutureReturnValueIgnored")
         public void onMatch(GameMode gameMode, String key, IPatternResult match) {
             if(key == null) return;
             Beezig.logger.debug(String.format("[ServerHive] Matched key %s, %d groups", key, match.size()));
@@ -305,7 +303,6 @@ public class ServerHive extends ServerInstance {
             }
             else if(key.endsWith(".setstate") && gameMode != null) {
                 gameMode.setState(GameState.GAME);
-                Beezig.get().getAsyncExecutor().schedule(() -> WorldTask.submit(() -> Beezig.api().sendPlayerMessage("/gameid")), 1, TimeUnit.SECONDS);
             }
             else if("nick".equals(key)) nick = match.get(0);
             else if("nick.reset".equals(key)) nick = null;

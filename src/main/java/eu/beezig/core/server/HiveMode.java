@@ -32,8 +32,10 @@ import eu.beezig.core.logging.ws.WinstreakService;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyService;
 import eu.beezig.core.util.ExceptionHandler;
+import eu.beezig.core.util.task.WorldTask;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
+import eu.the5zig.mod.server.GameState;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
@@ -41,6 +43,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public abstract class HiveMode extends GameMode {
     private int points;
@@ -117,6 +120,14 @@ public abstract class HiveMode extends GameMode {
                 winstreakService = Beezig.get().getWinstreakManager().getService(getIdentifier());
             }
         }
+    }
+
+    @Override
+    @SuppressWarnings("FutureReturnValueIgnored")
+    public void setState(GameState state) {
+        super.setState(state);
+        if(state == GameState.GAME)
+            Beezig.get().getAsyncExecutor().schedule(() -> WorldTask.submit(() -> Beezig.api().sendPlayerMessage("/gameid")), 1, TimeUnit.SECONDS);
     }
 
     /**
