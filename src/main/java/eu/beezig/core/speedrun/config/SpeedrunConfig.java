@@ -72,6 +72,11 @@ public class SpeedrunConfig {
      */
     private String[] modules = SpeedrunModules.defaultModules.toArray(new String[0]);
 
+    /**
+     * The module scale (percentage)
+     */
+    private int scale = 100;
+
     public int getColor(String semantic) {
         switch (semantic) {
             case "Default":
@@ -168,6 +173,10 @@ public class SpeedrunConfig {
         this.modules = modules;
     }
 
+    public void setScale(int scale) {
+        this.scale = scale;
+    }
+
     public int getCurrentSegmentColor() {
         return currentSegmentColor;
     }
@@ -218,5 +227,9 @@ public class SpeedrunConfig {
 
     public String[] getModules() {
         return modules;
+    }
+
+    public int getScale() {
+        return scale;
     }
 }

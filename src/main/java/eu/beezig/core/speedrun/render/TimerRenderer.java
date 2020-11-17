@@ -2,6 +2,7 @@ package eu.beezig.core.speedrun.render;
 
 import eu.beezig.core.speedrun.Run;
 import eu.the5zig.mod.render.RenderHelper;
+import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
@@ -16,15 +17,25 @@ public class TimerRenderer {
     }
 
     public void render(RenderHelper renderHelper, int x, int y) {
-        renderHelper.drawRect(x, y, x + MODULE_WIDTH, y + getTotalHeight(), run.getConfig().getBackgroundColor());
-        int mutY = y;
+        float scale = run == null || run.getConfig() == null ? 1f : run.getConfig().getScale() / 100f;
+        GL11.glPushMatrix();
+        GL11.glTranslatef(x, y, 1);
+        GL11.glScalef(scale, scale, scale);
+        renderHelper.drawRect(0, 0, MODULE_WIDTH, getUnscaledHeight(), run.getConfig().getBackgroundColor());
+        int mutY = 0;
         for(TimerModule module : activeModules) {
-            module.render(renderHelper, run, x, mutY);
+            module.render(renderHelper, run, 0, mutY);
             mutY += module.getHeight();
         }
+        GL11.glPopMatrix();
+    }
+
+    private int getUnscaledHeight() {
+        return activeModules.stream().mapToInt(TimerModule::getHeight).sum();
     }
 
     public int getTotalHeight() {
-        return activeModules.stream().mapToInt(TimerModule::getHeight).sum();
+        float scale = run == null || run.getConfig() == null ? 1f : run.getConfig().getScale() / 100f;
+        return (int) (getUnscaledHeight() * scale);
     }
 }
