@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class Protocol {
     public static final int VERSION = 3;
-    private Map<Byte, Class<? extends Packet>> packets = new HashMap<>();
+    private final Map<Byte, Class<? extends Packet>> packets = new HashMap<>();
 
     Protocol() {
         register(0x0, PacketDisconnect.class);
@@ -52,7 +52,7 @@ public class Protocol {
 
     public byte getPacketId(Packet packet) {
         for (Map.Entry<Byte, Class<? extends Packet>> entry : packets.entrySet()) {
-            Class c = entry.getValue();
+            Class<? extends Packet> c = entry.getValue();
             if (c.isInstance(packet))
                 return entry.getKey();
         }
