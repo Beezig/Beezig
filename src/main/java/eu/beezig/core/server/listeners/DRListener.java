@@ -82,6 +82,7 @@ public class DRListener extends AbstractGameListener<DR> {
 
     @Override
     public void onTick(DR gameMode) {
+        if(gameMode.getCurrentRun() != null) gameMode.getCurrentRun().tick();
         Scoreboard sb = Beezig.api().getSideScoreboard();
         if(sb == null) return;
         for(Map.Entry<String, Integer> entry : sb.getLines().entrySet()) {

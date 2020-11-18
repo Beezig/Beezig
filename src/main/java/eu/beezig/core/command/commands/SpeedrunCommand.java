@@ -32,7 +32,7 @@ public class SpeedrunCommand implements Command {
     public boolean execute(String[] args) {
         if(!ServerHive.isCurrent()) return false;
         if(args.length == 0 && BeezigForge.isSupported()) {
-            SpeedrunConfig cfg = new SpeedrunConfig();
+            SpeedrunConfig cfg = new SpeedrunConfig(null);
             try {
                 SpeedrunSerializer.read(cfg);
                 List<SettingInfo> settings = new ArrayList<>();

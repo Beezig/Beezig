@@ -12,6 +12,7 @@ import livesplitcore.*;
 import org.apache.commons.io.FilenameUtils;
 import org.json.simple.parser.ParseException;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,10 +28,10 @@ public class Run {
     private final String humanMapName;
 
     private livesplitcore.Run api;
-    private Timer timer;
+    private final Timer timer;
     private final File splits;
     private TimerRenderer renderer;
-    private SpeedrunConfig colorConfig;
+    private final SpeedrunConfig config;
 
     // Components
     private final GeneralLayoutSettings settings;
@@ -39,6 +40,8 @@ public class Run {
     private final PreviousSegmentComponent previousSegmentComponent;
     private final SumOfBestComponent sumOfBestComponent;
     private final PossibleTimeSaveComponent possibleTimeSaveComponent;
+    private float rainbowHue;
+    private int rainbowColor;
 
     public Run(String mapName, DR.MapData data, String humanMapName) throws IOException {
         this.humanMapName = humanMapName;
@@ -47,9 +50,9 @@ public class Run {
             splits.getParentFile().mkdirs();
             splits.createNewFile();
         }
-        colorConfig = new SpeedrunConfig();
+        config = new SpeedrunConfig(this);
         try {
-            SpeedrunSerializer.read(colorConfig);
+            SpeedrunSerializer.read(config);
         } catch (ParseException e) {
             Message.error(Message.translate("error.speedrun.config.load"));
             ExceptionHandler.catchException(e, "Speedrun config load");
@@ -81,7 +84,7 @@ public class Run {
 
     private List<? extends TimerModule> loadModules() {
         List<TimerModule> result = new ArrayList<>();
-        String[] enabled = colorConfig.getModules();
+        String[] enabled = config.getModules();
         for(String module : enabled) {
             try {
                 result.add(SpeedrunModules.registry.get(module).getConstructor().newInstance());
@@ -105,7 +108,7 @@ public class Run {
     }
 
     public SpeedrunConfig getConfig() {
-        return colorConfig;
+        return config;
     }
 
     private void loadSegment(String name) {
@@ -127,6 +130,24 @@ public class Run {
         for(int i = 0; i < api.len(); i++) timer.skipSplit();
         timer.split();
         timer.setGameTime(gameTime);
+    }
+
+    /**
+     * Runs every tick, updates the color for the rainbow effect
+     */
+    public void tick() {
+        if(config != null && config.isRainbowBestSegment()) {
+            // Extract opacity from regular color
+            int alpha = config.getBestSegmentColor() >>> 24;
+            if((rainbowHue += 0.02) > 1f) rainbowHue = 0f;
+            int rgb = Color.HSBtoRGB(rainbowHue, 1f, 1f);
+            // Add opacity to generated color
+            this.rainbowColor = (alpha << 24) | rgb;
+        }
+    }
+
+    public int getRainbowColor() {
+        return rainbowColor;
     }
 
     /**

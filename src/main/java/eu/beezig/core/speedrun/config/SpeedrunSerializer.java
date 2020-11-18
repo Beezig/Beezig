@@ -62,7 +62,7 @@ public class SpeedrunSerializer {
             && (gm = Beezig.api().getActiveServer().getGameListener().getCurrentGameMode()) instanceof DR
             && (currentRun = ((DR) gm).getCurrentRun()) != null) {
             config = currentRun.getConfig();
-        } else config = new SpeedrunConfig();
+        } else config = new SpeedrunConfig(null);
         config.setAll(settings);
         if(currentRun != null) currentRun.reloadConfig();
         try {

@@ -21,7 +21,8 @@ public enum SpeedrunConfigValues {
     COLOR_PAUSED(SpeedrunConfig::getPausedColor, (cfg, v) -> cfg.setPausedColor((int)(long) v)),
     COLOR_PERSONAL_BEST(SpeedrunConfig::getPersonalBestColor, (cfg, v) -> cfg.setPersonalBestColor((int)(long) v)),
     COLOR_CURRENT_SEGMENT(SpeedrunConfig::getCurrentSegmentColor, (cfg, v) -> cfg.setCurrentSegmentColor((int)(long) v)),
-    SCALE(SpeedrunConfig::getScale, (cfg, v) -> cfg.setScale((int)(long) v));
+    SCALE(SpeedrunConfig::getScale, (cfg, v) -> cfg.setScale((int)(long) v)),
+    RAINBOW_BEST(SpeedrunConfig::isRainbowBestSegment, (cfg, v) -> cfg.setRainbowBestSegment((boolean) v));
 
     private final Function<SpeedrunConfig, Object> getValueFunc;
     private final BiConsumer<SpeedrunConfig, Object> setValueFunc;

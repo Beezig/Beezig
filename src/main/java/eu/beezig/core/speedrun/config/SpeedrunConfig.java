@@ -1,12 +1,18 @@
 package eu.beezig.core.speedrun.config;
 
 import eu.beezig.core.api.SettingInfo;
+import eu.beezig.core.speedrun.Run;
 import eu.beezig.core.speedrun.SpeedrunModules;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
 
 public class SpeedrunConfig {
+    /**
+     * The associated Run object
+     */
+    private final Run run;
+
     /**
      * Default color
      */
@@ -77,6 +83,15 @@ public class SpeedrunConfig {
      */
     private int scale = 100;
 
+    /**
+     * Whether the best segment should use a rainbow animation
+     */
+    private boolean rainbowBestSegment = false;
+
+    public SpeedrunConfig(Run run) {
+        this.run = run;
+    }
+
     public int getColor(String semantic) {
         switch (semantic) {
             case "Default":
@@ -90,7 +105,7 @@ public class SpeedrunConfig {
             case "BehindLosingTime":
                 return behindLosingTimeColor;
             case "BestSegment":
-                return bestSegmentColor;
+                return rainbowBestSegment && run != null ? run.getRainbowColor() : bestSegmentColor;
             case "NotRunning":
                 return notRunningColor;
             case "Paused":
@@ -135,6 +150,10 @@ public class SpeedrunConfig {
 
     public void setBehindGainingTimeColor(int behindGainingTimeColor) {
         this.behindGainingTimeColor = behindGainingTimeColor;
+    }
+
+    public void setRainbowBestSegment(boolean rainbowBestSegment) {
+        this.rainbowBestSegment = rainbowBestSegment;
     }
 
     public void setBestSegmentColor(int bestSegmentColor) {
@@ -231,5 +250,9 @@ public class SpeedrunConfig {
 
     public int getScale() {
         return scale;
+    }
+
+    public boolean isRainbowBestSegment() {
+        return rainbowBestSegment;
     }
 }
