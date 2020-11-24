@@ -21,7 +21,7 @@ package eu.beezig.core.command.commands;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.Command;
-import eu.beezig.core.util.text.Message;
+import eu.beezig.core.notification.NotificationManager;
 
 public class DoNotDisturbCommand implements Command {
     @Override
@@ -43,8 +43,10 @@ public class DoNotDisturbCommand implements Command {
             if("true".equalsIgnoreCase(value) || "on".equalsIgnoreCase(value)) dnd = true;
             else if("false".equalsIgnoreCase(value) || "off".equalsIgnoreCase(value)) dnd = false;
         }
-        Beezig.get().getNotificationManager().setDoNotDisturb(dnd);
-        Message.info(Message.translate(dnd ? "msg.notify.on" : "msg.notify.off"));
+        NotificationManager.ActivationCause cause;
+        if(args.length > 1 && "process".equals(args[1])) cause = NotificationManager.ActivationCause.PROCESS;
+        else cause = NotificationManager.ActivationCause.USER;
+        Beezig.get().getNotificationManager().setDoNotDisturb(dnd, cause);
         return true;
     }
 }

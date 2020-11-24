@@ -2,6 +2,7 @@ package eu.beezig.core.util.process;
 
 import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
+import eu.beezig.core.notification.NotificationManager;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.process.processes.ScreenRecorders;
@@ -49,6 +50,8 @@ public class ProcessManager {
                     break;
                 }
             }
+            // If no match is found in the current list, check if it was in the previous list. If so, that means the process was closed.
+            if(processes.contains(recorder)) onProcessStop(recorder);
         }
         Set<IProcess> added = new HashSet<>(currentProcesses);
         added.removeAll(processes);
@@ -63,14 +66,14 @@ public class ProcessManager {
             if(Settings.RECORD_DND.get().getBoolean()) {
                 WorldTask.submit(() -> {
                     Message.info(Beezig.api().translate("msg.record.dnd", Color.accent() + ((ScreenRecorders) process).name() + Color.primary()));
-                    Beezig.get().getNotificationManager().setDoNotDisturb(true);
+                    Beezig.get().getNotificationManager().setDoNotDisturb(true, NotificationManager.ActivationCause.PROCESS);
                 });
             }
             else {
                 MessageComponent main = new MessageComponent(Message.infoPrefix() + Beezig.api().translate("msg.record.found",
                         Color.accent() + ((ScreenRecorders) process).name() + Color.primary()) + "\n");
                 TextButton enableNow = new TextButton("btn.record_dnd.name", "btn.record_dnd.desc", "§a");
-                enableNow.doRunCommand("/dnd on");
+                enableNow.doRunCommand("/dnd on process");
                 TextButton enableAlways = new TextButton("btn.record_setting.name", "btn.record_setting.desc", "§e");
                 enableAlways.doRunCommand("/bsettings record.dnd true");
                 main.getSiblings().add(enableNow);
@@ -78,6 +81,14 @@ public class ProcessManager {
                 main.getSiblings().add(enableAlways);
                 WorldTask.submit(() -> Beezig.api().messagePlayerComponent(main, false));
             }
+        }
+    }
+
+    private void onProcessStop(IProcess process) {
+        if(process instanceof ScreenRecorders) {
+            NotificationManager notificationManager = Beezig.get().getNotificationManager();
+            if(notificationManager.isDoNotDisturb() && notificationManager.getDoNotDisturbCause() == NotificationManager.ActivationCause.PROCESS)
+                notificationManager.setDoNotDisturb(false, NotificationManager.ActivationCause.PROCESS);
         }
     }
 }

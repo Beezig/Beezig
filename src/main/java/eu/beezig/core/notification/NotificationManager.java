@@ -23,6 +23,7 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.notification.gui.IncomingMessagesGui;
 import eu.beezig.core.util.Color;
+import eu.beezig.core.util.task.WorldTask;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.IPatternResult;
 import org.lwjgl.opengl.Display;
@@ -34,6 +35,7 @@ import java.util.Queue;
 public class NotificationManager {
     private Queue<IncomingMessage> ignoredMessages = new ArrayDeque<>();
     private boolean doNotDisturb;
+    private ActivationCause doNotDisturbCause;
     private SystemTrayManager tray;
     private IncomingMessagesGui guiHandle;
 
@@ -104,17 +106,34 @@ public class NotificationManager {
         }
     }
 
-    public void setDoNotDisturb(boolean doNotDisturb) {
+    public void setDoNotDisturb(boolean doNotDisturb, ActivationCause cause) {
         if(doNotDisturb) onDndEnable();
         else onDndDisable();
+        this.doNotDisturbCause = cause;
         this.doNotDisturb = doNotDisturb;
+        WorldTask.submit(() -> Message.info(Message.translate(doNotDisturb ? "msg.notify.on" : "msg.notify.off")));
     }
 
     public boolean isDoNotDisturb() {
         return doNotDisturb;
     }
 
+    public ActivationCause getDoNotDisturbCause() {
+        return doNotDisturbCause;
+    }
+
     enum MessageType {
         PRIVATE, BROADCAST
+    }
+
+    public enum ActivationCause {
+        /**
+         * Do Not Disturb was activated manually by the user by running /dnd
+         */
+        USER,
+        /**
+         * Do Not Disturb was automatically enabled for detecting a screen recorder
+         */
+        PROCESS
     }
 }
