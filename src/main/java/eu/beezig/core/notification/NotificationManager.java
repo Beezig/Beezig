@@ -30,14 +30,18 @@ import org.lwjgl.opengl.Display;
 
 import java.time.Instant;
 import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 
 public class NotificationManager {
-    private Queue<IncomingMessage> ignoredMessages = new ArrayDeque<>();
+    private final Queue<IncomingMessage> ignoredMessages = new ArrayDeque<>();
+    private final SystemTrayManager tray;
+    private final IncomingMessagesGui guiHandle;
+
     private boolean doNotDisturb;
     private ActivationCause doNotDisturbCause;
-    private SystemTrayManager tray;
-    private IncomingMessagesGui guiHandle;
+    private final Map<String, Long> recentRecipients = new HashMap<>();
 
     public NotificationManager() {
         this.guiHandle = new IncomingMessagesGui();
@@ -70,8 +74,13 @@ public class NotificationManager {
                     ignoredMessages.add(new IncomingMessage(type, sender, message));
                     break;
                 case IGNORE_ALERT:
-                    ignoredMessages.add(new IncomingMessage(type, sender, message));
-                    Beezig.api().sendPlayerMessage("/r " + Settings.MSG_DND_ALERT.get().getString());
+                    long now = System.currentTimeMillis();
+                    recentRecipients.entrySet().removeIf(e -> now - e.getValue() > 5000);
+                    recentRecipients.computeIfAbsent(sender, $ -> {
+                        ignoredMessages.add(new IncomingMessage(type, sender, message));
+                        Beezig.api().sendPlayerMessage("/msg " + sender + " " + Settings.MSG_DND_ALERT.get().getString());
+                        return now;
+                    });
                     break;
                 case SEPARATE:
                     guiHandle.ensureOpen();
@@ -85,7 +94,8 @@ public class NotificationManager {
     }
 
     private void onDndEnable() {
-        guiHandle.ensureOpen();
+        MessageIgnoreLevel level = (MessageIgnoreLevel) Settings.MSG_DND_MODE.get().getValue();
+        if(level == MessageIgnoreLevel.SEPARATE) guiHandle.ensureOpen();
     }
 
     private void onDndDisable() {
@@ -111,6 +121,7 @@ public class NotificationManager {
         else onDndDisable();
         this.doNotDisturbCause = cause;
         this.doNotDisturb = doNotDisturb;
+        this.recentRecipients.clear();
         WorldTask.submit(() -> Message.info(Message.translate(doNotDisturb ? "msg.notify.on" : "msg.notify.off")));
     }
 
