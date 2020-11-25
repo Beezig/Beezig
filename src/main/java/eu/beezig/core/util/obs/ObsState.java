@@ -3,8 +3,12 @@ package eu.beezig.core.util.obs;
 import com.google.crypto.tink.subtle.Ed25519Sign;
 import com.google.crypto.tink.subtle.X25519;
 import eu.beezig.core.Beezig;
+import eu.beezig.core.config.Settings;
+import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.text.Message;
+import eu.beezig.core.util.text.TextButton;
+import eu.the5zig.mod.util.component.MessageComponent;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -12,6 +16,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
+import java.net.ConnectException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
@@ -19,24 +24,85 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.UUID;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class ObsState {
     private static final UUID APP_UUID = UUID.fromString("3552936e-4224-48d0-b0e8-b0f08be197f9");
     private byte[] x25519Private;
     private Ed25519Sign messageSigner;
     private boolean startedRecording;
+    private ScheduledFuture<?> detectTask;
 
-    public ObsState() throws Exception {
+    public ObsState() {
+        detectTask = Beezig.get().getAsyncExecutor().scheduleAtFixedRate(() -> {
+            if(!ServerHive.isCurrent()) return;
+            try {
+                int status = ObsHttp.sendGet("/").getCode();
+                if(status != 200) return;
+                if(Settings.OBS_ENABLE.get().getBoolean()) authenticate();
+                else promptEnable();
+                detectTask.cancel(true);
+            } catch (Exception ex) {
+                if(ex instanceof InterruptedException) return;
+                if(ex instanceof ConnectException) {
+                    promptInstall();
+                    detectTask.cancel(true);
+                    return;
+                }
+                ExceptionHandler.catchException(ex);
+                detectTask.cancel(true);
+            }
+        }, 0, 10, TimeUnit.SECONDS);
+    }
+
+    public void authenticate() throws Exception {
         File key = new File(Beezig.get().getBeezigDir(), "obs_data");
-        if(!key.exists()) refreshAuthKey();
+        if (!key.exists()) refreshAuthKey();
         else {
-            try(InputStream is = new FileInputStream(key)) {
+            try (InputStream is = new FileInputStream(key)) {
                 byte[] bytes = new byte[32];
                 int read = is.read(bytes);
-                if(bytes.length != read) throw new IOException(String.format("Couldn't read the full private key, %d != %d", bytes.length, read));
+                if (bytes.length != read)
+                    throw new IOException(String.format("Couldn't read the full private key, %d != %d", bytes.length, read));
                 messageSigner = new Ed25519Sign(bytes);
             }
         }
+        Message.info(Beezig.api().translate("msg.obs", "§a" + Message.translate("msg.connected")));
+    }
+
+    /**
+     * Called when OBS is detected but OBS Controller isn't installed
+     */
+    private void promptInstall() {
+        if(!Settings.OBS_PROMPT.get().getBoolean()) return;
+        Message.info(Message.translate("msg.obs.prompt"));
+        Message.info(Message.translate("msg.obs.prompt.install"));
+        TextButton btn = new TextButton("btn.obs.prompt.install", "btn.obs.prompt.install.desc", "§a");
+        btn.doRunCommand("/beezig obs");
+        sendButtons(btn);
+    }
+
+    /**
+     * Called when OBS Controller is detected but the feature isn't enabled
+     */
+    private void promptEnable() {
+        if(!Settings.OBS_PROMPT.get().getBoolean()) return;
+        Message.info(Message.translate("msg.obs.prompt"));
+        Message.info(Message.translate("msg.obs.prompt.enable"));
+        TextButton btn = new TextButton("btn.obs.prompt.enable", "btn.obs.prompt.enable.desc", "§a");
+        btn.doRunCommand("/bsettings obs_enable on");
+        sendButtons(btn);
+    }
+
+    private void sendButtons(TextButton btn) {
+        MessageComponent component = new MessageComponent(Message.infoPrefix());
+        component.getSiblings().add(btn);
+        TextButton dismiss = new TextButton("btn.daily.ext.dismiss", "btn.daily.ext.dismiss.desc", "§c");
+        dismiss.doRunCommand("/bsettings obs_prompt off");
+        component.getSiblings().add(new MessageComponent(" "));
+        component.getSiblings().add(dismiss);
+        Beezig.api().messagePlayerComponent(component, false);
     }
 
     public void refreshAuthKey() throws Exception {
@@ -49,6 +115,11 @@ public class ObsState {
         JSONParser parser = new JSONParser();
         JSONObject parsed = (JSONObject) parser.parse(res.getBody());
         setSecretKey(parsed.get("key").toString(), parsed.get("shared_public").toString());
+    }
+
+    public void cancelTasks() {
+        if(!notAuthenticated()) Message.info(Beezig.api().translate("msg.obs", "§c" + Message.translate("msg.disconnected")));
+        detectTask.cancel(true);
     }
 
     private String generatePubKey() {
@@ -96,7 +167,7 @@ public class ObsState {
     }
 
     public void startRecording(String fileName) {
-        if(notAuthenticated()) return;
+        if(!Settings.OBS_ENABLE.get().getBoolean() || notAuthenticated()) return;
         try {
             if(!checkStatusCode(ObsHttp.sendPost("/recording/start", fileName, signMessage(fileName), APP_UUID.toString()).getCode())) return;
             startedRecording = true;

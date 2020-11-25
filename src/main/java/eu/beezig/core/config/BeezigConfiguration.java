@@ -25,6 +25,7 @@ import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
+import eu.beezig.core.util.process.ProcessManager;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
 import org.json.simple.JSONObject;
@@ -167,6 +168,21 @@ public class BeezigConfiguration {
                 return;
             }
             Message.info(Message.translate("msg.setting.language.restart"));
+        }
+        if(key == Settings.OBS_ENABLE) {
+            if(key.get().getBoolean()) {
+                ProcessManager processManager = Beezig.get().getProcessManager();
+                if(processManager.getObsState() != null) {
+                    if(processManager.getObsState().notAuthenticated()) {
+                        try {
+                            processManager.getObsState().authenticate();
+                        } catch (Exception e) {
+                            ExceptionHandler.catchException(e);
+                            Message.error(Message.translate("error.obs"));
+                        }
+                    }
+                }
+            }
         }
     }
 

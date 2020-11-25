@@ -106,6 +106,10 @@ public enum Settings {
     TELEMETRY(true, Category.META),
     NEWS(true, Category.META),
 
+    // OBS Controller
+    OBS_ENABLE(false, Category.OBS),
+    OBS_PROMPT(true, Category.OBS),
+
     // Hidden
     DAILY_EXTENSIONS(10, Category.HIDDEN);
 
@@ -155,6 +159,7 @@ public enum Settings {
         MISC,
         REPORTS,
         META,
+        OBS,
         HIDDEN;
 
         public String getName () {

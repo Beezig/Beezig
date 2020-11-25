@@ -48,15 +48,12 @@ public class ProcessManager {
     }
 
     private void resetObs() {
+        if(obsState != null) obsState.cancelTasks();
         obsState = null;
     }
 
     private void loadObs() {
-        try {
-            obsState = new ObsState();
-        } catch (Exception e) {
-            ExceptionHandler.catchException(e);
-        }
+        obsState = new ObsState();
     }
 
     public void refreshObsAuth() throws Exception {
