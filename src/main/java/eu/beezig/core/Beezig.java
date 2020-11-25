@@ -102,6 +102,7 @@ public class Beezig {
     private NewsManager newsManager;
     private BeezigServiceLoader serviceLoader;
     private WinstreakManager winstreakManager;
+    private ProcessManager processManager;
 
     // Flags
     private final boolean laby;
@@ -225,7 +226,7 @@ public class Beezig {
         Modules.register(this, api);
         CommandManager.init(this);
         notificationManager = new NotificationManager();
-        new ProcessManager();
+        processManager = new ProcessManager();
         AdvancedRecordsAnywhere.register();
         networkManager = new BeezigNetManager();
 
@@ -335,6 +336,10 @@ public class Beezig {
 
     public void setIsNativeSpeedrun(boolean nativeSpeedrun) {
         isNativeSpeedrun = nativeSpeedrun;
+    }
+
+    public ProcessManager getProcessManager() {
+        return processManager;
     }
 
     public static Beezig get() {

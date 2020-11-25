@@ -163,7 +163,7 @@ public class Run {
         if(config != null && config.isRainbowBestSegment()) {
             // Extract opacity from regular color
             int alpha = config.getBestSegmentColor() >>> 24;
-            if((rainbowHue += 0.02) > 1f) rainbowHue = 0f;
+            if((rainbowHue += 0.02f) > 1f) rainbowHue = 0f;
             int rgb = Color.HSBtoRGB(rainbowHue, 1f, 1f);
             // Add opacity to generated color
             this.rainbowColor = (alpha << 24) | rgb;

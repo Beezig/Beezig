@@ -3,8 +3,10 @@ package eu.beezig.core.util.process;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.notification.NotificationManager;
+import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
+import eu.beezig.core.util.obs.ObsState;
 import eu.beezig.core.util.process.processes.ScreenRecorders;
 import eu.beezig.core.util.process.providers.UnixProcessProvider;
 import eu.beezig.core.util.process.providers.WindowsProcessProvider;
@@ -23,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class ProcessManager {
     private IProcessProvider provider;
     private Set<IProcess> processes = new HashSet<>();
+    private ObsState obsState;
 
     @SuppressWarnings("FutureReturnValueIgnored")
     public ProcessManager() {
@@ -31,6 +34,7 @@ public class ProcessManager {
             this.provider = new UnixProcessProvider();
         else if(os.contains("win")) this.provider = new WindowsProcessProvider();
         Beezig.get().getAsyncExecutor().scheduleAtFixedRate(() -> {
+            if(!ServerHive.isCurrent()) return;
             try {
                 updateProcesses();
             } catch (IOException e) {
@@ -39,15 +43,39 @@ public class ProcessManager {
         }, 5, 10, TimeUnit.SECONDS);
     }
 
+    public ObsState getObsState() {
+        return obsState;
+    }
+
+    private void resetObs() {
+        obsState = null;
+    }
+
+    private void loadObs() {
+        try {
+            obsState = new ObsState();
+        } catch (Exception e) {
+            ExceptionHandler.catchException(e);
+        }
+    }
+
+    public void refreshObsAuth() throws Exception {
+        if(obsState != null) obsState.refreshAuthKey();
+        else {
+            ObsState state = new ObsState();
+            if(state.notAuthenticated()) state.refreshAuthKey();
+        }
+    }
+
     private void updateProcesses() throws IOException {
         if(provider == null) return;
         List<String> current = provider.getRunningProcesses();
         Set<IProcess> currentProcesses = new HashSet<>();
-        for(ScreenRecorders recorder : ScreenRecorders.values()) {
+        recorders: for(ScreenRecorders recorder : ScreenRecorders.values()) {
             for(String alias : recorder.getAliases()) {
                 if(current.contains(alias)) {
                     currentProcesses.add(recorder);
-                    break;
+                    continue recorders;
                 }
             }
             // If no match is found in the current list, check if it was in the previous list. If so, that means the process was closed.
@@ -81,6 +109,7 @@ public class ProcessManager {
                 main.getSiblings().add(enableAlways);
                 WorldTask.submit(() -> Beezig.api().messagePlayerComponent(main, false));
             }
+            if(process == ScreenRecorders.OBS) loadObs();
         }
     }
 
@@ -89,6 +118,7 @@ public class ProcessManager {
             NotificationManager notificationManager = Beezig.get().getNotificationManager();
             if(notificationManager.isDoNotDisturb() && notificationManager.getDoNotDisturbCause() == NotificationManager.ActivationCause.PROCESS)
                 notificationManager.setDoNotDisturb(false, NotificationManager.ActivationCause.PROCESS);
+            if(process == ScreenRecorders.OBS) resetObs();
         }
     }
 }

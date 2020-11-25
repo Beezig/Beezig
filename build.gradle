@@ -64,6 +64,7 @@ dependencies {
     embed(group: 'livesplit', name: 'livesplit-java', version: '0.11.0') {
         exclude module: 'jna'
     }
+    embed group: 'com.google.crypto.tink', name: 'tink', version: '1.5.0'
 
     compile group: 'eu.5zigreborn', name: 'plugin-api', version: '3.14.1'
     compile group: 'com.mojang', name: 'authlib', version: '1.6.25'

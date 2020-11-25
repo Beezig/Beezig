@@ -32,6 +32,7 @@ import eu.beezig.core.logging.ws.WinstreakService;
 import eu.beezig.core.server.monthly.IMonthly;
 import eu.beezig.core.server.monthly.MonthlyService;
 import eu.beezig.core.util.ExceptionHandler;
+import eu.beezig.core.util.process.ProcessManager;
 import eu.beezig.core.util.task.WorldTask;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameMode;
@@ -40,12 +41,16 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public abstract class HiveMode extends GameMode {
+    private static final DateTimeFormatter OBS_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").withZone(ZoneId.systemDefault());
     private int points;
     private String map;
     /**
@@ -126,8 +131,12 @@ public abstract class HiveMode extends GameMode {
     @SuppressWarnings("FutureReturnValueIgnored")
     public void setState(GameState state) {
         super.setState(state);
-        if(state == GameState.GAME)
+        if(state == GameState.GAME) {
+            ProcessManager process = Beezig.get().getProcessManager();
+            if(process.getObsState() != null)
+                process.getObsState().startRecording(String.format("%s%s %s", getIdentifier().toUpperCase(Locale.ROOT), map == null ? "" : " " + map, OBS_FORMAT.format(Instant.now())));
             Beezig.get().getAsyncExecutor().schedule(() -> WorldTask.submit(() -> Beezig.api().sendPlayerMessage("/gameid")), 1, TimeUnit.SECONDS);
+        }
     }
 
     /**
@@ -222,6 +231,8 @@ public abstract class HiveMode extends GameMode {
                 ExceptionHandler.catchException(e, "Winstreak save");
             }
         }
+        ProcessManager process = Beezig.get().getProcessManager();
+        if(process.getObsState() != null) process.getObsState().stopRecordingIfStarted();
     }
 
     /**
