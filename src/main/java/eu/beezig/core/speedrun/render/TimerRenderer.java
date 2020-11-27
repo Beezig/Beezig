@@ -17,15 +17,18 @@ public class TimerRenderer {
     }
 
     public void render(RenderHelper renderHelper, int x, int y) {
-        float scale = run == null || run.getConfig() == null ? 1f : run.getConfig().getScale() / 100f;
+        if(run == null) return;
+        float scale = run.getConfig() == null ? 1f : run.getConfig().getScale() / 100f;
         GL11.glPushMatrix();
         GL11.glTranslatef(x, y, 1);
         GL11.glScalef(scale, scale, scale);
         renderHelper.drawRect(0, 0, MODULE_WIDTH, getUnscaledHeight(), run.getConfig().getBackgroundColor());
         int mutY = 0;
-        for(TimerModule module : activeModules) {
-            module.render(renderHelper, run, 0, mutY);
-            mutY += module.getHeight();
+        synchronized (run.getStateLock()) {
+            for (TimerModule module : activeModules) {
+                module.render(renderHelper, run, 0, mutY);
+                mutY += module.getHeight();
+            }
         }
         GL11.glPopMatrix();
     }

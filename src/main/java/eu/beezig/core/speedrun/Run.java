@@ -28,7 +28,7 @@ public class Run {
     private final String humanMapName;
 
     private livesplitcore.Run api;
-    private final Timer timer;
+    private Timer timer;
     private final File splits;
     private TimerRenderer renderer;
     private final SpeedrunConfig config;
@@ -43,6 +43,9 @@ public class Run {
     private final PossibleTimeSaveComponent possibleTimeSaveComponent;
     private float rainbowHue;
     private int rainbowColor;
+
+    // Lock required to make sure we don't try to fetch a state when the timer/run is being closed (= dropped on the Rust side)
+    private final Object LOCK = new Object();
 
     public Run(String mapName, DR.MapData data, String humanMapName) throws IOException {
         this.humanMapName = humanMapName;
@@ -149,6 +152,10 @@ public class Run {
         timer.setGameTime(gameTime);
     }
 
+    public Object getStateLock() {
+        return LOCK;
+    }
+
     /**
      * Runs every tick, updates the color for the rainbow effect
      */
@@ -217,8 +224,11 @@ public class Run {
     }
 
     public void endNow() {
-        if(timer != null) timer.close();
-        api.close();
+        synchronized (LOCK) {
+            if (timer != null) timer.close();
+            timer = null;
+            api.close();
+        }
     }
 
     public boolean isTimerRunning() {
