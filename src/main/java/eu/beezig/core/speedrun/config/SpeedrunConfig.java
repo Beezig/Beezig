@@ -3,6 +3,7 @@ package eu.beezig.core.speedrun.config;
 import eu.beezig.core.api.SettingInfo;
 import eu.beezig.core.speedrun.Run;
 import eu.beezig.core.speedrun.SpeedrunModules;
+import eu.beezig.core.speedrun.TimerComparison;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
@@ -87,6 +88,11 @@ public class SpeedrunConfig {
      * Whether the best segment should use a rainbow animation
      */
     private boolean rainbowBestSegment = false;
+
+    /**
+     * The preferred comparison for the timer
+     */
+    private TimerComparison comparison = TimerComparison.PERSONAL_BEST;
 
     public SpeedrunConfig(Run run) {
         this.run = run;
@@ -196,6 +202,11 @@ public class SpeedrunConfig {
         this.scale = scale;
     }
 
+    public void setComparison(TimerComparison comparison) {
+        this.comparison = comparison;
+        if(run != null && run.isTimerRunning()) run.setComparison(comparison);
+    }
+
     public int getCurrentSegmentColor() {
         return currentSegmentColor;
     }
@@ -254,5 +265,9 @@ public class SpeedrunConfig {
 
     public boolean isRainbowBestSegment() {
         return rainbowBestSegment;
+    }
+
+    public TimerComparison getComparison() {
+        return comparison;
     }
 }

@@ -1,5 +1,6 @@
 package eu.beezig.core.speedrun.config;
 
+import eu.beezig.core.speedrun.TimerComparison;
 import eu.beezig.core.util.text.Message;
 
 import java.util.Locale;
@@ -22,7 +23,8 @@ public enum SpeedrunConfigValues {
     COLOR_PERSONAL_BEST(SpeedrunConfig::getPersonalBestColor, (cfg, v) -> cfg.setPersonalBestColor((int)(long) v)),
     COLOR_CURRENT_SEGMENT(SpeedrunConfig::getCurrentSegmentColor, (cfg, v) -> cfg.setCurrentSegmentColor((int)(long) v)),
     SCALE(SpeedrunConfig::getScale, (cfg, v) -> cfg.setScale((int)(long) v)),
-    RAINBOW_BEST(SpeedrunConfig::isRainbowBestSegment, (cfg, v) -> cfg.setRainbowBestSegment((boolean) v));
+    RAINBOW_BEST(SpeedrunConfig::isRainbowBestSegment, (cfg, v) -> cfg.setRainbowBestSegment((boolean) v)),
+    COMPARISON(SpeedrunConfig::getComparison, (cfg, v) -> cfg.setComparison(TimerComparison.valueOf(v.toString())));
 
     private final Function<SpeedrunConfig, Object> getValueFunc;
     private final BiConsumer<SpeedrunConfig, Object> setValueFunc;

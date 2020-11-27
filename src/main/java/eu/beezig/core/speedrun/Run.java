@@ -32,6 +32,7 @@ public class Run {
     private final File splits;
     private TimerRenderer renderer;
     private final SpeedrunConfig config;
+    private TimerComparison comparison = TimerComparison.PERSONAL_BEST;
 
     // Components
     private final GeneralLayoutSettings settings;
@@ -71,6 +72,7 @@ public class Run {
         editor.setPlatformName(mapName);
         api = editor.finish();
         timer = Timer.create(api.copy());
+        setComparison(config.getComparison());
         renderer = new TimerRenderer(this, loadModules());
         settings = GeneralLayoutSettings.createDefault();
 
@@ -93,6 +95,21 @@ public class Run {
             }
         }
         return result;
+    }
+
+    public void setComparison(TimerComparison comparison) {
+        // Hacky workaround: since we can't directly set the index with the Java API, we have to do this.
+        int distance = comparison.getEnumKey() - this.comparison.getEnumKey();
+        if(distance > 0) {
+            for(int i = 0; i < distance; i++) timer.switchToNextComparison();
+        } else if(distance < 0) {
+            for(int i = 0; i > distance; i--) timer.switchToPreviousComparison();
+        }
+        this.comparison = comparison;
+    }
+
+    public TimerComparison getComparison() {
+        return comparison;
     }
 
     public void reloadConfig() {

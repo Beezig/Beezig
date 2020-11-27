@@ -16,6 +16,7 @@ public class SpeedrunModules {
         .put("previous_segment", SpeedrunPrevSegment.class)
         .put("sum_of_best", SpeedrunSumOfBest.class)
         .put("segments", SpeedrunSegmentView.class)
+        .put("comparison", SpeedrunComparison.class)
         .build();
 
     public static final List<String> defaultModules = Lists.newArrayList("game_info", "segments",

@@ -34,6 +34,9 @@ public class SpeedrunSerializer {
             Collections.addAll(array, (String[]) in);
             return array;
         }
+        if(in instanceof Enum) {
+            return in.toString();
+        }
         return in;
     }
 
