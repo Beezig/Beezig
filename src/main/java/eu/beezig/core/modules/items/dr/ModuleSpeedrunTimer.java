@@ -15,6 +15,7 @@ public class ModuleSpeedrunTimer extends GameModeItem<DR> implements ICustomRend
 
     @Override
     public void render(int x, int y, RenderLocation renderLocation, boolean dummy) {
+        if(dummy) return;
         DR mode = getGameMode();
         if(mode == null || mode.getCurrentRun() == null) return;
         TimerRenderer renderer = mode.getCurrentRun().getRenderer();
@@ -23,8 +24,9 @@ public class ModuleSpeedrunTimer extends GameModeItem<DR> implements ICustomRend
 
     @Override
     public int getHeight(boolean dummy) {
+        if(dummy) return 0;
         DR mode = getGameMode();
-        if(mode == null || mode.getCurrentRun() == null) return 0;
+        if (mode == null || mode.getCurrentRun() == null) return 0;
         TimerRenderer renderer = mode.getCurrentRun().getRenderer();
         return renderer.getTotalHeight();
     }
