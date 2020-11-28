@@ -109,6 +109,8 @@ public enum Settings {
     // OBS Controller
     OBS_ENABLE(false, Category.OBS),
     OBS_PROMPT(true, Category.OBS),
+    OBS_CONFIRM_DELETE(true, Category.OBS),
+    OBS_FILE_ACTIONS(true, Category.OBS),
 
     // Hidden
     DAILY_EXTENSIONS(10, Category.HIDDEN);

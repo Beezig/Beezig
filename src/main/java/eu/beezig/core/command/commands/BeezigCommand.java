@@ -139,14 +139,6 @@ public class BeezigCommand implements Command {
                 Beezig.get().getNewsManager().readUnread();
             }
             else if("credits".equalsIgnoreCase(mode)) sendCredits();
-            else if("obs".equalsIgnoreCase(mode)) {
-                try {
-                    Beezig.get().getProcessManager().refreshObsAuth();
-                } catch (Exception e) {
-                    ExceptionHandler.catchException(e);
-                    Message.error(Message.translate("error.obs"));
-                }
-            }
         }
         return true;
     }

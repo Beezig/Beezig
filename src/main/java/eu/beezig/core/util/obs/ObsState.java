@@ -5,10 +5,13 @@ import com.google.crypto.tink.subtle.X25519;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.ServerHive;
+import eu.beezig.core.util.Color;
 import eu.beezig.core.util.ExceptionHandler;
+import eu.beezig.core.util.task.WorldTask;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.TextButton;
 import eu.the5zig.mod.util.component.MessageComponent;
+import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -29,6 +32,8 @@ import java.util.concurrent.TimeUnit;
 
 public class ObsState {
     private static final UUID APP_UUID = UUID.fromString("3552936e-4224-48d0-b0e8-b0f08be197f9");
+    private static final JSONParser PARSER = new JSONParser();
+
     private byte[] x25519Private;
     private Ed25519Sign messageSigner;
     private boolean startedRecording;
@@ -79,7 +84,7 @@ public class ObsState {
         Message.info(Message.translate("msg.obs.prompt"));
         Message.info(Message.translate("msg.obs.prompt.install"));
         TextButton btn = new TextButton("btn.obs.prompt.install", "btn.obs.prompt.install.desc", "§a");
-        btn.doRunCommand("/beezig obs");
+        btn.doRunCommand("/bobs connect");
         sendButtons(btn);
     }
 
@@ -112,8 +117,7 @@ public class ObsState {
         json.put("name", "Beezig");
         json.put("public_key", pub);
         ObsHttp.HttpRes res = ObsHttp.sendPost("/register", json.toString());
-        JSONParser parser = new JSONParser();
-        JSONObject parsed = (JSONObject) parser.parse(res.getBody());
+        JSONObject parsed = (JSONObject) PARSER.parse(res.getBody());
         setSecretKey(parsed.get("key").toString(), parsed.get("shared_public").toString());
     }
 
@@ -169,8 +173,11 @@ public class ObsState {
     public void startRecording(String fileName) {
         if(!Settings.OBS_ENABLE.get().getBoolean() || notAuthenticated()) return;
         try {
-            if(!checkStatusCode(ObsHttp.sendPost("/recording/start", fileName, signMessage(fileName), APP_UUID.toString()).getCode())) return;
+            if(isError(ObsHttp.sendPost("/recording/start", fileName, signMessage(fileName), APP_UUID.toString()).getCode())) return;
             startedRecording = true;
+            if(Settings.OBS_FILE_ACTIONS.get().getBoolean()) {
+                WorldTask.submit(() -> Message.info(Beezig.api().translate("msg.obs", Color.accent() + Message.translate("msg.obs.started"))));
+            }
         } catch (Exception e) {
             ExceptionHandler.catchException(e);
             Message.error(Message.translate("error.obs"));
@@ -180,7 +187,11 @@ public class ObsState {
     public void stopRecordingIfStarted() {
         if(!startedRecording || notAuthenticated()) return;
         try {
-            checkStatusCode(ObsHttp.sendPost("/recording/stop", "", signMessage(""), APP_UUID.toString()).getCode());
+            ObsHttp.HttpRes res = ObsHttp.sendPost("/recording/stop", "", signMessage(""), APP_UUID.toString());
+            if(isError(res.getCode())) return;
+            JSONObject json = (JSONObject) PARSER.parse(res.getBody());
+            Object path = json.get("path");
+            if(path != null) announceRecordingStopped(path.toString());
             startedRecording = false;
         } catch (Exception e) {
             ExceptionHandler.catchException(e);
@@ -188,11 +199,35 @@ public class ObsState {
         }
     }
 
-    private boolean checkStatusCode(int code) {
+    private void announceRecordingStopped(String filePath) {
+        File file = new File(FilenameUtils.normalize(filePath));
+        String name = file.getName();
+        UUID uuid = UUID.randomUUID();
+        ObsFileOperations.insert(uuid, file);
+        if(!Settings.OBS_FILE_ACTIONS.get().getBoolean()) return;
+        MessageComponent main = new MessageComponent(Message.infoPrefix()
+            + Beezig.api().translate("msg.obs.saved", Color.accent() + name + Color.primary()) + "\n");
+        TextButton open = new TextButton("btn.obs.file.open", "btn.obs.file.open.desc", "§a");
+        open.doRunCommand("/bobs open " + uuid);
+        TextButton openFolder = new TextButton("btn.obs.file.open_folder", "btn.obs.file.open_folder.desc", "§b");
+        openFolder.doRunCommand("/bobs folder " + uuid);
+        TextButton delete = new TextButton("btn.obs.file.delete", "btn.obs.file.delete.desc", "§c");
+        delete.doRunCommand("/bobs delete " + uuid);
+        MessageComponent space = new MessageComponent(" ");
+        main.getSiblings().add(new MessageComponent(Message.infoPrefix()));
+        main.getSiblings().add(open);
+        main.getSiblings().add(space);
+        main.getSiblings().add(openFolder);
+        main.getSiblings().add(space);
+        main.getSiblings().add(delete);
+        WorldTask.submit(() -> Beezig.api().messagePlayerComponent(main, false));
+    }
+
+    private boolean isError(int code) {
         if(code == 401) {
             Message.info(Message.translate("msg.obs.reauth"));
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 }
