@@ -52,7 +52,7 @@ public class BestGameCommand implements Command {
         Message.info(Message.translate("msg.bestgame.loading"));
         getGames().thenApplyAsync(games -> {
             Map<GameInfo, CompletableFuture<Double>> averages = new HashMap<>();
-            for(GameInfo game : games) averages.put(game, getAverage(game.id));
+            for(GameInfo game : games) averages.put(game, getAverage(game));
             CompletableFuture.allOf(averages.values().toArray(new CompletableFuture[0])).join();
             List<CompletableFuture<BestGameInfo>> results = new ArrayList<>();
             for(GameInfo game : games) results.add(calculateForPlayer(target, game, averages.get(game).join()));
@@ -90,10 +90,12 @@ public class BestGameCommand implements Command {
         else return "§7=";
     }
 
-    private CompletableFuture<Double> getAverage(String game) {
-        return lbCache.get(game, (k, exec) -> new Game(k, null).getLeaderboard(0, 20).thenApplyAsync(lb -> {
+    private CompletableFuture<Double> getAverage(GameInfo game) {
+        return lbCache.get(game.id, (k, exec) -> new Game(k, null).getLeaderboard(0, 20).thenApplyAsync(lb -> {
             LeaderboardPlace first = lb.getPlayers().get(0);
-            String place = first.containsKey("points") ? "points" : (first.containsKey("total_points") ? "total_points" :
+            String place;
+            if(game.shouldUseVictories()) place = "victories";
+            else place = first.containsKey("points") ? "points" : (first.containsKey("total_points") ? "total_points" :
                 (first.containsKey("karma") ? "karma" : "victories"));
             return lb.getPlayers().stream().filter(p -> p.get(place) != null).mapToInt(p -> (int)(long) p.get(place)).average().orElse(0);
         }));
@@ -118,7 +120,9 @@ public class BestGameCommand implements Command {
     private CompletableFuture<BestGameInfo> calculateForPlayer(String uuid, GameInfo game, double average) {
         return getStats(uuid, game.id).thenApplyAsync(profile -> {
             JSONObject input = profile.getInput();
-            String place = input.containsKey("points") ? "points" : (input.containsKey("total_points") ? "total_points" :
+            String place;
+            if(game.shouldUseVictories()) place = "victories";
+            else place = input.containsKey("points") ? "points" : (input.containsKey("total_points") ? "total_points" :
                 (input.containsKey("karma") ? "karma" : "victories"));
             return new BestGameInfo(game, profile.getInt(place) / average);
         }).exceptionally(e -> {
@@ -137,17 +141,21 @@ public class BestGameCommand implements Command {
     }
 
     private static class GameInfo {
-        private String id, name;
+        private final String id, name;
 
         private GameInfo(String id, String name) {
             this.id = id;
             this.name = name;
         }
+
+        private boolean shouldUseVictories() {
+            return "OITC".equalsIgnoreCase(id);
+        }
     }
 
     private static class BestGameInfo implements Comparable<BestGameInfo> {
-        private GameInfo game;
-        private double percent;
+        private final GameInfo game;
+        private final double percent;
         private boolean hasPlayed = true;
 
         BestGameInfo(GameInfo game, double percent) {
