@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  * The results are cached so that subsequent requests are quicker.
  */
 public class BestGameCommand implements Command {
-    private AsyncCache<String, Double> lbCache = Caffeine.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES).buildAsync();
+    private final AsyncCache<String, Double> lbCache = Caffeine.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES).buildAsync();
 
     @Override
     public String getName() {

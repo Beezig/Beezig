@@ -151,7 +151,7 @@ public class ServerHive extends ServerInstance {
             BeezigForge.get().setOnHive(true);
             if(!new File(Beezig.get().getBeezigDir(), "tut.new").exists()) WorldTask.submit(() -> BeezigForge.get().displayWelcomeGui());
         }
-        WorldTask.submit(() -> CommandManager.dispatchCommand("/beezig"));
+        if(Settings.JOIN_INFO.get().getBoolean()) WorldTask.submit(() -> CommandManager.dispatchCommand("/beezig"));
         Beezig.get().newExceptionHandler();
         JsonParser parser = new JsonParser();
         Version localBeezigForgeVersion = BeezigForge.isSupported() ? new Version(parser.parse(new InputStreamReader(this.getClass().getResourceAsStream("/beezig-forge-version.json"), StandardCharsets.UTF_8)).getAsJsonObject()) : null;

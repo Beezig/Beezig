@@ -92,6 +92,7 @@ public enum Settings {
     REPORTS_NOTIFY(true, Category.MISC),
     TABLIST_BADGES(true, Category.MISC),
     HIVE_RANK(false, Category.MISC),
+    JOIN_INFO(true, Category.MISC),
 
     // Meta
     UPDATE_CHECK(true, Category.META),
