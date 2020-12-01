@@ -3,13 +3,16 @@ package eu.beezig.core.command.commands;
 import com.google.common.base.Splitter;
 import eu.beezig.core.Beezig;
 import eu.beezig.core.command.Command;
+import eu.beezig.core.config.Settings;
 import eu.beezig.core.net.packets.PacketReport;
 import eu.beezig.core.report.ReportOutgoing;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.Color;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.StringUtils;
+import eu.beezig.core.util.text.TextButton;
 import eu.beezig.hiveapi.wrapper.mojang.UsernameToUuid;
+import eu.the5zig.mod.util.component.MessageComponent;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -42,7 +45,19 @@ public class ReportCommand implements Command {
                 List<String> reasons = Splitter.onPattern("\\s").splitToList(gReasons);
                 String pDisplay = Color.accent() + StringUtils.localizedJoin(players) + Color.primary();
                 String rDisplay = Color.accent() + StringUtils.localizedJoin(reasons) + Color.primary();
-                Message.info(Beezig.api().translate("msg.report.submit", pDisplay, rDisplay));
+                // Friend broadcast
+                String broadcastMessage = Settings.REPORTS_BROADCAST_MESSAGE.get().getString();
+                broadcastMessage = broadcastMessage.replace("{player}", StringUtils.englishJoin(players)).replace("{reason}", StringUtils.englishJoin(reasons));
+                if(Settings.REPORTS_BROADCAST.get().getBoolean()) {
+                    Message.info(Beezig.api().translate("msg.report.submit", pDisplay, rDisplay));
+                    Beezig.api().sendPlayerMessage("/friend broadcast " + broadcastMessage);
+                } else {
+                    MessageComponent base = new MessageComponent(Message.infoPrefix() + Beezig.api().translate("msg.report.submit", pDisplay, rDisplay) + " ");
+                    TextButton btn = new TextButton("btn.report.broadcast.name", "btn.report.broadcast.desc", "§e");
+                    btn.doRunCommand("/friend broadcast " + broadcastMessage);
+                    base.getSiblings().add(btn);
+                    Beezig.api().messagePlayerComponent(base, false);
+                }
                 CompletableFuture.allOf(players.stream().map(this::checkUsername).toArray(CompletableFuture[]::new))
                     .thenAcceptAsync(v -> Beezig.net().getHandler()
                         .sendPacket(PacketReport.newReport(new ReportOutgoing(ReportOutgoing.ReportType.PLAYER, players, reasons))))

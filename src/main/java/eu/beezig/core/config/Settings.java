@@ -89,10 +89,14 @@ public enum Settings {
     RECORD_DND(false, Category.MISC),
     CHAT_PARTY(true, Category.MISC),
     CHAT_FRIENDS(true, Category.MISC),
-    REPORTS_NOTIFY(true, Category.MISC),
     TABLIST_BADGES(true, Category.MISC),
     HIVE_RANK(false, Category.MISC),
     JOIN_INFO(true, Category.MISC),
+
+    // Reports
+    REPORTS_NOTIFY(true, Category.REPORTS),
+    REPORTS_BROADCAST(false, Category.REPORTS),
+    REPORTS_BROADCAST_MESSAGE("Please report {player} for {reason}", Category.REPORTS),
 
     // Meta
     UPDATE_CHECK(true, Category.META),
@@ -145,6 +149,7 @@ public enum Settings {
         DRAW_IT,
         GRAVITY,
         MISC,
+        REPORTS,
         META,
         HIDDEN;
 

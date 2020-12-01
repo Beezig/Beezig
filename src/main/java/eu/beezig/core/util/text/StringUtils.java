@@ -48,6 +48,16 @@ public class StringUtils {
                 .concat(list.get(list.size() - 1));
     }
 
+    public static String englishJoin(List<String> list) {
+        if(list == null || list.isEmpty()) return "";
+        return list.size() == 1
+            ? list.get(0)
+            : Joiner.on(", ")
+            .join(list.subList(0, list.size() - 1))
+            .concat(" and ")
+            .concat(list.get(list.size() - 1));
+    }
+
     public static String normalizeMapName(String mapIn) {
         return mapIn.replaceAll(MAP_REPLACE_REGEX, "").toLowerCase(Locale.ROOT);
     }
