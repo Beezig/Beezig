@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 
 public class ProfileBadgeListener {
     private static final Pattern LIST_REGEX = Pattern.compile("§8▍ .+ ▏ §3Online (?:spectators|participants) \\(.+\\): .+");
-    private static final Splitter COLON = Splitter.on(':'), COMMA = Splitter.on(", ");
+    public static final Splitter COLON = Splitter.on(':'), COMMA = Splitter.on(", ");
 
     @EventHandler
     public void onChat(ChatEvent event) {

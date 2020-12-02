@@ -63,6 +63,9 @@ public enum Settings {
     TIMV_ADVREC_KPV(true, Category.TROUBLE_IN_MINEVILLE),
     TIMV_TESTMESSAGES(true, Category.TROUBLE_IN_MINEVILLE),
 
+    // Hide and Seek
+    HIDE_HIDERS(true, Category.HIDE_AND_SEEK),
+
     // DrawIt
     DRAW_AUTOGUESS(false, Category.DRAW_IT),
 
@@ -146,6 +149,7 @@ public enum Settings {
         ADVANCED_RECORDS,
         ANTI_SNIPER,
         TROUBLE_IN_MINEVILLE,
+        HIDE_AND_SEEK,
         DRAW_IT,
         GRAVITY,
         MISC,
