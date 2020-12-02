@@ -88,6 +88,10 @@ public class Message {
         return String.format("§7▏ §aBeezig§7 ▏ %s", Color.primary());
     }
 
+    public static String errorPrefix() {
+        return error;
+    }
+
     public static void info(String text) {
         Beezig.api().messagePlayer(infoPrefix() + text);
     }

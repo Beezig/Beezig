@@ -25,7 +25,20 @@ import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.obs.ObsFileOperations;
 import eu.beezig.core.util.text.Message;
+import eu.beezig.core.util.text.TextButton;
+import eu.beezig.hiveapi.wrapper.utils.download.Downloader;
+import eu.beezig.hiveapi.wrapper.utils.json.JArray;
+import eu.the5zig.mod.util.component.MessageComponent;
+import eu.the5zig.mod.util.component.style.MessageAction;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SystemUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.UUID;
 
 public class ObsCommand implements Command {
@@ -82,6 +95,61 @@ public class ObsCommand implements Command {
             }
             UUID uuid = UUID.fromString(args[1]);
             ObsFileOperations.confirmDelete(uuid);
+        } else if("install".equalsIgnoreCase(mode)) {
+            int arch = "x86".equals(System.getProperty("os.arch")) ? 32 : 64;
+            if(!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_MAC) {
+                MessageComponent base = new MessageComponent(Message.errorPrefix() + Message.translate("error.obs.install.os") + " ");
+                TextButton btn = new TextButton("btn.obs.install.guide.name", "btn.obs.install.guide.desc", "§e");
+                btn.getStyle().setOnClick(new MessageAction(MessageAction.Action.OPEN_URL, "https://go.beezig.eu/obs-linux"));
+                base.getSiblings().add(btn);
+                Beezig.api().messagePlayerComponent(base, false);
+                return true;
+            }
+            Message.info(Message.translate("msg.obs.installing"));
+            try {
+                Downloader.getJsonArray(new URL("https://gitlab.com/api/v4/projects/19200869/releases")).thenAcceptAsync(arr -> {
+                    try {
+                        if (arr.getInput().isEmpty()) {
+                            Message.error(Message.translate("error.obs.install.version"));
+                            return;
+                        }
+                        JArray links = arr.getJObject(0).getJObject("assets").getJArray("links");
+                        if (links.getInput().isEmpty()) links = arr.getJObject(1).getJObject("assets").getJArray("links");
+                        File pluginsDir = null;
+                        String downloadUrl = null;
+                        for (int i = 0; i < links.getInput().size(); i++) {
+                            downloadUrl = links.getJObject(i).getString("direct_asset_url");
+                            if (SystemUtils.IS_OS_MAC && downloadUrl.endsWith(".dylib")) {
+                                pluginsDir = new File("/Applications/OBS.app/Contents/Plugins");
+                                break;
+                            } else if (SystemUtils.IS_OS_WINDOWS && downloadUrl.endsWith(".dll") && downloadUrl.contains(Integer.toString(arch, 10))) {
+                                pluginsDir = new File(arch == 64 ? "C:/Program Files/obs-studio/obs-plugins/32bit" : "C:/Program Files/obs-studio/obs-plugins/64bit");
+                                break;
+                            }
+                        }
+                        if (pluginsDir == null || !pluginsDir.exists()) {
+                            Message.error(Message.translate("error.obs.install.obs"));
+                            return;
+                        }
+                        URL download = new URL(downloadUrl);
+                        HttpURLConnection conn = (HttpURLConnection) download.openConnection();
+                        conn.addRequestProperty("User-Agent", Message.getUserAgent());
+                        try (FileOutputStream os = new FileOutputStream(new File(pluginsDir, FilenameUtils.getName(download.getPath())))) {
+                            os.write(IOUtils.toByteArray(conn.getInputStream()));
+                        }
+                        Message.info(Message.translate("msg.obs.install.success"));
+                    } catch (Exception ex) {
+                        ExceptionHandler.catchException(ex);
+                        Message.error(Message.translate("error.obs.install"));
+                    }
+                }).exceptionally(ex -> {
+                    ExceptionHandler.catchException(ex);
+                    Message.error(Message.translate("error.obs.install"));
+                    return null;
+                });
+            } catch (MalformedURLException e) {
+                ExceptionHandler.catchException(e);
+            }
         }
         return true;
     }

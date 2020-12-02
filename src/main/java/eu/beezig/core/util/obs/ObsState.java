@@ -84,7 +84,7 @@ public class ObsState {
         Message.info(Message.translate("msg.obs.prompt"));
         Message.info(Message.translate("msg.obs.prompt.install"));
         TextButton btn = new TextButton("btn.obs.prompt.install", "btn.obs.prompt.install.desc", "§a");
-        btn.doRunCommand("/bobs connect");
+        btn.doRunCommand("/bobs install");
         sendButtons(btn);
     }
 
