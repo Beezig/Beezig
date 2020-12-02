@@ -21,6 +21,7 @@ package eu.beezig.core.net.profile;
 
 import com.google.common.base.Splitter;
 import eu.beezig.core.Beezig;
+import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.UUIDUtils;
 import eu.the5zig.mod.event.ChatEvent;
@@ -39,7 +40,7 @@ public class ProfileBadgeListener {
 
     @EventHandler
     public void onChat(ChatEvent event) {
-        if(!ServerHive.isCurrent()) return;
+        if(!ServerHive.isCurrent() || !Settings.TABLIST_BADGES.get().getBoolean()) return;
         Matcher m = LIST_REGEX.matcher(event.getMessage());
         if(m.matches()) {
             List<String> parts = COLON.splitToList(event.getMessage());
