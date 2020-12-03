@@ -11,6 +11,7 @@ import eu.beezig.core.util.task.WorldTask;
 import eu.beezig.core.util.text.Message;
 import eu.beezig.core.util.text.TextButton;
 import eu.the5zig.mod.util.component.MessageComponent;
+import eu.the5zig.mod.util.component.style.MessageAction;
 import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -116,7 +117,16 @@ public class ObsState {
         json.put("uuid", APP_UUID.toString());
         json.put("name", "Beezig");
         json.put("public_key", pub);
+        Message.info(Message.translate("msg.obs.auth"));
         ObsHttp.HttpRes res = ObsHttp.sendPost("/register", json.toString());
+        if(res.getCode() == 409) {
+            MessageComponent base = new MessageComponent(Message.errorPrefix() + Message.translate("error.obs.auth.conflict") + " ");
+            TextButton btn = new TextButton("btn.obs.install.guide.name", "btn.obs.install.guide.desc", "§e");
+            btn.getStyle().setOnClick(new MessageAction(MessageAction.Action.OPEN_URL, "https://go.beezig.eu/obs-controller-reset"));
+            base.getSiblings().add(btn);
+            Beezig.api().messagePlayerComponent(base, false);
+            return;
+        }
         JSONObject parsed = (JSONObject) PARSER.parse(res.getBody());
         setSecretKey(parsed.get("key").toString(), parsed.get("shared_public").toString());
     }
