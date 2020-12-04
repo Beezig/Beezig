@@ -4,9 +4,12 @@ import eu.beezig.core.Beezig;
 import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.HiveMode;
+import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.text.Message;
+import eu.the5zig.mod.server.GameState;
 
 import java.util.List;
+import java.util.Locale;
 
 public class SHU extends HiveMode {
     private String game;
@@ -41,7 +44,7 @@ public class SHU extends HiveMode {
         return false;
     }
 
-    public void setGame(String game) {
+    public void joinGame(String game) {
         this.game = game.trim();
         String id = null;
         switch (this.game) {
@@ -73,7 +76,13 @@ public class SHU extends HiveMode {
                 id = "RR";
                 break;
         }
-        if(BeezigForge.isSupported()) BeezigForge.get().setCurrentGame(id);
+        if(id != null) {
+            ServerHive.current().getListener().updateLobby(id.toLowerCase(Locale.ROOT));
+            HiveMode newMode = (HiveMode) ServerHive.current().getGameListener().getCurrentGameMode();
+            if(newMode != null) {
+                newMode.setState(GameState.GAME);
+            }
+        }
     }
 
     public String getGame() {

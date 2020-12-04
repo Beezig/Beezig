@@ -37,6 +37,6 @@ public class SHUListener extends AbstractGameListener<SHU> {
 
     @Override
     public void onMatch(SHU gameMode, String key, IPatternResult match) {
-        if(gameMode != null && "shu.game".equals(key) && gameMode.getGame() == null) gameMode.setGame(match.get(0));
+        if(gameMode != null && "shu.game".equals(key) && gameMode.getGame() == null) gameMode.joinGame(match.get(0));
     }
 }

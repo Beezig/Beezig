@@ -99,6 +99,10 @@ public class ServerHive extends ServerInstance {
         return nick == null ? Beezig.user().getName() : nick;
     }
 
+    public ListenerHive getListener() {
+        return listener;
+    }
+
     @Override
     public void registerListeners() {
         GameListenerRegistry registry = getGameListener();
@@ -253,7 +257,7 @@ public class ServerHive extends ServerInstance {
         return (ServerHive) Beezig.api().getActiveServer();
     }
 
-    private class ListenerHive extends AbstractGameListener<GameMode> {
+    public class ListenerHive extends AbstractGameListener<GameMode> {
         private boolean readyForLobby = true;
 
         @Override
@@ -266,7 +270,7 @@ public class ServerHive extends ServerInstance {
             return false;
         }
 
-        void updateLobby(String id) {
+        public void updateLobby(String id) {
             getGameListener().switchLobby(id);
             if(BeezigForge.isSupported()) BeezigForge.get().setCurrentGame(id);
             if(getGameListener().getCurrentGameMode() instanceof HiveMode)
