@@ -83,11 +83,11 @@ public class ServerHive extends ServerInstance {
         return profile;
     }
 
-    public boolean getInParty() {
+    public boolean isInParty() {
         return inParty;
     }
 
-    public boolean getInPartyChat() {
+    public boolean isInPartyChat() {
         return inPartyChat;
     }
 
@@ -247,6 +247,10 @@ public class ServerHive extends ServerInstance {
 
     public static boolean isCurrent() {
         return Beezig.api().getActiveServer() instanceof ServerHive;
+    }
+
+    public static ServerHive current() {
+        return (ServerHive) Beezig.api().getActiveServer();
     }
 
     private class ListenerHive extends AbstractGameListener<GameMode> {

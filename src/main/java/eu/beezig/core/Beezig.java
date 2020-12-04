@@ -55,6 +55,7 @@ import eu.beezig.core.util.snipe.AntiSniper;
 import eu.beezig.core.util.task.WorldTaskManager;
 import eu.beezig.core.util.text.LinkSnipper;
 import eu.beezig.core.util.text.Message;
+import eu.beezig.core.util.text.MessageOverlay;
 import eu.beezig.core.util.text.PartyMembers;
 import eu.beezig.hiveapi.wrapper.HiveWrapper;
 import eu.the5zig.mod.ModAPI;
@@ -102,6 +103,7 @@ public class Beezig {
     private NewsManager newsManager;
     private BeezigServiceLoader serviceLoader;
     private WinstreakManager winstreakManager;
+    private MessageOverlay messageOverlayManager;
 
     // Flags
     private final boolean laby;
@@ -173,6 +175,7 @@ public class Beezig {
         HiveWrapper.setAsyncExecutor(asyncExecutor);
         HiveWrapper.setUserAgent(Message.getUserAgent());
         HiveWrapper.setUUIDCache(Caffeine.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES).buildAsync());
+        api.getPluginManager().registerListener(this, messageOverlayManager = new MessageOverlay());
 
         // Init configuration
         LanguageConfiguration.load();
@@ -315,6 +318,10 @@ public class Beezig {
 
     public NewsManager getNewsManager() {
         return newsManager;
+    }
+
+    public MessageOverlay getMessageOverlayManager() {
+        return messageOverlayManager;
     }
 
     public void setNewsManager(NewsManager newsManager) {

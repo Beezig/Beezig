@@ -45,7 +45,7 @@ public class DRAWListener extends AbstractGameListener<DRAW> {
     @Override
     public void onMatch(DRAW gameMode, String key, IPatternResult match) {
         if("draw.guess".equals(key)) {
-            String nick = ((ServerHive)Beezig.api().getActiveServer()).getNick();
+            String nick = ServerHive.current().getNick();
             if(gameMode.getCurrentDrawer().equals(nick)) {
                 gameMode.addPoints(2);
                 return;
@@ -66,7 +66,7 @@ public class DRAWListener extends AbstractGameListener<DRAW> {
         GameMode mode;
         if(!Settings.DRAW_AUTOGUESS.get().getBoolean() || !((mode = Beezig.api().getActiveServer().getGameListener().getCurrentGameMode()) instanceof DRAW)) return;
         if(mode.getState() != GameState.GAME) return;
-        if(((ServerHive) Beezig.api().getActiveServer()).getInPartyChat()) return;
+        if(ServerHive.current().isInPartyChat()) return;
         if(event.getMessage().startsWith("/")) return;
         if(event.getMessage().startsWith("!")) {
             event.setCancelled(true);

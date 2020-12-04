@@ -76,7 +76,7 @@ public abstract class AutoMessageManager {
                 if (!(skipThis.getAndSet(false) || skipAll.getAndSet(false)))
                     Beezig.get().getAsyncExecutor().execute(() -> {
                         try {
-                            if (((ServerHive) Beezig.api().getActiveServer()).getInPartyChat() && disablePartyChat) {
+                            if (ServerHive.current().isInPartyChat() && disablePartyChat) {
                                 Beezig.get().getAsyncExecutor().schedule(() -> {
                                     if (ActiveGame.get() == mode &&
                                         System.currentTimeMillis() - CommandManager.lastTeleportCommand() > 2000) {

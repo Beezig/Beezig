@@ -19,7 +19,6 @@
 
 package eu.beezig.core.automessage;
 
-import eu.beezig.core.Beezig;
 import eu.beezig.core.config.Setting;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.data.DataPath;
@@ -53,6 +52,6 @@ public class AutoNewGameManager extends AutoMessageManager{
 
     @Override
     public boolean shouldFire() {
-        return !((ServerHive) Beezig.api().getActiveServer()).getInParty() || Settings.AUTONEWGAME_IN_PARTIES.get().getBoolean();
+        return !ServerHive.current().isInParty() || Settings.AUTONEWGAME_IN_PARTIES.get().getBoolean();
     }
 }

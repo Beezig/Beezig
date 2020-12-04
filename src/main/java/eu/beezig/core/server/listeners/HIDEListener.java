@@ -57,7 +57,7 @@ public class HIDEListener extends AbstractGameListener<HIDE> {
     public void onMatch(HIDE gameMode, String key, IPatternResult match) {
         if("hide.kill".equals(key)) {
             gameMode.addKills(1);
-            ServerHive server = (ServerHive) Beezig.api().getActiveServer();
+            ServerHive server = ServerHive.current();
             server.addTokens(Integer.parseInt(match.get(1), 10));
         }
         else if("hide.win".equals(key)) {

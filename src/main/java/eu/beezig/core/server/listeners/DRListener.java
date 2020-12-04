@@ -57,11 +57,11 @@ public class DRListener extends AbstractGameListener<DR> {
         if("dr.death".equals(key)) gameMode.addDeaths(1);
         else if("dr.checkpoint".equals(key)) {
             gameMode.addCheckpoint();
-            ServerHive server = (ServerHive) Beezig.api().getActiveServer();
+            ServerHive server = ServerHive.current();
             server.addTokens(Integer.parseInt(match.get(0), 10));
         }
         else if("dr.finish".equals(key)) {
-            String nick = ((ServerHive)Beezig.api().getActiveServer()).getNick();
+            String nick = ServerHive.current().getNick();
             if(match.get(0).equals(nick)) {
                 gameMode.setFinishTime(match.get(1));
                 gameMode.calcTime();

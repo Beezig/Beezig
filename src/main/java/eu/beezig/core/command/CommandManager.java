@@ -76,6 +76,7 @@ public class CommandManager {
         commandExecutors.add(new BestGameCommand());
         commandExecutors.add(new SpeedrunCommand());
         commandExecutors.add(new WinstreakCommand());
+        commandExecutors.add(new MessageOverlayCommand());
     }
 
     /**

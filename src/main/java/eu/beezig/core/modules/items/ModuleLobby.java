@@ -19,7 +19,6 @@
 
 package eu.beezig.core.modules.items;
 
-import eu.beezig.core.Beezig;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.ServerHive;
 import eu.the5zig.mod.modules.StringItem;
@@ -27,7 +26,7 @@ import eu.the5zig.mod.modules.StringItem;
 public class ModuleLobby extends StringItem {
     @Override
     protected Object getValue(boolean dummy) {
-        return dummy ? "HUB1" : ((ServerHive)Beezig.api().getActiveServer()).getLobby();
+        return dummy ? "HUB1" : ServerHive.current().getLobby();
     }
 
     @Override

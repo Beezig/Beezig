@@ -19,7 +19,6 @@
 
 package eu.beezig.core.server.listeners;
 
-import eu.beezig.core.Beezig;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.BED;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -59,7 +58,7 @@ public class BEDListener extends AbstractGameListener<BED> {
                 }
             }
         }
-        else if(key.startsWith("bed.kill") && match.get(0).equals(((ServerHive) Beezig.api().getActiveServer()).getNick())) {
+        else if(key.startsWith("bed.kill") && match.get(0).equals(ServerHive.current().getNick())) {
             gameMode.addKills(1);
             gameMode.addPoints(key.equals("bed.kill.final") ? 10 : 5);
         }

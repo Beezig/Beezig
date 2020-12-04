@@ -19,7 +19,6 @@
 
 package eu.beezig.core.server.listeners;
 
-import eu.beezig.core.Beezig;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.SKY;
 import eu.the5zig.mod.server.AbstractGameListener;
@@ -50,7 +49,7 @@ public class SKYListener extends AbstractGameListener<SKY> {
 
     @Override
     public void onMatch(SKY gameMode, String key, IPatternResult match) {
-        if("sky.kill".equals(key) && match.get(0).equals(((ServerHive) Beezig.api().getActiveServer()).getNick())) {
+        if("sky.kill".equals(key) && match.get(0).equals(ServerHive.current().getNick())) {
             gameMode.addKills(1);
         }
         else if ("sky.win".equals(key)) {

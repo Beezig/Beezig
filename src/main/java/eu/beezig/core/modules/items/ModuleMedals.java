@@ -19,7 +19,6 @@
 
 package eu.beezig.core.modules.items;
 
-import eu.beezig.core.Beezig;
 import eu.beezig.core.modules.Modules;
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.util.text.Message;
@@ -28,7 +27,7 @@ import eu.the5zig.mod.modules.StringItem;
 public class ModuleMedals extends StringItem {
     @Override
     protected Object getValue(boolean dummy) {
-        return Message.formatNumber(dummy ? 1234 : ((ServerHive)Beezig.api().getActiveServer()).getMedals());
+        return Message.formatNumber(dummy ? 1234 : ServerHive.current().getMedals());
     }
 
     @Override
