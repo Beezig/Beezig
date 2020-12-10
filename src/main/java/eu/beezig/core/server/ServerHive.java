@@ -28,6 +28,7 @@ import eu.beezig.core.command.CommandManager;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.news.NewsManager;
 import eu.beezig.core.server.listeners.*;
+import eu.beezig.core.server.modes.SHU;
 import eu.beezig.core.util.DateUtils;
 import eu.beezig.core.util.ExceptionHandler;
 import eu.beezig.core.util.UUIDUtils;
@@ -122,6 +123,7 @@ public class ServerHive extends ServerInstance {
         registry.registerListener(grav);
         Beezig.api().getPluginManager().registerListener(Beezig.get(), draw);
         Beezig.api().getPluginManager().registerListener(Beezig.get(), grav);
+        SHU.registerListeners(registry);
     }
 
     @Override

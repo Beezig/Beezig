@@ -5,7 +5,11 @@ import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.ServerHive;
+import eu.beezig.core.server.modes.shu.CR;
+import eu.beezig.core.server.modes.shu.EF;
+import eu.beezig.core.server.modes.shu.SLAP;
 import eu.beezig.core.util.text.Message;
+import eu.the5zig.mod.server.GameListenerRegistry;
 import eu.the5zig.mod.server.GameState;
 
 import java.util.List;
@@ -75,6 +79,9 @@ public class SHU extends HiveMode {
             case "Restaurant Rush":
                 id = "RR";
                 break;
+            case "EF: Turbo":
+                id = "EFT";
+                break;
         }
         if(id != null) {
             ServerHive.current().getListener().updateLobby(id.toLowerCase(Locale.ROOT));
@@ -87,5 +94,11 @@ public class SHU extends HiveMode {
 
     public String getGame() {
         return game;
+    }
+
+    public static void registerListeners(GameListenerRegistry registry) {
+        registry.registerListener(new CR.CRListener());
+        registry.registerListener(new EF.EfListener());
+        registry.registerListener(new SLAP.SlapListener());
     }
 }

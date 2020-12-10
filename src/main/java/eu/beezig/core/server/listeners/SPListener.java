@@ -21,11 +21,10 @@ package eu.beezig.core.server.listeners;
 
 import eu.beezig.core.server.ServerHive;
 import eu.beezig.core.server.modes.SP;
-import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.GameState;
 import eu.the5zig.mod.server.IPatternResult;
 
-public class SPListener extends AbstractGameListener<SP> {
+public class SPListener extends SHUListener.ShuffleModeListener<SP> {
 
     @Override
     public Class<SP> getGameMode() {
@@ -39,13 +38,13 @@ public class SPListener extends AbstractGameListener<SP> {
 
     @Override
     public void onMatch(SP gameMode, String key, IPatternResult match) {
+        super.onMatch(gameMode, key, match); // ShuffleModeListener
         if("sp.points".equals(key)) {
             String nick = ServerHive.current().getNick();
             String player = match.get(0);
             if(!nick.equals(player)) gameMode.addPoints(10);
         }
         else if("sp.win".equals(key)) {
-            gameMode.addPoints(170);
             gameMode.won();
         }
     }

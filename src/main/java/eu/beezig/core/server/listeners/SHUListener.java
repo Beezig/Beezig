@@ -20,11 +20,13 @@
 package eu.beezig.core.server.listeners;
 
 import eu.beezig.core.server.modes.SHU;
+import eu.beezig.core.server.modes.shu.ShuffleMode;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.IPatternResult;
 
-public class SHUListener extends AbstractGameListener<SHU> {
+import java.util.Locale;
 
+public class SHUListener extends AbstractGameListener<SHU> {
     @Override
     public Class<SHU> getGameMode() {
         return SHU.class;
@@ -38,5 +40,27 @@ public class SHUListener extends AbstractGameListener<SHU> {
     @Override
     public void onMatch(SHU gameMode, String key, IPatternResult match) {
         if(gameMode != null && "shu.game".equals(key) && gameMode.getGame() == null) gameMode.joinGame(match.get(0));
+    }
+
+    public abstract static class ShuffleModeListener<T extends ShuffleMode> extends AbstractGameListener<T> {
+        @Override
+        public void onMatch(T gameMode, String key, IPatternResult match) {
+            if("shu.win".equals(key)) gameMode.shuffleWin();
+        }
+
+        public static <T extends ShuffleMode> ShuffleModeListener<T> simpleListener(Class<T> cls, String lobbyId) {
+            String lobby = lobbyId.toLowerCase(Locale.ROOT);
+            return new ShuffleModeListener<T>() {
+                @Override
+                public Class<T> getGameMode() {
+                    return cls;
+                }
+
+                @Override
+                public boolean matchLobby(String s) {
+                    return lobby.equals(s);
+                }
+            };
+        }
     }
 }
