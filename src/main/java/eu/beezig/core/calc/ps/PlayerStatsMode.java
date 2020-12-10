@@ -77,7 +77,7 @@ public class PlayerStatsMode {
             if(src.getInput().get(apiKills) == null || src.getInput().get(apiDeaths) == null) return null;
             value = src.getLong(getApiKey("kills")) / (double) src.getLong(getApiKey("deaths"));
         }
-        else if("wl".equalsIgnoreCase(stat)) {
+        else if("winrate".equalsIgnoreCase(stat)) {
             String apiWins = getApiKey("victories");
             String apiGames = getApiKey("played");
             if(src.getInput().get(apiWins) == null || src.getInput().get(apiGames) == null) return null;
