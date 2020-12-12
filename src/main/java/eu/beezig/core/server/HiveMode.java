@@ -69,7 +69,7 @@ public abstract class HiveMode extends GameMode {
     private File modeDir;
     protected long gameStart;
     private MonthlyService monthlyProfile;
-    private boolean init;
+    private boolean init, checkedGameID;
     protected WinstreakService winstreakService;
 
     protected HiveMode() {
@@ -126,8 +126,10 @@ public abstract class HiveMode extends GameMode {
     @SuppressWarnings("FutureReturnValueIgnored")
     public void setState(GameState state) {
         super.setState(state);
-        if(state == GameState.GAME)
+        if(state == GameState.GAME && !checkedGameID) {
+            checkedGameID = true;
             Beezig.get().getAsyncExecutor().schedule(() -> WorldTask.submit(() -> Beezig.api().sendPlayerMessage("/gameid")), 1, TimeUnit.SECONDS);
+        }
     }
 
     /**
