@@ -5,9 +5,7 @@ import eu.beezig.core.api.BeezigForge;
 import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.HiveMode;
 import eu.beezig.core.server.ServerHive;
-import eu.beezig.core.server.modes.shu.CR;
-import eu.beezig.core.server.modes.shu.EF;
-import eu.beezig.core.server.modes.shu.SLAP;
+import eu.beezig.core.server.modes.shu.*;
 import eu.beezig.core.util.text.Message;
 import eu.the5zig.mod.server.GameListenerRegistry;
 import eu.the5zig.mod.server.GameState;
@@ -67,6 +65,9 @@ public class SHU extends HiveMode {
             case "Sploop":
                 id = "SPL";
                 break;
+            case "Instagib":
+                id = "IG";
+                break;
             case "One in the Chamber":
                 id = "OITC";
                 break;
@@ -100,5 +101,7 @@ public class SHU extends HiveMode {
         registry.registerListener(new CR.CRListener());
         registry.registerListener(new EF.EfListener());
         registry.registerListener(new SLAP.SlapListener());
+        registry.registerListener(new IG.IgListener());
+        registry.registerListener(new OITC.OitcListener());
     }
 }
