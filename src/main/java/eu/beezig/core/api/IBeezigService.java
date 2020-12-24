@@ -60,4 +60,6 @@ public interface IBeezigService {
     void openSettings(Map<String, List<SettingInfo>> settings);
     void openAutovote(Map<String, List<String>> maps);
     void openSpeedrunConfig(List<SettingInfo> settings);
+    void shuffleOpenWinner();
+    void shuffleCheckWinner(Consumer<String> callback);
 }

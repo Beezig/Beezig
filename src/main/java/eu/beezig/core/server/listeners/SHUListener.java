@@ -19,10 +19,18 @@
 
 package eu.beezig.core.server.listeners;
 
+import eu.beezig.core.Beezig;
+import eu.beezig.core.api.BeezigForge;
+import eu.beezig.core.config.Settings;
 import eu.beezig.core.server.modes.SHU;
 import eu.beezig.core.server.modes.shu.ShuffleMode;
+import eu.beezig.core.util.Color;
+import eu.beezig.core.util.ExceptionHandler;
+import eu.beezig.core.util.text.Message;
+import eu.beezig.core.util.text.StringUtils;
 import eu.the5zig.mod.server.AbstractGameListener;
 import eu.the5zig.mod.server.IPatternResult;
+import eu.the5zig.util.minecraft.ChatColor;
 
 import java.util.Locale;
 
@@ -40,6 +48,33 @@ public class SHUListener extends AbstractGameListener<SHU> {
     @Override
     public void onMatch(SHU gameMode, String key, IPatternResult match) {
         if(gameMode != null && "shu.game".equals(key) && gameMode.getGame() == null) gameMode.joinGame(match.get(0));
+    }
+
+    @Override
+    public boolean onActionBar(SHU gameMode, String message) {
+        if(message == null || gameMode == null) return super.onActionBar(gameMode, message);
+        String stripped = ChatColor.stripColor(message);
+        if(BeezigForge.isSupported() && "Starting game in 6".equals(stripped) && Settings.SHU_WINNER_CHECK.get().getBoolean()) {
+            BeezigForge.get().shuffleOpenWinner();
+        }
+        if(BeezigForge.isSupported() && "Starting game in 5".equals(stripped) && Settings.SHU_WINNER_CHECK.get().getBoolean()) {
+            BeezigForge.get().shuffleCheckWinner(mode -> {
+                Message.info(Beezig.api().translate("msg.shu.winner", Color.accent() + mode + Color.primary()));
+                if(Settings.SHU_WINNER_LEAVE.get().getBoolean()) {
+                    try {
+                        if(!gameMode.getAutovoteManager().getFavoriteMaps("shu").contains(StringUtils.normalizeMapName(mode))) {
+                            Message.info(Message.translate("msg.shu.winner.leave"));
+                            Beezig.api().sendPlayerMessage("/hub");
+                            Beezig.api().sendPlayerMessage("/q shu");
+                        }
+                    } catch (Exception e) {
+                        ExceptionHandler.catchException(e);
+                        Message.error(Message.translate("error.data_read"));
+                    }
+                }
+            });
+        }
+        return super.onActionBar(gameMode, message);
     }
 
     public abstract static class ShuffleModeListener<T extends ShuffleMode> extends AbstractGameListener<T> {

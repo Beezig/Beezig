@@ -74,6 +74,10 @@ public enum Settings {
     GRAV_CONFIRM_DISCONNECT(true, Category.GRAVITY),
     GRAV_NEXT_MAP(false, Category.GRAVITY),
 
+    // Shuffle
+    SHU_WINNER_CHECK(false, Category.SHUFFLE),
+    SHU_WINNER_LEAVE(false, Category.SHUFFLE),
+
     // Misc
     MSG_PING(true, Category.MISC),
     MSG_DND_MODE(MessageIgnoreLevel.IGNORE_ALERT, Category.MISC),
@@ -152,6 +156,7 @@ public enum Settings {
         HIDE_AND_SEEK,
         DRAW_IT,
         GRAVITY,
+        SHUFFLE,
         MISC,
         REPORTS,
         META,
